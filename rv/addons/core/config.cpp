@@ -22,5 +22,14 @@ class CfgFunctions
                 headerType = -1;
 			};
 		};
+        class initialization 
+        {
+            class lib_loader
+            {
+                preInit = 1;
+                file = "z\intercept\rv\addons\core\lib.sqf";
+                headerType = -1;
+            };
+        };
 	};
 };

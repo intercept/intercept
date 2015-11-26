@@ -9,6 +9,12 @@ class CfgPatches {
 	};
 };
 
+class InterceptBlank {
+    class InterceptDummy {
+        val = 1;
+    };
+};
+
 class CfgFunctions
 {
 	class Intercept

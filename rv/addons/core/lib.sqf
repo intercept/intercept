@@ -16,6 +16,26 @@ intercept_fnc_test = {
     intercept_invoker_ok
 };
 
+intercept_fnc_callExtension = {
+    params ["_extension", "_args"];
+    private _res = "";
+    if(isNil "_thisScript") then {
+        HOOKED_PREAMBLE;
+        _res = _extension callExtension _args;
+    } else {
+        __fnc = {
+            params ["_extension", "_args"];
+            HOOKED_PREAMBLE;
+            _extension callExtension _args;
+        };
+        // force the call to be in non-scheduled space since you need to ensure
+        // that the gamestate does not change between setting it, and invoking
+        // the extension call
+        "_res = _this call __fnc; false;" configClasses (configfile >> "InterceptBlank"); 
+    };
+    _res;
+};
+
 intercept_fnc__onFrame = {
     HOOKED_PREAMBLE;
 };

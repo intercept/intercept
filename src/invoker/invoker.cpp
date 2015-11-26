@@ -20,6 +20,7 @@ namespace intercept {
             _attached = true;
             controller::get().add("init_invoker", std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("test_invoker", std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("invoker_demo", std::bind(&intercept::invoker::invoker_demo, this, std::placeholders::_1, std::placeholders::_2));
 
         }
     }
@@ -51,6 +52,20 @@ namespace intercept {
             res = res + 8;
             result_ = std::string((char *)res);
         }
+        return true;
+    }
+
+    bool invoker::invoker_demo(const arguments & args_, std::string & result_)
+    {
+        result_ = "1";
+        int player = invoke_raw("player");
+        int pos = invoke_raw("getpos", player);
+        pos = *(uint32_t *)(pos + 4);
+        pos = *(uint32_t *)(pos + 12);
+        float x = *(float *)((*(uint32_t *)(pos + 0 + 4)) + 12);
+        float y = *(float *)((*(uint32_t *)(pos + 8 + 4)) + 12);
+        float z = *(float *)((*(uint32_t *)(pos + 16 + 4)) + 12);
+        LOG(DEBUG) << "Player Pos: [" << x << "," << y << "," << z << "]";
         return true;
     }
 

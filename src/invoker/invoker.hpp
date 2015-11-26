@@ -20,6 +20,7 @@ namespace intercept {
         void attach_controller();
         bool init_invoker(const arguments & args_, std::string & result_);
         bool test_invoker(const arguments & args_, std::string & result_);
+        bool invoker_demo(const arguments & args_, std::string & result_);
 
         int invoke_raw(std::string function_name_);
         int invoke_raw(std::string function_name_, int right);

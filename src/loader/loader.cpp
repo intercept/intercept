@@ -31,23 +31,67 @@ namespace intercept {
     }
 
     bool loader::init_patch(const arguments &args_, std::string & result_) {
+        uint32_t version = args_.as_uint32(0);
         result_ = "1";
         if (!_patched) {
-            std::pair<std::string, uint32_t> func_map;
-            bool found = _find_initial_function(func_map);
-            if (found) {
-                HANDLE handle = GetModuleHandle(0); //or OpenProcess()
-                void *baseAddress = (void*)handle;
-                DWORD true_offset = func_map.second - (DWORD)baseAddress;
-                LOG(INFO) << "True offset for patch function: " << func_map.first << " @ " << (unary_function)true_offset;
-                DWORD offset = func_map.second;
-                _initial_trampoline = (unary_function)offset;
+            bool do_search = false;
+            bool found = false;
+            DWORD offset;
+            std::string command_name;
+
+            HANDLE handle = GetModuleHandle(0);
+            void *base_address = (void*)handle;
+
+            {
+                std::ifstream cache_read("interceptcache", std::ios::binary);
+                if (cache_read.is_open()) {
+                    uint32_t cached_version, command_length;
+                    cache_read.read((char *)&cached_version, sizeof(uint32_t));
+                    cache_read.read((char *)&command_length, sizeof(uint32_t));
+                    LOG(DEBUG) << "Command str len: " << command_length;
+                    command_name.resize(command_length, ' ');
+                    cache_read.read(&command_name[0], command_length);
+                    cache_read.read((char *)&offset, sizeof(DWORD));
+                    if(cached_version == version) {
+                        LOG(INFO) << "Cached offset for build #" << cached_version << " patch function: " << command_name << " @ " << (unary_function)offset;
+                        found = true;
+                    }
+                    else {
+                        LOG(INFO) << "Cached build #" << cached_version << " != " << version << ", researching patch offset.";
+                        do_search = true;
+                    }
+                }
+                else {
+                    do_search = true;
+                }
+            }
+            if (do_search) {
+                std::pair<std::string, uint32_t> func_map;
+                found = _find_initial_function(func_map);
+                if (found) {
+                    
+                    std::ofstream cache_write("interceptcache", std::ios::binary);
+                    offset = func_map.second - (DWORD)base_address;
+                    LOG(INFO) << "Found offset for patch function: " << func_map.first << " @ " << (unary_function)offset;
+                    if (cache_write.is_open()) {
+                        cache_write.write((char *)&version, sizeof(uint32_t));
+                        uint32_t command_length = func_map.first.length();
+                        cache_write.write((char *)&command_length, sizeof(uint32_t));
+                        cache_write.write(func_map.first.c_str(), command_length);
+                        cache_write.write((char *)&offset, sizeof(DWORD));
+                        LOG(INFO) << "Cache offset written";
+                        command_name = func_map.first;
+                    }
+                }
+            }
+            if(found) {
+                _initial_trampoline = (unary_function)(offset + (DWORD)base_address);
                 DetourTransactionBegin();
                 DetourUpdateThread(GetCurrentThread());
 
                 LONG errorCode = DetourAttach(&(PVOID &)_initial_trampoline, _initial_patch);
                 DetourTransactionCommit();
-                result_ = func_map.first;
+                result_ = command_name;
                 _patched = true;
             }
             else {
@@ -69,6 +113,127 @@ namespace intercept {
         }
 
         return true;
+    }
+
+    bool loader::get_function(std::string function_name_, unary_function & function_)
+    {
+        auto it = _unary_operators.find(function_name_);
+        if (it != _unary_operators.end()) {
+            function_ = (unary_function)it->second.op->procedure_addr;
+            return true;
+        }
+        return false;
+    }
+
+    bool loader::get_function(std::string function_name_, binary_function & function_)
+    {
+        auto it = _binary_operators.find(function_name_);
+        if (it != _binary_operators.end()) {
+            function_ = (binary_function)it->second.op->procedure_addr;
+            return true;
+        }
+        return false;
+    }
+
+    bool loader::get_function(std::string function_name_, nular_function & function_)
+    {
+        auto it = _nular_operators.find(function_name_);
+        if (it != _nular_operators.end()) {
+            function_ = (nular_function)it->second.op->procedure_addr;
+            return true;
+        }
+        return false;
+    }
+
+    bool loader::hook_function(std::string function_name_, void * hook_, unary_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to hook unary function " << function_name_;
+        if (get_function(function_name_, trampoline_)) {
+            return _hook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+        return false;
+    }
+
+    bool loader::hook_function(std::string function_name_, void * hook_, binary_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to hook binary function " << function_name_;
+        if (get_function(function_name_, trampoline_)) {
+            return _hook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+        return false;
+    }
+
+    bool loader::hook_function(std::string function_name_, void * hook_, nular_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to hook nular function " << function_name_;
+        if (get_function(function_name_, trampoline_)) {
+            return _hook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+        return false;
+    }
+
+    bool loader::unhook_function(std::string function_name_, void * hook_, unary_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to unhook unary function " << function_name_;
+        unary_function original_function;
+        if (get_function(function_name_, original_function)) {
+            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+    }
+
+    bool loader::unhook_function(std::string function_name_, void * hook_, binary_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to unhook binary function " << function_name_;
+        binary_function original_function;
+        if (get_function(function_name_, original_function)) {
+            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+    }
+
+    bool loader::unhook_function(std::string function_name_, void * hook_, nular_function & trampoline_)
+    {
+        LOG(DEBUG) << "Attempting to unhook nular function " << function_name_;
+        nular_function original_function;
+        if (get_function(function_name_, original_function)) {
+            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+        }
+        return false;
+    }
+
+    bool loader::_hook(void * hook_, void ** trampoline_, void * original_function_)
+    {
+        if (_hooked_functions.find((uint32_t)original_function_) == _hooked_functions.end()) {
+            DetourTransactionBegin();
+            DetourUpdateThread(GetCurrentThread());
+            long error_code = DetourAttach(trampoline_, hook_);
+            DetourTransactionCommit();
+            if (error_code) {
+                LOG(ERROR) << "Hooking function failed! Error code: " << error_code;
+                return false;
+            }
+            _hooked_functions.insert((uint32_t)original_function_);
+            LOG(DEBUG) << "Hook success!";
+            return true;
+        }
+        return false;
+    }
+
+    bool loader::_unhook(void * hook_, void ** trampoline_, void * original_function_)
+    {
+        if (_hooked_functions.find((uint32_t)original_function_) != _hooked_functions.end()) {
+            DetourTransactionBegin();
+            DetourUpdateThread(GetCurrentThread());
+            long error_code = DetourDetach(trampoline_, hook_);
+            DetourTransactionCommit();
+            if (error_code) {
+                LOG(ERROR) << "Unhooking function failed! Error code: " << error_code;
+                return false;
+            }
+            _hooked_functions.erase((uint32_t)original_function_);
+            LOG(DEBUG) << "Unhook success!";
+            return true;
+        }
+        return false;
     }
 
     void loader::_do_function_walk(uint32_t state_addr_) {
@@ -101,7 +266,9 @@ namespace intercept {
                 uint32_t name_entry = *(uint32_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found unary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
-                _unary_operators[std::string(new_entry.name)] = new_entry;
+                std::string name = std::string(new_entry.name);
+                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                _unary_operators[name] = new_entry;
             }
         }
 
@@ -126,7 +293,9 @@ namespace intercept {
                 uint32_t name_entry = *(uint32_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found binary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
-                _binary_operators[std::string(new_entry.name)] = new_entry;
+                std::string name = std::string(new_entry.name);
+                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                _binary_operators[name] = new_entry;
             }
         }
 
@@ -151,7 +320,9 @@ namespace intercept {
                 uint32_t name_entry = *(uint32_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found nular operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
-                _nular_operators[std::string(new_entry.name)] = new_entry;
+                std::string name = std::string(new_entry.name);
+                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                _nular_operators[name] = new_entry;
             }
         }
     }
@@ -318,6 +489,8 @@ namespace intercept {
         }
         return false;
     }
+
+    
 
    
 }

@@ -28,6 +28,7 @@ endif()
 include_directories("common")
 include_directories("controller")
 include_directories("loader")
+include_directories("invoker")
 include_directories("intercept_dll")
 
 
@@ -38,14 +39,16 @@ endif()
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/common)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/controller)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/loader)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/invoker)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/intercept_dll)
 
 set(GLOBAL_SOURCES ${GLOBAL_RC})
 
-# Add extensions to build here
+
 add_subdirectory(common)
 add_subdirectory(controller)
 add_subdirectory(loader)
+add_subdirectory(invoker)
 add_subdirectory(intercept_dll)
 
 

@@ -1,5 +1,7 @@
 #include "controller.hpp"
+#include "invoker.hpp"
 #include "loader.hpp"
+
 #include <chrono>
 
 #ifdef _DEBUG
@@ -23,6 +25,7 @@ namespace intercept {
 	bool controller::init(const arguments &_args, std::string & result) {
 		if (!_initiated) {
             loader::get().attach_controller();
+            invoker::get().attach_controller();
             result = "1";
 			_initiated = true;
 		}

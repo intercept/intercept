@@ -20,6 +20,8 @@ namespace intercept {
         ~invoker();
 
         void attach_controller();
+        bool open_invoke_period(const arguments & args_, std::string & result_);
+        bool close_invoke_period(const arguments & args_, std::string & result_);
         void allow_access();
         void deny_access();
         bool do_invoke_period(const arguments & args_, std::string & result_);

@@ -15,8 +15,8 @@ namespace intercept {
             float x = *(float *)((*(uint32_t *)(pos + 0 + 4)) + 12);
             float y = *(float *)((*(uint32_t *)(pos + 8 + 4)) + 12);
             float z = *(float *)((*(uint32_t *)(pos + 16 + 4)) + 12);
+            LOG(DEBUG) << "Thread ID " << std::this_thread::get_id() << " Player Pos: [" << x << "," << y << "," << z << "]";
             */
-            //LOG(DEBUG) << "Thread ID " << std::this_thread::get_id() << " Player Pos: [" << x << "," << y << "," << z << "]";
             Sleep(10);
         }
     }
@@ -41,8 +41,20 @@ namespace intercept {
             controller::get().add("test_invoker", std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_demo", std::bind(&intercept::invoker::invoker_demo, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("do_invoke_period", std::bind(&intercept::invoker::do_invoke_period, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("open_invoke_period", std::bind(&intercept::invoker::open_invoke_period, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("close_invoke_period", std::bind(&intercept::invoker::close_invoke_period, this, std::placeholders::_1, std::placeholders::_2));
 
         }
+    }
+
+    bool invoker::open_invoke_period(const arguments & args_, std::string & result_) {
+        allow_access();
+        return true;
+    }
+
+    bool invoker::close_invoke_period(const arguments & args_, std::string & result_) {
+        deny_access();
+        return false;
     }
 
     void invoker::allow_access() {
@@ -96,8 +108,6 @@ namespace intercept {
         }
         return true;
     }
-
-
 
     bool invoker::invoker_demo(const arguments & args_, std::string & result_)
     {

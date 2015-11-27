@@ -95,7 +95,7 @@ namespace intercept {
                 _message_id = _message_id + 1;
             } else {
 #ifdef _DEBUG
-                if (name_ != "fetch_result") {
+                if (name_ != "fetch_result" && name_ != "do_invoke_period") {
                     LOG(TRACE) << "dispatch[immediate]:\t[" << name_ << "] { " << args_.get() << " }";
                 }
 #endif

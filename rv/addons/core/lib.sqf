@@ -38,9 +38,11 @@ intercept_fnc_callExtension = {
 
 intercept_fnc__onFrame = {
     HOOKED_PREAMBLE;
+    "intercept" callExtension "do_invoke_period:";
 };
 diag_log text "Invoker SQF handler initializing...";
-[] call intercept_fnc_test;
+//[] call intercept_fnc_test;
+intercept_invoker_ok = true;
 if(intercept_invoker_ok) then {
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Invoker initialized.";

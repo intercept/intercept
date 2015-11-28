@@ -7,9 +7,11 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
 #include "shared.hpp"
 #include "controller.hpp"
 #include "logging.hpp"
+#include "invoker.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -43,6 +45,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     std::string input = function;
 
     std::string command = get_command(input);
+    bool block_execute = false;
+
     std::string argument_str;
     if (command.length() > 1 && input.length() > command.length() + 1) {
         argument_str = input.substr(command.length() + 1, (input.length() + 1 - command.length()));
@@ -69,7 +73,18 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
         _threaded = false;
     }
 
+    if (command == "block_execute") {
+        block_execute = true;
+        command = _args.as_string(0);
+        _threaded = false;
+    }
+    if (block_execute) {
+        intercept::invoker::get().allow_access();
+    }
     intercept::controller::get().call(command, _args, result, _threaded);
+    if (block_execute) {
+        intercept::invoker::get().deny_access();
+    }
     if (result.length() > 0) {
         sprintf_s(output, outputSize, "%s", result.c_str());
     }
@@ -95,7 +110,7 @@ void Init(void) {
 #endif
     el::Loggers::setDefaultConfigurations(conf, true);
 
-    LOG(INFO) << "ACRE Loaded";
+    LOG(INFO) << "Intercept DLL Loaded";
 }
 
 void Cleanup(void) {

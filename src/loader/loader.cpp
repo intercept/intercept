@@ -51,7 +51,7 @@ namespace intercept {
                     LOG(DEBUG) << "Command str len: " << command_length;
                     command_name.resize(command_length, ' ');
                     cache_read.read(&command_name[0], command_length);
-                    cache_read.read((char *)&offset, sizeof(DWORD));
+                    cache_read.read((char *)&offset, sizeof(uintptr_t));
                     if(cached_version == version) {
                         LOG(INFO) << "Cached offset for build #" << cached_version << " patch function: " << command_name << " @ " << (unary_function)offset;
                         found = true;
@@ -66,7 +66,7 @@ namespace intercept {
                 }
             }
             if (do_search) {
-                std::pair<std::string, uint32_t> func_map;
+                std::pair<std::string, uintptr_t> func_map;
                 found = _find_initial_function(func_map);
                 if (found) {
                     
@@ -78,7 +78,7 @@ namespace intercept {
                         uint32_t command_length = func_map.first.length();
                         cache_write.write((char *)&command_length, sizeof(uint32_t));
                         cache_write.write(func_map.first.c_str(), command_length);
-                        cache_write.write((char *)&offset, sizeof(DWORD));
+                        cache_write.write((char *)&offset, sizeof(uintptr_t));
                         LOG(INFO) << "Cache offset written";
                         command_name = func_map.first;
                     }
@@ -177,7 +177,7 @@ namespace intercept {
         LOG(DEBUG) << "Attempting to unhook unary function " << function_name_;
         unary_function original_function;
         if (get_function(function_name_, original_function)) {
-            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+            return _unhook(hook_, &(void *&)trampoline_, original_function);
         }
     }
 
@@ -186,7 +186,7 @@ namespace intercept {
         LOG(DEBUG) << "Attempting to unhook binary function " << function_name_;
         binary_function original_function;
         if (get_function(function_name_, original_function)) {
-            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+            return _unhook(hook_, &(void *&)trampoline_, original_function);
         }
     }
 
@@ -195,14 +195,14 @@ namespace intercept {
         LOG(DEBUG) << "Attempting to unhook nular function " << function_name_;
         nular_function original_function;
         if (get_function(function_name_, original_function)) {
-            return _unhook(hook_, &(void *&)trampoline_, trampoline_);
+            return _unhook(hook_, &(void *&)trampoline_, original_function);
         }
         return false;
     }
 
     bool loader::_hook(void * hook_, void ** trampoline_, void * original_function_)
     {
-        if (_hooked_functions.find((uint32_t)original_function_) == _hooked_functions.end()) {
+        if (_hooked_functions.find((uintptr_t)original_function_) == _hooked_functions.end()) {
             DetourTransactionBegin();
             DetourUpdateThread(GetCurrentThread());
             long error_code = DetourAttach(trampoline_, hook_);
@@ -211,7 +211,7 @@ namespace intercept {
                 LOG(ERROR) << "Hooking function failed! Error code: " << error_code;
                 return false;
             }
-            _hooked_functions.insert((uint32_t)original_function_);
+            _hooked_functions.insert((uintptr_t)original_function_);
             LOG(DEBUG) << "Hook success!";
             return true;
         }
@@ -220,7 +220,7 @@ namespace intercept {
 
     bool loader::_unhook(void * hook_, void ** trampoline_, void * original_function_)
     {
-        if (_hooked_functions.find((uint32_t)original_function_) != _hooked_functions.end()) {
+        if (_hooked_functions.find((uintptr_t)original_function_) != _hooked_functions.end()) {
             DetourTransactionBegin();
             DetourUpdateThread(GetCurrentThread());
             long error_code = DetourDetach(trampoline_, hook_);
@@ -229,17 +229,17 @@ namespace intercept {
                 LOG(ERROR) << "Unhooking function failed! Error code: " << error_code;
                 return false;
             }
-            _hooked_functions.erase((uint32_t)original_function_);
+            _hooked_functions.erase((uintptr_t)original_function_);
             LOG(DEBUG) << "Unhook success!";
             return true;
         }
         return false;
     }
 
-    void loader::_do_function_walk(uint32_t state_addr_) {
-        uint32_t unary_hash = state_addr_ + 16;
-        uint32_t binary_hash = state_addr_ + 28;
-        uint32_t nulars_hash = state_addr_ + 40;
+    void loader::_do_function_walk(uintptr_t state_addr_) {
+        uintptr_t unary_hash = state_addr_ + 16;
+        uintptr_t binary_hash = state_addr_ + 28;
+        uintptr_t nulars_hash = state_addr_ + 40;
 
         /*
         Unary Hashmap
@@ -248,22 +248,22 @@ namespace intercept {
         We don't give a fuck about that though, we just want to iterate through all of the
         buckets and in turn each item in the bucket, because they are our operator entries.
         */
-        uint32_t bucket_start = *(uint32_t *)unary_hash;
+        uintptr_t bucket_start = *(uintptr_t *)unary_hash;
         uint32_t bucket_count = *(uint32_t *)(unary_hash + 4);
 
 
         for (uint32_t bucket_offset = 0; bucket_offset < bucket_count; ++bucket_offset) {
 
-            uint32_t bucket = (bucket_start + (12 * bucket_offset));
-            uint32_t bucket_length = *(uint32_t *)(bucket + 4);
+            uintptr_t bucket = (bucket_start + (12 * bucket_offset));
+            uint32_t bucket_length = *(uintptr_t *)(bucket + 4);
 
-            uint32_t entry_start = *(uint32_t *)bucket;
+            uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uint32_t entry = *(uint32_t *)(entry_start + (20 * entry_offset));
+                uintptr_t entry = *(uintptr_t *)(entry_start + (20 * entry_offset));
                 unary_entry new_entry;
-                new_entry.op = (unary_operator *)*(uint32_t *)(entry + 12);
-                uint32_t name_entry = *(uint32_t *)entry;
+                new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 12);
+                uintptr_t name_entry = *(uintptr_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found unary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
                 std::string name = std::string(new_entry.name);
@@ -275,22 +275,22 @@ namespace intercept {
         /*
         Binary Hashmap
         */
-        bucket_start = *(uint32_t *)binary_hash;
+        bucket_start = *(uintptr_t *)binary_hash;
         bucket_count = *(uint32_t *)(binary_hash + 4);
 
 
         for (uint32_t bucket_offset = 0; bucket_offset < bucket_count; ++bucket_offset) {
 
-            uint32_t bucket = (bucket_start + (12 * bucket_offset));
+            uintptr_t bucket = (bucket_start + (12 * bucket_offset));
             uint32_t bucket_length = *(uint32_t *)(bucket + 4);
 
-            uint32_t entry_start = *(uint32_t *)bucket;
+            uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uint32_t entry = *(uint32_t *)(entry_start + (24 * entry_offset));
+                uintptr_t entry = *(uintptr_t *)(entry_start + (24 * entry_offset));
                 binary_entry new_entry;
-                new_entry.op = (binary_operator *)*(uint32_t *)(entry + 16);
-                uint32_t name_entry = *(uint32_t *)entry;
+                new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 16);
+                uintptr_t name_entry = *(uintptr_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found binary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
                 std::string name = std::string(new_entry.name);
@@ -302,22 +302,22 @@ namespace intercept {
         /*
         Nular Hashmap
         */
-        bucket_start = *(uint32_t *)nulars_hash;
+        bucket_start = *(uintptr_t *)nulars_hash;
         bucket_count = *(uint32_t *)(nulars_hash + 4);
 
 
         for (uint32_t bucket_offset = 0; bucket_offset < bucket_count; ++bucket_offset) {
 
-            uint32_t bucket = (bucket_start + (12 * bucket_offset));
-            uint32_t bucket_length = *(uint32_t *)(bucket + 4);
+            uintptr_t bucket = (bucket_start + (12 * bucket_offset));
+            uint32_t bucket_length = *(uintptr_t *)(bucket + 4);
 
-            uint32_t entry_start = *(uint32_t *)bucket;
+            uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uint32_t entry = (entry_start + (40 * entry_offset));
+                uintptr_t entry = (entry_start + (40 * entry_offset));
                 nular_entry new_entry;
-                new_entry.op = (nular_operator *)*(uint32_t *)(entry + 8);
-                uint32_t name_entry = *(uint32_t *)entry;
+                new_entry.op = (nular_operator *)*(uintptr_t *)(entry + 8);
+                uintptr_t name_entry = *(uintptr_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
                 LOG(INFO) << "Found nular operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
                 std::string name = std::string(new_entry.name);
@@ -392,7 +392,7 @@ namespace intercept {
         }
     }
 
-    bool loader::_find_initial_function(std::pair<std::string, uint32_t> &func_map) {
+    bool loader::_find_initial_function(std::pair<std::string, uintptr_t> &func_map) {
         HANDLE process = GetCurrentProcess();
 
         SYSTEM_INFO si;
@@ -417,7 +417,7 @@ namespace intercept {
                     // ok this is an RString (most likely) so lets
                     // set the pointer to the actual start of the object
                     // which is at -8
-                    uint32_t rstring_ptr = (uint32_t)&(char_ptr[0]);
+                    uintptr_t rstring_ptr = (uintptr_t)&(char_ptr[0]);
                     rstring_ptr -= 8;
                     // RString is an odd beast, it caches the allocated char array for
                     // some reason, probably because of Eastern Europe and their crappy
@@ -430,7 +430,7 @@ namespace intercept {
                     _find_locs_ptr(process, (char *)&rstring_ptr, rstring_ptr_results);
                     for (auto rstring : rstring_ptr_results) {
                         // these are the objects that contain a reference to this RString.
-                        uint32_t rstring_parent_ptr = (uint32_t)&(rstring[0]);
+                        uintptr_t rstring_parent_ptr = (uintptr_t)&(rstring[0]);
 
                         // Our goal here is to find our place first inside an array of operator entries,
                         // then try and find that array in a hash map bucket, and then with that bucket,
@@ -455,27 +455,27 @@ namespace intercept {
                             // dig around a bit more to figure that out).
 
                             // our entry
-                            uint32_t rstring_parent_container = (uint32_t)&(rstring_parent[0]);
+                            uintptr_t rstring_parent_container = (uintptr_t)&(rstring_parent[0]);
 
                             // So lets get those enums and check and see if they are under 10 as a sanity check
                             uint32_t check1 = *(uint32_t *)(rstring_parent_container + 4);
                             uint32_t check2 = *(uint32_t *)(rstring_parent_container + 8);
                             if (check1 < 10 && check2 < 10) {
                                 // Cool they are!
-                                uint32_t rstring_check1 = *(uint32_t *)(rstring_parent_container + 12);
-                                uint32_t rstring_check2 = *(uint32_t *)(rstring_parent_container + 16);
+                                uintptr_t rstring_check1 = *(uintptr_t *)(rstring_parent_container + 12);
+                                uintptr_t rstring_check2 = *(uintptr_t *)(rstring_parent_container + 16);
 
                                 // Now lets check the length of those two strings at the end and see if they
                                 // are 1) the same length as each other, and 2) the same length as the command
-                                uint32_t length1 = *(uint8_t *)(rstring_check1 + 4);
-                                uint32_t length2 = *(uint8_t *)(rstring_check2 + 4);
+                                uint32_t length1 = *(uint32_t *)(rstring_check1 + 4);
+                                uint32_t length2 = *(uint32_t *)(rstring_check2 + 4);
                                 if (length1 == length2 && length1 == command.length() + 1) {
-                                    uint32_t bucket_entry = *(uint32_t *)rstring_parent_container;
-                                    uint32_t name_entry = *(uint32_t *)bucket_entry;
+                                    uintptr_t bucket_entry = *(uintptr_t *)rstring_parent_container;
+                                    uintptr_t name_entry = *(uintptr_t *)bucket_entry;
                                     char *name = (char *)(name_entry + 8);
 
-                                    uint32_t op_entry = *(uint32_t *)(bucket_entry + 12);
-                                    op_entry = *(uint32_t *)(op_entry + 8);
+                                    uintptr_t op_entry = *(uintptr_t *)(bucket_entry + 12);
+                                    op_entry = *(uintptr_t *)(op_entry + 8);
                                     LOG(INFO) << "Found Initial Function Hook: " << name << " @ " << (unary_function)op_entry;
                                     func_map.first = name;
                                     func_map.second = op_entry;

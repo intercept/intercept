@@ -64,7 +64,8 @@ namespace intercept {
         std::string _registration_type;
 
         game_value _delete_array_ptr;
-        game_value _delete_size;
+        game_value _delete_size_zero;
+        game_value _delete_size_max;
         uint32_t _delete_index;
 
 
@@ -75,6 +76,7 @@ namespace intercept {
         
         std::mutex _invoke_mutex;
         std::mutex _state_mutex;
+        std::mutex _delete_mutex;
         std::condition_variable _invoke_condition;
         
         std::vector<std::thread> _demo_threads;

@@ -4,12 +4,13 @@
 namespace intercept {
 
     bool invoker_accessisble = false;
+    int total_memory_count = 0;
 
     void threaded_invoke_demo() {
         while (true) {
+            
             game_value player = invoker::get().invoke_raw("player");
-            invoker::get().release_value(&player);
-            /*
+            
             game_value pos_val = invoker::get().invoke_raw("getpos", &player);
             game_data_array *pos = (game_data_array *)pos_val.data;
 
@@ -19,9 +20,10 @@ namespace intercept {
             float y = ((game_data_number *)pos->data[1].data)->number;
             float z = ((game_data_number *)pos->data[2].data)->number;
             
+            invoker::get().release_value(&player);
+            invoker::get().release_value(&pos_val);
 
             LOG(DEBUG) << "Thread ID " << std::this_thread::get_id() << " Player Pos: [" << x << "," << y << "," << z << "]";
-            */
             Sleep(10);
         }
     }
@@ -92,7 +94,10 @@ namespace intercept {
     {
         if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
             LOG(INFO) << "Registration function unhooked.";
-            _delete_size = create_type<invoker_type::number>();
+            _delete_size_zero = create_type<invoker_type::number>();
+            _delete_size_max = create_type<invoker_type::number>();
+            ((game_data_number *)_delete_size_zero.data)->number = 0.0f;
+            ((game_data_number *)_delete_size_max.data)->number = 0.0f;
         }
         else {
             LOG(INFO) << "Registration function failed to unhook.";
@@ -148,7 +153,9 @@ namespace intercept {
 
     const game_value invoker::invoke_raw(std::string function_name_)
     {
+        
         nular_function function;
+        
         if (loader::get().get_function(function_name_, function)) {
             std::unique_lock<std::mutex> lock(_state_mutex);
             _invoke_condition.wait(lock, [] {return invoker_accessisble;});
@@ -157,7 +164,6 @@ namespace intercept {
             game_value return_value;
             return_value.__vptr = *(uintptr_t *)return_address;
             return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
-
             return return_value;
         }
         return game_value();
@@ -205,15 +211,16 @@ namespace intercept {
     }
 
     void invoker::release_value(game_value *value, bool immediate_) {
+        std::lock_guard<std::mutex> delete_lock(_delete_mutex);
+        value->data->ref_count_internal = 1; // this may or may not be needed and might actually be detrimental
         game_data_array *value_array = (game_data_array *)_delete_array_ptr.data;
         value_array->data[_delete_index++] = *value;
+        value_array->length = _delete_index;
         if (_delete_index >= 100 || immediate_) {
             _delete_index = 0;
             LOG(DEBUG) << "Flushing Memory...";
-            ((game_data_number *)_delete_size.data)->number = 0.0f;
-            invoke_raw("resize", &_delete_array_ptr, &_delete_size);
-            ((game_data_number *)_delete_size.data)->number = 100.0f;
-            invoke_raw("resize", &_delete_array_ptr, &_delete_size);
+            invoke_raw("resize", &_delete_array_ptr, &_delete_size_zero);
+            invoke_raw("resize", &_delete_array_ptr, &_delete_size_max);
         }
     }
 

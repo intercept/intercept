@@ -45,11 +45,13 @@ intercept_fnc_callExtension = {
     };
     _res;
 };
-
 intercept_fnc__onFrame = {
     // _start_time = diag_tickTime;
     HOOKED_PREAMBLE;
     "intercept" callExtension "do_invoke_period:";
+    // INVOKER_DELETE_ARRAY resize 0;
+    // INVOKER_DELETE_ARRAY resize 500;
+    
     // _end_time = diag_tickTime;
     // diag_log text format["t: %1", (_end_time-_start_time)*1000];
 };
@@ -60,7 +62,7 @@ diag_log text "Invoker SQF handler initializing...";
 "intercept" callExtension "invoker_begin_register:";
 "intercept" callExtension "invoker_register:delete_ptr";
 INVOKER_DELETE_ARRAY = [];
-INVOKER_DELETE_ARRAY resize 100;
+INVOKER_DELETE_ARRAY resize 1000;
 str INVOKER_DELETE_ARRAY;
 "intercept" callExtension "invoker_register:numeric_type";
 str 101;
@@ -78,7 +80,7 @@ str _obj;
 
 
 
-// intercept_invoker_ok = true;
+//intercept_invoker_ok = true;
 if(intercept_invoker_ok) then {
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Invoker initialized.";

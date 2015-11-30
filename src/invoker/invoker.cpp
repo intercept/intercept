@@ -29,6 +29,9 @@ namespace intercept {
             ((game_data_number *)test.data)->number = 100.0f;
             game_value rand_val = invoker::get().invoke_raw("random", &test, "SCALAR");
             LOG(DEBUG) << "Random Value: " << ((game_data_number *)rand_val.data)->number;
+
+            invoker::get().release_value(&test);
+            invoker::get().release_value(&rand_val);
             Sleep(10);
         }
     }
@@ -57,7 +60,6 @@ namespace intercept {
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
-
         }
     }
 

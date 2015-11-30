@@ -115,11 +115,26 @@ namespace intercept {
         return true;
     }
 
+    bool loader::get_function(std::string function_name_, unary_function & function_, std::string arg_signature_)
+    {
+        auto it = _unary_operators.find(function_name_);
+        if (it != _unary_operators.end()) {
+            for (auto op : it->second) {
+                if (op.op->arg_type.type().count(arg_signature_)) {
+                    function_ = (unary_function)op.op->procedure_addr;
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     bool loader::get_function(std::string function_name_, unary_function & function_)
     {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
-            function_ = (unary_function)it->second.op->procedure_addr;
+            function_ = (unary_function)it->second[0].op->procedure_addr;
             return true;
         }
         return false;
@@ -129,8 +144,23 @@ namespace intercept {
     {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
-            function_ = (binary_function)it->second.op->procedure_addr;
+            function_ = (binary_function)it->second[0].op->procedure_addr;
             return true;
+        }
+        return false;
+    }
+
+    bool loader::get_function(std::string function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_)
+    {
+        auto it = _binary_operators.find(function_name_);
+        if (it != _binary_operators.end()) {
+            for (auto op : it->second) {
+                if (op.op->arg1_type.type().count(arg1_signature_) && op.op->arg2_type.type().count(arg2_signature_)) {
+                    function_ = (binary_function)op.op->procedure_addr;
+                    return true;
+                }
+            }
+            return false;
         }
         return false;
     }
@@ -139,7 +169,7 @@ namespace intercept {
     {
         auto it = _nular_operators.find(function_name_);
         if (it != _nular_operators.end()) {
-            function_ = (nular_function)it->second.op->procedure_addr;
+            function_ = (nular_function)it->second[0].op->procedure_addr;
             return true;
         }
         return false;
@@ -251,7 +281,6 @@ namespace intercept {
         uintptr_t bucket_start = *(uintptr_t *)unary_hash;
         uint32_t bucket_count = *(uint32_t *)(unary_hash + 4);
 
-
         for (uint32_t bucket_offset = 0; bucket_offset < bucket_count; ++bucket_offset) {
 
             uintptr_t bucket = (bucket_start + (12 * bucket_offset));
@@ -260,15 +289,25 @@ namespace intercept {
             uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uintptr_t entry = *(uintptr_t *)(entry_start + (20 * entry_offset));
-                unary_entry new_entry;
-                new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 12);
-                uintptr_t name_entry = *(uintptr_t *)entry;
-                new_entry.name = (char *)(name_entry + 8);
-                LOG(INFO) << "Found unary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _unary_operators[name] = new_entry;
+
+                uint32_t op_count = *(uintptr_t *)(entry_start + (20 * entry_offset) + 4);
+                uintptr_t op_start = *(uintptr_t *)(entry_start + (20 * entry_offset));
+                for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
+                    uintptr_t entry = (op_start + (44 * op_offset));
+                    unary_entry new_entry;
+                    new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 12);
+
+                    uintptr_t name_entry = *(uintptr_t *)entry;
+                    new_entry.name = (char *)(name_entry + 8);
+                    LOG(INFO) << "Found unary operator: " <<
+                        new_entry.op->return_type.type_str() << " " <<
+                        new_entry.name <<
+                        "(" << new_entry.op->arg_type.type_str() << ")" <<
+                        " @ " << new_entry.op->procedure_addr;
+                    std::string name = std::string(new_entry.name);
+                    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                    _unary_operators[name].push_back(new_entry);
+                }
             }
         }
 
@@ -287,15 +326,24 @@ namespace intercept {
             uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uintptr_t entry = *(uintptr_t *)(entry_start + (24 * entry_offset));
-                binary_entry new_entry;
-                new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 16);
-                uintptr_t name_entry = *(uintptr_t *)entry;
-                new_entry.name = (char *)(name_entry + 8);
-                LOG(INFO) << "Found binary operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _binary_operators[name] = new_entry;
+                uint32_t op_count = *(uintptr_t *)(entry_start + (24 * entry_offset) + 4);
+                uintptr_t op_start = *(uintptr_t *)(entry_start + (24 * entry_offset));
+                for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
+                    uintptr_t entry = (op_start + (52 * op_offset));
+                    binary_entry new_entry;
+                    new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 16);
+                    uintptr_t name_entry = *(uintptr_t *)entry;
+                    new_entry.name = (char *)(name_entry + 8);
+                    LOG(INFO) << "Found binary operator: " <<
+                        new_entry.op->return_type.type_str() << " " <<
+                        "(" << new_entry.op->arg1_type.type_str() << ")" <<
+                        new_entry.name <<
+                        "(" << new_entry.op->arg2_type.type_str() << ")" <<
+                        " @ " << new_entry.op->procedure_addr;
+                    std::string name = std::string(new_entry.name);
+                    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                    _binary_operators[name].push_back(new_entry);
+                }
             }
         }
 
@@ -319,10 +367,11 @@ namespace intercept {
                 new_entry.op = (nular_operator *)*(uintptr_t *)(entry + 8);
                 uintptr_t name_entry = *(uintptr_t *)entry;
                 new_entry.name = (char *)(name_entry + 8);
-                LOG(INFO) << "Found nular operator: " << new_entry.name << " @ " << new_entry.op->procedure_addr;
+                LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " " 
+                    << new_entry.name << " @ " << new_entry.op->procedure_addr;
                 std::string name = std::string(new_entry.name);
                 std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _nular_operators[name] = new_entry;
+                _nular_operators[name].push_back(new_entry);
             }
         }
     }

@@ -8,7 +8,7 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            
+            /*
             game_value player = invoker::get().invoke_raw("player");
             
             game_value pos_val = invoker::get().invoke_raw("getpos", &player);
@@ -24,6 +24,11 @@ namespace intercept {
             invoker::get().release_value(&pos_val);
 
             LOG(DEBUG) << "Thread ID " << std::this_thread::get_id() << " Player Pos: [" << x << "," << y << "," << z << "]";
+            */
+            game_value test = invoker::get().create_type<invoker_type::number>();
+            ((game_data_number *)test.data)->number = 100.0f;
+            game_value rand_val = invoker::get().invoke_raw("random", &test, "SCALAR");
+            LOG(DEBUG) << "Random Value: " << ((game_data_number *)rand_val.data)->number;
             Sleep(10);
         }
     }
@@ -97,7 +102,7 @@ namespace intercept {
             _delete_size_zero = create_type<invoker_type::number>();
             _delete_size_max = create_type<invoker_type::number>();
             ((game_data_number *)_delete_size_zero.data)->number = 0.0f;
-            ((game_data_number *)_delete_size_max.data)->number = 0.0f;
+            ((game_data_number *)_delete_size_max.data)->number = 100.0f;
         }
         else {
             LOG(INFO) << "Registration function failed to unhook.";
@@ -151,52 +156,83 @@ namespace intercept {
         return true;
     }
 
+    const game_value invoker::invoke_raw(nular_function function_)
+    {
+        std::unique_lock<std::mutex> lock(_state_mutex);
+        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        uintptr_t return_address = function_(_sqf_this, _sqf_game_state);
+        game_value return_value;
+        return_value.__vptr = *(uintptr_t *)return_address;
+        return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
+        return return_value;
+    }
+
     const game_value invoker::invoke_raw(std::string function_name_)
     {
-        
         nular_function function;
-        
         if (loader::get().get_function(function_name_, function)) {
-            std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-            std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-            uintptr_t return_address = function(_sqf_this, _sqf_game_state);
-            game_value return_value;
-            return_value.__vptr = *(uintptr_t *)return_address;
-            return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
-            return return_value;
+            return invoke_raw(function);
         }
         return game_value();
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value *right)
+    const game_value invoker::invoke_raw(unary_function function_, game_value *right_)
+    {
+        std::unique_lock<std::mutex> lock(_state_mutex);
+        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        uintptr_t return_address = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
+        game_value return_value;
+        return_value.__vptr = *(uintptr_t *)return_address;
+        return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
+        return return_value;
+    }
+
+    const game_value invoker::invoke_raw(std::string function_name_, game_value * right_, std::string right_type_)
+    {
+        unary_function function;
+        if (loader::get().get_function(function_name_, function, right_type_)) {
+            return invoke_raw(function, right_);
+        }
+        return game_value();
+    }
+
+    const game_value invoker::invoke_raw(std::string function_name_, game_value *right_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
-            std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-            std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-            uintptr_t return_address = function(_sqf_this, _sqf_game_state, (uintptr_t)right);
-            game_value return_value;
-            return_value.__vptr = *(uintptr_t *)return_address;
-            return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
-            return return_value;
+            return invoke_raw(function, right_);
         }
         return game_value();
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value *left, game_value *right)
+    const game_value invoker::invoke_raw(binary_function function_, game_value *left_, game_value *right_)
+    {
+        std::unique_lock<std::mutex> lock(_state_mutex);
+        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        uintptr_t return_address = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
+        game_value return_value;
+        return_value.__vptr = *(uintptr_t *)return_address;
+        return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
+        return return_value;
+    }
+
+    const game_value invoker::invoke_raw(std::string function_name_, game_value *left_, game_value *right_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
-            std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-            std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-            uintptr_t return_address = function(_sqf_this, _sqf_game_state, (uintptr_t)left, (uintptr_t)right);
-            game_value return_value;
-            return_value.__vptr = *(uintptr_t *)return_address;
-            return_value.data = (game_data *)*(uintptr_t *)(return_address + 4);
-            return return_value;
+            return invoke_raw(function, left_, right_);
+        }
+        return game_value();
+    }
+
+    const game_value invoker::invoke_raw(std::string function_name_, game_value * left_, std::string left_type_, game_value * right_, std::string right_type_)
+    {
+        binary_function function;
+        if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
+            return invoke_raw(function, left_, right_);
         }
         return game_value();
     }
@@ -249,7 +285,7 @@ namespace intercept {
             invoker::get().type_structures["ARRAY"] = structure;
         }
         else if (step == "numeric_type") {
-            invoker::get().type_map[structure.first] = "NUMBER";
+            invoker::get().type_map[structure.first] = "SCALAR";
             invoker::get().type_structures["NUMBER"] = structure;
         }
         else if (step == "string_type") {

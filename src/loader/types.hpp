@@ -1,5 +1,6 @@
 #pragma once
 #include "shared.hpp"
+#include <set>
 
 
 namespace intercept {
@@ -8,12 +9,45 @@ namespace intercept {
         typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
         typedef uintptr_t(__cdecl *binary_function)(char *, uintptr_t, uintptr_t, uintptr_t);
 
+        typedef std::set<std::string> value_type;
+
+        class rv_string {
+        public:
+            uint32_t ref_count_internal;
+            uint32_t length;
+            char char_string;
+            std::string string();
+        };
+
+        struct value_entry {
+            rv_string *type_name;
+        };
+
+        struct compound_value_pair {
+            value_entry *first;
+            value_entry *second;
+        };
+
+        struct compound_value_entry {
+            uintptr_t           v_table;
+            compound_value_pair *types;
+        };
+
+        class op_value_entry {
+        public:
+            uintptr_t               v_table;
+            value_entry             *single_type;
+            compound_value_entry    *compound_type;
+            value_type type();
+            std::string type_str();
+        };
+
         struct unary_operator {
             uintptr_t        v_table;
             uint32_t         ref_count;
-            unary_function  *procedure_addr;
-            uintptr_t        return_type;
-            uintptr_t        arg_type;
+            unary_function   *procedure_addr;
+            op_value_entry   return_type;
+            op_value_entry   arg_type;
         };
 
         struct unary_entry {
@@ -24,10 +58,10 @@ namespace intercept {
         struct binary_operator {
             uintptr_t        v_table;
             uint32_t         ref_count;
-            unary_function  *procedure_addr;
-            uintptr_t        return_type;
-            uintptr_t        arg1_type;
-            uintptr_t        arg2_type;
+            unary_function   *procedure_addr;
+            op_value_entry   return_type;
+            op_value_entry   arg1_type;
+            op_value_entry   arg2_type;
         };
 
         struct binary_entry {
@@ -38,19 +72,13 @@ namespace intercept {
         struct nular_operator {
             uintptr_t        v_table;
             uint32_t         ref_count;
-            nular_function  *procedure_addr;
-            uintptr_t        return_type;
+            nular_function   *procedure_addr;
+            op_value_entry   return_type;
         };
 
         struct nular_entry {
             char *name;
             nular_operator *op;
-        };
-
-        struct rv_string {
-            uint32_t ref_count_internal;
-            uint32_t length;
-            char char_string;
         };
 
         class game_value;
@@ -72,9 +100,7 @@ namespace intercept {
         class game_data_string : public game_data {
         public:
             rv_string *string;
-            std::string get_string() {
-                return std::string((char *)&string->char_string);
-            }
+            std::string get_string();
         };
 
         class game_data_number : public game_data {
@@ -94,7 +120,7 @@ namespace intercept {
 
         class game_value {
         public:
-            game_value() : __vptr(NULL), data(NULL) {};
+            game_value();
             uintptr_t __vptr;
             game_data *data;
         };

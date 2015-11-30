@@ -35,15 +35,21 @@ namespace intercept {
 
         
         
-
+        const game_value invoke_raw(nular_function function_);
         const game_value invoke_raw(std::string function_name_);
-        const game_value invoke_raw(std::string function_name_, game_value *right);
-        const game_value invoke_raw(std::string function_name_, game_value *left, game_value *right);
+        
+        const game_value invoke_raw(unary_function function_, game_value * right_);
+        const game_value invoke_raw(std::string function_name_, game_value *right_);
+        const game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
+        
+        const game_value invoke_raw(binary_function function_, game_value * left_, game_value * right_);
+        const game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
+        const game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
 
         const value_type get_type(game_value value_);
 
-        void release_value(game_value * value);
-        void release_value(game_value * value, bool immediate_);
+        void release_value(game_value * value_);
+        void release_value(game_value * value_, bool immediate_);
 
         template<typename Type>
         game_value create_type() {

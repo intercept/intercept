@@ -15,7 +15,7 @@ SOURCE_GROUP("main" FILES ${INTERCEPT_SOURCES})
 add_library( ${INTERCEPT_EXTENSION_NAME} SHARED ${INTERCEPT_SOURCES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(${INTERCEPT_EXTENSION_NAME} common_static loader_static controller_static invoker_static ${LINK_LIBS})
+target_link_libraries(${INTERCEPT_EXTENSION_NAME} common_static loader_static controller_static invoker_static extensions_static ${LINK_LIBS})
 set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES PREFIX "")
 set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES FOLDER intercept)
 

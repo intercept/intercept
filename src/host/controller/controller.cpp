@@ -1,6 +1,7 @@
 #include "controller.hpp"
 #include "invoker.hpp"
 #include "loader.hpp"
+#include "extensions.hpp"
 
 
 #include <chrono>
@@ -28,6 +29,7 @@ namespace intercept {
 		if (!_initiated) {
             loader::get().attach_controller();
             invoker::get().attach_controller();
+            extensions::get().attach_controller();
             result = "1";
 			_initiated = true;
 		}

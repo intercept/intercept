@@ -2,6 +2,7 @@
 #include "invoker.hpp"
 #include "loader.hpp"
 
+
 #include <chrono>
 
 #ifdef _DEBUG
@@ -17,6 +18,7 @@ namespace intercept {
         add("reset", std::bind(&intercept::controller::reset, this, std::placeholders::_1, std::placeholders::_2));
         add("ready", std::bind(&intercept::controller::get_ready, this, std::placeholders::_1, std::placeholders::_2));
 		add("stop", std::bind(&controller::do_stop, this, std::placeholders::_1, std::placeholders::_2));
+        add("export_ptr_list", std::bind(&controller::export_ptr_list, this, std::placeholders::_1, std::placeholders::_2));
         // action results
         add("fetch_result", std::bind(&intercept::controller::fetch_result, this, std::placeholders::_1, std::placeholders::_2));
     }
@@ -72,6 +74,11 @@ namespace intercept {
             result = ss.str();
             _results.pop();
         }
+        return true;
+    }
+
+    bool controller::export_ptr_list(const arguments &_args, std::string & result) {
+        
         return true;
     }
 }

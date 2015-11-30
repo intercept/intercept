@@ -1,4 +1,3 @@
-//#include "ElInclude.hpp"
 #include <Windows.h>
 #include <stdio.h>
 #include <fstream>
@@ -12,6 +11,7 @@
 #include "controller.hpp"
 #include "logging.hpp"
 #include "invoker.hpp"
+#include "export.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 

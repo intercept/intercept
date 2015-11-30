@@ -24,6 +24,8 @@ namespace intercept {
 
         bool fetch_result(const arguments &, std::string &);
 
+        bool export_ptr_list(const arguments & _args, std::string & result);
+
 		bool do_stop(const arguments &, std::string &) {
 			stop();
 			_worker.join();

@@ -22,7 +22,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/win32/")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON) 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_subdirectory(src_host)
-add_subdirectory(src_client)
+add_subdirectory(src/host)
+add_subdirectory(src/client)
 
 

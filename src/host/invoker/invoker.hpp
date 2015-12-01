@@ -4,9 +4,10 @@
 #include "logging.hpp"
 #include "arguments.hpp"
 #include "loader.hpp"
-#include "types.hpp"
+#include "shared\types.hpp"
 #include <mutex>
 #include <condition_variable>
+#include <queue>
 
 
 using namespace intercept::rv_types;
@@ -46,15 +47,19 @@ namespace intercept {
         const game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
         const game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
 
-        const value_type get_type(game_value value_);
+        const value_type get_type(game_value *value_);
 
-        void release_value(game_value * value_);
-        void release_value(game_value * value_, bool immediate_);
+        const std::string get_type_str(game_value *value_);
+
+        bool release_value(game_value * value_);
+        bool release_value(game_value * value_, bool immediate_);
 
         template<typename Type>
         game_value create_type() {
             Type val_factory;
-            return val_factory.factory();
+            game_value new_val = val_factory.factory();
+            new_val.data->ref_count_internal = 0x0000dede;
+            return new_val;
         }
 
         std::unordered_map<value_type, std::string> type_map;
@@ -84,6 +89,8 @@ namespace intercept {
         std::mutex _state_mutex;
         std::mutex _delete_mutex;
         std::condition_variable _invoke_condition;
+
+        std::list<game_value> _free_queue;
         
         std::vector<std::thread> _demo_threads;
     };
@@ -93,17 +100,36 @@ namespace intercept {
             virtual game_value factory() = 0;
         };
 
-        class number : public invoker_factory_base {
+        class scalar : public invoker_factory_base {
         public:
             game_value factory() {
                 game_value new_number;
                 new_number.__vptr = invoker::get().game_value_vptr;
                 new_number.data = new game_data_number();
-                new_number.data->type = invoker::get().type_structures["NUMBER"].first;
-                new_number.data->data_type = invoker::get().type_structures["NUMBER"].second;
+                new_number.data->type = invoker::get().type_structures["SCALAR"].first;
+                new_number.data->data_type = invoker::get().type_structures["SCALAR"].second;
                 ((game_data_number *)new_number.data)->number = 0.0f;
 
                 return new_number;
+            }
+        };
+
+        class string : public invoker_factory_base {
+        public:
+            rv_string * make_compact() {
+                char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + 2048];
+                ((rv_string *)raw_data)->length = 2048;
+                ((rv_string *)raw_data)->ref_count_internal = 1;
+                return (rv_string *)raw_data;
+            }
+            game_value factory() {
+                game_value new_string;
+                new_string.__vptr = invoker::get().game_value_vptr;
+                new_string.data = new game_data_string();
+                new_string.data->type = invoker::get().type_structures["STRING"].first;
+                new_string.data->data_type = invoker::get().type_structures["STRING"].second;
+                ((game_data_string *)new_string.data)->raw_string = make_compact();
+                return new_string;
             }
         };
     }

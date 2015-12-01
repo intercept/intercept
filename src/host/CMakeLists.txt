@@ -30,6 +30,7 @@ include_directories("controller")
 include_directories("loader")
 include_directories("invoker")
 include_directories("extensions")
+include_directories("../client/intercept")
 include_directories("intercept_dll")
 
 
@@ -43,6 +44,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/loader)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/invoker)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/extensions)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/intercept_dll)
+
 
 set(GLOBAL_SOURCES ${GLOBAL_RC})
 

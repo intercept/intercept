@@ -1,21 +1,29 @@
 #include <Windows.h>
 #include <stdio.h>
-
+#include <cstdint>
 #include "intercept.hpp"
+#include "logging.hpp"
+
+INITIALIZE_EASYLOGGINGPP
 
 
 
+int __cdecl intercept::api_version() {
+    return 1;
+}
 
-
+void __cdecl intercept::on_frame() {
+    float rand_val = intercept::sqf::random(100.0f);
+    LOG(INFO) << "SQF Random Call: " << rand_val;
+}
 
 
 
 
 void Init(void) {
-    /*
     el::Configurations conf;
 
-    conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
+    conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_example_dll.log");
     conf.setGlobally(el::ConfigurationType::MaxLogFileSize, "10240");
 #ifdef _DEBUG
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%datetime] - %level - {%loc}t:%thread- %msg");
@@ -25,8 +33,7 @@ void Init(void) {
 #endif
     el::Loggers::setDefaultConfigurations(conf, true);
 
-    LOG(INFO) << "Intercept DLL Loaded";
-    */
+    LOG(INFO) << "Intercept Example DLL Loaded";
 }
 
 void Cleanup(void) {

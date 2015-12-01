@@ -31,7 +31,18 @@ namespace intercept {
         }
 
         std::string game_data_string::get_string() {
-            return std::string((char *)&string->char_string);
+            return std::string((char *)&raw_string->char_string);
+        }
+
+        bool game_data_string::set_string(std::string val_) {
+            if (ref_count_internal == 0x0000dede) {
+                if (val_.length() + 1 < 2048) {
+                    memcpy(&raw_string->char_string, val_.c_str(), val_.length() + 1);
+                    raw_string->length = val_.length() + 1;
+                    return true;
+                }
+            }
+            return false;
         }
 
         game_value::game_value() : __vptr(NULL), data(NULL) {

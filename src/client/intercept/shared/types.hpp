@@ -1,5 +1,5 @@
 #pragma once
-#include "shared.hpp"
+#include <stdio.h>
 #include <set>
 
 
@@ -99,8 +99,14 @@ namespace intercept {
 
         class game_data_string : public game_data {
         public:
-            rv_string *string;
+            game_data_string() {};
+            ~game_data_string() {
+                free(raw_string);
+            };
+            rv_string *raw_string;
             std::string get_string();
+            bool set_string(std::string val_);
+            
         };
 
         class game_data_number : public game_data {

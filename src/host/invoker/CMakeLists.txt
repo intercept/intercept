@@ -4,8 +4,12 @@ file(GLOB INVOKER_SOURCES *.h *.hpp *.c *.cpp)
 
 SOURCE_GROUP("main" FILES ${INVOKER_SOURCES})
 
+
+
 add_library(invoker_static STATIC ${INVOKER_SOURCES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+
 
 target_link_libraries(invoker_static controller_static loader_static ${LINK_LIBS})
 set_target_properties(invoker_static PROPERTIES PREFIX "")

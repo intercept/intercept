@@ -1,10 +1,21 @@
 #include "extensions.hpp"
 #include "controller.hpp"
+#include "export.hpp"
 
 namespace intercept {
 
     extensions::extensions() {
-    
+        _functions.new_string = client_function_defs::new_string;
+        _functions.new_scalar = client_function_defs::new_scalar;
+        _functions.free_value = client_function_defs::free_value;
+        _functions.get_binary_function = client_function_defs::get_binary_function;
+        _functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;
+        _functions.get_nular_function = client_function_defs::get_nular_function;
+        _functions.get_unary_function = client_function_defs::get_unary_function;
+        _functions.get_unary_function_typed = client_function_defs::get_unary_function_typed;
+        _functions.invoke_raw_binary = client_function_defs::invoke_raw_binary;
+        _functions.invoke_raw_nular = client_function_defs::invoke_raw_nular;
+        _functions.invoke_raw_unary = client_function_defs::invoke_raw_unary;
     }
 
     extensions::~extensions() {
@@ -31,46 +42,36 @@ namespace intercept {
             return true;
         }
 
-#ifdef _WINDOWS
-        // Make a copy of the file to temp, and load it from there, referencing the current path name
-        char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
-
-        if (!GetTempPathA(MAX_PATH, tmpPath)) {
-            LOG(ERROR) << "GetTempPath() failed, e=" << GetLastError();
-            return false;
-        }
-        if (!GetTempFileNameA(tmpPath, "intercept_dynload", TRUE, buffer)) {
-            LOG(ERROR) << "GetTempFileName() failed, e=" << GetLastError();
-            return false;
-        }
-        std::string temp_filename = buffer;
-        if (!CopyFileA(args_.as_string(0).c_str(), temp_filename.c_str(), FALSE)) {
-            DeleteFile(temp_filename.c_str());
-            if (!CopyFileA(args_.as_string(0).c_str(), temp_filename.c_str(), FALSE)) {
-                LOG(ERROR) << "CopyFile() , e=" << GetLastError();
-                return false;
-            }
-        }
-#else
-        std::string temp_filename = args_.as_string(0);
-#endif
-
-        dllHandle = LoadLibrary(temp_filename.c_str());
+        dllHandle = LoadLibrary(args_.as_string(0).c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << args_.as_string(0) << "]";
             return false;
         }
-        /*
-        if (!function) {
-            LOG(ERROR) << "GetProcAddress() failed, e=" << GetLastError() << " [" << args_.as_string(0) << "]";
-            FreeLibrary(dllHandle);
+
+        
+        auto new_module = module::entry(args_.as_string(0), dllHandle);
+
+        new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
+        new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
+        new_module.functions.mission_end = (module::mission_end_func)GetProcAddress(dllHandle, "mission_end");
+        new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
+        new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
+        new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
+
+        if (!new_module.functions.api_version) {
+            LOG(ERROR) << "Module " << args_.as_string(0) << " failed to define the api_version function.";
             return false;
         }
-        */
+
+        if (!new_module.functions.assign_functions) {
+            LOG(ERROR) << "Module " << args_.as_string(0) << " failed to define the assign_functions function.";
+            return false;
+        }
+
+        new_module.functions.assign_functions(_functions);
+
+        _modules[args_.as_string(0)] = new_module;
         LOG(INFO) << "Load completed [" << args_.as_string(0) << "]";
-
-        //_modules[args_.as_string(0)] = module(args_.as_string(0), dllHandle, function, temp_filename);
-
         return false;
     }
 
@@ -87,10 +88,6 @@ namespace intercept {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
             return false;
         }
-        //if (!DeleteFileA(_modules[args_.as_string(0)].temp_filename.c_str())) {
-        //    LOG(INFO) << "DeleteFile() failed during unload, e=" << GetLastError();
-        //    return false;
-        //}
 
         _modules.erase(args_.as_string(0));
 
@@ -120,11 +117,7 @@ namespace intercept {
                 function_str = function_str + temp[x] + ",";
         }
         //_modules[args_.as_string(0)].function((char *)result.c_str(), 4096, (const char *)function_str.c_str());
-#ifdef _DEBUG
-        //if (args_.as_string(0) != "fetch_result" && args_.as_string(0) != "ready") {
-        //    LOG(INFO) << "Called [" << args_.as_string(0) << "], with {" << function_str << "} result={" << result << "}";
-        //}
-#endif
+
         return true;
     }
 
@@ -141,6 +134,11 @@ namespace intercept {
         result = res;
 
         return false;
+    }
+
+    const std::unordered_map<std::string, module::entry>& extensions::modules()
+    {
+        return _modules;
     }
 
 }

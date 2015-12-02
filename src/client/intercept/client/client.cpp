@@ -1,25 +1,16 @@
 #include "client.hpp"
+#include "pointers.hpp"
 using namespace intercept::rv_types;
 namespace intercept {
     namespace client {
-        intercept::client_functions functions;
+        
+
         void __initialize();
 
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void __cdecl assign_functions(const struct intercept::client_functions funcs) {
             functions = funcs;
             __initialize();
-        }
-
-        namespace __sqf {
-            unary_function unary_random_scalar_raw;
-            nular_function nular_player_raw;
-        }
-
-        void __initialize()
-        {
-            __sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
-            __sqf::nular_player_raw = (nular_function)functions.get_nular_function("player");
         }
     }
 

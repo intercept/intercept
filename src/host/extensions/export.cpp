@@ -23,7 +23,7 @@ namespace intercept {
             return scalar;
         }
 
-        game_value new_string(char *string_) {
+        game_value new_string(const char *string_) {
             game_value string = intercept::invoker::get().create_type<intercept::invoker_type::string>();
             ((game_data_string *)string.data)->set_string(std::string(string_));
             return string;

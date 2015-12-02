@@ -11,7 +11,7 @@ namespace intercept {
         game_value invoke_raw_binary(binary_function function_, game_value * left_arg_, game_value * right_arg_);
 
         game_value new_scalar(float val_);
-        game_value new_string(char *string_);
+        game_value new_string(const char *string_);
 
         void free_value(game_value * value_);
 

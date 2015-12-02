@@ -1,3 +1,4 @@
+#pragma once
 //Exported Pointer Assignments For: Arma 3 155.133564 - Development
 
 

@@ -9,42 +9,7 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            /*
-            game_value player = invoker::get().invoke_raw("player");
-            
-            game_value pos_val = invoker::get().invoke_raw("getpos", &player);
-            game_data_array *pos = (game_data_array *)pos_val.data;
-
-
-
-            float x = ((game_data_number *)pos->data[0].data)->number;
-            float y = ((game_data_number *)pos->data[1].data)->number;
-            float z = ((game_data_number *)pos->data[2].data)->number;
-            
-            invoker::get().release_value(&player);
-            invoker::get().release_value(&pos_val);
-
-            LOG(DEBUG) << "Thread ID " << std::this_thread::get_id() << " Player Pos: [" << x << "," << y << "," << z << "]";
-            */
-            /*
-            game_value test1 = invoker::get().create_type<invoker_type::scalar>();
-            ((game_data_number *)test1.data)->number = 100.0f;
-            game_value test2 = invoker::get().create_type<invoker_type::scalar>();
-            ((game_data_number *)test2.data)->number = 200.0f;
-            game_value sum = invoker::get().invoke_raw("+", &test1, "SCALAR", &test2, "SCALAR");
-            //LOG(DEBUG) << "Random Value: " << ((game_data_number *)rand_val.data)->number;
-
-            invoker::get().release_value(&test1);
-            invoker::get().release_value(&test2);
-            invoker::get().release_value(&sum);
-            */
-
-            game_value test_string = invoker::get().create_type<invoker_type::string>();
-            game_value player = invoker::get().invoke_raw("player");
-            ((game_data_string *)test_string.data)->set_string("Hello World!");
-            invoker::get().invoke_raw("sidechat", &player, "OBJECT", &test_string, "STRING");
-            invoker::get().release_value(&test_string);
-            invoker::get().release_value(&player);
+           
             Sleep(10);
         }
     }

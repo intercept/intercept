@@ -90,6 +90,11 @@ namespace intercept {
             uintptr_t data_type;
         };
 
+        class game_data_object : public game_data {
+        public:
+            void *object;
+        };
+
         class game_data_array : public game_data {
         public:
             game_value *data;
@@ -112,11 +117,6 @@ namespace intercept {
         class game_data_number : public game_data {
         public:
             float number;
-        };
-
-        class game_data_object : public game_data {
-        public:
-            void *object;
         };
 
         class game_data_bool : public game_data {

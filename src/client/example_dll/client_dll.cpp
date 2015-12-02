@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "intercept.hpp"
 #include "logging.hpp"
+#include <sstream>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -14,7 +15,9 @@ int __cdecl intercept::api_version() {
 
 void __cdecl intercept::on_frame() {
     float rand_val = intercept::sqf::random(100.0f);
-    LOG(INFO) << "SQF Random Call: " << rand_val;
+    std::stringstream side_chat_msg;
+    side_chat_msg << "Hello Arma World, here is some randomness: " << rand_val;
+    intercept::sqf::side_chat(intercept::sqf::player(), side_chat_msg.str());
 }
 
 

@@ -1,3 +1,4 @@
+#pragma once
 //Exported Pointer Definitions For: Arma 3 155.133564 - Development
 
 

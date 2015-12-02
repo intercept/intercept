@@ -44,7 +44,19 @@ namespace intercept {
         bool init_patch(const arguments &_args, std::string & result);
         bool remove_patch(const arguments &_args, std::string & result);
 
-        
+
+        const auto unary() {
+            return _unary_operators;
+        }
+
+        const auto binary() {
+            return _binary_operators;
+        }
+
+        const auto nular() {
+            return _nular_operators;
+        }
+
 
     protected:
         

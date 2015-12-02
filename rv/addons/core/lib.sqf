@@ -17,6 +17,11 @@ intercept_fnc_test = {
     intercept_invoker_ok
 };
 
+intercept_fnc_exportOpList = {
+    _version = format["%1 %2.%3 - %4", (productVersion select 0), (productVersion select 2), (productVersion select 3), (productVersion select 4)];
+    "intercept" callExtension ("export_ptr_list:" + _version);
+};
+
 // This function is a wrapper to call extension.
 // It will always execute the callExtension call in
 // unscheduled space, opening and closing an invoke

@@ -17,7 +17,7 @@ namespace intercept {
     namespace sqf {
         float random(float max_) {
             game_value max = client::functions.new_scalar(max_);
-            game_value rand_val = client::functions.invoke_raw_unary(client::__sqf::unary_random_scalar_raw, &max);
+            game_value rand_val = client::functions.invoke_raw_unary(client::__sqf::unary__random__scalar_nan__ret__scalar_nan, &max);
             client::functions.free_value(&max);
             float rand = ((game_data_number *)rand_val.data)->number;
             client::functions.free_value(&rand_val);

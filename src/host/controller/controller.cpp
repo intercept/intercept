@@ -3,7 +3,7 @@
 #include "loader.hpp"
 #include "extensions.hpp"
 
-
+#include <regex>
 #include <chrono>
 
 #ifdef _DEBUG
@@ -25,27 +25,27 @@ namespace intercept {
     }
     controller::~controller() { }
 
-	bool controller::init(const arguments &_args, std::string & result) {
+	bool controller::init(const arguments &args_, std::string & result_) {
 		if (!_initiated) {
             loader::get().attach_controller();
             invoker::get().attach_controller();
             extensions::get().attach_controller();
-            result = "1";
+            result_ = "1";
 			_initiated = true;
 		}
 		return true;
 	}
 
-    bool controller::get_ready(const arguments &_args, std::string & result) {
-        result = "0";
+    bool controller::get_ready(const arguments &args_, std::string & result_) {
+        result_ = "0";
 
         if (!_ready)
-            result = "-1";
+            result_ = "-1";
 
         return true;
     }
 
-    bool controller::reset(const arguments &_args, std::string & result) {
+    bool controller::reset(const arguments &args_, std::string & result_) {
         _ready = false;
 
 
@@ -66,21 +66,113 @@ namespace intercept {
         return true;
     }
 
-    bool controller::fetch_result(const arguments &_args, std::string & result) {
-        result = "";
+    bool controller::fetch_result(const arguments &args_, std::string & result_) {
+        result_ = "";
         if (_results.size() > 0) {
             std::lock_guard<std::mutex> _lock(_results_lock);
             dispatch_result res = _results.front();
 			std::stringstream ss;
 			ss << "[" << res.id << ",[" << res.message << "]]";
-            result = ss.str();
+            result_ = ss.str();
             _results.pop();
         }
         return true;
     }
 
-    bool controller::export_ptr_list(const arguments &_args, std::string & result) {
-        
+    bool controller::export_ptr_list(const arguments &args_, std::string & result_) {
+        std::ofstream pointers("sqf_pointers.hpp");
+        std::ofstream assignments("sqf_assignments.hpp");
+        pointers << "//Exported Pointer Definitions For: " << args_.as_string(0) << "\n\n";
+        assignments << "//Exported Pointer Assignments For: " << args_.as_string(0) << "\n\n";
+
+        pointers << "\n// Unary Functions\n";
+        assignments << "\n// Unary Functions\n";
+
+        auto unary_list = loader::get().unary();
+        std::list<std::string> sorted_unary_list;
+        for (auto unary : unary_list) {
+            sorted_unary_list.push_back(unary.first);
+        };
+        sorted_unary_list.sort();
+
+        for (auto unary_entry : sorted_unary_list) {
+            std::string op_name = unary_entry;
+            std::regex name_test = std::regex("[a-z]+?.*");
+            if (std::regex_match(op_name, name_test)) {
+                for (auto op : unary_list[unary_entry]) {
+                    std::string arg_types = op.op->arg_type.type_str();
+                    std::transform(arg_types.begin(), arg_types.end(), arg_types.begin(), ::tolower);
+                    std::string return_type = op.op->return_type.type_str();
+                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
+                    std::string first_arg_type = *op.op->arg_type.type().begin();
+                    std::string pointer_name = "unary__" + op_name + "__" + arg_types + "__ret__" + return_type;
+                    pointers << "unary_function " << pointer_name << ";\n";
+                    //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
+                    assignments << "__sqf::" << pointer_name << " = " << "(unary_function)functions.get_unary_function_typed(\"" << op_name << "\", \"" << first_arg_type << "\");\n";
+                }
+            }
+        }
+
+        pointers << "\n// Binary Functions\n";
+        assignments << "\n// Binary Functions\n";
+
+        auto binary_list = loader::get().binary();
+        std::list<std::string> sorted_binary_list;
+        for (auto binary : binary_list) {
+            sorted_binary_list.push_back(binary.first);
+        };
+        sorted_binary_list.sort();
+
+        for (auto binary_entry : sorted_binary_list) {
+            std::string op_name = binary_entry;
+            std::regex name_test = std::regex("[a-z]+?.*");
+            if (std::regex_match(op_name, name_test)) {
+                for (auto op : binary_list[binary_entry]) {
+                    std::string arg1_types = op.op->arg1_type.type_str();
+                    std::transform(arg1_types.begin(), arg1_types.end(), arg1_types.begin(), ::tolower);
+                    std::string arg2_types = op.op->arg2_type.type_str();
+                    std::transform(arg2_types.begin(), arg2_types.end(), arg2_types.begin(), ::tolower);
+
+                    std::string return_type = op.op->return_type.type_str();
+                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
+
+                    std::string first_arg1_type = *op.op->arg1_type.type().begin();
+                    std::string first_arg2_type = *op.op->arg2_type.type().begin();
+
+                    std::string pointer_name = "binary__" + op_name + "__" + arg1_types + "__" + arg2_types + "__ret__" + return_type;
+                    pointers << "binary_function " << pointer_name << ";\n";
+
+                    assignments << "__sqf::" << pointer_name << " = " << "(binary_function)functions.get_binary_function_typed(\"" << op_name << 
+                        "\", \"" << first_arg1_type << "\", \"" << first_arg2_type << "\");\n";
+                }
+            }
+        }
+
+        pointers << "\n// Nular Functions\n";
+        assignments << "\n// Nular Functions\n";
+
+        auto nular_list = loader::get().nular();
+        std::list<std::string> sorted_nular_list;
+        for (auto nular : nular_list) {
+            sorted_nular_list.push_back(nular.first);
+        };
+        sorted_nular_list.sort();
+
+        for (auto nular_entry : sorted_nular_list) {
+            std::string op_name = nular_entry;
+            std::regex name_test = std::regex("[a-z]+?.*");
+            if (std::regex_match(op_name, name_test)) {
+                for (auto op : nular_list[nular_entry]) {
+                    std::string return_type = op.op->return_type.type_str();
+                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
+                    std::string pointer_name = "nular__" + op_name + "__ret__" + return_type;
+                    pointers << "nular_function " << pointer_name << ";\n";
+                    //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
+                    assignments << "__sqf::" << pointer_name << " = " << "(nular_function)functions.get_nular_function(\"" << op_name << "\");\n";
+                }
+            }
+        }
+
         return true;
     }
 }

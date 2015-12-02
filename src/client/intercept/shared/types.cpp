@@ -25,7 +25,7 @@ namespace intercept {
             }
             else {
                 return
-                    compound_type->types->first->type_name->string() + "," +
+                    compound_type->types->first->type_name->string() + "_" +
                     compound_type->types->second->type_name->string();
             }
         }

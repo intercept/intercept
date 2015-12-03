@@ -39,7 +39,8 @@ void __cdecl intercept::on_frame() {
     std::stringstream side_chat_msg;
     side_chat_msg << "Hello Arma World, here is some randomness: " << rand_val;
     
-    // send it to the SQF sideChat command, using the nular function player
+    // send it to the binary SQF sideChat command, using the nular function player as the
+    // first argument
     intercept::sqf::side_chat(intercept::sqf::player(), side_chat_msg.str());
 }
 

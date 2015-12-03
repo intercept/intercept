@@ -79,10 +79,6 @@ namespace intercept {
     {
         if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
             LOG(INFO) << "Registration function unhooked.";
-            _delete_size_zero = create_type<invoker_type::scalar>();
-            _delete_size_max = create_type<invoker_type::scalar>();
-            ((game_data_number *)_delete_size_zero.data)->number = 0.0f;
-            ((game_data_number *)_delete_size_max.data)->number = 100.0f;
         }
         else {
             LOG(INFO) << "Registration function failed to unhook.";
@@ -116,7 +112,18 @@ namespace intercept {
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        bool patched = loader::get().hook_function("cadetmode", _state_hook, _state_hook_trampoline);
+        //bool patched = loader::get().hook_function("cadetmode", _state_hook, _state_hook_trampoline);
+        _delete_size_zero = create_type<invoker_type::scalar>();
+        _delete_size_max = create_type<invoker_type::scalar>();
+        ((game_data_number *)_delete_size_zero.data)->number = 0.0f;
+        ((game_data_number *)_delete_size_max.data)->number = 100.0f;
+        game_value delete_ptr_name = create_type<invoker_type::string>();
+        ((game_data_string *)delete_ptr_name.data)->set_string("INVOKER_DELETE_ARRAY");
+        game_value mission_namespace = invoke_raw("missionnamespace");
+        invoker::get()._delete_array_ptr = invoke_raw("getvariable", &mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
+        //release_value(&delete_ptr_name);
+        //release_value(&mission_namespace);
+        /*
         if (patched) {
             LOG(INFO) << "Invoker has attached itself.";
             _patched = true;
@@ -126,6 +133,7 @@ namespace intercept {
             LOG(ERROR) << "Invoker has FAILED to attach itself.";
             result_ = "-1";
         }
+        */
         return true;
     }
 
@@ -292,6 +300,8 @@ namespace intercept {
     {
         LOG(INFO) << "Registration Hook Function Called: " << invoker::get()._registration_type;
         auto step = invoker::get()._registration_type;
+        invoker::get()._sqf_game_state = sqf_game_state_;
+        invoker::get()._sqf_this = sqf_this_;
 
         invoker::get().game_value_vptr = *(uintptr_t *)right_arg_;
 
@@ -321,6 +331,47 @@ namespace intercept {
             invoker::get().type_map[structure.first] = "OBJECT";
             invoker::get().type_structures["OBJECT"] = structure;
         }
+        else if (step == "group_type") {
+            invoker::get().type_map[structure.first] = "GROUP";
+            invoker::get().type_structures["GROUP"] = structure;
+        }
+        else if (step == "config_type") {
+            invoker::get().type_map[structure.first] = "CONFIG";
+            invoker::get().type_structures["CONFIG"] = structure;
+        }
+        else if (step == "control_type") {
+            invoker::get().type_map[structure.first] = "CONTROL";
+            invoker::get().type_structures["CONTROL"] = structure;
+        }
+        else if (step == "display_type") {
+            invoker::get().type_map[structure.first] = "DISPLAY";
+            invoker::get().type_structures["DISPLAY"] = structure;
+        }
+        else if (step == "location_type") {
+            invoker::get().type_map[structure.first] = "LOCATION";
+            invoker::get().type_structures["LOCATION"] = structure;
+        }
+        else if (step == "script_type") {
+            invoker::get().type_map[structure.first] = "SCRIPT";
+            invoker::get().type_structures["SCRIPT"] = structure;
+        }
+        else if (step == "side_type") {
+            invoker::get().type_map[structure.first] = "SIDE";
+            invoker::get().type_structures["SIDE"] = structure;
+        }
+        else if (step == "text_type") {
+            invoker::get().type_map[structure.first] = "TEXT";
+            invoker::get().type_structures["TEXT"] = structure;
+        }
+        else if (step == "team_type") {
+            invoker::get().type_map[structure.first] = "TEAM_MEMBER";
+            invoker::get().type_structures["TEAM_MEMBER"] = structure;
+        }
+        else if (step == "namespace_type") {
+            invoker::get().type_map[structure.first] = "NAMESPACE";
+            invoker::get().type_structures["NAMESPACE"] = structure;
+        }
+
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);
     }
 

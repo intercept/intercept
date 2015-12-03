@@ -51,31 +51,18 @@ intercept_fnc_callExtension = {
     _res;
 };
 intercept_fnc__onFrame = {
-    HOOKED_PREAMBLE;
+    //HOOKED_PREAMBLE;
     "intercept" callExtension "do_invoke_period:";
 };
 
-diag_log text "Invoker SQF handler initializing...";
-[] call intercept_fnc_test;
-
-"intercept" callExtension "invoker_begin_register:";
-"intercept" callExtension "invoker_register:delete_ptr";
 INVOKER_DELETE_ARRAY = [];
 INVOKER_DELETE_ARRAY resize 1000;
 str INVOKER_DELETE_ARRAY;
-"intercept" callExtension "invoker_register:numeric_type";
-str 101;
-"intercept" callExtension "invoker_register:string_type";
-str "HEEEEEY";
-"intercept" callExtension "invoker_register:bool_type";
-str true;
-"intercept" callExtension "invoker_register:code_type";
-_code = { player; };
-str _code;
-"intercept" callExtension "invoker_register:object_type";
-_obj = player;
-str _obj;
-"intercept" callExtension "invoker_end_register:";
+
+diag_log text "Invoker SQF handler initializing...";
+_res = ["init_invoker"] call intercept_fnc_callExtension;
+
+[] call intercept_fnc_test;
 
 
 

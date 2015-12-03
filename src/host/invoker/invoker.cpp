@@ -112,28 +112,17 @@ namespace intercept {
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        //bool patched = loader::get().hook_function("cadetmode", _state_hook, _state_hook_trampoline);
         _delete_size_zero = create_type<invoker_type::scalar>();
         _delete_size_max = create_type<invoker_type::scalar>();
         ((game_data_number *)_delete_size_zero.data)->number = 0.0f;
         ((game_data_number *)_delete_size_max.data)->number = 100.0f;
+
+        // @TODO These values need to get cleaned up, but when the release_value() is
+        // called this early it crashes the game with some weird race. Need to look at.
         game_value delete_ptr_name = create_type<invoker_type::string>();
         ((game_data_string *)delete_ptr_name.data)->set_string("INVOKER_DELETE_ARRAY");
         game_value mission_namespace = invoke_raw("missionnamespace");
         invoker::get()._delete_array_ptr = invoke_raw("getvariable", &mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
-        //release_value(&delete_ptr_name);
-        //release_value(&mission_namespace);
-        /*
-        if (patched) {
-            LOG(INFO) << "Invoker has attached itself.";
-            _patched = true;
-            result_ = "1";
-        }
-        else {
-            LOG(ERROR) << "Invoker has FAILED to attach itself.";
-            result_ = "-1";
-        }
-        */
         return true;
     }
 
@@ -257,7 +246,8 @@ namespace intercept {
     bool invoker::release_value(game_value *value_, bool immediate_) {
         if (value_->data->ref_count_internal != 0x0000dede) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            value_->data->ref_count_internal = 1; // this may or may not be needed and might actually be detrimental
+            // this may or may not be needed and might actually be detrimental (most likely is)
+            value_->data->ref_count_internal = 1; 
             game_data_array *value_array = (game_data_array *)_delete_array_ptr.data;
             value_array->data[_delete_index++] = *value_;
             value_array->length = _delete_index;

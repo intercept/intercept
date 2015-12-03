@@ -62,3 +62,12 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     return TRUE;
 }
 ```
+
+## Completion Status
+
+As of now (12/2/15) Intercept is _not_ language feature complete. It still requires that hundreds of wrapper functions be written to facilitate smooth interaction with the RV engine. Most of these will come in the form of simple macros for repititous simple functions (for example any SQF functions that returns nothing, and takes a standard set of simple arguments like `OBJECT` and `SCALAR`), but others will require more hand tuning to take and return relevant results. Also event handling is not completed in any significant fashion, and a structure for handling engine events needs to be implemented.
+
+## Contributions
+
+Feel free to contribute as much as you want to this project in terms of time and code. The goal of this project is to be a tool for the community to provide better performing and more complex addons for the Arma 3 platform.
+

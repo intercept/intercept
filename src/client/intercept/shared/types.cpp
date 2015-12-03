@@ -48,6 +48,10 @@ namespace intercept {
         game_value::game_value() : __vptr(NULL), data(NULL) {
         
         };
+
+        void game_data_array::allocate(size_t size_) {
+            data = new game_value[size_];
+        }
     }
 }
 

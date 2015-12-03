@@ -12,6 +12,7 @@ namespace intercept {
 
         game_value new_scalar(float val_);
         game_value new_string(const char *string_);
+        game_value new_array(size_t size_);
 
         void free_value(game_value * value_);
 

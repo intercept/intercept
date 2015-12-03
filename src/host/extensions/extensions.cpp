@@ -7,6 +7,7 @@ namespace intercept {
     extensions::extensions() {
         _functions.new_string = client_function_defs::new_string;
         _functions.new_scalar = client_function_defs::new_scalar;
+        _functions.new_array = client_function_defs::new_array;
         _functions.free_value = client_function_defs::free_value;
         _functions.get_binary_function = client_function_defs::get_binary_function;
         _functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;

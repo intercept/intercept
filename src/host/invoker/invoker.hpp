@@ -132,5 +132,17 @@ namespace intercept {
                 return new_string;
             }
         };
+
+        class array : public invoker_factory_base {
+        public:
+            game_value factory() {
+                game_value new_array;
+                new_array.__vptr = invoker::get().game_value_vptr;
+                new_array.data = new game_data_array();
+                new_array.data->type = invoker::get().type_structures["ARRAY"].first;
+                new_array.data->data_type = invoker::get().type_structures["ARRAY"].second;
+                return new_array;
+            }
+        };
     }
 }

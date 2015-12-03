@@ -29,6 +29,12 @@ namespace intercept {
             return string;
         }
 
+        game_value new_array(size_t size_) {
+            game_value array = intercept::invoker::get().create_type<intercept::invoker_type::array>();
+            ((game_data_array *)array.data)->allocate(size_);
+            return array;
+        }
+
         void free_value(game_value *value_) {
             intercept::invoker::get().release_value(value_);
         }

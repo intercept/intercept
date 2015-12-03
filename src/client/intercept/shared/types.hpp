@@ -97,6 +97,11 @@ namespace intercept {
 
         class game_data_array : public game_data {
         public:
+            game_data_array() {};
+            ~game_data_array() {
+                free(data);
+            }
+            void allocate(size_t size_);
             game_value *data;
             uint32_t length;
             uint32_t max_size;

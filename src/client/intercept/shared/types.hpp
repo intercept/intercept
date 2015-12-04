@@ -214,6 +214,18 @@ namespace intercept {
             game_data_bool _val;
         };
 
+		class game_value_string : public game_value_helper
+		{
+		public: 
+			game_value_string(std::string str_)
+			{
+				_str.set_string(str_);
+				value.data = &_str;
+			}
+		protected:
+			game_data_string _str;
+		};
+
         class game_value_vector3 : public game_value_helper {
         public:
             game_value_vector3(client::types::vector3 vec_) {

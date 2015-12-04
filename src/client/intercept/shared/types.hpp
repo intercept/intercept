@@ -221,6 +221,8 @@ namespace intercept {
                 _elements[1] = game_value_number(vec_.y);
                 _elements[2] = game_value_number(vec_.z);
                 _array.data = _elements;
+                _array.length = 3;
+                _array.max_size = 3;
                 value.data = &_array;
             }
         protected:
@@ -234,6 +236,8 @@ namespace intercept {
                 _elements[0] = game_value_number(vec_.x);
                 _elements[1] = game_value_number(vec_.y);
                 _array.data = _elements;
+                _array.length = 2;
+                _array.max_size = 2;
                 value.data = &_array;
             }
         protected:
@@ -247,8 +251,23 @@ namespace intercept {
             game_value_array() {
                 _array.data = _elements;
                 value.data = &_array;
+                _array.length = SIZE;
+                _array.max_size = SIZE;
             }
-            game_value & operator [](uint32_t i_) const { return _elements[i]; }
+
+            game_value_array(std::initializer_list<game_value> values_) {
+                _array.data = _elements;
+                value.data = &_array;
+                _array.length = SIZE;
+                _array.max_size = SIZE;
+                uint32_t i = 0;
+                for (auto val : values_) {
+                    _elements[i++] = val;
+                }
+            }
+            game_value & operator [](int i_) { return _elements[i_]; }
+            game_value operator [](int i_) const { return _elements[i_]; }
+
         protected:
             game_data_array_stack _array;
             game_value _elements[SIZE];

@@ -59,7 +59,9 @@ namespace intercept {
 
             SQF's random implementation is redundant, so here be experiments!
             */
-            game_value rand_val = functions.invoke_raw_unary(client::__sqf::unary__random__scalar_nan__ret__scalar_nan, game_value_number(max_));
+            game_value_array<2> test_array({ game_value_number(100.0f), game_value_number(200.0f) });
+
+            game_value rand_val = functions.invoke_raw_unary(client::__sqf::unary__random__scalar_nan__ret__scalar_nan, &test_array[1]);
             float rand = ((game_data_number *)rand_val.data)->number;
             functions.free_value(&rand_val);
             return rand;
@@ -71,6 +73,9 @@ namespace intercept {
         }
 
         void side_chat(object obj_, const std::string &message_) {
+            // CHECK IT OUT! Booyaa. :D
+            game_value_array<2> test_array({ game_value_number(100.0f), game_value_number(200.0f), *obj_ });
+
             game_value message = functions.new_string(message_.c_str());
             functions.invoke_raw_binary(client::__sqf::binary__sidechat__object_array__string__ret__nothing, *obj_, &message);
             functions.free_value(&message);

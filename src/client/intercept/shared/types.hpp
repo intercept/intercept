@@ -92,12 +92,25 @@ namespace intercept {
 
         class game_data_object : public game_data {
         public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_object() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
             void *object;
         };
 
         class game_data_array : public game_data {
         public:
-            game_data_array() {};
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_array() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
             ~game_data_array() {
                 free(data);
             }
@@ -107,9 +120,31 @@ namespace intercept {
             uint32_t max_size;
         };
 
+        class game_data_array_stack : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_array_stack() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            ~game_data_array_stack() {
+            }
+            game_value *data;
+            uint32_t length;
+            uint32_t max_size;
+        };
+
         class game_data_string : public game_data {
         public:
-            game_data_string() {};
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_string() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
             ~game_data_string() {
                 free(raw_string);
             };
@@ -121,16 +156,31 @@ namespace intercept {
 
         class game_data_number : public game_data {
         public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_number() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            }
             float number;
         };
 
         class game_data_bool : public game_data {
         public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_bool() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            }
             bool val;
         };
 
         class game_value {
         public:
+            static uintptr_t __vptr_def;
             game_value();
             uintptr_t __vptr;
             game_data *data;

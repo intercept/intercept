@@ -293,7 +293,12 @@ namespace intercept {
         invoker::get()._sqf_game_state = sqf_game_state_;
         invoker::get()._sqf_this = sqf_this_;
 
+        std::pair<value_type, value_type> gv_structure;
         invoker::get().game_value_vptr = *(uintptr_t *)right_arg_;
+        game_value::__vptr_def = *(uintptr_t *)right_arg_;
+        gv_structure.first = game_value::__vptr_def;
+        gv_structure.second = game_value::__vptr_def;
+        invoker::get().type_structures["GV"] = gv_structure;
 
         std::pair<value_type, value_type> structure;
         structure.first = *(uintptr_t *)(*(uintptr_t *)(right_arg_ + 4));
@@ -304,14 +309,23 @@ namespace intercept {
             LOG(INFO) << "Assigned Delete Ptr";
             invoker::get().type_map[structure.first] = "ARRAY";
             invoker::get().type_structures["ARRAY"] = structure;
+            game_data_array::type_def = structure.first;
+            game_data_array::data_type_def = structure.second;
+            game_data_array_stack::type_def = structure.first;
+            game_data_array_stack::data_type_def = structure.second;
+            
         }
         else if (step == "numeric_type") {
             invoker::get().type_map[structure.first] = "SCALAR";
             invoker::get().type_structures["SCALAR"] = structure;
+            game_data_number::type_def = structure.first;
+            game_data_number::data_type_def = structure.second;
         }
         else if (step == "string_type") {
             invoker::get().type_map[structure.first] = "STRING";
             invoker::get().type_structures["STRING"] = structure;
+            game_data_string::type_def = structure.first;
+            game_data_string::data_type_def = structure.second;
         }
         else if (step == "code_type") {
             invoker::get().type_map[structure.first] = "CODE";
@@ -320,6 +334,8 @@ namespace intercept {
         else if (step == "object_type") {
             invoker::get().type_map[structure.first] = "OBJECT";
             invoker::get().type_structures["OBJECT"] = structure;
+            game_data_object::type_def = structure.first;
+            game_data_object::data_type_def = structure.second;
         }
         else if (step == "group_type") {
             invoker::get().type_map[structure.first] = "GROUP";

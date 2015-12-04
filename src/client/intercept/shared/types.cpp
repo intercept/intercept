@@ -2,7 +2,25 @@
 
 namespace intercept {
     namespace rv_types {
+        uintptr_t game_data_string::type_def;
+        uintptr_t game_data_string::data_type_def;
 
+        uintptr_t game_data_object::type_def;
+        uintptr_t game_data_object::data_type_def;
+
+        uintptr_t game_data_number::type_def;
+        uintptr_t game_data_number::data_type_def;
+
+        uintptr_t game_data_array::type_def;
+        uintptr_t game_data_array::data_type_def;
+
+        uintptr_t game_data_array_stack::type_def;
+        uintptr_t game_data_array_stack::data_type_def;
+
+
+
+
+        uintptr_t game_value::__vptr_def;
         std::string rv_string::string() {
             return std::string((char *)&char_string);
         }
@@ -46,7 +64,7 @@ namespace intercept {
         }
 
         game_value::game_value() : __vptr(NULL), data(NULL) {
-        
+            __vptr = __vptr_def;
         };
 
         void game_data_array::allocate(size_t size_) {

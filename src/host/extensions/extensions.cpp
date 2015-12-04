@@ -5,6 +5,7 @@
 namespace intercept {
 
     extensions::extensions() {
+        _functions.get_type_structure = client_function_defs::get_type_structure;
         _functions.new_string = client_function_defs::new_string;
         _functions.new_scalar = client_function_defs::new_scalar;
         _functions.new_array = client_function_defs::new_array;

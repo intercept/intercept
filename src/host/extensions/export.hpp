@@ -10,6 +10,8 @@ namespace intercept {
         game_value invoke_raw_unary(unary_function function_, game_value * right_arg_);
         game_value invoke_raw_binary(binary_function function_, game_value * left_arg_, game_value * right_arg_);
 
+        void get_type_structure(char *type_name, uintptr_t &type_def_, uintptr_t &data_type_def_);
+
         game_value new_scalar(float val_);
         game_value new_string(const char *string_);
         game_value new_array(size_t size_);

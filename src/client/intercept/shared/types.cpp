@@ -17,6 +17,8 @@ namespace intercept {
         uintptr_t game_data_array_stack::type_def;
         uintptr_t game_data_array_stack::data_type_def;
 
+        uintptr_t game_data_bool::type_def;
+        uintptr_t game_data_bool::data_type_def;
 
 
 

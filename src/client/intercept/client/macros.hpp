@@ -5,8 +5,10 @@
  *
  *
  */
-#define STACK_GAMEVALUE(var_name) game_value var_name;\
-var_name.__vptr = 
+#define STACK_BOOL(var_name, val)  game_value var_name;\
+game_data_bool var_name##_data;\
+var_name.data = &var_name##_data;\
+((game_data_bool *)var_name##.data)->value = val
 
 #define STACK_SCALAR(var_name, val)  game_value var_name;\
 game_data_number var_name##_data;\

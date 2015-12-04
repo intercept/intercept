@@ -39,6 +39,10 @@ namespace intercept {
             game_data_object::type_def = type_def;
             game_data_object::data_type_def = data_type_def;
 
+            functions.get_type_structure("BOOL", type_def, data_type_def);
+            game_data_bool::type_def = type_def;
+            game_data_bool::data_type_def = data_type_def;
+
             functions.get_type_structure("GV", type_def, data_type_def);
             game_value::__vptr_def = type_def;
 
@@ -75,7 +79,7 @@ namespace intercept {
 
         void side_chat(object obj_, const std::string &message_) {
             game_value message = functions.new_string(message_.c_str());
-            functions.invoke_raw_binary(client::__sqf::binary__sidechat__object_array__string__ret__nothing, &obj_->rv_obj, &message);
+            functions.invoke_raw_binary(client::__sqf::binary__sidechat__object_array__string__ret__nothing, &obj_->value, &message);
             functions.free_value(&message);
         }
 

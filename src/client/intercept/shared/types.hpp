@@ -175,7 +175,7 @@ namespace intercept {
                 data_type = data_type_def;
                 ref_count_internal = 1;
             }
-            bool val;
+            bool value;
         };
 
         class game_value {

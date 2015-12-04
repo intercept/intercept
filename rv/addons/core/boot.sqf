@@ -18,6 +18,7 @@ if(_res == "ceil") then {
     str "HEEEEEY";
     "intercept" callExtension "invoker_register:bool_type";
     str true;
+    str false;
     "intercept" callExtension "invoker_register:code_type";
     _code = { player; };
     str _code;

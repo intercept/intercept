@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ *
+ *
+ *
+ */
 #define STACK_GAMEVALUE(var_name) game_value var_name;\
 var_name.__vptr = 
 
@@ -22,3 +27,17 @@ game_value var_name##_array_data[3];\
 STACK_SCALAR_EL(var_name##_x, var_name##_array_data[0], input_vector##.x);\
 STACK_SCALAR_EL(var_name##_y, var_name##_array_data[1], input_vector##.y);\
 STACK_SCALAR_EL(var_name##_z, var_name##_array_data[2], input_vector##.z)
+
+
+#define SIMPLE_UNARY_FUNC_ANY_ANY(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_ANY_CODE(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_ANY_SCALAR(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_BOOL(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_CONFIG(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_CONTROL(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_DISPLAY(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_GROUP(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_LOCATION(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_NetObject(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_OBJECT(ptr, fnc, var)
+#define SIMPLE_UNARY_FUNC_BOOL_SCALAR(ptr, fnc, var)

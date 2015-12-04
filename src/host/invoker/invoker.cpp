@@ -377,6 +377,12 @@ namespace intercept {
             invoker::get().type_map[structure.first] = "NAMESPACE";
             invoker::get().type_structures["NAMESPACE"] = structure;
         }
+        else if (step == "bool_type") {
+            invoker::get().type_map[structure.first] = "BOOL";
+            invoker::get().type_structures["BOOL"] = structure;
+            game_data_bool::type_def = structure.first;
+            game_data_bool::data_type_def = structure.second;
+        }
 
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);
     }

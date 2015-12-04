@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <set>
-
+#include "client\vector.hpp"
 
 namespace intercept {
     namespace rv_types {
@@ -184,6 +184,74 @@ namespace intercept {
             game_value();
             uintptr_t __vptr;
             game_data *data;
+        };
+
+        class game_value_helper {
+        public:
+            game_value value;
+            operator game_value() { return value; }
+            operator game_value *() { return &value; }
+
+        };
+
+        class game_value_number : public game_value_helper {
+        public:
+            game_value_number(float value_) {
+                _number.number = value_;
+                value.data = &_number;
+            }
+        protected:
+            game_data_number _number;
+        };
+
+        class game_value_bool : public game_value_helper {
+        public:
+            game_value_bool(bool val_) {
+                _val.value = val_;
+                value.data = &_val;
+            }
+        protected:
+            game_data_bool _val;
+        };
+
+        class game_value_vector3 : public game_value_helper {
+        public:
+            game_value_vector3(client::types::vector3 vec_) {
+                _elements[0] = game_value_number(vec_.x);
+                _elements[1] = game_value_number(vec_.y);
+                _elements[2] = game_value_number(vec_.z);
+                _array.data = _elements;
+                value.data = &_array;
+            }
+        protected:
+            game_data_array_stack _array;
+            game_value _elements[3];
+        };
+
+        class game_value_vector2 : public game_value_helper {
+        public:
+            game_value_vector2(client::types::vector2 vec_) {
+                _elements[0] = game_value_number(vec_.x);
+                _elements[1] = game_value_number(vec_.y);
+                _array.data = _elements;
+                value.data = &_array;
+            }
+        protected:
+            game_data_array_stack _array;
+            game_value _elements[2];
+        };
+
+        template<size_t SIZE>
+        class game_value_array : public game_value_helper {
+        public:
+            game_value_array() {
+                _array.data = _elements;
+                value.data = &_array;
+            }
+            game_value & operator [](uint32_t i_) const { return _elements[i]; }
+        protected:
+            game_data_array_stack _array;
+            game_value _elements[SIZE];
         };
     }
 }

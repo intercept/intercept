@@ -12,6 +12,8 @@ namespace intercept {
                 internal_ptr(rv_types::game_value value_);
                 ~internal_ptr();
                 rv_types::game_value value;
+                operator rv_types::game_value() { return value; }
+                operator rv_types::game_value *() { return &value; }
             };
 
             class object_ptr : public internal_ptr {

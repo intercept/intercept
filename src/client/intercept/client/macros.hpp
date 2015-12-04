@@ -30,6 +30,11 @@ STACK_SCALAR_EL(var_name##_x, var_name##_array_data[0], input_vector##.x);\
 STACK_SCALAR_EL(var_name##_y, var_name##_array_data[1], input_vector##.y);\
 STACK_SCALAR_EL(var_name##_z, var_name##_array_data[2], input_vector##.z)
 
+#define STACK_ARRAY(var_name, size) game_value var_name;\
+game_data_array_stack var_name##_data;\
+var_name.data = &var_name##_data;\
+game_value var_name##_array_data[size];
+
 
 #define SIMPLE_UNARY_FUNC_ANY_ANY(ptr, fnc, var)
 #define SIMPLE_UNARY_FUNC_ANY_CODE(ptr, fnc, var)

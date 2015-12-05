@@ -3,3 +3,4 @@
 #include "chat.hpp"
 #include "core.hpp"
 #include "misc.hpp"
+#include "position.hpp"

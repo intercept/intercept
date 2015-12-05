@@ -16,8 +16,14 @@ int __cdecl intercept::api_version() {
 void __cdecl intercept::on_frame() {
     float rand_val = intercept::sqf::random(100.0f);
     std::stringstream side_chat_msg;
-    side_chat_msg << "Hello Arma World, here is some randomness: " << rand_val;
-    intercept::sqf::custom_chat(intercept::sqf::player(), 1, side_chat_msg.str());
+    
+    object player = intercept::sqf::player();
+    vector3 pos = intercept::sqf::get_pos_asl(player);
+
+    side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
+
+    intercept::sqf::side_chat(player, side_chat_msg.str());
+    intercept::sqf::set_pos_asl(player, pos);
 }
 
 

@@ -102,6 +102,10 @@ namespace intercept {
 
             class game_value_number : public game_value_helper {
             public:
+                game_value_number() {
+                    _number.number = 0.0f;
+                    value.data = &_number;
+                };
                 game_value_number(float value_) {
                     _number.number = value_;
                     value.data = &_number;
@@ -123,31 +127,38 @@ namespace intercept {
             class game_value_vector3 : public game_value_helper {
             public:
                 game_value_vector3(client::types::vector3 vec_) {
-                    _elements[0] = game_value_number(vec_.x);
-                    _elements[1] = game_value_number(vec_.y);
-                    _elements[2] = game_value_number(vec_.z);
-                    _array.data = _elements;
+                    ((game_data_number *)_vals[0].value.data)->number = vec_.x;
+                    ((game_data_number *)_vals[1].value.data)->number = vec_.y;
+                    ((game_data_number *)_vals[2].value.data)->number = vec_.z;
+                    _elements[0] = _vals[0];
+                    _elements[1] = _vals[1];
+                    _elements[2] = _vals[2];
+                    _array.data = &_elements[0];
                     _array.length = 3;
                     _array.max_size = 3;
                     value.data = &_array;
                 }
             protected:
                 game_data_array_stack _array;
+                game_value_number _vals[3];
                 game_value _elements[3];
             };
 
             class game_value_vector2 : public game_value_helper {
             public:
                 game_value_vector2(client::types::vector2 vec_) {
-                    _elements[0] = game_value_number(vec_.x);
-                    _elements[1] = game_value_number(vec_.y);
-                    _array.data = _elements;
-                    _array.length = 2;
-                    _array.max_size = 2;
+                    ((game_data_number *)_vals[0].value.data)->number = vec_.x;
+                    ((game_data_number *)_vals[1].value.data)->number = vec_.y;
+                    _elements[0] = _vals[0];
+                    _elements[1] = _vals[1];
+                    _array.data = &_elements[0];
+                    _array.length = 3;
+                    _array.max_size = 3;
                     value.data = &_array;
                 }
             protected:
                 game_data_array_stack _array;
+                game_value_number _vals[2];
                 game_value _elements[2];
             };
 

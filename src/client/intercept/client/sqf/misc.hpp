@@ -7,17 +7,11 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-        namespace __helpers {
-            float nular_function(intercept::rv_types::nular_function fnc_);
-            bool nular_function_bool(intercept::rv_types::nular_function fnc_);
-        }
-
         float random(float max_);
 		bool visible_watch();
 		bool visible_map();
 		bool visible_gps();
 		bool visible_compass();
-
 
         float save_zone_x();
         float save_zone_y();

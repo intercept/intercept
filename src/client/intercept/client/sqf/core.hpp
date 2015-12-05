@@ -7,13 +7,6 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-        namespace __helpers {
-            std::vector<object>& all_objects(nular_function fnc_);
-            std::vector<group>& all_groups(nular_function fnc_);
-            std::vector<display>& all_displays(nular_function fnc_);
-            std::vector<marker>& all_map_markers(nular_function fnc_);
-        }
-
         std::vector<object>& all_3den_entities();
         std::vector<object>& all_curators();
         std::vector<object>& all_dead();

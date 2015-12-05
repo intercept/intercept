@@ -55,6 +55,19 @@ namespace intercept {
 		bool visible_gps();
 		bool visible_compass();
 		float view_distance();
+		bool team_switch_enabled();
+		void team_switch();
+
+		float system_of_units();
+		float sun_or_moon(); // BUT WHICH ONE IS IT!?!?!??!!?
+		float sound_volume();
+		bool sling_load_assistant_shown();
+		void simul_weather_sync();
+		void select_no_player();
+		bool saving_enabled();
+		void save_profile_namespace();
+
+		std::vector<object> switchable_units();
 
         float save_zone_x();
         float save_zone_y();

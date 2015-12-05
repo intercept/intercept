@@ -200,5 +200,60 @@ namespace intercept {
 		float view_distance() {
 			return __helpers::__retrieve_nular_number(client::__sqf::nular__viewdistance__ret__scalar);
         }
+
+		bool team_switch_enabled()
+        {
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__teamswitchenabled__ret__bool);
+        }
+
+		void team_switch()
+        {
+			__helpers::__empty_nular(client::__sqf::nular__teamswitch__ret__nothing);
+        }
+
+		float system_of_units()
+        {
+			return __helpers::__retrieve_nular_number(client::__sqf::nular__systemofunits__ret__scalar);
+		}
+
+		std::vector<object> switchable_units()
+		{
+			return __helpers::all_objects(client::__sqf::nular__switchableunits__ret__array);
+		}
+
+		float sun_or_moon()
+        {
+			return __helpers::__retrieve_nular_number(client::__sqf::nular__sunormoon__ret__scalar);
+        }
+
+		float sound_volume()
+        {
+			return __helpers::__retrieve_nular_number(client::__sqf::nular__soundvolume__ret__scalar);
+        }
+
+		bool sling_load_assistant_shown()
+        {
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__slingloadassistantshown__ret__bool);
+        }
+
+		void simul_weather_sync()
+        {
+			__helpers::__empty_nular(client::__sqf::nular__simulweathersync__ret__nothing);
+        }
+
+		void select_no_player()
+        {
+			__helpers::__empty_nular(client::__sqf::nular__selectnoplayer__ret__nothing);
+        }
+
+		bool saving_enabled()
+        {
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__savingenabled__ret__bool);
+        }
+		
+		void save_profile_namespace()
+        {
+			__helpers::__empty_nular(client::__sqf::nular__saveprofilenamespace__ret__nothing);
+        }
     }
 }

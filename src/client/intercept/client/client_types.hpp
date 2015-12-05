@@ -2,6 +2,8 @@
 #include "shared.hpp"
 #include "shared\types.hpp"
 #include "vector.hpp"
+#include "client\client.hpp"
+#include <vector>
 #include <memory>
 using namespace intercept::rv_types;
 namespace intercept {
@@ -91,6 +93,8 @@ namespace intercept {
             typedef std::shared_ptr<text_ptr> text;
             typedef std::shared_ptr<team_member_ptr> team_member;
             typedef std::shared_ptr<rv_namespace_ptr> rv_namespace;
+
+            typedef std::string marker;
 
             class game_value_helper {
             public:
@@ -188,6 +192,33 @@ namespace intercept {
             protected:
                 game_data_array_stack _array;
                 game_value _elements[SIZE];
+            };
+
+            template<typename T, typename Allocator>
+            class game_value_array_dynamic : public game_value_helper {
+            public:
+                game_value_array_dynamic(std::vector<T> init_) {
+                    _array.allocate(init_.size());
+                    uint32_t i = 0;
+                    for (auto el : init_) {
+                        _array.data[i] = Allocator(el);
+                    }
+                    _array.length = init_.size();
+                    _array.max_size = init_.size();
+                    value.data = &_array;
+                }
+            protected:
+                game_data_array _array;
+            };
+
+            class game_value_string : public game_value_helper {
+            public:
+                game_value_string(std::string str_) {
+                    value = host::functions.new_string(str_.c_str());
+                }
+                ~game_value_string() {
+                    host::functions.free_value(&value);
+                }
             };
 
         }

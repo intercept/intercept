@@ -21,7 +21,7 @@ void __cdecl intercept::on_frame() {
     vector3 pos = intercept::sqf::get_pos_asl(player);
 
     side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
-
+    object test = intercept::sqf::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
     intercept::sqf::side_chat(player, side_chat_msg.str());
     intercept::sqf::set_pos_asl(player, pos);
 }

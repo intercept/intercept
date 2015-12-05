@@ -33,7 +33,7 @@ namespace intercept {
 
 			/* Unary function helpers */
 			/** Void return, standard input helpers **/
-			void __empty_unary_obj(unary_function fnc_, object obj_);
+			void __empty_unary_object(unary_function fnc_, object obj_);
 			void __empty_unary_vector(unary_function fnc_, vector3 vec_);
 			void __empty_unary_string(unary_function fnc_, std::string str_);
 			void __empty_unary_number(unary_function fnc_, float val_);
@@ -43,10 +43,10 @@ namespace intercept {
 			/** Common return/input helpers **/
 			bool __bool_unary_object(unary_function fnc_, object obj_);
 			bool __bool_unary_string(unary_function fnc_, std::string str_);
-			bool __bool_unary_float(unary_function fnc_, float val_);
+			bool __bool_unary_number(unary_function fnc_, float val_);
 			bool __bool_unary_control(unary_function fnc_, control ctl_);
 
-			float __number_unary_float(unary_function fnc_, float val_);
+			float __number_unary_number(unary_function fnc_, float val_);
 			float __number_unary_control(unary_function fnc_, control ctl_);
 			float __number_unary_string(unary_function fnc_, std::string str_);
 			float __number_unary_object(unary_function fnc_, object obj_);

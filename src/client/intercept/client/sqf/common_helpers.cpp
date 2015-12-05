@@ -159,7 +159,7 @@ namespace intercept {
 				return output;
 			}
 
-			void __empty_unary_obj(unary_function fnc_, object obj_)
+			void __empty_unary_object(unary_function fnc_, object obj_)
 			{
 				host::functions.invoke_raw_unary(fnc_, *obj_);
 			}
@@ -200,7 +200,7 @@ namespace intercept {
 				return rv;
 			}
 
-			bool __bool_unary_float(unary_function fnc_, float val_)
+			bool __bool_unary_number(unary_function fnc_, float val_)
 			{
 				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
@@ -216,7 +216,7 @@ namespace intercept {
 				return rv;
 			}
 
-			float __number_unary_float(unary_function fnc_, float val_)
+			float __number_unary_number(unary_function fnc_, float val_)
 			{
 				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
 				float rv = ((game_data_number *)num_ret.data)->number;

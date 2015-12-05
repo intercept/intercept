@@ -158,6 +158,31 @@ namespace intercept {
                 host::functions.free_value(&intersects_value);
                 return output;
             }
+
+			void __empty_unary_obj(unary_function fnc_, object obj_)
+            {
+				host::functions.invoke_raw_unary(fnc_, *obj_);
+            }
+
+			void __empty_unary_vector(unary_function fnc_, vector3 vec_)
+            {
+				host::functions.invoke_raw_unary(fnc_, game_value_vector3(vec_));
+            }
+
+			void __empty_unary_string(unary_function fnc_, std::string str_)
+            {
+				host::functions.invoke_raw_unary(fnc_, game_value_string(str_));
+            }
+
+			void __empty_unary_number(unary_function fnc_, float val_)
+            {
+				host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
+            }
+
+			void __empty_unary_bool(unary_function fnc_, bool val_)
+            {
+				host::functions.invoke_raw_unary(fnc_, game_value_bool(val_));
+            }
 		}
 	}
 }

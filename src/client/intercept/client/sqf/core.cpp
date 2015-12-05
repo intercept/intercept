@@ -29,5 +29,10 @@ namespace intercept {
 
             return std::make_shared<object_ptr>(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
         }
+
+        void delete_vehicle(object obj_)
+        {
+            host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, *obj_);
+        }
     }
 }

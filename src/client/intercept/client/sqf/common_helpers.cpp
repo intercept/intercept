@@ -1,0 +1,36 @@
+#include "client\pointers.hpp"
+#include "common_helpers.h"
+
+namespace intercept {
+	namespace sqf {
+		namespace __helpers
+		{
+			float __retrieve_nular_number(nular_function fnc_)
+			{
+				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+				float ret_number = ((game_data_number *)function_return_number.data)->number;
+				host::functions.free_value(&function_return_number);
+
+				return ret_number;
+			}
+
+			vector3 __retrieve_nular_vector3(nular_function fnc_)
+			{
+				game_value function_return_array = host::functions.invoke_raw_nular(fnc_);
+				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
+				host::functions.free_value(&function_return_array);
+				return vector3(x, y, z);
+			}
+
+			bool __retrieve_nular_bool(nular_function fnc_)
+			{
+				game_value function_return_bool = host::functions.invoke_raw_nular(fnc_);
+				bool ret_bool = ((game_data_bool *)function_return_bool.data)->value;
+				host::functions.free_value(&function_return_bool);
+				return ret_bool;
+			}
+		}
+	}
+}

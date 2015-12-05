@@ -9,6 +9,7 @@ namespace intercept {
     namespace sqf {
         namespace __helpers {
             float nular_function(intercept::rv_types::nular_function fnc_);
+            bool nular_function_bool(intercept::rv_types::nular_function fnc_);
         }
 
         float random(float max_);
@@ -19,5 +20,18 @@ namespace intercept {
         float save_zone_w();
         float save_zone_x_abs();
         float save_zone_w_abs();
+        
+        bool shown_artillerycomputer();
+        bool shown_chat();
+        bool shown_compass();
+        bool shown_curatorcompass();
+        bool shown_gps();
+        bool shown_hud__ret__array;
+        bool shown_map();
+        bool shown_pad();
+        bool shown_radio();
+        bool shown_uavfeed();
+        bool shown_warrant();
+        bool shown_watch();
     }
 }

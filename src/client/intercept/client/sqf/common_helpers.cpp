@@ -50,6 +50,11 @@ namespace intercept {
                 return std::make_shared<side_ptr>(function_return_number.data);
             }
 
+            control __retrieve_nular_control(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<control_ptr>(function_return_number.data);
+            }
+
             group __retrieve_nular_group(nular_function fnc_) {
                 game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
                 return std::make_shared<group_ptr>(function_return_number.data);

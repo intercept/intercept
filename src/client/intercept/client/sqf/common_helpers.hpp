@@ -16,6 +16,7 @@ namespace intercept {
             rv_namespace __retrieve_nular_namespace(nular_function fnc_);
             location __retrieve_nular_location(nular_function fnc_);
             side __retrieve_nular_side(nular_function fnc_);
+            control __retrieve_nular_control(nular_function fnc_);
             group __retrieve_nular_group(nular_function fnc_);
             config __retrieve_nular_config(nular_function fnc_);
             display __retrieve_nular_display(nular_function fnc_);

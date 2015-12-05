@@ -14,5 +14,10 @@ namespace intercept {
 		vector3 wind();
 		float waves();
 		void set_waves(float lerp_time_, float val_); // @TODO
+
+		float time();
+		float time_multiplier();
+		
+
 	}
 }

@@ -31,6 +31,10 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__benchmark__ret__scalar);
         }
 
+        side blufor() {
+            return __helpers::__retrieve_nular_side(client::__sqf::nular__blufor__ret__side);
+        }
+
         std::string briefingname() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__briefingname__ret__string);
         }
@@ -47,8 +51,16 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__cameraview__ret__string);
         }
 
+        config campaignconfigfile() {
+            return __helpers::__retrieve_nular_config(client::__sqf::nular__campaignconfigfile__ret__config);
+        }
+
         bool cheatsenabled() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__cheatsenabled__ret__bool);
+        }
+
+        side civilian() {
+            return __helpers::__retrieve_nular_side(client::__sqf::nular__civilian__ret__side);
         }
 
         void clearforcesrtd() {
@@ -79,6 +91,18 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__commandingmenu__ret__string);
         }
 
+        config configfile() {
+            return __helpers::__retrieve_nular_config(client::__sqf::nular__configfile__ret__config);
+        }
+
+        config confignull() {
+            return __helpers::__retrieve_nular_config(client::__sqf::nular__confignull__ret__config);
+        }
+
+        control controlnull() {
+            return __helpers::__retrieve_nular_control(client::__sqf::nular__controlnull__ret__control);
+        }
+
         std::string copyfromclipboard() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__copyfromclipboard__ret__string);
         }
@@ -101,6 +125,10 @@ namespace intercept {
 
         float currentchannel() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__currentchannel__ret__scalar);
+        }
+
+        rv_namespace currentnamespace() {
+            return __helpers::__retrieve_nular_namespace(client::__sqf::nular__currentnamespace__ret__namespace);
         }
 
         object cursortarget() {
@@ -230,7 +258,7 @@ namespace intercept {
         }
 
         // TODO std::array<bool, 2> groupiconsvisible();
-        
+
         group grpnull() {
             return __helpers::__retrieve_nular_group(client::__sqf::nular__grpnull__ret__group);
         }
@@ -318,7 +346,7 @@ namespace intercept {
         std::string language() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__language__ret__string);
         }
-        
+
         // TODO std::vector<std::array<std::string, 2>> librarycredits();
 
         std::vector<std::string> librarydisclaimers() {
@@ -399,6 +427,10 @@ namespace intercept {
             __helpers::__empty_nular(client::__sqf::nular__opencuratorinterface__ret__nothing);
         }
 
+        side opfor() {
+            return __helpers::__retrieve_nular_side(client::__sqf::nular__opfor__ret__side);
+        }
+
         float overcast() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__overcast__ret__scalar);
         }
@@ -466,6 +498,10 @@ namespace intercept {
             __helpers::__empty_nular(client::__sqf::nular__resetcamshake__ret__nothing);
         }
 
+        side resistance() {
+            return __helpers::__retrieve_nular_side(client::__sqf::nular__resistance__ret__side);
+        }
+
         bool reversedmousey() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__reversedmousey__ret__bool);
         }
@@ -518,6 +554,9 @@ namespace intercept {
         bool shown_curatorcompass() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncuratorcompass__ret__bool);
         }
+        bool shown_hud() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__shownhud__ret__array);
+        }
         bool shown_gps() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__showngps__ret__bool);
         }
@@ -543,20 +582,79 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__shownwatch__ret__bool);
         }
 
-		bool visible_watch() {
-			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblewatch__ret__bool);
+        bool visible_watch() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblewatch__ret__bool);
         }
 
-		bool visible_map() {
-			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblemap__ret__bool);
-		}
+        bool visible_map() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblemap__ret__bool);
+        }
 
-		bool visible_gps() {
-			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblegps__ret__bool);
-		}
+        bool visible_gps() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblegps__ret__bool);
+        }
 
-		bool visible_compass() {
-			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblecompass__ret__bool);
-		}
+        bool visible_compass() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblecompass__ret__bool);
+        }
+
+        float view_distance() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__viewdistance__ret__scalar);
+        }
+
+        bool team_switch_enabled()
+        {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__teamswitchenabled__ret__bool);
+        }
+
+        void team_switch()
+        {
+            __helpers::__empty_nular(client::__sqf::nular__teamswitch__ret__nothing);
+        }
+
+        float system_of_units()
+        {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__systemofunits__ret__scalar);
+        }
+
+        std::vector<object> switchable_units()
+        {
+            return __helpers::all_objects(client::__sqf::nular__switchableunits__ret__array);
+        }
+
+        float sun_or_moon()
+        {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__sunormoon__ret__scalar);
+        }
+
+        float sound_volume()
+        {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__soundvolume__ret__scalar);
+        }
+
+        bool sling_load_assistant_shown()
+        {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__slingloadassistantshown__ret__bool);
+        }
+
+        void simul_weather_sync()
+        {
+            __helpers::__empty_nular(client::__sqf::nular__simulweathersync__ret__nothing);
+        }
+
+        void select_no_player()
+        {
+            __helpers::__empty_nular(client::__sqf::nular__selectnoplayer__ret__nothing);
+        }
+
+        bool saving_enabled()
+        {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__savingenabled__ret__bool);
+        }
+
+        void save_profile_namespace()
+        {
+            __helpers::__empty_nular(client::__sqf::nular__saveprofilenamespace__ret__nothing);
+        }
     }
 }

@@ -1,6 +1,7 @@
 #include "chat.hpp"
 #include "client\pointers.hpp"
 #include "core.hpp"
+#include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
@@ -78,6 +79,16 @@ namespace intercept {
 
         std::vector<object>& all_units_uav() {
             return __helpers::all_objects(client::__sqf::nular__allunitsuav__ret__array);
+        }
+
+		float server_time()
+        {
+			return __helpers::__retrieve_nular_number(client::__sqf::nular__servertime__ret__scalar);
+        }
+
+		std::string server_name()
+        {
+			return __helpers::__retrieve_nular_string(client::__sqf::nular__servername__ret__string);
         }
     }
 }

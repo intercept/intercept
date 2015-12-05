@@ -34,9 +34,6 @@ def parse():
     binary_functions_declared = len(binary_functions)
     nular_functions_declared = len(nular_functions)
 
-    if "nular__lightnings__ret__scalar" in nular_functions:
-        print("it's in here")
-
     unary_functions_used = []
     binary_functions_used = []
     nular_functions_used = []

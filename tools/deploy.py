@@ -9,7 +9,7 @@ from pygithub3 import Github
 
 
 TRANSLATIONISSUE = 13
-TRANSLATIONBODY = """**SQF->C++ Conversion Coverage statistics**
+TRANSLATIONBODY = """## **SQF->C++ Conversion Coverage statistics**
 
 {}
 """

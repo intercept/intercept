@@ -2,7 +2,7 @@
 #include "shared.hpp"
 #include "client\client.hpp"
 #include "shared\functions.hpp"
-
+#include "client\sqf\sqf.hpp"
 
 #define DLLEXPORT __declspec(dllexport)
 

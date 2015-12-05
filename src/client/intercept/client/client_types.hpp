@@ -1,79 +1,80 @@
 #pragma once
 #include "shared.hpp"
 #include "shared\types.hpp"
+#include "vector.hpp"
 #include <memory>
-
+using namespace intercept::rv_types;
 namespace intercept {
     namespace client {
         namespace types {
             class internal_ptr {
             public:
                 internal_ptr();
-                internal_ptr(rv_types::game_value value_);
+                internal_ptr(game_value value_);
                 ~internal_ptr();
-                rv_types::game_value value;
-                operator rv_types::game_value() { return value; }
-                operator rv_types::game_value *() { return &value; }
+                game_value value;
+                operator game_value() { return value; }
+                operator game_value *() { return &value; }
             };
 
             class object_ptr : public internal_ptr {
             public:
-                object_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                object_ptr(game_value value_) : internal_ptr(value_) {};
                 ~object_ptr();
             };
             class group_ptr : public internal_ptr {
             public:
-                group_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                group_ptr(game_value value_) : internal_ptr(value_) {};
                 ~group_ptr();
             };
             class code_ptr : public internal_ptr {
             public:
-                code_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                code_ptr(game_value value_) : internal_ptr(value_) {};
                 ~code_ptr();
             };
             class config_ptr : public internal_ptr {
             public:
-                config_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                config_ptr(game_value value_) : internal_ptr(value_) {};
                 ~config_ptr();
             };
             class control_ptr : public internal_ptr {
             public:
-                control_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                control_ptr(game_value value_) : internal_ptr(value_) {};
                 ~control_ptr();
             };
             class display_ptr : public internal_ptr {
             public:
-                display_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                display_ptr(game_value value_) : internal_ptr(value_) {};
                 ~display_ptr();
             };
             class location_ptr : public internal_ptr {
             public:
-                location_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                location_ptr(game_value value_) : internal_ptr(value_) {};
                 ~location_ptr();
             };
             class script_ptr : public internal_ptr {
             public:
-                script_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                script_ptr(game_value value_) : internal_ptr(value_) {};
                 ~script_ptr();
             };
             class side_ptr : public internal_ptr {
             public:
-                side_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                side_ptr(game_value value_) : internal_ptr(value_) {};
                 ~side_ptr();
             };
             class text_ptr : public internal_ptr {
             public:
-                text_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                text_ptr(game_value value_) : internal_ptr(value_) {};
                 ~text_ptr();
             };
             class team_member_ptr : public internal_ptr {
             public:
-                team_member_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                team_member_ptr(game_value value_) : internal_ptr(value_) {};
                 ~team_member_ptr();
             };
             class rv_namespace_ptr : public internal_ptr {
             public:
-                rv_namespace_ptr(rv_types::game_value value_) : internal_ptr(value_) {};
+                rv_namespace_ptr(game_value value_) : internal_ptr(value_) {};
                 ~rv_namespace_ptr();
             };
 
@@ -90,6 +91,93 @@ namespace intercept {
             typedef std::shared_ptr<text_ptr> text;
             typedef std::shared_ptr<team_member_ptr> team_member;
             typedef std::shared_ptr<rv_namespace_ptr> rv_namespace;
+
+            class game_value_helper {
+            public:
+                game_value value;
+                operator game_value() { return value; }
+                operator game_value *() { return &value; }
+
+            };
+
+            class game_value_number : public game_value_helper {
+            public:
+                game_value_number(float value_) {
+                    _number.number = value_;
+                    value.data = &_number;
+                }
+            protected:
+                game_data_number _number;
+            };
+
+            class game_value_bool : public game_value_helper {
+            public:
+                game_value_bool(bool val_) {
+                    _val.value = val_;
+                    value.data = &_val;
+                }
+            protected:
+                game_data_bool _val;
+            };
+
+            class game_value_vector3 : public game_value_helper {
+            public:
+                game_value_vector3(client::types::vector3 vec_) {
+                    _elements[0] = game_value_number(vec_.x);
+                    _elements[1] = game_value_number(vec_.y);
+                    _elements[2] = game_value_number(vec_.z);
+                    _array.data = _elements;
+                    _array.length = 3;
+                    _array.max_size = 3;
+                    value.data = &_array;
+                }
+            protected:
+                game_data_array_stack _array;
+                game_value _elements[3];
+            };
+
+            class game_value_vector2 : public game_value_helper {
+            public:
+                game_value_vector2(client::types::vector2 vec_) {
+                    _elements[0] = game_value_number(vec_.x);
+                    _elements[1] = game_value_number(vec_.y);
+                    _array.data = _elements;
+                    _array.length = 2;
+                    _array.max_size = 2;
+                    value.data = &_array;
+                }
+            protected:
+                game_data_array_stack _array;
+                game_value _elements[2];
+            };
+
+            template<size_t SIZE>
+            class game_value_array : public game_value_helper {
+            public:
+                game_value_array() {
+                    _array.data = _elements;
+                    value.data = &_array;
+                    _array.length = SIZE;
+                    _array.max_size = SIZE;
+                }
+
+                game_value_array(std::initializer_list<game_value> values_) {
+                    _array.data = _elements;
+                    value.data = &_array;
+                    _array.length = SIZE;
+                    _array.max_size = SIZE;
+                    uint32_t i = 0;
+                    for (auto val : values_) {
+                        _elements[i++] = val;
+                    }
+                }
+                game_value & operator [](int i_) { return _elements[i_]; }
+                game_value operator [](int i_) const { return _elements[i_]; }
+
+            protected:
+                game_data_array_stack _array;
+                game_value _elements[SIZE];
+            };
 
         }
     }

@@ -1,20 +1,21 @@
 #pragma once
+#include "../shared.hpp"
+#include "client.hpp"
+#include "shared\functions.hpp"
+#include "client_types.hpp"
 
 using namespace intercept::rv_types;
 using namespace intercept::client;
 
-extern intercept::client_functions functions;
-
 namespace intercept {
     namespace client {
 
-        namespace __sqf {
-#include "sqf_pointers.hpp"
-        }
+        class __sqf {
+        public:
+            static void __initialize();
+#include "sqf_pointers_declaration.hpp"
+        };
 
-        void __initialize()
-        {
-#include "sqf_assignments.hpp"
-        }
+        
     }
 }

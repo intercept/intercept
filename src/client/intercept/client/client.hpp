@@ -3,13 +3,15 @@
 #include "shared\functions.hpp"
 #include "client_types.hpp"
 
-
-
-
 #define DLLEXPORT __declspec(dllexport)
-using namespace intercept::client::types;
+
 namespace intercept {
     namespace client {
+
+        class host {
+        public:
+            static client_functions functions;
+        };
         
         extern "C" {
             DLLEXPORT void __cdecl assign_functions(const struct intercept::client_functions funcs);
@@ -18,9 +20,5 @@ namespace intercept {
         void __initialize();
     }
 
-    namespace sqf {
-        float random(float max_);
-        object player();
-        void side_chat(object obj_, const std::string &message_);
-    }
+
 }

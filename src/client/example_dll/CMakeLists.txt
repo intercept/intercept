@@ -12,17 +12,20 @@ file(GLOB INTERCEPT_EXAMPLE_SOURCES *.h *.hpp *.c *.cpp)
 file(GLOB INTERCEPT_CLIENT_SOURCES  ../intercept/*.h ../intercept/*.hpp ../intercept/*.c ../intercept/*.cpp)
 file(GLOB INTERCEPT_CLIENT_MAIN_SOURCES  ../intercept/client/*.h ../intercept/client/*.hpp ../intercept/client/*.c ../intercept/client/*.cpp)
 file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../intercept/shared/*.h ../intercept/shared/*.hpp ../intercept/shared/*.c ../intercept/shared/*.cpp)
+file(GLOB INTERCEPT_CLIENT_SQF_SHARED_SOURCES  ../intercept/client/sqf/*.h ../intercept/client/sqf/*.hpp ../intercept/client/sqf/*.c ../intercept/client/sqf/*.cpp)
 
 
 SOURCE_GROUP("example_dll" FILES ${INTERCEPT_EXAMPLE_SOURCES})
 SOURCE_GROUP("intercept_includes" FILES ${INTERCEPT_CLIENT_SOURCES})
 SOURCE_GROUP("intercept_includes\\client" FILES ${INTERCEPT_CLIENT_MAIN_SOURCES})
 SOURCE_GROUP("intercept_includes\\shared" FILES ${INTERCEPT_CLIENT_SHARED_SOURCES})
+SOURCE_GROUP("intercept_includes\\client\\sqf" FILES ${INTERCEPT_CLIENT_SQF_SHARED_SOURCES})
 
 
 
 
-add_library( ${INTERCEPT_EXAMPLE_NAME} SHARED ${INTERCEPT_EXAMPLE_SOURCES} ${INTERCEPT_CLIENT_SOURCES} ${INTERCEPT_CLIENT_MAIN_SOURCES} ${INTERCEPT_CLIENT_SHARED_SOURCES})
+
+add_library( ${INTERCEPT_EXAMPLE_NAME} SHARED ${INTERCEPT_EXAMPLE_SOURCES} ${INTERCEPT_CLIENT_SOURCES} ${INTERCEPT_CLIENT_MAIN_SOURCES} ${INTERCEPT_CLIENT_SHARED_SOURCES} ${INTERCEPT_CLIENT_SQF_SHARED_SOURCES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} "../intercept")
 
 target_link_libraries(${INTERCEPT_EXAMPLE_NAME} ${LINK_LIBS})

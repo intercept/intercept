@@ -80,12 +80,16 @@ namespace intercept {
     }
 
     bool controller::export_ptr_list(const arguments &args_, std::string & result_) {
-        std::ofstream pointers("sqf_pointers.hpp");
+        std::ofstream pointers("sqf_pointers_declaration.hpp");
+        std::ofstream pointers_def("sqf_pointers_definitions.hpp");
+
         std::ofstream assignments("sqf_assignments.hpp");
         pointers << "//Exported Pointer Definitions For: " << args_.as_string(0) << "\n\n";
         assignments << "//Exported Pointer Assignments For: " << args_.as_string(0) << "\n\n";
 
         pointers << "\n// Unary Functions\n";
+        pointers_def << "\n// Unary Functions\n";
+
         assignments << "\n// Unary Functions\n";
 
         auto unary_list = loader::get().unary();
@@ -106,14 +110,17 @@ namespace intercept {
                     std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
                     std::string first_arg_type = *op.op->arg_type.type().begin();
                     std::string pointer_name = "unary__" + op_name + "__" + arg_types + "__ret__" + return_type;
-                    pointers << "unary_function " << pointer_name << ";\n";
+                    pointers_def << "unary_function __sqf::" << pointer_name << ";\n";
+                    pointers << "static unary_function " << pointer_name << ";\n";
                     //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
-                    assignments << "__sqf::" << pointer_name << " = " << "(unary_function)functions.get_unary_function_typed(\"" << op_name << "\", \"" << first_arg_type << "\");\n";
+                    assignments << "__sqf::" << pointer_name << " = " << "(unary_function)host::functions.get_unary_function_typed(\"" << op_name << "\", \"" << first_arg_type << "\");\n";
                 }
             }
         }
 
         pointers << "\n// Binary Functions\n";
+        pointers_def << "\n// Binary Functions\n";
+
         assignments << "\n// Binary Functions\n";
 
         auto binary_list = loader::get().binary();
@@ -140,15 +147,18 @@ namespace intercept {
                     std::string first_arg2_type = *op.op->arg2_type.type().begin();
 
                     std::string pointer_name = "binary__" + op_name + "__" + arg1_types + "__" + arg2_types + "__ret__" + return_type;
-                    pointers << "binary_function " << pointer_name << ";\n";
+                    pointers_def << "binary_function __sqf::" << pointer_name << ";\n";
+                    pointers << "static binary_function " << pointer_name << ";\n";
 
-                    assignments << "__sqf::" << pointer_name << " = " << "(binary_function)functions.get_binary_function_typed(\"" << op_name << 
+                    assignments << "__sqf::" << pointer_name << " = " << "(binary_function)host::functions.get_binary_function_typed(\"" << op_name << 
                         "\", \"" << first_arg1_type << "\", \"" << first_arg2_type << "\");\n";
                 }
             }
         }
 
         pointers << "\n// Nular Functions\n";
+        pointers_def << "\n// Nular Functions\n";
+
         assignments << "\n// Nular Functions\n";
 
         auto nular_list = loader::get().nular();
@@ -166,9 +176,11 @@ namespace intercept {
                     std::string return_type = op.op->return_type.type_str();
                     std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
                     std::string pointer_name = "nular__" + op_name + "__ret__" + return_type;
-                    pointers << "nular_function " << pointer_name << ";\n";
+                    pointers_def << "nular_function __sqf::" << pointer_name << ";\n";
+                    pointers << "static nular_function " << pointer_name << ";\n";
+
                     //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
-                    assignments << "__sqf::" << pointer_name << " = " << "(nular_function)functions.get_nular_function(\"" << op_name << "\");\n";
+                    assignments << "__sqf::" << pointer_name << " = " << "(nular_function)host::functions.get_nular_function(\"" << op_name << "\");\n";
                 }
             }
         }

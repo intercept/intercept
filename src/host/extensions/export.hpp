@@ -1,6 +1,6 @@
 #pragma once
 #include "shared.hpp"
-#include "shared\types.hpp"
+#include "types.hpp"
 
 using namespace intercept::rv_types;
 

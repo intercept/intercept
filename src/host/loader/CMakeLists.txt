@@ -8,11 +8,9 @@ file(GLOB INTERCEPT_CLIENT_SOURCES  ../../client/intercept/*.h ../../client/inte
 file(GLOB INTERCEPT_CLIENT_MAIN_SOURCES  ../../client/intercept/client/*.h ../../client/intercept/client/*.hpp ../../client/intercept/client/*.c ../../client/intercept/client/*.cpp)
 file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../../client/intercept/shared/*.h ../../client/intercept/shared/*.hpp ../../client/intercept/shared/*.c ../../client/intercept/shared/*.cpp)
 
-SOURCE_GROUP("intercept_includes" FILES ${INTERCEPT_CLIENT_SOURCES})
-SOURCE_GROUP("intercept_includes\\client" FILES ${INTERCEPT_CLIENT_MAIN_SOURCES})
 SOURCE_GROUP("intercept_includes\\shared" FILES ${INTERCEPT_CLIENT_SHARED_SOURCES})
 
-add_library(loader_static STATIC ${LOADER_SOURCES} ${INTERCEPT_CLIENT_SOURCES} ${INTERCEPT_CLIENT_MAIN_SOURCES} ${INTERCEPT_CLIENT_SHARED_SOURCES})
+add_library(loader_static STATIC ${LOADER_SOURCES} ${INTERCEPT_CLIENT_SHARED_SOURCES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories("C:/Program Files (x86)/Microsoft Research/Detours Express 3.0/include/")
 

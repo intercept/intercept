@@ -4,7 +4,7 @@
 #include "logging.hpp"
 #include "arguments.hpp"
 #include "loader.hpp"
-#include "shared\types.hpp"
+#include "types.hpp"
 #include <mutex>
 #include <condition_variable>
 #include <queue>

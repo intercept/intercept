@@ -3,7 +3,7 @@
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "shared\types.hpp"
+#include "types.hpp"
 #include <unordered_set>
 
 using namespace intercept::rv_types;

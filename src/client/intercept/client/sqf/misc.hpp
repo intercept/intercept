@@ -13,6 +13,11 @@ namespace intercept {
         }
 
         float random(float max_);
+		bool visible_watch();
+		bool visible_map();
+		bool visible_gps();
+		bool visible_compass();
+
 
         float save_zone_x();
         float save_zone_y();

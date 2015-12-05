@@ -1,5 +1,6 @@
 #include "chat.hpp"
 #include "client\pointers.hpp"
+#include "common_helpers.h"
 
 namespace intercept {
     namespace sqf {
@@ -82,5 +83,25 @@ namespace intercept {
         bool shown_watch() {
             return __helpers::nular_function_bool(client::__sqf::nular__shownwatch__ret__bool);
         }
+
+		bool visible_watch()
+        {
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblewatch__ret__bool);
+        }
+
+		bool visible_map()
+		{
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblemap__ret__bool);
+		}
+
+		bool visible_gps()
+		{
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblegps__ret__bool);
+		}
+
+		bool visible_compass()
+		{
+			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblecompass__ret__bool);
+		}
     }
 }

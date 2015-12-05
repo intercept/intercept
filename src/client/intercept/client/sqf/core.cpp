@@ -4,6 +4,7 @@
 
 namespace intercept {
     namespace sqf {
+
         object player() {
             game_value player_obj = host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object);
             return std::make_shared<object_ptr>(player_obj);
@@ -33,6 +34,50 @@ namespace intercept {
         void delete_vehicle(object obj_)
         {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, *obj_);
+        }
+
+        std::vector<object>& all_3den_entities() {
+            return __helpers::all_objects(client::__sqf::nular__all3denentities__ret__array);
+        }
+
+        std::vector<object>& all_curators() {
+            return __helpers::all_objects(client::__sqf::nular__all3denentities__ret__array);
+        }
+
+        std::vector<object>& all_dead() {
+            return __helpers::all_objects(client::__sqf::nular__alldead__ret__array);
+        }
+
+        std::vector<object>& all_deadmen() {
+            return __helpers::all_objects(client::__sqf::nular__alldeadmen__ret__array);
+        }
+
+        std::vector<display>& all_displays() {
+            return __helpers::all_displays(client::__sqf::nular__alldisplays__ret__array);
+        }
+
+        std::vector<group>& all_groups() {
+            return __helpers::all_groups(client::__sqf::nular__allgroups__ret__array);
+        }
+
+        std::vector<marker>& all_map_markers() {
+            return __helpers::all_map_markers(client::__sqf::nular__allmapmarkers__ret__array);
+        }
+
+        std::vector<object>& all_mines() {
+            return __helpers::all_objects(client::__sqf::nular__allmines__ret__array);
+        }
+
+        std::vector<object>& all_players() {
+            return __helpers::all_objects(client::__sqf::nular__allplayers__ret__array);
+        }
+
+        std::vector<object>& all_units() {
+            return __helpers::all_objects(client::__sqf::nular__allunits__ret__array);
+        }
+
+        std::vector<object>& all_units_uav() {
+            return __helpers::all_objects(client::__sqf::nular__allunitsuav__ret__array);
         }
     }
 }

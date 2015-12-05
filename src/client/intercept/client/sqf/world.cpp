@@ -1,5 +1,5 @@
 #include "client\pointers.hpp"
-#include "common_helpers.h"
+#include "common_helpers.hpp"
 
 namespace intercept {
 	namespace sqf {

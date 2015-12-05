@@ -13,5 +13,24 @@ namespace intercept {
 		bool visible_gps();
 		bool visible_compass();
 
+        float save_zone_x();
+        float save_zone_y();
+        float save_zone_h();
+        float save_zone_w();
+        float save_zone_x_abs();
+        float save_zone_w_abs();
+        
+        bool shown_artillerycomputer();
+        bool shown_chat();
+        bool shown_compass();
+        bool shown_curatorcompass();
+        bool shown_gps();
+        bool shown_hud__ret__array;
+        bool shown_map();
+        bool shown_pad();
+        bool shown_radio();
+        bool shown_uavfeed();
+        bool shown_warrant();
+        bool shown_watch();
     }
 }

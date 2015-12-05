@@ -20,7 +20,7 @@ REPOPATH = "{}/{}".format(REPOUSER,REPONAME)
 
 
 def update_coverage_statistics(token):
-    diag = sp.check_output(["python", "tools/conversion_coverage.py", "--markdown"])
+    diag = sp.check_output(["python3", "tools/conversion_coverage.py", "--markdown"])
     diag = str(diag, "utf-8")
     repo = Github(token).get_repo(REPOPATH)
     issue = repo.get_issue(TRANSLATIONISSUE)

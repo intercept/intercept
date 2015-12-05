@@ -195,5 +195,10 @@ namespace intercept {
 		bool visible_compass() {
 			return __helpers::__retrieve_nular_bool(client::__sqf::nular__visiblecompass__ret__bool);
 		}
+
+		
+		float view_distance() {
+			return __helpers::__retrieve_nular_number(client::__sqf::nular__viewdistance__ret__scalar);
+        }
     }
 }

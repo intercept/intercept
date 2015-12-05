@@ -54,6 +54,7 @@ namespace intercept {
 		bool visible_map();
 		bool visible_gps();
 		bool visible_compass();
+		float view_distance();
 
         float save_zone_x();
         float save_zone_y();

@@ -30,6 +30,41 @@ namespace intercept {
                 return std::make_shared<object_ptr>(function_return_number.data);
             }
 
+            text __retrieve_nular_text(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<text_ptr>(function_return_number.data);
+            }
+
+            rv_namespace __retrieve_nular_namespace(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<rv_namespace_ptr>(function_return_number.data);
+            }
+
+            location __retrieve_nular_location(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<location_ptr>(function_return_number.data);
+            }
+
+            side __retrieve_nular_side(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<side_ptr>(function_return_number.data);
+            }
+
+            group __retrieve_nular_group(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<group_ptr>(function_return_number.data);
+            }
+
+            config __retrieve_nular_config(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<config_ptr>(function_return_number.data);
+            }
+
+            display __retrieve_nular_display(nular_function fnc_) {
+                game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
+                return std::make_shared<display_ptr>(function_return_number.data);
+            }
+
 			vector3 __retrieve_nular_vector3(nular_function fnc_) {
 				game_value function_return_array = host::functions.invoke_raw_nular(fnc_);
 				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;

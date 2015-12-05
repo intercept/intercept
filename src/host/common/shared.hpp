@@ -22,7 +22,7 @@
 #define EXTENSION_RETURN() return;
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #define sleep(x) Sleep(x)
 #endif
 

@@ -7,7 +7,7 @@ from xml.dom import minidom
 def parse():
     scriptpath = os.path.realpath(__file__)
     projectpath = os.path.dirname(os.path.dirname(scriptpath))
-    projectpath = os.path.join(projectpath, "src\\client\\intercept\\client")
+    projectpath = os.path.join(projectpath, "src/client/intercept/client")
     projectpath_sqf = os.path.join(projectpath, "sqf")
 
     declarations_file = os.path.join(projectpath, "sqf_pointers_declaration.hpp")

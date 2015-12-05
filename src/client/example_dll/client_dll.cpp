@@ -17,7 +17,7 @@ void __cdecl intercept::on_frame() {
     float rand_val = intercept::sqf::random(100.0f);
     std::stringstream side_chat_msg;
     side_chat_msg << "Hello Arma World, here is some randomness: " << rand_val;
-    intercept::sqf::side_chat(intercept::sqf::player(), side_chat_msg.str());
+    intercept::sqf::custom_chat(intercept::sqf::player(), 1, side_chat_msg.str());
 }
 
 

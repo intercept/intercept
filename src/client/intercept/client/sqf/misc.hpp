@@ -7,6 +7,6 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-        object player();
+        float random(float max_);
     }
 }

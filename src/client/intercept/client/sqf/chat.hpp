@@ -15,5 +15,7 @@ namespace intercept {
         void group_chat(object obj_, const std::string & message_);
         void vehicle_chat(object obj_, const std::string & message_);
         void command_chat(object obj_, const std::string & message_);
+        void system_chat(const std::string &message_);
+        void custom_chat(object obj_, uint32_t channel_id_, const std::string &message_);
     }
 }

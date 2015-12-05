@@ -29,10 +29,6 @@ def parse():
             if (m_nular):
                 nular_functions.append(m_nular.group(0))
 
-    print("Unary functions declared: {}".format(len(unary_functions)))
-    print("Binary functions declared: {}".format(len(binary_functions)))
-    print("Nular functions declared: {}".format(len(nular_functions)))
-
     # For statistics usage later
     unary_functions_declared = len(unary_functions)
     binary_functions_declared = len(binary_functions)
@@ -64,9 +60,38 @@ def parse():
                         nular_functions.remove(function)
                         nular_functions_used.append(function)
 
+    percentage_completed = ((unary_functions_declared + binary_functions_declared + nular_functions_declared) / (len(unary_functions_used) + len(binary_functions_used) + len(nular_functions_used))) / 100
+    print("### PERCENTAGE COMPLETED: {}%\n".format(round(percentage_completed)))
+
+    print("Unary functions declared: {}".format(unary_functions_declared))
+    print("Binary functions declared: {}".format(binary_functions_declared))
+    print("Nular functions declared: {}".format(nular_functions_declared))
     print("Unary functions used: {}".format(len(unary_functions_used)))
     print("Binary functions used: {}".format(len(binary_functions_used)))
     print("Nular functions used: {}".format(len(nular_functions_used)))
+
+    print("### Unary Functions")
+    for function in unary_functions: # Output any unary functions yet to be completed
+        print("- [ ] {}".format(function))
+    for function in unary_functions_used: # Output any unary functions completed
+        print("- [x] {}".format(function))
+    print("\n----")
+
+    print("### Binary Functions")
+    for function in binary_functions: # Output any binary functions yet to be completed
+        print("- [ ] {}".format(function))
+    for function in binary_functions_used: # Output any binary functions completed
+        print("- [x] {}".format(function))
+    print("\n----")
+
+    print("### Nular Functions")
+    for function in nular_functions: # Output any nular functions yet to be completed
+        print("- [ ] {}".format(function))
+    for function in nular_functions_used: # Output any nular functions completed
+        print("- [x] {}".format(function))
+    print("\n----")
+
+
 
 if __name__ == "__main__":
     parse()

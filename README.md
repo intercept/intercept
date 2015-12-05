@@ -10,6 +10,10 @@ Intercept works on a host/client based system, in which the host, Intercept itse
 
 The intercept library also provides raw C bindings to the C++ versions of SQF functions, so it is entirely possible to use Intercept as the basis for writing in additional scripting languages to the RV engine, such as Python or Lua.
 
+## [Progress](https://github.com/NouberNou/intercept/issues/13)
+
+You can view the progress of wrapper completion [here](https://github.com/NouberNou/intercept/issues/13).
+
 ## Terminology 
 
 #### RVEngine 

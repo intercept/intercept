@@ -11,6 +11,106 @@ namespace intercept {
             return rand;
         }
 
+        float acc_time() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
+        }
+
+        std::vector<std::string> activated_addons() {
+            return __helpers::_nular_strings(client::__sqf::nular__activatedaddons__ret__array);
+        }
+
+        std::vector<team_member> agents() {
+            return __helpers::_nular_team_members(client::__sqf::nular__agents__ret__array);
+        }
+
+        float armorypoints() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__armorypoints__ret__scalar);
+        }
+
+        float benchmark() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__benchmark__ret__scalar);
+        }
+
+        std::string briefingname() {
+            return __helpers::__retrieve_nular_string(client::__sqf::nular__briefingname__ret__string);
+        }
+
+        bool cadetmode() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__cadetmode__ret__bool);
+        }
+
+        object cameraon() {
+            return __helpers::__retrieve_nular_object(client::__sqf::nular__cameraon__ret__object);
+        }
+
+        std::string cameraview() {
+            return __helpers::__retrieve_nular_string(client::__sqf::nular__cameraview__ret__string);
+        }
+
+        bool cheatsenabled() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__cheatsenabled__ret__bool);
+        }
+
+        void clearforcesrtd() {
+            __helpers::__empty_nular(client::__sqf::nular__clearforcesrtd__ret__nothing);
+        }
+
+        void clearitempool() {
+            __helpers::__empty_nular(client::__sqf::nular__clearitempool__ret__nothing);
+        }
+
+        void clearmagazinepool() {
+            __helpers::__empty_nular(client::__sqf::nular__clearmagazinepool__ret__nothing);
+        }
+
+        void clearradio() {
+            __helpers::__empty_nular(client::__sqf::nular__clearradio__ret__nothing);
+        }
+
+        void clearweaponpool() {
+            __helpers::__empty_nular(client::__sqf::nular__clearweaponpool__ret__nothing);
+        }
+
+        float clientowner() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__clientowner__ret__scalar);
+        }
+
+        std::string commandingmenu() {
+            return __helpers::__retrieve_nular_string(client::__sqf::nular__commandingmenu__ret__string);
+        }
+
+        std::string copyfromclipboard() {
+            return __helpers::__retrieve_nular_string(client::__sqf::nular__copyfromclipboard__ret__string);
+        }
+
+        object curatorcamera() {
+            return __helpers::__retrieve_nular_object(client::__sqf::nular__curatorcamera__ret__object);
+        }
+
+        object curatormouseover() {
+            return __helpers::__retrieve_nular_object(client::__sqf::nular__curatormouseover__ret__object);
+        }
+
+        std::vector<object> curatorselected() {
+            return __helpers::all_objects(client::__sqf::nular__curatorselected__ret__array);
+        }
+
+        std::string current3denoperation() {
+            return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
+        }
+
+        float currentchannel() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__currentchannel__ret__scalar);
+        }
+
+        object cursortarget() {
+            return __helpers::__retrieve_nular_object(client::__sqf::nular__cursortarget__ret__object);
+        }
+
+        float daytime() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__daytime__ret__scalar);
+        }
+
         float save_zone_x() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonex__ret__scalar);
         }
@@ -28,6 +128,19 @@ namespace intercept {
         }
         float save_zone_w_abs() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonewabs__ret__scalar);
+        }
+
+        float diag_fps() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__diag_fps__ret__scalar);
+        }
+        float diag_fpsmin() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__diag_fpsmin__ret__scalar);
+        }
+        float diag_frameno() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__diag_frameno__ret__scalar);
+        }
+        float diag_ticktime() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__diag_ticktime__ret__scalar);
         }
 
         bool shown_artillerycomputer() {

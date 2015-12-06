@@ -36,9 +36,7 @@ namespace intercept {
         config confignull();
         control controlnull();
         std::string copyfromclipboard();
-        object curatorcamera();
-        object curatormouseover();
-        std::vector<object> curatorselected();
+
         std::string current3denoperation();
         float currentchannel();
         rv_namespace currentnamespace();
@@ -134,7 +132,6 @@ namespace intercept {
         float musicvolume();
         float nextweatherchange();
         object objnull();
-        void opencuratorinterface();
         side opfor();
         float overcast();
         float overcastforecast();
@@ -188,7 +185,6 @@ namespace intercept {
         bool shown_artillerycomputer();
         bool shown_chat();
         bool shown_compass();
-        bool shown_curatorcompass();
         bool shown_gps();
         bool shown_hud();
         bool shown_map();
@@ -269,11 +265,6 @@ namespace intercept {
         bool create_dialog(std::string value_);
         group create_group(side value_);
         void create_vehicle_crew(object value_);
-
-        float curator_camera_area_ceiling(object value_);
-        bool curator_editing_area_type(object value_);
-        float curator_points(object value_);
-        float curator_waypoint_cost(object value_);
         std::string current_command(object value_);
         std::string current_magazine(object value_);
         std::string current_muzzle(object value_);
@@ -348,8 +339,6 @@ namespace intercept {
         float get_ammo_cargo(object value_);
         float get_anim_aim_precision(object value_);
         float get_anim_speed_coef(object value_);
-        object get_assigned_curator_logic(object value_);
-        object get_assigned_curator_unit(object value_);
         float get_bleeding_remaining(object value_);
         float get_burning_value(object value_);
         object get_connected_uav(object value_);
@@ -540,9 +529,6 @@ namespace intercept {
         void remove_all_actions(object value_);
         void remove_all_assigned_items(object value_);
         void remove_all_containers(object value_);
-        void remove_all_curator_addons(object value_);
-        void remove_all_curator_camera_areas(object value_);
-        void remove_all_curator_editing_areas(object value_);
         void remove_all_handgun_items(object value_);
         void remove_all_items(object value_);
         void remove_all_items_with_magazines(object value_);
@@ -601,7 +587,6 @@ namespace intercept {
         void show_cinema_border(bool value_);
         void show_commanding_menu(std::string value_);
         void show_compass(bool value_);
-        void show_curator_compass(bool value_);
         void show_gps(bool value_);
         void show_hud(bool value_);
         void show_map(bool value_);
@@ -642,7 +627,6 @@ namespace intercept {
         void tv_clear(control value_);
         std::string type_of(object value_);
         void uisleep(float value_);
-        void unassign_curator(object value_);
         void unassign_team(object value_);
         void unassign_vehicle(object value_);
         bool underwater(object value_);
@@ -665,7 +649,6 @@ namespace intercept {
         float add3denlayer(float value0_, std::string value1_);
         void add_backpack(object value0_, std::string value1_);
         void add_backpack_global(object value0_, std::string value1_);
-        void add_curator_points(float value0_, object value1_);
         void add_goggles(object value0_, std::string value1_);
         void add_handgun_item(object value0_, std::string value1_);
         void add_headgear(object value0_, std::string value1_);
@@ -688,7 +671,6 @@ namespace intercept {
         void add_weapon_global(object value0_, std::string value1_);
         void allow3dmode(bool value0_, control value1_);
         void allow_crew_in_immobile(bool value0_, object value1_);
-        void allow_curator_logic_ignore_areas(bool value0_, object value1_);
         void allow_damage(bool value0_, object value1_);
         void allow_dammage(bool value0_, object value1_);
         void allow_file_operations(bool value0_, control value1_);
@@ -717,7 +699,7 @@ namespace intercept {
         void create_menu(float value0_, control value1_);
         display create_mission_display(std::string value0_, display value1_);
 
-        float curator_coef(object value0_, std::string value1_);
+
         void debug_fsm(float value0_, bool value1_);
         bool diary_subject_exists(object value0_, std::string value1_);
         void direct_say(object value0_, std::string value1_);
@@ -820,8 +802,6 @@ namespace intercept {
         void remove_action(float value0_, object value1_);
         void remove_all_event_handlers(object value0_, std::string value1_);
         void remove_all_mpevent_handlers(object value0_, std::string value1_);
-        void remove_curator_camera_area(float value0_, object value1_);
-        void remove_curator_editing_area(float value0_, object value1_);
         void remove_group_icon(float value0_, group value1_);
         void remove_handgun_item(object value0_, std::string value1_);
         void remove_item(object value0_, std::string value1_);

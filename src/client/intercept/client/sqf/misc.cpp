@@ -108,18 +108,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__copyfromclipboard__ret__string);
         }
 
-        object curatorcamera() {
-            return __helpers::__retrieve_nular_object(client::__sqf::nular__curatorcamera__ret__object);
-        }
-
-        object curatormouseover() {
-            return __helpers::__retrieve_nular_object(client::__sqf::nular__curatormouseover__ret__object);
-        }
-
-        std::vector<object> curatorselected() {
-            return __helpers::all_objects(client::__sqf::nular__curatorselected__ret__array);
-        }
-
         std::string current3denoperation() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
         }
@@ -427,10 +415,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__objnull__ret__object);
         }
 
-        void opencuratorinterface() {
-            __helpers::__empty_nular(client::__sqf::nular__opencuratorinterface__ret__nothing);
-        }
-
         side opfor() {
             return __helpers::__retrieve_nular_side(client::__sqf::nular__opfor__ret__side);
         }
@@ -554,9 +538,6 @@ namespace intercept {
         }
         bool shown_compass() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncompass__ret__bool);
-        }
-        bool shown_curatorcompass() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncuratorcompass__ret__bool);
         }
         bool shown_hud() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__shownhud__ret__array);
@@ -948,22 +929,6 @@ namespace intercept {
             __helpers::__empty_unary_object(client::__sqf::unary__createvehiclecrew__object__ret__nothing, value_);
         }
 
-        float curator_camera_area_ceiling(object value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__curatorcameraareaceiling__object__ret__scalar, value_);
-        }
-
-        bool curator_editing_area_type(object value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__curatoreditingareatype__object__ret__bool, value_);
-        }
-
-        float curator_points(object value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__curatorpoints__object__ret__scalar, value_);
-        }
-
-        float curator_waypoint_cost(object value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__curatorwaypointcost__object__ret__scalar, value_);
-        }
-
         std::string current_command(object value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__currentcommand__object__ret__string, value_);
         }
@@ -1254,14 +1219,6 @@ namespace intercept {
 
         float get_anim_speed_coef(object value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__getanimspeedcoef__object__ret__scalar, value_);
-        }
-
-        object get_assigned_curator_logic(object value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__getassignedcuratorlogic__object__ret__object, value_);
-        }
-
-        object get_assigned_curator_unit(object value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__getassignedcuratorunit__object__ret__object, value_);
         }
 
         float get_bleeding_remaining(object value_) {
@@ -2012,18 +1969,6 @@ namespace intercept {
             __helpers::__empty_unary_object(client::__sqf::unary__removeallcontainers__object__ret__nothing, value_);
         }
 
-        void remove_all_curator_addons(object value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__removeallcuratoraddons__object__ret__nothing, value_);
-        }
-
-        void remove_all_curator_camera_areas(object value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__removeallcuratorcameraareas__object__ret__nothing, value_);
-        }
-
-        void remove_all_curator_editing_areas(object value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__removeallcuratoreditingareas__object__ret__nothing, value_);
-        }
-
         void remove_all_handgun_items(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__removeallhandgunitems__object__ret__nothing, value_);
         }
@@ -2256,10 +2201,6 @@ namespace intercept {
             __helpers::__empty_unary_bool(client::__sqf::unary__showcompass__bool__ret__nothing, value_);
         }
 
-        void show_curator_compass(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__showcuratorcompass__bool__ret__nothing, value_);
-        }
-
         void show_gps(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__showgps__bool__ret__nothing, value_);
         }
@@ -2420,10 +2361,6 @@ namespace intercept {
             __helpers::__empty_unary_number(client::__sqf::unary__uisleep__scalar__ret__nothing, value_);
         }
 
-        void unassign_curator(object value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__unassigncurator__object__ret__nothing, value_);
-        }
-
         void unassign_team(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__unassignteam__object__ret__nothing, value_);
         }
@@ -2512,10 +2449,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_curator_points(float value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratorpoints__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
         void add_goggles(object value0_, std::string value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addgoggles__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
@@ -2602,10 +2535,6 @@ namespace intercept {
 
         void allow_crew_in_immobile(bool value0_, object value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__allowcrewinimmobile__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
-        }
-
-        void allow_curator_logic_ignore_areas(bool value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
         void allow_damage(bool value0_, object value1_) {
@@ -2723,13 +2652,6 @@ namespace intercept {
         display create_mission_display(std::string value0_, display value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__createmissiondisplay__display__string__ret__display, game_value_string(value0_), *value1_);
             return std::make_shared<display_ptr>(ret_value);
-        }
-
-        float curator_coef(object value0_, std::string value1_) {
-            game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__curatorcoef__object__string__ret__scalar, *value0_, game_value_string(value1_));
-            float rv = ((game_data_number *)ret_value.data)->number;
-            host::functions.free_value(&ret_value);
-            return rv;
         }
 
         void debug_fsm(float value0_, bool value1_) {
@@ -3238,14 +3160,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeallmpeventhandlers__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_curator_camera_area(float value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removecuratorcameraarea__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
-        void remove_curator_editing_area(float value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removecuratoreditingarea__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
         void remove_group_icon(float value0_, group value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
@@ -3378,18 +3292,6 @@ namespace intercept {
 
         void set_combat_mode(std::string value0_, team_member value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, game_value_string(value0_), *value1_);
-        }
-
-        void set_curator_camera_area_ceiling(float value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorcameraareaceiling__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
-        void set_curator_editing_area_type(bool value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcuratoreditingareatype__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
-        }
-
-        void set_curator_waypoint_cost(float value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
         void set_custom_aim_coef(float value0_, object value1_) {

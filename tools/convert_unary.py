@@ -1,6 +1,7 @@
 import os
 import sys
 import re
+import conversion_coverage as coverage
 
 def parse():
     scriptpath = os.path.realpath(__file__)
@@ -8,164 +9,195 @@ def parse():
     projectpath = os.path.join(projectpath, "tools")
     declarations_file = os.path.join(projectpath, "unary_definitions.txt")
 
+    used_functions = coverage.parse()
+    unary_functions = used_functions[0]
+    binary_functions = used_functions[1]
+    nular_functions = used_functions[2]
+
     converted = []
     functions_converted = []
-
+    helper_methods = {}
     with open(declarations_file) as f:
         for line in f:
             m_unary = re.search('(?<=static unary_function )\w+', line)
             if (m_unary): # We have a unary function on this line
-                function_name = re.search('(?<=unary__)[a-zA-Z]+', m_unary.group(0)).group(0)
+                skip_generation = m_unary.group(0).lower() in unary_functions # check if we can skip auto generation for this - it's already done somewhere in our source files
+                function_name = re.search('(?<=unary__)[a-zA-Z0-9]+', m_unary.group(0)).group(0)
                 function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
                 function_output = function_name
                 ret_type = 'void'
 
-                if (line.find("ret__scalar") != -1):
+                part = line
+
+                if (part.find("ret__scalar") != -1):
                     function_output = "float " + function_output
                     ret_type = "float"
 
-                if (line.find("ret__bool") != -1):
+                if (part.find("ret__bool") != -1):
                     function_output = "bool " + function_output
                     ret_type = "bool"
 
-                if (line.find("ret__object") != -1):
+                if (part.find("ret__object") != -1):
                     function_output = "object " + function_output
                     ret_type = "object"
 
-                if (line.find("ret__side") != -1):
+                if (part.find("ret__side") != -1):
                     function_output = "side " + function_output
                     ret_type = "side"
 
-                if (line.find("ret__string") != -1):
+                if (part.find("ret__string") != -1):
                     function_output = "std::string " + function_output
                     ret_type = "std::string"
 
-                if (line.find("ret__display") != -1):
+                if (part.find("ret__display") != -1):
                     function_output = "display " + function_output
                     ret_type = "display"
 
-                if (line.find("ret__control") != -1):
+                if (part.find("ret__control") != -1):
                     function_output = "control " + function_output
                     ret_type = "control"
 
-                if (line.find("ret__nothing") != -1):
+                if (part.find("ret__nothing") != -1):
                     function_output = "void " + function_output
                     ret_type = "void"
 
-                if (line.find("ret__text") != -1):
+                if (part.find("ret__text") != -1):
                     function_output = "text " + function_output
                     ret_type = "text"
 
-                if (line.find("ret__group") != -1):
+                if (part.find("ret__group") != -1):
                     function_output = "group " + function_output
                     ret_type = "group"
 
-                if (line.find("ret__team_member") != -1):
+                if (part.find("ret__team_member") != -1):
                     function_output = "team_member " + function_output
                     ret_type = "team_member"
 
                 function_output += "("
-                input_type = 'float'
-                if (line.find("__scalar__") != -1):
-                    function_output += "float value_"
-                    input_type = 'float'
+                input_type = []
 
-                if (line.find("__scalar_nan__") != -1):
-                    function_output += "float value_"
-                    input_type = 'float'
+                to_match = [["__scalar__", "float"], ["__scalar_nan__", "float"], ["__bool__", "bool"],
+                    ["__object__", "object"], ["__side__", "side"], ["__string__", "string"], ["__display__", "display"],
+                    ["__control__", "control"], ["__text__", "string"], ["__group__", "group"], ["__array__", "array"], ["__team_member__", "team_member"]]
 
-                if (line.find("__bool__") != -1):
-                    function_output += "bool value_"
-                    input_type = 'bool'
+                value_type_n = 0
+                for match_check in to_match:
+                    if (part.find(match_check[0]) != -1):
+                        if (len(input_type) > 0):
+                            function_output += ", "
+                        type_name = match_check[1]
+                        if type_name == "string":
+                            type_name = "const std::string&"
+                        function_output += type_name + " value_".format(value_type_n)
+                        input_type.append(match_check[1])
+                        value_type_n+=1
 
-                if (line.find("__object__") != -1):
-                    function_output += "object value_"
-                    input_type = 'object'
-
-                if (line.find("__side__") != -1):
-                    function_output += "side value_"
-                    input_type = 'side'
-
-                if (line.find("__string__") != -1):
-                    function_output += "std::string value_"
-                    input_type = 'string'
-
-                if (line.find("__display__") != -1):
-                    function_output += "display value_"
-                    input_type = 'display'
-
-                if (line.find("__control__") != -1):
-                    function_output += "control value_"
-                    input_type = 'control'
-
-                if (line.find("__text__") != -1):
-                    function_output += "text value_"
-                    input_type = 'text'
-
-                if (line.find("__group__") != -1):
-                    function_output += "group value_"
-                    input_type = 'group'
-
-                if (line.find("__array__") != -1):
-                    function_output += "array value_"
-                    input_type = 'array'
                 function_output += ")"
 
                 if (not function_output.startswith(function_name) and not function_output.endswith("()")): # we got a function we can generate with our rules
                     function_implementation = function_output + " {\n    "
                     function_declaration = function_output + ";"
 
+                    helper_method = ""
                     # __empty_unary_number(unary_function fnc_, float val_);
                     if (ret_type == 'float'):
-                        function_implementation += "return __number_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'bool'):
-                        function_implementation += "return __bool_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'std::string'):
-                        function_implementation += "return __string_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'object'):
-                        function_implementation += "return __object_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'control'):
-                        function_implementation += "return __control_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'text'):
-                        function_implementation += "return __text_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'display'):
-                        function_implementation += "return __display_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'void'):
-                        function_implementation += "__empty_unary_"
+                        helper_method += ""
                     elif  (ret_type == 'side'):
-                        function_implementation += "return __side_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'group'):
-                        function_implementation += "return __group_unary_"
+                        helper_method += "game_value ret_value = "
+                    elif  (ret_type == 'team_member'):
+                        helper_method += "game_value ret_value = "
 
-                    if (input_type == 'float'):
-                        function_implementation += "number("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'bool'):
-                        function_implementation += "bool("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'string'):
-                        function_implementation += "string("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'object'):
-                        function_implementation += "object("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'control'):
-                        function_implementation += "control("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'text'):
-                        function_implementation += "text("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'display'):
-                        function_implementation += "display("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'side'):
-                        function_implementation += "side("+ m_unary.group(0).lower() +", value_);\n"
-                    elif  (input_type == 'group'):
-                        function_implementation += "group("+ m_unary.group(0).lower() +", value_);\n"
+                    helper_method += "host::functions.invoke_raw_unary"
+                    function_implementation += helper_method + "(client::__sqf::"+ m_unary.group(0).lower()
 
-                    function_implementation += "}\n"
-                    if input_type != 'array':
-                        converted.append(function_declaration)
-                        functions_converted.append(function_implementation)
+                    value_type_n = 0
+                    for type_name in input_type:
+                        function_implementation += ", "
+                        if (type_name == 'float'):
+                            function_implementation += "game_value_number(value{}_)".format(value_type_n)
+                        elif  (type_name == 'bool'):
+                            function_implementation += "game_value_bool(value{}_)".format(value_type_n)
+                        elif  (type_name == 'string'):
+                            function_implementation += "game_value_string(value{}_)".format(value_type_n)
+                        elif  (type_name == 'object'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'control'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'text'):
+                            function_implementation += "game_value_string(value{}_)".format(value_type_n)
+                        elif  (type_name == 'display'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'side'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'group'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'team_member'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        value_type_n+=1
+
+                    function_implementation += ");\n"  # close method invokation
+
+                    # handle return value
+                    return_conversion = ""
+                    if (ret_type == 'float'):
+                        return_conversion += "    float rv = ((game_data_number *)ret_value.data)->number;\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'bool'):
+                        return_conversion += "    bool rv = ((game_data_bool *)ret_value.data)->value;\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'std::string'):
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'object'):
+                        return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
+                    elif  (ret_type == 'control'):
+                        return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
+                    elif  (ret_type == 'text'):
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'display'):
+                        return_conversion += "    return std::make_shared<display_ptr>(ret_value);\n"
+                    elif  (ret_type == 'side'):
+                        return_conversion += "    return std::make_shared<side_ptr>(ret_value);\n"
+                    elif  (ret_type == 'group'):
+                        return_conversion += "    return std::make_shared<group_ptr>(ret_value);\n"
+                    elif  (ret_type == 'team_member'):
+                        return_conversion += "    return std::make_shared<team_member_ptr>(ret_value);\n"
+
+                    function_implementation += return_conversion + "}\n" # close function definition
+
+                    if 'array' not in input_type:
+                        if not skip_generation:
+                            converted.append(function_declaration)
+                            functions_converted.append(function_implementation)
+                        if helper_method in helper_methods.keys():
+                            helper_methods[helper_method] +=1
+                        else:
+                            helper_methods[helper_method] = 1
+
+    #orig_stdout = sys.stdout
+    #f = file('out.txt', 'w')
+    #sys.stdout = f
 
     for output in converted:
         print(output)
 
     for output in functions_converted:
         print(output)
+    #for helper in helper_methods.keys():
+    #    print("{}: {}".format(helper, helper_methods[helper]))
 
 if __name__ == "__main__":
     parse()

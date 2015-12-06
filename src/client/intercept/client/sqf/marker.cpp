@@ -4,7 +4,7 @@
 
 namespace intercept {
     namespace sqf {
-		namespace marker {
+		namespace markers {
 			void delete_marker(const std::string& value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__deletemarker__string__ret__nothing, value_);
 			}

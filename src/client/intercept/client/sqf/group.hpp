@@ -7,7 +7,7 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-		namespace group {
+		namespace groups {
 			bool group_icon_selectable();
 			std::array<bool, 2> group_icons_visible();
 			group grp_null();

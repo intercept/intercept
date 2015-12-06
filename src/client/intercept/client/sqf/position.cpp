@@ -2,8 +2,6 @@
 #include "client\pointers.hpp"
 #include "position.hpp"
 
-#pragma deprecated(get_pos_obj)
-
 namespace intercept {
     namespace sqf {
 		namespace position {

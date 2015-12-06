@@ -4,7 +4,7 @@
 
 namespace intercept {
     namespace sqf {
-		namespace group {
+		namespace groups {
 			bool group_icon_selectable() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__groupiconselectable__ret__bool);
 			}

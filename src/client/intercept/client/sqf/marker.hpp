@@ -7,7 +7,7 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-		namespace marker {
+		namespace markers {
 			void delete_marker(const std::string& value_);
 			void delete_marker_local(const std::string& value_);
 			float marker_alpha(const std::string& value_);

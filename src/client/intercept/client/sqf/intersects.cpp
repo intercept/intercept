@@ -14,18 +14,18 @@ namespace intercept {
                     game_data_array* element = ((game_data_array *)intersects->data[i].data); // our element array
 
                     intersect_surfaces surfaces; // Our intersecting surfaces
-                    game_data_array* position = ((game_data_array *)element[0].data); // finding the position
+                    game_data_array* position = ((game_data_array *)element->data[0].data); // finding the position
                     surfaces.intersectPosASL = vector3(); // the actual position where line intersects 1st surface
                     surfaces.intersectPosASL.x = ((game_data_number *)position[0].data)->number;
                     surfaces.intersectPosASL.y = ((game_data_number *)position[1].data)->number;
                     surfaces.intersectPosASL.z = ((game_data_number *)position[2].data)->number;
 
                     // translating rv string to std string
-                    surfaces.surfaceNormal = ((game_data_string *)element[1].data)->get_string(); // a normal to the intersected surface
+                    surfaces.surfaceNormal = ((game_data_string *)element->data[1].data)->get_string(); // a normal to the intersected surface
 
-                                                                                                  // translating objects
-                    surfaces.intersectObject = std::make_shared<object_ptr>(element[2]); // the object the surface belongs to (could be proxy object)
-                    surfaces.parentObject = std::make_shared<object_ptr>(element[3]); // the object proxy object belongs to (not always the same as intersect object)
+                    // translating objects
+                    surfaces.intersectObject = std::make_shared<object_ptr>(element->data[2]); // the object the surface belongs to (could be proxy object)
+                    surfaces.parentObject = std::make_shared<object_ptr>(element->data[3]); // the object proxy object belongs to (not always the same as intersect object)
 
                     output.push_back(std::make_shared<intersect_surfaces>(surfaces)); // Store the surfaces for our return
                 }

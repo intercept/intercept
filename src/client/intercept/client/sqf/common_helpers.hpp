@@ -24,13 +24,6 @@ namespace intercept {
             config __retrieve_nular_config(nular_function fnc_);
             display __retrieve_nular_display(nular_function fnc_);
 
-			std::vector<team_member> _nular_team_members(nular_function fnc_);
-			std::vector<std::string> _nular_strings(nular_function fnc_);
-			std::vector<object> all_objects(nular_function fnc_);
-			std::vector<group> all_groups(nular_function fnc_);
-			std::vector<display> all_displays(nular_function fnc_);
-			std::vector<marker> all_map_markers(nular_function fnc_);
-
 			/* Unary function helpers */
 			/** Void return, standard input helpers **/
 			void __empty_unary_object(unary_function fnc_, object obj_);

@@ -13,7 +13,7 @@ namespace intercept {
         }
 
         std::vector<object> curatorselected() {
-            return __helpers::all_objects(client::__sqf::nular__curatorselected__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__curatorselected__ret__array));
         }
 
         void opencuratorinterface() {

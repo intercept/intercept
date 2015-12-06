@@ -38,61 +38,68 @@ namespace intercept {
         }
 
         std::vector<object>& all_3den_entities() {
-            return __helpers::all_objects(client::__sqf::nular__all3denentities__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
         }
 
         std::vector<object>& all_curators() {
-            return __helpers::all_objects(client::__sqf::nular__allcurators__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allcurators__ret__array));
         }
 
         std::vector<object>& all_dead() {
-            return __helpers::all_objects(client::__sqf::nular__alldead__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldead__ret__array));
         }
 
         std::vector<object>& all_deadmen() {
-            return __helpers::all_objects(client::__sqf::nular__alldeadmen__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldeadmen__ret__array));
         }
 
         std::vector<display>& all_displays() {
-            return __helpers::all_displays(client::__sqf::nular__alldisplays__ret__array);
+            return __helpers::__convert_to_displays_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldisplays__ret__array));
         }
 
         std::vector<group>& all_groups() {
-            return __helpers::all_groups(client::__sqf::nular__allgroups__ret__array);
+            return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allgroups__ret__array));
         }
 
         std::vector<marker>& all_map_markers() {
-            return __helpers::all_map_markers(client::__sqf::nular__allmapmarkers__ret__array);
+            return __helpers::__convert_to_markers_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmapmarkers__ret__array));
         }
 
         std::vector<object>& all_mines() {
-            return __helpers::all_objects(client::__sqf::nular__allmines__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmines__ret__array));
         }
 
         std::vector<object>& all_players() {
-            return __helpers::all_objects(client::__sqf::nular__allplayers__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allplayers__ret__array));
         }
 
         std::vector<object>& all_units() {
-            return __helpers::all_objects(client::__sqf::nular__allunits__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allunits__ret__array));
         }
 
         std::vector<object>& all_units_uav() {
-            return __helpers::all_objects(client::__sqf::nular__allunitsuav__ret__array);
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allunitsuav__ret__array));
         }
 
-		float server_time()
-        {
-			return __helpers::__retrieve_nular_number(client::__sqf::nular__servertime__ret__scalar);
+		float server_time() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__servertime__ret__scalar);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
-		std::string server_name()
-        {
-			return __helpers::__retrieve_nular_string(client::__sqf::nular__servername__ret__string);
+		std::string server_name() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__servername__ret__string);
+            std::string ret_number = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return ret_number;
         }
 
         bool is_null(object value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__isnull__object__ret__bool, value_);
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
         bool is_null(group value_) {
@@ -103,7 +110,10 @@ namespace intercept {
         }
 
         bool is_null(control value_) {
-            return __helpers::__bool_unary_control(client::__sqf::unary__isnull__control__ret__bool, value_);
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
         bool is_null(display value_) {
@@ -111,6 +121,35 @@ namespace intercept {
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
+        }
+
+        bool is_null(script value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        bool is_null(task value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        script script_null() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__scriptnull__ret__script);
+            return std::make_shared<script_ptr>(ret_value);
+        }
+
+        task task_null() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__tasknull__ret__task);
+            return std::make_shared<task_ptr>(ret_value);
+        }
+
+        rv_namespace ui_namespace() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__uinamespace__ret__namespace);
+            return std::make_shared<rv_namespace_ptr>(ret_value);
         }
 
         std::vector<script> diag_active_mission_fsms() {

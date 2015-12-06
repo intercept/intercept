@@ -65,6 +65,10 @@ namespace intercept {
             {
                 host::functions.free_value(&value);
             }
+            task_ptr::~task_ptr()
+            {
+                host::functions.free_value(&value);
+            }
         }
     }
 }

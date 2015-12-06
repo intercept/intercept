@@ -79,8 +79,12 @@ namespace intercept {
                 rv_namespace_ptr(game_value value_) : internal_ptr(value_) {};
                 ~rv_namespace_ptr();
             };
-
-
+            class task_ptr : public internal_ptr {
+            public:
+                task_ptr(game_value value_) : internal_ptr(value_) {};
+                ~task_ptr();
+            };
+            
             typedef std::shared_ptr<object_ptr> object;
             typedef std::shared_ptr<group_ptr> group;
             typedef std::shared_ptr<code_ptr> code;
@@ -93,6 +97,7 @@ namespace intercept {
             typedef std::shared_ptr<text_ptr> text;
             typedef std::shared_ptr<team_member_ptr> team_member;
             typedef std::shared_ptr<rv_namespace_ptr> rv_namespace;
+            typedef std::shared_ptr<task_ptr> task;
 
             typedef std::string marker;
 

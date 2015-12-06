@@ -32,6 +32,12 @@ namespace intercept {
         bool is_null(group value_);
         bool is_null(control value_);
         bool is_null(display value_);
+        bool is_null(script value_);
+        bool is_null(task value_);
+        
+        script script_null();
+        task task_null();
+        rv_namespace ui_namespace();
 
         std::vector<script> diag_active_mission_fsms();
         std::vector<script> diag_active_sqf_scripts();

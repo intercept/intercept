@@ -32,53 +32,52 @@ def parse():
                 if (part.find("ret__scalar") != -1):
                     function_output = "float " + function_output
                     ret_type = "float"
-
                 if (part.find("ret__bool") != -1):
                     function_output = "bool " + function_output
                     ret_type = "bool"
-
                 if (part.find("ret__object") != -1):
                     function_output = "object " + function_output
                     ret_type = "object"
-
                 if (part.find("ret__side") != -1):
                     function_output = "side " + function_output
                     ret_type = "side"
-
                 if (part.find("ret__string") != -1):
                     function_output = "std::string " + function_output
                     ret_type = "std::string"
-
                 if (part.find("ret__display") != -1):
                     function_output = "display " + function_output
                     ret_type = "display"
-
                 if (part.find("ret__control") != -1):
                     function_output = "control " + function_output
                     ret_type = "control"
-
                 if (part.find("ret__nothing") != -1):
                     function_output = "void " + function_output
                     ret_type = "void"
-
                 if (part.find("ret__text") != -1):
                     function_output = "text " + function_output
                     ret_type = "text"
-
                 if (part.find("ret__group") != -1):
                     function_output = "group " + function_output
                     ret_type = "group"
-
                 if (part.find("ret__team_member") != -1):
                     function_output = "team_member " + function_output
                     ret_type = "team_member"
-
+                if (part.find("ret__task") != -1):
+                    function_output = "task " + function_output
+                    ret_type = "task"
+                if (part.find("ret__script") != -1):
+                    function_output = "script " + function_output
+                    ret_type = "script"
+                if (part.find("ret__namespace") != -1):
+                    function_output = "namespace " + function_output
+                    ret_type = "namespace"
                 function_output += "("
                 input_type = []
 
                 to_match = [["__scalar__", "float"], ["__scalar_nan__", "float"], ["__bool__", "bool"],
                     ["__object__", "object"], ["__side__", "side"], ["__string__", "string"], ["__display__", "display"],
-                    ["__control__", "control"], ["__text__", "string"], ["__group__", "group"], ["__array__", "array"], ["__team_member__", "team_member"]]
+                    ["__control__", "control"], ["__text__", "string"], ["__group__", "group"], ["__array__", "array"], ["__team_member__", "team_member"],
+                    ["__task__", "task"], ["__script__", "script"], ["__namespace__", "namespace"]]
 
                 value_type_n = 0
                 for match_check in to_match:
@@ -100,27 +99,9 @@ def parse():
 
                     helper_method = ""
                     # __empty_unary_number(unary_function fnc_, float val_);
-                    if (ret_type == 'float'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'bool'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'std::string'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'object'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'control'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'text'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'display'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'void'):
+                    if  (ret_type == 'void'):
                         helper_method += ""
-                    elif  (ret_type == 'side'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'group'):
-                        helper_method += "game_value ret_value = "
-                    elif  (ret_type == 'team_member'):
+                    else:
                         helper_method += "game_value ret_value = "
 
                     helper_method += "host::functions.invoke_raw_unary"
@@ -149,6 +130,8 @@ def parse():
                             function_implementation += "*value{}_".format(value_type_n)
                         elif  (type_name == 'team_member'):
                             function_implementation += "*value{}_".format(value_type_n)
+                        else:
+                            function_implementation += "*value{}_".format(value_type_n)
                         value_type_n+=1
 
                     function_implementation += ");\n"  # close method invokation
@@ -175,6 +158,12 @@ def parse():
                         return_conversion += "    return std::make_shared<group_ptr>(ret_value);\n"
                     elif  (ret_type == 'team_member'):
                         return_conversion += "    return std::make_shared<team_member_ptr>(ret_value);\n"
+                    elif  (ret_type == 'script'):
+                        return_conversion += "    return std::make_shared<script_ptr>(ret_value);\n"
+                    elif  (ret_type == 'task'):
+                        return_conversion += "    return std::make_shared<task_ptr>(ret_value);\n"
+                    elif  (ret_type == 'rv_namespace'):
+                        return_conversion += "    return std::make_shared<rv_namespace_ptr>(ret_value);\n"
 
                     function_implementation += return_conversion + "}\n" # close function definition
 

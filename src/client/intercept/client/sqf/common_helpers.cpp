@@ -85,26 +85,7 @@ namespace intercept {
 				host::functions.free_value(&function_return_bool);
 				return ret_bool;
 			}
-
-			std::vector<object> all_objects(nular_function fnc_) {	
-                return __convert_to_objects_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-			std::vector<std::string> _nular_strings(nular_function fnc_) {
-                return __convert_to_strings_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-			std::vector<team_member> _nular_team_members(nular_function fnc_) {
-                return __convert_to_team_members_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-			std::vector<group> all_groups(nular_function fnc_) {
-                return __convert_to_groups_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-			std::vector<display> all_displays(nular_function fnc_) {
-                return __convert_to_displays_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-			std::vector<marker> all_map_markers(nular_function fnc_) {
-                return __convert_to_markers_vector(host::functions.invoke_raw_nular(fnc_));
-			}
-
+            
 			void __empty_unary_object(unary_function fnc_, object obj_)
 			{
 				host::functions.invoke_raw_unary(fnc_, *obj_);

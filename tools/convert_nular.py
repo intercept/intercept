@@ -32,47 +32,45 @@ def parse():
                 if (part.find("ret__scalar") != -1):
                     function_output = "float " + function_output
                     ret_type = "float"
-
+                if (part.find("ret__script") != -1):
+                    function_output = "script " + function_output
+                    ret_type = "script"
                 if (part.find("ret__bool") != -1):
                     function_output = "bool " + function_output
                     ret_type = "bool"
-
                 if (part.find("ret__object") != -1):
                     function_output = "object " + function_output
                     ret_type = "object"
-
                 if (part.find("ret__side") != -1):
                     function_output = "side " + function_output
                     ret_type = "side"
-
                 if (part.find("ret__string") != -1):
                     function_output = "std::string " + function_output
                     ret_type = "std::string"
-
                 if (part.find("ret__display") != -1):
                     function_output = "display " + function_output
                     ret_type = "display"
-
                 if (part.find("ret__control") != -1):
                     function_output = "control " + function_output
                     ret_type = "control"
-
                 if (part.find("ret__nothing") != -1):
                     function_output = "void " + function_output
                     ret_type = "void"
-
                 if (part.find("ret__text") != -1):
                     function_output = "text " + function_output
                     ret_type = "text"
-
                 if (part.find("ret__group") != -1):
                     function_output = "group " + function_output
                     ret_type = "group"
-
+                if (part.find("ret__namespace") != -1):
+                    function_output = "rv_namespace " + function_output
+                    ret_type = "rv_namespace"
+                if (part.find("ret__task") != -1):
+                    function_output = "task " + function_output
+                    ret_type = "task"
                 if (part.find("ret__team_member") != -1):
                     function_output = "team_member " + function_output
                     ret_type = "team_member"
-
                 if (part.find("ret__array") != -1):
                     function_output = "std::vector<?> " + function_output
                     ret_type = "array"
@@ -96,6 +94,12 @@ def parse():
                     elif  (ret_type == 'control'):
                         helper_method += "game_value ret_value = "
                     elif  (ret_type == 'text'):
+                        helper_method += "game_value ret_value = "
+                    elif  (ret_type == 'script'):
+                        helper_method += "game_value ret_value = "
+                    elif  (ret_type == 'task'):
+                        helper_method += "game_value ret_value = "
+                    elif  (ret_type == 'rv_namespace'):
                         helper_method += "game_value ret_value = "
                     elif  (ret_type == 'display'):
                         helper_method += "game_value ret_value = "
@@ -125,6 +129,12 @@ def parse():
                         return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
                     elif  (ret_type == 'control'):
                         return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
+                    elif  (ret_type == 'script'):
+                        return_conversion += "    return std::make_shared<script_ptr>(ret_value);\n"
+                    elif  (ret_type == 'task'):
+                        return_conversion += "    return std::make_shared<task_ptr>(ret_value);\n"
+                    elif  (ret_type == 'rv_namespace'):
+                        return_conversion += "    return std::make_shared<rv_namespace_ptr>(ret_value);\n"
                     elif  (ret_type == 'text'):
                         return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'display'):

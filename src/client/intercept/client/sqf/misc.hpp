@@ -900,5 +900,15 @@ namespace intercept {
         side west();
         bool buldozer_is_enabled_road_diag();
         void buldozer_reload_oper_map();
+        void cancel_simple_task_destination(task value_);
+        task current_task(object value_);
+        script exec_vm(const std::string& value_);
+        float priority(task value_);
+        bool script_done(script value_);
+        bool task_completed(task value_);
+        task task_parent(task value_);
+        std::string task_state(task value_);
+        void terminate(script value_);
+        std::string type(task value_);
     }
 }

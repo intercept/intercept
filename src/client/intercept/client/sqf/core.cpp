@@ -42,7 +42,7 @@ namespace intercept {
         }
 
         std::vector<object>& all_curators() {
-            return __helpers::all_objects(client::__sqf::nular__all3denentities__ret__array);
+            return __helpers::all_objects(client::__sqf::nular__allcurators__ret__array);
         }
 
         std::vector<object>& all_dead() {
@@ -111,6 +111,39 @@ namespace intercept {
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
+        }
+
+        std::vector<script> diag_active_mission_fsms() {
+            game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
+            game_data_array* array_value = ((game_data_array *)input__.data);
+            std::vector<script> output;
+            for (int i = 0; i < array_value->length; ++i) {
+                output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+            }
+            host::functions.free_value(&input__);
+            return output;
+        }
+
+        std::vector<script> diag_active_sqf_scripts() {
+            game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
+            game_data_array* array_value = ((game_data_array *)input__.data);
+            std::vector<script> output;
+            for (int i = 0; i < array_value->length; ++i) {
+                output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+            }
+            host::functions.free_value(&input__);
+            return output;
+        }
+
+        std::vector<script> diag_active_sqs_scripts() {
+            game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
+            game_data_array* array_value = ((game_data_array *)input__.data);
+            std::vector<script> output;
+            for (int i = 0; i < array_value->length; ++i) {
+                output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+            }
+            host::functions.free_value(&input__);
+            return output;
         }
     }
 }

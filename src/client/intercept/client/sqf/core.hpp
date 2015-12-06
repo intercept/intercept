@@ -27,10 +27,14 @@ namespace intercept {
 
 		float server_time();
 		std::string server_name();
-        
+
         bool is_null(object value_);
         bool is_null(group value_);
         bool is_null(control value_);
         bool is_null(display value_);
+
+        std::vector<script> diag_active_mission_fsms();
+        std::vector<script> diag_active_sqf_scripts();
+        std::vector<script> diag_active_sqs_scripts();
     }
 }

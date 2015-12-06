@@ -3496,6 +3496,60 @@ namespace intercept {
             return rv;
         }
 
+        float radio_volume() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__radiovolume__ret__scalar);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
 
+        void save_game() {
+            host::functions.invoke_raw_nular(client::__sqf::nular__savegame__ret__nothing);
+        }
+
+        void save_joysticks() {
+            host::functions.invoke_raw_nular(client::__sqf::nular__savejoysticks__ret__nothing);
+        }
+
+        side side_enemy() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__sideenemy__ret__side);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        side side_friendly() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__sidefriendly__ret__side);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        side side_logic() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__sidelogic__ret__side);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        side side_unknown() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__sideunknown__ret__side);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        team_member team_member_null() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__teammembernull__ret__team_member);
+            return std::make_shared<team_member_ptr>(ret_value);
+        }
+
+        side west() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__west__ret__side);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        bool buldozer_is_enabled_road_diag() {
+            game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__buldozer_isenabledroaddiag__ret__bool);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        void buldozer_reload_oper_map() {
+            host::functions.invoke_raw_nular(client::__sqf::nular__buldozer_reloadopermap__ret__nothing);
+        }
     }
 }

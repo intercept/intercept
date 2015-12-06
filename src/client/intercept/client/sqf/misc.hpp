@@ -888,5 +888,17 @@ namespace intercept {
         std::string team_name(team_member value_);
         std::string team_type(team_member value_);
         float waypoint_timeout_current(group value_);
+
+        float radio_volume();
+        void save_game();
+        void save_joysticks();
+        side side_enemy();
+        side side_friendly();
+        side side_logic();
+        side side_unknown();
+        team_member team_member_null();
+        side west();
+        bool buldozer_is_enabled_road_diag();
+        void buldozer_reload_oper_map();
     }
 }

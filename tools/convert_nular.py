@@ -107,8 +107,10 @@ def parse():
                         helper_method += "game_value ret_value = "
                     elif  (ret_type == 'team_member'):
                         helper_method += "game_value ret_value = "
+                    elif  (ret_type == 'array'):
+                        helper_method += "game_value input__ = "
 
-                    helper_method += "host::functions.invoke_raw_unary"
+                    helper_method += "host::functions.invoke_raw_nular"
                     function_implementation += helper_method + "(client::__sqf::"+ m_unary.group(0).lower() + ");\n"
 
                     # handle return value

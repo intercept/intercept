@@ -22,7 +22,7 @@ def parse():
             m_unary = re.search('(?<=static binary_function )\w+', line)
             if (m_unary): # We have a unary function on this line
                 skip_generation = m_unary.group(0).lower() in binary_functions # check if we can skip auto generation for this - it's already done somewhere in our source files
-                function_name = re.search('(?<=binary__)[a-zA-Z]+', m_unary.group(0)).group(0)
+                function_name = re.search('(?<=binary__)[a-zA-Z0-9]+', m_unary.group(0)).group(0)
                 function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
                 function_output = function_name
                 ret_type = 'void'
@@ -133,7 +133,7 @@ def parse():
                             function_implementation += "game_value_number(value{}_)".format(value_type_n)
                         elif  (type_name == 'bool'):
                             function_implementation += "game_value_bool(value{}_)".format(value_type_n)
-                        elif  (type_name == 'std::string'):
+                        elif  (type_name == 'string'):
                             function_implementation += "game_value_string(value{}_)".format(value_type_n)
                         elif  (type_name == 'object'):
                             function_implementation += "*value{}_".format(value_type_n)
@@ -160,13 +160,13 @@ def parse():
                     elif  (ret_type == 'bool'):
                         return_conversion += "    bool rv = ((game_data_bool *)ret_value.data)->value;\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'std::string'):
-                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv\n"
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'object'):
                         return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
                     elif  (ret_type == 'control'):
                         return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
                     elif  (ret_type == 'text'):
-                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv\n"
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'display'):
                         return_conversion += "    return std::make_shared<display_ptr>(ret_value);\n"
                     elif  (ret_type == 'side'):

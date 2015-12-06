@@ -209,6 +209,7 @@ namespace intercept {
         if (get_function(function_name_, original_function)) {
             return _unhook(hook_, &(void *&)trampoline_, original_function);
         }
+        return false;
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, binary_function & trampoline_)
@@ -218,6 +219,7 @@ namespace intercept {
         if (get_function(function_name_, original_function)) {
             return _unhook(hook_, &(void *&)trampoline_, original_function);
         }
+        return false;
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, nular_function & trampoline_)

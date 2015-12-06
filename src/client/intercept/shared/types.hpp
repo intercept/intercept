@@ -89,6 +89,138 @@ namespace intercept {
             uintptr_t data_type;
         };
 
+        class game_data_group : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_group() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *group;
+        };
+
+        class game_data_config : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_config() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *config;
+        };
+
+        class game_data_control : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_control() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *control;
+        };
+
+        class game_data_display : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_display() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *display;
+        };
+
+        class game_data_location : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_location() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *location;
+        };
+
+        class game_data_script : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_script() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *script;
+        };
+
+        class game_data_side : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_side() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *side;
+        };
+
+        class game_data_text : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_text() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *text;
+        };
+
+        class game_data_team : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_team() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *team;
+        };
+
+        class game_data_namespace : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_namespace() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *rv_namespace;
+        };
+
+        class game_data_code : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_code() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *code;
+        };
+
         class game_data_object : public game_data {
         public:
             static uintptr_t type_def;

@@ -90,13 +90,16 @@ namespace intercept {
         {
 			return __helpers::__retrieve_nular_string(client::__sqf::nular__servername__ret__string);
         }
-        
+
         bool is_null(object value_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__isnull__object__ret__bool, value_);
         }
 
         bool is_null(group value_) {
-            return true; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
         bool is_null(control value_) {
@@ -104,7 +107,10 @@ namespace intercept {
         }
 
         bool is_null(display value_) {
-            return nullptr; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
     }
 }

@@ -9,6 +9,7 @@ using namespace intercept::client::types;
 namespace intercept {
     namespace sqf {
         float acc_time();
+        object agent(team_member value_);
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
         //std::vector<?> airdensity_curvertd(); // no entry on the biki
@@ -857,5 +858,35 @@ namespace intercept {
         bool unregister_task(const std::string& value0_, team_member value1_);
         void use_audio_time_for_moves(bool value0_, object value1_);
         void vehicle_radio(object value0_, const std::string& value1_);
+
+        side create_center(side value_);
+        void delete_center(side value_);
+        void delete_team(team_member value_);
+        void do3denaction(const std::string& value_);
+        display find_display(float value_);
+        side flag_side(object value_);
+        std::string formation(team_member value_);
+        bool from_editor(team_member value_);
+        void get3dengrid(const std::string& value_);
+        object get_editor_camera(control value_);
+        object hc_leader(group value_);
+        std::string image(const std::string& value_);
+        bool is_agent(team_member value_);
+        std::string key_image(float value_);
+        std::string key_name(float value_);
+        team_member leader(team_member value_);
+        bool local(group value_);
+        std::string net_id(group value_);
+        object object_from_net_id(const std::string& value_);
+        bool open_map(bool value_);
+        float parse_number(bool value_);
+        std::string parse_text(const std::string& value_);
+        float playable_slots_number(side value_);
+        float players_number(side value_);
+        float score_side(side value_);
+        bool show_subtitles(bool value_);
+        std::string team_name(team_member value_);
+        std::string team_type(team_member value_);
+        float waypoint_timeout_current(group value_);
     }
 }

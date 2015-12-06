@@ -10,6 +10,11 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
         }
 
+        object agent(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__agent__team_member__ret__object, *value_);
+            return std::make_shared<object_ptr>(ret_value);
+        }
+
         std::vector<std::string> activated_addons() {
             return __helpers::_nular_strings(client::__sqf::nular__activatedaddons__ret__array);
         }
@@ -827,10 +832,6 @@ namespace intercept {
             return __helpers::__number_unary_string(client::__sqf::unary__count__string__ret__scalar, value_);
         }
 
-        side create_center(side value_) {
-            return nullptr; // TODO implement
-        }
-
         bool create_dialog(std::string value_) {
             return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, value_);
         }
@@ -877,10 +878,6 @@ namespace intercept {
 
         float debriefing_text(std::string value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__debriefingtext__string__ret__scalar, value_);
-        }
-
-        void delete_center(side value_) {
-            // TODO implement
         }
 
         void delete_collection(object value_) {
@@ -1015,10 +1012,6 @@ namespace intercept {
             __helpers::__empty_unary_object(client::__sqf::unary__fillweaponsfrompool__object__ret__nothing, value_);
         }
 
-        display find_display(float value_) {
-            return nullptr; // TODO implement
-        }
-
         bool finite(float value_) {
             return __helpers::__bool_unary_number(client::__sqf::unary__finite__scalar_nan__ret__bool, value_);
         }
@@ -1033,10 +1026,6 @@ namespace intercept {
 
         object flag_owner(object value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__flagowner__object__ret__object, value_);
-        }
-
-        side flag_side(object value_) {
-            return nullptr; // TODO implement
         }
 
         std::string flag_texture(object value_) {
@@ -1135,10 +1124,6 @@ namespace intercept {
             return __helpers::__number_unary_object(client::__sqf::unary__getdirvisual__object__ret__scalar, value_);
         }
 
-        object get_editor_camera(control value_) {
-            return nullptr; // TODO implement
-        }
-
         std::string get_editor_mode(control value_) {
             return __helpers::__string_unary_control(client::__sqf::unary__geteditormode__control__ret__string, value_);
         }
@@ -1229,10 +1214,6 @@ namespace intercept {
 
         float hands_hit(object value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__handshit__object__ret__scalar, value_);
-        }
-
-        object hc_leader(group value_) {
-            return nullptr; // TODO implement
         }
 
         void hc_remove_all_groups(object value_) {
@@ -1419,14 +1400,6 @@ namespace intercept {
             return __helpers::__bool_unary_object(client::__sqf::unary__isweaponrested__object__ret__bool, value_);
         }
 
-        std::string key_image(float value_) {
-            return nullptr; // TODO implement
-        }
-
-        std::string key_name(float value_) {
-            return ""; // TODO implement
-        }
-
         std::string land_result(object value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__landresult__object__ret__string, value_);
         }
@@ -1599,10 +1572,6 @@ namespace intercept {
             return __helpers::__string_unary_object(client::__sqf::unary__netid__object__ret__string, value_);
         }
 
-        std::string net_id(group value_) {
-            return ""; // TODO implement
-        }
-
         float next_menu_item_index(control value_) {
             return __helpers::__number_unary_control(client::__sqf::unary__nextmenuitemindex__control__ret__scalar, value_);
         }
@@ -1639,10 +1608,6 @@ namespace intercept {
             return __helpers::__bool_unary_number(client::__sqf::unary__opendlcpage__scalar__ret__bool, value_);
         }
 
-        bool open_map(bool value_) {
-            return false; // TODO implement
-        }
-
         bool open_youtube_video(std::string value_) {
             return __helpers::__bool_unary_string(client::__sqf::unary__openyoutubevideo__string__ret__bool, value_);
         }
@@ -1653,14 +1618,6 @@ namespace intercept {
 
         float parse_number(std::string value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__parsenumber__string__ret__scalar, value_);
-        }
-
-        float parse_number(bool value_) {
-            return 0.0f; // TODO implement
-        }
-
-        std::string parse_text(std::string value_) {
-            return ""; // TODO implement
         }
 
         void pick_weapon_pool(object value_) {
@@ -1677,14 +1634,6 @@ namespace intercept {
 
         void play_sound(std::string value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__playsound__string__ret__nothing, value_);
-        }
-
-        float playable_slots_number(side value_) {
-            return 0.0f; // TODO implement
-        }
-
-        float players_number(side value_) {
-            return 0.0f; // TODO implement
         }
 
         bool pp_effect_committed(std::string value_) {
@@ -1899,10 +1848,6 @@ namespace intercept {
             return __helpers::__number_unary_object(client::__sqf::unary__score__object__ret__scalar, value_);
         }
 
-        float score_side(side value_) {
-            return 0.0f; // TODO implement
-        }
-
         void script_name(std::string value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__scriptname__string__ret__nothing, value_);
         }
@@ -2033,10 +1978,6 @@ namespace intercept {
 
         void show_radio(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__showradio__bool__ret__nothing, value_);
-        }
-
-        bool show_subtitles(bool value_) {
-            return false; // TODO implement
         }
 
         void show_uavfeed(bool value_) {
@@ -2217,10 +2158,6 @@ namespace intercept {
 
         object vest_container(object value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__vestcontainer__object__ret__object, value_);
-        }
-
-        float waypoint_timeout_current(group value_) {
-            return 0.0f; // TODO implement
         }
 
         bool waypoints_enabled_uav(object value_) {
@@ -3389,6 +3326,175 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__vehicleradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
+        side create_center(side value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__createcenter__side__ret__side, *value_);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        void delete_center(side value_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__deletecenter__side__ret__nothing, *value_);
+        }
+
+        void delete_team(team_member value_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__deleteteam__team_member__ret__nothing, *value_);
+        }
+
+        void do3denaction(const std::string& value_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__do3denaction__string__ret__nothing, game_value_string(value_));
+        }
+
+        display find_display(float value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__finddisplay__scalar__ret__display, game_value_number(value_));
+            return std::make_shared<display_ptr>(ret_value);
+        }
+
+        side flag_side(object value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__flagside__object__ret__side, *value_);
+            return std::make_shared<side_ptr>(ret_value);
+        }
+
+        std::string formation(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__formation__team_member__ret__string, *value_);
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        bool from_editor(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__fromeditor__team_member__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        void get3dengrid(const std::string& value_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__get3dengrid__string__ret__nothing, game_value_string(value_));
+        }
+
+        object get_editor_camera(control value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__geteditorcamera__control__ret__object, *value_);
+            return std::make_shared<object_ptr>(ret_value);
+        }
+
+        object hc_leader(group value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__hcleader__group__ret__object, *value_);
+            return std::make_shared<object_ptr>(ret_value);
+        }
+
+        std::string image(const std::string& value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__image__string__ret__text, game_value_string(value_));
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        bool is_agent(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isagent__team_member__ret__bool, *value_);
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        std::string key_image(float value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__keyimage__scalar__ret__text, game_value_number(value_));
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        std::string key_name(float value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__keyname__scalar__ret__string, game_value_number(value_));
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        team_member leader(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__leader__team_member__ret__team_member, *value_);
+            return std::make_shared<team_member_ptr>(ret_value);
+        }
+
+        std::string net_id(group value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__netid__group__ret__string, *value_);
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        object object_from_net_id(const std::string& value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__objectfromnetid__string__ret__object, game_value_string(value_));
+            return std::make_shared<object_ptr>(ret_value);
+        }
+
+        bool open_map(bool value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__openmap__bool__ret__bool, game_value_bool(value_));
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        float parse_number(bool value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__parsenumber__bool__ret__scalar, game_value_bool(value_));
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        std::string parse_text(const std::string& value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__parsetext__string__ret__text, game_value_string(value_));
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        float playable_slots_number(side value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__playableslotsnumber__side__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        float players_number(side value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__playersnumber__side__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        float score_side(side value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__scoreside__side__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        bool show_subtitles(bool value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__showsubtitles__bool__ret__bool, game_value_bool(value_));
+            bool rv = ((game_data_bool *)ret_value.data)->value;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        std::string team_name(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__teamname__team_member__ret__string, *value_);
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        std::string team_type(team_member value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__teamtype__team_member__ret__string, *value_);
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
+
+        float waypoint_timeout_current(group value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
+        }
 
 
     }

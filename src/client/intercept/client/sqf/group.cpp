@@ -18,23 +18,31 @@ namespace intercept {
         }
 
         group create_group(side value_) {
-            return nullptr; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, *value_);
+            return std::make_shared<group_ptr>(ret_value);
         }
 
         void delete_group(group value_) {
-            // TODO implement
+            host::functions.invoke_raw_unary(client::__sqf::unary__deletegroup__group__ret__nothing, *value_);
         }
 
-        group group_from_net_id(std::string value_) {
-            return nullptr; // TODO implement
+        group group_from_net_id(const std::string& value_) {
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupfromnetid__string__ret__group, game_value_string(value_));
+            return std::make_shared<group_ptr>(ret_value);
         }
 
         std::string group_id(group value_) {
-            return nullptr; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, *value_);
+            std::string rv = ((game_data_string *)ret_value.data)->get_string();
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
         float group_owner(group value_) {
-            return 0.0f; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
 
         bool set_group_owner(float value0_, group value1_) {
@@ -45,7 +53,8 @@ namespace intercept {
         }
 
         object leader(group value_) {
-            return nullptr; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, *value_);
+            return std::make_shared<object_ptr>(ret_value);
         }
 
         void group_radio(object value0_, const std::string& value1_) {
@@ -61,9 +70,12 @@ namespace intercept {
         }
 
         float current_waypoint(group value_) {
-            return 0.0f; // TODO implement
+            game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, *value_);
+            float rv = ((game_data_number *)ret_value.data)->number;
+            host::functions.free_value(&ret_value);
+            return rv;
         }
-        
+
         void set_group_icons_selectable(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, value_);
         }

@@ -2434,46 +2434,46 @@ namespace intercept {
         }
 
         // BINARY FUNCTIONS
-        float add3denlayer(float value0_, std::string value1_) {
+        float add3denlayer(float value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, game_value_number(value0_), game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void add_backpack(object value0_, std::string value1_) {
+        void add_backpack(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpack__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_backpack_global(object value0_, std::string value1_) {
+        void add_backpack_global(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_goggles(object value0_, std::string value1_) {
+        void add_goggles(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addgoggles__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_handgun_item(object value0_, std::string value1_) {
+        void add_handgun_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addhandgunitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_headgear(object value0_, std::string value1_) {
+        void add_headgear(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addheadgear__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_item(object value0_, std::string value1_) {
+        void add_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__additem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_item_to_backpack(object value0_, std::string value1_) {
+        void add_item_to_backpack(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__additemtobackpack__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_item_to_uniform(object value0_, std::string value1_) {
+        void add_item_to_uniform(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__additemtouniform__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_item_to_vest(object value0_, std::string value1_) {
+        void add_item_to_vest(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__additemtovest__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2481,15 +2481,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addlivestats__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void add_magazine(object value0_, std::string value1_) {
+        void add_magazine(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazine__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_magazine_global(object value0_, std::string value1_) {
+        void add_magazine_global(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_primary_weapon_item(object value0_, std::string value1_) {
+        void add_primary_weapon_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addprimaryweaponitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2505,11 +2505,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addscoreside__side__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void add_secondary_weapon_item(object value0_, std::string value1_) {
+        void add_secondary_weapon_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addsecondaryweaponitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_uniform(object value0_, std::string value1_) {
+        void add_uniform(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__adduniform__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2517,15 +2517,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addvehicle__group__object__ret__nothing, *value0_, *value1_);
         }
 
-        void add_vest(object value0_, std::string value1_) {
+        void add_vest(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addvest__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_weapon(object value0_, std::string value1_) {
+        void add_weapon(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addweapon__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void add_weapon_global(object value0_, std::string value1_) {
+        void add_weapon_global(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2553,25 +2553,25 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__allowsprint__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        float ammo(object value0_, std::string value1_) {
+        float ammo(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__ammo__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        float animation_phase(object value0_, std::string value1_) {
+        float animation_phase(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__animationphase__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void assign_item(object value0_, std::string value1_) {
+        void assign_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__assignitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void assign_team(object value0_, std::string value1_) {
+        void assign_team(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__assignteam__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2579,11 +2579,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void button_set_action(std::string value0_, control value1_) {
+        void button_set_action(const std::string& value0_, control value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__buttonsetaction__control__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        void cam_command(object value0_, std::string value1_) {
+        void cam_command(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__camcommand__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2640,7 +2640,7 @@ namespace intercept {
             return std::make_shared<control_ptr>(ret_value);
         }
 
-        display create_display(std::string value0_, display value1_) {
+        display create_display(const std::string& value0_, display value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__createdisplay__display__string__ret__display, game_value_string(value0_), *value1_);
             return std::make_shared<display_ptr>(ret_value);
         }
@@ -2649,7 +2649,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__createmenu__control__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        display create_mission_display(std::string value0_, display value1_) {
+        display create_mission_display(const std::string& value0_, display value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__createmissiondisplay__display__string__ret__display, game_value_string(value0_), *value1_);
             return std::make_shared<display_ptr>(ret_value);
         }
@@ -2658,18 +2658,18 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__debugfsm__scalar__bool__ret__nothing, game_value_number(value0_), game_value_bool(value1_));
         }
 
-        bool diary_subject_exists(object value0_, std::string value1_) {
+        bool diary_subject_exists(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__diarysubjectexists__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void direct_say(object value0_, std::string value1_) {
+        void direct_say(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__directsay__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void disable_ai(object value0_, std::string value1_) {
+        void disable_ai(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__disableai__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2690,29 +2690,29 @@ namespace intercept {
             return std::make_shared<control_ptr>(ret_value);
         }
 
-        void display_remove_all_event_handlers(std::string value0_, display value1_) {
+        void display_remove_all_event_handlers(const std::string& value0_, display value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__displayremovealleventhandlers__display__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        float door_phase(object value0_, std::string value1_) {
+        float door_phase(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__doorphase__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        float empty_positions(object value0_, std::string value1_) {
+        float empty_positions(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__emptypositions__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void enable_ai(object value0_, std::string value1_) {
+        void enable_ai(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__enableai__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void enable_aifeature(bool value0_, std::string value1_) {
+        void enable_aifeature(bool value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__enableaifeature__string__bool__ret__nothing, game_value_bool(value0_), game_value_string(value1_));
         }
 
@@ -2775,7 +2775,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__engineon__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void fire(object value0_, std::string value1_) {
+        void fire(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__fire__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2783,7 +2783,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__flyinheight__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void force_add_uniform(object value0_, std::string value1_) {
+        void force_add_uniform(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__forceadduniform__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2795,14 +2795,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__forcewalk__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        std::string get_editor_object_scope(std::string value0_, control value1_) {
+        std::string get_editor_object_scope(const std::string& value0_, control value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__geteditorobjectscope__control__string__ret__string, game_value_string(value0_), *value1_);
             std::string rv = ((game_data_string *)ret_value.data)->get_string();
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        float get_hit(object value0_, std::string value1_) {
+        float get_hit(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__gethit__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
@@ -2816,34 +2816,34 @@ namespace intercept {
             return rv;
         }
 
-        float get_hit_point_damage(object value0_, std::string value1_) {
+        float get_hit_point_damage(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__gethitpointdamage__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        object get_object_proxy(std::string value0_, control value1_) {
+        object get_object_proxy(const std::string& value0_, control value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__getobjectproxy__control__string__ret__object, game_value_string(value0_), *value1_);
             return std::make_shared<object_ptr>(ret_value);
         }
 
-        float get_speed(object value0_, std::string value1_) {
+        float get_speed(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__getspeed__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void global_radio(object value0_, std::string value1_) {
+        void global_radio(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__globalradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void group_radio(object value0_, std::string value1_) {
+        void group_radio(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        bool has_weapon(object value0_, std::string value1_) {
+        bool has_weapon(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
@@ -2862,11 +2862,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__hideobjectglobal__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void hint_c(std::string value0_, std::string value1_) {
+        void hint_c(const std::string& value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__text__ret__nothing, game_value_string(value0_), game_value_string(value1_));
         }
 
-        void html_load(std::string value0_, control value1_) {
+        void html_load(const std::string& value0_, control value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__htmlload__control__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
@@ -2874,56 +2874,56 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__inflame__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        bool is_flashlight_on(object value0_, std::string value1_) {
+        bool is_flashlight_on(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__isflashlighton__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool is_irlaser_on(object value0_, std::string value1_) {
+        bool is_irlaser_on(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__isirlaseron__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool is_kind_of(object value0_, std::string value1_) {
+        bool is_kind_of(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__iskindof__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool is_uniform_allowed(object value0_, std::string value1_) {
+        bool is_uniform_allowed(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__isuniformallowed__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool kb_add_database(object value0_, std::string value1_) {
+        bool kb_add_database(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__kbadddatabase__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool kb_add_database_targets(object value0_, std::string value1_) {
+        bool kb_add_database_targets(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__kbadddatabasetargets__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool kb_has_topic(object value0_, std::string value1_) {
+        bool kb_has_topic(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__kbhastopic__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void kb_remove_topic(object value0_, std::string value1_) {
+        void kb_remove_topic(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__kbremovetopic__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2934,7 +2934,7 @@ namespace intercept {
             return rv;
         }
 
-        void land(object value0_, std::string value1_) {
+        void land(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__land__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -2942,7 +2942,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        float lb_add(std::string value0_, control value1_) {
+        float lb_add(const std::string& value0_, control value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbadd__control__string__ret__scalar, game_value_string(value0_), *value1_);
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
@@ -3014,7 +3014,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__limitspeed__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void link_item(object value0_, std::string value1_) {
+        void link_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__linkitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3037,14 +3037,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lnbsetcurselrow__control__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        bool load_identity(object value0_, std::string value1_) {
+        bool load_identity(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__loadidentity__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool load_status(object value0_, std::string value1_) {
+        bool load_status(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__loadstatus__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
@@ -3085,35 +3085,35 @@ namespace intercept {
             return rv;
         }
 
-        void move_object_to_end(std::string value0_, control value1_) {
+        void move_object_to_end(const std::string& value0_, control value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__moveobjecttoend__control__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        void play_action(object value0_, std::string value1_) {
+        void play_action(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__playaction__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void play_action_now(object value0_, std::string value1_) {
+        void play_action_now(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__playactionnow__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void play_gesture(object value0_, std::string value1_) {
+        void play_gesture(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__playgesture__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void play_move(object value0_, std::string value1_) {
+        void play_move(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__playmove__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void play_move_now(object value0_, std::string value1_) {
+        void play_move_now(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__playmovenow__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void pp_effect_commit(float value0_, std::string value1_) {
+        void pp_effect_commit(float value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectcommit__string__scalar__ret__nothing, game_value_number(value0_), game_value_string(value1_));
         }
 
-        void pp_effect_enable(bool value0_, std::string value1_) {
+        void pp_effect_enable(bool value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectenable__string__bool__ret__nothing, game_value_bool(value0_), game_value_string(value1_));
         }
 
@@ -3129,19 +3129,19 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__progresssetposition__control__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void public_variable_client(float value0_, std::string value1_) {
+        void public_variable_client(float value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__publicvariableclient__scalar__string__ret__nothing, game_value_number(value0_), game_value_string(value1_));
         }
 
-        void radio_channel_set_call_sign(float value0_, std::string value1_) {
+        void radio_channel_set_call_sign(float value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__radiochannelsetcallsign__scalar__string__ret__nothing, game_value_number(value0_), game_value_string(value1_));
         }
 
-        void radio_channel_set_label(float value0_, std::string value1_) {
+        void radio_channel_set_label(float value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__radiochannelsetlabel__scalar__string__ret__nothing, game_value_number(value0_), game_value_string(value1_));
         }
 
-        bool register_task(std::string value0_, team_member value1_) {
+        bool register_task(const std::string& value0_, team_member value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__registertask__team_member__string__ret__bool, game_value_string(value0_), *value1_);
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
@@ -3152,11 +3152,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeaction__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void remove_all_event_handlers(object value0_, std::string value1_) {
+        void remove_all_event_handlers(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removealleventhandlers__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_all_mpevent_handlers(object value0_, std::string value1_) {
+        void remove_all_mpevent_handlers(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeallmpeventhandlers__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3164,35 +3164,35 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void remove_handgun_item(object value0_, std::string value1_) {
+        void remove_handgun_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removehandgunitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_item(object value0_, std::string value1_) {
+        void remove_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_item_from_backpack(object value0_, std::string value1_) {
+        void remove_item_from_backpack(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeitemfrombackpack__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_item_from_uniform(object value0_, std::string value1_) {
+        void remove_item_from_uniform(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeitemfromuniform__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_item_from_vest(object value0_, std::string value1_) {
+        void remove_item_from_vest(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeitemfromvest__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_items(object value0_, std::string value1_) {
+        void remove_items(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeitems__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_magazine_global(object value0_, std::string value1_) {
+        void remove_magazine_global(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removemagazineglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_magazines(object value0_, std::string value1_) {
+        void remove_magazines(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removemagazines__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3200,23 +3200,23 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void remove_menu_item(std::string value0_, control value1_) {
+        void remove_menu_item(const std::string& value0_, control value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        void remove_primary_weapon_item(object value0_, std::string value1_) {
+        void remove_primary_weapon_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeprimaryweaponitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_secondary_weapon_item(object value0_, std::string value1_) {
+        void remove_secondary_weapon_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removesecondaryweaponitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_weapon(object value0_, std::string value1_) {
+        void remove_weapon(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeweapon__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_weapon_global(object value0_, std::string value1_) {
+        void remove_weapon_global(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeweaponglobal__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3224,21 +3224,21 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__revealmine__side__object__ret__nothing, *value0_, *value1_);
         }
 
-        bool save_identity(object value0_, std::string value1_) {
+        bool save_identity(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__saveidentity__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        bool save_status(object value0_, std::string value1_) {
+        bool save_status(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__savestatus__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        void select_diary_subject(object value0_, std::string value1_) {
+        void select_diary_subject(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__selectdiarysubject__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3246,11 +3246,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, *value0_, *value1_);
         }
 
-        void select_weapon(object value0_, std::string value1_) {
+        void select_weapon(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__selectweapon__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void send_simple_command(object value0_, std::string value1_) {
+        void send_simple_command(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__sendsimplecommand__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3290,7 +3290,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void set_combat_mode(std::string value0_, team_member value1_) {
+        void set_combat_mode(const std::string& value0_, team_member value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
@@ -3318,11 +3318,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setdropinterval__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_editor_mode(std::string value0_, control value1_) {
+        void set_editor_mode(const std::string& value0_, control value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__seteditormode__control__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        void set_face(object value0_, std::string value1_) {
+        void set_face(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setface__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3338,15 +3338,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setflagside__object__side__ret__nothing, *value0_, *value1_);
         }
 
-        void set_flag_texture(object value0_, std::string value1_) {
+        void set_flag_texture(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setflagtexture__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_formation(std::string value0_, team_member value1_) {
+        void set_formation(const std::string& value0_, team_member value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setformation__team_member__string__ret__nothing, game_value_string(value0_), *value1_);
         }
 
-        void set_formation_task(object value0_, std::string value1_) {
+        void set_formation_task(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setformationtask__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3369,7 +3369,7 @@ namespace intercept {
             return rv;
         }
 
-        void set_identity(object value0_, std::string value1_) {
+        void set_identity(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setidentity__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3397,15 +3397,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setlightuseflare__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void set_mimic(object value0_, std::string value1_) {
+        void set_mimic(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmimic__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_name(object value0_, std::string value1_) {
+        void set_name(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setname__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_name_sound(object value0_, std::string value1_) {
+        void set_name_sound(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setnamesound__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3420,7 +3420,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setoxygenremaining__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_particle_class(object value0_, std::string value1_) {
+        void set_particle_class(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setparticleclass__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3432,7 +3432,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setpitch__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_radio_msg(float value0_, std::string value1_) {
+        void set_radio_msg(float value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setradiomsg__scalar__string__ret__nothing, game_value_number(value0_), game_value_string(value1_));
         }
 
@@ -3440,7 +3440,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setrandomlip__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void set_rank(object value0_, std::string value1_) {
+        void set_rank(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setrank__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3456,7 +3456,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setskill__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_speaker(object value0_, std::string value1_) {
+        void set_speaker(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setspeaker__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3468,15 +3468,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setsuppression__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_target_age(object value0_, std::string value1_) {
+        void set_target_age(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__settargetage__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_trigger_text(object value0_, std::string value1_) {
+        void set_trigger_text(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__settriggertext__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_trigger_type(object value0_, std::string value1_) {
+        void set_trigger_type(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__settriggertype__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3488,15 +3488,15 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setunitability__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_unit_pos(object value0_, std::string value1_) {
+        void set_unit_pos(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setunitpos__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_unit_pos_weak(object value0_, std::string value1_) {
+        void set_unit_pos_weak(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setunitposweak__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_unit_rank(object value0_, std::string value1_) {
+        void set_unit_rank(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setunitrank__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3520,11 +3520,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleid__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void set_vehicle_lock(object value0_, std::string value1_) {
+        void set_vehicle_lock(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setvehiclelock__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void set_vehicle_var_name(object value0_, std::string value1_) {
+        void set_vehicle_var_name(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setvehiclevarname__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3536,14 +3536,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__showlegend__control__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        float skill(object value0_, std::string value1_) {
+        float skill(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__skill__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
             return rv;
         }
 
-        float skill_final(object value0_, std::string value1_) {
+        float skill_final(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__skillfinal__object__string__ret__scalar, *value0_, game_value_string(value1_));
             float rv = ((game_data_number *)ret_value.data)->number;
             host::functions.free_value(&ret_value);
@@ -3562,23 +3562,23 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__suppressfor__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
         }
 
-        void switch_action(object value0_, std::string value1_) {
+        void switch_action(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchaction__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void switch_camera(object value0_, std::string value1_) {
+        void switch_camera(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchcamera__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void switch_gesture(object value0_, std::string value1_) {
+        void switch_gesture(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchgesture__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void switch_light(object value0_, std::string value1_) {
+        void switch_light(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchlight__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void switch_move(object value0_, std::string value1_) {
+        void switch_move(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchmove__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
@@ -3593,15 +3593,15 @@ namespace intercept {
             return rv;
         }
 
-        void unassign_item(object value0_, std::string value1_) {
+        void unassign_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__unassignitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void unlink_item(object value0_, std::string value1_) {
+        void unlink_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__unlinkitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        bool unregister_task(std::string value0_, team_member value1_) {
+        bool unregister_task(const std::string& value0_, team_member value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__unregistertask__team_member__string__ret__bool, game_value_string(value0_), *value1_);
             bool rv = ((game_data_bool *)ret_value.data)->value;
             host::functions.free_value(&ret_value);
@@ -3612,7 +3612,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__useaudiotimeformoves__object__bool__ret__nothing, game_value_bool(value0_), *value1_);
         }
 
-        void vehicle_radio(object value0_, std::string value1_) {
+        void vehicle_radio(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__vehicleradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 

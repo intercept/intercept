@@ -27,47 +27,47 @@ namespace intercept {
 
 			object __retrieve_nular_object(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<object_ptr>(function_return_number.data);
+				return std::make_shared<object_ptr>(function_return_number);
 			}
 
 			text __retrieve_nular_text(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<text_ptr>(function_return_number.data);
+				return std::make_shared<text_ptr>(function_return_number);
 			}
 
 			rv_namespace __retrieve_nular_namespace(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<rv_namespace_ptr>(function_return_number.data);
+				return std::make_shared<rv_namespace_ptr>(function_return_number);
 			}
 
 			location __retrieve_nular_location(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<location_ptr>(function_return_number.data);
+				return std::make_shared<location_ptr>(function_return_number);
 			}
 
 			side __retrieve_nular_side(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<side_ptr>(function_return_number.data);
+				return std::make_shared<side_ptr>(function_return_number);
 			}
 
 			control __retrieve_nular_control(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<control_ptr>(function_return_number.data);
+				return std::make_shared<control_ptr>(function_return_number);
 			}
 
 			group __retrieve_nular_group(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<group_ptr>(function_return_number.data);
+				return std::make_shared<group_ptr>(function_return_number);
 			}
 
 			config __retrieve_nular_config(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<config_ptr>(function_return_number.data);
+				return std::make_shared<config_ptr>(function_return_number);
 			}
 
 			display __retrieve_nular_display(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<display_ptr>(function_return_number.data);
+				return std::make_shared<display_ptr>(function_return_number);
 			}
 
 			vector3 __retrieve_nular_vector3(nular_function fnc_) {
@@ -184,6 +184,11 @@ namespace intercept {
 				host::functions.invoke_raw_unary(fnc_, game_value_bool(val_));
 			}
 
+			void __empty_unary_control(unary_function fnc_, control ctrl_)
+			{
+				host::functions.invoke_raw_unary(fnc_, *ctrl_);
+			}
+
 			bool __bool_unary_object(unary_function fnc_, object obj_)
 			{
 				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
@@ -275,7 +280,7 @@ namespace intercept {
 			object __object_unary_object(unary_function fnc_, object obj_)
 			{
 				game_value obj_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
-				return std::make_shared<object_ptr>(obj_ret.data);
+				return std::make_shared<object_ptr>(obj_ret);
 			}
 		}
 	}

@@ -324,7 +324,6 @@ namespace intercept {
         void delete_marker_local(std::string value_);
         void delete_site(object value_);
         bool delete_status(std::string value_);
-        void delete_vehicle(object value_);
         void detach(object value_);
         bool did_jipowner(object value_);
         bool difficulty_enabled(std::string value_);

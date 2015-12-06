@@ -1168,10 +1168,6 @@ namespace intercept {
             return __helpers::__bool_unary_string(client::__sqf::unary__deletestatus__string__ret__bool, value_);
         }
 
-        void delete_vehicle(object value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__deletevehicle__object__ret__nothing, value_);
-        }
-
         void detach(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__detach__object__ret__nothing, value_);
         }
@@ -2142,10 +2138,6 @@ namespace intercept {
 
         float rad(float value_) {
             return __helpers::__number_unary_number(client::__sqf::unary__rad__scalar_nan__ret__scalar_nan, value_);
-        }
-
-        float random(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__random__scalar_nan__ret__scalar_nan, value_);
         }
 
         std::string rank(object value_) {

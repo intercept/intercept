@@ -19,7 +19,7 @@ namespace intercept {
         // std::vector<site>& all_sites(); // This command is depecrated and no longer supported https://community.bistudio.com/wiki/allSites
         std::vector<object>& all_units();
         std::vector<object>& all_units_uav();
-        
+
         object player();
         object create_vehicle(std::string type_, vector3 pos_);
         object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_, float placement_, std::string special_);
@@ -27,5 +27,10 @@ namespace intercept {
 
 		float server_time();
 		std::string server_name();
+        
+        bool is_null(object value_);
+        bool is_null(group value_);
+        bool is_null(control value_);
+        bool is_null(display value_);
     }
 }

@@ -9,3 +9,6 @@
 #include "ctrl.hpp"
 #include "marker.hpp"
 #include "curator.hpp"
+#include "3den.hpp"
+#include "group.hpp"
+#include "multiplayer.hpp"

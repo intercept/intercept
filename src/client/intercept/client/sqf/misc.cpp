@@ -108,10 +108,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__copyfromclipboard__ret__string);
         }
 
-        std::string current3denoperation() {
-            return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
-        }
-
         float currentchannel() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__currentchannel__ret__scalar);
         }
@@ -130,10 +126,6 @@ namespace intercept {
 
         bool dialog() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__dialog__ret__bool);
-        }
-
-        bool didjip() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__didjip__ret__bool);
         }
 
         float difficulty() {
@@ -206,17 +198,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__freelook__ret__bool);
         }
 
-        object get3dencamera() {
-            return __helpers::__retrieve_nular_object(client::__sqf::nular__get3dencamera__ret__object);
-        }
 
-        bool get3deniconsvisible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3deniconsvisible__ret__bool);
-        }
-
-        bool get3denlinesvisible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3denlinesvisible__ret__bool);
-        }
 
         std::string getclientstate() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__getclientstate__ret__string);
@@ -240,16 +222,6 @@ namespace intercept {
 
         float gettotaldlcusagetime() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__gettotaldlcusagetime__ret__scalar);
-        }
-
-        bool groupiconselectable() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__groupiconselectable__ret__bool);
-        }
-
-        // TODO std::array<bool, 2> groupiconsvisible();
-
-        group grpnull() {
-            return __helpers::__retrieve_nular_group(client::__sqf::nular__grpnull__ret__group);
         }
 
         float gusts() {
@@ -280,20 +252,8 @@ namespace intercept {
             __helpers::__empty_nular(client::__sqf::nular__initambientlife__ret__nothing);
         }
 
-        bool is3den() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3den__ret__bool);
-        }
-
-        bool is3denmultiplayer() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3denmultiplayer__ret__bool);
-        }
-
         bool isautotest() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__isautotest__ret__bool);
-        }
-
-        bool isdedicated() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__isdedicated__ret__bool);
         }
 
         bool isfilepatchingenabled() {
@@ -304,16 +264,8 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__isinstructorfigureenabled__ret__bool);
         }
 
-        bool ismultiplayer() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__ismultiplayer__ret__bool);
-        }
-
         bool ispipenabled() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__ispipenabled__ret__bool);
-        }
-
-        bool isserver() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__isserver__ret__bool);
         }
 
         bool issteammission() {
@@ -837,10 +789,6 @@ namespace intercept {
             __helpers::__empty_unary_object(client::__sqf::unary__clearbackpackcargoglobal__object__ret__nothing, value_);
         }
 
-        void clear_group_icons(group value_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__cleargroupicons__group__ret__nothing, *value_);
-        }
-
         void clear_item_cargo(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__clearitemcargo__object__ret__nothing, value_);
         }
@@ -921,10 +869,6 @@ namespace intercept {
             return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, value_);
         }
 
-        group create_group(side value_) {
-            return nullptr; // TODO implement
-        }
-
         void create_vehicle_crew(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__createvehiclecrew__object__ret__nothing, value_);
         }
@@ -943,10 +887,6 @@ namespace intercept {
 
         float current_vision_mode(object value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__currentvisionmode__object__ret__scalar, value_);
-        }
-
-        float current_waypoint(group value_) {
-            return 0.0f; // TODO implement
         }
 
         std::string current_weapon(object value_) {
@@ -983,10 +923,6 @@ namespace intercept {
 
         void delete_collection(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__deletecollection__object__ret__nothing, value_);
-        }
-
-        void delete_group(group value_) {
-            // TODO implement
         }
 
         bool delete_identity(std::string value_) {
@@ -1035,10 +971,6 @@ namespace intercept {
 
         void echo(std::string value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__echo__string__ret__nothing, value_);
-        }
-
-        void edit(std::string value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__edit3denmissionattributes__string__ret__nothing, value_);
         }
 
         object effective_commander(object value_) {
@@ -1201,10 +1133,6 @@ namespace intercept {
             return __helpers::__string_unary_control(client::__sqf::unary__gearslotdata__control__ret__string, value_);
         }
 
-        float get_3den_action_state(std::string value_) {
-            return __helpers::__number_unary_string(client::__sqf::unary__get3denactionstate__string__ret__scalar, value_);
-        }
-
         float get_aiming_coef(object value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__getaimingcoef__object__ret__scalar, value_);
         }
@@ -1331,18 +1259,6 @@ namespace intercept {
 
         std::string goggles(object value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__goggles__object__ret__string, value_);
-        }
-
-        group group_from_net_id(std::string value_) {
-            return nullptr; // TODO implement
-        }
-
-        std::string group_id(group value_) {
-            return nullptr; // TODO implement
-        }
-
-        float group_owner(group value_) {
-            return 0.0f; // TODO implement
         }
 
         object gunner(object value_) {
@@ -1497,22 +1413,6 @@ namespace intercept {
             return __helpers::__bool_unary_object(client::__sqf::unary__ismarkedforcollection__object__ret__bool, value_);
         }
 
-        bool is_null(object value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__isnull__object__ret__bool, value_);
-        }
-
-        bool is_null(group value_) {
-            return true; // TODO implement
-        }
-
-        bool is_null(control value_) {
-            return __helpers::__bool_unary_control(client::__sqf::unary__isnull__control__ret__bool, value_);
-        }
-
-        bool is_null(display value_) {
-            return nullptr; // TODO implement
-        }
-
         bool is_object_hidden(object value_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__isobjecthidden__object__ret__bool, value_);
         }
@@ -1617,10 +1517,6 @@ namespace intercept {
             return __helpers::__object_unary_object(client::__sqf::unary__leader__object__ret__object, value_);
         }
 
-        object leader(group value_) {
-            return nullptr; // TODO implement
-        }
-
         bool leaderboard_de_init(std::string value_) {
             return __helpers::__bool_unary_string(client::__sqf::unary__leaderboarddeinit__string__ret__bool, value_);
         }
@@ -1691,14 +1587,6 @@ namespace intercept {
 
         float load_vest(object value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__loadvest__object__ret__scalar, value_);
-        }
-
-        bool local(object value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__local__object__ret__bool, value_);
-        }
-
-        bool local(group value_) {
-            return nullptr; // TODO implement
         }
 
         std::string localize(std::string value_) {
@@ -1949,14 +1837,6 @@ namespace intercept {
             return __helpers::__bool_unary_object(client::__sqf::unary__reloadenabled__object__ret__bool, value_);
         }
 
-        bool remove(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__remove3denlayer__scalar__ret__bool, value_);
-        }
-
-        void remove_all(std::string value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__removeall3deneventhandlers__string__ret__nothing, value_);
-        }
-
         void remove_all_actions(object value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__removeallactions__object__ret__nothing, value_);
         }
@@ -2131,10 +2011,6 @@ namespace intercept {
 
         bool set_current_channel(float value_) {
             return __helpers::__bool_unary_number(client::__sqf::unary__setcurrentchannel__scalar__ret__bool, value_);
-        }
-
-        void set_group_icons_selectable(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, value_);
         }
 
         void set_horizon_parallax_coef(float value_) {
@@ -2434,12 +2310,6 @@ namespace intercept {
         }
 
         // BINARY FUNCTIONS
-        float add3denlayer(float value0_, const std::string& value1_) {
-            game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, game_value_number(value0_), game_value_string(value1_));
-            float rv = ((game_data_number *)ret_value.data)->number;
-            host::functions.free_value(&ret_value);
-            return rv;
-        }
 
         void add_backpack(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpack__object__string__ret__nothing, *value0_, game_value_string(value1_));
@@ -2839,10 +2709,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__globalradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void group_radio(object value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, *value0_, game_value_string(value1_));
-        }
-
         bool has_weapon(object value0_, const std::string& value1_) {
             game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, *value0_, game_value_string(value1_));
             bool rv = ((game_data_bool *)ret_value.data)->value;
@@ -2850,7 +2716,7 @@ namespace intercept {
             return rv;
         }
 
-        void hc_remove_group(object value0_, group value1_) {
+        void hc_oup(object value0_, group value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__hcremovegroup__object__group__ret__nothing, *value0_, *value1_);
         }
 
@@ -3160,10 +3026,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__removeallmpeventhandlers__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
 
-        void remove_group_icon(float value0_, group value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
         void remove_handgun_item(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removehandgunitem__object__string__ret__nothing, *value0_, game_value_string(value1_));
         }
@@ -3240,10 +3102,6 @@ namespace intercept {
 
         void select_diary_subject(object value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__selectdiarysubject__object__string__ret__nothing, *value0_, game_value_string(value1_));
-        }
-
-        void select_leader(object value0_, group value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, *value0_, *value1_);
         }
 
         void select_weapon(object value0_, const std::string& value1_) {
@@ -3360,13 +3218,6 @@ namespace intercept {
 
         void set_fuel_cargo(float value0_, object value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setfuelcargo__object__scalar__ret__nothing, game_value_number(value0_), *value1_);
-        }
-
-        bool set_group_owner(float value0_, group value1_) {
-            game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, game_value_number(value0_), *value1_);
-            bool rv = ((game_data_bool *)ret_value.data)->value;
-            host::functions.free_value(&ret_value);
-            return rv;
         }
 
         void set_identity(object value0_, const std::string& value1_) {

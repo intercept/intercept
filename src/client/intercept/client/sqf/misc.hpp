@@ -37,7 +37,6 @@ namespace intercept {
         control controlnull();
         std::string copyfromclipboard();
 
-        std::string current3denoperation();
         float currentchannel();
         rv_namespace currentnamespace();
         object cursortarget();
@@ -51,9 +50,7 @@ namespace intercept {
         float diag_fpsmin();
         float diag_frameno();
         float diag_ticktime();
-
         bool dialog();
-        bool didjip();
         float difficulty();
         bool difficultyenabledrtd();
         void disabledebriefingstats();
@@ -72,10 +69,6 @@ namespace intercept {
         void forceend();
         void forceweatherchange();
         bool freelook();
-        object get3dencamera();
-        bool get3deniconsvisible();
-        bool get3denlinesvisible();
-        // TODO array[] get3denmouseover(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
         // TODO array[] getartillerycomputersettings(); // ["Semi (medium)","HE Mortar Shells",0]
         std::string getclientstate();
         // TODO not on biki getdlcassetsusage();
@@ -87,9 +80,6 @@ namespace intercept {
         std::array<float,6> getresolution();
         float getshadowdistance();
         float gettotaldlcusagetime();
-        bool groupiconselectable();
-        std::array<bool,2> groupiconsvisible();
-        group grpnull();
         float gusts();
         void halt();
         bool hasinterface();
@@ -98,15 +88,10 @@ namespace intercept {
         float humidity();
         side independent();
         void initambientlife();
-        bool is3den();
-        bool is3denmultiplayer();
         bool isautotest();
-        bool isdedicated();
         bool isfilepatchingenabled();
         bool isinstructorfigureenabled();
-        bool ismultiplayer();
         bool ispipenabled();
-        bool isserver();
         bool issteammission();
         bool isstreamfriendlyuienabled();
         bool isstressdamageenabled();
@@ -242,7 +227,6 @@ namespace intercept {
         void clear_all_items_from_backpack(object value_);
         void clear_backpack_cargo(object value_);
         void clear_backpack_cargo_global(object value_);
-        void clear_group_icons(group value_);
         void clear_item_cargo(object value_);
         void clear_item_cargo_global(object value_);
         void clear_magazine_cargo(object value_);
@@ -263,13 +247,11 @@ namespace intercept {
         float count(std::string value_);
         side create_center(side value_);
         bool create_dialog(std::string value_);
-        group create_group(side value_);
         void create_vehicle_crew(object value_);
         std::string current_command(object value_);
         std::string current_magazine(object value_);
         std::string current_muzzle(object value_);
         float current_vision_mode(object value_);
-        float current_waypoint(group value_);
         std::string current_weapon(object value_);
         std::string current_weapon_mode(object value_);
         float current_zeroing(object value_);
@@ -279,7 +261,6 @@ namespace intercept {
         float deg(float value_);
         void delete_center(side value_);
         void delete_collection(object value_);
-        void delete_group(group value_);
         bool delete_identity(std::string value_);
 
         void delete_site(object value_);
@@ -334,7 +315,6 @@ namespace intercept {
         float gear_idcammo_count(float value_);
         float gear_slot_ammo_count(control value_);
         std::string gear_slot_data(control value_);
-        float get_3den_action_state(std::string value_);
         float get_aiming_coef(object value_);
         float get_ammo_cargo(object value_);
         float get_anim_aim_precision(object value_);
@@ -368,9 +348,7 @@ namespace intercept {
         float get_wings_orientation_rtd(object value_);
         float get_wings_position_rtd(object value_);
         std::string goggles(object value_);
-        group group_from_net_id(std::string value_);
-        std::string group_id(group value_);
-        float group_owner(group value_);
+
         object gunner(object value_);
         std::string handgun_magazine(object value_);
         std::string handgun_weapon(object value_);
@@ -409,10 +387,7 @@ namespace intercept {
         bool is_localized(std::string value_);
         bool is_manual_fire(object value_);
         bool is_marked_for_collection(object value_);
-        bool is_null(object value_);
-        bool is_null(group value_);
-        bool is_null(control value_);
-        bool is_null(display value_);
+
         bool is_object_hidden(object value_);
         bool is_object_rtd(object value_);
         bool is_player(object value_);
@@ -439,7 +414,6 @@ namespace intercept {
         float lb_sort(control value_);
         float lb_sort_by_value(control value_);
         object leader(object value_);
-        object leader(group value_);
         bool leaderboard_de_init(std::string value_);
         bool leaderboard_init(std::string value_);
         bool leaderboard_request_rows_friends(std::string value_);
@@ -458,8 +432,6 @@ namespace intercept {
         std::string load_file(std::string value_);
         float load_uniform(object value_);
         float load_vest(object value_);
-        bool local(object value_);
-        bool local(group value_);
         std::string localize(std::string value_);
         bool lock_identity(object value_);
         float locked(object value_);
@@ -524,8 +496,6 @@ namespace intercept {
         float rating(object value_);
         void reload(object value_);
         bool reload_enabled(object value_);
-        bool remove(float value_);
-        void remove_all(std::string value_);
         void remove_all_actions(object value_);
         void remove_all_assigned_items(object value_);
         void remove_all_containers(object value_);
@@ -570,7 +540,7 @@ namespace intercept {
         void set_aperture(float value_);
         void set_armory_points(float value_);
         bool set_current_channel(float value_);
-        void set_group_icons_selectable(bool value_);
+
         void set_horizon_parallax_coef(float value_);
         void set_object_view_distance(float value_);
         void set_playable(object value_);
@@ -646,7 +616,6 @@ namespace intercept {
         bool waypoints_enabled_uav(object value_);
         bool weapon_lowered(object value_);
 
-        float add3denlayer(float value0_, const std::string& value1_);
         void add_backpack(object value0_, const std::string& value1_);
         void add_backpack_global(object value0_, const std::string& value1_);
         void add_goggles(object value0_, const std::string& value1_);
@@ -739,7 +708,6 @@ namespace intercept {
         object get_object_proxy(const std::string& value0_, control value1_);
         float get_speed(object value0_, const std::string& value1_);
         void global_radio(object value0_, const std::string& value1_);
-        void group_radio(object value0_, const std::string& value1_);
         bool has_weapon(object value0_, const std::string& value1_);
         void hc_remove_group(object value0_, group value1_);
         void hide_object(bool value0_, object value1_);
@@ -802,7 +770,6 @@ namespace intercept {
         void remove_action(float value0_, object value1_);
         void remove_all_event_handlers(object value0_, const std::string& value1_);
         void remove_all_mpevent_handlers(object value0_, const std::string& value1_);
-        void remove_group_icon(float value0_, group value1_);
         void remove_handgun_item(object value0_, const std::string& value1_);
         void remove_item(object value0_, const std::string& value1_);
         void remove_item_from_backpack(object value0_, const std::string& value1_);
@@ -821,7 +788,6 @@ namespace intercept {
         bool save_identity(object value0_, const std::string& value1_);
         bool save_status(object value0_, const std::string& value1_);
         void select_diary_subject(object value0_, const std::string& value1_);
-        void select_leader(object value0_, group value1_);
         void select_weapon(object value0_, const std::string& value1_);
         void send_simple_command(object value0_, const std::string& value1_);
         void set_actual_collective_rtd(float value0_, object value1_);
@@ -851,7 +817,7 @@ namespace intercept {
         void set_from_editor(bool value0_, team_member value1_);
         void set_fuel(float value0_, object value1_);
         void set_fuel_cargo(float value0_, object value1_);
-        bool set_group_owner(float value0_, group value1_);
+
         void set_identity(object value0_, const std::string& value1_);
         void set_light_brightness(float value0_, object value1_);
         void set_light_day_light(bool value0_, object value1_);

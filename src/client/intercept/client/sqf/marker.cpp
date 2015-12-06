@@ -1,4 +1,4 @@
-#include "ctrl.hpp"
+#include "marker.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -63,6 +63,6 @@ namespace intercept {
         std::string get_marker_type(const std::string& value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__getmarkertype__string__ret__string, value_);
         }
-        
+
     }
 }

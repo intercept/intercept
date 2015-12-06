@@ -73,23 +73,35 @@ def parse():
     print("Binary functions: {}/{}".format(len(binary_functions_used), binary_functions_declared))
     print("Nular functions: {}/{}".format(len(nular_functions_used), nular_functions_declared))
 
+    print("## TODO:\n-----\n")
     print("### Unary Functions")
     for function in unary_functions: # Output any unary functions yet to be completed
         print("- [ ] {}".format(function))
-    for function in unary_functions_used: # Output any unary functions completed
-        print("- [x] {}".format(function))
     print("\n----")
 
     print("### Binary Functions")
     for function in binary_functions: # Output any binary functions yet to be completed
         print("- [ ] {}".format(function))
-    for function in binary_functions_used: # Output any binary functions completed
-        print("- [x] {}".format(function))
     print("\n----")
 
     print("### Nular Functions")
     for function in nular_functions: # Output any nular functions yet to be completed
         print("- [ ] {}".format(function))
+    print("\n----")
+
+    # Output everything already completed
+    print("## COMPLETED:\n-----\n")
+    print("### Unary Functions")
+    for function in unary_functions_used: # Output any unary functions completed
+        print("- [x] {}".format(function))
+    print("\n----")
+
+    print("### Binary Functions")
+    for function in binary_functions_used: # Output any binary functions completed
+        print("- [x] {}".format(function))
+    print("\n----")
+
+    print("### Nular Functions")
     for function in nular_functions_used: # Output any nular functions completed
         print("- [x] {}".format(function))
     print("\n----")

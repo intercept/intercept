@@ -5,12 +5,9 @@
 namespace intercept {
     namespace sqf {
         namespace __helpers {
-            bool line_intersects_with(game_value& array_input) {
+            game_value line_intersects_with(game_value& array_input) {
                 game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, &array_input);
-                bool intersects = ((game_data_bool *)intersects_value.data)->value;
-
-                host::functions.free_value(&intersects_value);
-                return intersects;
+                return intersects_value;
             }
         }
 
@@ -61,8 +58,8 @@ namespace intercept {
             return true;
         }
 
-        bool line_intersects_with(vector3 begin_pos_, vector3 end_pos_, const object& ignore_obj1_ = nullptr, const object& ignore_obj2_ = nullptr, bool sort_by_distance_ = true) {
-            
+        std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, const object& ignore_obj1_ = nullptr, const object& ignore_obj2_ = nullptr, bool sort_by_distance_ = true) {
+            game_value intersects_value;
             if (ignore_obj1_ != nullptr && ignore_obj2_ != nullptr) {
                 game_value_array<5> array_input({
                     game_value_vector3(begin_pos_),
@@ -71,15 +68,23 @@ namespace intercept {
                     ignore_obj1_->value,
                     game_value_bool(sort_by_distance_)
                 });
-                return __helpers::line_intersects_with((game_value)array_input);
+                intersects_value = __helpers::line_intersects_with((game_value)array_input);
             }
             else {
                 game_value_array<2> array_input({
                     game_value_vector3(begin_pos_),
                     game_value_vector3(end_pos_)
                 });
-                return __helpers::line_intersects_with((game_value)array_input);
+                intersects_value = __helpers::line_intersects_with((game_value)array_input);
             }
+            game_data_array* intersects = ((game_data_array *)intersects_value.data);
+
+            std::vector<object> output;
+            for (int i = 0; i < intersects->length; ++i) {
+                output.push_back(std::make_shared<object_ptr>(intersects->data[i]));
+            }
+            host::functions.free_value(&intersects_value);
+            return output;
         }
 
         bool terrain_intersect(vector3 begin_pos_, vector3 end_pos_) {

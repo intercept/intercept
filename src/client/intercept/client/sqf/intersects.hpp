@@ -7,9 +7,6 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-        namespace __helpers {
-            game_value line_intersects_with(game_value& array_input);
-        }
         struct intersect_surfaces {
             vector3 intersectPosASL; //- the actual position where line intersects 1st surface
             std::string surfaceNormal; //- a normal to the intersected surface
@@ -17,6 +14,11 @@ namespace intercept {
             object parentObject; //- the object proxy object belongs to(not always the same as intersect object)
         };
         typedef std::vector<std::shared_ptr<intersect_surfaces>> intersect_surfaces_list;
+                
+        namespace __helpers {
+            game_value line_intersects_with(game_value& array_input);
+            intersect_surfaces_list __line_intersects_surfaces(game_value& intersects_value_);
+        }
 
         bool intersect (vector3 begin_pos_, vector3 end_pos_, const object& obj_, std::string lodname_); 
         

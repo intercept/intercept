@@ -20,6 +20,39 @@ namespace intercept {
         uintptr_t game_data_bool::type_def;
         uintptr_t game_data_bool::data_type_def;
 
+        uintptr_t game_data_code::type_def;
+        uintptr_t game_data_code::data_type_def;
+
+        uintptr_t game_data_group::type_def;
+        uintptr_t game_data_group::data_type_def;
+
+        uintptr_t game_data_config::type_def;
+        uintptr_t game_data_config::data_type_def;
+
+        uintptr_t game_data_control::type_def;
+        uintptr_t game_data_control::data_type_def;
+
+        uintptr_t game_data_display::type_def;
+        uintptr_t game_data_display::data_type_def;
+
+        uintptr_t game_data_location::type_def;
+        uintptr_t game_data_location::data_type_def;
+
+        uintptr_t game_data_script::type_def;
+        uintptr_t game_data_script::data_type_def;
+
+        uintptr_t game_data_side::type_def;
+        uintptr_t game_data_side::data_type_def;
+
+        uintptr_t game_data_text::type_def;
+        uintptr_t game_data_text::data_type_def;
+
+        uintptr_t game_data_team::type_def;
+        uintptr_t game_data_team::data_type_def;
+
+        uintptr_t game_data_namespace::type_def;
+        uintptr_t game_data_namespace::data_type_def;
+
 
 
         uintptr_t game_value::__vptr_def;

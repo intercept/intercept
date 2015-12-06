@@ -330,6 +330,8 @@ namespace intercept {
         else if (step == "code_type") {
             invoker::get().type_map[structure.first] = "CODE";
             invoker::get().type_structures["CODE"] = structure;
+            game_data_code::type_def = structure.first;
+            game_data_code::data_type_def = structure.second;
         }
         else if (step == "object_type") {
             invoker::get().type_map[structure.first] = "OBJECT";
@@ -340,42 +342,62 @@ namespace intercept {
         else if (step == "group_type") {
             invoker::get().type_map[structure.first] = "GROUP";
             invoker::get().type_structures["GROUP"] = structure;
+            game_data_group::type_def = structure.first;
+            game_data_group::data_type_def = structure.second;
         }
         else if (step == "config_type") {
             invoker::get().type_map[structure.first] = "CONFIG";
             invoker::get().type_structures["CONFIG"] = structure;
+            game_data_config::type_def = structure.first;
+            game_data_config::data_type_def = structure.second;
         }
         else if (step == "control_type") {
             invoker::get().type_map[structure.first] = "CONTROL";
             invoker::get().type_structures["CONTROL"] = structure;
+            game_data_control::type_def = structure.first;
+            game_data_control::data_type_def = structure.second;
         }
         else if (step == "display_type") {
             invoker::get().type_map[structure.first] = "DISPLAY";
             invoker::get().type_structures["DISPLAY"] = structure;
+            game_data_display::type_def = structure.first;
+            game_data_display::data_type_def = structure.second;
         }
         else if (step == "location_type") {
             invoker::get().type_map[structure.first] = "LOCATION";
             invoker::get().type_structures["LOCATION"] = structure;
+            game_data_location::type_def = structure.first;
+            game_data_location::data_type_def = structure.second;
         }
         else if (step == "script_type") {
             invoker::get().type_map[structure.first] = "SCRIPT";
             invoker::get().type_structures["SCRIPT"] = structure;
+            game_data_script::type_def = structure.first;
+            game_data_script::data_type_def = structure.second;
         }
         else if (step == "side_type") {
             invoker::get().type_map[structure.first] = "SIDE";
             invoker::get().type_structures["SIDE"] = structure;
+            game_data_side::type_def = structure.first;
+            game_data_side::data_type_def = structure.second;
         }
         else if (step == "text_type") {
             invoker::get().type_map[structure.first] = "TEXT";
             invoker::get().type_structures["TEXT"] = structure;
+            game_data_text::type_def = structure.first;
+            game_data_text::data_type_def = structure.second;
         }
         else if (step == "team_type") {
             invoker::get().type_map[structure.first] = "TEAM_MEMBER";
             invoker::get().type_structures["TEAM_MEMBER"] = structure;
+            game_data_team::type_def = structure.first;
+            game_data_team::data_type_def = structure.second;
         }
         else if (step == "namespace_type") {
             invoker::get().type_map[structure.first] = "NAMESPACE";
             invoker::get().type_structures["NAMESPACE"] = structure;
+            game_data_namespace::type_def = structure.first;
+            game_data_namespace::data_type_def = structure.second;
         }
         else if (step == "bool_type") {
             invoker::get().type_map[structure.first] = "BOOL";

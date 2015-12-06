@@ -115,7 +115,7 @@ namespace intercept {
             function_str = temp[1];
         }
         else {
-            for (int x = 1; x < temp.size(); x++)
+            for (size_t x = 1; x < temp.size(); x++)
                 function_str = function_str + temp[x] + ",";
         }
         //_modules[args_.as_string(0)].function((char *)result.c_str(), 4096, (const char *)function_str.c_str());

@@ -28,6 +28,9 @@ namespace intercept {
 			/* potential namespace: items, inventory, campaign */
 			void add_item_pool(std::string item_name_, float item_count_);
 			void add_magazine_pool(std::string mag_name_, float mag_count_);
+
+			/* potential namespace: core, misc, world */
+			void add_to_remains_collector(std::vector<object> objects_);
 		}
 	}
 }

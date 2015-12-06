@@ -128,6 +128,12 @@ namespace intercept {
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
 			}
+
+			void add_to_remains_collector(std::vector<object> objects_)
+			{
+				//game_value_array_dynamic<object, game_value_object> objects_arr(objects_);
+
+			}
 		}
 	}
 }

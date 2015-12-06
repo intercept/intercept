@@ -103,6 +103,34 @@ namespace intercept {
 			{
 				host::functions.invoke_raw_binary(__sqf::binary__setposatl__object__array__ret__nothing, *obj_, game_value_vector3(pos_));
 			}
+			
+			vector3 agl_to_asl(vector3 agl_) 
+			{
+				// hey bbe, asl? add me on kik.
+				game_value_array<3> agl({
+					game_value_number(agl_.x),
+					game_value_number(agl_.y),
+					game_value_number(agl_.z)
+				});
+
+				game_value asl = host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, agl);
+				float x = ((game_data_number *)((game_data_array *)asl.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)asl.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)asl.data)->data[2].data)->number;
+
+				host::functions.free_value(&asl);
+				return vector3(x, y, z);
+			}
+
+			vector3 aim_pos(object obj_)
+			{
+				game_value pos = host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, *obj_);
+				float x = ((game_data_number *)((game_data_array *)pos.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)pos.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)pos.data)->data[2].data)->number;
+				host::functions.free_value(&pos);
+				return vector3(x, y, z);
+			}
 		}
     }
 }

@@ -834,9 +834,6 @@ namespace intercept {
         void set_camera_interest(float value0_, object value1_);
         void set_collision_light(bool value0_, object value1_);
         void set_combat_mode(std::string value0_, team_member value1_);
-        void set_curator_camera_area_ceiling(float value0_, object value1_);
-        void set_curator_editing_area_type(bool value0_, object value1_);
-        void set_curator_waypoint_cost(float value0_, object value1_);
         void set_custom_aim_coef(float value0_, object value1_);
         void set_custom_weight_rtd(float value0_, object value1_);
         void set_damage(float value0_, object value1_);

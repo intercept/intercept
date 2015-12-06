@@ -37,6 +37,9 @@ def parse():
     unary_functions_used = []
     binary_functions_used = []
     nular_functions_used = []
+    unary_functions_found_at = []
+    binary_functions_found_at = []
+    nular_functions_found_at = []
 
     unary_functions_cpy = list(unary_functions)
     binary_functions_cpy = list(binary_functions)
@@ -46,23 +49,27 @@ def parse():
     for file in os.listdir(projectpath_sqf):
         if file.endswith(".cpp"):
             source_file = os.path.join(projectpath_sqf, file) # find our source file contents
+            lineN = 0
             with open(source_file) as f:
-                fileContent = f.read()
+                for line in f:# fileContent = f.read()
+                    lineN += 1
+                    for function in unary_functions_cpy: # check if this source file contains any unary functions
+                        if line.find(function) != -1 and function not in unary_functions_used:
+                            unary_functions.remove(function)
+                            unary_functions_used.append(function)
+                            unary_functions_found_at.append(["src/client/intercept/client/sqf/" + file, lineN])
 
-                for function in unary_functions_cpy: # check if this source file contains any unary functions
-                    if fileContent.find(function) != -1 and function not in unary_functions_used:
-                        unary_functions.remove(function)
-                        unary_functions_used.append(function)
+                    for function in binary_functions_cpy: # check if this source file contains any binary functions
+                        if line.find(function) != -1 and function not in binary_functions_used:
+                            binary_functions.remove(function)
+                            binary_functions_used.append(function)
+                            binary_functions_found_at.append(["src/client/intercept/client//sqf/" + file, lineN])
 
-                for function in binary_functions_cpy: # check if this source file contains any binary functions
-                    if fileContent.find(function) != -1 and function not in binary_functions_used:
-                        binary_functions.remove(function)
-                        binary_functions_used.append(function)
-
-                for function in nular_functions_cpy: # check if this source file contains any nular functions
-                    if fileContent.find(function) != -1 and function not in nular_functions_used:
-                        nular_functions.remove(function)
-                        nular_functions_used.append(function)
+                    for function in nular_functions_cpy: # check if this source file contains any nular functions
+                        if line.find(function) != -1 and function not in nular_functions_used:
+                            nular_functions.remove(function)
+                            nular_functions_used.append(function)
+                            nular_functions_found_at.append(["src/client/intercept/client/sqf/" + file, lineN])
 
     total_declared = unary_functions_declared + binary_functions_declared + nular_functions_declared
     total_used = len(unary_functions_used) + len(binary_functions_used) + len(nular_functions_used)
@@ -92,18 +99,24 @@ def parse():
     # Output everything already completed
     print("## COMPLETED:\n-----\n")
     print("### Unary Functions")
+    index = 0
     for function in unary_functions_used: # Output any unary functions completed
-        print("- [x] {}".format(function))
+        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, unary_functions_found_at[index][0], unary_functions_found_at[index][1]))
+        index+=1
     print("\n----")
 
     print("### Binary Functions")
+    index = 0
     for function in binary_functions_used: # Output any binary functions completed
-        print("- [x] {}".format(function))
+        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
+        index+=1
     print("\n----")
 
     print("### Nular Functions")
+    index = 0
     for function in nular_functions_used: # Output any nular functions completed
-        print("- [x] {}".format(function))
+        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, nular_functions_found_at[index][0], nular_functions_found_at[index][1]))
+        index+=1
     print("\n----")
 
     return [unary_functions_used, binary_functions_used, nular_functions_used]

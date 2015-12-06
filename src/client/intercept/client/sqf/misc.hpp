@@ -290,8 +290,7 @@ namespace intercept {
         void delete_collection(object value_);
         void delete_group(group value_);
         bool delete_identity(std::string value_);
-        void delete_marker(std::string value_);
-        void delete_marker_local(std::string value_);
+
         void delete_site(object value_);
         bool delete_status(std::string value_);
         void detach(object value_);
@@ -363,8 +362,7 @@ namespace intercept {
         std::string get_editor_mode(control value_);
         float get_fatigue(object value_);
         float get_fuel_cargo(object value_);
-        std::string get_marker_color(std::string value_);
-        std::string get_marker_type(std::string value_);
+
         float get_mass(object value_);
         float get_object_dlc(object value_);
         float get_object_type(object value_);
@@ -478,13 +476,7 @@ namespace intercept {
         float locked(object value_);
         bool locked_driver(object value_);
         float log(float value_);
-        float marker_alpha(std::string value_);
-        std::string marker_brush(std::string value_);
-        std::string marker_color(std::string value_);
-        float marker_dir(std::string value_);
-        std::string marker_shape(std::string value_);
-        std::string marker_text(std::string value_);
-        std::string marker_type(std::string value_);
+
         bool mine_active(object value_);
         float morale(object value_);
         void move_out(object value_);
@@ -890,10 +882,7 @@ namespace intercept {
         void set_light_flare_size(float value0_, object value1_);
         void set_light_intensity(float value0_, object value1_);
         void set_light_use_flare(bool value0_, object value1_);
-        void set_marker_alpha(float value0_, std::string value1_);
-        void set_marker_alpha_local(float value0_, std::string value1_);
-        void set_marker_dir(float value0_, std::string value1_);
-        void set_marker_dir_local(float value0_, std::string value1_);
+
         void set_mimic(object value0_, std::string value1_);
         void set_name(object value0_, std::string value1_);
         void set_name_sound(object value0_, std::string value1_);

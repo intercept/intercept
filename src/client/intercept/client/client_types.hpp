@@ -38,6 +38,9 @@ namespace intercept {
             public:
                 config_ptr(game_value value_) : internal_ptr(value_) {};
                 ~config_ptr();
+
+                config operator>>(std::string& value_);
+                config operator>>(const char* value_);
             };
             class control_ptr : public internal_ptr {
             public:

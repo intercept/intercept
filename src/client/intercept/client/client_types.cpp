@@ -33,6 +33,17 @@ namespace intercept {
             {
                 host::functions.free_value(&value);
             }
+
+            config config_ptr::operator>>(std::string& value_) {
+                auto binary = (binary_function)host::functions.get_binary_function_typed(">>", "CONFIG", "STRING");
+                game_value ret_value = host::functions.invoke_raw_binary(binary, *this, game_value_string(value_));
+                return std::make_shared<config_ptr>(ret_value);
+            }
+
+            config config_ptr::operator>>(const char* value_) {
+                return operator>>(std::string(value_));
+            }
+
             control_ptr::~control_ptr()
             {
                 host::functions.free_value(&value);

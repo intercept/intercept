@@ -38,6 +38,10 @@ def parse():
     binary_functions_used = []
     nular_functions_used = []
 
+    unary_functions_cpy = list(unary_functions)
+    binary_functions_cpy = list(binary_functions)
+    nular_functions_cpy = list(nular_functions)
+
     # Walk through our source files and figure out which ones are used in our code
     for file in os.listdir(projectpath_sqf):
         if file.endswith(".cpp"):
@@ -45,30 +49,29 @@ def parse():
             with open(source_file) as f:
                 fileContent = f.read()
 
-                for function in unary_functions: # check if this source file contains any unary functions
-                    if fileContent.find(function) != -1:
+                for function in unary_functions_cpy: # check if this source file contains any unary functions
+                    if fileContent.find(function) != -1 and function not in unary_functions_used:
                         unary_functions.remove(function)
                         unary_functions_used.append(function)
 
-                for function in binary_functions: # check if this source file contains any binary functions
-                    if fileContent.find(function) != -1:
+                for function in binary_functions_cpy: # check if this source file contains any binary functions
+                    if fileContent.find(function) != -1 and function not in binary_functions_used:
                         binary_functions.remove(function)
                         binary_functions_used.append(function)
 
-                for function in nular_functions: # check if this source file contains any nular functions
-                    if fileContent.find(function) != -1:
+                for function in nular_functions_cpy: # check if this source file contains any nular functions
+                    if fileContent.find(function) != -1 and function not in nular_functions_used:
                         nular_functions.remove(function)
                         nular_functions_used.append(function)
 
-    percentage_completed = ((unary_functions_declared + binary_functions_declared + nular_functions_declared) / (len(unary_functions_used) + len(binary_functions_used) + len(nular_functions_used))) / 100
-    print("### PERCENTAGE COMPLETED: {}%\n".format(round(percentage_completed)))
+    total_declared = unary_functions_declared + binary_functions_declared + nular_functions_declared
+    total_used = len(unary_functions_used) + len(binary_functions_used) + len(nular_functions_used)
+    percentage_completed = total_used / total_declared * 100
+    print("### PERCENTAGE COMPLETED: {}%\n".format(round(percentage_completed*100)/100))
 
-    print("Unary functions declared: {}".format(unary_functions_declared))
-    print("Binary functions declared: {}".format(binary_functions_declared))
-    print("Nular functions declared: {}".format(nular_functions_declared))
-    print("Unary functions used: {}".format(len(unary_functions_used)))
-    print("Binary functions used: {}".format(len(binary_functions_used)))
-    print("Nular functions used: {}".format(len(nular_functions_used)))
+    print("Unary functions: {}/{}".format(len(unary_functions_used), unary_functions_declared))
+    print("Binary functions: {}/{}".format(len(binary_functions_used), binary_functions_declared))
+    print("Nular functions: {}/{}".format(len(nular_functions_used), nular_functions_declared))
 
     print("### Unary Functions")
     for function in unary_functions: # Output any unary functions yet to be completed
@@ -91,7 +94,7 @@ def parse():
         print("- [x] {}".format(function))
     print("\n----")
 
-
+    return [unary_functions_used, binary_functions_used, nular_functions_used]
 
 if __name__ == "__main__":
     parse()

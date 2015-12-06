@@ -101,48 +101,83 @@ def parse():
                     helper_method = ""
                     # __empty_unary_number(unary_function fnc_, float val_);
                     if (ret_type == 'float'):
-                        helper_method += "return __number_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'bool'):
-                        helper_method += "return __bool_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'std::string'):
-                        helper_method += "return __string_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'object'):
-                        helper_method += "return __object_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'control'):
-                        helper_method += "return __control_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'text'):
-                        helper_method += "return __text_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'display'):
-                        helper_method += "return __display_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'void'):
-                        helper_method += "__empty_unary_"
+                        helper_method += ""
                     elif  (ret_type == 'side'):
-                        helper_method += "return __side_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'group'):
-                        helper_method += "return __group_unary_"
+                        helper_method += "game_value ret_value = "
                     elif  (ret_type == 'team_member'):
-                        helper_method += "return __team_member_unary_"
+                        helper_method += "game_value ret_value = "
 
-                    value_type_n = 0
-                    for type_name in input_type:
-                        if (value_type_n > 0):
-                            helper_method += "_"
-
-                        if (type_name == 'float'):
-                            helper_method += "number"
-                        else:
-                            helper_method += type_name
-                        value_type_n+=1
-
-                    function_implementation += helper_method + "("+ m_unary.group(0).lower()
+                    helper_method += "host::functions.invoke_raw_binary"
+                    function_implementation += helper_method + "(client::__sqf::"+ m_unary.group(0).lower()
 
                     value_type_n = 0
                     for type_name in input_type:
                         function_implementation += ", "
-                        function_implementation += "value{}_".format(value_type_n)
+                        if (type_name == 'float'):
+                            function_implementation += "game_value_number(value{}_)".format(value_type_n)
+                        elif  (type_name == 'bool'):
+                            function_implementation += "game_value_bool(value{}_)".format(value_type_n)
+                        elif  (type_name == 'std::string'):
+                            function_implementation += "game_value_string(value{}_)".format(value_type_n)
+                        elif  (type_name == 'object'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'control'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'text'):
+                            function_implementation += "game_value_string(value{}_)".format(value_type_n)
+                        elif  (type_name == 'display'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'side'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'group'):
+                            function_implementation += "*value{}_".format(value_type_n)
+                        elif  (type_name == 'team_member'):
+                            function_implementation += "*value{}_".format(value_type_n)
                         value_type_n+=1
 
-                    function_implementation += ");\n}\n"
+                    function_implementation += ");\n"  # close method invokation
+
+                    # handle return value
+                    return_conversion = ""
+                    if (ret_type == 'float'):
+                        return_conversion += "    float rv = ((game_data_number *)ret_value.data)->number;\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'bool'):
+                        return_conversion += "    bool rv = ((game_data_bool *)ret_value.data)->value;\n    host::functions.free_value(&ret_value);\n    return rv;\n"
+                    elif  (ret_type == 'std::string'):
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv\n"
+                    elif  (ret_type == 'object'):
+                        return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
+                    elif  (ret_type == 'control'):
+                        return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
+                    elif  (ret_type == 'text'):
+                        return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv\n"
+                    elif  (ret_type == 'display'):
+                        return_conversion += "    return std::make_shared<display_ptr>(ret_value);\n"
+                    elif  (ret_type == 'side'):
+                        return_conversion += "    return std::make_shared<side_ptr>(ret_value);\n"
+                    elif  (ret_type == 'group'):
+                        return_conversion += "    return std::make_shared<group_ptr>(ret_value);\n"
+                    elif  (ret_type == 'team_member'):
+                        return_conversion += "    return std::make_shared<team_member_ptr>(ret_value);\n"
+
+                    function_implementation += return_conversion + "}\n" # close function definition
+
                     if  'array' not in input_type and len(input_type) > 1:
                         if not skip_generation:
                             converted.append(function_declaration)
@@ -151,6 +186,10 @@ def parse():
                             helper_methods[helper_method] +=1
                         else:
                             helper_methods[helper_method] = 1
+
+    orig_stdout = sys.stdout
+    f = file('out.txt', 'w')
+    sys.stdout = f
 
     for output in converted:
         print(output)

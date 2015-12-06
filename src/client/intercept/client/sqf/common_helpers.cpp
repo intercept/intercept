@@ -86,77 +86,23 @@ namespace intercept {
 				return ret_bool;
 			}
 
-
-			std::vector<object> all_objects(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<object> output;
-				for (int i = 0; i < intersects->length; ++i) {
-					output.push_back(std::make_shared<object_ptr>(intersects->data[i]));
-				}
-				host::functions.free_value(&intersects_value);
-				return output;
+			std::vector<object> all_objects(nular_function fnc_) {	
+                return __convert_to_objects_vector(host::functions.invoke_raw_nular(fnc_));
 			}
-
 			std::vector<std::string> _nular_strings(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<std::string> output;
-				for (int i = 0; i < intersects->length; ++i) {
-					std::string value = ((game_data_string *)intersects->data[i].data)->get_string();
-					output.push_back(value);
-				}
-				host::functions.free_value(&intersects_value); // TODO do we also have to free all the strings in the array?
-				return output;
+                return __convert_to_strings_vector(host::functions.invoke_raw_nular(fnc_));
 			}
-
 			std::vector<team_member> _nular_team_members(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<team_member> output;
-				for (int i = 0; i < intersects->length; ++i) {
-					output.push_back(std::make_shared<team_member_ptr>(intersects->data[i]));
-				}
-				host::functions.free_value(&intersects_value);
-				return output;
+                return __convert_to_team_members_vector(host::functions.invoke_raw_nular(fnc_));
 			}
-
 			std::vector<group> all_groups(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<group> output;
-				for (int i = 0; i < intersects->length; ++i) {
-					output.push_back(std::make_shared<group_ptr>(intersects->data[i]));
-				}
-				host::functions.free_value(&intersects_value);
-				return output;
+                return __convert_to_groups_vector(host::functions.invoke_raw_nular(fnc_));
 			}
-
 			std::vector<display> all_displays(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<display> output;
-				for (int i = 0; i < intersects->length; ++i) {
-					output.push_back(std::make_shared<display_ptr>(intersects->data[i]));
-				}
-				host::functions.free_value(&intersects_value);
-				return output;
+                return __convert_to_displays_vector(host::functions.invoke_raw_nular(fnc_));
 			}
 			std::vector<marker> all_map_markers(nular_function fnc_) {
-				game_value intersects_value = host::functions.invoke_raw_nular(fnc_);
-				game_data_array* intersects = ((game_data_array *)intersects_value.data);
-
-				std::vector<marker> output;
-				for (int i = 0; i < intersects->length; ++i) { // TODO figure out converting markers in an array to an std vector marker 
-															   // output.push_back((host::functions.new_string((const char *)(intersects->data[i]))));
-				}
-				host::functions.free_value(&intersects_value);
-				return output;
+                return __convert_to_markers_vector(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			void __empty_unary_object(unary_function fnc_, object obj_)
@@ -282,6 +228,74 @@ namespace intercept {
 				game_value obj_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
 				return std::make_shared<object_ptr>(obj_ret);
 			}
+
+
+            std::vector<object> __convert_to_objects_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<object> output;
+                for (int i = 0; i < array_value->length; ++i) {
+                    output.push_back(std::make_shared<object_ptr>(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
+
+            std::vector<std::string> __convert_to_strings_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<std::string> output;
+                for (int i = 0; i < array_value->length; ++i) {
+                    std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
+                    output.push_back(value);
+                }
+                host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
+                return output;
+            }
+
+            std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<team_member> output;
+                for (int i = 0; i < array_value->length; ++i) {
+                    output.push_back(std::make_shared<team_member_ptr>(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
+
+            std::vector<group> __convert_to_groups_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<group> output;
+                for (int i = 0; i < array_value->length; ++i) {
+                    output.push_back(std::make_shared<group_ptr>(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
+
+            std::vector<display> __convert_to_displays_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<display> output;
+                for (int i = 0; i < array_value->length; ++i) {
+                    output.push_back(std::make_shared<display_ptr>(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
+            std::vector<marker> __convert_to_markers_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<marker> output;
+                for (int i = 0; i < array_value->length; ++i) { // TODO figure out converting markers in an array to an std vector marker 
+                    std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
+                    output.push_back(value);
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
 		}
 	}
 }

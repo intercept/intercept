@@ -56,6 +56,13 @@ namespace intercept {
 			std::string __string_unary_string(unary_function fnc_, std::string str_);
 
 			object __object_unary_object(unary_function fnc_, object obj_);
+
+            std::vector<object> __convert_to_objects_vector(game_value input__);
+            std::vector<std::string> __convert_to_strings_vector(game_value input__);
+            std::vector<team_member> __convert_to_team_members_vector(game_value input__);
+            std::vector<group> __convert_to_groups_vector(game_value input__);
+            std::vector<display> __convert_to_displays_vector(game_value input__);
+            std::vector<marker> __convert_to_markers_vector(game_value input__);
 		}
 	}
 }

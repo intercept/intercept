@@ -156,7 +156,7 @@ namespace intercept {
             game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
             game_data_array* array_value = ((game_data_array *)input__.data);
             std::vector<script> output;
-            for (int i = 0; i < array_value->length; ++i) {
+            for (uint32_t i = 0; i < array_value->length; ++i) {
                 output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
             }
             host::functions.free_value(&input__);
@@ -167,7 +167,7 @@ namespace intercept {
             game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
             game_data_array* array_value = ((game_data_array *)input__.data);
             std::vector<script> output;
-            for (int i = 0; i < array_value->length; ++i) {
+            for (uint32_t i = 0; i < array_value->length; ++i) {
                 output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
             }
             host::functions.free_value(&input__);
@@ -178,7 +178,7 @@ namespace intercept {
             game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
             game_data_array* array_value = ((game_data_array *)input__.data);
             std::vector<script> output;
-            for (int i = 0; i < array_value->length; ++i) {
+            for (uint32_t i = 0; i < array_value->length; ++i) {
                 output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
             }
             host::functions.free_value(&input__);

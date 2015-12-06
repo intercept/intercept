@@ -215,7 +215,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<object> output;
-                for (int i = 0; i < array_value->length; ++i) {
+                for (uint32_t i = 0; i < array_value->length; ++i) {
                     output.push_back(std::make_shared<object_ptr>(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
@@ -226,7 +226,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<std::string> output;
-                for (int i = 0; i < array_value->length; ++i) {
+                for (uint32_t i = 0; i < array_value->length; ++i) {
                     std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
                     output.push_back(value);
                 }
@@ -238,7 +238,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<team_member> output;
-                for (int i = 0; i < array_value->length; ++i) {
+                for (uint32_t i = 0; i < array_value->length; ++i) {
                     output.push_back(std::make_shared<team_member_ptr>(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
@@ -249,7 +249,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<group> output;
-                for (int i = 0; i < array_value->length; ++i) {
+                for (uint32_t i = 0; i < array_value->length; ++i) {
                     output.push_back(std::make_shared<group_ptr>(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
@@ -260,7 +260,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<display> output;
-                for (int i = 0; i < array_value->length; ++i) {
+                for (uint32_t i = 0; i < array_value->length; ++i) {
                     output.push_back(std::make_shared<display_ptr>(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
@@ -270,7 +270,7 @@ namespace intercept {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
                 std::vector<marker> output;
-                for (int i = 0; i < array_value->length; ++i) { // TODO figure out converting markers in an array to an std vector marker 
+                for (uint32_t i = 0; i < array_value->length; ++i) { // TODO figure out converting markers in an array to an std vector marker 
                     std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
                     output.push_back(value);
                 }

@@ -10,7 +10,7 @@ namespace intercept {
 
                 // TODO do we have to free memory of our array elements?
                 intersect_surfaces_list output;
-                for (int i = 0; i < intersects->length; ++i) {
+                for (uint32_t i = 0; i < intersects->length; ++i) {
                     game_data_array* element = ((game_data_array *)intersects->data[i].data); // our element array
 
                     intersect_surfaces surfaces; // Our intersecting surfaces
@@ -75,7 +75,7 @@ namespace intercept {
                 ignore_obj1_->value,
                 ignore_obj2_->value,
                 game_value_bool(sort_mode_),
-                game_value_number(max_results_),
+                game_value_number((float)max_results_),
                 game_value_string(lod1_),
                 game_value_string(lod2_)
             });
@@ -106,7 +106,7 @@ namespace intercept {
             game_data_array* intersects = ((game_data_array *)intersects_value.data);
 
             std::vector<object> output;
-            for (int i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length; ++i) {
                 output.push_back(std::make_shared<object_ptr>(intersects->data[i]));
             }
             host::functions.free_value(&intersects_value);
@@ -188,14 +188,14 @@ namespace intercept {
                 with_obj_->value,
                 ignore_obj_->value,
                 game_value_bool(sort_by_distance_),
-                game_value_number(flags_)
+                game_value_number((float)flags_)
             });
 
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
             game_data_array* intersects = ((game_data_array *)intersects_value.data);
 
             std::vector<object> output;
-            for (int i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length; ++i) {
                 output.push_back(std::make_shared<object_ptr>(intersects->data[i]));
             }
             host::functions.free_value(&intersects_value);

@@ -12,9 +12,9 @@ SOURCE_GROUP("intercept_includes\\shared" FILES ${INTERCEPT_CLIENT_SHARED_SOURCE
 
 add_library(loader_static STATIC ${LOADER_SOURCES} ${INTERCEPT_CLIENT_SHARED_SOURCES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories("C:/Program Files (x86)/Microsoft Research/Detours Express 3.0/include/")
+include_directories("C:/Users/Verox/Desktop/detours/include/")
 
-target_link_libraries(loader_static controller_static "C:/Program Files (x86)/Microsoft Research/Detours Express 3.0/lib.X86/detours.lib" ${LINK_LIBS})
+target_link_libraries(loader_static controller_static "C:/Users/Verox/Desktop/detours/lib.X86/detours.lib" ${LINK_LIBS})
 set_target_properties(loader_static PROPERTIES PREFIX "")
 set_target_properties(loader_static PROPERTIES COMPILE_DEFINITIONS _STATIC)
 set_target_properties(loader_static PROPERTIES FOLDER intercept)

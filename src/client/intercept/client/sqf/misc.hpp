@@ -8,8 +8,6 @@ using namespace intercept::client::types;
 
 namespace intercept {
     namespace sqf {
-        float random(float max_);
-
         float acc_time();
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
@@ -179,8 +177,6 @@ namespace intercept {
         bool shown_warrant();
         bool shown_watch();
 
-        float abs(float value_);
-        float acos(float value_);
         std::string action_name(std::string value_);
         void activate_key(std::string value_);
         void add_switchable_unit(object value_);
@@ -188,15 +184,13 @@ namespace intercept {
         void airport_side(float value_);
         bool alive(object value_);
         std::string animation_state(object value_);
-        float asin(float value_);
         object assigned_commander(object value_);
         object assigned_driver(object value_);
         object assigned_gunner(object value_);
         object assigned_target(object value_);
         std::string assigned_team(object value_);
         object assigned_vehicle(object value_);
-        float atan(float value_);
-        float atg(float value_);
+
         std::string backpack(object value_);
         object backpack_container(object value_);
         std::string behaviour(object value_);
@@ -221,7 +215,6 @@ namespace intercept {
         bool captive(object value_);
         float captive_num(object value_);
         bool cb_checked(control value_);
-        float ceil(float value_);
         bool channel_enabled(float value_);
         bool check_aifeature(std::string value_);
         void clear_all_items_from_backpack(object value_);
@@ -243,7 +236,6 @@ namespace intercept {
         void commit_overlay(control value_);
         bool completed_fsm(float value_);
         void copy_to_clipboard(std::string value_);
-        float cos(float value_);
         float count(std::string value_);
         side create_center(side value_);
         bool create_dialog(std::string value_);
@@ -258,7 +250,6 @@ namespace intercept {
         float damage(object value_);
         void de_activate_key(std::string value_);
         float debriefing_text(std::string value_);
-        float deg(float value_);
         void delete_center(side value_);
         void delete_collection(object value_);
         bool delete_identity(std::string value_);
@@ -290,7 +281,6 @@ namespace intercept {
         void end_mission(std::string value_);
         void estimated_time_left(float value_);
         float exec_fsm(std::string value_);
-        float exp(float value_);
         void export_jipmessages(std::string value_);
         std::string face(object value_);
         std::string faction(object value_);
@@ -304,7 +294,6 @@ namespace intercept {
         side flag_side(object value_);
         std::string flag_texture(object value_);
         bool fleeing(object value_);
-        float floor(float value_);
         void force_map(bool value_);
         void force_respawn(object value_);
         object form_leader(object value_);
@@ -421,7 +410,6 @@ namespace intercept {
         std::string life_state(object value_);
         void light_detach_object(object value_);
         std::string light_is_on(object value_);
-        float ln(float value_);
         void lnb_clear(control value_);
         void lnb_clear(float value_);
         float lnb_cur_sel_row(control value_);
@@ -436,8 +424,6 @@ namespace intercept {
         bool lock_identity(object value_);
         float locked(object value_);
         bool locked_driver(object value_);
-        float log(float value_);
-
         bool mine_active(object value_);
         float morale(object value_);
         void move_out(object value_);
@@ -489,8 +475,7 @@ namespace intercept {
         float query_items_pool(std::string value_);
         float query_magazine_pool(std::string value_);
         float query_weapon_pool(std::string value_);
-        float rad(float value_);
-        float random(float value_);
+
         std::string rank(object value_);
         float rank_id(object value_);
         float rating(object value_);
@@ -522,7 +507,6 @@ namespace intercept {
         void rope_destroy(object value_);
         float rope_length(object value_);
         bool rope_unwound(object value_);
-        float round(float value_);
         void save_overlay(control value_);
         void save_var(std::string value_);
         void scope_name(std::string value_);
@@ -567,7 +551,6 @@ namespace intercept {
         void show_warrant(bool value_);
         void show_watch(bool value_);
         bool simulation_enabled(object value_);
-        float sin(float value_);
         float size_of(std::string value_);
         float skill(object value_);
         void skip_time(float value_);
@@ -577,14 +560,11 @@ namespace intercept {
         bool some_ammo(object value_);
         std::string speaker(object value_);
         float speed(object value_);
-        float sqrt(float value_);
         std::string stance(object value_);
         void stop_engine_rtd(object value_);
         bool stopped(object value_);
         void system_chat(std::string value_);
-        float tan(float value_);
         std::string text(std::string value_);
-        float tg(float value_);
         void title_fade_out(float value_);
         std::string to_lower(std::string value_);
         std::string to_upper(std::string value_);

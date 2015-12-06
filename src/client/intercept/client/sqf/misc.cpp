@@ -5,12 +5,6 @@
 
 namespace intercept {
     namespace sqf {
-        float random(float max_) {
-            game_value rand_val = host::functions.invoke_raw_unary(client::__sqf::unary__random__scalar_nan__ret__scalar_nan, game_value_number(max_));
-            float rand = ((game_data_number *)rand_val.data)->number;
-            host::functions.free_value(&rand_val);
-            return rand;
-        }
 
         float acc_time() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
@@ -594,14 +588,6 @@ namespace intercept {
             __helpers::__empty_nular(client::__sqf::nular__saveprofilenamespace__ret__nothing);
         }
 
-        float abs(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__abs__scalar_nan__ret__scalar_nan, value_);
-        }
-
-        float acos(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__acos__scalar_nan__ret__scalar_nan, value_);
-        }
-
         std::string action_name(std::string value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__actionname__string__ret__string, value_);
         }
@@ -630,10 +616,6 @@ namespace intercept {
             return __helpers::__string_unary_object(client::__sqf::unary__animationstate__object__ret__string, value_);
         }
 
-        float asin(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__asin__scalar_nan__ret__scalar_nan, value_);
-        }
-
         object assigned_commander(object value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__assignedcommander__object__ret__object, value_);
         }
@@ -656,14 +638,6 @@ namespace intercept {
 
         object assigned_vehicle(object value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__assignedvehicle__object__ret__object, value_);
-        }
-
-        float atan(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__atan__scalar_nan__ret__scalar_nan, value_);
-        }
-
-        float atg(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__atg__scalar_nan__ret__scalar_nan, value_);
         }
 
         std::string backpack(object value_) {
@@ -765,10 +739,6 @@ namespace intercept {
             return __helpers::__bool_unary_control(client::__sqf::unary__cbchecked__control__ret__bool, value_);
         }
 
-        float ceil(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__ceil__scalar_nan__ret__scalar_nan, value_);
-        }
-
         bool channel_enabled(float value_) {
             return __helpers::__bool_unary_number(client::__sqf::unary__channelenabled__scalar__ret__bool, value_);
         }
@@ -853,10 +823,6 @@ namespace intercept {
             __helpers::__empty_unary_string(client::__sqf::unary__copytoclipboard__string__ret__nothing, value_);
         }
 
-        float cos(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__cos__scalar_nan__ret__scalar_nan, value_);
-        }
-
         float count(std::string value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__count__string__ret__scalar, value_);
         }
@@ -911,10 +877,6 @@ namespace intercept {
 
         float debriefing_text(std::string value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__debriefingtext__string__ret__scalar, value_);
-        }
-
-        float deg(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__deg__scalar_nan__ret__scalar_nan, value_);
         }
 
         void delete_center(side value_) {
@@ -1033,10 +995,6 @@ namespace intercept {
             return __helpers::__number_unary_string(client::__sqf::unary__execfsm__string__ret__scalar, value_);
         }
 
-        float exp(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__exp__scalar_nan__ret__scalar_nan, value_);
-        }
-
         void export_jipmessages(std::string value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__exportjipmessages__string__ret__nothing, value_);
         }
@@ -1087,10 +1045,6 @@ namespace intercept {
 
         bool fleeing(object value_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__fleeing__object__ret__bool, value_);
-        }
-
-        float floor(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__floor__scalar_nan__ret__scalar_nan, value_);
         }
 
         void force_map(bool value_) {
@@ -1545,10 +1499,6 @@ namespace intercept {
             return __helpers::__string_unary_object(client::__sqf::unary__lightison__object__ret__string, value_);
         }
 
-        float ln(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__ln__scalar_nan__ret__scalar_nan, value_);
-        }
-
         void lnb_clear(control value_) {
             __helpers::__empty_unary_control(client::__sqf::unary__lnbclear__control__ret__nothing, value_);
         }
@@ -1603,10 +1553,6 @@ namespace intercept {
 
         bool locked_driver(object value_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__lockeddriver__object__ret__bool, value_);
-        }
-
-        float log(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__log__scalar_nan__ret__scalar_nan, value_);
         }
 
         bool mine_active(object value_) {
@@ -1813,10 +1759,6 @@ namespace intercept {
             return __helpers::__number_unary_string(client::__sqf::unary__queryweaponpool__string__ret__scalar, value_);
         }
 
-        float rad(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__rad__scalar_nan__ret__scalar_nan, value_);
-        }
-
         std::string rank(object value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__rank__object__ret__string, value_);
         }
@@ -1939,10 +1881,6 @@ namespace intercept {
 
         bool rope_unwound(object value_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__ropeunwound__object__ret__bool, value_);
-        }
-
-        float round(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__round__scalar_nan__ret__scalar_nan, value_);
         }
 
         void save_overlay(control value_) {
@@ -2117,10 +2055,6 @@ namespace intercept {
             return __helpers::__bool_unary_object(client::__sqf::unary__simulationenabled__object__ret__bool, value_);
         }
 
-        float sin(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__sin__scalar_nan__ret__scalar_nan, value_);
-        }
-
         float size_of(std::string value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__sizeof__string__ret__scalar, value_);
         }
@@ -2157,10 +2091,6 @@ namespace intercept {
             return __helpers::__number_unary_object(client::__sqf::unary__speed__object__ret__scalar, value_);
         }
 
-        float sqrt(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__sqrt__scalar_nan__ret__scalar_nan, value_);
-        }
-
         std::string stance(object value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__stance__object__ret__string, value_);
         }
@@ -2177,16 +2107,8 @@ namespace intercept {
             __helpers::__empty_unary_string(client::__sqf::unary__systemchat__string__ret__nothing, value_);
         }
 
-        float tan(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__tan__scalar_nan__ret__scalar_nan, value_);
-        }
-
         std::string text(std::string value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__text__location__ret__string, value_);
-        }
-
-        float tg(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__tg__scalar_nan__ret__scalar_nan, value_);
         }
 
         void title_fade_out(float value_) {

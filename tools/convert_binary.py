@@ -1,12 +1,18 @@
 import os
 import sys
 import re
+import conversion_coverage as coverage
 
 def parse():
     scriptpath = os.path.realpath(__file__)
     projectpath = os.path.dirname(os.path.dirname(scriptpath))
     projectpath = os.path.join(projectpath, "tools")
     declarations_file = os.path.join(projectpath, "unary_definitions.txt")
+
+    used_functions = coverage.parse()
+    unary_functions = used_functions[0]
+    binary_functions = used_functions[1]
+    nular_functions = used_functions[2]
 
     converted = []
     functions_converted = []
@@ -15,6 +21,7 @@ def parse():
         for line in f:
             m_unary = re.search('(?<=static binary_function )\w+', line)
             if (m_unary): # We have a unary function on this line
+                skip_generation = m_unary.group(0).lower() in binary_functions # check if we can skip auto generation for this - it's already done somewhere in our source files
                 function_name = re.search('(?<=binary__)[a-zA-Z]+', m_unary.group(0)).group(0)
                 function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
                 function_output = function_name
@@ -137,8 +144,9 @@ def parse():
 
                     function_implementation += ");\n}\n"
                     if  'array' not in input_type and len(input_type) > 1:
-                        converted.append(function_declaration)
-                        functions_converted.append(function_implementation)
+                        if not skip_generation:
+                            converted.append(function_declaration)
+                            functions_converted.append(function_implementation)
                         if helper_method in helper_methods.keys():
                             helper_methods[helper_method] +=1
                         else:

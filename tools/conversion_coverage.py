@@ -94,5 +94,7 @@ def parse():
         print("- [x] {}".format(function))
     print("\n----")
 
+    return [unary_functions_used, binary_functions_used, nular_functions_used]
+
 if __name__ == "__main__":
     parse()

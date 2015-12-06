@@ -37,47 +37,47 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, *obj_);
         }
 
-        std::vector<object>& all_3den_entities() {
+        std::vector<object> all_3den_entities() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
         }
 
-        std::vector<object>& all_curators() {
+        std::vector<object> all_curators() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allcurators__ret__array));
         }
 
-        std::vector<object>& all_dead() {
+        std::vector<object> all_dead() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldead__ret__array));
         }
 
-        std::vector<object>& all_deadmen() {
+        std::vector<object> all_deadmen() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldeadmen__ret__array));
         }
 
-        std::vector<display>& all_displays() {
+        std::vector<display> all_displays() {
             return __helpers::__convert_to_displays_vector(host::functions.invoke_raw_nular(client::__sqf::nular__alldisplays__ret__array));
         }
 
-        std::vector<group>& all_groups() {
+        std::vector<group> all_groups() {
             return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allgroups__ret__array));
         }
 
-        std::vector<marker>& all_map_markers() {
+        std::vector<marker> all_map_markers() {
             return __helpers::__convert_to_markers_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmapmarkers__ret__array));
         }
 
-        std::vector<object>& all_mines() {
+        std::vector<object> all_mines() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmines__ret__array));
         }
 
-        std::vector<object>& all_players() {
+        std::vector<object> all_players() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allplayers__ret__array));
         }
 
-        std::vector<object>& all_units() {
+        std::vector<object> all_units() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allunits__ret__array));
         }
 
-        std::vector<object>& all_units_uav() {
+        std::vector<object> all_units_uav() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allunitsuav__ret__array));
         }
 

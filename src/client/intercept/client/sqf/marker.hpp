@@ -23,6 +23,13 @@ namespace intercept {
 			void set_marker_dir_local(float value0_, const std::string& value1_);
 			std::string get_marker_color(const std::string& value_);
 			std::string get_marker_type(const std::string& value_);
+
+            std::string create_marker(std::string name_, vector3 pos_);
+            std::string create_marker(std::string name_, vector2 pos_);
+            std::string create_marker(std::string name_, object pos_);
+            std::string create_marker_local(std::string name_, vector3 pos_);
+            std::string create_marker_local(std::string name_, vector2 pos_);
+            std::string create_marker_local(std::string name_, object pos_);
 		}
     }
 }

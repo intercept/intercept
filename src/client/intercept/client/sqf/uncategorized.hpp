@@ -104,19 +104,9 @@ namespace intercept {
 
 			/* potential namespace: gui, ui */
 			void create_gear_dialog(object unit_, std::string resource_);
-			
+
 			/* potential namespace: misc */
 			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_);
-
-			/* potential namespace: marker */
-			std::string create_marker(std::string name_, vector3 pos_);
-			std::string create_marker(std::string name_, vector2 pos_);
-			std::string create_marker(std::string name_, object pos_);
-			std::string create_marker_local(std::string name_, vector3 pos_);
-			std::string create_marker_local(std::string name_, vector2 pos_);
-			std::string create_marker_local(std::string name_, object pos_);
-
-			
 		}
 	}
 }

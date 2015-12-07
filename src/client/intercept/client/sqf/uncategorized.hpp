@@ -78,6 +78,9 @@ namespace intercept {
 
 			/* potential namespace: locations */
 			std::string class_name(location loc_);
+			location create_location(std::string classname_, vector3 pos_, float size_x_, float size_y_);
+			location create_location(std::string classname_, vector2 pos_, float size_x_, float size_y_);
+			location create_location(std::string classname_, object obj_, float size_x_, float size_y_);
 
 			/* potential namespace: ai, group, unit */
 			std::string combat_mode(group loc_);
@@ -97,6 +100,11 @@ namespace intercept {
 			
 			/* potential namespace: misc */
 			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_);
+
+			/* potential namespace: marker */
+			std::string create_marker(std::string name_, vector3 pos_);
+			std::string create_marker(std::string name_, vector2 pos_);
+			std::string create_marker(std::string name_, object pos_);
 		}
 	}
 }

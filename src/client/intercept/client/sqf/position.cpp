@@ -79,6 +79,16 @@ namespace intercept {
 				return __helpers::get_pos_obj(__sqf::unary__getposatlvisual__object__ret__array, obj_);
 			}
 
+			vector3 aim_pos(object obj_)
+			{
+				game_value pos = host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, *obj_);
+				float x = ((game_data_number *)((game_data_array *)pos.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)pos.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)pos.data)->data[2].data)->number;
+				host::functions.free_value(&pos);
+				return vector3(x, y, z);
+			}
+
 			void set_pos(object obj_, vector3 pos_)
 			{
 				host::functions.invoke_raw_binary(__sqf::binary__setpos__object__array__ret__nothing, *obj_, game_value_vector3(pos_));
@@ -122,15 +132,43 @@ namespace intercept {
 				return vector3(x, y, z);
 			}
 
-			vector3 aim_pos(object obj_)
+			vector3 asl_to_agl(vector3 asl_)
 			{
-				game_value pos = host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, *obj_);
-				float x = ((game_data_number *)((game_data_array *)pos.data)->data[0].data)->number;
-				float y = ((game_data_number *)((game_data_array *)pos.data)->data[1].data)->number;
-				float z = ((game_data_number *)((game_data_array *)pos.data)->data[2].data)->number;
-				host::functions.free_value(&pos);
+				// hey bbe, asl? add me on kik.
+				game_value_array<3> asl({
+					game_value_number(asl_.x),
+					game_value_number(asl_.y),
+					game_value_number(asl_.z)
+				});
+
+				game_value agl = host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, asl);
+				float x = ((game_data_number *)((game_data_array *)agl.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)agl.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)agl.data)->data[2].data)->number;
+
+				host::functions.free_value(&agl);
 				return vector3(x, y, z);
 			}
+
+			vector3 atl_to_asl(vector3 atl_)
+			{
+				// hey bbe, asl? add me on kik.
+				game_value_array<3> atl ({
+					game_value_number(atl_.x),
+					game_value_number(atl_.y),
+					game_value_number(atl_.z)
+				});
+
+				game_value asl = host::functions.invoke_raw_unary(client::__sqf::unary__atltoasl__array__ret__array, atl);
+				float x = ((game_data_number *)((game_data_array *)asl.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)asl.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)asl.data)->data[2].data)->number;
+
+				host::functions.free_value(&asl);
+				return vector3(x, y, z);
+			}
+
+
 		}
     }
 }

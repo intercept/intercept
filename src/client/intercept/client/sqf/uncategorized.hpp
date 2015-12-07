@@ -38,6 +38,7 @@ namespace intercept {
 			/* potential namespace: core, display, all */
 			std::vector<control> all_controls(display display_); // @todo
 
+			/* potential namespace: core, all */
 			std::vector<object> all_mission_objects(std::string type_);
 
 		}

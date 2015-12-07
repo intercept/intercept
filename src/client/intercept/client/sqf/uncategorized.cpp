@@ -436,6 +436,79 @@ namespace intercept {
 				host::functions.free_value(&str_ret);
 				return rv;
 			}
+
+			std::string create_marker_local(std::string name_, vector2 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector2(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker_local(std::string name_, vector3 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector3(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker_local(std::string name_, object pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					pos_,
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f)
+			{
+				game_value_array<5> args({
+					game_value_string(type_),
+					game_value_vector3(pos_),
+					game_value_array_dynamic<marker, game_value_string>(markers_),
+					game_value_number(placement_),
+				});
+
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createmine__array__ret__object, args));
+			}
+
+			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f)
+			{
+				game_value_array<5> args({
+					game_value_string(type_),
+					game_value_vector3(pos_),
+					game_value_array_dynamic<marker, game_value_string>(markers_),
+					game_value_number(placement_),
+				});
+				
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsource__array__ret__object, args));
+			}
+
+			team_member create_team(std::string type_, std::string name_)
+			{
+				game_value_array<2> args({
+					game_value_string(type_),
+					game_value_string(name_),
+				});
+
+				return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
+			}
 		}
 	}
 }

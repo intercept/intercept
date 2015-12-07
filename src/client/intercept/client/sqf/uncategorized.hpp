@@ -94,6 +94,11 @@ namespace intercept {
 
 			/* potential namespace: core, create */
 			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE");
+			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+
+			/* potential namespace: core, create, teams */
+			team_member create_team(std::string type_, std::string name_);
 
 			/* potential namespace: gui, ui */
 			void create_gear_dialog(object unit_, std::string resource_);
@@ -105,6 +110,11 @@ namespace intercept {
 			std::string create_marker(std::string name_, vector3 pos_);
 			std::string create_marker(std::string name_, vector2 pos_);
 			std::string create_marker(std::string name_, object pos_);
+			std::string create_marker_local(std::string name_, vector3 pos_);
+			std::string create_marker_local(std::string name_, vector2 pos_);
+			std::string create_marker_local(std::string name_, object pos_);
+
+			
 		}
 	}
 }

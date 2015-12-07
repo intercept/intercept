@@ -59,6 +59,5 @@ namespace intercept {
 				return rv;
 			}
 		}
-
 	}
 }

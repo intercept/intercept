@@ -11,7 +11,7 @@ namespace intercept {
 			/* potential namespace: */
 			std::vector<std::string> action_keys(std::string user_action_);
 
-			text action_keys_image(std::string user_action_);
+			text action_keys_images(std::string user_action_);
 
 			std::string action_keys_names(std::string user_action_);
 			std::string action_keys_names(std::string user_action_, float max_keys_);
@@ -42,6 +42,9 @@ namespace intercept {
 
 			/* potential namespace: core, all */
 			std::vector<object> all_mission_objects(std::string type_);
+
+			/* potential namespace: vehicle, core, cargo */
+			std::vector<object> assigned_cargo(object veh_);
 
 		}
 	}

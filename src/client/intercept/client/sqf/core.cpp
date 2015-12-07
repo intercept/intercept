@@ -187,7 +187,7 @@ namespace intercept {
 
 			bool __sqfassert(bool test_)
 			{
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, game_value_bool(test_));
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__assert__bool__ret__bool, game_value_bool(test_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				

@@ -17,10 +17,10 @@ namespace intercept {
 				return r_arr;
 			}
 
-			text action_keys_image(std::string user_action_)
+			text action_keys_images(std::string user_action_)
 			{
-				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, game_value_string(user_action_));
-				return std::make_shared<text_ptr>(act_keys);
+				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysimages__string_array__ret__text, game_value_string(user_action_));
+				return text(act_keys);
 			}
 
 			std::string action_keys_names(std::string user_action_)
@@ -154,6 +154,11 @@ namespace intercept {
 			std::vector<object> all_mission_objects(std::string type_)
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__allmissionobjects__string__ret__array, game_value_string(type_)));
+			}
+
+			std::vector<object> assigned_cargo(object veh_)
+			{
+				
 			}
 		}
 	}

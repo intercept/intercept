@@ -65,6 +65,9 @@ def parse():
                 if (part.find("ret__namespace") != -1):
                     function_output = "rv_namespace " + function_output
                     ret_type = "rv_namespace"
+                if (part.find("ret__any") != -1):
+                    function_output = "rv_any " + function_output
+                    ret_type = "rv_any"
                 if (part.find("ret__task") != -1):
                     function_output = "task " + function_output
                     ret_type = "task"
@@ -113,6 +116,8 @@ def parse():
                         helper_method += "game_value ret_value = "
                     elif  (ret_type == 'array'):
                         helper_method += "game_value input__ = "
+                    elif  (ret_type == 'rv_any'):
+                        helper_method += "game_value input__ = "
 
                     helper_method += "host::functions.invoke_raw_nular"
                     function_implementation += helper_method + "(client::__sqf::"+ m_unary.group(0).lower() + ");\n"
@@ -126,25 +131,27 @@ def parse():
                     elif  (ret_type == 'std::string'):
                         return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'object'):
-                        return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
+                        return_conversion += "    return object(ret_value);\n"
                     elif  (ret_type == 'control'):
-                        return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
+                        return_conversion += "    return control(ret_value);\n"
                     elif  (ret_type == 'script'):
-                        return_conversion += "    return std::make_shared<script_ptr>(ret_value);\n"
+                        return_conversion += "    return script(ret_value);\n"
                     elif  (ret_type == 'task'):
-                        return_conversion += "    return std::make_shared<task_ptr>(ret_value);\n"
+                        return_conversion += "    return task(ret_value);\n"
                     elif  (ret_type == 'rv_namespace'):
-                        return_conversion += "    return std::make_shared<rv_namespace_ptr>(ret_value);\n"
+                        return_conversion += "    return rv_namespace(ret_value);\n"
                     elif  (ret_type == 'text'):
                         return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'display'):
-                        return_conversion += "    return std::make_shared<display_ptr>(ret_value);\n"
+                        return_conversion += "    return display(ret_value);\n"
                     elif  (ret_type == 'side'):
-                        return_conversion += "    return std::make_shared<side_ptr>(ret_value);\n"
+                        return_conversion += "    return side(ret_value);\n"
                     elif  (ret_type == 'group'):
-                        return_conversion += "    return std::make_shared<group_ptr>(ret_value);\n"
+                        return_conversion += "    return group(ret_value);\n"
                     elif  (ret_type == 'team_member'):
-                        return_conversion += "    return std::make_shared<team_member_ptr>(ret_value);\n"
+                        return_conversion += "    return team_member(ret_value);\n"
+                    elif  (ret_type == 'rv_any'):
+                        return_conversion += "    return rv_any(ret_value);\n"
                     elif  (ret_type == 'array'):
                         return_conversion += "    game_data_array* array_value = ((game_data_array *)input__.data);\n"
                         return_conversion += "    std::vector<?> output;\n"

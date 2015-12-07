@@ -282,7 +282,7 @@ namespace intercept {
 
                 std::vector<config> output;
                 for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(std::make_shared<config_ptr>(array_value->data[i]));
+                    output.push_back(config(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
                 return output;

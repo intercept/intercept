@@ -81,7 +81,7 @@ namespace intercept {
 
 			vector3 aim_pos(object obj_)
 			{
-				game_value pos = host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, *obj_);
+				game_value pos = host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, obj_);
 				float x = ((game_data_number *)((game_data_array *)pos.data)->data[0].data)->number;
 				float y = ((game_data_number *)((game_data_array *)pos.data)->data[1].data)->number;
 				float z = ((game_data_number *)((game_data_array *)pos.data)->data[2].data)->number;

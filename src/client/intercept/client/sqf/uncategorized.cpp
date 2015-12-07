@@ -328,7 +328,7 @@ namespace intercept {
 				//return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
 			}
 
-			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
+			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ /* = {}*/, float placement_ /*= 0.0f*/, std::string special_ /*= "NONE"*/)
 			{
 				game_value_array<5> args({
 					game_value_string(type_),
@@ -398,7 +398,7 @@ namespace intercept {
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 			}
 
-			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f)
+			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				game_value_array<5> args({
 					game_value_string(type_),
@@ -410,7 +410,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createmine__array__ret__object, args));
 			}
 
-			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f)
+			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				game_value_array<5> args({
 					game_value_string(type_),
@@ -432,7 +432,7 @@ namespace intercept {
 				return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
 			}
 
-			object create_trigger(std::string type_, vector3 pos_, bool make_global_ = true)
+			object create_trigger(std::string type_, vector3 pos_, bool make_global_/* = true*/)
 			{
 				game_value_array<3> args({
 					game_value_string(type_),
@@ -443,7 +443,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
 			}
 
-			object create_trigger(std::string type_, object pos_, bool make_global_ = true)
+			object create_trigger(std::string type_, object pos_, bool make_global_ /*= true*/)
 			{
 				game_value_array<3> args({
 					game_value_string(type_),

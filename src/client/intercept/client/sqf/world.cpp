@@ -1,5 +1,6 @@
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
+#include "world.h"
 
 namespace intercept {
 	namespace sqf {
@@ -39,6 +40,23 @@ namespace intercept {
 
 			float time_multiplier() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__timemultiplier__ret__scalar);
+			}
+
+			float date_to_number(game_date date_)
+			{
+				game_value_array<5> date_array({
+					game_value_number(date_.year),
+					game_value_number(date_.month),
+					game_value_number(date_.day),
+					game_value_number(date_.hour),
+					game_value_number(date_.minute)
+				});
+
+				game_value date_number = host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_array);
+				float rv = ((game_data_number *)date_number.data)->number;
+
+				host::functions.free_value(&date_number);
+				return rv;
 			}
 		}
 

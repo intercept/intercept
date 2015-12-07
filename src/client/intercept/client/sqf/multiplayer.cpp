@@ -10,7 +10,7 @@ namespace intercept {
 			}
 
 			bool local(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__local__group__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__local__group__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;

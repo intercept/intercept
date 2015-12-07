@@ -7,7 +7,7 @@ namespace intercept {
 			namespace __helpers {
 				void chat_message(binary_function fnc_, object obj_, const std::string &message_) {
 					game_value message = host::functions.new_string(message_.c_str());
-					host::functions.invoke_raw_binary(fnc_, *obj_, &message);
+					host::functions.invoke_raw_binary(fnc_, obj_, &message);
 					host::functions.free_value(&message);
 				}
 			}
@@ -41,7 +41,7 @@ namespace intercept {
 			void custom_chat(object obj_, uint32_t channel_id_, const std::string &message_) {
 				game_value message = host::functions.new_string(message_.c_str());
 				auto args = game_value_array<2>({ game_value_number((float)channel_id_), message });
-				host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, *obj_, args);
+				host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
 				host::functions.free_value(&message);
 			}
 		}

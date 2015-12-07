@@ -76,9 +76,11 @@ namespace intercept {
 			/**
 			* Returns objects intersecting with the virtual line from begPos to endPos
 			*/
-			std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_by_distance_);
+			std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_);
+            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, const object & ignore_obj_one_);
+            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, const object & ignore_obj_one_, const object & ignore_obj_two_);
 
-			/**
+            /**
 			* Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionAGL
 			*/
 			bool terrain_intersect(vector3 begin_pos_, vector3 end_pos_);

@@ -277,6 +277,16 @@ namespace intercept {
                 host::functions.free_value(&input__);
                 return output;
             }
+            std::vector<config> __convert_to_configs_vector(game_value input__) {
+                game_data_array* array_value = ((game_data_array *)input__.data);
+
+                std::vector<config> output;
+                for (uint32_t i = 0; i < array_value->length; ++i) {
+                    output.push_back(std::make_shared<config_ptr>(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
 		}
 	}
 }

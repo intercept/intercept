@@ -282,6 +282,86 @@ namespace intercept {
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
 			}
+
+			// What a confusing command name.
+			std::string class_name(location loc_)
+			{
+				game_value str_ret = host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string combat_mode(group grp_)
+			{
+				game_value str_ret = host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string combat_mode(object unit_)
+			{
+				return __helpers::__string_unary_object(client::__sqf::unary__combatmode__object_group__ret__string, unit_);
+			}
+
+			void command_get_out(object unit_)
+			{
+				return __helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
+			}
+
+			void command_get_out(std::vector<object> units_)
+			{
+				// @todo
+				throw 713; // Not Implmemented.
+				//return __helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
+			}
+
+			void command_stop(object unit_)
+			{
+				return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
+			}
+			void command_stop(std::vector<object> units_)
+			{
+				// @todo
+				throw 713; // Not Implmemented.
+				//return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
+			}
+
+			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
+			{
+				game_value_array<5> args({
+					game_value_string(type_),
+					game_value_vector3(pos_),
+					game_value_array_dynamic<marker, game_value_string>(markers_),
+					game_value_number(placement_),
+					game_value_string(special_)
+				});
+
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createagent__array__ret__object, args));
+			}
+
+			void create_gear_dialog(object unit_, std::string resource_)
+			{
+				game_value_array<2> params({
+					unit_,
+					game_value_string(resource_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__creategeardialog__array__ret__nothing, params);
+			}
+
+			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_)
+			{
+				game_value_array<4> params({
+					side_,
+					game_value_vector3(pos_),
+					game_value_number(idstatic_),
+					veh_
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
+			}
 		}
 	}
 }

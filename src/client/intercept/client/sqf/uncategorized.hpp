@@ -75,6 +75,28 @@ namespace intercept {
 			/* potential namespace: ui, gui, misc */
 			void button_set_action(float control_id_, std::string code_);
 			void button_set_action(control control_, std::string code_);
+
+			/* potential namespace: locations */
+			std::string class_name(location loc_);
+
+			/* potential namespace: ai, group, unit */
+			std::string combat_mode(group loc_);
+			std::string combat_mode(object loc_);
+
+			/* potential namespace: ai */
+			void command_get_out(object unit_);
+			void command_get_out(std::vector<object> units_);
+			void command_stop(object unit_);
+			void command_stop(std::vector<object> units_);
+
+			/* potential namespace: core, create */
+			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE");
+
+			/* potential namespace: gui, ui */
+			void create_gear_dialog(object unit_, std::string resource_);
+			
+			/* potential namespace: misc */
+			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_);
 		}
 	}
 }

@@ -31,6 +31,15 @@ namespace intercept {
 
 			/* potential namespace: core, misc, world */
 			void add_to_remains_collector(std::vector<object> objects_);
+
+			/* potential namespace: medical, misc, unit */
+			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_);
+
+			/* potential namespace: core, display, all */
+			std::vector<control> all_controls(display display_); // @todo
+
+			std::vector<object> all_mission_objects(std::string type_);
+
 		}
 	}
 }

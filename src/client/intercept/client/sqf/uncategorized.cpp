@@ -126,13 +126,29 @@ namespace intercept {
 					game_value_number(mag_count_)
 				});
 
-				host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
+				host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
 			}
 
+			/// @todo
 			void add_to_remains_collector(std::vector<object> objects_)
 			{
 				//game_value_array_dynamic<object, game_value_object> objects_arr(objects_);
+			}
 
+			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_)
+			{
+				game_value_array<3> params({
+					wounded_->value,
+					medic_->value,
+					game_value_bool(medic_can_heal_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__aisfinishheal__array__ret__nothing, params);
+			}
+
+			std::vector<object> all_mission_objects(std::string type_)
+			{
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__allmissionobjects__string__ret__array, game_value_string(type_)));
 			}
 		}
 	}

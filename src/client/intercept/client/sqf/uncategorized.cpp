@@ -253,6 +253,17 @@ namespace intercept {
 				return bb;
 			}
 
+			vector3 bounding_center(object obj_)
+			{
+				game_value function_return_array = host::functions.invoke_raw_unary(client::__sqf::unary__boundingcenter__object__ret__array, obj_);
+				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
+				host::functions.free_value(&function_return_array);
+				return vector3(x, y, z);
+			}
+
+
 		}
 	}
 }

@@ -68,6 +68,7 @@ namespace intercept {
 			std::vector<std::string> backpack_magazines(object unit_);
 			sqf::bounding_box bounding_box(object model_);
 			sqf::bounding_box bounding_box_real(object model_);
+			vector3 bounding_center(object obj_);
 		}
 	}
 }

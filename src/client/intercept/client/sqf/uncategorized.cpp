@@ -208,7 +208,7 @@ namespace intercept {
 
 			std::vector<std::string> backpack_magazines(object unit_)
 			{
-				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackitems__object__ret__array, unit_));
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackmagazines__object__ret__array, unit_));
 			}
 
 			sqf::bounding_box bounding_box(object model_)

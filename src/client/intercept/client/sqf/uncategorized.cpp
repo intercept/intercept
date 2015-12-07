@@ -17,6 +17,11 @@ namespace intercept {
 				return r_arr;
 			}
 
+			text action_keys_image(std::string user_action_)
+			{
+				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, game_value_string(user_action_));
+				return std::make_shared<text_ptr>(act_keys);
+			}
 
 			std::string action_keys_names(std::string user_action_)
 			{

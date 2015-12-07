@@ -141,7 +141,7 @@ namespace intercept {
 					game_value_number(asl_.z)
 				});
 
-				game_value agl = host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, asl);
+				game_value agl = host::functions.invoke_raw_unary(client::__sqf::unary__asltoagl__array__ret__array, asl);
 				float x = ((game_data_number *)((game_data_array *)agl.data)->data[0].data)->number;
 				float y = ((game_data_number *)((game_data_array *)agl.data)->data[1].data)->number;
 				float z = ((game_data_number *)((game_data_array *)agl.data)->data[2].data)->number;

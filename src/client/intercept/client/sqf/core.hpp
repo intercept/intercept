@@ -46,6 +46,19 @@ namespace intercept {
 
 			bool __sqfassert(bool test_);
 
+            std::vector<control> all_controls(display display_);
+
+            std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_);
+
+            std::vector<std::string> all_turrets(object vehicle_);
+
+            std::vector<std::string> all_variables(object value_);
+            std::vector<std::string> all_variables(control value_);
+            std::vector<std::string> all_variables(team_member value_);
+            std::vector<std::string> all_variables(rv_namespace value_);
+            std::vector<std::string> all_variables(group value_);
+            std::vector<std::string> all_variables(task value_);
+            std::vector<std::string> all_variables(location value_);
 		}
     }
 }

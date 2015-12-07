@@ -102,6 +102,16 @@ namespace intercept {
 			void set_curator_waypoint_cost(float value0_, object value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, game_value_number(value0_), value1_);
 			}
+
+			std::vector<std::string> curator_addons(object curator_module_)
+			{
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__curatoraddons__object__ret__array, curator_module_));
+			}
+
+			std::vector<object> curator_editable_objects(object curator_module_)
+			{
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__curatoreditableobjects__object__ret__array, curator_module_));
+			}
 		}
     }
 }

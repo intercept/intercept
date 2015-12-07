@@ -36,6 +36,12 @@ class CfgFunctions
                 file = "z\intercept\rv\addons\core\lib.sqf";
                 headerType = -1;
             };
+            class post_init_handler
+            {
+                postInit = 1;
+                file = "z\intercept\rv\addons\core\post_init.sqf";
+                headerType = -1;
+            };
         };
 	};
 };

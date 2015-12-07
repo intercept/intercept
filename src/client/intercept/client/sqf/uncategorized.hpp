@@ -66,9 +66,15 @@ namespace intercept {
 			std::vector<std::string> backpack_cargo(object box_);
 			std::vector<std::string> backpack_items(object unit_);
 			std::vector<std::string> backpack_magazines(object unit_);
+
+			/* potential namespace: misc, model, position? */
 			sqf::bounding_box bounding_box(object model_);
 			sqf::bounding_box bounding_box_real(object model_);
 			vector3 bounding_center(object obj_);
+
+			/* potential namespace: ui, gui, misc */
+			void button_set_action(float control_id_, std::string code_);
+			void button_set_action(control control_, std::string code_);
 		}
 	}
 }

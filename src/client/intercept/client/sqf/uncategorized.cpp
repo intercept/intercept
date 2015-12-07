@@ -263,7 +263,25 @@ namespace intercept {
 				return vector3(x, y, z);
 			}
 
+			void button_set_action(float control_id_, std::string code_)
+			{
+				game_value_array<2> params({
+					game_value_number(control_id_),
+					game_value_string(code_)
+				});
 
+				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
+			}
+
+			void button_set_action(control control_, std::string code_)
+			{
+				game_value_array<2> params({
+					control_,
+					game_value_string(code_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
+			}
 		}
 	}
 }

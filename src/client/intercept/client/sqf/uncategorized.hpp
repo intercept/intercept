@@ -72,9 +72,15 @@ namespace intercept {
 			sqf::bounding_box bounding_box_real(object model_);
 			vector3 bounding_center(object obj_);
 
-			/* potential namespace: ui, gui, misc */
+			/* potential namespace: controls, ui, gui, misc */
 			void button_set_action(float control_id_, std::string code_);
 			void button_set_action(control control_, std::string code_);
+			void ctrl_enable(float control_id_, bool enable_);
+			void ctrl_enable(control control_, bool enable_);
+			void ctrl_set_text(float control_id_, std::string code_);
+			void ctrl_set_text(control control_, std::string code_);
+			void ctrl_show(float control_id_, bool show_);
+			void ctrl_show(control control_, bool show_);
 
 			/* potential namespace: locations */
 			std::string class_name(location loc_);
@@ -107,6 +113,20 @@ namespace intercept {
 
 			/* potential namespace: misc */
 			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_);
+
+			/* potential namespace: vehicle */
+			std::vector<object> crew(object _veh);
+
+			/* potential namespace: magazine, items, inventory */
+			std::string current_magazine_detail(object veh_);
+
+			/* potential namespace: teams */
+			std::vector<task> current_tasks(team_member team_member_);
+
+			/* potential namespace: gui, ui */
+			void cut_obj(std::string name_, std::string type_, float speed_ = 1);
+			void cut_rsc(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
+			void cut_text(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
 		}
 	}
 }

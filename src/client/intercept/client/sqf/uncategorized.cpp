@@ -283,6 +283,71 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
 			}
 
+			void ctrl_enable(float control_id_, bool enable_)
+			{
+				game_value_array<2> params({
+					game_value_number(control_id_),
+					game_value_bool(enable_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlenable__array__ret__nothing, params);
+			}
+
+			void ctrl_enable(control control_, bool enable_)
+			{
+				{
+					game_value_array<2> params({
+						control_,
+						game_value_bool(enable_)
+					});
+
+					host::functions.invoke_raw_unary(client::__sqf::unary__ctrlenable__array__ret__nothing, params);
+				}
+			}
+
+			void ctrl_set_text(float control_id_, std::string text_)
+			{
+				game_value_array<2> params({
+					game_value_number(control_id_),
+					game_value_string(text_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlsettext__array__ret__nothing, params);
+			}
+
+			void ctrl_set_text(control control_, std::string text_)
+			{
+				game_value_array<2> params({
+					control_,
+					game_value_string(text_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlsettext__array__ret__nothing, params);
+			}
+
+			void ctrl_show(float control_id_, bool show_)
+			{
+				game_value_array<2> params({
+					game_value_number(control_id_),
+					game_value_bool(show_)
+				});
+
+				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
+			}
+
+			void ctrl_show(control control_, bool show_)
+			{
+				{
+					game_value_array<2> params({
+						control_,
+						game_value_bool(show_)
+					});
+
+					host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
+				}
+			}
+
+
 			// What a confusing command name.
 			std::string class_name(location loc_)
 			{
@@ -400,7 +465,7 @@ namespace intercept {
 
 			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
-				game_value_array<5> args({
+				game_value_array<4> args({
 					game_value_string(type_),
 					game_value_vector3(pos_),
 					game_value_array_dynamic<marker, game_value_string>(markers_),
@@ -412,7 +477,7 @@ namespace intercept {
 
 			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
-				game_value_array<5> args({
+				game_value_array<4> args({
 					game_value_string(type_),
 					game_value_vector3(pos_),
 					game_value_array_dynamic<marker, game_value_string>(markers_),
@@ -454,6 +519,64 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
 			}
 
+			std::vector<object> crew(object _veh)
+			{
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
+			}
+
+			std::string current_magazine_detail(object veh_)
+			{
+				return __helpers::__string_unary_object(client::__sqf::unary__currentmagazinedetail__object__ret__array, veh_);
+			}
+			
+			std::vector<task> current_tasks(team_member team_member_)
+			{
+				game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__currenttasks__team_member__ret__array, team_member_);
+
+				game_data_array* array_value = ((game_data_array *)input.data);
+
+				std::vector<task> output;
+				for (uint32_t i = 0; i < array_value->length; ++i) {
+					output.push_back(task(array_value->data[i]));
+				}
+				host::functions.free_value(&input);
+				return output;
+			}
+
+			void cut_obj(std::string name_, std::string type_, float speed_)
+			{
+				game_value_array<3> args({
+					game_value_string(name_),
+					game_value_string(type_),
+					game_value_number(speed_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__cutobj__array__ret__nothing, args);
+			}
+
+			void cut_rsc(std::string name_, std::string type_, float speed_, bool show_on_map_)
+			{
+				game_value_array<4> args({
+					game_value_string(name_),
+					game_value_string(type_),
+					game_value_number(speed_),
+					game_value_bool(show_on_map_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__cutrsc__array__ret__nothing, args);
+			}
+
+			void cut_text(std::string name_, std::string type_, float speed_, bool show_on_map_)
+			{
+				game_value_array<4> args({
+					game_value_string(name_),
+					game_value_string(type_),
+					game_value_number(speed_),
+					game_value_bool(show_on_map_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__cuttext__array__ret__nothing, args);
+			}
 		}
 	}
 }

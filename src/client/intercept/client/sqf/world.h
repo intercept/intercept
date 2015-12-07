@@ -6,6 +6,15 @@
 using namespace intercept::client::types;
 namespace intercept {
 	namespace sqf {
+		struct game_date
+		{
+			float year;
+			float month;
+			float day;
+			float hour;
+			float minute;
+		};
+
 		namespace world {
 			float world_size();
 			std::string world_name();
@@ -18,6 +27,8 @@ namespace intercept {
 
 			float time();
 			float time_multiplier();
+
+
 
 		}
 	}

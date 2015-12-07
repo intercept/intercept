@@ -1,4 +1,5 @@
 # Intercept
+https://travis-ci.org/NouberNou/intercept.svg?branch=master
 
 ## Overview
 

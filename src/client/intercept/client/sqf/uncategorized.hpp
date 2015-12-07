@@ -7,6 +7,12 @@ using namespace intercept::client::types;
 
 namespace intercept {
 	namespace sqf {
+		struct bounding_box
+		{
+			vector3 min;
+			vector3 max;
+		};
+
 		namespace __uncategorized {
 			/* potential namespace: */
 			std::vector<std::string> action_keys(std::string user_action_);
@@ -55,6 +61,13 @@ namespace intercept {
 			/* potential namespace: ai */
 			bool attack_enabled(object unit_);
 			bool attack_enabled(group group_);
+
+			/* potential namespace: cargo */
+			std::vector<std::string> backpack_cargo(object box_);
+			std::vector<std::string> backpack_items(object unit_);
+			std::vector<std::string> backpack_magazines(object unit_);
+			sqf::bounding_box bounding_box(object model_);
+			sqf::bounding_box bounding_box_real(object model_);
 		}
 	}
 }

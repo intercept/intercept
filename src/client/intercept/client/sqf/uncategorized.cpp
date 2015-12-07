@@ -140,11 +140,11 @@ namespace intercept {
 				//game_value_array_dynamic<object, game_value_object> objects_arr(objects_);
 			}
 
-			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_)
+			void ais_finish_heal(object wounded_, object medic_, bool medic_can_heal_)
 			{
 				game_value_array<3> params({
-					wounded_->value,
-					medic_->value,
+					wounded_,
+					medic_,
 					game_value_bool(medic_can_heal_)
 				});
 
@@ -194,6 +194,63 @@ namespace intercept {
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
 				host::functions.free_value(&bool_ret);
 				return rv;
+			}
+
+			std::vector<std::string> backpack_cargo(object box_)
+			{
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackcargo__object__ret__array, box_));
+			}
+
+			std::vector<std::string> backpack_items(object unit_)
+			{
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackitems__object__ret__array, unit_));
+			}
+
+			std::vector<std::string> backpack_magazines(object unit_)
+			{
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackitems__object__ret__array, unit_));
+			}
+
+			sqf::bounding_box bounding_box(object model_)
+			{
+				game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingbox__object__ret__array, model_);
+				game_data_array* array_value = ((game_data_array *)input.data);
+
+				sqf::bounding_box bb;
+
+				float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
+				float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
+				float z_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[2].data)->number;
+				bb.min = vector3(x_min, y_min, z_min);
+
+				float x_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[0].data)->number;
+				float y_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[1].data)->number;
+				float z_max  = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[2].data)->number;
+				bb.min = vector3(x_max, y_max, z_max);
+
+				host::functions.free_value(&input);
+				return bb;
+			}
+
+			sqf::bounding_box bounding_box_real(object model_)
+			{
+				game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingboxreal__object__ret__array, model_);
+				game_data_array* array_value = ((game_data_array *)input.data);
+
+				sqf::bounding_box bb;
+
+				float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
+				float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
+				float z_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[2].data)->number;
+				bb.min = vector3(x_min, y_min, z_min);
+
+				float x_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[0].data)->number;
+				float y_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[1].data)->number;
+				float z_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[2].data)->number;
+				bb.min = vector3(x_max, y_max, z_max);
+
+				host::functions.free_value(&input);
+				return bb;
 			}
 
 		}

@@ -27,47 +27,47 @@ namespace intercept {
 
 			object __retrieve_nular_object(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<object_ptr>(function_return_number);
+				return object(function_return_number);
 			}
 
 			text __retrieve_nular_text(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<text_ptr>(function_return_number);
+				return text(function_return_number);
 			}
 
 			rv_namespace __retrieve_nular_namespace(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<rv_namespace_ptr>(function_return_number);
+				return rv_namespace(function_return_number);
 			}
 
 			location __retrieve_nular_location(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<location_ptr>(function_return_number);
+				return location(function_return_number);
 			}
 
 			side __retrieve_nular_side(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<side_ptr>(function_return_number);
+				return side(function_return_number);
 			}
 
 			control __retrieve_nular_control(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<control_ptr>(function_return_number);
+				return control(function_return_number);
 			}
 
 			group __retrieve_nular_group(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<group_ptr>(function_return_number);
+				return group(function_return_number);
 			}
 
 			config __retrieve_nular_config(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<config_ptr>(function_return_number);
+				return config(function_return_number);
 			}
 
 			display __retrieve_nular_display(nular_function fnc_) {
 				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return std::make_shared<display_ptr>(function_return_number);
+				return display(function_return_number);
 			}
 
 			vector3 __retrieve_nular_vector3(nular_function fnc_) {
@@ -88,7 +88,7 @@ namespace intercept {
             
 			void __empty_unary_object(unary_function fnc_, object obj_)
 			{
-				host::functions.invoke_raw_unary(fnc_, *obj_);
+				host::functions.invoke_raw_unary(fnc_, obj_);
 			}
 
 			void __empty_unary_vector(unary_function fnc_, vector3 vec_)
@@ -113,12 +113,12 @@ namespace intercept {
 
 			void __empty_unary_control(unary_function fnc_, control ctrl_)
 			{
-				host::functions.invoke_raw_unary(fnc_, *ctrl_);
+				host::functions.invoke_raw_unary(fnc_, ctrl_);
 			}
 
 			bool __bool_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
+				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, obj_);
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
 				host::functions.free_value(&bool_ret);
 				return rv;
@@ -142,7 +142,7 @@ namespace intercept {
 
 			bool __bool_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, *ctl_);
+				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
 				host::functions.free_value(&bool_ret);
 				return rv;
@@ -158,7 +158,7 @@ namespace intercept {
 
 			float __number_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, *ctl_);
+				game_value num_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
 				float rv = ((game_data_number *)num_ret.data)->number;
 				host::functions.free_value(&num_ret);
 				return rv;
@@ -174,7 +174,7 @@ namespace intercept {
 
 			float __number_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
+				game_value num_ret = host::functions.invoke_raw_unary(fnc_, obj_);
 				float rv = ((game_data_number *)num_ret.data)->number;
 				host::functions.free_value(&num_ret);
 				return rv;
@@ -182,7 +182,7 @@ namespace intercept {
 
 			std::string __string_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, *ctl_);
+				game_value str_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
 				std::string rv = ((game_data_string *)str_ret.data)->get_string();
 				host::functions.free_value(&str_ret);
 				return rv;
@@ -190,7 +190,7 @@ namespace intercept {
 
 			std::string __string_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
+				game_value str_ret = host::functions.invoke_raw_unary(fnc_, obj_);
 				std::string rv = ((game_data_string *)str_ret.data)->get_string();
 				host::functions.free_value(&str_ret);
 				return rv;
@@ -206,8 +206,8 @@ namespace intercept {
 
 			object __object_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value obj_ret = host::functions.invoke_raw_unary(fnc_, *obj_);
-				return std::make_shared<object_ptr>(obj_ret);
+				game_value obj_ret = host::functions.invoke_raw_unary(fnc_, obj_);
+				return object(obj_ret);
 			}
 
 
@@ -216,7 +216,7 @@ namespace intercept {
 
                 std::vector<object> output;
                 for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(std::make_shared<object_ptr>(array_value->data[i]));
+                    output.push_back(object(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
                 return output;
@@ -239,7 +239,7 @@ namespace intercept {
 
                 std::vector<team_member> output;
                 for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(std::make_shared<team_member_ptr>(array_value->data[i]));
+                    output.push_back(team_member(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
                 return output;
@@ -250,7 +250,7 @@ namespace intercept {
 
                 std::vector<group> output;
                 for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(std::make_shared<group_ptr>(array_value->data[i]));
+                    output.push_back(group(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
                 return output;
@@ -261,7 +261,7 @@ namespace intercept {
 
                 std::vector<display> output;
                 for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(std::make_shared<display_ptr>(array_value->data[i]));
+                    output.push_back(display(array_value->data[i]));
                 }
                 host::functions.free_value(&input__);
                 return output;

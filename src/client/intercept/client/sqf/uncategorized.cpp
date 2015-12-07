@@ -509,6 +509,29 @@ namespace intercept {
 
 				return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
 			}
+
+			object create_trigger(std::string type_, vector3 pos_, bool make_global_ = true)
+			{
+				game_value_array<3> args({
+					game_value_string(type_),
+					game_value_vector3(pos_),
+					game_value_bool(make_global_)
+				});
+
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
+			}
+
+			object create_trigger(std::string type_, object pos_, bool make_global_ = true)
+			{
+				game_value_array<3> args({
+					game_value_string(type_),
+					pos_,
+					game_value_bool(make_global_)
+				});
+
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
+			}
+
 		}
 	}
 }

@@ -96,6 +96,8 @@ namespace intercept {
 			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE");
 			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
 			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+			object create_trigger(std::string type_, vector3 pos_, bool make_global_ = true);
+			object create_trigger(std::string type_, object pos_, bool make_global_ = true);
 
 			/* potential namespace: core, create, teams */
 			team_member create_team(std::string type_, std::string name_);

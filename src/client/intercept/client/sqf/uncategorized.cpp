@@ -158,8 +158,44 @@ namespace intercept {
 
 			std::vector<object> assigned_cargo(object veh_)
 			{
-				
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__assignedcargo__object__ret__array, veh_));
 			}
+
+			std::vector<std::string> assigned_items(object unit_)
+			{
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__assigneditems__object__ret__array, unit_));
+			}
+
+			object attached_object(location loc_)
+			{
+				game_value ath_obj = host::functions.invoke_raw_unary(client::__sqf::unary__attachedobject__location__ret__object, loc_);
+				return object(ath_obj);
+			}
+
+			std::vector<object> attached_objects(object obj_)
+			{
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobjects__object__ret__array, obj_));
+			}
+
+			object attached_to(object obj_)
+			{
+				game_value ath_obj = host::functions.invoke_raw_unary(client::__sqf::unary__attachedto__object__ret__array, obj_);
+				return object(ath_obj);
+			}
+
+			bool attack_enabled(object unit_)
+			{
+				return __helpers::__bool_unary_object(client::__sqf::unary__attackenabled__object_group__ret__bool, unit_);
+			}
+
+			bool attack_enabled(group group_)
+			{
+				game_value bool_ret = host::functions.invoke_raw_unary(client::__sqf::unary__attackenabled__object_group__ret__bool, group_);
+				bool rv = ((game_data_bool *)bool_ret.data)->value;
+				host::functions.free_value(&bool_ret);
+				return rv;
+			}
+
 		}
 	}
 }

@@ -45,7 +45,16 @@ namespace intercept {
 
 			/* potential namespace: vehicle, core, cargo */
 			std::vector<object> assigned_cargo(object veh_);
+			std::vector<std::string> assigned_items(object unit_);
 
+			/* potential namespace: misc, attach */
+			object attached_object(location loc_);
+			std::vector<object> attached_objects(object obj_);
+			object attached_to(object obj_);
+
+			/* potential namespace: ai */
+			bool attack_enabled(object unit_);
+			bool attack_enabled(group group_);
 		}
 	}
 }

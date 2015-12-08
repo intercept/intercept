@@ -36,28 +36,28 @@ namespace intercept {
 
         
         
-        const game_value invoke_raw(nular_function function_);
-        const game_value invoke_raw(std::string function_name_);
+        const rv_game_value invoke_raw(nular_function function_);
+        const rv_game_value invoke_raw(std::string function_name_);
         
-        const game_value invoke_raw(unary_function function_, game_value * right_);
-        const game_value invoke_raw(std::string function_name_, game_value *right_);
-        const game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
+        const rv_game_value invoke_raw(unary_function function_, rv_game_value * right_);
+        const rv_game_value invoke_raw(std::string function_name_, rv_game_value *right_);
+        const rv_game_value invoke_raw(std::string function_name_, rv_game_value *right_, std::string right_type_);
         
-        const game_value invoke_raw(binary_function function_, game_value * left_, game_value * right_);
-        const game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
-        const game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
+        const rv_game_value invoke_raw(binary_function function_, rv_game_value * left_, rv_game_value * right_);
+        const rv_game_value invoke_raw(std::string function_name_, rv_game_value *left_, rv_game_value *right_);
+        const rv_game_value invoke_raw(std::string function_name_, rv_game_value *left_, std::string left_type_, rv_game_value *right_, std::string right_type_);
 
-        const value_type get_type(game_value *value_);
+        const value_type get_type(rv_game_value *value_);
 
-        const std::string get_type_str(game_value *value_);
+        const std::string get_type_str(rv_game_value *value_);
 
-        bool release_value(game_value * value_);
-        bool release_value(game_value * value_, bool immediate_);
+        bool release_value(rv_game_value * value_);
+        bool release_value(rv_game_value * value_, bool immediate_);
 
         template<typename Type>
-        game_value create_type() {
+        rv_game_value create_type() {
             Type val_factory;
-            game_value new_val = val_factory.factory();
+            rv_game_value new_val = val_factory.factory();
             new_val.data->ref_count_internal = 0x0000dede;
             return new_val;
         }
@@ -74,9 +74,9 @@ namespace intercept {
 
         std::string _registration_type;
 
-        game_value _delete_array_ptr;
-        game_value _delete_size_zero;
-        game_value _delete_size_max;
+        rv_game_value _delete_array_ptr;
+        rv_game_value _delete_size_zero;
+        rv_game_value _delete_size_max;
         uint32_t _delete_index;
 
 
@@ -90,20 +90,20 @@ namespace intercept {
         std::mutex _delete_mutex;
         std::condition_variable _invoke_condition;
 
-        std::list<game_value> _free_queue;
+        std::list<rv_game_value> _free_queue;
         
         std::vector<std::thread> _demo_threads;
     };
     namespace invoker_type {
         class invoker_factory_base {
         public:
-            virtual game_value factory() = 0;
+            virtual rv_game_value factory() = 0;
         };
 
         class scalar : public invoker_factory_base {
         public:
-            game_value factory() {
-                game_value new_number;
+            rv_game_value factory() {
+                rv_game_value new_number;
                 new_number.__vptr = invoker::get().game_value_vptr;
                 new_number.data = new game_data_number();
                 new_number.data->type = invoker::get().type_structures["SCALAR"].first;
@@ -122,8 +122,8 @@ namespace intercept {
                 ((rv_string *)raw_data)->ref_count_internal = 1;
                 return (rv_string *)raw_data;
             }
-            game_value factory() {
-                game_value new_string;
+            rv_game_value factory() {
+                rv_game_value new_string;
                 new_string.__vptr = invoker::get().game_value_vptr;
                 new_string.data = new game_data_string();
                 new_string.data->type = invoker::get().type_structures["STRING"].first;
@@ -135,8 +135,8 @@ namespace intercept {
 
         class array : public invoker_factory_base {
         public:
-            game_value factory() {
-                game_value new_array;
+            rv_game_value factory() {
+                rv_game_value new_array;
                 new_array.__vptr = invoker::get().game_value_vptr;
                 new_array.data = new game_data_array();
                 new_array.data->type = invoker::get().type_structures["ARRAY"].first;

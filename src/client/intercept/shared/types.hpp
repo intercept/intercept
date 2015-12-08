@@ -80,7 +80,7 @@ namespace intercept {
             nular_operator *op;
         };
 
-        class game_value;
+        class rv_game_value;
 
         class game_data {
         public:
@@ -246,7 +246,7 @@ namespace intercept {
                 free(data);
             }
             void allocate(size_t size_);
-            game_value *data;
+            rv_game_value *data;
             uint32_t length;
             uint32_t max_size;
         };
@@ -262,7 +262,7 @@ namespace intercept {
             };
             ~game_data_array_stack() {
             }
-            game_value *data;
+            rv_game_value *data;
             uint32_t length;
             uint32_t max_size;
         };
@@ -309,10 +309,10 @@ namespace intercept {
             bool value;
         };
 
-        class game_value {
+        class rv_game_value {
         public:
             static uintptr_t __vptr_def;
-            game_value();
+            rv_game_value();
             uintptr_t __vptr;
             game_data *data;
         };

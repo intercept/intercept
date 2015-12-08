@@ -5,7 +5,7 @@
 #include "client\client.hpp"
 #include <vector>
 #include <memory>
-using namespace intercept::rv_types;
+
 namespace intercept {
     namespace client {
         namespace types {
@@ -115,89 +115,118 @@ namespace intercept {
 
             typedef std::string marker;
 
-            class game_value_helper {
-            public:
-                game_value value;
-                operator game_value() { return value; }
-                operator game_value *() { return &value; }
 
+            class game_value {
+            public:
+                rv_game_value data;
             };
 
-            class game_value_number : public game_value_helper {
+            class game_value_number : public game_value {
             public:
                 game_value_number() {
-                    _number.number = 0.0f;
-                    value.data = &_number;
+                    data.data = &_data;
                 };
-                game_value_number(float value_) {
-                    _number.number = value_;
-                    value.data = &_number;
-                }
-            protected:
-                game_data_number _number;
+                game_value_number(float val_) {
+                    data.data = &_data;
+                    _data.number = val_;
+                };
+
+                game_data_number _data;
             };
 
-            class game_value_bool : public game_value_helper {
+            class game_value_bool : public game_value {
             public:
-                game_value_bool(bool val_) {
-                    _val.value = val_;
-                    value.data = &_val;
-                }
-            protected:
-                game_data_bool _val;
+                game_value_bool() {
+                    data.data = &_data;
+                };
+                game_value_bool(float val_) {
+                    data.data = &_data;
+                    _data.value = val_;
+                };
+
+                game_data_bool _data;
             };
 
-            class game_value_vector3 : public game_value_helper {
+            class game_value_vec3 : public game_value {
             public:
-                game_value_vector3(client::types::vector3 vec_) {
-                    ((game_data_number *)_vals[0].value.data)->number = vec_.x;
-                    ((game_data_number *)_vals[1].value.data)->number = vec_.y;
-                    ((game_data_number *)_vals[2].value.data)->number = vec_.z;
-                    _elements[0] = _vals[0];
-                    _elements[1] = _vals[1];
-                    _elements[2] = _vals[2];
-                    _array.data = &_elements[0];
-                    _array.length = 3;
-                    _array.max_size = 3;
-                    value.data = &_array;
-                }
-            protected:
-                game_data_array_stack _array;
-                game_value_number _vals[3];
-                game_value _elements[3];
+                game_value_vec3() {
+                    data.data = &_data;
+                };
+
+                game_value_vec3(vector3 vec_) {
+                    data.data = &_data;
+                    _data.length = 3;
+                    _data.max_size = 3;
+                    _elements[0]._data.number = vec_.x;
+                    _elements[1]._data.number = vec_.y;
+                    _elements[2]._data.number = vec_.z;
+
+                    _data.data[0] = _elements[0].data;
+                    _data.data[1] = _elements[1].data;
+                    _data.data[2] = _elements[2].data;
+
+                };
+
+                game_data_array_stack _data;
+                game_value_number _elements[3];
             };
 
-            class game_value_vector2 : public game_value_helper {
+            class game_value_vec2 : public game_value {
             public:
-                game_value_vector2(client::types::vector2 vec_) {
-                    ((game_data_number *)_vals[0].value.data)->number = vec_.x;
-                    ((game_data_number *)_vals[1].value.data)->number = vec_.y;
-                    _elements[0] = _vals[0];
-                    _elements[1] = _vals[1];
-                    _array.data = &_elements[0];
-                    _array.length = 3;
-                    _array.max_size = 3;
-                    value.data = &_array;
+                game_value_vec2() {
+                    data.data = &_data;
+                };
+
+                game_value_vec2(vector2 vec_) {
+                    data.data = &_data;
+                    _data.length = 3;
+                    _data.max_size = 3;
+                    _elements[0]._data.number = vec_.x;
+                    _elements[1]._data.number = vec_.y;
+
+                    _data.data[0] = _elements[0].data;
+                    _data.data[1] = _elements[1].data;
+
+                };
+
+
+                game_data_array_stack _data;
+                game_value_number _elements[2];
+            };
+
+
+
+            class game_value_string_stack : public game_value {
+            public:
+                game_value_string_stack() {
+                    data.data = &_data;
                 }
-            protected:
-                game_data_array_stack _array;
-                game_value_number _vals[2];
-                game_value _elements[2];
+
+                game_value_string_stack(std::string str_) {
+                    data.data = &_data;
+                    _data.raw_string = (rv_string *)&rv_string_raw;
+                    _data.raw_string->length = str_.length() + 1;
+                    _data.raw_string->ref_count_internal = 1;
+                    strcpy(&_data.raw_string->char_string, str_.c_str());
+                }
+
+                char rv_string_raw[2048 + 8];
+                game_data_string _data;
             };
 
             template<size_t SIZE>
-            class game_value_array : public game_value_helper {
+            class game_value_array : public game_value {
             public:
                 game_value_array() {
+                    data.data = &_array;
                     _array.data = _elements;
-                    value.data = &_array;
                     _array.length = SIZE;
                     _array.max_size = SIZE;
                 }
 
                 game_value_array(std::initializer_list<game_value> values_) {
+                    data.data = &_array;
                     _array.data = _elements;
-                    value.data = &_array;
                     _array.length = SIZE;
                     _array.max_size = SIZE;
                     uint32_t i = 0;
@@ -213,32 +242,23 @@ namespace intercept {
                 game_value _elements[SIZE];
             };
 
-            template<typename T, typename Allocator>
-            class game_value_array_dynamic : public game_value_helper {
+            class game_value_array_dynamic : public game_value {
             public:
-                game_value_array_dynamic(std::vector<T> init_) {
-                    _array.allocate(init_.size());
+                game_value_array_dynamic(std::vector<game_value> init_) {
+                    _array.data = &_elements[0].data;//new game_value[init_.size()];
+                    data.data = &_array;
                     uint32_t i = 0;
                     for (auto el : init_) {
-                        _array.data[i] = Allocator(el);
+                        _array.data[i++] = el.data;
                     }
                     _array.length = init_.size();
                     _array.max_size = init_.size();
-                    value.data = &_array;
                 }
             protected:
                 game_data_array _array;
+                game_value _elements[2048];
             };
 
-            class game_value_string : public game_value_helper {
-            public:
-                game_value_string(std::string str_) {
-                    value = host::functions.new_string(str_.c_str());
-                }
-                ~game_value_string() {
-                    host::functions.free_value(&value);
-                }
-            };
 
         }
     }

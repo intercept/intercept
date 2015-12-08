@@ -55,7 +55,7 @@ namespace intercept {
 
 
 
-        uintptr_t game_value::__vptr_def;
+        uintptr_t rv_game_value::__vptr_def;
         std::string rv_string::string() {
             return std::string((char *)&char_string);
         }
@@ -98,12 +98,12 @@ namespace intercept {
             return false;
         }
 
-        game_value::game_value() : __vptr(NULL), data(NULL) {
+        rv_game_value::rv_game_value() : __vptr(NULL), data(NULL) {
             __vptr = __vptr_def;
         };
 
         void game_data_array::allocate(size_t size_) {
-            data = new game_value[size_];
+            data = new rv_game_value[size_];
         }
     }
 }

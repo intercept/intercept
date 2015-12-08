@@ -4,15 +4,15 @@
 
 namespace intercept {
     namespace client_function_defs {
-        game_value invoke_raw_nular(nular_function function_) {
+        rv_game_value invoke_raw_nular(nular_function function_) {
             return intercept::invoker::get().invoke_raw(function_);
         }
 
-        game_value invoke_raw_unary(unary_function function_, game_value *right_arg_) {
+        rv_game_value invoke_raw_unary(unary_function function_, rv_game_value *right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, right_arg_);
         }
 
-        game_value invoke_raw_binary(binary_function function_, game_value *left_arg_, game_value *right_arg_) {
+        rv_game_value invoke_raw_binary(binary_function function_, rv_game_value *left_arg_, rv_game_value *right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, left_arg_, right_arg_);
         }
 
@@ -22,26 +22,26 @@ namespace intercept {
             data_type_def_ = structure.second;
         }
 
-        game_value new_scalar(float val_)
+        rv_game_value new_scalar(float val_)
         {
-            game_value scalar = intercept::invoker::get().create_type<intercept::invoker_type::scalar>();
+            rv_game_value scalar = intercept::invoker::get().create_type<intercept::invoker_type::scalar>();
             ((game_data_number *)scalar.data)->number = val_;
             return scalar;
         }
 
-        game_value new_string(const char *string_) {
-            game_value string = intercept::invoker::get().create_type<intercept::invoker_type::string>();
+        rv_game_value new_string(const char *string_) {
+            rv_game_value string = intercept::invoker::get().create_type<intercept::invoker_type::string>();
             ((game_data_string *)string.data)->set_string(std::string(string_));
             return string;
         }
 
-        game_value new_array(size_t size_) {
-            game_value array = intercept::invoker::get().create_type<intercept::invoker_type::array>();
+        rv_game_value new_array(size_t size_) {
+            rv_game_value array = intercept::invoker::get().create_type<intercept::invoker_type::array>();
             ((game_data_array *)array.data)->allocate(size_);
             return array;
         }
 
-        void free_value(game_value *value_) {
+        void free_value(rv_game_value *value_) {
             intercept::invoker::get().release_value(value_);
         }
 

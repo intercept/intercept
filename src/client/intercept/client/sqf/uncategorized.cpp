@@ -138,8 +138,8 @@ namespace intercept {
 			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_)
 			{
 				game_value_array<3> params({
-					wounded_->value,
-					medic_->value,
+					wounded_,
+					medic_,
 					game_value_bool(medic_can_heal_)
 				});
 

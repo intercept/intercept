@@ -2230,7 +2230,7 @@ namespace intercept {
 			}
 
 			void add_score_side(float value0_, side value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addscoreside__side__scalar__ret__nothing, game_value_number(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addscoreside__side__scalar__ret__nothing, value1_, game_value_number(value0_));
 			}
 
 			void add_secondary_weapon_item(object value0_, const std::string& value1_) {
@@ -2538,7 +2538,7 @@ namespace intercept {
 			}
 
 			float get_hit_index(float value0_, object value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__gethitindex__object__scalar__ret__scalar, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__gethitindex__object__scalar__ret__scalar, value1_, game_value_number(value0_));
 				float rv = ((game_data_number *)ret_value.data)->number;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2674,7 +2674,7 @@ namespace intercept {
 			}
 
 			std::string lb_data(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2685,21 +2685,21 @@ namespace intercept {
 			}
 
 			bool lb_is_selected(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbisselected__control__scalar__ret__bool, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbisselected__control__scalar__ret__bool, value1_, game_value_number(value0_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			std::string lb_picture(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			std::string lb_picture_right(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2710,21 +2710,21 @@ namespace intercept {
 			}
 
 			std::string lb_text(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			std::string lb_text_right(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			float lb_value(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, value1_, game_value_number(value0_));
 				float rv = ((game_data_number *)ret_value.data)->number;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2743,7 +2743,7 @@ namespace intercept {
 			}
 
 			float lnb_add_column(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lnbaddcolumn__control__scalar__ret__scalar, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lnbaddcolumn__control__scalar__ret__scalar, value1_, game_value_number(value0_));
 				float rv = ((game_data_number *)ret_value.data)->number;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2792,7 +2792,7 @@ namespace intercept {
 			}
 
 			bool locked_cargo(float value0_, object value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lockedcargo__object__scalar__ret__bool, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__lockedcargo__object__scalar__ret__bool, value1_, game_value_number(value0_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -2975,7 +2975,7 @@ namespace intercept {
 			}
 
 			void set_airport_side(float value0_, side value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__scalar__side__ret__nothing, game_value_number(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__scalar__side__ret__nothing, value1_, game_value_number(value0_));
 			}
 
 			void set_ammo_cargo(float value0_, object value1_) {
@@ -3119,7 +3119,7 @@ namespace intercept {
 			}
 
 			bool set_owner(float value0_, object value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setowner__object__scalar__ret__bool, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setowner__object__scalar__ret__bool, value1_, game_value_number(value0_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -3296,7 +3296,7 @@ namespace intercept {
 			}
 
 			std::string tv_tooltip(float value0_, control value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, value1_, game_value_number(value0_));
 				std::string rv = ((game_data_string *)ret_value.data)->get_string();
 				host::functions.free_value(&ret_value);
 				return rv;

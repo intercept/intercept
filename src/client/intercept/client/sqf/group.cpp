@@ -14,6 +14,7 @@ namespace intercept {
 			group grp_null() {
 				return __helpers::__retrieve_nular_group(client::__sqf::nular__grpnull__ret__group);
 			}
+
 			void clear_group_icons(group value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__cleargroupicons__group__ret__nothing, value_);
 			}
@@ -47,7 +48,7 @@ namespace intercept {
 			}
 
 			bool set_group_owner(float value0_, group value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, game_value_number(value0_), value1_);
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, value1_, game_value_number(value0_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -63,11 +64,11 @@ namespace intercept {
 			}
 
 			void remove_group_icon(float value0_, group value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value_number(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, value1_, game_value_number(value0_));
 			}
 
 			void select_leader(object value0_, group value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value1_, value0_);
 			}
 
 			float current_waypoint(group value_) {

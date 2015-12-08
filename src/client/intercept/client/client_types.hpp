@@ -9,98 +9,109 @@ using namespace intercept::rv_types;
 namespace intercept {
     namespace client {
         namespace types {
-            class internal_ptr {
+            class game_value_shared_wrapper {
             public:
-                internal_ptr();
-                internal_ptr(game_value value_);
-                ~internal_ptr();
+                game_value_shared_wrapper(game_value value_) : value(value_) {};
+                ~game_value_shared_wrapper() {
+                    host::functions.free_value(&value);
+                }
                 game_value value;
-                operator game_value() { return value; }
-                operator game_value *() { return &value; }
             };
 
-            class object_ptr : public internal_ptr {
+            class internal {
             public:
-                object_ptr(game_value value_) : internal_ptr(value_) {};
-                ~object_ptr();
-            };
-            class group_ptr : public internal_ptr {
-            public:
-                group_ptr(game_value value_) : internal_ptr(value_) {};
-                ~group_ptr();
-            };
-            class code_ptr : public internal_ptr {
-            public:
-                code_ptr(game_value value_) : internal_ptr(value_) {};
-                ~code_ptr();
-            };
-            class config_ptr : public internal_ptr {
-            public:
-                config_ptr(game_value value_) : internal_ptr(value_) {};
-                ~config_ptr();
+                internal() { };
+                internal(game_value value_) {
+                    _value = std::make_shared<game_value_shared_wrapper>(value_);
+                }
+                internal(const internal &copy_) : _value(copy_._value) {};
+                operator game_value() { return _value->value; }
+                operator game_value() const { return _value->value; }
 
-                config operator>>(std::string& value_);
-                config operator>>(const char* value_);
+                operator game_value *() { return &(_value->value); }
+
+            protected:
+                std::shared_ptr<game_value_shared_wrapper> _value;
             };
-            class control_ptr : public internal_ptr {
+
+            class object : public internal {
             public:
-                control_ptr(game_value value_) : internal_ptr(value_) {};
-                ~control_ptr();
+                object() {};
+                object(game_value value_) : internal(value_) {};
+                object(const object &copy_) : internal(copy_) {};
             };
-            class display_ptr : public internal_ptr {
+            class group : public internal {
             public:
-                display_ptr(game_value value_) : internal_ptr(value_) {};
-                ~display_ptr();
+                group() {};
+                group(game_value value_) : internal(value_) {};
+                group(const group &copy_) : internal(copy_) {};
             };
-            class location_ptr : public internal_ptr {
+            class code : public internal {
             public:
-                location_ptr(game_value value_) : internal_ptr(value_) {};
-                ~location_ptr();
+                code() {};
+                code(game_value value_) : internal(value_) {};
+                code(const code &copy_) : internal(copy_) {};
             };
-            class script_ptr : public internal_ptr {
+            class config : public internal {
             public:
-                script_ptr(game_value value_) : internal_ptr(value_) {};
-                ~script_ptr();
+                config() {};
+                config(game_value value_) : internal(value_) {};
+                config(const config &copy_) : internal(copy_) {};
             };
-            class side_ptr : public internal_ptr {
+            class control : public internal {
             public:
-                side_ptr(game_value value_) : internal_ptr(value_) {};
-                ~side_ptr();
+                control() {};
+                control(game_value value_) : internal(value_) {};
+                control(const control &copy_) : internal(copy_) {};
             };
-            class text_ptr : public internal_ptr {
+            class display : public internal {
             public:
-                text_ptr(game_value value_) : internal_ptr(value_) {};
-                ~text_ptr();
+                display() {};
+                display(game_value value_) : internal(value_) {};
+                display(const display &copy_) : internal(copy_) {};
             };
-            class team_member_ptr : public internal_ptr {
+            class location : public internal {
             public:
-                team_member_ptr(game_value value_) : internal_ptr(value_) {};
-                ~team_member_ptr();
+                location() {};
+                location(game_value value_) : internal(value_) {};
+                location(const location &copy_) : internal(copy_) {};
             };
-            class rv_namespace_ptr : public internal_ptr {
+            class script : public internal {
             public:
-                rv_namespace_ptr(game_value value_) : internal_ptr(value_) {};
-                ~rv_namespace_ptr();
+                script() {};
+                script(game_value value_) : internal(value_) {};
+                script(const script &copy_) : internal(copy_) {};
             };
-            class task_ptr : public internal_ptr {
+            class side : public internal {
             public:
-                task_ptr(game_value value_) : internal_ptr(value_) {};
-                ~task_ptr();
+                side() {};
+                side(game_value value_) : internal(value_) {};
+                side(const side &copy_) : internal(copy_) {};
             };
-            
-            typedef std::shared_ptr<object_ptr> object;
-            typedef std::shared_ptr<group_ptr> group;
-            typedef std::shared_ptr<code_ptr> code;
-            typedef std::shared_ptr<config_ptr> config;
-            typedef std::shared_ptr<control_ptr> control;
-            typedef std::shared_ptr<display_ptr> display;
-            typedef std::shared_ptr<location_ptr> location;
-            typedef std::shared_ptr<script_ptr> script;
-            typedef std::shared_ptr<side_ptr> side;
-            typedef std::shared_ptr<text_ptr> text;
-            typedef std::shared_ptr<team_member_ptr> team_member;
-            typedef std::shared_ptr<rv_namespace_ptr> rv_namespace;
-            typedef std::shared_ptr<task_ptr> task;
+            class text : public internal {
+            public:
+                text() {};
+                text(game_value value_) : internal(value_) {};
+                text(const text &copy_) : internal(copy_) {};
+            };
+            class team_member : public internal {
+            public:
+                team_member() {};
+                team_member(game_value value_) : internal(value_) {};
+                team_member(const team_member &copy_) : internal(copy_) {};
+            };
+            class rv_namespace : public internal {
+            public:
+                rv_namespace() {};
+                rv_namespace(game_value value_) : internal(value_) {};
+                rv_namespace(const rv_namespace &copy_) : internal(copy_) {};
+            };
+            class task : public internal {
+            public:
+                task() {};
+                task(game_value value_) : internal(value_) {};
+                task(const task &copy_) : internal(copy_) {};
+            };
 
             typedef std::string marker;
 

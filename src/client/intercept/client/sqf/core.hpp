@@ -43,6 +43,22 @@ namespace intercept {
 			std::vector<script> diag_active_mission_fsms();
 			std::vector<script> diag_active_sqf_scripts();
 			std::vector<script> diag_active_sqs_scripts();
+
+			bool __sqfassert(bool test_);
+
+            std::vector<control> all_controls(display display_);
+
+            std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_);
+
+            std::vector<std::string> all_turrets(object vehicle_);
+
+            std::vector<std::string> all_variables(object value_);
+            std::vector<std::string> all_variables(control value_);
+            std::vector<std::string> all_variables(team_member value_);
+            std::vector<std::string> all_variables(rv_namespace value_);
+            std::vector<std::string> all_variables(group value_);
+            std::vector<std::string> all_variables(task value_);
+            std::vector<std::string> all_variables(location value_);
 		}
     }
 }

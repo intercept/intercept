@@ -8,7 +8,7 @@ namespace intercept {
 		namespace core {
 			object player() {
 				game_value player_obj = host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object);
-				return std::make_shared<object_ptr>(player_obj);
+				return object(player_obj);
 			}
 
 			object create_vehicle(std::string type_, vector3 pos_)
@@ -16,7 +16,7 @@ namespace intercept {
 				game_value type = host::functions.new_string(type_.c_str());
 				game_value obj = host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, &type, game_value_vector3(pos_));
 				host::functions.free_value(&type);
-				return std::make_shared<object_ptr>(obj);
+				return object(obj);
 			}
 
 			object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
@@ -29,12 +29,12 @@ namespace intercept {
 					game_value_string(special_)
 				});
 
-				return std::make_shared<object_ptr>(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
+				return object(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
 			}
 
 			void delete_vehicle(object obj_)
 			{
-				host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, *obj_);
+				host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
 			}
 
 			std::vector<object> all_3den_entities() {
@@ -96,42 +96,42 @@ namespace intercept {
 			}
 
 			bool is_null(object value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			bool is_null(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			bool is_null(control value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			bool is_null(display value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			bool is_null(script value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
 			}
 
 			bool is_null(task value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, *value_);
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, value_);
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				return rv;
@@ -139,17 +139,17 @@ namespace intercept {
 
 			script script_null() {
 				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__scriptnull__ret__script);
-				return std::make_shared<script_ptr>(ret_value);
+				return script(ret_value);
 			}
 
 			task task_null() {
 				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__tasknull__ret__task);
-				return std::make_shared<task_ptr>(ret_value);
+				return task(ret_value);
 			}
 
 			rv_namespace ui_namespace() {
 				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__uinamespace__ret__namespace);
-				return std::make_shared<rv_namespace_ptr>(ret_value);
+				return rv_namespace(ret_value);
 			}
 
 			std::vector<script> diag_active_mission_fsms() {
@@ -157,7 +157,7 @@ namespace intercept {
 				game_data_array* array_value = ((game_data_array *)input__.data);
 				std::vector<script> output;
 				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+					output.push_back(script(array_value->data[i]));
 				}
 				host::functions.free_value(&input__);
 				return output;
@@ -168,7 +168,7 @@ namespace intercept {
 				game_data_array* array_value = ((game_data_array *)input__.data);
 				std::vector<script> output;
 				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+					output.push_back(script(array_value->data[i]));
 				}
 				host::functions.free_value(&input__);
 				return output;
@@ -179,11 +179,73 @@ namespace intercept {
 				game_data_array* array_value = ((game_data_array *)input__.data);
 				std::vector<script> output;
 				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(std::make_shared<script_ptr>(array_value->data[i]));
+					output.push_back(script(array_value->data[i]));
 				}
 				host::functions.free_value(&input__);
 				return output;
 			}
+
+			bool __sqfassert(bool test_) {
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__assert__bool__ret__bool, game_value_bool(test_));
+				bool rv = ((game_data_bool *)ret_value.data)->value;
+				host::functions.free_value(&ret_value);
+				
+				return rv;
+			}
+
+            std::vector<control> all_controls(display display_) {
+                game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
+                game_data_array* array_value = ((game_data_array *)input__.data);
+                std::vector<control> output;
+                for (uint32_t i = 0; i < array_value->length; ++i) {
+                    output.push_back(control(array_value->data[i]));
+                }
+                host::functions.free_value(&input__);
+                return output;
+            }
+
+            std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_) {
+                game_value_array<2> array_input({
+                    vehicle_,
+                    game_value_bool(person_turrets_)
+                });
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allturrets__array__ret__array, array_input));
+            }
+
+            std::vector<std::string> all_turrets(object vehicle_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allturrets__object__ret__array, vehicle_));
+            }
+
+            std::vector<std::string> all_variables(object value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__object__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(control value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__control__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(team_member value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__team_member__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(rv_namespace value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__namespace__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(group value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__group__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(task value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__task__ret__array, value_));
+            }
+            std::vector<std::string> all_variables(location value_) {
+                return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                    client::__sqf::unary__allvariables__location__ret__array, value_));
+            }
 		}
     }
 }

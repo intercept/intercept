@@ -64,6 +64,85 @@ namespace intercept {
 			std::string get_marker_type(const std::string& value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__getmarkertype__string__ret__string, value_);
 			}
+
+            std::string create_marker(std::string name_, vector2 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector2(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker(std::string name_, vector3 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector3(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker(std::string name_, object pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					pos_,
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker_local(std::string name_, vector2 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector2(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker_local(std::string name_, vector3 pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					game_value_vector3(pos_),
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string create_marker_local(std::string name_, object pos_)
+			{
+				game_value_array<2> params({
+					game_value_string(name_),
+					pos_,
+				});
+
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+                        
 		}
     }
 }

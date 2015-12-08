@@ -47,7 +47,7 @@ namespace intercept {
 				return rv;
 			}
 
-			bool set_group_owner(float value0_, group value1_) {
+			bool set_group_owner(group value1_, float value0_) {
 				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, value1_, game_value_number(value0_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
@@ -63,7 +63,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, game_value_string(value1_));
 			}
 
-			void remove_group_icon(float value0_, group value1_) {
+			void remove_group_icon(group value1_, float value0_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, value1_, game_value_number(value0_));
 			}
 

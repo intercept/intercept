@@ -20,13 +20,16 @@ void __cdecl intercept::on_frame() {
     
     object player = intercept::sqf::core::player();
     vector3 pos = intercept::sqf::position::get_pos_asl(player);
+    /*
     game_value_array<2> test_args;
-    test_args[0] = game_value_string("Test: %1");
+    game_value_string string = game_value_string("Test: %1");
+    test_args[0] = string;
+    test_args[1] = (game_value)player;
     game_value formatted_string = intercept::client::host::functions.invoke_raw_unary(intercept::client::__sqf::unary__format__array__ret__string, test_args);
-    pos = intercept::sqf::position::get_pos_asl(player);
-    //side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
-    //object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
-    //intercept::sqf::chat::side_chat(player, side_chat_msg.str());
+    */
+    side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
+    object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
+    intercept::sqf::chat::side_chat(player, side_chat_msg.str());
     //intercept::sqf::position::set_pos_asl(player, pos);
 }
 

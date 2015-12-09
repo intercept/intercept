@@ -1,22 +1,21 @@
 #pragma once
 #include "shared.hpp"
-#include "types.hpp"
+#include "shared\types.hpp"
 
-using namespace intercept::rv_types;
+using namespace intercept::types;
 
 namespace intercept {
     namespace client_function_defs {
-        rv_game_value invoke_raw_nular(nular_function function_);
-        rv_game_value invoke_raw_unary(unary_function function_, rv_game_value * right_arg_);
-        rv_game_value invoke_raw_binary(binary_function function_, rv_game_value * left_arg_, rv_game_value * right_arg_);
+        game_value invoke_raw_nular(nular_function function_);
+        game_value invoke_raw_unary(unary_function function_, game_value & right_arg_);
+        game_value invoke_raw_binary(binary_function function_, game_value & left_arg_, game_value & right_arg_);
 
         void get_type_structure(char *type_name, uintptr_t &type_def_, uintptr_t &data_type_def_);
 
-        rv_game_value new_scalar(float val_);
-        rv_game_value new_string(const char *string_);
-        rv_game_value new_array(size_t size_);
+        rv_string * allocate_string(size_t size_);
+        void free_string(game_value *);
 
-        void free_value(rv_game_value * value_);
+        void free_value(game_value * value_);
 
         nular_function get_nular_function(const char * function_name_);
 

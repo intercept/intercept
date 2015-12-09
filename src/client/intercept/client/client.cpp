@@ -1,11 +1,11 @@
 #include "client.hpp"
-#include "client_types.hpp"
-#include "vector.hpp"
+#include "shared\client_types.hpp"
+#include "shared\vector.hpp"
 #include "macros.hpp"
 #include "pointers.hpp"
 
 
-using namespace intercept::rv_types;
+using namespace intercept::types;
 namespace intercept {
     namespace client {
         client_functions host::functions;
@@ -21,8 +21,6 @@ namespace intercept {
             host::functions.get_type_structure("ARRAY", type_def, data_type_def);
             game_data_array::type_def = type_def;
             game_data_array::data_type_def = data_type_def;
-            game_data_array_stack::type_def = type_def;
-            game_data_array_stack::data_type_def = data_type_def;
 
 
             host::functions.get_type_structure("SCALAR", type_def, data_type_def);
@@ -34,13 +32,12 @@ namespace intercept {
             game_data_string::data_type_def = data_type_def;
 
             host::functions.get_type_structure("OBJECT", type_def, data_type_def);
-            game_data_object::type_def = type_def;
-            game_data_object::data_type_def = data_type_def;
 
             host::functions.get_type_structure("BOOL", type_def, data_type_def);
             game_data_bool::type_def = type_def;
             game_data_bool::data_type_def = data_type_def;
 
+            /*
             host::functions.get_type_structure("CODE", type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
@@ -84,11 +81,11 @@ namespace intercept {
             host::functions.get_type_structure("NAMESPACE", type_def, data_type_def);
             game_data_namespace::type_def = type_def;
             game_data_namespace::data_type_def = data_type_def;
-
+            */
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
-            game_value::__vptr_def = type_def;
+            rv_game_value::__vptr_def = type_def;
 
         }
     }

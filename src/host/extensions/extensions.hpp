@@ -3,7 +3,7 @@
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "functions.hpp"
+#include "shared\functions.hpp"
 
 namespace intercept {
     namespace module {

@@ -234,6 +234,18 @@ namespace intercept {
                 return output;
             }
 
+			std::vector<float> __convert_to_numbers_vector(game_value input__) {
+				game_data_array* array_value = ((game_data_array *)input__.data);
+
+				std::vector<float> output;
+				for (uint32_t i = 0; i < array_value->length; ++i) {
+					float value = ((game_data_number *)array_value->data[i].data)->number;
+					output.push_back(value);
+				}
+				host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
+				return output;
+			}
+
             std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
                 game_data_array* array_value = ((game_data_array *)input__.data);
 
@@ -287,6 +299,16 @@ namespace intercept {
                 host::functions.free_value(&input__);
                 return output;
             }
+
+			vector3 __convert_to_vector3(game_value input__)
+			{
+				game_data_array* array_value = ((game_data_array *)input__.data);
+				float x = ((game_data_number *)array_value->data[0].data)->number;
+				float y = ((game_data_number *)array_value->data[1].data)->number;
+				float z = ((game_data_number *)array_value->data[2].data)->number;
+				host::functions.free_value(&input__);
+				return vector3(x, y, z);
+			}
 		}
 	}
 }

@@ -13,6 +13,29 @@ namespace intercept {
 			vector3 max;
 		};
 
+		struct rv_container
+		{
+			std::string type;
+			object container;
+		};
+
+		struct rv_destination
+		{
+			vector3 pos;
+			std::string planning_mode;
+			bool force_replan;
+		};
+
+		struct rv_crew_member
+		{
+			object unit;
+			std::string role;
+			float cargo_index;
+			// turret path; // @todo
+			bool person_turret;
+		};
+
+
 		namespace __uncategorized {
 			/* potential namespace: */
 			std::vector<std::string> action_keys(std::string user_action_);
@@ -127,6 +150,51 @@ namespace intercept {
 			void cut_obj(std::string name_, std::string type_, float speed_ = 1);
 			void cut_rsc(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
 			void cut_text(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
+			void enable_debriefing_stats(float left_, float top_, float width_, float height_);
+
+			/* potential namespace: misc */
+			void enable_saving(bool enable_);
+			void enable_saving(bool enable_, bool autosave_);
+			
+			/* potential namespace: rtd, vehicles, afm */
+			std::vector<bool> engines_is_on_rtd(object helicopter_);
+			std::vector<float> engines_torque_rtd(object helicopter_);
+			std::vector<float> engines_rpm_rtd(object helicopter_);
+
+			/* potential namespace: core */
+			std::vector<object> entities(std::string type_);
+
+			/* potential namespace: backpack, containers, inventory */
+			std::vector<object> every_backpack(object box_);
+
+			/* potential namespace: containers, inventory */
+			std::vector<rv_container> every_container(object box_);
+
+			/* potential namespace: ai */
+			rv_destination expected_destination(object unit_);
+
+			/* potential namespace: position */
+			vector3 eye_direction(object unit_);
+			vector3 eye_pos(object unit_);
+
+			/* potential namespace: groups, ai */
+			std::string formation(object leader_);
+			std::string formation(group group_);
+
+			std::vector<object> formation_members(object unit_);
+			vector3 formation_position(object unit_);
+			
+			/* Potential namespace: core */
+			std::vector<rv_crew_member> full_crew(object veh_, const std::string &filter_ = "");
+
+			/* potential namespace: misc */
+			std::vector<std::string> get_artillery_ammo(const std::vector<object> &units_);
+
+			/* potential namespace: physics, physx, core */
+			vector3 get_center_of_mass(object obj_);
+
+			/* potential namespace: misc */
+			std::vector<float> get_dlcs(float filter_);
 		}
 	}
 }

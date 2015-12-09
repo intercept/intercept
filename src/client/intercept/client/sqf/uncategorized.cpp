@@ -577,6 +577,117 @@ namespace intercept {
 
 				host::functions.invoke_raw_unary(__sqf::unary__cuttext__array__ret__nothing, args);
 			}
+
+			void enable_debriefing_stats(float left_, float top_, float width_, float height_)
+			{
+				game_value_array<4> args({
+					game_value_number(left_),
+					game_value_number(top_),
+					game_value_number(width_),
+					game_value_number(height_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, args);
+			}
+
+			void enable_saving(bool enable_)
+			{
+				enable_saving(enable_, !enable_);
+			}
+
+			void enable_saving(bool enable_, bool autosave_)
+			{
+				game_value_array<2> args({
+					game_value_bool(enable_),
+					game_value_bool(autosave_)
+				});
+
+				host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
+			}
+
+			std::string formation(object leader_)
+			{
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, leader_);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::string formation(group group_)
+			{
+				game_value str_ret = host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, group_);
+				std::string rv = ((game_data_string *)str_ret.data)->get_string();
+				host::functions.free_value(&str_ret);
+				return rv;
+			}
+
+			std::vector<object> formation_members(object unit_)
+			{
+				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
+			}
+
+			vector3 formation_position(object unit_)
+			{
+				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
+			}
+
+			std::vector<rv_crew_member> full_crew(object veh_, const std::string & filter_)
+			{
+				game_value crew_list;
+
+				if (filter_ == "")
+				{
+					crew_list = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__object__ret__array, veh_);
+				}
+				else
+				{
+					game_value_array<2> args({
+						veh_,
+						game_value_string(filter_)
+					});
+
+					crew_list = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__array__ret__array, args);
+				}
+
+				game_data_array* gd_array = ((game_data_array *)crew_list.data);
+				std::vector<rv_crew_member> output;
+				for (uint32_t i = 0; i < gd_array->length; ++i) {
+
+					rv_crew_member crew_m;
+
+					crew_m.unit = object(((game_data_array *)gd_array->data[i].data)->data[0]);
+					crew_m.role = ((game_data_string *)((game_data_array *)gd_array->data[i].data)->data[1].data)->get_string();
+					crew_m.cargo_index = ((game_data_number *)((game_data_array *)gd_array->data[i].data)->data[2].data)->number;
+					// Turret path
+					crew_m.person_turret = ((game_data_bool *)((game_data_array *)gd_array->data[i].data)->data[4].data)->value;
+					output.push_back(crew_m);
+				}
+
+				host::functions.free_value(&crew_list);
+				return output;
+			}
+
+			std::vector<std::string> get_artillery_ammo(const std::vector<object>& units_)
+			{
+				game_value_array_dynamic<object, object> addons_arr(units_);
+
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getartilleryammo__array__ret__array, addons_arr));
+			}
+
+			vector3 get_center_of_mass(object obj_)
+			{
+				game_value function_return_array = host::functions.invoke_raw_unary(client::__sqf::unary__getcenterofmass__object__ret__array, obj_);
+				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
+				host::functions.free_value(&function_return_array);
+				return vector3(x, y, z);
+			}
+
+			std::vector<float> get_dlcs(float filter_)
+			{
+				return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getdlcs__scalar__ret__array, game_value_number(filter_)));
+			}
 		}
 	}
 }

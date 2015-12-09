@@ -65,7 +65,28 @@ namespace intercept {
 				return __helpers::__string_unary_string(client::__sqf::unary__getmarkertype__string__ret__string, value_);
 			}
 
-            std::string create_marker(std::string name_, vector2 pos_)
+			vector3 get_marker_pos(const std::string& value_)
+			{
+				game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkerpos__string__ret__array, game_value_string(value_));
+
+				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
+				host::functions.free_value(&function_return_array);
+				return vector3(x, y, z);
+			}
+
+			vector2 get_marker_size(const std::string& value_)
+			{
+				game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkersize__string__ret__array, game_value_string(value_));
+
+				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
+				host::functions.free_value(&function_return_array);
+				return vector2(x, y);
+			}
+
+			std::string create_marker(std::string name_, vector2 pos_)
 			{
 				game_value_array<2> params({
 					game_value_string(name_),

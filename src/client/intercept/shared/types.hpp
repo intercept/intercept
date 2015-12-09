@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <set>
+#include "vector.hpp"
 
 namespace intercept {
     namespace types {
@@ -133,9 +134,11 @@ namespace intercept {
             game_value(uintptr_t internal_);
             game_value(float val_);
             game_value(bool val_);
-            game_value(std::string val_);
+            game_value(std::string &val_);
             game_value(const char *);
             game_value(std::initializer_list<game_value> list_);
+            game_value(client::types::vector3 &vec_);
+            game_value(client::types::vector2 &vec_);
             game_value & operator = (const game_value &copy_);
             game_value & operator = (game_value &&move_);
 
@@ -143,8 +146,11 @@ namespace intercept {
             game_value & operator = (bool val_);
             game_value & operator = (std::string val_);
             game_value & operator = (const char *val_);
-
             game_value & operator = (std::initializer_list<game_value> list_);
+            game_value & operator = (client::types::vector3 vec_);
+            game_value & operator = (client::types::vector2 vec_);
+
+
 
             operator float();
             operator bool();

@@ -265,7 +265,7 @@ namespace intercept {
             _rv_data.data = new game_data_bool(val_);
         }
 
-        game_value::game_value(std::string val_)
+        game_value::game_value(std::string &val_)
         {
             _rv_data.data = new game_data_string(val_);
         }
@@ -278,6 +278,16 @@ namespace intercept {
         game_value::game_value(std::initializer_list<game_value> list_)
         {
             _rv_data.data = new game_data_array(list_);
+        }
+
+        game_value::game_value(client::types::vector3 & vec_)
+        {
+            _rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });
+        }
+
+        game_value::game_value(client::types::vector2 & vec_)
+        {
+            _rv_data.data = new game_data_array({ vec_.x, vec_.y });
         }
 
         game_value::~game_value() {
@@ -341,6 +351,22 @@ namespace intercept {
             if (_rv_data.data)
                 delete _rv_data.data;
             _rv_data.data = new game_data_array(list_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(client::types::vector3 vec_)
+        {
+            if (_rv_data.data)
+                delete _rv_data.data;
+            _rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });
+            return *this;
+        }
+
+        game_value & game_value::operator=(client::types::vector2 vec_)
+        {
+            if (_rv_data.data)
+                delete _rv_data.data;
+            _rv_data.data = new game_data_array({ vec_.x, vec_.y });
             return *this;
         }
 

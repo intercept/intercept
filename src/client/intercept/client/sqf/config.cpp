@@ -19,10 +19,10 @@ namespace intercept {
             }
 
             std::vector<config> config_properties(config config_entry, const std::string& condition_ = "true", bool inherit = true) {
-                game_value_array<3> array_entry({
+                game_value array_entry({
                     config_entry->value,
-                    game_value_string(condition_),
-                    game_value_bool(inherit)
+                    game_value(condition_),
+                    game_value(inherit)
                 });
                 game_value output = host::functions.invoke_raw_unary(client::__sqf::unary__configproperties__array__ret__array, array_entry);
                 return __helpers::__convert_to_configs_vector(output);
@@ -52,7 +52,7 @@ namespace intercept {
             //}
 
              config get_mission_config(const std::string& value_) {
-                game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfig__string__ret__config, game_value_string(value_));
+                game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfig__string__ret__config, game_value(value_));
                 return std::make_shared<config_ptr>(ret_value);
             }
 
@@ -111,7 +111,7 @@ namespace intercept {
             }
 
             std::vector<std::string> config_classes(const std::string& value_, config a_config_) {
-                game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, game_value_string(value_), *a_config_);
+                game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, game_value(value_), *a_config_);
                 return __helpers::__convert_to_strings_vector(output);
             }
 
@@ -124,7 +124,7 @@ namespace intercept {
             }
             
             config select(config a_config_, float a_number_) {
-                game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__select__config__scalar__ret__config, *a_config_, game_value_number(a_number_));
+                game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__select__config__scalar__ret__config, *a_config_, game_value(a_number_));
                 return std::make_shared<config_ptr>(ret_value);
             }
 

@@ -9,7 +9,7 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-           
+            game_value player = invoker::get().invoke_raw("player");
             Sleep(10);
         }
     }
@@ -112,14 +112,17 @@ namespace intercept {
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        _delete_size_zero = game_value(0.0f);
-        _delete_size_max = game_value(100.0f);
-
         // @TODO These values need to get cleaned up, but when the release_value() is
         // called this early it crashes the game with some weird race. Need to look at.
         game_value delete_ptr_name = "INVOKER_DELETE_ARRAY";
         game_value mission_namespace = invoke_raw("missionnamespace");
         invoker::get()._delete_array_ptr = invoke_raw("getvariable", &mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
+
+        _delete_size_zero = game_value(0.0f);
+        _delete_size_max = game_value(100.0f);
+
+        
+        
         return true;
     }
 
@@ -142,73 +145,85 @@ namespace intercept {
         return true;
     }
 
-    const game_value invoker::invoke_raw(nular_function function_)
+    rv_game_value invoker::invoke_raw(nular_function function_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        return game_value(function_(_sqf_this, _sqf_game_state));
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_)
+    rv_game_value invoker::invoke_raw(std::string function_name_)
     {
         nular_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw(function);
         }
-        return game_value();
+        return rv_game_value();
     }
 
-    const game_value invoker::invoke_raw(unary_function function_, game_value *right_)
+    rv_game_value invoker::invoke_raw(unary_function function_, game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        return game_value(function_(_sqf_this, _sqf_game_state, (uintptr_t)right_));
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, game_value * right_, std::string right_type_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function, right_type_)) {
             return invoke_raw(function, right_);
         }
-        return game_value();
+        return rv_game_value();
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value *right_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, game_value *right_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw(function, right_);
         }
-        return game_value();
+        return rv_game_value();
     }
 
-    const game_value invoker::invoke_raw(binary_function function_, game_value *left_, game_value *right_)
+    rv_game_value invoker::invoke_raw(binary_function function_, game_value *left_, game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        return game_value(function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_));
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value *left_, game_value *right_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, game_value *left_, game_value *right_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw(function, left_, right_);
         }
-        return game_value();
+        return rv_game_value();
     }
 
-    const game_value invoker::invoke_raw(std::string function_name_, game_value * left_, std::string left_type_, game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, game_value * left_, std::string left_type_, game_value * right_, std::string right_type_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
             return invoke_raw(function, left_, right_);
         }
-        return game_value();
+        return rv_game_value();
     }
 
     const value_type invoker::get_type(game_value *value_)
@@ -264,14 +279,14 @@ namespace intercept {
         std::pair<value_type, value_type> structure;
         structure.first = *(uintptr_t *)(*(uintptr_t *)(right_arg_ + 4));
         structure.second = *(uintptr_t *)((*(uintptr_t *)(right_arg_ + 4)) + 8);
-
         if (step == "delete_ptr") {
-            invoker::get()._delete_array_ptr = (game_value)*(game_value *)right_arg_;
+            DebugBreak();
             LOG(INFO) << "Assigned Delete Ptr";
             invoker::get().type_map[structure.first] = "ARRAY";
             invoker::get().type_structures["ARRAY"] = structure;
             game_data_array::type_def = structure.first;
             game_data_array::data_type_def = structure.second;
+            //invoker::get()._delete_array_ptr = game_value(right_arg_);
             
         }
         else if (step == "numeric_type") {
@@ -292,8 +307,6 @@ namespace intercept {
             game_data_string::type_def = structure.first;
             game_data_string::data_type_def = structure.second;
         }
-
-        /*
         else if (step == "code_type") {
             invoker::get().type_map[structure.first] = "CODE";
             invoker::get().type_structures["CODE"] = structure;
@@ -366,7 +379,6 @@ namespace intercept {
             game_data_namespace::type_def = structure.first;
             game_data_namespace::data_type_def = structure.second;
         }
-        */
         
 
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);

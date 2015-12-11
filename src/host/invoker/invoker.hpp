@@ -36,16 +36,16 @@ namespace intercept {
 
         
         
-        const game_value invoke_raw(nular_function function_);
-        const game_value invoke_raw(std::string function_name_);
+        rv_game_value invoke_raw(nular_function function_);
+        rv_game_value invoke_raw(std::string function_name_);
         
-        const game_value invoke_raw(unary_function function_, game_value * right_);
-        const game_value invoke_raw(std::string function_name_, game_value *right_);
-        const game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw(unary_function function_, game_value * right_);
+        rv_game_value invoke_raw(std::string function_name_, game_value *right_);
+        rv_game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
         
-        const game_value invoke_raw(binary_function function_, game_value * left_, game_value * right_);
-        const game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
-        const game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw(binary_function function_, game_value * left_, game_value * right_);
+        rv_game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
+        rv_game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
 
         const value_type get_type(game_value *value_);
 

@@ -120,9 +120,11 @@ namespace intercept {
             rv_game_value() : __vptr(rv_game_value::__vptr_def), data(nullptr) {};
             uintptr_t __vptr;
             game_data *data;
+            const void deallocate();
         };
 
         class game_data_array;
+        class internal_object;
 
         class game_value {
         public:
@@ -131,14 +133,15 @@ namespace intercept {
             game_value(const game_value &copy_);
             game_value(game_value &&move_);
 
-            game_value(uintptr_t internal_);
+            game_value(rv_game_value internal_);
             game_value(float val_);
             game_value(bool val_);
             game_value(std::string &val_);
             game_value(const char *);
             game_value(std::initializer_list<game_value> list_);
-            game_value(client::types::vector3 &vec_);
-            game_value(client::types::vector2 &vec_);
+            game_value(vector3 &vec_);
+            game_value(vector2 &vec_);
+            game_value(internal_object internal_);
             game_value & operator = (const game_value &copy_);
             game_value & operator = (game_value &&move_);
 
@@ -147,8 +150,9 @@ namespace intercept {
             game_value & operator = (std::string val_);
             game_value & operator = (const char *val_);
             game_value & operator = (std::initializer_list<game_value> list_);
-            game_value & operator = (client::types::vector3 vec_);
-            game_value & operator = (client::types::vector2 vec_);
+            game_value & operator = (vector3 vec_);
+            game_value & operator = (vector2 vec_);
+            game_value & operator = (internal_object internal_);
 
 
 
@@ -162,19 +166,14 @@ namespace intercept {
             game_value & operator [](int i_);
             game_value operator [](int i_) const;
 
-            uintptr_t type() {
-                return _rv_data.data->type;
-            }
+            uintptr_t type();
 
-            bool client_owned() {
-                if (_rv_data.data->ref_count_internal == 0x0000dede)
-                    return true;
-                return false;
-            }
+            bool client_owned();
 
 
             ~game_value();
         protected:
+            void _free();
             rv_game_value _rv_data;
         };
 
@@ -211,5 +210,153 @@ namespace intercept {
 
         rv_string *allocate_string(size_t size_);
         void free_string(rv_string *str_);
+
+        class game_data_group : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_group() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *group;
+        };
+
+        class game_data_config : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_config() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *config;
+        };
+
+        class game_data_control : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_control() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *control;
+        };
+
+        class game_data_display : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_display() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *display;
+        };
+
+        class game_data_location : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_location() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *location;
+        };
+
+        class game_data_script : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_script() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *script;
+        };
+
+        class game_data_side : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_side() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *side;
+        };
+
+        class game_data_text : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_text() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *text;
+        };
+
+        class game_data_team : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_team() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *team;
+        };
+
+        class game_data_namespace : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_namespace() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *rv_namespace;
+        };
+
+        class game_data_code : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_code() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            rv_string *code_string;
+            uintptr_t instruction_array;
+            uint32_t instruction_array_size;
+            uint32_t instruction_array_max_size;
+            bool is_final;
+        };
+
+        class game_data_object : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_object() {
+                type = type_def;
+                data_type = data_type_def;
+                ref_count_internal = 1;
+            };
+            void *object;
+        };
     }
 }

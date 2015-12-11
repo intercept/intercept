@@ -93,22 +93,22 @@ namespace intercept {
 
 			void __empty_unary_vector(unary_function fnc_, vector3 vec_)
 			{
-				host::functions.invoke_raw_unary(fnc_, game_value_vector3(vec_));
+				host::functions.invoke_raw_unary(fnc_, game_value(vec_));
 			}
 
 			void __empty_unary_string(unary_function fnc_, std::string str_)
 			{
-				host::functions.invoke_raw_unary(fnc_, game_value_string(str_));
+				host::functions.invoke_raw_unary(fnc_, game_value(str_));
 			}
 
 			void __empty_unary_number(unary_function fnc_, float val_)
 			{
-				host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
+				host::functions.invoke_raw_unary(fnc_, game_value(val_));
 			}
 
 			void __empty_unary_bool(unary_function fnc_, bool val_)
 			{
-				host::functions.invoke_raw_unary(fnc_, game_value_bool(val_));
+				host::functions.invoke_raw_unary(fnc_, game_value(val_));
 			}
 
 			void __empty_unary_control(unary_function fnc_, control ctrl_)
@@ -126,7 +126,7 @@ namespace intercept {
 
 			bool __bool_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value_string(str_));
+				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
 				host::functions.free_value(&bool_ret);
 				return rv;
@@ -134,7 +134,7 @@ namespace intercept {
 
 			bool __bool_unary_number(unary_function fnc_, float val_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
+				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value(val_));
 				bool rv = ((game_data_bool *)bool_ret.data)->value;
 				host::functions.free_value(&bool_ret);
 				return rv;
@@ -150,7 +150,7 @@ namespace intercept {
 
 			float __number_unary_number(unary_function fnc_, float val_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value_number(val_));
+				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value(val_));
 				float rv = ((game_data_number *)num_ret.data)->number;
 				host::functions.free_value(&num_ret);
 				return rv;
@@ -166,7 +166,7 @@ namespace intercept {
 
 			float __number_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value_string(str_));
+				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
 				float rv = ((game_data_number *)num_ret.data)->number;
 				host::functions.free_value(&num_ret);
 				return rv;
@@ -198,7 +198,7 @@ namespace intercept {
 
 			std::string __string_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, game_value_string(str_));
+				game_value str_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
 				std::string rv = ((game_data_string *)str_ret.data)->get_string();
 				host::functions.free_value(&str_ret);
 				return rv;

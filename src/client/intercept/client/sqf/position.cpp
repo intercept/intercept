@@ -91,36 +91,36 @@ namespace intercept {
 
 			void set_pos(object obj_, vector3 pos_)
 			{
-				host::functions.invoke_raw_binary(__sqf::binary__setpos__object__array__ret__nothing, obj_, game_value_vector3(pos_));
+				host::functions.invoke_raw_binary(__sqf::binary__setpos__object__array__ret__nothing, obj_, game_value(pos_));
 			}
 
 			void set_pos_asl(object obj_, vector3 pos_)
 			{
-				host::functions.invoke_raw_binary(__sqf::binary__setposasl__object__array__ret__nothing, obj_, game_value_vector3(pos_));
+				host::functions.invoke_raw_binary(__sqf::binary__setposasl__object__array__ret__nothing, obj_, game_value(pos_));
 			}
 
 			void set_pos_asl2(object obj_, vector3 pos_)
 			{
-				host::functions.invoke_raw_binary(__sqf::binary__setposasl2__object__array__ret__nothing, obj_, game_value_vector3(pos_));
+				host::functions.invoke_raw_binary(__sqf::binary__setposasl2__object__array__ret__nothing, obj_, game_value(pos_));
 			}
 
 			void set_pos_aslw(object obj_, vector3 pos_)
 			{
-				host::functions.invoke_raw_binary(__sqf::binary__setposaslw__object__array__ret__nothing, obj_, game_value_vector3(pos_));
+				host::functions.invoke_raw_binary(__sqf::binary__setposaslw__object__array__ret__nothing, obj_, game_value(pos_));
 			}
 
 			void set_pos_atl(object obj_, vector3 pos_)
 			{
-				host::functions.invoke_raw_binary(__sqf::binary__setposatl__object__array__ret__nothing, obj_, game_value_vector3(pos_));
+				host::functions.invoke_raw_binary(__sqf::binary__setposatl__object__array__ret__nothing, obj_, game_value(pos_));
 			}
 			
 			vector3 agl_to_asl(vector3 agl_) 
 			{
 				// hey bbe, asl? add me on kik.
-				game_value_array<3> agl({
-					game_value_number(agl_.x),
-					game_value_number(agl_.y),
-					game_value_number(agl_.z)
+				game_value agl({
+					game_value(agl_.x),
+					game_value(agl_.y),
+					game_value(agl_.z)
 				});
 
 				game_value asl = host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, agl);
@@ -135,10 +135,10 @@ namespace intercept {
 			vector3 asl_to_agl(vector3 asl_)
 			{
 				// hey bbe, asl? add me on kik.
-				game_value_array<3> asl({
-					game_value_number(asl_.x),
-					game_value_number(asl_.y),
-					game_value_number(asl_.z)
+				game_value asl({
+					game_value(asl_.x),
+					game_value(asl_.y),
+					game_value(asl_.z)
 				});
 
 				game_value agl = host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, asl);
@@ -153,10 +153,10 @@ namespace intercept {
 			vector3 atl_to_asl(vector3 atl_)
 			{
 				// hey bbe, asl? add me on kik.
-				game_value_array<3> atl ({
-					game_value_number(atl_.x),
-					game_value_number(atl_.y),
-					game_value_number(atl_.z)
+				game_value atl ({
+					game_value(atl_.x),
+					game_value(atl_.y),
+					game_value(atl_.z)
 				});
 
 				game_value asl = host::functions.invoke_raw_unary(client::__sqf::unary__atltoasl__array__ret__array, atl);

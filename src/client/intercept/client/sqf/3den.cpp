@@ -42,7 +42,7 @@ namespace intercept {
 			}
 
 			float add_3den_layer(float value0_, const std::string& value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, game_value_number(value0_), game_value_string(value1_));
+				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, game_value(value0_), game_value(value1_));
 				float rv = ((game_data_number *)ret_value.data)->number;
 				host::functions.free_value(&ret_value);
 				return rv;

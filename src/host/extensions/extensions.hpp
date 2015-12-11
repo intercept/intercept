@@ -50,9 +50,9 @@ namespace intercept {
         bool list(const arguments & args_, std::string & result);
         
         const std::unordered_map<std::string, module::entry>& modules();
-        
+        client_functions functions;
     protected:
         std::unordered_map<std::string, module::entry> _modules;
-        client_functions _functions;
+        
     };
 };

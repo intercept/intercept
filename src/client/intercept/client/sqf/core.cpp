@@ -14,19 +14,19 @@ namespace intercept {
 			object create_vehicle(std::string type_, vector3 pos_)
 			{
 				game_value type = host::functions.new_string(type_.c_str());
-				game_value obj = host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, &type, game_value_vector3(pos_));
+				game_value obj = host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, &type, game_value(pos_));
 				host::functions.free_value(&type);
 				return object(obj);
 			}
 
 			object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
 			{
-				game_value_array<5> args({
-					game_value_string(type_),
-					game_value_vector3(pos_),
-					game_value_array_dynamic<marker, game_value_string>(markers_),
-					game_value_number(placement_),
-					game_value_string(special_)
+				game_value args({
+					game_value(type_),
+					game_value(pos_),
+					game_value(markers_),
+					game_value(placement_),
+					game_value(special_)
 				});
 
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
@@ -187,7 +187,7 @@ namespace intercept {
 
 			bool __sqfassert(bool test_)
 			{
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, game_value_bool(test_));
+				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, game_value(test_));
 				bool rv = ((game_data_bool *)ret_value.data)->value;
 				host::functions.free_value(&ret_value);
 				

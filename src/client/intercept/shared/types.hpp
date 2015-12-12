@@ -153,12 +153,14 @@ namespace intercept {
             game_value & operator = (vector3 vec_);
             game_value & operator = (vector2 vec_);
             game_value & operator = (internal_object internal_);
+            game_value & operator = (rv_game_value internal_);
 
 
 
             operator float();
             operator bool();
             operator std::string();
+            operator rv_game_value *();
             operator float() const;
             operator bool() const;
             operator std::string() const;

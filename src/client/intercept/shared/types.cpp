@@ -333,12 +333,8 @@ namespace intercept {
         }
 
         game_data_array::~game_data_array() {
-#ifdef INTERCEPT_HOST_DLL
             if (data)
                 delete[] data;
-#else
-            client::host::functions.free_string(data);
-#endif
         }
 
         game_value::game_value() {
@@ -433,6 +429,13 @@ namespace intercept {
         {
             // Ghetto superstar...
             if (_rv_data.data && _rv_data.data->ref_count_internal == INTERNAL_TAG) {
+                /*
+                 We have no virtual tables because we need to keep the internal games'
+                 memory structure intact, so we gotta do it ourselves.
+
+                 Any game_data types that allocate their own memory need to have their
+                 destructor called here before we delete the pointer.
+                */
                 if (_rv_data.data && _rv_data.data->type == game_data_array::type_def)
                     static_cast<game_data_array *>(_rv_data.data)->~game_data_array(); // ... that is what you are.
                 else if (_rv_data.data && _rv_data.data->type == game_data_string::type_def)
@@ -441,7 +444,23 @@ namespace intercept {
                     delete _rv_data.data;
             }
             else {
-                client::host::functions.free_value(this);
+                /*
+                 How this works? We need to free data allocated in the engine process in the engine
+                 process. So we know it isn't our own created data because we tag with INTERNAL_TAG
+                 (0x0000dede) and we pass back the game_value to the engine. The engine then copies
+                 the ptr address of the raw rv_game_value to its pool of game_values to delete later
+                 and we can just null out the ptr here, effectively freeing the memory in the context
+                 of the object (the actual memory will be freed later by the game process).
+                */
+                if (_rv_data.data && (
+                    _rv_data.data->type == game_data_number::type_def ||
+                    _rv_data.data->type == game_data_bool::type_def ||
+                    _rv_data.data->type == game_data_array::type_def ||
+                    _rv_data.data->type == game_data_string::type_def
+                    )) {
+                    client::host::functions.free_value(this);
+                    _rv_data.data = nullptr;
+                }
             }
         }
 
@@ -525,6 +544,15 @@ namespace intercept {
             return *this;
         }
 
+        game_value & game_value::operator=(rv_game_value internal_)
+        {
+            if (_rv_data.data)
+                _free();
+            _rv_data.data = internal_.data;
+            _rv_data.__vptr = internal_.__vptr;
+            return *this;
+        }
+
         game_value::operator float()
         {
             if (_rv_data.data && _rv_data.data->type == game_data_number::type_def)
@@ -537,6 +565,11 @@ namespace intercept {
             if (_rv_data.data && _rv_data.data->type == game_data_bool::type_def)
                 return ((game_data_bool *)_rv_data.data)->val;
             return false;
+        }
+
+        game_value::operator rv_game_value *()
+        {
+            return &_rv_data;
         }
 
         game_value::operator float() const
@@ -592,21 +625,14 @@ namespace intercept {
 
 
         rv_string * allocate_string(size_t size_) {
-#ifdef INTERCEPT_HOST_DLL
-            char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + size_];
-            ((rv_string *)raw_data)->length = size_;
-            ((rv_string *)raw_data)->ref_count_internal = 1;
-            return (rv_string *)raw_data;
-#else
             return client::host::functions.allocate_string(size_);
-#endif
         }
 
         void free_string(rv_string * str_) {
-            delete[] str_;
+            client::host::functions.free_string(str_);
         }
 
-        void rv_game_value::deallocate()
+        const void rv_game_value::deallocate()
         {
             data = nullptr;
         }

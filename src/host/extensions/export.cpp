@@ -29,8 +29,12 @@ namespace intercept {
             return (rv_string *)raw_data;
         }
 
-        void free_string(game_value *value_) {
-            intercept::invoker::get().release_value(value_);
+        void free_string(rv_string *value_) {
+            if (value_->ref_count_internal <= 1)
+                delete[] value_;
+            else {
+                invoker::get().collect_string(value_);
+            }
         }
 
         void free_value(game_value *value_) {

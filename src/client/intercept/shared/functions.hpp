@@ -19,7 +19,7 @@ namespace intercept {
             game_value(*new_string)(const char *string_);
             game_value(*new_array)(size_t size_);
             rv_string *(*allocate_string)(size_t size_);
-            void(*free_string)(game_value *);
+            void(*free_string)(rv_string *str_);
 
             void(*free_value)(game_value * value_);
 

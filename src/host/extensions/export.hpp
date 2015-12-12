@@ -13,7 +13,7 @@ namespace intercept {
         void get_type_structure(char *type_name, uintptr_t &type_def_, uintptr_t &data_type_def_);
 
         rv_string * allocate_string(size_t size_);
-        void free_string(game_value *);
+        void free_string(rv_string *);
 
         void free_value(game_value * value_);
 

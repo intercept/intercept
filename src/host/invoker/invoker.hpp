@@ -34,6 +34,8 @@ namespace intercept {
         bool test_invoker(const arguments & args_, std::string & result_);
         bool invoker_demo(const arguments & args_, std::string & result_);
 
+        void invoke_lock_test();
+
         
         
         rv_game_value invoke_raw(nular_function function_);
@@ -54,11 +56,16 @@ namespace intercept {
         bool release_value(game_value * value_);
         bool release_value(game_value * value_, bool immediate_);
 
+        void collect_string(rv_string *str_);
+
 
         std::unordered_map<value_type, std::string> type_map;
         std::unordered_map<std::string, std::pair<value_type, value_type>> type_structures;
         uintptr_t game_value_vptr;
     protected:
+        std::thread _collection_thread;
+        void _string_collector();
+
         static int __cdecl _state_hook(char *sqf_this_, uintptr_t sqf_game_state_);
         static nular_function _state_hook_trampoline;
 
@@ -78,12 +85,13 @@ namespace intercept {
         char *_sqf_this;
         uintptr_t _sqf_game_state;
         
+        std::list<rv_string *> _string_collection;
+
         std::mutex _invoke_mutex;
         std::mutex _state_mutex;
         std::mutex _delete_mutex;
+        std::mutex _string_collection_mutex;
         std::condition_variable _invoke_condition;
-
-        std::list<game_value> _free_queue;
         
         std::vector<std::thread> _demo_threads;
     };

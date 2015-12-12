@@ -1,6 +1,7 @@
 #include "invoker.hpp"
 #include "controller.hpp"
 #include "extensions.hpp"
+#include "shared\client_types.hpp"
 
 namespace intercept {
 
@@ -9,7 +10,23 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            game_value player = invoker::get().invoke_raw("player");
+            
+            //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " player";
+            //invoker::get().invoke_raw("player");
+            /*
+            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " format";
+            game_value message = invoker::get().invoke_raw("format", &game_value({
+                "Hello World: %1",
+                player
+            }), "ARRAY");
+            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " test assign";
+            game_value test = player;
+            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " sidechat";
+            invoker::get().invoke_raw("sidechat", player, "OBJECT", &message, "STRING");
+            */
+            game_value rand_max = 100.0f;
+            game_value rand_res = invoker::get().invoke_raw("random", &rand_max, "SCALAR");
+            LOG(DEBUG) << "RAND: " << (float)rand_res;
             Sleep(10);
         }
     }
@@ -38,17 +55,14 @@ namespace intercept {
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
+            _collection_thread = std::thread(&invoker::_string_collector, this);
         }
     }
 
     void invoker::allow_access() {
-        std::unique_lock<std::mutex> invoke_lock(_invoke_mutex, std::defer_lock);
-        {
-            std::lock_guard<std::mutex> lock(_state_mutex);
-            invoke_lock.lock();
-            invoker_accessisble = true;
-        }
-        
+        std::lock_guard<std::mutex> lock(_state_mutex);
+        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        invoker_accessisble = true;
         _invoke_condition.notify_all();
     }
 
@@ -88,16 +102,9 @@ namespace intercept {
 
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
-        auto to_free = _free_queue.begin();
-        while (to_free != _free_queue.end()) {
-            if (release_value(&*to_free, true)) {
-                _free_queue.erase(to_free++);
-            }
-            else {
-                ++to_free;
-            }
-        }
+        LOG(DEBUG) << "-------------------------------- UNLOCKING!";
         allow_access();
+        LOG(DEBUG) << "-------------------------------- UNLOCKED!";
         long timeout = clock() + 3;
         while (clock() < timeout) continue;
         // do the per-frame handler here.
@@ -107,6 +114,7 @@ namespace intercept {
             }
         }
         deny_access();
+        LOG(DEBUG) << "-------------------------------- LOCKED!";
         return true;
     }
 
@@ -136,21 +144,37 @@ namespace intercept {
 
     bool invoker::invoker_demo(const arguments & args_, std::string & result_)
     {
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        //std::unique_lock<std::mutex> lock(_state_mutex);
+        //_invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        //std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
         result_ = "1";
         _demo_threads.push_back(std::thread(threaded_invoke_demo));
         LOG(INFO) << "Started Demo Thread #" << _demo_threads.size();
         return true;
     }
 
+    void invoker::invoke_lock_test()
+    {
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
+        std::unique_lock<std::mutex> lock(_state_mutex);
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
+        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
+        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " invoker locked...";
+    }
+
     rv_game_value invoker::invoke_raw(nular_function function_)
     {
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
         std::unique_lock<std::mutex> lock(_state_mutex);
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " locked, calling...";
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
+        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " assigning...";
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
@@ -243,7 +267,11 @@ namespace intercept {
     bool invoker::release_value(game_value *value_, bool immediate_) {
         if (!value_->client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            _delete_array_ptr[_delete_index++] = *value_;
+            // We do not need a deep copy here, so we cast to the internal data type, and just copy the ptr.
+            // The game_value destructor should set this pointer to null after, so it is effectively deleted
+            // in the context of the passed objects lifespan, but the memory remains until we free it in the
+            // RV engine itself later.
+            ((rv_game_value *)_delete_array_ptr[_delete_index++])->data = ((rv_game_value *)value_)->data;
             if (_delete_index >= 100 || immediate_) {
                 _delete_index = 0;
                 LOG(DEBUG) << "Flushing Memory...";
@@ -253,6 +281,35 @@ namespace intercept {
             return true;
         }
         return false;
+    }
+
+    void invoker::collect_string(rv_string * str_)
+    {
+        std::lock_guard<std::mutex> string_lock(_string_collection_mutex);
+        _string_collection.push_back(str_);
+    }
+
+    void invoker::_string_collector()
+    {
+        LOG(INFO) << "Started string collector thread.";
+        while (true) {
+            {
+                std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
+                for (auto it = _string_collection.begin(); it != _string_collection.end();) {
+                    if ((*it)->ref_count_internal <= 1) {
+                        LOG(DEBUG) << "Freeing string: " << (&(*it)->char_string);
+                        rv_string *to_delete = *it;
+                        _string_collection.erase(it++);
+                        delete[] to_delete;
+                        
+                    }
+                    else {
+                        ++it;
+                    }
+                }
+            }
+            sleep(250);
+        }
     }
 
     int invoker::_state_hook(char * sqf_this_, uintptr_t sqf_game_state_)
@@ -280,7 +337,6 @@ namespace intercept {
         structure.first = *(uintptr_t *)(*(uintptr_t *)(right_arg_ + 4));
         structure.second = *(uintptr_t *)((*(uintptr_t *)(right_arg_ + 4)) + 8);
         if (step == "delete_ptr") {
-            DebugBreak();
             LOG(INFO) << "Assigned Delete Ptr";
             invoker::get().type_map[structure.first] = "ARRAY";
             invoker::get().type_structures["ARRAY"] = structure;

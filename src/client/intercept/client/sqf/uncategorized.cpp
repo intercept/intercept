@@ -3,7 +3,7 @@
 #include "common_helpers.hpp"
 
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
@@ -20,11 +20,7 @@ namespace intercept {
 
 			std::string action_keys_names(std::string user_action_)
 			{
-				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, game_value(user_action_));
-				std::string r_str = ((game_data_string *)act_keys.data)->get_string();
-
-				host::functions.free_value(&act_keys);
-				return r_str;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, user_action_));
 			}
 
 			std::string action_keys_names(std::string user_action_, float max_keys_)
@@ -33,11 +29,7 @@ namespace intercept {
 					game_value(user_action_),
 					game_value(max_keys_)
 				});
-				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params);
-				std::string r_str = ((game_data_string *)act_keys.data)->get_string();
-
-				host::functions.free_value(&act_keys);
-				return r_str;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
 			std::string action_keys_names(std::string user_action_, float max_keys_, std::string input_device_priority_)
 			{
@@ -46,11 +38,7 @@ namespace intercept {
 					game_value(max_keys_),
 					game_value(input_device_priority_)
 				});
-				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params);
-				std::string r_str = ((game_data_string *)act_keys.data)->get_string();
-
-				host::functions.free_value(&act_keys);
-				return r_str;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
 
 			std::vector<std::string> action_keys_names_array(std::string user_action_)
@@ -91,9 +79,11 @@ namespace intercept {
 
 			void activate_addons(std::vector<std::string> &addons_)
 			{
-				game_value addons_arr(addons_);
+                std::vector<game_value> addons;
+                for (auto it : addons_)
+                    addons.push_back(it);
 
-				host::functions.invoke_raw_unary(client::__sqf::unary__activateaddons__array__ret__nothing, addons_arr);
+				host::functions.invoke_raw_unary(client::__sqf::unary__activateaddons__array__ret__nothing, addons);
 			}
 
 			/* potential namespace: camera */
@@ -129,10 +119,12 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
 			}
 
-			/// @todo
 			void add_to_remains_collector(std::vector<object> objects_)
 			{
-				//game_value objects_arr(objects_);
+                std::vector<game_value> objects;
+                for (auto it : objects_)
+                    objects.push_back(game_value(it));
+                host::functions.invoke_raw_unary(client::__sqf::unary__addtoremainscollector__array__ret__nothing, objects);
 			}
 
 			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_)

@@ -19,8 +19,7 @@ namespace intercept {
 			}
 
 			group create_group(side value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, value_);
-				return group(ret_value);
+				return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, value_));
 			}
 
 			void delete_group(group value_) {
@@ -28,34 +27,23 @@ namespace intercept {
 			}
 
 			group group_from_net_id(const std::string& value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupfromnetid__string__ret__group, game_value(value_));
-				return group(ret_value);
+				return group(host::functions.invoke_raw_unary(client::__sqf::unary__groupfromnetid__string__ret__group, value_));
 			}
 
 			std::string group_id(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_);
-				std::string rv = ((game_data_string *)ret_value.data)->get_string();
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_));
 			}
 
 			float group_owner(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_);
-				float rv = ((game_data_number *)ret_value.data)->number;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_));
 			}
 
 			bool set_group_owner(float value0_, group value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, game_value(value0_), value1_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, value0_, value1_));
 			}
 
 			object leader(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, value_);
-				return object(ret_value);
+				return object(host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, value_));
 			}
 
 			void group_radio(object value0_, const std::string& value1_) {
@@ -71,10 +59,7 @@ namespace intercept {
 			}
 
 			float current_waypoint(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, value_);
-				float rv = ((game_data_number *)ret_value.data)->number;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, value_));
 			}
 
 			void set_group_icons_selectable(bool value_) {

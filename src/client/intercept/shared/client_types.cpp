@@ -16,6 +16,11 @@ namespace intercept {
         internal_object::operator game_value() const { return value->value; }
         internal_object::operator game_value *() { return &value->value; }
 
+        internal_object::operator game_value&() const
+        {
+            return value->value;
+        }
+
 
 #define RV_GENERIC_OBJECT_DEF(type)         type##::##type##() {}\
         type##::##type##(rv_game_value value_) : internal_object(value_) {}\

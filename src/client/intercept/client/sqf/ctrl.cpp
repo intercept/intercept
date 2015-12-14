@@ -58,10 +58,7 @@ namespace intercept {
 			}
 
 			float ctrl_idd(display value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlidd__display__ret__scalar, value_);
-				float rv = ((game_data_number *)ret_value.data)->number;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ctrlidd__display__ret__scalar, value_));
 			}
 
 			void ctrl_map_anim_clear(control value_) {
@@ -89,13 +86,11 @@ namespace intercept {
 			}
 
 			display ctrl_parent(control value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlparent__control__ret__display, value_);
-				return display(ret_value);
+				return display(host::functions.invoke_raw_unary(client::__sqf::unary__ctrlparent__control__ret__display, value_));
 			}
 
 			control ctrl_parent_controls_group(control value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlparentcontrolsgroup__control__ret__control, value_);
-				return control(ret_value);
+				return control(host::functions.invoke_raw_unary(client::__sqf::unary__ctrlparentcontrolsgroup__control__ret__control, value_));
 			}
 
 			float ctrl_scale(control value_) {
@@ -115,10 +110,7 @@ namespace intercept {
 			}
 
 			std::string ctrl_text(float value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__ctrltext__scalar__ret__string, game_value(value_));
-				std::string rv = ((game_data_string *)ret_value.data)->get_string();
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ctrltext__scalar__ret__string, value_));
 			}
 
 			float ctrl_text_height(control value_) {

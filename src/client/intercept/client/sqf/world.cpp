@@ -10,11 +10,7 @@ namespace intercept {
 
 			std::string world_name()
 			{
-				game_value game_world_name = host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string);
-				std::string w_name = ((game_data_string *)game_world_name.data)->get_string();
-				host::functions.free_value(&game_world_name);
-
-				return w_name;
+				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string));
 			}
 
 			float wind_str() {

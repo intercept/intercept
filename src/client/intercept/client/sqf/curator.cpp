@@ -70,37 +70,34 @@ namespace intercept {
 			}
 
 			void add_curator_points(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addcuratorpoints__object__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addcuratorpoints__object__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void allow_curator_logic_ignore_areas(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing, value0_, value1_);
 			}
 			float curator_coef(object value0_, std::string value1_) {
-				game_value ret_value = host::functions.invoke_raw_binary(client::__sqf::binary__curatorcoef__object__string__ret__scalar, value0_, game_value(value1_));
-				float rv = ((game_data_number *)ret_value.data)->number;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__curatorcoef__object__string__ret__scalar, value0_, value1_));
 			}
 
 			void remove_curator_camera_area(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removecuratorcameraarea__object__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removecuratorcameraarea__object__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void remove_curator_editing_area(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removecuratoreditingarea__object__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removecuratoreditingarea__object__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void set_curator_camera_area_ceiling(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorcameraareaceiling__object__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorcameraareaceiling__object__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void set_curator_editing_area_type(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratoreditingareatype__object__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratoreditingareatype__object__bool__ret__nothing, value0_, value1_);
 			}
 
 			void set_curator_waypoint_cost(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, value0_, value1_);
 			}
 		}
     }

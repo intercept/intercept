@@ -564,7 +564,7 @@ namespace intercept {
 			float size_of(std::string value_);
 			float skill(object value_);
 			void skip_time(float value_);
-			void sleep(float value_);
+			//void sleep(float value_);
 			float slider_position(control value_);
 			float slider_position(float value_);
 			bool some_ammo(object value_);

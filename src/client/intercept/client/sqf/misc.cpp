@@ -130,23 +130,23 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__difficulty__ret__scalar);
 			}
 
-			bool difficultyenabledrtd() {
+			bool difficulty_enabled_rtd() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__difficultyenabledrtd__ret__bool);
 			}
 
-			void disabledebriefingstats() {
+			void disable_debriefing_stats() {
 				__helpers::__empty_nular(client::__sqf::nular__disabledebriefingstats__ret__nothing);
 			}
 
-			void disableserialization() {
+			void disable_serialization() {
 				__helpers::__empty_nular(client::__sqf::nular__disableserialization__ret__nothing);
 			}
 
-			display displaynull() {
+			display display_null() {
 				return __helpers::__retrieve_nular_display(client::__sqf::nular__displaynull__ret__display);
 			}
 
-			float distributionregion() {
+			float distribution_region() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__distributionregion__ret__scalar);
 			}
 
@@ -154,15 +154,15 @@ namespace intercept {
 				return __helpers::__retrieve_nular_side(client::__sqf::nular__east__ret__side);
 			}
 
-			void enableenddialog() {
+			void enable_end_dialog() {
 				__helpers::__empty_nular(client::__sqf::nular__enableenddialog__ret__nothing);
 			}
 
-			void endloadingscreen() {
+			void end_loading_screen() {
 				__helpers::__empty_nular(client::__sqf::nular__endloadingscreen__ret__nothing);
 			}
 
-			float estimatedendservertime() {
+			float estimated_end_server_time() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__estimatedendservertime__ret__scalar);
 			}
 
@@ -170,7 +170,7 @@ namespace intercept {
 				__helpers::__empty_nular(client::__sqf::nular__exit__ret__nothing);
 			}
 
-			void finishmissioninit() {
+			void finish_mission_init() {
 				__helpers::__empty_nular(client::__sqf::nular__finishmissioninit__ret__nothing);
 			}
 
@@ -178,21 +178,21 @@ namespace intercept {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__fog__ret__scalar);
 			}
 
-			float fogforecast() {
+			float fog_forecast() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__fogforecast__ret__scalar);
 			}
 
-			// TODO std::vector<float> fogparams();
+			// TODO std::vector<float> fog_params();
 
-			void forceend() {
+			void force_end() {
 				__helpers::__empty_nular(client::__sqf::nular__forceend__ret__nothing);
 			}
 
-			void forceweatherchange() {
+			void force_weather_change() {
 				__helpers::__empty_nular(client::__sqf::nular__forceweatherchange__ret__nothing);
 			}
 
-			bool freelook() {
+			bool free_look() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__freelook__ret__bool);
 			}
 
@@ -206,19 +206,19 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__getelevationoffset__ret__scalar);
 			}
 
-			// TODO std::array<float, 2> getmouseposition();
-			// TODO std::array<float, 2> getobjectviewdistance();
+			// TODO std::array<float, 2> get_mouse_position();
+			// TODO std::array<float, 2> get_object_view_distance();
 
-			bool getremotesensorsdisabled() {
+			bool get_remote_sensors_disabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__getremotesensorsdisabled__ret__bool);
 			}
 
-			// TODO std::array<float, 6> getresolution();
-			float getshadowdistance() {
+			// TODO std::array<float, 6> get_resolution();
+			float get_shadow_distance() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__getshadowdistance__ret__scalar);
 			}
 
-			float gettotaldlcusagetime() {
+			float get_total_dlc_usage_time() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__gettotaldlcusagetime__ret__scalar);
 			}
 
@@ -230,11 +230,11 @@ namespace intercept {
 				__helpers::__empty_nular(client::__sqf::nular__halt__ret__nothing);
 			}
 
-			bool hasinterface() {
+			bool has_interface() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__hasinterface__ret__bool);
 			}
 
-			bool hcshownbar() {
+			bool hc_shown_bar() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__hcshownbar__ret__bool);
 			}
 
@@ -246,39 +246,39 @@ namespace intercept {
 				return __helpers::__retrieve_nular_side(client::__sqf::nular__independent__ret__side);
 			}
 
-			void initambientlife() {
+			void init_ambient_life() {
 				__helpers::__empty_nular(client::__sqf::nular__initambientlife__ret__nothing);
 			}
 
-			bool isautotest() {
+			bool is_autotest() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__isautotest__ret__bool);
 			}
 
-			bool isfilepatchingenabled() {
+			bool is_filepatching_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__isfilepatchingenabled__ret__bool);
 			}
 
-			bool isinstructorfigureenabled() {
+			bool is_instructor_figure_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__isinstructorfigureenabled__ret__bool);
 			}
 
-			bool ispipenabled() {
+			bool is_pip_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__ispipenabled__ret__bool);
 			}
 
-			bool issteammission() {
+			bool is_steam_mission() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__issteammission__ret__bool);
 			}
 
-			bool isstreamfriendlyuienabled() {
+			bool is_stream_friendly_ui_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__isstreamfriendlyuienabled__ret__bool);
 			}
 
-			bool isstressdamageenabled() {
+			bool is_stress_damage_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__isstressdamageenabled__ret__bool);
 			}
 
-			bool istuthintsenabled() {
+			bool is_tut_hints_enabled() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__istuthintsenabled__ret__bool);
 			}
 
@@ -286,9 +286,9 @@ namespace intercept {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__language__ret__string);
 			}
 
-			// TODO std::vector<std::array<std::string, 2>> librarycredits();
+			// TODO std::vector<std::array<std::string, 2>> library_credits();
 
-			std::vector<std::string> librarydisclaimers() {
+			std::vector<std::string> library_disclaimers() {
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(client::__sqf::nular__librarydisclaimers__ret__array));
 			}
 
@@ -296,69 +296,69 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__lightnings__ret__scalar);
 			}
 
-			std::string linebreak() {
+			std::string line_break() {
 				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__linebreak__ret__text));
 			}
 
-			void loadgame() {
+			void load_game() {
 				__helpers::__empty_nular(client::__sqf::nular__loadgame__ret__nothing);
 			}
 
-			location locationnull() {
+			location location_null() {
 				return __helpers::__retrieve_nular_location(client::__sqf::nular__locationnull__ret__location);
 			}
 
-			void logentities() {
+			void log_entities() {
 				__helpers::__empty_nular(client::__sqf::nular__logentities__ret__nothing);
 			}
 
-			void mapanimclear() {
+			void map_anim_clear() {
 				__helpers::__empty_nular(client::__sqf::nular__mapanimclear__ret__nothing);
 			}
 
-			void mapanimcommit() {
+			void map_anim_commit() {
 				__helpers::__empty_nular(client::__sqf::nular__mapanimcommit__ret__nothing);
 			}
 
-			bool mapanimdone() {
+			bool map_anim_done() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__mapanimdone__ret__bool);
 			}
 
-			bool markasfinishedonsteam() {
+			bool mark_as_finished_on_steam() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__markasfinishedonsteam__ret__bool);
 			}
 
-			config missionconfigfile() {
+			config mission_config_file() {
 				return __helpers::__retrieve_nular_config(client::__sqf::nular__missionconfigfile__ret__config);
 			}
 
-			float missiondifficulty() {
+			float mission_difficulty() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__missiondifficulty__ret__scalar);
 			}
 
-			std::string missionname() {
+			std::string mission_name() {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__missionname__ret__string);
 			}
 
-			rv_namespace missionnamespace() {
+			rv_namespace mission_namespace() {
 				return __helpers::__retrieve_nular_namespace(client::__sqf::nular__missionnamespace__ret__namespace);
 			}
 
-			// TODO std::array<float, 6> missionstart();
+			// TODO std::array<float, 6> mission_start();
 
-			float moonintensity() {
+			float moon_intensity() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__moonintensity__ret__scalar);
 			}
 
-			float musicvolume() {
+			float music_volume() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__musicvolume__ret__scalar);
 			}
 
-			float nextweatherchange() {
+			float next_weather_change() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__nextweatherchange__ret__scalar);
 			}
 
-			object objnull() {
+			object obj_null() {
 				return __helpers::__retrieve_nular_object(client::__sqf::nular__objnull__ret__object);
 			}
 
@@ -370,15 +370,15 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__overcast__ret__scalar);
 			}
 
-			float overcastforecast() {
+			float overcast_forecast() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__overcastforecast__ret__scalar);
 			}
 
-			rv_namespace parsingnamespace() {
+			rv_namespace parsing_namespace() {
 				return __helpers::__retrieve_nular_namespace(client::__sqf::nular__parsingnamespace__ret__namespace);
 			}
 
-			float particlesquality() {
+			float particles_quality() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__particlesquality__ret__scalar);
 			}
 
@@ -386,38 +386,38 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__pi__ret__scalar);
 			}
 
-			float pixelh() {
+			float pixel_h() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__pixelh__ret__scalar);
 			}
 
-			float pixelw() {
+			float pixel_w() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__pixelw__ret__scalar);
 			}
 
-			std::vector<object> playableunits() {
+			std::vector<object> playable_units() {
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__playableunits__ret__array));
 			}
 
-			float playerrespawntime() {
+			float player_respawn_time() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__playerrespawntime__ret__scalar);
 			}
 
-			side playerside() {
+			side player_side() {
 				return __helpers::__retrieve_nular_side(client::__sqf::nular__playerside__ret__side);
 			}
 
-			std::string profilename() {
+			std::string profile_name() {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__profilename__ret__string);
 			}
-			rv_namespace profilenamespace() {
+			rv_namespace profile_namespace() {
 				return __helpers::__retrieve_nular_namespace(client::__sqf::nular__profilenamespace__ret__namespace);
 			}
 
-			std::string profilenamesteam() {
+			std::string profile_namesteam() {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__profilenamesteam__ret__string);
 			}
 
-			float radiovolume() {
+			float radio_volume() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__shownradio__ret__bool);
 			}
 
@@ -429,7 +429,7 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__rainbow__ret__scalar);
 			}
 
-			void resetcamshake() {
+			void reset_cam_shake() {
 				__helpers::__empty_nular(client::__sqf::nular__resetcamshake__ret__nothing);
 			}
 
@@ -437,11 +437,11 @@ namespace intercept {
 				return __helpers::__retrieve_nular_side(client::__sqf::nular__resistance__ret__side);
 			}
 
-			bool reversedmousey() {
+			bool reversed_mouse_y() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__reversedmousey__ret__bool);
 			}
 
-			void runinitscript() {
+			void run_init_script() {
 				__helpers::__empty_nular(client::__sqf::nular__runinitscript__ret__nothing);
 			}
 

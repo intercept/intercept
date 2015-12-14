@@ -40,6 +40,7 @@ namespace intercept {
 			vector3 agl_to_asl(vector3 agl_);
 			vector3 asl_to_agl(vector3 asl_);
 			vector3 atl_to_asl(vector3 atl_);
+			vector3 asl_to_atl(vector3 asl_);
 			
 		}
 

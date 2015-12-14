@@ -32,6 +32,9 @@ namespace intercept {
 			void set_curator_camera_area_ceiling(float value0_, object value1_);
 			void set_curator_editing_area_type(bool value0_, object value1_);
 			void set_curator_waypoint_cost(float value0_, object value1_);
+
+			std::vector<std::string> curator_addons(object curator_module_);
+			std::vector<object> curator_editable_objects(object curator_module_);
 		}
     }
 }

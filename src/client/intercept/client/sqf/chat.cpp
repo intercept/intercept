@@ -31,16 +31,12 @@ namespace intercept {
 			}
 
 			void system_chat(const std::string &message_) {
-				game_value message = host::functions.new_string(message_.c_str());
-				host::functions.invoke_raw_unary(client::__sqf::unary__systemchat__string__ret__nothing, message);
-				host::functions.free_value(&message);
+				host::functions.invoke_raw_unary(client::__sqf::unary__systemchat__string__ret__nothing, game_value(message_));
 			}
 
 			void custom_chat(object obj_, uint32_t channel_id_, const std::string &message_) {
-				game_value message = host::functions.new_string(message_.c_str());
-				game_value args = game_value({ ((float)channel_id_), message });
+				game_value args = game_value({ ((float)channel_id_), message_ });
 				host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
-				host::functions.free_value(&message);
 			}
 		}
     }

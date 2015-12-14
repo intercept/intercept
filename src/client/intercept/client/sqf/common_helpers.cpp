@@ -169,20 +169,19 @@ namespace intercept {
             }
 
 			std::vector<float> __convert_to_numbers_vector(game_value input__) {
-				game_data_array* array_value = ((game_data_array *)input__.data);
-
 				std::vector<float> output;
-				for (uint32_t i = 0; i < array_value->length; ++i) {
-					float value = ((game_data_number *)array_value->data[i].data)->number;
-					output.push_back(value);
+				for (uint32_t i = 0; i < input__.length(); ++i) {
+					output.push_back(input__[i]);
 				}
 				host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
 				return output;
 			}
 
+
+			std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
                 std::vector<team_member> output;
-                for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(team_member(input_[i].rv_data));
+                for (uint32_t i = 0; i < input__.length(); ++i) {
+                    output.push_back(team_member(input__[i].rv_data));
                 }
                 return output;
             }
@@ -202,6 +201,7 @@ namespace intercept {
                 }
                 return output;
             }
+
             std::vector<marker> __convert_to_markers_vector(game_value input_) {
                 std::vector<marker> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
@@ -209,6 +209,7 @@ namespace intercept {
                 }
                 return output;
             }
+
             std::vector<config> __convert_to_configs_vector(game_value input_) {
                 std::vector<config> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
@@ -217,14 +218,9 @@ namespace intercept {
                 return output;
             }
 
-			vector3 __convert_to_vector3(game_value input__)
+			vector3 __convert_to_vector3(game_value input_)
 			{
-				game_data_array* array_value = ((game_data_array *)input__.data);
-				float x = ((game_data_number *)array_value->data[0].data)->number;
-				float y = ((game_data_number *)array_value->data[1].data)->number;
-				float z = ((game_data_number *)array_value->data[2].data)->number;
-				host::functions.free_value(&input__);
-				return vector3(x, y, z);
+				return vector3(input_[0], input_[1], input_[2]);
 			}
 		}
 	}

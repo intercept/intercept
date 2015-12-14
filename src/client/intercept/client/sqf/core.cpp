@@ -157,21 +157,29 @@ namespace intercept {
 			}
 
             std::vector<control> all_controls(display display_) {
-                game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
-                game_data_array* array_value = ((game_data_array *)input__.data);
-                std::vector<control> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(control(array_value->data[i]));
-                }
-                host::functions.free_value(&input__);
-                return output;
+                //game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
+                //game_data_array* array_value = ((game_data_array *)input__.data);
+                //std::vector<control> output;
+                //for (uint32_t i = 0; i < array_value->length; ++i) {
+                //    output.push_back(control(array_value->data[i]));
+                //}
+                //host::functions.free_value(&input__);
+                //return output;
+
+				game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
+				std::vector<control> output;
+				for (uint32_t i = 0; i < input__.length(); ++i) {
+					output.push_back(control(input__[i].rv_data));
+				}
+				return output;
             }
 
             std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_) {
-                game_value_array<2> array_input({
+               game_value array_input({
                     vehicle_,
-                    game_value_bool(person_turrets_)
+                    game_value(person_turrets_)
                 });
+
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allturrets__array__ret__array, array_input));
             }

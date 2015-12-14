@@ -23,7 +23,7 @@ void __cdecl intercept::on_frame() {
     side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
     //object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
     intercept::sqf::chat::side_chat(player, side_chat_msg.str());
-    //intercept::sqf::position::set_pos_asl(player, pos);
+    //intercept::sqf::position::set_pos_asl(test, pos);
 }
 
 

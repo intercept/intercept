@@ -41,6 +41,8 @@ namespace intercept {
         rv_game_value invoke_raw(nular_function function_);
         rv_game_value invoke_raw(std::string function_name_);
         
+        void invoke_delete();
+
         rv_game_value invoke_raw(unary_function function_, game_value * right_);
         rv_game_value invoke_raw(std::string function_name_, game_value *right_);
         rv_game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
@@ -53,8 +55,7 @@ namespace intercept {
 
         const std::string get_type_str(game_value *value_);
 
-        bool release_value(game_value * value_);
-        bool release_value(game_value * value_, bool immediate_);
+        bool release_value(game_value * value_, bool immediate_ = false);
 
         void collect_string(rv_string *str_);
 

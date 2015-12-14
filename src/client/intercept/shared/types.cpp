@@ -105,33 +105,33 @@ namespace intercept {
 
         game_data_number::game_data_number(const game_data_number & copy_)
         {
-            type = copy_.type_def;
-            data_type = copy_.data_type_def;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             number = copy_.number;
         }
 
         game_data_number::game_data_number(game_data_number && move_)
         {
-            type = move_.type_def;
-            data_type = move_.data_type_def;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             number = move_.number;
         }
 
         game_data_number & game_data_number::operator=(const game_data_number & copy_)
         {
-            type = copy_.type_def;
-            data_type = copy_.data_type_def;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             number = copy_.number;
             return *this;
         }
 
         game_data_number & game_data_number::operator=(game_data_number && move_)
         {
-            type = move_.type_def;
-            data_type = move_.data_type_def;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             number = move_.number;
             return *this;
@@ -154,33 +154,33 @@ namespace intercept {
 
         game_data_bool::game_data_bool(const game_data_bool & copy_)
         {
-            type = copy_.type_def;
-            data_type = copy_.data_type_def;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             val = copy_.val;
         }
 
         game_data_bool::game_data_bool(game_data_bool && move_)
         {
-            type = move_.type_def;
-            data_type = move_.data_type_def;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             val = move_.val;
         }
 
         game_data_bool & game_data_bool::operator=(const game_data_bool & copy_)
         {
-            type = copy_.type_def;
-            data_type = copy_.data_type_def;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             val = copy_.val;
             return *this;
         }
 
         game_data_bool & game_data_bool::operator=(game_data_bool && move_)
         {
-            type = move_.type_def;
-            data_type = move_.data_type_def;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             val = move_.val;
             return *this;
@@ -208,9 +208,9 @@ namespace intercept {
 
         game_data_string::game_data_string(const game_data_string & copy_)
         {
-            type = copy_.type;
-            data_type = copy_.data_type;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             raw_string = allocate_string(copy_.raw_string->length);
             memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
             raw_string->length = copy_.raw_string->length;
@@ -219,8 +219,8 @@ namespace intercept {
 
         game_data_string::game_data_string(game_data_string && move_)
         {
-            type = move_.type;
-            data_type = move_.data_type;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             free_string(raw_string);
             raw_string = move_.raw_string;
@@ -229,9 +229,9 @@ namespace intercept {
 
         game_data_string & game_data_string::operator=(const game_data_string & copy_)
         {
-            type = copy_.type;
-            data_type = copy_.data_type;
-            ref_count_internal = copy_.ref_count_internal;
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
             raw_string = allocate_string(copy_.raw_string->length);
             memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
             raw_string->length = copy_.raw_string->length;
@@ -241,8 +241,8 @@ namespace intercept {
 
         game_data_string & game_data_string::operator=(game_data_string && move_)
         {
-            type = move_.type;
-            data_type = move_.data_type;
+            type = type_def;
+            data_type = data_type_def;
             ref_count_internal = move_.ref_count_internal;
             free_string(raw_string);
             raw_string = move_.raw_string;

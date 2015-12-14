@@ -10,23 +10,17 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            
-            //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " player";
-            //invoker::get().invoke_raw("player");
-            /*
-            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " format";
-            game_value message = invoker::get().invoke_raw("format", &game_value({
-                "Hello World: %1",
-                player
-            }), "ARRAY");
-            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " test assign";
-            game_value test = player;
-            LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " sidechat";
+            types::object player = invoker::get().invoke_raw("player");
+            game_value tick_time = invoker::get().invoke_raw("diag_ticktime");
+
+            game_value args = {
+                "Testers: %1 %2",
+                player,
+                tick_time
+            };
+            game_value message = invoker::get().invoke_raw("format", &args, "ARRAY");
             invoker::get().invoke_raw("sidechat", player, "OBJECT", &message, "STRING");
-            */
-            game_value rand_max = 100.0f;
-            game_value rand_res = invoker::get().invoke_raw("random", &rand_max, "SCALAR");
-            LOG(DEBUG) << "RAND: " << (float)rand_res;
+
             Sleep(10);
         }
     }
@@ -60,9 +54,12 @@ namespace intercept {
     }
 
     void invoker::allow_access() {
-        std::lock_guard<std::mutex> lock(_state_mutex);
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        invoker_accessisble = true;
+        std::unique_lock<std::mutex> invoke_lock(_invoke_mutex, std::defer_lock);
+        {
+            std::lock_guard<std::mutex> lock(_state_mutex);
+            invoke_lock.lock();
+            invoker_accessisble = true;
+        }
         _invoke_condition.notify_all();
     }
 
@@ -102,9 +99,8 @@ namespace intercept {
 
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
-        LOG(DEBUG) << "-------------------------------- UNLOCKING!";
+        LOG(DEBUG) << "-------------------------------- EXECUTE PERIOD BEGIN!";
         allow_access();
-        LOG(DEBUG) << "-------------------------------- UNLOCKED!";
         long timeout = clock() + 3;
         while (clock() < timeout) continue;
         // do the per-frame handler here.
@@ -114,7 +110,7 @@ namespace intercept {
             }
         }
         deny_access();
-        LOG(DEBUG) << "-------------------------------- LOCKED!";
+        LOG(DEBUG) << "-------------------------------- EXECUTE PERIOD END!";
         return true;
     }
 
@@ -142,11 +138,11 @@ namespace intercept {
         return true;
     }
 
+    /**
+    DO NOT EXECUTE THIS VIA A BLOCKING CALL EXTENSION!
+    */
     bool invoker::invoker_demo(const arguments & args_, std::string & result_)
     {
-        //std::unique_lock<std::mutex> lock(_state_mutex);
-        //_invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        //std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
         result_ = "1";
         _demo_threads.push_back(std::thread(threaded_invoke_demo));
         LOG(INFO) << "Started Demo Thread #" << _demo_threads.size();
@@ -155,30 +151,38 @@ namespace intercept {
 
     void invoker::invoke_lock_test()
     {
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
+        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
         std::unique_lock<std::mutex> lock(_state_mutex);
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
+        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
+        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " invoker locked...";
+       // LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " invoker locked...";
     }
 
     rv_game_value invoker::invoke_raw(nular_function function_)
     {
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
         std::unique_lock<std::mutex> lock(_state_mutex);
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
         std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " locked, calling...";
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
-        LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " assigning...";
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
         return ret;
+    }
+
+
+    void invoker::invoke_delete()
+    {
+        binary_function function;
+        if (loader::get().get_function("resize", function)) {
+            std::unique_lock<std::mutex> lock(_state_mutex);
+            _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+            std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+            function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_zero);
+            function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_max);
+        }
     }
 
     rv_game_value invoker::invoke_raw(std::string function_name_)
@@ -260,10 +264,6 @@ namespace intercept {
         return type_map[value_->type()];
     }
 
-    bool invoker::release_value(game_value *value) {
-        return release_value(value, false);
-    }
-
     bool invoker::release_value(game_value *value_, bool immediate_) {
         if (!value_->client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
@@ -271,12 +271,15 @@ namespace intercept {
             // The game_value destructor should set this pointer to null after, so it is effectively deleted
             // in the context of the passed objects lifespan, but the memory remains until we free it in the
             // RV engine itself later.
-            ((rv_game_value *)_delete_array_ptr[_delete_index++])->data = ((rv_game_value *)value_)->data;
+            LOG(DEBUG) << "Adding delete...";
+            ((rv_game_value *)_delete_array_ptr[_delete_index])->data = ((rv_game_value *)value_)->data;
+            ((rv_game_value *)_delete_array_ptr[_delete_index])->__vptr = ((rv_game_value *)value_)->__vptr;
+            LOG(DEBUG) << "Ptr: " << ((rv_game_value *)value_)->data->type << " <-> " << ((rv_game_value *)_delete_array_ptr[_delete_index])->data->type;
+            _delete_index++;
             if (_delete_index >= 100 || immediate_) {
-                _delete_index = 0;
                 LOG(DEBUG) << "Flushing Memory...";
-                invoke_raw("resize", &_delete_array_ptr, &_delete_size_zero);
-                invoke_raw("resize", &_delete_array_ptr, &_delete_size_max);
+                invoke_delete();
+                _delete_index = 0;
             }
             return true;
         }

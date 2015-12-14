@@ -24,12 +24,12 @@ namespace intercept {
 				minute = minute_;
 			}
 
-			game_date from_vector(std::vector<float> date_vector_)
+			static game_date from_vector(std::vector<float> date_vector_)
 			{
 				return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
 			}
 
-			std::vector<float> to_vector()
+			std::vector<float> to_vector() const
 			{
 				std::vector<float> ret_val {year, month, day, hour, minute};
 				return ret_val;

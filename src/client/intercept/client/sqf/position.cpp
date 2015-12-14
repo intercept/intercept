@@ -114,6 +114,21 @@ namespace intercept {
 			{
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__atltoasl__array__ret__array, atl_));
 			}
+			vector3 asl_to_atl(vector3 asl_)
+			{
+				game_value_array<3> asl({
+					game_value_number(asl_.x),
+					game_value_number(asl_.y),
+					game_value_number(asl_.z)
+				});
+				game_value atl = host::functions.invoke_raw_unary(client::__sqf::unary__asltoatl__array__ret__array, asl);
+				float x = ((game_data_number *)((game_data_array *)atl.data)->data[0].data)->number;
+				float y = ((game_data_number *)((game_data_array *)atl.data)->data[1].data)->number;
+				float z = ((game_data_number *)((game_data_array *)atl.data)->data[2].data)->number;
+
+				host::functions.free_value(&atl);
+				return vector3(x, y, z);
+			}
 		}
     }
 }

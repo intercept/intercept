@@ -1,5 +1,5 @@
 # Intercept
-![TravisCI Build Indicator](https://travis-ci.org/NouberNou/intercept.svg?branch=master)
+[![TravisCI Build Indicator](https://travis-ci.org/NouberNou/intercept.svg?branch=master)](https://travis-ci.org/NouberNou/intercept)
 
 ## Overview
 

@@ -64,7 +64,9 @@ def parse():
                 if (part.find("ret__text") != -1):
                     function_output = "text " + function_output
                     ret_type = "text"
-
+                if (part.find("ret__any") != -1):
+                    function_output = "rv_any " + function_output
+                    ret_type = "rv_any"
                 if (part.find("ret__group") != -1):
                     function_output = "group " + function_output
                     ret_type = "group"
@@ -78,7 +80,7 @@ def parse():
 
                 to_match = [["__scalar__", "float"], ["__scalar_nan__", "float"], ["__bool__", "bool"],
                     ["__object__", "object"], ["__side__", "side"], ["__string__", "string"], ["__display__", "display"],
-                    ["__control__", "control"], ["__text__", "string"], ["__group__", "group"], ["__array__", "array"], ["__team_member__", "team_member"]]
+                    ["__control__", "control"], ["__text__", "string"], ["__group__", "group"], ["__array__", "array"], ["__team_member__", "team_member"], ["__any__", "rv_any"]]
 
                 value_type_n = 0
                 for match_check in to_match:
@@ -135,20 +137,10 @@ def parse():
                             function_implementation += "game_value_bool(value{}_)".format(value_type_n)
                         elif  (type_name == 'string'):
                             function_implementation += "game_value_string(value{}_)".format(value_type_n)
-                        elif  (type_name == 'object'):
-                            function_implementation += "*value{}_".format(value_type_n)
-                        elif  (type_name == 'control'):
-                            function_implementation += "*value{}_".format(value_type_n)
                         elif  (type_name == 'text'):
                             function_implementation += "game_value_string(value{}_)".format(value_type_n)
-                        elif  (type_name == 'display'):
-                            function_implementation += "*value{}_".format(value_type_n)
-                        elif  (type_name == 'side'):
-                            function_implementation += "*value{}_".format(value_type_n)
-                        elif  (type_name == 'group'):
-                            function_implementation += "*value{}_".format(value_type_n)
-                        elif  (type_name == 'team_member'):
-                            function_implementation += "*value{}_".format(value_type_n)
+                        else:
+                            function_implementation += "value{}_".format(value_type_n)
                         value_type_n+=1
 
                     function_implementation += ");\n"  # close method invokation
@@ -162,20 +154,21 @@ def parse():
                     elif  (ret_type == 'std::string'):
                         return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'object'):
-                        return_conversion += "    return std::make_shared<object_ptr>(ret_value);\n"
+                        return_conversion += "    return object(ret_value);\n"
                     elif  (ret_type == 'control'):
-                        return_conversion += "    return std::make_shared<control_ptr>(ret_value);\n"
+                        return_conversion += "    return control(ret_value);\n"
                     elif  (ret_type == 'text'):
                         return_conversion += "    std::string rv = ((game_data_string *)ret_value.data)->get_string();\n    host::functions.free_value(&ret_value);\n    return rv;\n"
                     elif  (ret_type == 'display'):
-                        return_conversion += "    return std::make_shared<display_ptr>(ret_value);\n"
+                        return_conversion += "    return display(ret_value);\n"
                     elif  (ret_type == 'side'):
-                        return_conversion += "    return std::make_shared<side_ptr>(ret_value);\n"
+                        return_conversion += "    return side(ret_value);\n"
                     elif  (ret_type == 'group'):
-                        return_conversion += "    return std::make_shared<group_ptr>(ret_value);\n"
+                        return_conversion += "    return group(ret_value);\n"
                     elif  (ret_type == 'team_member'):
-                        return_conversion += "    return std::make_shared<team_member_ptr>(ret_value);\n"
-
+                        return_conversion += "    return team_member(ret_value);\n"
+                    elif  (ret_type == 'rv_any'):
+                        return_conversion += "    return rv_any(ret_value);\n"
                     function_implementation += return_conversion + "}\n" # close function definition
 
                     if  'array' not in input_type and len(input_type) > 1:
@@ -187,9 +180,9 @@ def parse():
                         else:
                             helper_methods[helper_method] = 1
 
-    orig_stdout = sys.stdout
-    f = file('out.txt', 'w')
-    sys.stdout = f
+    #orig_stdout = sys.stdout
+    #f = file('out.txt', 'w')
+    #sys.stdout = f
 
     for output in converted:
         print(output)

@@ -197,6 +197,7 @@ namespace intercept {
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);
             game_data_array & game_data_array::operator = (game_data_array &&move_);
+            void free();
             ~game_data_array();
             game_value *data;
             uint32_t length;
@@ -213,6 +214,7 @@ namespace intercept {
             game_data_string(game_data_string &&move_);
             game_data_string & game_data_string::operator = (const game_data_string &copy_);
             game_data_string & game_data_string::operator = (game_data_string &&move_);
+            void free();
             ~game_data_string();
             rv_string *raw_string;
         };

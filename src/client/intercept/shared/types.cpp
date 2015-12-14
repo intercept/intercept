@@ -250,10 +250,14 @@ namespace intercept {
             return *this;
         }
 
-        game_data_string::~game_data_string()
-        {
+        void game_data_string::free() {
             if (raw_string)
                 free_string(raw_string);
+        }
+
+        game_data_string::~game_data_string()
+        {
+            free();
         }
 
 
@@ -331,10 +335,14 @@ namespace intercept {
             move_.data = nullptr;
             return *this;
         }
-
-        game_data_array::~game_data_array() {
+        
+        void game_data_array::free() {
             if (data)
                 delete[] data;
+        }
+
+        game_data_array::~game_data_array() {
+            free();
         }
 
         game_value::game_value() {
@@ -437,9 +445,9 @@ namespace intercept {
                  destructor called here before we delete the pointer.
                 */
                 if (rv_data.data && rv_data.data->type == game_data_array::type_def)
-                    static_cast<game_data_array *>(rv_data.data)->~game_data_array(); // ... that is what you are.
+                    ((game_data_array *)rv_data.data)->free(); // ... that is what you are.
                 else if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                    static_cast<game_data_string *>(rv_data.data)->~game_data_string(); // ... that is what you are.
+                    ((game_data_string *)rv_data.data)->free(); // ... that is what you are.
                 if (rv_data.data)
                     delete rv_data.data;
             }

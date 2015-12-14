@@ -2,8 +2,9 @@
 #include "shared.hpp"
 #include "client\client.hpp"
 #include "shared\client_types.hpp"
+#include "shared\types.hpp"
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {

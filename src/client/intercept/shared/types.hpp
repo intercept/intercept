@@ -136,20 +136,23 @@ namespace intercept {
             game_value(rv_game_value internal_);
             game_value(float val_);
             game_value(bool val_);
-            game_value(std::string &val_);
+            game_value(const std::string &val_);
             game_value(const char *);
-            game_value(std::initializer_list<game_value> list_);
+            game_value(const std::vector<game_value> &list_);
             game_value(vector3 &vec_);
             game_value(vector2 &vec_);
             game_value(internal_object internal_);
+
+            ~game_value();
+
             game_value & operator = (const game_value &copy_);
             game_value & operator = (game_value &&move_);
 
             game_value & operator = (float val_);
             game_value & operator = (bool val_);
-            game_value & operator = (std::string val_);
+            game_value & operator = (const std::string val_);
             game_value & operator = (const char *val_);
-            game_value & operator = (std::initializer_list<game_value> list_);
+            game_value & operator = (const std::vector<game_value> &list_);
             game_value & operator = (vector3 vec_);
             game_value & operator = (vector2 vec_);
             game_value & operator = (internal_object internal_);
@@ -161,22 +164,26 @@ namespace intercept {
             operator bool();
             operator std::string();
             operator rv_game_value *();
+            operator vector3();
+            operator vector2();
             operator float() const;
             operator bool() const;
             operator std::string() const;
+            operator vector3() const;
+            operator vector2() const;
 
             game_value & operator [](int i_);
             game_value operator [](int i_) const;
 
             uintptr_t type();
 
+            size_t length();
+
             bool client_owned();
-
-
-            ~game_value();
+            rv_game_value rv_data;
         protected:
             void _free();
-            rv_game_value _rv_data;
+            
         };
 
         class game_data_array : public game_data {
@@ -185,7 +192,7 @@ namespace intercept {
             static uintptr_t data_type_def;
             game_data_array();;
             game_data_array(size_t size_);;
-            game_data_array(std::initializer_list<game_value> init_);;
+            game_data_array(const std::vector<game_value> &init_);;
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);

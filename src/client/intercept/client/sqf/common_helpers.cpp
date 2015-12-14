@@ -10,80 +10,55 @@ namespace intercept {
 			}
 
 			std::string __retrieve_nular_string(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				std::string ret_number = ((game_data_string *)function_return_number.data)->get_string();
-				host::functions.free_value(&function_return_number);
-
-				return ret_number;
+				return game_value(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			float __retrieve_nular_number(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				float ret_number = ((game_data_number *)function_return_number.data)->number;
-				host::functions.free_value(&function_return_number);
-
-				return ret_number;
+				return game_value(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			object __retrieve_nular_object(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return object(function_return_number);
+				return object(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			text __retrieve_nular_text(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return text(function_return_number);
+				return text(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			rv_namespace __retrieve_nular_namespace(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return rv_namespace(function_return_number);
+				return rv_namespace(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			location __retrieve_nular_location(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return location(function_return_number);
+				return location(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			side __retrieve_nular_side(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return side(function_return_number);
+				return side(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			control __retrieve_nular_control(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return control(function_return_number);
+				return control(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			group __retrieve_nular_group(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return group(function_return_number);
+				return group(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			config __retrieve_nular_config(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return config(function_return_number);
+				return config(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			display __retrieve_nular_display(nular_function fnc_) {
-				game_value function_return_number = host::functions.invoke_raw_nular(fnc_);
-				return display(function_return_number);
+				return display(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			vector3 __retrieve_nular_vector3(nular_function fnc_) {
-				game_value function_return_array = host::functions.invoke_raw_nular(fnc_);
-				float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
-				float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
-				float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
-				host::functions.free_value(&function_return_array);
-				return vector3(x, y, z);
+				return game_value(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			bool __retrieve_nular_bool(nular_function fnc_) {
-				game_value function_return_bool = host::functions.invoke_raw_nular(fnc_);
-				bool ret_bool = ((game_data_bool *)function_return_bool.data)->value;
-				host::functions.free_value(&function_return_bool);
-				return ret_bool;
+				return game_value(host::functions.invoke_raw_nular(fnc_));
 			}
             
 			void __empty_unary_object(unary_function fnc_, object obj_)
@@ -118,173 +93,116 @@ namespace intercept {
 
 			bool __bool_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, obj_);
-				bool rv = ((game_data_bool *)bool_ret.data)->value;
-				host::functions.free_value(&bool_ret);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
 			}
 
 			bool __bool_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
-				bool rv = ((game_data_bool *)bool_ret.data)->value;
-				host::functions.free_value(&bool_ret);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(fnc_, str_));
 			}
 
 			bool __bool_unary_number(unary_function fnc_, float val_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, game_value(val_));
-				bool rv = ((game_data_bool *)bool_ret.data)->value;
-				host::functions.free_value(&bool_ret);
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(fnc_, val_));
 			}
 
 			bool __bool_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value bool_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
-				bool rv = ((game_data_bool *)bool_ret.data)->value;
-				host::functions.free_value(&bool_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
 			}
 
 			float __number_unary_number(unary_function fnc_, float val_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value(val_));
-				float rv = ((game_data_number *)num_ret.data)->number;
-				host::functions.free_value(&num_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, val_));
 			}
 
 			float __number_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
-				float rv = ((game_data_number *)num_ret.data)->number;
-				host::functions.free_value(&num_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
 			}
 
 			float __number_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
-				float rv = ((game_data_number *)num_ret.data)->number;
-				host::functions.free_value(&num_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, str_));
 			}
 
 			float __number_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value num_ret = host::functions.invoke_raw_unary(fnc_, obj_);
-				float rv = ((game_data_number *)num_ret.data)->number;
-				host::functions.free_value(&num_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
 			}
 
 			std::string __string_unary_control(unary_function fnc_, control ctl_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, ctl_);
-				std::string rv = ((game_data_string *)str_ret.data)->get_string();
-				host::functions.free_value(&str_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
 			}
 
 			std::string __string_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, obj_);
-				std::string rv = ((game_data_string *)str_ret.data)->get_string();
-				host::functions.free_value(&str_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
 			}
 
 			std::string __string_unary_string(unary_function fnc_, std::string str_)
 			{
-				game_value str_ret = host::functions.invoke_raw_unary(fnc_, game_value(str_));
-				std::string rv = ((game_data_string *)str_ret.data)->get_string();
-				host::functions.free_value(&str_ret);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(fnc_, str_));
 			}
 
 			object __object_unary_object(unary_function fnc_, object obj_)
 			{
-				game_value obj_ret = host::functions.invoke_raw_unary(fnc_, obj_);
-				return object(obj_ret);
+				return object(host::functions.invoke_raw_unary(fnc_, obj_));
 			}
 
 
-            std::vector<object> __convert_to_objects_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(object(array_value->data[i]));
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(object(input_[i].rv_data));
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
 
-            std::vector<std::string> __convert_to_strings_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<std::string> __convert_to_strings_vector(game_value input_) {
                 std::vector<std::string> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
-                    output.push_back(value);
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(input_[i]);
                 }
-                host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
                 return output;
             }
 
-            std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<team_member> __convert_to_team_members_vector(game_value input_) {
                 std::vector<team_member> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(team_member(array_value->data[i]));
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(team_member(input_[i].rv_data));
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
 
-            std::vector<group> __convert_to_groups_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<group> __convert_to_groups_vector(game_value input_) {
                 std::vector<group> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(group(array_value->data[i]));
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(group(input_[i].rv_data));
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
 
-            std::vector<display> __convert_to_displays_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<display> __convert_to_displays_vector(game_value input_) {
                 std::vector<display> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(display(array_value->data[i]));
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(display(input_[i].rv_data));
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
-            std::vector<marker> __convert_to_markers_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<marker> __convert_to_markers_vector(game_value input_) {
                 std::vector<marker> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) { // TODO figure out converting markers in an array to an std vector marker 
-                    std::string value = ((game_data_string *)array_value->data[i].data)->get_string();
-                    output.push_back(value);
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(input_[i]);
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
-            std::vector<config> __convert_to_configs_vector(game_value input__) {
-                game_data_array* array_value = ((game_data_array *)input__.data);
-
+            std::vector<config> __convert_to_configs_vector(game_value input_) {
                 std::vector<config> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(config(array_value->data[i]));
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(config(input_[i].rv_data));
                 }
-                host::functions.free_value(&input__);
                 return output;
             }
 		}

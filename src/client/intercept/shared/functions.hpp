@@ -7,9 +7,9 @@ using namespace intercept::types;
 namespace intercept {
     extern "C" {
         struct client_functions {
-            game_value (*invoke_raw_nular)(nular_function function_);
-            game_value(*invoke_raw_unary)(unary_function function_, game_value & right_arg_);
-            game_value(*invoke_raw_binary)(binary_function function_, game_value & left_arg_, game_value & right_arg_);
+            rv_game_value(*invoke_raw_nular)(nular_function function_);
+            rv_game_value(*invoke_raw_unary)(unary_function function_, game_value right_arg_);
+            rv_game_value(*invoke_raw_binary)(binary_function function_, game_value left_arg_, game_value right_arg_);
 
             
 

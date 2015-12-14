@@ -4,15 +4,15 @@
 
 namespace intercept {
     namespace client_function_defs {
-        game_value invoke_raw_nular(nular_function function_) {
+        rv_game_value invoke_raw_nular(nular_function function_) {
             return intercept::invoker::get().invoke_raw(function_);
         }
 
-        game_value invoke_raw_unary(unary_function function_, game_value &right_arg_) {
+        rv_game_value invoke_raw_unary(unary_function function_, game_value right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &right_arg_);
         }
 
-        game_value invoke_raw_binary(binary_function function_, game_value &left_arg_, game_value &right_arg_) {
+        rv_game_value invoke_raw_binary(binary_function function_, game_value left_arg_, game_value right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &left_arg_, &right_arg_);
         }
 

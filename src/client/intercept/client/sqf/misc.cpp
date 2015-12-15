@@ -2887,7 +2887,7 @@ namespace intercept {
 			}
 
 			void set_combat_mode(const std::string& value0_, team_member value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, value1_, value0_);
 			}
 
 			void set_custom_aim_coef(float value0_, object value1_) {
@@ -2939,7 +2939,7 @@ namespace intercept {
 			}
 
 			void set_formation(const std::string& value0_, team_member value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setformation__team_member__string__ret__nothing, value1_, value0_);
 			}
 
 			void set_formation_task(object value0_, const std::string& value1_) {
@@ -2947,7 +2947,7 @@ namespace intercept {
 			}
 
 			void set_from_editor(bool value0_, team_member value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_fuel(float value0_, object value1_) {

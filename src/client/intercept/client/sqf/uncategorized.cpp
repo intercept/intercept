@@ -673,11 +673,12 @@ namespace intercept {
 				return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getdlcs__scalar__ret__array, filter_));
 			}
 
+#pragma region listbox
 			/****************************************************************************** LISTBOX ***************************************************************************/
-			float lb_add(float control_id_, std::string text_)
+			float lb_add(int control_id_, std::string text_)
 			{
 				game_value args({
-					(control_id_),
+					(float)(control_id_),
 					(text_)
 				});
 
@@ -689,160 +690,137 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbadd__control__string__ret__scalar, control_, text_));
 			}
 
-			float lb_color(float control_id_, float index_)
+			float lb_color(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbcolor__array__ret__array, args));
 			}
 
-			float lb_color(control control_, float index_)
+			float lb_color(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, (float)index_));
 			}
 
-			float lb_color_right(float control_id_, float index_)
+			float lb_color_right(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbcolorright__array__ret__array, args));
 			}
 
-			float lb_color_right(control control_, float index_)
+			float lb_color_right(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, (float)index_));
 			}
 
-			std::string lb_data(float control_id_, float index_)
+			std::string lb_data(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbdata__array__ret__string, args));
 			}
 
-			std::string lb_data(control control_, float index_)
+			std::string lb_data(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, (float)index_));
 			}
 
-			void lb_delete(float control_id_, float index_)
+			void lb_delete(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbdelete__array__ret__nothing, args);
 			}
 
-			void lb_delete(control control_, float index_)
+			void lb_delete(control control_, int index_)
 			{
-				host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, index_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, (float)index_);
 			}
 
-			std::string lb_picture(float control_id_, float index_)
+			std::string lb_picture(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbpicture__array__ret__string, args));
 			}
 
-			std::string lb_picture(control control_, float index_)
+			std::string lb_picture(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, (float)index_));
 			}
 
-			std::string lb_picture_right(float control_id_, float index_)
+			std::string lb_picture_right(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
-
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbpictureright__array__ret__string, args));
 			}
 
-			std::string lb_picture_right(control control_, float index_)
+			std::string lb_picture_right(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, (float)index_));
 			}
 
 			std::vector<float> lb_selection(control control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 
-			void lb_set_color(float control_id_, float index_, rv_color color_)
+			void lb_set_color(int control_id_, int index_, rv_color color_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolor__array__ret__nothing, args);
 			}
 
-			void lb_set_color(control control_, float index_, rv_color color_)
+			void lb_set_color(control control_, int index_, rv_color color_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcolor__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_color_right(float control_id_, float index_, rv_color color_)
+			void lb_set_color_right(int control_id_, int index_, rv_color color_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolorright__array__ret__nothing, args);
 			}
 
-			void lb_set_color_right(control control_, float index_, rv_color color_)
+			void lb_set_color_right(control control_, int index_, rv_color color_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcolorright__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_cur_sel(float control_id_, float index_)
+			void lb_set_cur_sel(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
-
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcursel__array__ret__nothing, args);
 			}
 
-			void lb_set_cur_sel(control control_, float index_)
+			void lb_set_cur_sel(control control_, int index_)
 			{
-				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, index_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, (float)index_);
 			}
 
-			void lb_set_data(float control_id_, float index_, std::string data_)
+			void lb_set_data(int control_id_, int index_, std::string data_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					data_
 				});
 
@@ -850,63 +828,63 @@ namespace intercept {
 			}
 
 
-			void lb_set_data(control control_, float index_, std::string data_)
+			void lb_set_data(control control_, int index_, std::string data_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					(data_)
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetdata__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture(float control_id_, float index_, std::string name_)
+			void lb_set_picture(int control_id_, int index_, std::string name_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					name_
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicture__array__ret__nothing, args);
 			}
 
-			void lb_set_picture(control control_, float index_, std::string name_)
+			void lb_set_picture(control control_, int index_, std::string name_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					(name_)
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicture__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture_right(float control_id_, float index_, std::string name_)
+			void lb_set_picture_right(int control_id_, int index_, std::string name_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					name_
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpictureright__array__ret__nothing, args);
 			}
 
-			void lb_set_picture_right(control control_, float index_, std::string name_)
+			void lb_set_picture_right(control control_, int index_, std::string name_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					(name_)
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpictureright__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture_color(float control_id_, float index_, rv_color color_) 
+			void lb_set_picture_color(int control_id_, int index_, rv_color color_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
@@ -914,96 +892,89 @@ namespace intercept {
 			}
 
 
-			void lb_set_picture_color(control control_, float index_, rv_color color_)
+			void lb_set_picture_color(control control_, int index_, rv_color color_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolor__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture_color_disabled(float control_id_, float index_, rv_color color_)
+			void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolordisabled__array__ret__nothing, args);
 			}
 
-			void lb_set_picture_color_disabled(control control_, float index_, rv_color color_)
+			void lb_set_picture_color_disabled(control control_, int index_, rv_color color_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolordisabled__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture_color_selected(float control_id_, float index_, rv_color color_)
+			void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolorselected__array__ret__nothing, args);
 			}
 
-			void lb_set_picture_color_selected(control control_, float index_, rv_color color_)
+			void lb_set_picture_color_selected(control control_, int index_, rv_color color_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					color_.__to_gv_vector()
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolorselected__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_tooltip(float control_id_, float index_, std::string tooltip_) 
+			void lb_set_tooltip(int control_id_, int index_, std::string tooltip_)
 			{
 				game_value args({
-					(control_id_),
-					(index_),
+					(float)(control_id_),
+					(float)(index_),
 					tooltip_
 				});
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsettooltip__array__ret__nothing, args);
 			}
 
-			void lb_set_tooltip(control control_, float index_, std::string tooltip_)
+			void lb_set_tooltip(control control_, int index_, std::string tooltip_)
 			{
 				game_value args({
-					(index_),
+					(float)(index_),
 					(tooltip_)
 				});
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsettooltip__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_value(float control_id_, float index_, float val_)
+			void lb_set_value(int control_id_, int index_, float val_)
 			{
-				game_value args({
-					(control_id_),
-					(index_),
-					val_
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_), game_value(val_) };
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetvalue__array__ret__nothing, args);
 			}
 
-			void lb_set_value(control control_, float index_, float val_)
+			void lb_set_value(control control_, int index_, float val_)
 			{
-				game_value args({
-					(index_),
-					(val_)
-				});
+				std::vector<game_value> args{game_value((float)index_), game_value(val_) };
 
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetvalue__control__array__ret__nothing, control_, args);
 			}
@@ -1023,52 +994,44 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsort__array__ret__scalar, args);
 			}
 
-			std::string lb_text(float control_id_, float index_)
+			std::string lb_text(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbtext__array__ret__string, args));
 			}
 
-			std::string lb_text(control control_, float index_)
+			std::string lb_text(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, (float)index_));
 			}
 
-			std::string lb_text_right(float control_id_, float index_)
+			std::string lb_text_right(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbtextright__array__ret__string, args));
 			}
 
-			std::string lb_text_right(control control_, float index_)
+			std::string lb_text_right(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, (float)index_));
 			}
 
-			float lb_value(float control_id_, float index_)
+			float lb_value(int control_id_, int index_)
 			{
-				game_value args({
-					(control_id_),
-					(index_)
-				});
+				std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) }; 
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbvalue__array__ret__scalar, args));
 			}
 
-			float lb_value(control control_, float index_)
+			float lb_value(control control_, int index_)
 			{
-				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, index_));
+				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float)index_));
 			}
 
 			/*************************************************************** LISTBOX END *****************************************************************************/
+#pragma endregion listbox 
 		}
 	}
 }

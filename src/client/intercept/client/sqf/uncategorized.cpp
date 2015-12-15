@@ -995,7 +995,7 @@ namespace intercept {
 					val_
 				});
 
-				host::functions.invoke_raw_unary(client::__sqf::unary__lbsettooltip__array__ret__nothing, args);
+				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetvalue__array__ret__nothing, args);
 			}
 
 			void lb_set_value(control control_, float index_, float val_)
@@ -1060,7 +1060,7 @@ namespace intercept {
 					(index_)
 				});
 
-				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbtextright__array__ret__string, args));
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbvalue__array__ret__scalar, args));
 			}
 
 			float lb_value(control control_, float index_)

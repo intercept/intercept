@@ -130,167 +130,167 @@ namespace intercept {
 			}
 
 			void ctrl_commit(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcommit__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcommit__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_enable(control value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlenable__control__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlenable__control__bool__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_remove_all_event_handlers(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlremovealleventhandlers__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlremovealleventhandlers__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_auto_scroll_delay(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrolldelay__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrolldelay__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_auto_scroll_rewind(control value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrollrewind__control__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrollrewind__control__bool__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_auto_scroll_speed(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrollspeed__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetautoscrollspeed__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_checked(control value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetchecked__control__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetchecked__control__bool__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_fade(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfade__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfade__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfont__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfont__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h1(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth1__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth1__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h1b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth1b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth1b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h2(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth2__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth2__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h2b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth2b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth2b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h3(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth3__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth3__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h3b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth3b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth3b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h4(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth4__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth4__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h4b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth4b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth4b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h5(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth5__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth5__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h5b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth5b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth5b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h6(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth6__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth6__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_h6b(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth6b__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfonth6b__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheight__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheight__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h1(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth1__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth1__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h2(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth2__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth2__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h3(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth3__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth3__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h4(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth4__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth4__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h5(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth5__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth5__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_h6(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth6__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheighth6__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_height_secondary(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheightsecondary__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontheightsecondary__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_p(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontp__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontp__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_p(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontp__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontp__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_pb(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontpb__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontpb__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_font_secondary(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontsecondary__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetfontsecondary__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_model(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetmodel__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetmodel__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_model_scale(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetmodelscale__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetmodelscale__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_scale(control value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetscale__control__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetscale__control__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_structured_text(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetstructuredtext__control__text__ret__nothing, value0_, game_value(value1_));
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetstructuredtext__control__text__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_text(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettext__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettext__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_text_secondary(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettextsecondary__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettextsecondary__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_set_tooltip(control value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltip__control__string__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltip__control__string__ret__nothing, value0_, value1_);
 			}
 
 			void ctrl_show(control value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlshow__control__bool__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlshow__control__bool__ret__nothing, value0_, value1_);
 			}
 		}
     }

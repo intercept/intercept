@@ -11,11 +11,7 @@ namespace intercept {
 
 			std::string world_name()
 			{
-				game_value game_world_name = host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string);
-				std::string w_name = ((game_data_string *)game_world_name.data)->get_string();
-				host::functions.free_value(&game_world_name);
-
-				return w_name;
+				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string));
 			}
 
 			float wind_str() {
@@ -44,19 +40,17 @@ namespace intercept {
 
 			float date_to_number(game_date date_)
 			{
-				game_value_array<5> date_array({
-					game_value_number(date_.year),
-					game_value_number(date_.month),
-					game_value_number(date_.day),
-					game_value_number(date_.hour),
-					game_value_number(date_.minute)
-				});
+				//game_value date_array({
+				//	(date_.year),
+				//	(date_.month),
+				//	(date_.day),
+				//	(date_.hour),
+				//	(date_.minute)
+				//});
 
-				game_value date_number = host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_array);
-				float rv = ((game_data_number *)date_number.data)->number;
+				//return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_array));
 
-				host::functions.free_value(&date_number);
-				return rv;
+				throw 713; // @todo
 			}
 		}
 	}

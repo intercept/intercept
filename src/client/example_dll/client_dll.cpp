@@ -4,7 +4,8 @@
 #include "intercept.hpp"
 #include "logging.hpp"
 #include <sstream>
-
+#include "client\client.hpp"
+#include "client\pointers.hpp"
 INITIALIZE_EASYLOGGINGPP
 
 
@@ -14,16 +15,15 @@ int __cdecl intercept::api_version() {
 }
 
 void __cdecl intercept::on_frame() {
-    float rand_val = intercept::sqf::__math::random(100.0f);
     std::stringstream side_chat_msg;
     
     object player = intercept::sqf::core::player();
     vector3 pos = intercept::sqf::position::get_pos_asl(player);
 
     side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
-    object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
+    //object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
     intercept::sqf::chat::side_chat(player, side_chat_msg.str());
-    intercept::sqf::position::set_pos_asl(player, pos);
+    //intercept::sqf::position::set_pos_asl(test, pos);
 }
 
 

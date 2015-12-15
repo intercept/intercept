@@ -5,19 +5,18 @@
 namespace intercept {
 
     extensions::extensions() {
-        _functions.get_type_structure = client_function_defs::get_type_structure;
-        _functions.new_string = client_function_defs::new_string;
-        _functions.new_scalar = client_function_defs::new_scalar;
-        _functions.new_array = client_function_defs::new_array;
-        _functions.free_value = client_function_defs::free_value;
-        _functions.get_binary_function = client_function_defs::get_binary_function;
-        _functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;
-        _functions.get_nular_function = client_function_defs::get_nular_function;
-        _functions.get_unary_function = client_function_defs::get_unary_function;
-        _functions.get_unary_function_typed = client_function_defs::get_unary_function_typed;
-        _functions.invoke_raw_binary = client_function_defs::invoke_raw_binary;
-        _functions.invoke_raw_nular = client_function_defs::invoke_raw_nular;
-        _functions.invoke_raw_unary = client_function_defs::invoke_raw_unary;
+        functions.get_type_structure = client_function_defs::get_type_structure;
+        functions.free_value = client_function_defs::free_value;
+        functions.allocate_string = client_function_defs::allocate_string;
+        functions.free_string = client_function_defs::free_string;
+        functions.get_binary_function = client_function_defs::get_binary_function;
+        functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;
+        functions.get_nular_function = client_function_defs::get_nular_function;
+        functions.get_unary_function = client_function_defs::get_unary_function;
+        functions.get_unary_function_typed = client_function_defs::get_unary_function_typed;
+        functions.invoke_raw_binary = client_function_defs::invoke_raw_binary;
+        functions.invoke_raw_nular = client_function_defs::invoke_raw_nular;
+        functions.invoke_raw_unary = client_function_defs::invoke_raw_unary;
     }
 
     extensions::~extensions() {
@@ -70,7 +69,7 @@ namespace intercept {
             return false;
         }
 
-        new_module.functions.assign_functions(_functions);
+        new_module.functions.assign_functions(functions);
 
         _modules[args_.as_string(0)] = new_module;
         LOG(INFO) << "Load completed [" << args_.as_string(0) << "]";

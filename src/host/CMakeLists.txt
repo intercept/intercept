@@ -6,6 +6,8 @@ if(WIN32)
 add_definitions(/DWINVER=0x0600 /D_WIN32_WINNT=0x0600)
 endif()
 
+add_definitions(/DINTERCEPT_HOST_DLL=1)
+
 if (NOT CMAKE_BUILD_TYPE AND CMAKE_COMPILER_IS_GNUCXX)
 	message(STATUS "No build type selected, default to Debug")
 	set(CMAKE_BUILD_TYPE "Debug")
@@ -30,7 +32,7 @@ include_directories("controller")
 include_directories("loader")
 include_directories("invoker")
 include_directories("extensions")
-include_directories("../client/intercept/shared")
+include_directories("../client/intercept")
 include_directories("intercept_dll")
 
 

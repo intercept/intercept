@@ -2254,7 +2254,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__allow3dmode__control__bool__ret__nothing, value0_, value1_);
 			}
 
-			void allow_crew_in_immobile(object value1_, bool value1_) {
+			void allow_crew_in_immobile(object value0_, bool value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__allowcrewinimmobile__object__bool__ret__nothing, value0_, value1_);
 			}
 

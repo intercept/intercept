@@ -12,7 +12,7 @@ intercept_fnc_test = {
         if(_res == profileNameSteam) then {
             intercept_invoker_ok = true;
         };
-        diag_log text format["Invoker test result: %1 == %2", _res, profileNameSteam];
+        diag_log text format["Intercept Invoker test result: %1 == %2", _res, profileNameSteam];
     };
     intercept_invoker_ok
 };
@@ -50,6 +50,12 @@ intercept_fnc_callExtension = {
     };
     _res;
 };
+
+intercept_fnc__event = {
+    params ["_type", "_eventArgs"];
+    
+};
+
 intercept_fnc__onFrame = {
     //HOOKED_PREAMBLE;
     "intercept" callExtension "do_invoke_period:";
@@ -59,7 +65,7 @@ INVOKER_DELETE_ARRAY = [];
 INVOKER_DELETE_ARRAY resize 1000;
 str INVOKER_DELETE_ARRAY;
 
-diag_log text "Invoker SQF handler initializing...";
+diag_log text "Intercept Invoker SQF handler initializing...";
 _res = ["init_invoker"] call intercept_fnc_callExtension;
 
 [] call intercept_fnc_test;
@@ -69,5 +75,8 @@ _res = ["init_invoker"] call intercept_fnc_callExtension;
 //intercept_invoker_ok = true;
 if(intercept_invoker_ok) then {
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
-    diag_log text "Invoker initialized.";
+    diag_log text "Intercept Invoker initialized.";
+    diag_log text format["Intercept Pre-Init..."];
+    _res = ["rv_event,pre_init"] call intercept_fnc_callExtension;
+    diag_log text format["Intercept Pre-Init Completed."];
 };

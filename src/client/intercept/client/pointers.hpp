@@ -2,9 +2,9 @@
 #include "../shared.hpp"
 #include "client.hpp"
 #include "shared\functions.hpp"
-#include "client_types.hpp"
+#include "shared\client_types.hpp"
 
-using namespace intercept::rv_types;
+using namespace intercept::types;
 using namespace intercept::client;
 
 namespace intercept {

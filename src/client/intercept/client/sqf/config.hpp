@@ -1,21 +1,20 @@
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"
-#include "client\client_types.hpp"
+#include "shared\client_types.hpp"
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
         namespace configs {
- 
-            /*std::vector<config> config_hierarchy(config config_entry_);
+            std::vector<config> config_hierarchy(config config_entry_);
             std::string config_name(config config_entry_);
             std::vector<config> config_properties(config config_entry,const std::string& condition_, bool inherit);
             std::string config_source_mod(config config_entry_);
             std::vector<std::string> config_source_mod_list(config config_entry_);
             float count(config config_entry_);
-            std::vector<game_value> get_array(config config_entry_);
+            //std::vector<game_value> get_array(config config_entry_);
             config get_mission_config(const std::string& value_);
             float get_number(config config_entry_);
             std::string get_text(config config_entry_);
@@ -32,7 +31,7 @@ namespace intercept {
             config campaign_config_file();
             config config_file();
             config config_null();
-            config mission_config_file();*/
+            config mission_config_file();
         }
     }
 }

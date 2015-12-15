@@ -12,6 +12,9 @@
 #include "logging.hpp"
 #include "invoker.hpp"
 #include "export.hpp"
+#include "client\client.hpp"
+#include "extensions.hpp"
+#include "shared\functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -94,10 +97,11 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 
 
 
-
+intercept::client_functions intercept::client::host::functions;
 
 
 void Init(void) {
+    intercept::client::host::functions = intercept::extensions::get().functions;
     el::Configurations conf;
 
     conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");

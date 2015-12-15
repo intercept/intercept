@@ -2199,7 +2199,7 @@ namespace intercept {
 			}
 
 			void add_live_stats(object value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addlivestats__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addlivestats__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void add_magazine(object value0_, const std::string& value1_) {
@@ -2215,11 +2215,11 @@ namespace intercept {
 			}
 
 			void add_rating(object value0_, float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addrating__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addrating__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void add_score(object value0_,float value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addscore__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addscore__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void add_score_side(side value0_, float value1_) {
@@ -2235,7 +2235,7 @@ namespace intercept {
 			}
 
 			void add_vehicle(group value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__addvehicle__group__object__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__addvehicle__group__object__ret__nothing, value1_, value0_);
 			}
 
 			void add_vest(object value0_, const std::string& value1_) {
@@ -2255,15 +2255,15 @@ namespace intercept {
 			}
 
 			void allow_crew_in_immobile(object value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__allowcrewinimmobile__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__allowcrewinimmobile__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void allow_damage(object value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__allowdamage__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__allowdamage__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void allow_dammage(object value0_, bool value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__allowdammage__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__allowdammage__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void allow_file_operations(control value0_, bool value1_) {
@@ -2271,7 +2271,7 @@ namespace intercept {
 			}
 
 			void allow_sprint(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__allowsprint__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__allowsprint__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			float ammo(object value0_, const std::string& value1_) {
@@ -2291,11 +2291,11 @@ namespace intercept {
 			}
 
 			void assign_to_airport(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void button_set_action(const std::string& value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__buttonsetaction__control__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__buttonsetaction__control__string__ret__nothing, value1_, value0_);
 			}
 
 			void cam_command(object value0_, const std::string& value1_) {
@@ -2303,43 +2303,43 @@ namespace intercept {
 			}
 
 			void cam_commit(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__camcommit__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__camcommit__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_commit_prepared(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__camcommitprepared__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__camcommitprepared__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_preload(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__campreload__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__campreload__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_prepare_bank(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__campreparebank__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__campreparebank__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_prepare_dir(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__campreparedir__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__campreparedir__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_prepare_dive(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__campreparedive__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__campreparedive__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_prepare_fov(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__campreparefov__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__campreparefov__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_set_bank(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__camsetbank__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__camsetbank__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_set_dive(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__camsetdive__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__camsetdive__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cam_set_fov(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__camsetfov__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__camsetfov__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void cb_set_checked(bool value0_, control value1_) {
@@ -2355,15 +2355,15 @@ namespace intercept {
 			}
 
 			display create_display(const std::string& value0_, display value1_) {
-				return display(host::functions.invoke_raw_binary(client::__sqf::binary__createdisplay__display__string__ret__display, value0_, value1_));
+				return display(host::functions.invoke_raw_binary(client::__sqf::binary__createdisplay__display__string__ret__display, value1_, value0_));
 			}
 
 			void create_menu(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__createmenu__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__createmenu__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			display create_mission_display(const std::string& value0_, display value1_) {
-				return display(host::functions.invoke_raw_binary(client::__sqf::binary__createmissiondisplay__display__string__ret__display, value0_, value1_));
+				return display(host::functions.invoke_raw_binary(client::__sqf::binary__createmissiondisplay__display__string__ret__display, value1_, value0_));
 			}
 
 			void debug_fsm(float value0_, bool value1_) {
@@ -2383,15 +2383,15 @@ namespace intercept {
 			}
 
 			void disable_conversation(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__disableconversation__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__disableconversation__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void disable_nvgequipment(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__disablenvgequipment__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__disablenvgequipment__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void disable_tiequipment(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__disabletiequipment__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__disabletiequipment__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			control display_ctrl(float value0_, display value1_) {
@@ -2419,11 +2419,11 @@ namespace intercept {
 			}
 
 			void enable_aim_precision(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enableaimprecision__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enableaimprecision__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_auto_start_up_rtd(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enableautostartuprtd__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enableautostartuprtd__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			bool enable_auto_trim_rtd(bool value0_, object value1_) {
@@ -2435,43 +2435,43 @@ namespace intercept {
 			}
 
 			void enable_copilot(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablecopilot__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablecopilot__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_fatigue(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablefatigue__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablefatigue__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_mimics(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablemimics__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablemimics__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_reload(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablereload__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablereload__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_rope_attach(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enableropeattach__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enableropeattach__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_simulation(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablesimulation__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablesimulation__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_simulation_global(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablesimulationglobal__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablesimulationglobal__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_stamina(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enablestamina__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enablestamina__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void enable_uavwaypoints(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void engine_on(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__engineon__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__engineon__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void fire(object value0_, const std::string& value1_) {
@@ -2479,7 +2479,7 @@ namespace intercept {
 			}
 
 			void fly_in_height(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__flyinheight__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__flyinheight__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void force_add_uniform(object value0_, const std::string& value1_) {
@@ -2487,11 +2487,11 @@ namespace intercept {
 			}
 
 			void force_speed(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__forcespeed__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__forcespeed__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void force_walk(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__forcewalk__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__forcewalk__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			std::string get_editor_object_scope(const std::string& value0_, control value1_) {
@@ -2531,11 +2531,11 @@ namespace intercept {
 			}
 
 			void hide_object(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__hideobject__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__hideobject__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void hide_object_global(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__hideobjectglobal__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__hideobjectglobal__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void hint_c(const std::string& value0_, const std::string& value1_) {
@@ -2543,11 +2543,11 @@ namespace intercept {
 			}
 
 			void html_load(const std::string& value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__htmlload__control__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__htmlload__control__string__ret__nothing, value1_, value0_);
 			}
 
 			void inflame(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__inflame__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__inflame__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			bool is_flashlight_on(object value0_, const std::string& value1_) {
@@ -2591,7 +2591,7 @@ namespace intercept {
 			}
 
 			void land_at(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			float lb_add(const std::string& value0_, control value1_) {
@@ -2599,11 +2599,11 @@ namespace intercept {
 			}
 
 			std::string lb_data(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, value1_, value0_));
 			}
 
 			void lb_delete(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			bool lb_is_selected(float value0_, control value1_) {
@@ -2611,35 +2611,35 @@ namespace intercept {
 			}
 
 			std::string lb_picture(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, value1_, value0_));
 			}
 
 			std::string lb_picture_right(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, value1_, value0_));
 			}
 
 			void lb_set_cur_sel(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			std::string lb_text(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, value1_, value0_));
 			}
 
 			std::string lb_text_right(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, value1_, value0_));
 			}
 
 			float lb_value(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, value1_, value0_));
 			}
 
 			void leave_vehicle(object value0_, group value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__leavevehicle__group__object__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__leavevehicle__group__object__ret__nothing, value1_, value0_);
 			}
 
 			void limit_speed(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__limitspeed__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__limitspeed__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void link_item(object value0_, const std::string& value1_) {
@@ -2647,19 +2647,19 @@ namespace intercept {
 			}
 
 			float lnb_add_column(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lnbaddcolumn__control__scalar__ret__scalar, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lnbaddcolumn__control__scalar__ret__scalar, value1_, value0_));
 			}
 
 			void lnb_delete_column(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lnbdeletecolumn__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lnbdeletecolumn__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void lnb_delete_row(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lnbdeleterow__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lnbdeleterow__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void lnb_set_cur_sel_row(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lnbsetcurselrow__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lnbsetcurselrow__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			bool load_identity(object value0_, const std::string& value1_) {
@@ -2671,23 +2671,23 @@ namespace intercept {
 			}
 
 			void lock(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lock__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lock__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void lock(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lock__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lock__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void lock_cargo(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lockcargo__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lockcargo__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void lock_driver(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__lockdriver__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__lockdriver__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			bool locked_cargo(float value0_, object value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lockedcargo__object__scalar__ret__bool, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lockedcargo__object__scalar__ret__bool, value1_, value0_));
 			}
 
 			void map_center_on_camera(bool value0_, control value1_) {
@@ -2699,7 +2699,7 @@ namespace intercept {
 			}
 
 			void move_object_to_end(const std::string& value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__moveobjecttoend__control__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__moveobjecttoend__control__string__ret__nothing, value1_, value0_);
 			}
 
 			void play_action(object value0_, const std::string& value1_) {
@@ -2739,7 +2739,7 @@ namespace intercept {
 			}
 
 			void progress_set_position(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__progresssetposition__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__progresssetposition__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void public_variable_client(float value0_, const std::string& value1_) {
@@ -2755,11 +2755,11 @@ namespace intercept {
 			}
 
 			bool register_task(const std::string& value0_, team_member value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__registertask__team_member__string__ret__bool, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__registertask__team_member__string__ret__bool, value1_, value0_));
 			}
 
 			void remove_action(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removeaction__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removeaction__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void remove_all_event_handlers(object value0_, const std::string& value1_) {
@@ -2803,11 +2803,11 @@ namespace intercept {
 			}
 
 			void remove_menu_item(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void remove_menu_item(const std::string& value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removemenuitem__control__string__ret__nothing, value1_, value0_);
 			}
 
 			void remove_primary_weapon_item(object value0_, const std::string& value1_) {
@@ -2851,7 +2851,7 @@ namespace intercept {
 			}
 
 			void set_actual_collective_rtd(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setactualcollectivertd__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setactualcollectivertd__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_airport_side(float value0_, side value1_) {
@@ -2859,19 +2859,19 @@ namespace intercept {
 			}
 
 			void set_ammo_cargo(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setammocargo__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setammocargo__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_anim_speed_coef(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setanimspeedcoef__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setanimspeedcoef__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_autonomous(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setautonomous__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setautonomous__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_bleeding_remaining(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setbleedingremaining__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setbleedingremaining__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_cam_use_ti(float value0_, bool value1_) {
@@ -2879,11 +2879,11 @@ namespace intercept {
 			}
 
 			void set_camera_interest(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcamerainterest__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcamerainterest__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_collision_light(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_combat_mode(const std::string& value0_, team_member value1_) {
@@ -2891,31 +2891,31 @@ namespace intercept {
 			}
 
 			void set_custom_aim_coef(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcustomaimcoef__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcustomaimcoef__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_custom_weight_rtd(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setcustomweightrtd__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setcustomweightrtd__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_damage(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setdamage__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setdamage__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_dammage(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setdammage__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setdammage__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_dir(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setdir__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setdir__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_drop_interval(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setdropinterval__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setdropinterval__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_editor_mode(const std::string& value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__seteditormode__control__string__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__seteditormode__control__string__ret__nothing, value1_, value0_);
 			}
 
 			void set_face(object value0_, const std::string& value1_) {
@@ -2923,11 +2923,11 @@ namespace intercept {
 			}
 
 			void set_faceanimation(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setfaceanimation__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setfaceanimation__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_fatigue(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setfatigue__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setfatigue__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_flag_side(object value0_, side value1_) {
@@ -2951,11 +2951,11 @@ namespace intercept {
 			}
 
 			void set_fuel(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setfuel__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setfuel__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_fuel_cargo(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setfuelcargo__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setfuelcargo__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_identity(object value0_, const std::string& value1_) {
@@ -2963,27 +2963,27 @@ namespace intercept {
 			}
 
 			void set_light_brightness(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightbrightness__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightbrightness__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_light_day_light(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightdaylight__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightdaylight__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_light_flare_max_distance(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightflaremaxdistance__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightflaremaxdistance__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_light_flare_size(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightflaresize__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightflaresize__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_light_intensity(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightintensity__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightintensity__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_light_use_flare(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setlightuseflare__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setlightuseflare__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_mimic(object value0_, const std::string& value1_) {
@@ -2999,11 +2999,11 @@ namespace intercept {
 			}
 
 			bool set_owner(float value0_, object value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setowner__object__scalar__ret__bool, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setowner__object__scalar__ret__bool, value1_, value0_));
 			}
 
 			void set_oxygen_remaining(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setoxygenremaining__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setoxygenremaining__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_particle_class(object value0_, const std::string& value1_) {
@@ -3011,11 +3011,11 @@ namespace intercept {
 			}
 
 			void set_pilot_light(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setpilotlight__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setpilotlight__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_pitch(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setpitch__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setpitch__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_radio_msg(float value0_, const std::string& value1_) {
@@ -3023,7 +3023,7 @@ namespace intercept {
 			}
 
 			void set_random_lip(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setrandomlip__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setrandomlip__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_rank(object value0_, const std::string& value1_) {
@@ -3031,15 +3031,15 @@ namespace intercept {
 			}
 
 			void set_repair_cargo(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setrepaircargo__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setrepaircargo__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_rotor_brake_rtd(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_skill(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setskill__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setskill__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_speaker(object value0_, const std::string& value1_) {
@@ -3047,11 +3047,11 @@ namespace intercept {
 			}
 
 			void set_stamina(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setstamina__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setstamina__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_suppression(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setsuppression__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setsuppression__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_target_age(object value0_, const std::string& value1_) {
@@ -3067,11 +3067,11 @@ namespace intercept {
 			}
 
 			void set_unconscious(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setunconscious__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setunconscious__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void set_unit_ability(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setunitability__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setunitability__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_unit_pos(object value0_, const std::string& value1_) {
@@ -3087,23 +3087,23 @@ namespace intercept {
 			}
 
 			void set_unit_recoil_coefficient(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setunitrecoilcoefficient__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setunitrecoilcoefficient__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_vehicle_ammo(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleammo__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleammo__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_vehicle_ammo_def(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleammodef__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleammodef__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_vehicle_armor(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setvehiclearmor__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setvehiclearmor__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_vehicle_id(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleid__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__setvehicleid__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void set_vehicle_lock(object value0_, const std::string& value1_) {
@@ -3131,15 +3131,15 @@ namespace intercept {
 			}
 
 			void slider_set_position(float value0_, control value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__slidersetposition__control__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__slidersetposition__control__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void stop(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__stop__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__stop__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void suppress_for(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__suppressfor__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__suppressfor__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			void switch_action(object value0_, const std::string& value1_) {
@@ -3163,11 +3163,11 @@ namespace intercept {
 			}
 
 			void trigger_attach_object(float value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value1_, value0_);
 			}
 
 			std::string tv_tooltip(float value0_, control value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, value1_, value0_));
 			}
 
 			void unassign_item(object value0_, const std::string& value1_) {
@@ -3179,11 +3179,11 @@ namespace intercept {
 			}
 
 			bool unregister_task(const std::string& value0_, team_member value1_) {
-                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__unregistertask__team_member__string__ret__bool, value0_, value1_));
+                return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__unregistertask__team_member__string__ret__bool, value1_, value0_));
 			}
 
 			void use_audio_time_for_moves(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__useaudiotimeformoves__object__bool__ret__nothing, value0_, value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__useaudiotimeformoves__object__bool__ret__nothing, value1_, value0_);
 			}
 
 			void vehicle_radio(object value0_, const std::string& value1_) {

@@ -898,7 +898,6 @@ namespace intercept {
 			std::string team_type(team_member value_);
 			float waypoint_timeout_current(group value_);
 
-			float radio_volume();
 			void save_game();
 			void save_joysticks();
 			side side_enemy();

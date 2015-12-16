@@ -643,12 +643,12 @@ namespace intercept {
         }
 
         game_value & game_value::operator [](int i_) {
-            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && i_ < ((game_data_array *)rv_data.data)->length);
+            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data)->length);
             return ((game_data_array *)rv_data.data)->data[i_];
         }
 
         game_value game_value::operator [](int i_) const {
-            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && i_ < ((game_data_array *)rv_data.data)->length);
+            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data)->length);
             return ((game_data_array *)rv_data.data)->data[i_];
         }
 
@@ -661,6 +661,7 @@ namespace intercept {
         size_t game_value::length() {
             if (type() == game_data_array::type_def)
                 return ((game_data_array *)rv_data.data)->length;
+            return 0;
         }
 
         bool game_value::client_owned() {

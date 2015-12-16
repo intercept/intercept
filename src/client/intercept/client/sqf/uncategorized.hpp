@@ -53,7 +53,6 @@ namespace intercept {
 			}
 		};
 
-
 		namespace __uncategorized {
 			/* potential namespace: */
 			std::vector<std::string> action_keys(std::string user_action_);
@@ -260,6 +259,8 @@ namespace intercept {
 			std::string lb_text_right(control control_, int index_);
 			float lb_value(int control_id_, int index_);
 			float lb_value(control control_, int index_);
+
+
 		}
 	}
 }

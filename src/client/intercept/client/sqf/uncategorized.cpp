@@ -27,21 +27,16 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, user_action_));
 			}
 
-			std::string action_keys_names(std::string user_action_, float max_keys_)
+			std::string action_keys_names(std::string user_action_, int max_keys_)
 			{
-				//game_value params({
-				//	user_action_,
-				//	max_keys_
-				//});
-
-				//return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
-				throw 713; // @todo
+				std::vector<game_value> params{ game_value(user_action_), game_value((float)max_keys_) };
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
-			std::string action_keys_names(std::string user_action_, float max_keys_, std::string input_device_priority_)
+			std::string action_keys_names(std::string user_action_, int max_keys_, std::string input_device_priority_)
 			{
 				game_value params({
 					user_action_,
-					max_keys_,
+					(float)max_keys_,
 					input_device_priority_
 				});
 
@@ -57,22 +52,17 @@ namespace intercept {
 				return r_arr;
 			}
 
-			std::vector<std::string> action_keys_names_array(std::string user_action_, float max_keys_)
+			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_)
 			{
-				//game_value params({
-				//	user_action_,
-				//	max_keys_
-				//});
+				std::vector<game_value> params{ game_value(user_action_), game_value((float)max_keys_) };
 
-				//return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
-
-				throw 713; // @todo
+				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
 			}
-			std::vector<std::string> action_keys_names_array(std::string user_action_, float max_keys_, std::string input_device_priority_)
+			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_, std::string input_device_priority_)
 			{
 				game_value params({
 					user_action_,
-					max_keys_,
+					(float)max_keys_,
 					input_device_priority_
 				});
 
@@ -91,34 +81,23 @@ namespace intercept {
 			/* potential namespace: camera */
 			void add_cam_shake(float power_, float duration_, float frequency_)
 			{
-				//game_value params({
-				//	power_,
-				//	duration_,
-				//	frequency_
-				//});
+				std::vector<game_value> params{ game_value(power_), game_value(duration_), game_value(frequency_) };
 
-				//host::functions.invoke_raw_unary(client::__sqf::unary__addcamshake__array__ret__nothing, params);
+				host::functions.invoke_raw_unary(client::__sqf::unary__addcamshake__array__ret__nothing, params);
 			}
 
 			/* potential namespace: items, inventory, campaign */
-			void add_item_pool(std::string item_name_, float item_count_)
+			void add_item_pool(std::string item_name_, int item_count_)
 			{
-				//game_value params({
-				//	item_name_,
-				//	item_count_
-				//});
+				std::vector<game_value> params{ game_value(item_name_), game_value((float)item_count_) };
 
-				//host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
+				host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
 			}
 
-			void add_magazine_pool(std::string mag_name_, float mag_count_)
+			void add_magazine_pool(std::string mag_name_, int mag_count_)
 			{
-				//game_value params({
-				//	mag_name_,
-				//	mag_count_
-				//});
-
-				//host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
+				std::vector<game_value> params{ game_value(mag_name_), game_value((float)mag_count_) };
+				host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
 			}
 
 			void add_to_remains_collector(std::vector<object> objects_)
@@ -214,7 +193,7 @@ namespace intercept {
 
 				//host::functions.free_value(&input);
 				//return bb;
-				throw 713; // @todo
+				throw 713; // TODO
 			}
 
 			sqf::bounding_box bounding_box_real(object model_)
@@ -236,7 +215,7 @@ namespace intercept {
 
 				//host::functions.free_value(&input);
 				//return bb;
-				throw 713; // @todo
+				throw 713; // TODO
 			}
 
 			vector3 bounding_center(object obj_)
@@ -244,7 +223,7 @@ namespace intercept {
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__boundingcenter__object__ret__array, obj_));
 			}
 
-			void button_set_action(float control_id_, std::string code_)
+			void button_set_action(int control_id_, std::string code_)
 			{
 				game_value params({
 					control_id_,
@@ -264,7 +243,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
 			}
 
-			void ctrl_enable(float control_id_, bool enable_)
+			void ctrl_enable(int control_id_, bool enable_)
 			{
 				//game_value params({
 				//	control_id_,
@@ -284,7 +263,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlenable__array__ret__nothing, params);
 			}
 
-			void ctrl_set_text(float control_id_, std::string text_)
+			void ctrl_set_text(int control_id_, std::string text_)
 			{
 				game_value params({
 					control_id_,
@@ -304,14 +283,10 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlsettext__array__ret__nothing, params);
 			}
 
-			void ctrl_show(float control_id_, bool show_)
+			void ctrl_show(int control_id_, bool show_)
 			{
-				//game_value params({
-				//	control_id_,
-				//	show_
-				//});
-
-				//host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
+				std::vector<game_value> params{ game_value((float)control_id_), game_value(show_) };
+				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
 			}
 
 			void ctrl_show(control control_, bool show_)
@@ -350,9 +325,13 @@ namespace intercept {
 
 			void command_get_out(std::vector<object> units_)
 			{
-				// @todo
-				throw 713; // Not Implmemented.
-				//return __helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
+				//std::vector<game_value> units;
+				//for (auto it : units)
+				//	units.push_back(it);
+
+				//__helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, units);
+				//TODO Implement command_get_out
+				throw 713;
 			}
 
 			void command_stop(object unit_)
@@ -361,8 +340,7 @@ namespace intercept {
 			}
 			void command_stop(std::vector<object> units_)
 			{
-				// @todo
-				throw 713; // Not Implmemented.
+				throw 713; // TODO Implement command_stop
 				//return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
 			}
 
@@ -644,7 +622,7 @@ namespace intercept {
 				//host::functions.free_value(&crew_list);
 				//return output;
 
-				throw 713; // @todo
+				throw 713; // TODO re-implement full_crew
 			}
 
 			std::vector<std::string> get_artillery_ammo(const std::vector<object>& units_)
@@ -658,14 +636,7 @@ namespace intercept {
 
 			vector3 get_center_of_mass(object obj_)
 			{
-
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__getcenterofmass__object__ret__array, obj_));
-				//game_value function_return_array = host::functions.invoke_raw_unary(client::__sqf::unary__getcenterofmass__object__ret__array, obj_);
-				//float x = ((game_data_number *)((game_data_array *)function_return_array.data)->data[0].data)->number;
-				//float y = ((game_data_number *)((game_data_array *)function_return_array.data)->data[1].data)->number;
-				//float z = ((game_data_number *)((game_data_array *)function_return_array.data)->data[2].data)->number;
-				//host::functions.free_value(&function_return_array);
-				//return vector3(x, y, z);
 			}
 
 			std::vector<float> get_dlcs(float filter_)

@@ -31,7 +31,7 @@ namespace intercept {
 			object unit;
 			std::string role;
 			float cargo_index;
-			// turret path; // @todo
+			// turret path; // TODO
 			bool person_turret;
 		};
 
@@ -60,12 +60,12 @@ namespace intercept {
 			text action_keys_images(std::string user_action_);
 
 			std::string action_keys_names(std::string user_action_);
-			std::string action_keys_names(std::string user_action_, float max_keys_);
-			std::string action_keys_names(std::string user_action_, float max_keys_, std::string input_device_priority_);
+			std::string action_keys_names(std::string user_action_, int max_keys_);
+			std::string action_keys_names(std::string user_action_, int max_keys_, std::string input_device_priority_);
 
 			std::vector<std::string> action_keys_names_array(std::string user_action_);
-			std::vector<std::string> action_keys_names_array(std::string user_action_, float max_keys_);
-			std::vector<std::string> action_keys_names_array(std::string user_action_, float max_keys_, std::string input_device_priority_);
+			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_);
+			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_, std::string input_device_priority_);
 
 			/* potential namespace: misc, missions */
 			void activate_addons(std::vector<std::string> &addons_);
@@ -74,8 +74,8 @@ namespace intercept {
 			void add_cam_shake(float power_, float duration_, float frequency_);
 
 			/* potential namespace: items, inventory, campaign */
-			void add_item_pool(std::string item_name_, float item_count_);
-			void add_magazine_pool(std::string mag_name_, float mag_count_);
+			void add_item_pool(std::string item_name_, int item_count_);
+			void add_magazine_pool(std::string mag_name_, int mag_count_);
 
 			/* potential namespace: core, misc, world */
 			void add_to_remains_collector(std::vector<object> objects_);
@@ -84,7 +84,7 @@ namespace intercept {
 			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_);
 
 			/* potential namespace: core, display, all */
-			std::vector<control> all_controls(display display_); // @todo
+			std::vector<control> all_controls(display display_); // TODO implement all_controls
 
 			/* potential namespace: core, all */
 			std::vector<object> all_mission_objects(std::string type_);
@@ -113,13 +113,13 @@ namespace intercept {
 			vector3 bounding_center(object obj_);
 
 			/* potential namespace: controls, ui, gui, misc */
-			void button_set_action(float control_id_, std::string code_);
+			void button_set_action(int control_id_, std::string code_);
 			void button_set_action(control control_, std::string code_);
-			void ctrl_enable(float control_id_, bool enable_);
+			void ctrl_enable(int control_id_, bool enable_);
 			void ctrl_enable(control control_, bool enable_);
-			void ctrl_set_text(float control_id_, std::string code_);
+			void ctrl_set_text(int control_id_, std::string code_);
 			void ctrl_set_text(control control_, std::string code_);
-			void ctrl_show(float control_id_, bool show_);
+			void ctrl_show(int control_id_, bool show_);
 			void ctrl_show(control control_, bool show_);
 
 			/* potential namespace: locations */
@@ -164,7 +164,7 @@ namespace intercept {
 			std::vector<task> current_tasks(team_member team_member_);
 
 			/* potential namespace: gui, ui */
-			void cut_obj(std::string name_, std::string type_, float speed_ = 1);
+			void cut_obj(std::string name_, std::string type_, float speed_ = 1.0f);
 			void cut_rsc(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
 			void cut_text(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
 			void enable_debriefing_stats(float left_, float top_, float width_, float height_);

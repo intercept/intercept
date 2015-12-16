@@ -417,10 +417,6 @@ namespace intercept {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__profilenamesteam__ret__string);
 			}
 
-			float radio_volume() {
-				return __helpers::__retrieve_nular_number(client::__sqf::nular__shownradio__ret__bool);
-			}
-
 			float rain() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__rain__ret__scalar);
 			}

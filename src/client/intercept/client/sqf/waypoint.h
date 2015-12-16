@@ -18,6 +18,16 @@ namespace intercept {
 				  windex((float)windex)
 			{
 			}
+
+			std::vector<game_value> __to_gv_vec()
+			{
+				return std::vector<game_value>{wgroup, game_value(windex)};
+			}
+
+			game_value __to_gv()
+			{
+				return game_value({ wgroup, windex });
+			}
 		};
 
 		namespace waypoints {

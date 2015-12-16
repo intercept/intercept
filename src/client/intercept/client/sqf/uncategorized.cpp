@@ -42,7 +42,7 @@ namespace intercept {
 
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
-
+			
 			std::vector<std::string> action_keys_names_array(std::string user_action_)
 			{
 				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, game_value(user_action_));
@@ -226,7 +226,7 @@ namespace intercept {
 			void button_set_action(int control_id_, std::string code_)
 			{
 				game_value params({
-					control_id_,
+					(float)control_id_,
 					code_
 				});
 
@@ -266,7 +266,7 @@ namespace intercept {
 			void ctrl_set_text(int control_id_, std::string text_)
 			{
 				game_value params({
-					control_id_,
+					(float)control_id_,
 					text_
 				});
 

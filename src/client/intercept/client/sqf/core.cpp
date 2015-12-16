@@ -7,26 +7,26 @@ namespace intercept {
     namespace sqf {
 		namespace core {
 			object player() {
-				game_value player_obj = host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object);
-				return object(player_obj);
+				return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
 			}
 
 			object create_vehicle(std::string type_, vector3 pos_)
 			{
-				game_value type = host::functions.new_string(type_.c_str());
-				game_value obj = host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, &type, game_value_vector3(pos_));
-				host::functions.free_value(&type);
-				return object(obj);
+				return object(host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, type_, pos_));
 			}
 
 			object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
 			{
-				game_value_array<5> args({
-					game_value_string(type_),
-					game_value_vector3(pos_),
-					game_value_array_dynamic<marker, game_value_string>(markers_),
-					game_value_number(placement_),
-					game_value_string(special_)
+                std::vector<game_value> markers;
+                for (auto it : markers_) {
+                    markers.push_back(it);
+                }
+				game_value args({
+					type_,
+					pos_,
+                    markers,
+					placement_,
+					special_
 				});
 
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
@@ -82,133 +82,104 @@ namespace intercept {
 			}
 
 			float server_time() {
-				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__servertime__ret__scalar);
-				float rv = ((game_data_number *)ret_value.data)->number;
-				host::functions.free_value(&ret_value);
-				return rv;
+				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__servertime__ret__scalar));
 			}
 
 			std::string server_name() {
-				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__servername__ret__string);
-				std::string ret_number = ((game_data_string *)ret_value.data)->get_string();
-				host::functions.free_value(&ret_value);
-				return ret_number;
+				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__servername__ret__string));
 			}
 
 			bool is_null(object value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_));
 			}
 
 			bool is_null(group value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
 			}
 
 			bool is_null(control value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, value_));
 			}
 
 			bool is_null(display value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, value_));
 			}
 
 			bool is_null(script value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, value_));
 			}
 
 			bool is_null(task value_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, value_);
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				return rv;
+                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, value_));
 			}
 
 			script script_null() {
-				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__scriptnull__ret__script);
-				return script(ret_value);
+				return script(host::functions.invoke_raw_nular(client::__sqf::nular__scriptnull__ret__script));
 			}
 
 			task task_null() {
-				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__tasknull__ret__task);
-				return task(ret_value);
+				return task(host::functions.invoke_raw_nular(client::__sqf::nular__tasknull__ret__task));
 			}
 
 			rv_namespace ui_namespace() {
-				game_value ret_value = host::functions.invoke_raw_nular(client::__sqf::nular__uinamespace__ret__namespace);
-				return rv_namespace(ret_value);
+				return rv_namespace(host::functions.invoke_raw_nular(client::__sqf::nular__uinamespace__ret__namespace));
 			}
 
 			std::vector<script> diag_active_mission_fsms() {
-				game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
-				game_data_array* array_value = ((game_data_array *)input__.data);
+				game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
 				std::vector<script> output;
-				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(script(array_value->data[i]));
+				for (uint32_t i = 0; i < input.length(); ++i) {
+					output.push_back(script(input[i].rv_data));
 				}
-				host::functions.free_value(&input__);
 				return output;
 			}
 
 			std::vector<script> diag_active_sqf_scripts() {
-				game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
-				game_data_array* array_value = ((game_data_array *)input__.data);
-				std::vector<script> output;
-				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(script(array_value->data[i]));
-				}
-				host::functions.free_value(&input__);
-				return output;
+				game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
+                std::vector<script> output;
+                for (uint32_t i = 0; i < input.length(); ++i) {
+                    output.push_back(script(input[i].rv_data));
+                }
+                return output;
 			}
 
 			std::vector<script> diag_active_sqs_scripts() {
-				game_value input__ = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
-				game_data_array* array_value = ((game_data_array *)input__.data);
-				std::vector<script> output;
-				for (uint32_t i = 0; i < array_value->length; ++i) {
-					output.push_back(script(array_value->data[i]));
-				}
-				host::functions.free_value(&input__);
-				return output;
+				game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
+                std::vector<script> output;
+                for (uint32_t i = 0; i < input.length(); ++i) {
+                    output.push_back(script(input[i].rv_data));
+                }
+                return output;
 			}
 
 			bool __sqfassert(bool test_) {
-				game_value ret_value = host::functions.invoke_raw_unary(client::__sqf::unary__assert__bool__ret__bool, game_value_bool(test_));
-				bool rv = ((game_data_bool *)ret_value.data)->value;
-				host::functions.free_value(&ret_value);
-				
-				return rv;
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, test_));
 			}
 
             std::vector<control> all_controls(display display_) {
-                game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
-                game_data_array* array_value = ((game_data_array *)input__.data);
-                std::vector<control> output;
-                for (uint32_t i = 0; i < array_value->length; ++i) {
-                    output.push_back(control(array_value->data[i]));
-                }
-                host::functions.free_value(&input__);
-                return output;
+                //game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
+                //game_data_array* array_value = ((game_data_array *)input__.data);
+                //std::vector<control> output;
+                //for (uint32_t i = 0; i < array_value->length; ++i) {
+                //    output.push_back(control(array_value->data[i]));
+                //}
+                //host::functions.free_value(&input__);
+                //return output;
+
+				game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
+				std::vector<control> output;
+				for (uint32_t i = 0; i < input__.length(); ++i) {
+					output.push_back(control(input__[i].rv_data));
+				}
+				return output;
             }
 
             std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_) {
-                game_value_array<2> array_input({
+               game_value array_input({
                     vehicle_,
-                    game_value_bool(person_turrets_)
+                    game_value(person_turrets_)
                 });
+
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allturrets__array__ret__array, array_input));
             }

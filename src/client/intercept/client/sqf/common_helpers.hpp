@@ -1,9 +1,9 @@
 #pragma once
 #include "client\client.hpp"
-#include "client\client_types.hpp"
-#include "../vector.hpp"
+#include "shared\client_types.hpp"
+#include "shared\vector.hpp"
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 namespace intercept {
 	namespace sqf {
 		namespace __helpers {

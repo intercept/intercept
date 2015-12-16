@@ -1,13 +1,21 @@
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"
-#include "client\client_types.hpp"
+#include "shared\client_types.hpp"
 #include<vector>
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 
 namespace intercept {
-    namespace sqf {
+	namespace sqf {
+		struct game_resolution
+		{
+			vector2 resolution;
+			vector2 viewport;
+			float aspect_ratio;
+			float ui_scale;
+		};
+
 		namespace misc {
 			float acc_time();
 			object agent(team_member value_);
@@ -52,94 +60,94 @@ namespace intercept {
 			float diag_ticktime();
 			bool dialog();
 			float difficulty();
-			bool difficultyenabledrtd();
-			void disabledebriefingstats();
-			void disableserialization();
-			display displaynull();
-			float distributionregion();
+			bool difficulty_enabled_rtd();
+			void disable_debriefing_stats();
+			void disable_serialization();
+			display display_null();
+			float distribution_region();
 			side east();
-			void enableenddialog();
-			void endloadingscreen();
-			float estimatedendservertime();
+			void enable_end_dialog();
+			void end_loading_screen();
+			float estimated_end_server_time();
 			void exit();
-			void finishmissioninit();
+			void finish_mission_init();
 			bool fog();
-			float fogforecast();
-			std::vector<float> fogparams();
-			void forceend();
-			void forceweatherchange();
-			bool freelook();
+			float fog_forecast();
+			std::vector<float> fog_params();
+			void force_end();
+			void force_weather_change();
+			bool free_look();
 			// TODO array[] getartillerycomputersettings(); // ["Semi (medium)","HE Mortar Shells",0]
 			std::string getclientstate();
 			// TODO not on biki getdlcassetsusage();
 			float getelevationoffset();
 			// TODO not on biki std::vector<std::string> getmissiondlcs();
-			std::array<float, 2> getmouseposition();
-			std::array<float, 2> getobjectviewdistance();
-			bool getremotesensorsdisabled();
-			std::array<float, 6> getresolution();
-			float getshadowdistance();
-			float gettotaldlcusagetime();
+			vector2 get_mouse_position();
+			std::array<float, 2> get_object_view_distance();
+			bool get_remote_sensors_disabled();
+			game_resolution get_resolution();
+			float get_shadow_distance();
+			float get_total_dlc_usage_time();
 			float gusts();
 			void halt();
-			bool hasinterface();
-			bool hcshownbar();
+			bool has_interface();
+			bool hc_shown_bar();
 			// TODO hud_movement_levels hudmovementlevels();
 			float humidity();
 			side independent();
-			void initambientlife();
-			bool isautotest();
-			bool isfilepatchingenabled();
-			bool isinstructorfigureenabled();
-			bool ispipenabled();
-			bool issteammission();
-			bool isstreamfriendlyuienabled();
-			bool isstressdamageenabled();
-			bool istuthintsenabled();
+			void init_ambient_life();
+			bool is_autotest();
+			bool is_filepatching_enabled();
+			bool is_instructor_figure_enabled();
+			bool is_pip_enabled();
+			bool is_steam_mission();
+			bool is_stream_friendly_ui_enabled();
+			bool is_stress_damage_enabled();
+			bool is_tut_hints_enabled();
 			std::string language();
-			std::vector<std::array<std::string, 2>> librarycredits();
-			std::vector<std::string> librarydisclaimers();
+			std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
+			std::vector<std::string> library_disclaimers();
 			float lightnings();
-			std::string linebreak();
-			void loadgame();
-			location locationnull();
-			void logentities();
-			void mapanimclear();
-			void mapanimcommit();
-			bool mapanimdone();
-			bool markasfinishedonsteam();
-			config missionconfigfile();
-			float missiondifficulty();
-			std::string missionname();
-			rv_namespace missionnamespace();
-			std::array<float, 6> missionstart();
-			float moonintensity();
-			float musicvolume();
-			float nextweatherchange();
-			object objnull();
+			std::string line_break();
+			void load_game();
+			location location_null();
+			void log_entities();
+			void map_anim_clear();
+			void map_anim_commit();
+			bool map_anim_done();
+			bool mark_as_finished_on_steam();
+			config mission_config_file();
+			float mission_difficulty();
+			std::string mission_name();
+			rv_namespace mission_namespace();
+			std::array<float, 6> mission_start();
+			float moon_intensity();
+			float music_volume();
+			float next_weather_change();
+			object obj_null();
 			side opfor();
 			float overcast();
-			float overcastforecast();
-			rv_namespace parsingnamespace();
-			float particlesquality();
+			float overcast_forecast();
+			rv_namespace parsing_namespace();
+			float particles_quality();
 			float pi();
-			float pixelh();
-			float pixelw();
-			std::vector<object> playableunits();
+			float pixel_h();
+			float pixel_w();
+			std::vector<object> playable_units();
 			object player();
-			float playerrespawntime();
-			side playerside();
+			float player_respawn_time();
+			side player_side();
 			// TODO implement product_version productversion();
-			std::string profilename();
-			rv_namespace profilenamespace();
-			std::string profilenamesteam();
-			float radiovolume();
+			std::string profile_name();
+			rv_namespace profile_namespace();
+			std::string profile_namesteam();
+			float radio_volume();
 			float rain();
 			float rainbow();
-			void resetcamshake();
+			void reset_cam_shake();
 			side resistance();
-			bool reversedmousey();
-			void runinitscript();
+			bool reversed_mouse_y();
+			void run_init_script();
 
 			bool visible_watch();
 			bool visible_map();
@@ -556,7 +564,7 @@ namespace intercept {
 			float size_of(std::string value_);
 			float skill(object value_);
 			void skip_time(float value_);
-			void sleep(float value_);
+			//void sleep(float value_);
 			float slider_position(control value_);
 			float slider_position(float value_);
 			bool some_ammo(object value_);
@@ -607,24 +615,24 @@ namespace intercept {
 			void add_item_to_backpack(object value0_, const std::string& value1_);
 			void add_item_to_uniform(object value0_, const std::string& value1_);
 			void add_item_to_vest(object value0_, const std::string& value1_);
-			void add_live_stats(float value0_, object value1_);
+			void add_live_stats(object value0_, float value1_);
 			void add_magazine(object value0_, const std::string& value1_);
 			void add_magazine_global(object value0_, const std::string& value1_);
 			void add_primary_weapon_item(object value0_, const std::string& value1_);
-			void add_rating(float value0_, object value1_);
-			void add_score(float value0_, object value1_);
-			void add_score_side(float value0_, side value1_);
+			void add_rating(object value0_, float value1_);
+			void add_score(object value0_, float value1_);
+			void add_score_side(side value0_, float value1_);
 			void add_secondary_weapon_item(object value0_, const std::string& value1_);
 			void add_uniform(object value0_, const std::string& value1_);
-			void add_vehicle(object value0_, group value1_);
+			void add_vehicle(group value0_, object value1_);
 			void add_vest(object value0_, const std::string& value1_);
 			void add_weapon(object value0_, const std::string& value1_);
 			void add_weapon_global(object value0_, const std::string& value1_);
-			void allow3dmode(bool value0_, control value1_);
-			void allow_crew_in_immobile(bool value0_, object value1_);
-			void allow_damage(bool value0_, object value1_);
-			void allow_dammage(bool value0_, object value1_);
-			void allow_file_operations(bool value0_, control value1_);
+			void allow3dmode(control value0_, bool value1_);
+			void allow_crew_in_immobile(object value0_, bool value1_);
+			void allow_damage(object value0_, bool value1_);
+			void allow_dammage(object value0_, bool value1_);
+			void allow_file_operations(control value0_, bool value1_);
 			void allow_sprint(bool value0_, object value1_);
 			float ammo(object value0_, const std::string& value1_);
 			float animation_phase(object value0_, const std::string& value1_);

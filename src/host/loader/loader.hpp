@@ -3,10 +3,10 @@
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "types.hpp"
+#include "shared\types.hpp"
 #include <unordered_set>
 
-using namespace intercept::rv_types;
+using namespace intercept::types;
 
 namespace intercept {
     class loader

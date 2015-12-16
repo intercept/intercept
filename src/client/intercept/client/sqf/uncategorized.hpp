@@ -1,9 +1,9 @@
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"
-#include "client\client_types.hpp"
+#include "shared\client_types.hpp"
 
-using namespace intercept::client::types;
+using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
@@ -33,6 +33,24 @@ namespace intercept {
 			float cargo_index;
 			// turret path; // @todo
 			bool person_turret;
+		};
+
+		struct rv_color
+		{
+			float red;
+			float blue;
+			float green;
+			float alpha;
+
+			std::vector<game_value> __to_gv_vector() const
+			{
+				return std::vector<game_value> ({
+					game_value(red),
+					game_value(blue),
+					game_value(green),
+					game_value(alpha)
+				});
+			}
 		};
 
 
@@ -195,6 +213,53 @@ namespace intercept {
 
 			/* potential namespace: misc */
 			std::vector<float> get_dlcs(float filter_);
+
+			/* potential namespace: dialogs, ui, listbox */
+			float lb_add(int control_id_, std::string text_);
+			float lb_add(control control_, std::string text_);
+			float lb_color(int control_id_, int index_);
+			float lb_color(control control_, int index_);
+			float lb_color_right(int control_id_, int index_);
+			float lb_color_right(control control_, int index_);
+			std::string lb_data(int control_id_, int index_);
+			std::string lb_data(control control_, int index_);
+			void lb_delete(int control_id_, int index_);
+			void lb_delete(control control_, int index_);
+			std::string lb_picture(int control_id_, int index_);
+			std::string lb_picture(control control_, int index_);
+			std::string lb_picture_right(int control_id_, int index_);
+			std::string lb_picture_right(control control_, int index_);
+			std::vector<float> lb_selection(control control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
+			void lb_set_color(int control_id_, int index_, rv_color color_);
+			void lb_set_color(control control_, int index_, rv_color color_);
+			void lb_set_color_right(int control_id_, int index_, rv_color color_);
+			void lb_set_color_right(control control_, int index_, rv_color color_);
+			void lb_set_cur_sel(int control_id_, int index_);
+			void lb_set_cur_sel(control control_, int index_);
+			void lb_set_data(int control_id_, int index_, std::string data_);
+			void lb_set_data(control control_, int index_, std::string data_);
+			void lb_set_picture(int control_id_, int index_, std::string name_);
+			void lb_set_picture(control control_, int index_, std::string name_);
+			void lb_set_picture_right(int control_id_, int index_, std::string name_);
+			void lb_set_picture_right(control control_, int index_, std::string name_);
+			void lb_set_picture_color(int control_id_, int index_, rv_color color_);
+			void lb_set_picture_color(control control_, int index_, rv_color color_);
+			void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_);
+			void lb_set_picture_color_disabled(control control_, int index_, rv_color color_);
+			void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
+			void lb_set_picture_color_selected(control control_, int index_, rv_color color_);
+			void lb_set_tooltip(int control_id_, int index_, std::string tooltip_);
+			void lb_set_tooltip(control control_, int index_, std::string tooltip_);
+			void lb_set_value(int control_id_, int index_, float val_);
+			void lb_set_value(control control_, int index_, float val_);
+			void lb_sort(control control_);
+			void lb_sort(control control_, std::string sort_order_);
+			std::string lb_text(int control_id_, int index_);
+			std::string lb_text(control control_, int index_);
+			std::string lb_text_right(int control_id_, int index_);
+			std::string lb_text_right(control control_, int index_);
+			float lb_value(int control_id_, int index_);
+			float lb_value(control control_, int index_);
 		}
 	}
 }

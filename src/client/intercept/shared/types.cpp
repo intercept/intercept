@@ -1,21 +1,20 @@
 #include "types.hpp"
+#include "client\client.hpp"
+#include "client_types.hpp"
+#include <assert.h>
+
+#define INTERNAL_TAG 0x0000dede
 
 namespace intercept {
-    namespace rv_types {
+    namespace types {
         uintptr_t game_data_string::type_def;
         uintptr_t game_data_string::data_type_def;
-
-        uintptr_t game_data_object::type_def;
-        uintptr_t game_data_object::data_type_def;
 
         uintptr_t game_data_number::type_def;
         uintptr_t game_data_number::data_type_def;
 
         uintptr_t game_data_array::type_def;
         uintptr_t game_data_array::data_type_def;
-
-        uintptr_t game_data_array_stack::type_def;
-        uintptr_t game_data_array_stack::data_type_def;
 
         uintptr_t game_data_bool::type_def;
         uintptr_t game_data_bool::data_type_def;
@@ -53,9 +52,15 @@ namespace intercept {
         uintptr_t game_data_namespace::type_def;
         uintptr_t game_data_namespace::data_type_def;
 
+        uintptr_t game_data_object::type_def;
+        uintptr_t game_data_object::data_type_def;
 
 
-        uintptr_t game_value::__vptr_def;
+
+        uintptr_t rv_game_value::__vptr_def;
+
+
+
         std::string rv_string::string() {
             return std::string((char *)&char_string);
         }
@@ -83,29 +88,603 @@ namespace intercept {
             }
         }
 
-        std::string game_data_string::get_string() {
-            return std::string((char *)&raw_string->char_string);
+        game_data_number::game_data_number() {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            number = 0.0f;
         }
 
-        bool game_data_string::set_string(std::string val_) {
-            if (ref_count_internal == 0x0000dede) {
-                if (val_.length() + 1 < 2048) {
-                    memcpy(&raw_string->char_string, val_.c_str(), val_.length() + 1);
-                    raw_string->length = val_.length() + 1;
-                    return true;
+        game_data_number::game_data_number(float val_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            number = val_;
+        }
+
+        game_data_number::game_data_number(const game_data_number & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            number = copy_.number;
+        }
+
+        game_data_number::game_data_number(game_data_number && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            number = move_.number;
+        }
+
+        game_data_number & game_data_number::operator=(const game_data_number & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            number = copy_.number;
+            return *this;
+        }
+
+        game_data_number & game_data_number::operator=(game_data_number && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            number = move_.number;
+            return *this;
+        }
+
+        game_data_bool::game_data_bool() {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            val = false;
+        }
+
+        game_data_bool::game_data_bool(bool val_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            val = val_;
+        }
+
+        game_data_bool::game_data_bool(const game_data_bool & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            val = copy_.val;
+        }
+
+        game_data_bool::game_data_bool(game_data_bool && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            val = move_.val;
+        }
+
+        game_data_bool & game_data_bool::operator=(const game_data_bool & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            val = copy_.val;
+            return *this;
+        }
+
+        game_data_bool & game_data_bool::operator=(game_data_bool && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            val = move_.val;
+            return *this;
+        }
+
+        game_data_string::game_data_string() {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            raw_string = allocate_string(128);
+            raw_string->length = 128;
+            raw_string->ref_count_internal = 1;
+        }
+
+        game_data_string::game_data_string(std::string str_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            raw_string = allocate_string(str_.length() + 1);
+            memcpy(&raw_string->char_string, str_.c_str(), str_.length() + 1);
+            raw_string->length = str_.length() + 1;
+            raw_string->ref_count_internal = 1;
+        }
+
+        game_data_string::game_data_string(const game_data_string & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            raw_string = allocate_string(copy_.raw_string->length);
+            memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
+            raw_string->length = copy_.raw_string->length;
+            raw_string->ref_count_internal = 1;
+        }
+
+        game_data_string::game_data_string(game_data_string && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            free_string(raw_string);
+            raw_string = move_.raw_string;
+            move_.raw_string = nullptr;
+        }
+
+        game_data_string & game_data_string::operator=(const game_data_string & copy_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            raw_string = allocate_string(copy_.raw_string->length);
+            memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
+            raw_string->length = copy_.raw_string->length;
+            raw_string->ref_count_internal = 1;
+            return *this;
+        }
+
+        game_data_string & game_data_string::operator=(game_data_string && move_)
+        {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = move_.ref_count_internal;
+            free_string(raw_string);
+            raw_string = move_.raw_string;
+            move_.raw_string = nullptr;
+            return *this;
+        }
+
+        void game_data_string::free() {
+            if (raw_string)
+                free_string(raw_string);
+        }
+
+        game_data_string::~game_data_string()
+        {
+            free();
+        }
+
+
+        game_data_array::game_data_array() {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            length = 0;
+            max_size = 0;
+            data = nullptr;
+        }
+
+        game_data_array::game_data_array(size_t size_) {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            data = new game_value[size_];
+            length = size_;
+            max_size = size_;
+        }
+
+        game_data_array::game_data_array(const std::vector<game_value> &init_) {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            data = new game_value[init_.size()];
+            length = init_.size();
+            max_size = init_.size();
+            size_t i = 0;
+            for (auto it = init_.begin(); it != init_.end(); ++it) {
+                data[i++] = *it;
+            }
+        }
+
+        game_data_array::game_data_array(const game_data_array & copy_) {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            length = copy_.length;
+            max_size = copy_.max_size;
+            data = new game_value[length];
+            for (size_t i = 0; i < length; ++i)
+                data[i] = copy_.data[i];
+        }
+
+        game_data_array::game_data_array(game_data_array && move_) {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            data = move_.data;
+            length = move_.length;
+            max_size = move_.max_size;
+            move_.data = nullptr;
+        }
+
+        game_data_array & game_data_array::operator = (const game_data_array &copy_) {
+            type = type_def;
+            data_type = data_type_def;
+            ref_count_internal = INTERNAL_TAG;
+            length = copy_.length;
+            data = new game_value[length];
+            for (size_t i = 0; i < length; ++i)
+                data[i] = copy_.data[i];
+            return *this;
+        }
+
+        game_data_array & game_data_array::operator = (game_data_array &&move_) {
+            if (this == &move_)
+                return *this;
+            if (data)
+                delete[] data;
+            data = move_.data;
+            length = move_.length;
+            max_size = move_.max_size;
+            move_.data = nullptr;
+            return *this;
+        }
+        
+        void game_data_array::free() {
+            if (data)
+                delete[] data;
+        }
+
+        game_data_array::~game_data_array() {
+            free();
+        }
+
+        game_value::game_value() {
+            rv_data.data = nullptr;
+        }
+
+        void game_value::copy(const game_value & copy_) {
+            rv_data.__vptr = copy_.rv_data.__vptr;
+            if (copy_.rv_data.data) {
+                if (copy_.rv_data.data->type == game_data_number::type_def) {
+                    rv_data.data = new game_data_number();
+                    ((game_data_number *)rv_data.data)->operator=(*((game_data_number *)copy_.rv_data.data));
+                }
+                else if (copy_.rv_data.data->type == game_data_bool::type_def) {
+                    rv_data.data = new game_data_bool();
+                    ((game_data_bool *)rv_data.data)->operator=(*((game_data_bool *)copy_.rv_data.data));
+                }
+                else if (copy_.rv_data.data->type == game_data_array::type_def) {
+                    rv_data.data = new game_data_array();
+                    ((game_data_array *)rv_data.data)->operator=(*((game_data_array *)copy_.rv_data.data));
+                }
+                else if (copy_.rv_data.data->type == game_data_string::type_def) {
+                    rv_data.data = new game_data_string();
+                    ((game_data_string *)rv_data.data)->operator=(*((game_data_string *)copy_.rv_data.data));
+                }
+                else {
+                    rv_data.data = copy_.rv_data.data;
                 }
             }
+        }
+
+        game_value::game_value(const game_value & copy_) {
+            copy(copy_);
+        }
+
+        game_value::game_value(game_value && move_) {
+            rv_data.__vptr = move_.rv_data.__vptr;
+            rv_data.data = move_.rv_data.data;
+            move_.rv_data.data = nullptr;
+        }
+
+        game_value::game_value(rv_game_value internal_)
+        {
+            rv_data.__vptr = internal_.__vptr;
+            rv_data.data = (game_data *)internal_.data;
+        }
+
+        game_value::game_value(float val_)
+        {
+            rv_data.data = new game_data_number(val_);
+        }
+
+        game_value::game_value(bool val_)
+        {
+            rv_data.data = new game_data_bool(val_);
+        }
+
+        game_value::game_value(const std::string &val_)
+        {
+            rv_data.data = new game_data_string(val_);
+        }
+
+        game_value::game_value(const char *val_)
+        {
+            rv_data.data = new game_data_string(val_);
+        }
+
+        game_value::game_value(const std::vector<game_value> &list_)
+        {
+            rv_data.data = new game_data_array(list_);
+        }
+
+        game_value::game_value(vector3 & vec_)
+        {
+            rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });
+        }
+
+        game_value::game_value(vector2 & vec_)
+        {
+            rv_data.data = new game_data_array({ vec_.x, vec_.y });
+        }
+        game_value::game_value(internal_object internal_)
+        {
+            rv_data.data = internal_.value->value.rv_data.data;
+            rv_data.__vptr = internal_.value->value.rv_data.__vptr;
+        }
+        game_value::~game_value() {
+            _free();
+        }
+
+        void game_value::_free()
+        {
+            // Ghetto superstar...
+            if (rv_data.data && rv_data.data->ref_count_internal == INTERNAL_TAG) {
+                /*
+                 We have no virtual tables because we need to keep the internal games'
+                 memory structure intact, so we gotta do it ourselves.
+
+                 Any game_data types that allocate their own memory need to have their
+                 destructor called here before we delete the pointer.
+                */
+                if (rv_data.data && rv_data.data->type == game_data_array::type_def)
+                    ((game_data_array *)rv_data.data)->free(); // ... that is what you are.
+                else if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                    ((game_data_string *)rv_data.data)->free(); // ... that is what you are.
+                if (rv_data.data)
+                    delete rv_data.data;
+            }
+            else {
+                /*
+                 How this works? We need to free data allocated in the engine process in the engine
+                 process. So we know it isn't our own created data because we tag with INTERNAL_TAG
+                 (0x0000dede) and we pass back the game_value to the engine. The engine then copies
+                 the ptr address of the raw rv_game_value to its pool of game_values to delete later
+                 and we can just null out the ptr here, effectively freeing the memory in the context
+                 of the object (the actual memory will be freed later by the game process).
+                */
+                if (rv_data.data && (
+                    rv_data.data->type == game_data_number::type_def ||
+                    rv_data.data->type == game_data_bool::type_def ||
+                    rv_data.data->type == game_data_array::type_def ||
+                    rv_data.data->type == game_data_string::type_def
+                    )) {
+                    client::host::functions.free_value(this);
+                    rv_data.data = nullptr;
+                }
+            }
+        }
+
+        game_value & game_value::operator = (const game_value &copy_) {
+            copy(copy_);
+            return *this;
+        }
+        game_value & game_value::operator = (game_value &&move_) {
+            if (this == &move_)
+                return *this;
+            if (rv_data.data) // this needs to be properly freed from where it came.
+                _free();
+            rv_data.__vptr = move_.rv_data.__vptr;
+            rv_data.data = move_.rv_data.data;
+            move_.rv_data.data = nullptr;
+            return *this;
+        }
+
+        game_value & game_value::operator=(const float val_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_number(val_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(bool val_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_bool(val_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(std::string val_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_string(val_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(const char * val_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_string(val_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(const std::vector<game_value> &list_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_array(list_);
+            return *this;
+        }
+
+        game_value & game_value::operator=(vector3 vec_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });
+            return *this;
+        }
+
+        game_value & game_value::operator=(vector2 vec_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = new game_data_array({ vec_.x, vec_.y });
+            return *this;
+        }
+
+        game_value & game_value::operator=(internal_object internal_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = ((game_value)internal_).rv_data.data;
+            rv_data.__vptr = ((game_value)internal_).rv_data.__vptr;
+            return *this;
+        }
+
+        game_value & game_value::operator=(rv_game_value internal_)
+        {
+            if (rv_data.data)
+                _free();
+            rv_data.data = internal_.data;
+            rv_data.__vptr = internal_.__vptr;
+            return *this;
+        }
+
+        game_value::operator float()
+        {
+            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
+                return ((game_data_number *)rv_data.data)->number;
+            return 0.0f;
+        }
+
+        game_value::operator bool()
+        {
+            if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
+                return ((game_data_bool *)rv_data.data)->val;
             return false;
         }
 
-        game_value::game_value() : __vptr(NULL), data(NULL) {
-            __vptr = __vptr_def;
-        };
-
-        void game_data_array::allocate(size_t size_) {
-            data = new game_value[size_];
+        game_value::operator rv_game_value *()
+        {
+            return &rv_data;
         }
-    }
+
+        game_value::operator vector3()
+        {
+            return vector3(
+                ((game_data_array *)rv_data.data)->data[0],
+                ((game_data_array *)rv_data.data)->data[1],
+                ((game_data_array *)rv_data.data)->data[2]
+                );
+        }
+
+        game_value::operator vector2()
+        {
+            return vector2(
+                ((game_data_array *)rv_data.data)->data[0],
+                ((game_data_array *)rv_data.data)->data[1]
+                );
+        }
+
+        game_value::operator float() const
+        {
+            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
+                return ((game_data_number *)rv_data.data)->number;
+            return 0.0f;
+        }
+
+        game_value::operator bool() const
+        {
+            if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
+                return ((game_data_bool *)rv_data.data)->val;
+            return false;
+        }
+
+        game_value::operator vector3() const
+        {
+            return vector3(
+                ((game_data_array *)rv_data.data)->data[0],
+                ((game_data_array *)rv_data.data)->data[1],
+                ((game_data_array *)rv_data.data)->data[2]
+                );
+        }
+
+        game_value::operator vector2() const
+        {
+            return vector2(
+                ((game_data_array *)rv_data.data)->data[0],
+                ((game_data_array *)rv_data.data)->data[1]
+                );
+        }
+
+        game_value::operator std::string() const
+        {
+            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                return std::string(&((game_data_string *)rv_data.data)->raw_string->char_string);
+            return std::string();
+        }
+
+        game_value::operator std::string()
+        {
+            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                return std::string(&((game_data_string *)rv_data.data)->raw_string->char_string);
+            return std::string();
+        }
+
+        game_value & game_value::operator [](int i_) {
+            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && i_ < ((game_data_array *)rv_data.data)->length);
+            return ((game_data_array *)rv_data.data)->data[i_];
+        }
+
+        game_value game_value::operator [](int i_) const {
+            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && i_ < ((game_data_array *)rv_data.data)->length);
+            return ((game_data_array *)rv_data.data)->data[i_];
+        }
+
+        uintptr_t game_value::type() {
+            if (rv_data.data)
+                return rv_data.data->type;
+            return 0x0;
+        }
+
+        size_t game_value::length() {
+            if (type() == game_data_array::type_def)
+                return ((game_data_array *)rv_data.data)->length;
+        }
+
+        bool game_value::client_owned() {
+            if (rv_data.data && rv_data.data->ref_count_internal == 0x0000dede)
+                return true;
+            return false;
+        }
+
+
+
+        rv_string * allocate_string(size_t size_) {
+            return client::host::functions.allocate_string(size_);
+        }
+
+        void free_string(rv_string * str_) {
+            client::host::functions.free_string(str_);
+        }
+
+        const void rv_game_value::deallocate()
+        {
+            data = nullptr;
+        }
+
+}
 }
 
 

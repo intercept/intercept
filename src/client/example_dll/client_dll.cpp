@@ -15,19 +15,15 @@ int __cdecl intercept::api_version() {
 }
 
 void __cdecl intercept::on_frame() {
-    float rand_val = intercept::sqf::__math::random(100.0f);
     std::stringstream side_chat_msg;
     
     object player = intercept::sqf::core::player();
     vector3 pos = intercept::sqf::position::get_pos_asl(player);
-    game_value_array<2> test_args;
-    test_args[0] = game_value_string("Test: %1");
-    game_value formatted_string = intercept::client::host::functions.invoke_raw_unary(intercept::client::__sqf::unary__format__array__ret__string, test_args);
-    pos = intercept::sqf::position::get_pos_asl(player);
-    //side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
+
+    side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "]";
     //object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
-    //intercept::sqf::chat::side_chat(player, side_chat_msg.str());
-    //intercept::sqf::position::set_pos_asl(player, pos);
+    intercept::sqf::chat::side_chat(player, side_chat_msg.str());
+    //intercept::sqf::position::set_pos_asl(test, pos);
 }
 
 

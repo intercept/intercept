@@ -237,7 +237,6 @@ namespace intercept {
 		const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
 
 		namespace waypoints {
-			/* potential namespace: waypoint, waypoints */
 			object waypoint_attached_object(waypoint& wp_);
 			object waypoint_attached_vehicle(waypoint & wp_);
 			waypoint::behaviour waypoint_behaviour(waypoint & wp_);

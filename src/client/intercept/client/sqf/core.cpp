@@ -213,7 +213,7 @@ namespace intercept {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__task__ret__array, value_));
             }
-            std::vector<std::string> all_variables(location value_) {
+            std::vector<std::string> all_variables(const location &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__location__ret__array, value_));
             }

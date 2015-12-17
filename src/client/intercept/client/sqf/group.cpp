@@ -15,7 +15,7 @@ namespace intercept {
 				return __helpers::__retrieve_nular_group(client::__sqf::nular__grpnull__ret__group);
 			}
 
-			void clear_group_icons(group value_) {
+			void clear_group_icons(const group &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__cleargroupicons__group__ret__nothing, value_);
 			}
 
@@ -23,7 +23,7 @@ namespace intercept {
 				return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, value_));
 			}
 
-			void delete_group(group value_) {
+			void delete_group(const group &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__deletegroup__group__ret__nothing, value_);
 			}
 
@@ -31,35 +31,35 @@ namespace intercept {
 				return group(host::functions.invoke_raw_unary(client::__sqf::unary__groupfromnetid__string__ret__group, value_));
 			}
 
-			std::string group_id(group value_) {
+			std::string group_id(const group &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_));
 			}
 
-			float group_owner(group value_) {
+			float group_owner(const group &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_));
 			}
 
-			bool set_group_owner(group value1_, float value0_) {
+			bool set_group_owner(const group &value1_, float value0_) {
 				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, value0_, value1_));
 			}
 
-			object leader(group value_) {
+			object leader(const group &value_) {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, value_));
 			}
 
-			void group_radio(object value0_, const std::string& value1_) {
+			void group_radio(const object &value0_, const std::string& value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void remove_group_icon(group value1_, float value0_) {
+			void remove_group_icon(const group &value1_, float value0_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void select_leader(object value0_, group value1_) {
+			void select_leader(const object &value0_, const group &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value1_, value0_);
 			}
 
-			float current_waypoint(group value_) {
+			float current_waypoint(const group &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, value_));
 			}
 

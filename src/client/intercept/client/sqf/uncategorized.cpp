@@ -134,7 +134,7 @@ namespace intercept {
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__assigneditems__object__ret__array, unit_));
 			}
 
-			object attached_object(location loc_)
+			object attached_object(const location &loc_)
 			{
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobject__location__ret__object, loc_));
 			}
@@ -303,7 +303,7 @@ namespace intercept {
 
 
 			// What a confusing command name.
-			std::string class_name(location loc_)
+			std::string class_name(const location &loc_)
 			{
 				return game_value( host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_) );
 			}
@@ -347,8 +347,8 @@ namespace intercept {
 			object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/)
 			{
 				std::vector<game_value> markers;
-				for (auto it : markers_)
-					markers.push_back(game_value(it));
+				for (auto &it : markers_)
+					markers.push_back(it);
 
 				game_value args({
 					type_,
@@ -422,8 +422,8 @@ namespace intercept {
 			object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
-				for (auto it : markers_)
-					markers.push_back(game_value(it));
+				for (auto &it : markers_)
+					markers.push_back(it);
 
 				game_value args({
 					type_,
@@ -439,7 +439,7 @@ namespace intercept {
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
-					markers.push_back(game_value(it));
+					markers.push_back(it);
 
 				game_value args({
 					type_,

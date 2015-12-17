@@ -45,10 +45,10 @@ namespace intercept {
 			std::vector<game_value> __to_gv_vector() const
 			{
 				return std::vector<game_value> ({
-					game_value(red),
-					game_value(blue),
-					game_value(green),
-					game_value(alpha)
+					red,
+					blue,
+					green,
+					alpha
 				});
 			}
 		};
@@ -81,7 +81,7 @@ namespace intercept {
 			void add_to_remains_collector(std::vector<object> objects_);
 
 			/* potential namespace: medical, misc, unit */
-			void ais_finish_heal(object &wounded_, const object &medic_, bool medic_can_heal_);
+			void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
 
 			/* potential namespace: core, display, all */
 			std::vector<control> all_controls(const display &display_); // TODO implement all_controls
@@ -94,7 +94,7 @@ namespace intercept {
 			std::vector<std::string> assigned_items(const object &unit_);
 
 			/* potential namespace: misc, attach */
-			object attached_object(location loc_);
+			object attached_object(const location &loc_);
 			std::vector<object> attached_objects(const object &obj_);
 			object attached_to(const object &obj_);
 
@@ -123,7 +123,7 @@ namespace intercept {
 			void ctrl_show(const control &control_, bool show_);
 
 			/* potential namespace: locations */
-			std::string class_name(location loc_);
+			std::string class_name(const location &loc_);
 			location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
 			location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_);
 			location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);

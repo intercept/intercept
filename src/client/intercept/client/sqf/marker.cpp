@@ -146,7 +146,7 @@ namespace intercept {
 				});
 
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
-			}              
+			}
 		}
     }
 }

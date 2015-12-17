@@ -58,7 +58,7 @@ namespace intercept {
             std::vector<std::string> all_variables(rv_namespace value_);
             std::vector<std::string> all_variables(const group &value_);
             std::vector<std::string> all_variables(const task &value_);
-            std::vector<std::string> all_variables(location value_);
+            std::vector<std::string> all_variables(const location &value_);
 		}
     }
 }

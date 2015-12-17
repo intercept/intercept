@@ -8,8 +8,8 @@ namespace intercept {
     extern "C" {
         struct client_functions {
             rv_game_value(*invoke_raw_nular)(nular_function function_);
-            rv_game_value(*invoke_raw_unary)(unary_function function_, game_value right_arg_);
-            rv_game_value(*invoke_raw_binary)(binary_function function_, game_value left_arg_, game_value right_arg_);
+            rv_game_value(*invoke_raw_unary)(unary_function function_, const game_value &right_arg_);
+            rv_game_value(*invoke_raw_binary)(binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
 
             
 

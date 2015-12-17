@@ -9,7 +9,8 @@ namespace intercept {
         typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
         typedef uintptr_t(__cdecl *binary_function)(char *, uintptr_t, uintptr_t, uintptr_t);
 
-        typedef std::set<std::string> value_type;
+        typedef std::set<std::string> value_types;
+        typedef uintptr_t value_type;
 
         class rv_string {
         public:
@@ -38,7 +39,7 @@ namespace intercept {
             uintptr_t               v_table;
             value_entry             *single_type;
             compound_value_entry    *compound_type;
-            value_type type();
+            value_types type();
             std::string type_str();
         };
 
@@ -133,15 +134,15 @@ namespace intercept {
             game_value(const game_value &copy_);
             game_value(game_value &&move_);
 
-            game_value(rv_game_value internal_);
+            game_value(const rv_game_value internal_);
             game_value(float val_);
             game_value(bool val_);
             game_value(const std::string &val_);
             game_value(const char *);
             game_value(const std::vector<game_value> &list_);
-            game_value(vector3 &vec_);
-            game_value(vector2 &vec_);
-            game_value(internal_object internal_);
+            game_value(const vector3 &vec_);
+            game_value(const vector2 &vec_);
+            game_value(const internal_object internal_);
 
             ~game_value();
 
@@ -153,10 +154,10 @@ namespace intercept {
             game_value & operator = (const std::string val_);
             game_value & operator = (const char *val_);
             game_value & operator = (const std::vector<game_value> &list_);
-            game_value & operator = (vector3 vec_);
-            game_value & operator = (vector2 vec_);
-            game_value & operator = (internal_object internal_);
-            game_value & operator = (rv_game_value internal_);
+            game_value & operator = (const vector3 vec_);
+            game_value & operator = (const vector2 vec_);
+            game_value & operator = (const internal_object internal_);
+            game_value & operator = (const rv_game_value internal_);
 
 
 
@@ -175,11 +176,11 @@ namespace intercept {
             game_value & operator [](int i_);
             game_value operator [](int i_) const;
 
-            uintptr_t type();
+            uintptr_t type() const;
 
-            size_t length();
+            size_t length() const;
 
-            bool client_owned();
+            bool client_owned() const;
             rv_game_value rv_data;
         protected:
             void _free();

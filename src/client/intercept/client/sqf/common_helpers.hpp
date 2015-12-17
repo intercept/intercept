@@ -31,20 +31,20 @@ namespace intercept {
 			void __empty_unary_string(unary_function fnc_, const std::string &str_);
 			void __empty_unary_number(unary_function fnc_, float val_);
 			void __empty_unary_bool(unary_function fnc_, bool val_);
-			void __empty_unary_control(unary_function fnc_, control ctl_);
+			void __empty_unary_control(unary_function fnc_, const control &ctl_);
 
 			/** Common return/input helpers **/
 			bool __bool_unary_object(unary_function fnc_, const object &obj_);
 			bool __bool_unary_string(unary_function fnc_, const std::string &str_);
 			bool __bool_unary_number(unary_function fnc_, float val_);
-			bool __bool_unary_control(unary_function fnc_, control ctl_);
+			bool __bool_unary_control(unary_function fnc_, const control &ctl_);
 
 			float __number_unary_number(unary_function fnc_, float val_);
-			float __number_unary_control(unary_function fnc_, control ctl_);
+			float __number_unary_control(unary_function fnc_, const control &ctl_);
 			float __number_unary_string(unary_function fnc_, const std::string &str_);
 			float __number_unary_object(unary_function fnc_, const object &obj_);
 
-			std::string __string_unary_control(unary_function fnc_, control ctl_);
+			std::string __string_unary_control(unary_function fnc_, const control &ctl_);
 			std::string __string_unary_object(unary_function fnc_, const object &obj_);
 			std::string __string_unary_string(unary_function fnc_, const std::string &str_);
 

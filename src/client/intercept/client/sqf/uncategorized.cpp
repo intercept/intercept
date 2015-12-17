@@ -103,8 +103,8 @@ namespace intercept {
 			void add_to_remains_collector(std::vector<object> objects_)
 			{
                 std::vector<game_value> objects;
-                for (auto it : objects_)
-                    objects.push_back(game_value(it));
+                for (auto &it : objects_)
+                    objects.push_back(it);
                 host::functions.invoke_raw_unary(client::__sqf::unary__addtoremainscollector__array__ret__nothing, objects);
 			}
 
@@ -628,8 +628,8 @@ namespace intercept {
 			std::vector<std::string> get_artillery_ammo(const std::vector<object>& units_)
 			{
 				std::vector<game_value> units;
-				for (auto it : units_)
-					units.push_back(game_value(it));
+				for (auto &it : units_)
+					units.push_back(it);
 
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getartilleryammo__array__ret__array, units));
 			}

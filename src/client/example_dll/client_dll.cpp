@@ -18,6 +18,9 @@ void __cdecl intercept::on_frame() {
     std::stringstream side_chat_msg;
     
     object player = intercept::sqf::core::player();
+    {
+        object another_player = player;
+    }
     vector3 pos = intercept::sqf::position::get_pos_asl(player);
     float world_size = intercept::sqf::misc::safe_zone_w();
     side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "] World Size: " << world_size;

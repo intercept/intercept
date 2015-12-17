@@ -18,7 +18,7 @@ namespace intercept {
 
 		namespace misc {
 			float acc_time();
-			object agent(team_member value_);
+			object agent(const team_member &value_);
 			std::vector<std::string> activated_addons();
 			std::vector<team_member> agents();
 			//std::vector<?> airdensity_curvertd(); // no entry on the biki
@@ -247,7 +247,7 @@ namespace intercept {
 			bool completed_fsm(float value_);
 			void copy_to_clipboard(const std::string &value_);
 			float count(const std::string &value_);
-			side create_center(side value_);
+			side create_center(const side &value_);
 			bool create_dialog(const std::string &value_);
 			void create_vehicle_crew(const object &value_);
 			std::string current_command(const object &value_);
@@ -260,7 +260,7 @@ namespace intercept {
 			float damage(const object &value_);
 			void de_activate_key(const std::string &value_);
 			float debriefing_text(const std::string &value_);
-			void delete_center(side value_);
+			void delete_center(const side &value_);
 			void delete_collection(const object &value_);
 			bool delete_identity(const std::string &value_);
 
@@ -465,8 +465,8 @@ namespace intercept {
 			std::string pitch(const object &value_);
 			void play_music(const std::string &value_);
 			void play_sound(const std::string &value_);
-			float playable_slots_number(side value_);
-			float players_number(side value_);
+			float playable_slots_number(const side &value_);
+			float players_number(const side &value_);
 			bool pp_effect_committed(const std::string &value_);
 			bool pp_effect_committed(float value_);
 			void pp_effect_destroy(float value_);
@@ -521,7 +521,7 @@ namespace intercept {
 			void save_var(const std::string &value_);
 			void scope_name(const std::string &value_);
 			float score(const object &value_);
-			float score_side(side value_);
+			float score_side(const side &value_);
 			void script_name(const std::string &value_);
 			float scud_state(const object &value_);
 			std::string secondary_weapon(const object &value_);
@@ -621,7 +621,7 @@ namespace intercept {
 			void add_primary_weapon_item(const object &value0_, const std::string& value1_);
 			void add_rating(const object &value0_, float value1_);
 			void add_score(const object &value0_, float value1_);
-			void add_score_side(side value0_, float value1_);
+			void add_score_side(const side &value0_, float value1_);
 			void add_secondary_weapon_item(const object &value0_, const std::string& value1_);
 			void add_uniform(const object &value0_, const std::string& value1_);
 			void add_vehicle(const group &value0_, const object &value1_);
@@ -713,7 +713,7 @@ namespace intercept {
 			bool kb_add_database_targets(const object &value0_, const std::string& value1_);
 			bool kb_has_topic(const object &value0_, const std::string& value1_);
 			void kb_remove_topic(const object &value0_, const std::string& value1_);
-			float knows_about(const object &value0_, side value1_);
+			float knows_about(const object &value0_, const side &value1_);
 			void land(const object &value0_, const std::string& value1_);
 			void land_at(const object &value0_, float value1_);
 			float lb_add(const control &value0_, const std::string& value1_);
@@ -741,7 +741,7 @@ namespace intercept {
 			void lock_driver(const object &value0_, bool value1_);
 			bool locked_cargo(const object &value0_, float value1_);
 			void map_center_on_camera(const control &value0_, bool value1_);
-			bool mine_detected_by(const object &value0_, side value1_);
+			bool mine_detected_by(const object &value0_, const side &value1_);
 			void move_object_to_end(const control &value0_, const std::string& value1_);
 			void play_action(const object &value0_, const std::string& value1_);
 			void play_action_now(const object &value0_, const std::string& value1_);
@@ -756,7 +756,7 @@ namespace intercept {
 			void public_variable_client(float value0_, const std::string& value1_);
 			void radio_channel_set_call_sign(float value0_, const std::string& value1_);
 			void radio_channel_set_label(float value0_, const std::string& value1_);
-			bool register_task(team_member value0_, const std::string& value1_);
+			bool register_task(const team_member &value0_, const std::string& value1_);
 			void remove_action(const object &value0_, float value1_);
 			void remove_all_event_handlers(const object &value0_, const std::string& value1_);
 			void remove_all_mpevent_handlers(const object &value0_, const std::string& value1_);
@@ -774,14 +774,14 @@ namespace intercept {
 			void remove_secondary_weapon_item(const object &value0_, const std::string& value1_);
 			void remove_weapon(const object &value0_, const std::string& value1_);
 			void remove_weapon_global(const object &value0_, const std::string& value1_);
-			void reveal_mine(const object &value0_, side value1_);
+			void reveal_mine(const object &value0_, const side &value1_);
 			bool save_identity(const object &value0_, const std::string& value1_);
 			bool save_status(const object &value0_, const std::string& value1_);
 			void select_diary_subject(const object &value0_, const std::string& value1_);
 			void select_weapon(const object &value0_, const std::string& value1_);
 			void send_simple_command(const object &value0_, const std::string& value1_);
 			void set_actual_collective_rtd(const object &value0_, float value1_);
-			void set_airport_side(float value0_, side value1_);
+			void set_airport_side(float value0_, const side &value1_);
 			void set_ammo_cargo(const object &value0_, float value1_);
 			void set_anim_speed_coef(const object &value0_, float value1_);
 			void set_autonomous(const object &value0_, bool value1_);
@@ -789,7 +789,7 @@ namespace intercept {
 			void set_cam_use_ti(float value0_, bool value1_);
 			void set_camera_interest(const object &value0_, float value1_);
 			void set_collision_light(const object &value0_, bool value1_);
-			void set_combat_mode(team_member value0_, const std::string& value1_);
+			void set_combat_mode(const team_member &value0_, const std::string& value1_);
 			void set_custom_aim_coef(const object &value0_, float value1_);
 			void set_custom_weight_rtd(const object &value0_, float value1_);
 			void set_damage(const object &value0_, float value1_);
@@ -800,11 +800,11 @@ namespace intercept {
 			void set_face(const object &value0_, const std::string& value1_);
 			void set_faceanimation(const object &value0_, float value1_);
 			void set_fatigue(const object &value0_, float value1_);
-			void set_flag_side(const object &value0_, side value1_);
+			void set_flag_side(const object &value0_, const side &value1_);
 			void set_flag_texture(const object &value0_, const std::string& value1_);
-			void set_formation(team_member value0_, const std::string& value1_);
+			void set_formation(const team_member &value0_, const std::string& value1_);
 			void set_formation_task(const object &value0_, const std::string& value1_);
-			void set_from_editor(team_member value0_, bool value1_);
+			void set_from_editor(const team_member &value0_, bool value1_);
 			void set_fuel(const object &value0_, float value1_);
 			void set_fuel_cargo(const object &value0_, float value1_);
 
@@ -864,38 +864,38 @@ namespace intercept {
 			std::string tv_tooltip(const control &value0_, float value1_);
 			void unassign_item(const object &value0_, const std::string& value1_);
 			void unlink_item(const object &value0_, const std::string& value1_);
-			bool unregister_task(team_member value0_, const std::string& value1_);
+			bool unregister_task(const team_member &value0_, const std::string& value1_);
 			void use_audio_time_for_moves(const object &value0_, bool value1_);
 			void vehicle_radio(const object &value0_, const std::string& value1_);
 
-			side create_center(side value_);
-			void delete_center(side value_);
-			void delete_team(team_member value_);
+			side create_center(const side &value_);
+			void delete_center(const side &value_);
+			void delete_team(const team_member &value_);
 			void do3denaction(const std::string& value_);
 			display find_display(float value_);
 			side flag_side(const object &value_);
-			std::string formation(team_member value_);
-			bool from_editor(team_member value_);
+			std::string formation(const team_member &value_);
+			bool from_editor(const team_member &value_);
 			void get3dengrid(const std::string& value_);
 			object get_editor_camera(const control &value_);
 			object hc_leader(const group &value_);
 			std::string image(const std::string& value_);
-			bool is_agent(team_member value_);
+			bool is_agent(const team_member &value_);
 			std::string key_image(float value_);
 			std::string key_name(float value_);
-			team_member leader(team_member value_);
+			team_member leader(const team_member &value_);
 			bool local(const group &value_);
 			std::string net_id(const group &value_);
 			object object_from_net_id(const std::string& value_);
 			bool open_map(bool value_);
 			float parse_number(bool value_);
 			std::string parse_text(const std::string& value_);
-			float playable_slots_number(side value_);
-			float players_number(side value_);
-			float score_side(side value_);
+			float playable_slots_number(const side &value_);
+			float players_number(const side &value_);
+			float score_side(const side &value_);
 			bool show_subtitles(bool value_);
-			std::string team_name(team_member value_);
-			std::string team_type(team_member value_);
+			std::string team_name(const team_member &value_);
+			std::string team_type(const team_member &value_);
 			float waypoint_timeout_current(const group &value_);
 
 			float radio_volume();

@@ -10,7 +10,7 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
 			}
 
-			object agent(team_member value_) {
+			object agent(const team_member &value_) {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__agent__team_member__ret__object, value_));
 			}
 
@@ -2210,7 +2210,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addscore__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void add_score_side(side value0_, float value1_) {
+			void add_score_side(const side &value0_, float value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addscoreside__side__scalar__ret__nothing, value0_, value1_);
 			}
 
@@ -2570,7 +2570,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__kbremovetopic__object__string__ret__nothing, value0_, value1_);
 			}
 
-			float knows_about(const object &value0_, side value1_) {
+			float knows_about(const object &value0_, const side &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__side__object__ret__scalar, value0_, value1_));
 			}
 
@@ -2682,7 +2682,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__mapcenteroncamera__control__bool__ret__nothing, value0_, value1_);
 			}
 
-			bool mine_detected_by(const object &value0_, side value1_) {
+			bool mine_detected_by(const object &value0_, const side &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__minedetectedby__object__side__ret__bool, value0_, value1_));
 			}
 
@@ -2742,7 +2742,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__radiochannelsetlabel__scalar__string__ret__nothing, value0_, value1_);
 			}
 
-			bool register_task(team_member value0_, const std::string& value1_) {
+			bool register_task(const team_member &value0_, const std::string& value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__registertask__team_member__string__ret__bool, value0_, value1_));
 			}
 
@@ -2814,7 +2814,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__removeweaponglobal__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void reveal_mine(const object &value0_, side value1_) {
+			void reveal_mine(const object &value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__revealmine__side__object__ret__nothing, value0_, value1_);
 			}
 
@@ -2842,7 +2842,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setactualcollectivertd__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void set_airport_side(float value0_, side value1_) {
+			void set_airport_side(float value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__scalar__side__ret__nothing, value0_, value1_);
 			}
 
@@ -2874,7 +2874,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, value0_, value1_);
 			}
 
-			void set_combat_mode(team_member value0_, const std::string& value1_) {
+			void set_combat_mode(const team_member &value0_, const std::string& value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
 			}
 
@@ -2918,7 +2918,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setfatigue__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void set_flag_side(const object &value0_, side value1_) {
+			void set_flag_side(const object &value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setflagside__object__side__ret__nothing, value0_, value1_);
 			}
 
@@ -2926,7 +2926,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setflagtexture__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void set_formation(team_member value0_, const std::string& value1_) {
+			void set_formation(const team_member &value0_, const std::string& value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
 			}
 
@@ -2934,7 +2934,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setformationtask__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void set_from_editor(team_member value0_, bool value1_) {
+			void set_from_editor(const team_member &value0_, bool value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value0_, value1_);
 			}
 
@@ -3166,7 +3166,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__unlinkitem__object__string__ret__nothing, value0_, value1_);
 			}
 
-			bool unregister_task(team_member value0_, const std::string& value1_) {
+			bool unregister_task(const team_member &value0_, const std::string& value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__unregistertask__team_member__string__ret__bool, value0_, value1_));
 			}
 
@@ -3178,15 +3178,15 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__vehicleradio__object__string__ret__nothing, value0_, value1_);
 			}
 
-			side create_center(side value_) {
+			side create_center(const side &value_) {
 				return side(host::functions.invoke_raw_unary(client::__sqf::unary__createcenter__side__ret__side, value_));
 			}
 
-			void delete_center(side value_) {
+			void delete_center(const side &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__deletecenter__side__ret__nothing, value_);
 			}
 
-			void delete_team(team_member value_) {
+			void delete_team(const team_member &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__deleteteam__team_member__ret__nothing, value_);
 			}
 
@@ -3202,11 +3202,11 @@ namespace intercept {
 				return side(host::functions.invoke_raw_unary(client::__sqf::unary__flagside__object__ret__side, value_));
 			}
 
-			std::string formation(team_member value_) {
+			std::string formation(const team_member &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__formation__team_member__ret__string, value_));
 			}
 
-			bool from_editor(team_member value_) {
+			bool from_editor(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__fromeditor__team_member__ret__bool, value_));
 			}
 
@@ -3226,7 +3226,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__image__string__ret__text, value_));
 			}
 
-			bool is_agent(team_member value_) {
+			bool is_agent(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isagent__team_member__ret__bool, value_));
 			}
 
@@ -3238,7 +3238,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__keyname__scalar__ret__string, value_));
 			}
 
-			team_member leader(team_member value_) {
+			team_member leader(const team_member &value_) {
 				return team_member(host::functions.invoke_raw_unary(client::__sqf::unary__leader__team_member__ret__team_member, value_));
 			}
 
@@ -3262,15 +3262,15 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__parsetext__string__ret__text, value_));
 			}
 
-			float playable_slots_number(side value_) {
+			float playable_slots_number(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__playableslotsnumber__side__ret__scalar, value_));
 			}
 
-			float players_number(side value_) {
+			float players_number(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__playersnumber__side__ret__scalar, value_));
 			}
 
-			float score_side(side value_) {
+			float score_side(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__scoreside__side__ret__scalar, value_));
 			}
 
@@ -3278,11 +3278,11 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__showsubtitles__bool__ret__bool, value_));
 			}
 
-			std::string team_name(team_member value_) {
+			std::string team_name(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__teamname__team_member__ret__string, value_));
 			}
 
-			std::string team_type(team_member value_) {
+			std::string team_type(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__teamtype__team_member__ret__string, value_));
 			}
 

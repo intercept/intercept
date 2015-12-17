@@ -7,6 +7,8 @@
 This is the main patching suit for Intercept. It contains all the functionality
 to search for and patch the RV engine. It also does the main memory analysis to
 find and catalog the SQF function pointers and store them.
+
+https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
@@ -231,14 +233,14 @@ namespace intercept {
 
         /*!
         @name SQF Function Map Accessors
-        */
-
-        /*!@{
-        @brief Return the associated function maps.
 
         These are accessors for the maps of function pointers. They return a
         std::map of functions, each entry being a std::vector of their specific
         implementation (only 1 if not overloaded).
+        */
+
+        /*!@{
+        @brief Return the associated function maps.
         */
         const unary_map & unary() const;
         const binary_map & binary() const;

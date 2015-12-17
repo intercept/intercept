@@ -15,7 +15,7 @@ namespace intercept {
 			group create_group(side value_);
 			void delete_group(const group &value_);
 
-			group group_from_net_id(std::string value_);
+			group group_from_net_id(const std::string &value_);
 			std::string group_id(const group &value_);
 			float group_owner(const group &value_);
 			bool set_group_owner(const group &value0_, float value1_);

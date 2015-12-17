@@ -603,7 +603,6 @@ namespace intercept {
 			std::string vest(object value_);
 			object vest_container(object value_);
 			float waypoint_timeout_current(group value_);
-			bool waypoints_enabled_uav(object value_);
 			bool weapon_lowered(object value_);
 
 			void add_backpack(object value0_, const std::string& value1_);
@@ -684,7 +683,6 @@ namespace intercept {
 			void enable_simulation(bool value0_, object value1_);
 			void enable_simulation_global(bool value0_, object value1_);
 			void enable_stamina(bool value0_, object value1_);
-			void enable_uavwaypoints(bool value0_, object value1_);
 			void engine_on(bool value0_, object value1_);
 			void fire(object value0_, const std::string& value1_);
 			void fly_in_height(float value0_, object value1_);
@@ -896,7 +894,6 @@ namespace intercept {
 			bool show_subtitles(bool value_);
 			std::string team_name(team_member value_);
 			std::string team_type(team_member value_);
-			float waypoint_timeout_current(group value_);
 
 			void save_game();
 			void save_joysticks();

@@ -24,7 +24,6 @@ namespace intercept {
 			void group_radio(object value0_, const std::string& value1_);
 			void remove_group_icon(float value0_, group value1_);
 			void select_leader(object value0_, group value1_);
-			float current_waypoint(group value_);
 			void set_group_icons_selectable(bool value_);
 		}
     }

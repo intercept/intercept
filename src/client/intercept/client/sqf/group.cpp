@@ -59,10 +59,6 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value1_, value0_);
 			}
 
-			float current_waypoint(group value_) {
-				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, value_));
-			}
-
 			void set_group_icons_selectable(bool value_) {
 				__helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, value_);
 			}

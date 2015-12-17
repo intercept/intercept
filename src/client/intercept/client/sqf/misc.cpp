@@ -2148,10 +2148,6 @@ namespace intercept {
 				return __helpers::__object_unary_object(client::__sqf::unary__vestcontainer__object__ret__object, value_);
 			}
 
-			bool waypoints_enabled_uav(object value_) {
-				return __helpers::__bool_unary_object(client::__sqf::unary__waypointsenableduav__object__ret__bool, value_);
-			}
-
 			bool weapon_lowered(object value_) {
 				return __helpers::__bool_unary_object(client::__sqf::unary__weaponlowered__object__ret__bool, value_);
 			}
@@ -2460,10 +2456,6 @@ namespace intercept {
 
 			void enable_stamina(bool value0_, object value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__enablestamina__object__bool__ret__nothing, value0_, value1_);
-			}
-
-			void enable_uavwaypoints(bool value0_, object value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
 			}
 
 			void engine_on(bool value0_, object value1_) {
@@ -3292,10 +3284,6 @@ namespace intercept {
 
 			std::string team_type(team_member value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__teamtype__team_member__ret__string, value_));
-			}
-
-			float waypoint_timeout_current(group value_) {
-                return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_));
 			}
 
 			float radio_volume() {

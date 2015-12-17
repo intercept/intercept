@@ -27,7 +27,7 @@ namespace intercept {
 
 	bool controller::init(const arguments &args_, std::string & result_) {
 		if (!_initiated) {
-            loader::get().attach_controller();
+            //loader::get().attach_controller(); // no longer needed, as the loader is called directly once.
             invoker::get().attach_controller();
             extensions::get().attach_controller();
             result_ = "1";

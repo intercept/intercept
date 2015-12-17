@@ -53,6 +53,7 @@ namespace intercept {
 
         struct unary_entry {
             char *name;
+            uintptr_t procedure_ptr_addr;
             unary_operator *op;
         };
 
@@ -67,6 +68,7 @@ namespace intercept {
 
         struct binary_entry {
             char *name;
+            uintptr_t procedure_ptr_addr;
             binary_operator *op;
         };
 
@@ -79,6 +81,7 @@ namespace intercept {
 
         struct nular_entry {
             char *name;
+            uintptr_t procedure_ptr_addr;
             nular_operator *op;
         };
 

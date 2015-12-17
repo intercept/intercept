@@ -19,7 +19,7 @@ void __cdecl intercept::on_frame() {
     
     object player = intercept::sqf::core::player();
     vector3 pos = intercept::sqf::position::get_pos_asl(player);
-    float world_size = intercept::sqf::misc::save_zone_w();
+    float world_size = intercept::sqf::misc::safe_zone_w();
     side_chat_msg << "Player Pos: [" << pos.x << "," << pos.y << "," << pos.z << "] World Size: " << world_size;
     //object test = intercept::sqf::core::create_vehicle("Bo_Mk82", pos, { }, 100.0f, "NONE");
     intercept::sqf::chat::side_chat(player, side_chat_msg.str());

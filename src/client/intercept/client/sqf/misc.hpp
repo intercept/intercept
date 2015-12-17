@@ -168,12 +168,12 @@ namespace intercept {
 
 			std::vector<object> switchable_units();
 
-			float save_zone_x();
-			float save_zone_y();
-			float save_zone_h();
-			float save_zone_w();
-			float save_zone_x_abs();
-			float save_zone_w_abs();
+			float safe_zone_x();
+			float safe_zone_y();
+			float safe_zone_h();
+			float safe_zone_w();
+			float safe_zone_x_abs();
+			float safe_zone_w_abs();
 
 			bool shown_artillerycomputer();
 			bool shown_chat();

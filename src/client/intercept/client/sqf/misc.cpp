@@ -441,22 +441,22 @@ namespace intercept {
 				__helpers::__empty_nular(client::__sqf::nular__runinitscript__ret__nothing);
 			}
 
-			float save_zone_x() {
+			float safe_zone_x() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonex__ret__scalar);
 			}
-			float save_zone_y() {
+			float safe_zone_y() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoney__ret__scalar);
 			}
-			float save_zone_h() {
+			float safe_zone_h() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoneh__ret__scalar);
 			}
-			float save_zone_w() {
+			float safe_zone_w() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonew__ret__scalar);
 			}
-			float save_zone_x_abs() {
+			float safe_zone_x_abs() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonexabs__ret__scalar);
 			}
-			float save_zone_w_abs() {
+			float safe_zone_w_abs() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonewabs__ret__scalar);
 			}
 

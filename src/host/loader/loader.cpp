@@ -378,6 +378,18 @@ namespace intercept {
         }
     }
 
+    const unary_map & loader::unary() const {
+        return _unary_operators;
+    }
+
+    const binary_map & loader::binary() const {
+        return _binary_operators;
+    }
+
+    const nular_map & loader::nular() const {
+        return _nular_operators;
+    }
+
     void loader::_find_locs(HANDLE process, std::string const pattern, std::vector<unsigned char *> &output) {
 
         unsigned char *p = NULL;

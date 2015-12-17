@@ -108,11 +108,11 @@ namespace intercept {
                 host::functions.invoke_raw_unary(client::__sqf::unary__addtoremainscollector__array__ret__nothing, objects);
 			}
 
-			void ais_finish_heal(object wounded_, object medic_, bool medic_can_heal_)
+			void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_)
 			{
-				game_value params({
-					wounded_,
-					medic_,
+				game_value params(std::vector<game_value>{
+					game_value(wounded_),
+                    game_value(medic_),
 					game_value(medic_can_heal_)
 				});
 
@@ -372,13 +372,13 @@ namespace intercept {
 				host::functions.invoke_raw_unary(__sqf::unary__creategeardialog__array__ret__nothing, params);
 			}
 
-			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_)
+			void create_guarded_point(side side_, vector3 pos_, float idstatic_, const object &veh_)
 			{
 				game_value params({
 					side_,
-					(pos_),
-					(idstatic_),
-					veh_
+					pos_,
+					idstatic_,
+					game_value(veh_)
 				});
 
 				host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
@@ -387,10 +387,10 @@ namespace intercept {
 			location create_location(std::string classname_, vector3 pos_, float size_x_, float size_y_)
 			{
 				game_value params({
-					(classname_),
-					(pos_),
-					(size_x_),
-					(size_y_)
+					classname_,
+					pos_,
+					size_x_,
+					size_y_
 				});
 
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
@@ -399,27 +399,27 @@ namespace intercept {
 			location create_location(std::string classname_, vector2 pos_, float size_x_, float size_y_)
 			{
 				game_value params({
-					(classname_),
-					(pos_),
-					(size_x_),
-					(size_y_)
+					classname_,
+					pos_,
+					size_x_,
+					size_y_
 				});
 
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 			}
-			location create_location(std::string classname_, object obj_, float size_x_, float size_y_)
+			location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_)
 			{
 				game_value params({
-					(classname_),
-					obj_,
-					(size_x_),
-					(size_y_)
+					game_value(classname_),
+                    game_value(obj_),
+					size_x_,
+					size_y_
 				});
 
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 			}
 
-			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
+			object create_mine(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
@@ -472,11 +472,11 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
 			}
 
-			object create_trigger(std::string type_, object pos_, bool make_global_ /*= true*/)
+			object create_trigger(std::string type_, const object &pos_, bool make_global_ /*= true*/)
 			{
 				game_value args({
 					(type_),
-					pos_,
+					game_value(pos_),
 					(make_global_)
 				});
 

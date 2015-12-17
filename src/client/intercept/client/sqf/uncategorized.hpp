@@ -81,7 +81,7 @@ namespace intercept {
 			void add_to_remains_collector(std::vector<object> objects_);
 
 			/* potential namespace: medical, misc, unit */
-			void ais_finish_heal(object &wounded_, object &medic_, bool medic_can_heal_);
+			void ais_finish_heal(object &wounded_, const object &medic_, bool medic_can_heal_);
 
 			/* potential namespace: core, display, all */
 			std::vector<control> all_controls(display display_); // TODO implement all_controls
@@ -126,7 +126,7 @@ namespace intercept {
 			std::string class_name(location loc_);
 			location create_location(std::string classname_, vector3 pos_, float size_x_, float size_y_);
 			location create_location(std::string classname_, vector2 pos_, float size_x_, float size_y_);
-			location create_location(std::string classname_, object obj_, float size_x_, float size_y_);
+			location create_location(std::string classname_, const object &obj_, float size_x_, float size_y_);
 
 			/* potential namespace: ai, group, unit */
 			std::string combat_mode(group loc_);
@@ -143,7 +143,7 @@ namespace intercept {
 			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
 			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
 			object create_trigger(std::string type_, vector3 pos_, bool make_global_ = true);
-			object create_trigger(std::string type_, object pos_, bool make_global_ = true);
+			object create_trigger(std::string type_, const object &pos_, bool make_global_ = true);
 
 			/* potential namespace: core, create, teams */
 			team_member create_team(std::string type_, std::string name_);
@@ -152,7 +152,7 @@ namespace intercept {
 			void create_gear_dialog(object unit_, std::string resource_);
 
 			/* potential namespace: misc */
-			void create_guarded_point(side side_, vector3 pos_, float idstatic_, object veh_);
+			void create_guarded_point(side side_, vector3 pos_, float idstatic_, const object &veh_);
 
 			/* potential namespace: vehicle */
 			std::vector<object> crew(object _veh);

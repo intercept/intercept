@@ -142,7 +142,7 @@ namespace intercept {
             game_value(const std::vector<game_value> &list_);
             game_value(const vector3 &vec_);
             game_value(const vector2 &vec_);
-            game_value(const internal_object internal_);
+            game_value(const internal_object &internal_);
 
             ~game_value();
 

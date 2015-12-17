@@ -88,7 +88,7 @@ namespace intercept {
 				return vector2(function_return_array[0], function_return_array[1]);
 			}
 
-			std::string create_marker(std::string name_, vector2 pos_)
+			std::string create_marker(const std::string &name_, vector2 pos_)
 			{
 				game_value params({
 					name_,
@@ -98,7 +98,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
 			}
 
-			std::string create_marker(std::string name_, vector3 pos_)
+			std::string create_marker(const std::string &name_, const vector3 &pos_)
 			{
 				game_value params({
 					name_,
@@ -108,17 +108,17 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
 			}
 
-			std::string create_marker(std::string name_, object pos_)
+			std::string create_marker(const std::string &name_, const object &pos_)
 			{
 				game_value params({
 					name_,
-					pos_
+					game_value(pos_)
 				});
 
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
 			}
 
-			std::string create_marker_local(std::string name_, vector2 pos_)
+			std::string create_marker_local(const std::string &name_, vector2 pos_)
 			{
 				game_value params({
 					name_,
@@ -128,7 +128,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
 			}
 
-			std::string create_marker_local(std::string name_, vector3 pos_)
+			std::string create_marker_local(const std::string &name_, vector3 pos_)
 			{
 				game_value params({
 					name_,
@@ -138,11 +138,11 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
 			}
 
-			std::string create_marker_local(std::string name_, object pos_)
+			std::string create_marker_local(const std::string &name_, const object &pos_)
 			{
 				game_value params({
 					name_,
-					pos_,
+					game_value(pos_),
 				});
 
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));

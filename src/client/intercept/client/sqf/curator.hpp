@@ -24,14 +24,14 @@ namespace intercept {
 			void remove_all_curator_editing_areas(object value_);
 			void show_curator_compass(bool value_);
 			void unassign_curator(object value_);
-			void add_curator_points(float value0_, object value1_);
-			void allow_curator_logic_ignore_areas(bool value0_, object value1_);
+			void add_curator_points(float value0_, const object &value1_);
+			void allow_curator_logic_ignore_areas(bool value0_, const object &value1_);
 			float curator_coef(object value0_, std::string value1_);
-			void remove_curator_camera_area(float value0_, object value1_);
-			void remove_curator_editing_area(float value0_, object value1_);
-			void set_curator_camera_area_ceiling(float value0_, object value1_);
-			void set_curator_editing_area_type(bool value0_, object value1_);
-			void set_curator_waypoint_cost(float value0_, object value1_);
+			void remove_curator_camera_area(float value0_, const object &value1_);
+			void remove_curator_editing_area(float value0_, const object &value1_);
+			void set_curator_camera_area_ceiling(float value0_, const object &value1_);
+			void set_curator_editing_area_type(bool value0_, const object &value1_);
+			void set_curator_waypoint_cost(float value0_, const object &value1_);
 
 			std::vector<std::string> curator_addons(object curator_module_);
 			std::vector<object> curator_editable_objects(object curator_module_);

@@ -56,6 +56,13 @@ namespace intercept {
         */
         void attach_controller();
 
+        /*!
+        @brief Walks the game state maps of SQF functions and finds their info.
+
+        This walks the internal game state objects maps of SQF functions and then
+        gets their comref information, arguement types, and the pointer to the
+        actual function and stores them.
+        */
         void do_function_walk(uintptr_t state_addr_);
         
         /*!
@@ -287,14 +294,6 @@ namespace intercept {
         Does the actual unhooking of a function, again using Detours
         */
         bool _unhook(void *hook_, void **trampoline_, void * original_function_);
-
-        /*!
-        @brief Walks the game state maps of SQF functions and finds their info.
-        
-        This walks the internal game state objects maps of SQF functions and then
-        gets their comref information, arguement types, and the pointer to the 
-        actual function and stores them.
-        */
 
         /*!
         @name Function Maps

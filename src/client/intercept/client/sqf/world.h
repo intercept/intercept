@@ -24,7 +24,7 @@ namespace intercept {
 				minute = minute_;
 			}
 
-			static game_date from_vector(std::vector<float> date_vector_)
+			static game_date from_vector(const std::vector<float> &date_vector_)
 			{
 				return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
 			}

@@ -139,9 +139,9 @@ namespace intercept {
 			void command_stop(std::vector<object> units_);
 
 			/* potential namespace: core, create */
-			object create_agent(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
-			object create_mine(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
-			object create_sound_source(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+			object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
+			object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
+			object create_sound_source(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
 			object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
 			object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
 

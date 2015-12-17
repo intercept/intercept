@@ -23,7 +23,7 @@ namespace intercept {
 
 			object player();
 			object create_vehicle(const std::string &type_, const vector3 &pos_);
-			object create_vehicle(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_, float placement_, const std::string &special_);
+			object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_);
 			void delete_vehicle(const object &obj_);
 
 			float server_time();

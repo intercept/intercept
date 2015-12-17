@@ -344,7 +344,7 @@ namespace intercept {
 				//return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
 			}
 
-			object create_agent(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/)
+			object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
@@ -419,7 +419,7 @@ namespace intercept {
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 			}
 
-			object create_mine(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
+			object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
@@ -435,7 +435,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createmine__array__ret__object, args));
 			}
 
-			object create_sound_source(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
+			object create_sound_source(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)

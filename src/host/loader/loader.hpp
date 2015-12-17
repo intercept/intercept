@@ -51,12 +51,6 @@ namespace intercept {
         ~loader();
 
         /*!
-        @brief Attaches the controller functionality for this class to the main 
-        controller.
-        */
-        void attach_controller();
-
-        /*!
         @brief Walks the game state maps of SQF functions and finds their info.
 
         This walks the internal game state objects maps of SQF functions and then
@@ -216,37 +210,6 @@ namespace intercept {
         bool unhook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
         //!@}
 
-        /*!
-        @name Controller Functions
-
-        These are functions that are callable from the RV engine via the SQF
-        `callExtension` controller.
-        */
-
-        /*!@{
-        @brief Does the initial hooking and memory searching/reading for Intercept
-
-        Initializes the patching of the RV engine, does the memory search, caches
-        the results of the search, hooks the initial function to get the game state
-        and then walks all the function pointers and stores them.
-        */
-        bool init_patch(const arguments &_args, std::string & result);
-
-        /*!
-        @brief Cleans up the initial hooking.
-
-        This cleans up the initial hooking patch and any other needed cleanup.
-        */
-        bool remove_patch(const arguments &_args, std::string & result);
-        //!@}
-
-        /*!
-        @name SQF Function Map Accessors
-
-        These are accessors for the maps of function pointers. They return a
-        std::map of functions, each entry being a std::vector of their specific
-        implementation (only 1 if not overloaded).
-        */
 
         /*!@{
         @brief Return the associated function maps.
@@ -257,44 +220,6 @@ namespace intercept {
         //!@}
 
     protected:
-        /*!
-        @brief Finds a string in memory.
-
-        This searches the memory for a specific string.
-        */
-        void _find_locs(HANDLE process_, std::string const pattern_, std::vector<unsigned char *> &output_);
-
-        /*!
-        @brief Finds a pointer in memory.
-
-        This searches the memory for a ptr address.
-        */
-        void _find_locs_ptr(HANDLE process_, char *find_, std::vector<unsigned char *> &output_);
-
-        /*!
-        @brief Looks for the initial SQF function to hook.
-
-        This searches memory for the initial SQF function to hook and returns
-        via reference the name and pointer address of the functions.
-
-        @return `true` if the function was found, `false` if it failed.
-        */
-        bool _find_initial_function(std::pair<std::string, uintptr_t> &func_map);
-
-        /*!
-        @brief Internal function to do an actual hook.
-        
-        Does the actual hooking of a function, using Detours.
-        */
-        bool _hook(void *hook_, void **trampoline_, void * original_function_);
-
-        /*!
-        @brief Internal function to unhook.
-        
-        Does the actual unhooking of a function, again using Detours
-        */
-        bool _unhook(void *hook_, void **trampoline_, void * original_function_);
-
         /*!
         @name Function Maps
         */

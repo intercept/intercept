@@ -42,7 +42,6 @@ std::string get_command(const std::string & input) {
 std::atomic_bool _threaded = false;
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
-    DebugBreak();
     ZERO_OUTPUT();
     
     // Get the command, then the command args

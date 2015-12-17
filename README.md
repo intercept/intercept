@@ -15,6 +15,10 @@ The intercept library also provides raw C bindings to the C++ versions of SQF fu
 
 You can view the progress of wrapper completion [here](https://github.com/NouberNou/intercept/issues/13).
 
+## Tutorial
+
+You can find a basic tutorial on [how to build and install Intercept on our wiki](https://github.com/NouberNou/intercept/wiki/Building-and-installing-Intercept-from-source).
+
 ## Terminology 
 
 #### RVEngine 

@@ -43,7 +43,7 @@ namespace intercept {
 
 			game_value __to_gv()
 			{
-				return game_value({ &wgroup, windex });
+				return game_value(std::vector<game_value>{ wgroup, windex });
 			}
 
 			static const std::string __speed_lookup[4];

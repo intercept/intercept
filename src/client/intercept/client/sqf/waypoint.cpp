@@ -99,14 +99,24 @@ namespace intercept {
 
 			waypoint add_waypoint(group& gp_, const vector3& center_, float radius_, int index_, const std::string& name_)
 			{
-				game_value args({ game_value(center_), radius_, index_, name_ });
+				game_value args({ 
+                    center_, 
+                    radius_, 
+                    (float)index_, 
+                    name_ 
+                });
 
 				return waypoint(game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
 			}
 
 			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "")
 			{
-				game_value args({ center_, radius_, index_, name_ });
+				game_value args({ 
+                    center_, 
+                    radius_, 
+                    (float)index_, 
+                    name_ 
+                });
 				
 				return waypoint(game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
 			}
@@ -128,7 +138,9 @@ namespace intercept {
 				// TODO test for logic.
 				std::vector<waypoint> waypoints;
 				for (uint32_t i = 0; i < rv_ret_vals.length() - 1; i++)
-					waypoints.push_back(waypoint(rv_ret_vals[i]));		
+					waypoints.push_back(waypoint(rv_ret_vals[i]));
+
+                return waypoints;
 			}
 			std::vector<waypoint> synchronized_waypoints(object & obj_)
 			{
@@ -138,6 +150,8 @@ namespace intercept {
 				std::vector<waypoint> waypoints;
 				for (uint32_t i = 0; i < rv_ret_vals.length() - 1; i++)
 					waypoints.push_back(waypoint(rv_ret_vals[i]));
+
+                return waypoints;
 			}
 
 			void set_current_waypoint(group & gp_, waypoint & wp_)

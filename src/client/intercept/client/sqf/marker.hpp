@@ -29,12 +29,12 @@ namespace intercept {
 			vector3 get_marker_pos(const std::string& value_);
 			vector2 get_marker_size(const std::string& value_);
 
-            std::string create_marker(std::string name_, vector3 pos_);
-            std::string create_marker(std::string name_, vector2 pos_);
-            std::string create_marker(std::string name_, object pos_);
-            std::string create_marker_local(std::string name_, vector3 pos_);
-            std::string create_marker_local(std::string name_, vector2 pos_);
-            std::string create_marker_local(std::string name_, object pos_);
+            std::string create_marker(const std::string &name_, const vector3 &pos_);
+            std::string create_marker(const std::string &name_, const vector2 &pos_);
+            std::string create_marker(const std::string &name_, const object &pos_);
+            std::string create_marker_local(const std::string &name_, const vector3 &pos_);
+            std::string create_marker_local(const std::string &name_, const vector2 &pos_);
+            std::string create_marker_local(const std::string &name_, const object &pos_);
 		}
     }
 }

@@ -26,11 +26,13 @@ namespace intercept {
 
     int __cdecl loader::_initial_patch(char * a_, int b_, int c_)
     {
-        loader::get()._do_function_walk(b_);
+        loader::get().do_function_walk(b_);
         return _initial_trampoline(a_, b_, c_);
     }
 
     bool loader::init_patch(const arguments &args_, std::string & result_) {
+
+        /*
         uint32_t version = args_.as_uint32(0);
         result_ = "1";
         if (!_patched) {
@@ -98,7 +100,7 @@ namespace intercept {
                 result_ = "-1";
             }
         }
-        
+        */
         return true;
     }
 
@@ -268,7 +270,7 @@ namespace intercept {
         return false;
     }
 
-    void loader::_do_function_walk(uintptr_t state_addr_) {
+    void loader::do_function_walk(uintptr_t state_addr_) {
         uintptr_t unary_hash = state_addr_ + 16;
         uintptr_t binary_hash = state_addr_ + 28;
         uintptr_t nulars_hash = state_addr_ + 40;

@@ -25,7 +25,7 @@ namespace intercept {
 			/**
 			* Finds named selections in object which are in specified LOD, intersected by given section of a line
 			*/
-			bool intersect(vector3 begin_pos_, vector3 end_pos_, const object& obj_, std::string lodname_);
+			bool intersect(const vector3 &begin_pos_, const vector3 &end_pos_, const object& obj_, const std::string &lodname_);
 
 			/**
 			* Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -38,7 +38,7 @@ namespace intercept {
 			*
 			* @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
 			*/
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_);
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_);
 
 			/**
 			* Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -52,7 +52,7 @@ namespace intercept {
 			*
 			* @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
 			*/
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_, const object& ignore_obj1_);
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_);
 
 			/**
 			* Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -71,44 +71,44 @@ namespace intercept {
 			*
 			* @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
 			*/
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_mode_, int max_results_, std::string lod1_, std::string lod2_);
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_mode_, int max_results_, const std::string &lod1_, const std::string &lod2_);
 
 			/**
 			* Returns objects intersecting with the virtual line from begPos to endPos
 			*/
-			std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_);
-            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, const object & ignore_obj_one_);
-            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, const object & ignore_obj_one_, const object & ignore_obj_two_);
+			std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_);
+            std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_);
+            std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_, const object & ignore_obj_two_);
 
             /**
 			* Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionAGL
 			*/
-			bool terrain_intersect(vector3 begin_pos_, vector3 end_pos_);
+			bool terrain_intersect(const vector3 &begin_pos_, const vector3 &end_pos_);
 
 			/**
 			* Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionASL
 			*/
-			bool terrain_intersect_asl(vector3 begin_pos_, vector3 end_pos_);
+			bool terrain_intersect_asl(const vector3 &begin_pos_, const vector3 &end_pos_);
 
 			/**
 			* Checks for object intersection with a virtual line between two positions. Returns true if intersects with an object.
 			*/
-			bool line_intersects(vector3 begin_position_, vector3 end_position_);
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_);
 
 			/**
 			* Checks for object intersection with a virtual line between two positions. Returns true if intersects with an object.
 			*/
-			bool line_intersects(vector3 begin_position_, vector3 end_position_, const object& ignore_obj_one_);
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object& ignore_obj_one_);
 
 			/**
 			* Checks for object intersection with a virtual line between two positions. Returns true if intersects with an object.
 			*/
-			bool line_intersects(vector3 begin_position_, vector3 end_position_, const object& ignore_obj_one_, const object& ignore_obj_two_);
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object& ignore_obj_one_, const object& ignore_obj_two_);
 
 			/**
 			* Find list of objects intersected by given line from begin_position_ to end_position_
 			*/
-			std::vector<object> line_intersects_objs(vector3 begin_position_, vector3 end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
+			std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
 		}
     }
 }

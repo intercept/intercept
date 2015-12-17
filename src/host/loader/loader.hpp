@@ -18,7 +18,7 @@ namespace intercept {
 
         void attach_controller();
 
-        
+        void do_function_walk(uintptr_t state_addr_);
        
 
         bool get_function(std::string function_name_, unary_function &function_);
@@ -70,7 +70,7 @@ namespace intercept {
         
         static int __cdecl _initial_patch(char *a, int b, int c);
         static unary_function _initial_trampoline;
-        void _do_function_walk(uintptr_t state_addr_);
+        
 
         
 

@@ -48,11 +48,11 @@ namespace intercept {
 			}
 
 			void group_radio(const object &value0_, const std::string& value1_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, game_value(value1_));
+				host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, value1_);
 			}
 
 			void remove_group_icon(const group &value1_, float value0_) {
-				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value(value0_), value1_);
+				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, value0_, value1_);
 			}
 
 			void select_leader(const object &value0_, const group &value1_) {

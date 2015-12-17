@@ -31,7 +31,7 @@ namespace intercept {
 			}
 
 			void system_chat(const std::string &message_) {
-				host::functions.invoke_raw_unary(client::__sqf::unary__systemchat__string__ret__nothing, game_value(message_));
+				host::functions.invoke_raw_unary(client::__sqf::unary__systemchat__string__ret__nothing, message_);
 			}
 
 			void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_) {

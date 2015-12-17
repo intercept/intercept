@@ -79,7 +79,7 @@ namespace intercept {
             }
 
             std::vector<std::string> config_classes(const std::string& value_, config a_config_) {
-                game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, game_value(value_), a_config_);
+                game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, value_, a_config_);
                 return __helpers::__convert_to_strings_vector(output);
             }
 

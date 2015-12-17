@@ -673,7 +673,7 @@ namespace intercept {
 			}
 
 			std::string button_action(float value_) {
-				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, game_value(value_)));
+				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, value_));
 			}
 
 			bool cam_committed(const object &value_) {
@@ -3183,7 +3183,7 @@ namespace intercept {
 			}
 
 			void do3denaction(const std::string& value_) {
-				host::functions.invoke_raw_unary(client::__sqf::unary__do3denaction__string__ret__nothing, game_value(value_));
+				host::functions.invoke_raw_unary(client::__sqf::unary__do3denaction__string__ret__nothing, value_);
 			}
 
 			display find_display(float value_) {

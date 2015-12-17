@@ -100,7 +100,7 @@ namespace intercept {
                 game_value array_input({
                     begin_pos_,
                     end_pos_,
-                    game_value(ignore_obj_one_),
+                    ignore_obj_one_,
                     game_value(),
                     sort_by_distance_
                 });
@@ -120,8 +120,8 @@ namespace intercept {
                 game_value array_input({
                     begin_pos_,
                     end_pos_,
-                    game_value(ignore_obj_one_),
-                    game_value(ignore_obj_two_),
+                    ignore_obj_one_,
+                    ignore_obj_two_,
                     sort_by_distance_
                 });
                 game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
@@ -166,7 +166,7 @@ namespace intercept {
 				game_value array_input({
 					begin_position_,
 					end_position_,
-					game_value(ignore_obj_one_)
+					ignore_obj_one_
 				});
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input));
 			}
@@ -176,8 +176,8 @@ namespace intercept {
 				game_value array_input({
 					begin_position_,
 					end_position_,
-                    game_value(ignore_obj_one_),
-                    game_value(ignore_obj_two_)
+                    ignore_obj_one_,
+                    ignore_obj_two_
 				});
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input));
 			}
@@ -186,8 +186,8 @@ namespace intercept {
 				game_value array_input({
 					begin_position_,
 					end_position_,
-					game_value(with_obj_),
-                    game_value(ignore_obj_),
+					with_obj_,
+                    ignore_obj_,
 					sort_by_distance_,
 					(float)flags_
 				});

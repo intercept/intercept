@@ -176,7 +176,7 @@ namespace intercept {
 
             std::vector<std::string> all_turrets(const object &vehicle_, bool person_turrets_) {
                game_value array_input(std::vector<game_value>{
-                    game_value(vehicle_),
+                    vehicle_,
                     person_turrets_
                 });
 

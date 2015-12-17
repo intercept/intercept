@@ -43,7 +43,7 @@ namespace intercept {
 
 			game_value __to_gv()
 			{
-				return game_value({ wgroup, windex });
+				return game_value(std::vector<game_value>{ wgroup, windex });
 			}
 
 			static const std::string __speed_lookup[4];
@@ -330,8 +330,8 @@ namespace intercept {
 
 			bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.
 
-			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_, const std::string & name_);
+			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_, const std::string & name_);
 			void delete_waypoint(waypoint & wp_);
 			void copy_waypoints(group & to_, group & from_);
 

@@ -84,7 +84,7 @@ namespace intercept {
 			void ais_finish_heal(object &wounded_, const object &medic_, bool medic_can_heal_);
 
 			/* potential namespace: core, display, all */
-			std::vector<control> all_controls(display display_); // TODO implement all_controls
+			std::vector<control> all_controls(const display &display_); // TODO implement all_controls
 
 			/* potential namespace: core, all */
 			std::vector<object> all_mission_objects(const std::string &type_);
@@ -114,13 +114,13 @@ namespace intercept {
 
 			/* potential namespace: controls, ui, gui, misc */
 			void button_set_action(int control_id_, const std::string &code_);
-			void button_set_action(control control_, const std::string &code_);
+			void button_set_action(const control &control_, const std::string &code_);
 			void ctrl_enable(int control_id_, bool enable_);
-			void ctrl_enable(control control_, bool enable_);
+			void ctrl_enable(const control &control_, bool enable_);
 			void ctrl_set_text(int control_id_, const std::string &code_);
-			void ctrl_set_text(control control_, const std::string &code_);
+			void ctrl_set_text(const control &control_, const std::string &code_);
 			void ctrl_show(int control_id_, bool show_);
-			void ctrl_show(control control_, bool show_);
+			void ctrl_show(const control &control_, bool show_);
 
 			/* potential namespace: locations */
 			std::string class_name(location loc_);
@@ -152,7 +152,7 @@ namespace intercept {
 			void create_gear_dialog(const object &unit_, const std::string &resource_);
 
 			/* potential namespace: misc */
-			void create_guarded_point(side side_, const vector3 &pos_, float idstatic_, const object &veh_);
+			void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
 
 			/* potential namespace: vehicle */
 			std::vector<object> crew(object _veh);
@@ -161,7 +161,7 @@ namespace intercept {
 			std::string current_magazine_detail(const object &veh_);
 
 			/* potential namespace: teams */
-			std::vector<task> current_tasks(team_member team_member_);
+			std::vector<task> current_tasks(const team_member &team_member_);
 
 			/* potential namespace: gui, ui */
 			void cut_obj(const std::string &name_, const std::string &type_, float speed_ = 1.0f);
@@ -215,50 +215,50 @@ namespace intercept {
 
 			/* potential namespace: dialogs, ui, listbox */
 			float lb_add(int control_id_, const std::string &text_);
-			float lb_add(control control_, const std::string &text_);
+			float lb_add(const control &control_, const std::string &text_);
 			float lb_color(int control_id_, int index_);
-			float lb_color(control control_, int index_);
+			float lb_color(const control &control_, int index_);
 			float lb_color_right(int control_id_, int index_);
-			float lb_color_right(control control_, int index_);
+			float lb_color_right(const control &control_, int index_);
 			std::string lb_data(int control_id_, int index_);
-			std::string lb_data(control control_, int index_);
+			std::string lb_data(const control &control_, int index_);
 			void lb_delete(int control_id_, int index_);
-			void lb_delete(control control_, int index_);
+			void lb_delete(const control &control_, int index_);
 			std::string lb_picture(int control_id_, int index_);
-			std::string lb_picture(control control_, int index_);
+			std::string lb_picture(const control &control_, int index_);
 			std::string lb_picture_right(int control_id_, int index_);
-			std::string lb_picture_right(control control_, int index_);
-			std::vector<float> lb_selection(control control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
+			std::string lb_picture_right(const control &control_, int index_);
+			std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 			void lb_set_color(int control_id_, int index_, rv_color color_);
-			void lb_set_color(control control_, int index_, rv_color color_);
+			void lb_set_color(const control &control_, int index_, rv_color color_);
 			void lb_set_color_right(int control_id_, int index_, rv_color color_);
-			void lb_set_color_right(control control_, int index_, rv_color color_);
+			void lb_set_color_right(const control &control_, int index_, rv_color color_);
 			void lb_set_cur_sel(int control_id_, int index_);
-			void lb_set_cur_sel(control control_, int index_);
+			void lb_set_cur_sel(const control &control_, int index_);
 			void lb_set_data(int control_id_, int index_, const std::string &data_);
-			void lb_set_data(control control_, int index_, const std::string &data_);
+			void lb_set_data(const control &control_, int index_, const std::string &data_);
 			void lb_set_picture(int control_id_, int index_, const std::string &name_);
-			void lb_set_picture(control control_, int index_, const std::string &name_);
+			void lb_set_picture(const control &control_, int index_, const std::string &name_);
 			void lb_set_picture_right(int control_id_, int index_, const std::string &name_);
-			void lb_set_picture_right(control control_, int index_, const std::string &name_);
+			void lb_set_picture_right(const control &control_, int index_, const std::string &name_);
 			void lb_set_picture_color(int control_id_, int index_, rv_color color_);
-			void lb_set_picture_color(control control_, int index_, rv_color color_);
+			void lb_set_picture_color(const control &control_, int index_, rv_color color_);
 			void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_);
-			void lb_set_picture_color_disabled(control control_, int index_, rv_color color_);
+			void lb_set_picture_color_disabled(const control &control_, int index_, rv_color color_);
 			void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
-			void lb_set_picture_color_selected(control control_, int index_, rv_color color_);
+			void lb_set_picture_color_selected(const control &control_, int index_, rv_color color_);
 			void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
-			void lb_set_tooltip(control control_, int index_, const std::string &tooltip_);
+			void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_);
 			void lb_set_value(int control_id_, int index_, float val_);
-			void lb_set_value(control control_, int index_, float val_);
-			void lb_sort(control control_);
-			void lb_sort(control control_, const std::string &sort_order_);
+			void lb_set_value(const control &control_, int index_, float val_);
+			void lb_sort(const control &control_);
+			void lb_sort(const control &control_, const std::string &sort_order_);
 			std::string lb_text(int control_id_, int index_);
-			std::string lb_text(control control_, int index_);
+			std::string lb_text(const control &control_, int index_);
 			std::string lb_text_right(int control_id_, int index_);
-			std::string lb_text_right(control control_, int index_);
+			std::string lb_text_right(const control &control_, int index_);
 			float lb_value(int control_id_, int index_);
-			float lb_value(control control_, int index_);
+			float lb_value(const control &control_, int index_);
 
 
 		}

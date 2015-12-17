@@ -15,6 +15,7 @@ namespace intercept {
         internal_object::operator game_value() { return value->value; }
         internal_object::operator game_value() const { return value->value; }
         internal_object::operator game_value *() { return &value->value; }
+        internal_object::operator game_value *() const { return &value->value; }
 
         internal_object::operator game_value&() const
         {

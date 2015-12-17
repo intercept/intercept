@@ -21,6 +21,7 @@ namespace intercept {
             operator game_value();
             operator game_value() const;
             operator game_value *();
+            operator game_value *() const;
             operator game_value &() const;
 
             std::shared_ptr<game_value_shared_wrapper> value;

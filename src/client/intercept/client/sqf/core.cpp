@@ -97,19 +97,19 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
 			}
 
-			bool is_null(control value_) {
+			bool is_null(const control &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, value_));
 			}
 
-			bool is_null(display value_) {
+			bool is_null(const display &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__display__ret__bool, value_));
 			}
 
-			bool is_null(script value_) {
+			bool is_null(const script &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, value_));
 			}
 
-			bool is_null(task value_) {
+			bool is_null(const task &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__task__ret__bool, value_));
 			}
 
@@ -156,7 +156,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, test_));
 			}
 
-            std::vector<control> all_controls(display display_) {
+            std::vector<control> all_controls(const display &display_) {
                 //game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
                 //game_data_array* array_value = ((game_data_array *)input__.data);
                 //std::vector<control> output;
@@ -193,11 +193,11 @@ namespace intercept {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__object__ret__array, value_));
             }
-            std::vector<std::string> all_variables(control value_) {
+            std::vector<std::string> all_variables(const control &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__control__ret__array, value_));
             }
-            std::vector<std::string> all_variables(team_member value_) {
+            std::vector<std::string> all_variables(const team_member &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__team_member__ret__array, value_));
             }
@@ -209,7 +209,7 @@ namespace intercept {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__group__ret__array, value_));
             }
-            std::vector<std::string> all_variables(task value_) {
+            std::vector<std::string> all_variables(const task &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__task__ret__array, value_));
             }

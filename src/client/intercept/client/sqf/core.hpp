@@ -31,10 +31,10 @@ namespace intercept {
 
 			bool is_null(const object &value_);
 			bool is_null(const group &value_);
-			bool is_null(control value_);
-			bool is_null(display value_);
-			bool is_null(script value_);
-			bool is_null(task value_);
+			bool is_null(const control &value_);
+			bool is_null(const display &value_);
+			bool is_null(const script &value_);
+			bool is_null(const task &value_);
 
 			script script_null();
 			task task_null();
@@ -46,18 +46,18 @@ namespace intercept {
 
 			bool __sqfassert(bool test_);
 
-            std::vector<control> all_controls(display display_);
+            std::vector<control> all_controls(const display &display_);
 
             std::vector<std::string> all_turrets(const object &vehicle_, bool person_turrets_);
 
             std::vector<std::string> all_turrets(const object &vehicle_);
 
             std::vector<std::string> all_variables(const object &value_);
-            std::vector<std::string> all_variables(control value_);
-            std::vector<std::string> all_variables(team_member value_);
+            std::vector<std::string> all_variables(const control &value_);
+            std::vector<std::string> all_variables(const team_member &value_);
             std::vector<std::string> all_variables(rv_namespace value_);
             std::vector<std::string> all_variables(const group &value_);
-            std::vector<std::string> all_variables(task value_);
+            std::vector<std::string> all_variables(const task &value_);
             std::vector<std::string> all_variables(location value_);
 		}
     }

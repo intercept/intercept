@@ -12,7 +12,7 @@ namespace intercept {
 			std::array<bool, 2> group_icons_visible();
 			group grp_null();
 			void clear_group_icons(const group &value_);
-			group create_group(side value_);
+			group create_group(const side &value_);
 			void delete_group(const group &value_);
 
 			group group_from_net_id(const std::string &value_);

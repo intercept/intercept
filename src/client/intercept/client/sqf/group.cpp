@@ -19,7 +19,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__cleargroupicons__group__ret__nothing, value_);
 			}
 
-			group create_group(side value_) {
+			group create_group(const side &value_) {
 				return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, value_));
 			}
 

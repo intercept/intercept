@@ -10,7 +10,7 @@ namespace intercept {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
 			}
 
-			object agent(team_member value_) {
+			object agent(const team_member &value_) {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__agent__team_member__ret__object, value_));
 			}
 
@@ -668,7 +668,7 @@ namespace intercept {
 				return __helpers::__bool_unary_string(client::__sqf::unary__buldozer_loadnewroads__string__ret__bool, value_);
 			}
 
-			std::string button_action(control value_) {
+			std::string button_action(const control &value_) {
 				return __helpers::__string_unary_control(client::__sqf::unary__buttonaction__control__ret__string, value_);
 			}
 
@@ -728,7 +728,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__captivenum__object__ret__scalar, value_);
 			}
 
-			bool cb_checked(control value_) {
+			bool cb_checked(const control &value_) {
 				return __helpers::__bool_unary_control(client::__sqf::unary__cbchecked__control__ret__bool, value_);
 			}
 
@@ -768,7 +768,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__clearmagazinecargoglobal__object__ret__nothing, value_);
 			}
 
-			void clear_overlay(control value_) {
+			void clear_overlay(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__clearoverlay__control__ret__nothing, value_);
 			}
 
@@ -784,11 +784,11 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__closedialog__scalar__ret__nothing, value_);
 			}
 
-			void close_overlay(control value_) {
+			void close_overlay(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__closeoverlay__control__ret__nothing, value_);
 			}
 
-			void collapse_object_tree(control value_) {
+			void collapse_object_tree(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__collapseobjecttree__control__ret__nothing, value_);
 			}
 
@@ -804,7 +804,7 @@ namespace intercept {
 				__helpers::__empty_unary_string(client::__sqf::unary__comment__string__ret__nothing, value_);
 			}
 
-			void commit_overlay(control value_) {
+			void commit_overlay(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__commitoverlay__control__ret__nothing, value_);
 			}
 
@@ -1056,11 +1056,11 @@ namespace intercept {
 				return __helpers::__number_unary_number(client::__sqf::unary__gearidcammocount__scalar__ret__scalar, value_);
 			}
 
-			float gear_slot_ammo_count(control value_) {
+			float gear_slot_ammo_count(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__gearslotammocount__control__ret__scalar, value_);
 			}
 
-			std::string gear_slot_data(control value_) {
+			std::string gear_slot_data(const control &value_) {
 				return __helpers::__string_unary_control(client::__sqf::unary__gearslotdata__control__ret__string, value_);
 			}
 
@@ -1112,7 +1112,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__getdirvisual__object__ret__scalar, value_);
 			}
 
-			std::string get_editor_mode(control value_) {
+			std::string get_editor_mode(const control &value_) {
 				return __helpers::__string_unary_control(client::__sqf::unary__geteditormode__control__ret__string, value_);
 			}
 
@@ -1236,7 +1236,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__hmd__object__ret__string, value_);
 			}
 
-			void import_all_groups(control value_) {
+			void import_all_groups(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__importallgroups__control__ret__nothing, value_);
 			}
 
@@ -1344,11 +1344,11 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__isplayer__object__ret__bool, value_);
 			}
 
-			bool is_real_time(control value_) {
+			bool is_real_time(const control &value_) {
 				return __helpers::__bool_unary_control(client::__sqf::unary__isrealtime__control__ret__bool, value_);
 			}
 
-			bool is_showing(control value_) {
+			bool is_showing(const control &value_) {
 				return __helpers::__bool_unary_control(client::__sqf::unary__isshowing3dicons__control__ret__bool, value_);
 			}
 
@@ -1392,7 +1392,7 @@ namespace intercept {
 				return __helpers::__object_unary_object(client::__sqf::unary__lasertarget__object__ret__object, value_);
 			}
 
-			void lb_clear(control value_) {
+			void lb_clear(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__lbclear__control__ret__nothing, value_);
 			}
 
@@ -1400,7 +1400,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__lbclear__scalar__ret__nothing, value_);
 			}
 
-			float lb_cur_sel(control value_) {
+			float lb_cur_sel(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__lbcursel__control__ret__scalar, value_);
 			}
 
@@ -1408,7 +1408,7 @@ namespace intercept {
 				return __helpers::__number_unary_number(client::__sqf::unary__lbcursel__scalar__ret__scalar, value_);
 			}
 
-			float lb_size(control value_) {
+			float lb_size(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__lbsize__control__ret__scalar, value_);
 			}
 
@@ -1416,11 +1416,11 @@ namespace intercept {
 				return __helpers::__number_unary_number(client::__sqf::unary__lbsize__scalar__ret__scalar, value_);
 			}
 
-			float lb_sort(control value_) {
+			float lb_sort(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__lbsort__control__ret__scalar, value_);
 			}
 
-			float lb_sort_by_value(control value_) {
+			float lb_sort_by_value(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__lbsortbyvalue__control__ret__scalar, value_);
 			}
 
@@ -1456,7 +1456,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__lightison__object__ret__string, value_);
 			}
 
-			void lnb_clear(control value_) {
+			void lnb_clear(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__lnbclear__control__ret__nothing, value_);
 			}
 
@@ -1464,7 +1464,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__lnbclear__scalar__ret__nothing, value_);
 			}
 
-			float lnb_cur_sel_row(control value_) {
+			float lnb_cur_sel_row(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__lnbcurselrow__control__ret__scalar, value_);
 			}
 
@@ -1556,7 +1556,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__netid__object__ret__string, value_);
 			}
 
-			float next_menu_item_index(control value_) {
+			float next_menu_item_index(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__nextmenuitemindex__control__ret__scalar, value_);
 			}
 
@@ -1660,7 +1660,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__progressloadingscreen__scalar__ret__nothing, value_);
 			}
 
-			float progress_position(control value_) {
+			float progress_position(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__progressposition__control__ret__scalar, value_);
 			}
 
@@ -1784,7 +1784,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__resetsubgroupdirection__object__ret__nothing, value_);
 			}
 
-			void restart_editor_camera(control value_) {
+			void restart_editor_camera(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__restarteditorcamera__control__ret__nothing, value_);
 			}
 
@@ -1812,7 +1812,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__ropeunwound__object__ret__bool, value_);
 			}
 
-			void save_overlay(control value_) {
+			void save_overlay(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__saveoverlay__control__ret__nothing, value_);
 			}
 
@@ -1844,7 +1844,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__selectplayer__object__ret__nothing, value_);
 			}
 
-			void selected_editor_objects(control value_) {
+			void selected_editor_objects(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__selectededitorobjects__control__ret__nothing, value_);
 			}
 
@@ -1992,7 +1992,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__sleep__scalar__ret__nothing, value_);
 			}
 
-			float slider_position(control value_) {
+			float slider_position(const control &value_) {
 				return __helpers::__number_unary_control(client::__sqf::unary__sliderposition__control__ret__scalar, value_);
 			}
 
@@ -2068,7 +2068,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__tvclear__scalar__ret__nothing, value_);
 			}
 
-			void tv_clear(control value_) {
+			void tv_clear(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__tvclear__control__ret__nothing, value_);
 			}
 
@@ -2116,7 +2116,7 @@ namespace intercept {
 				return __helpers::__bool_unary_string(client::__sqf::unary__unlockachievement__string__ret__bool, value_);
 			}
 
-			void update_object_tree(control value_) {
+			void update_object_tree(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__updateobjecttree__control__ret__nothing, value_);
 			}
 
@@ -2206,7 +2206,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addscore__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void add_score_side(side value0_, float value1_) {
+			void add_score_side(const side &value0_, float value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addscoreside__side__scalar__ret__nothing, value0_, value1_);
 			}
 
@@ -2234,7 +2234,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addweaponglobal__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void allow3dmode(control value0_, bool value1_) {
+			void allow3dmode(const control &value0_, bool value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__allow3dmode__control__bool__ret__nothing, value0_, value1_);
 			}
 
@@ -2250,7 +2250,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__allowdammage__object__bool__ret__nothing, value0_, value1_);
 			}
 
-			void allow_file_operations(control value0_, bool value1_) {
+			void allow_file_operations(const control &value0_, bool value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__allowfileoperations__control__bool__ret__nothing, value0_, value1_);
 			}
 
@@ -2562,7 +2562,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__kbremovetopic__object__string__ret__nothing, value0_, value1_);
 			}
 
-			float knows_about(const object &value0_, side value1_) {
+			float knows_about(const object &value0_, const side &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__side__object__ret__scalar, value0_, value1_));
 			}
 
@@ -2674,7 +2674,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__mapcenteroncamera__control__bool__ret__nothing, value0_, value1_);
 			}
 
-			bool mine_detected_by(const object &value0_, side value1_) {
+			bool mine_detected_by(const object &value0_, const side &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__minedetectedby__object__side__ret__bool, value0_, value1_));
 			}
 
@@ -2734,7 +2734,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__radiochannelsetlabel__scalar__string__ret__nothing, value0_, value1_);
 			}
 
-			bool register_task(const std::string& value0_, team_member value1_) {
+			bool register_task(const std::string& value0_, const team_member &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__registertask__team_member__string__ret__bool, value0_, value1_));
 			}
 
@@ -2806,7 +2806,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__removeweaponglobal__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void reveal_mine(const object &value0_, side value1_) {
+			void reveal_mine(const object &value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__revealmine__side__object__ret__nothing, value0_, value1_);
 			}
 
@@ -2834,7 +2834,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setactualcollectivertd__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void set_airport_side(float value0_, side value1_) {
+			void set_airport_side(float value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__scalar__side__ret__nothing, value0_, value1_);
 			}
 
@@ -2866,7 +2866,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, value0_, value1_);
 			}
 
-			void set_combat_mode(const std::string& value0_, team_member value1_) {
+			void set_combat_mode(const std::string& value0_, const team_member &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
 			}
 
@@ -2910,7 +2910,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setfatigue__object__scalar__ret__nothing, value0_, value1_);
 			}
 
-			void set_flag_side(const object &value0_, side value1_) {
+			void set_flag_side(const object &value0_, const side &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setflagside__object__side__ret__nothing, value0_, value1_);
 			}
 
@@ -2918,7 +2918,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setflagtexture__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void set_formation(const std::string& value0_, team_member value1_) {
+			void set_formation(const std::string& value0_, const team_member &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
 			}
 
@@ -2926,7 +2926,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setformationtask__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void set_from_editor(bool value0_, team_member value1_) {
+			void set_from_editor(bool value0_, const team_member &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value0_, value1_);
 			}
 
@@ -3158,7 +3158,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__unlinkitem__object__string__ret__nothing, value0_, value1_);
 			}
 
-			bool unregister_task(const std::string& value0_, team_member value1_) {
+			bool unregister_task(const std::string& value0_, const team_member &value1_) {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__unregistertask__team_member__string__ret__bool, value0_, value1_));
 			}
 
@@ -3170,15 +3170,15 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__vehicleradio__object__string__ret__nothing, value0_, value1_);
 			}
 
-			side create_center(side value_) {
+			side create_center(const side &value_) {
 				return side(host::functions.invoke_raw_unary(client::__sqf::unary__createcenter__side__ret__side, value_));
 			}
 
-			void delete_center(side value_) {
+			void delete_center(const side &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__deletecenter__side__ret__nothing, value_);
 			}
 
-			void delete_team(team_member value_) {
+			void delete_team(const team_member &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__deleteteam__team_member__ret__nothing, value_);
 			}
 
@@ -3194,11 +3194,11 @@ namespace intercept {
 				return side(host::functions.invoke_raw_unary(client::__sqf::unary__flagside__object__ret__side, value_));
 			}
 
-			std::string formation(team_member value_) {
+			std::string formation(const team_member &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__formation__team_member__ret__string, value_));
 			}
 
-			bool from_editor(team_member value_) {
+			bool from_editor(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__fromeditor__team_member__ret__bool, value_));
 			}
 
@@ -3206,7 +3206,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__get3dengrid__string__ret__nothing, value_);
 			}
 
-			object get_editor_camera(control value_) {
+			object get_editor_camera(const control &value_) {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__geteditorcamera__control__ret__object, value_));
 			}
 
@@ -3218,7 +3218,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__image__string__ret__text, value_));
 			}
 
-			bool is_agent(team_member value_) {
+			bool is_agent(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isagent__team_member__ret__bool, value_));
 			}
 
@@ -3230,7 +3230,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__keyname__scalar__ret__string, value_));
 			}
 
-			team_member leader(team_member value_) {
+			team_member leader(const team_member &value_) {
 				return team_member(host::functions.invoke_raw_unary(client::__sqf::unary__leader__team_member__ret__team_member, value_));
 			}
 
@@ -3254,15 +3254,15 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__parsetext__string__ret__text, value_));
 			}
 
-			float playable_slots_number(side value_) {
+			float playable_slots_number(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__playableslotsnumber__side__ret__scalar, value_));
 			}
 
-			float players_number(side value_) {
+			float players_number(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__playersnumber__side__ret__scalar, value_));
 			}
 
-			float score_side(side value_) {
+			float score_side(const side &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__scoreside__side__ret__scalar, value_));
 			}
 
@@ -3270,11 +3270,11 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__showsubtitles__bool__ret__bool, value_));
 			}
 
-			std::string team_name(team_member value_) {
+			std::string team_name(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__teamname__team_member__ret__string, value_));
 			}
 
-			std::string team_type(team_member value_) {
+			std::string team_type(const team_member &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__teamtype__team_member__ret__string, value_));
 			}
 
@@ -3323,7 +3323,7 @@ namespace intercept {
 				host::functions.invoke_raw_nular(client::__sqf::nular__buldozer_reloadopermap__ret__nothing);
 			}
 
-			void cancel_simple_task_destination(task value_) {
+			void cancel_simple_task_destination(const task &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__cancelsimpletaskdestination__task__ret__nothing, value_);
 			}
 
@@ -3335,31 +3335,31 @@ namespace intercept {
 				return script(host::functions.invoke_raw_unary(client::__sqf::unary__execvm__string__ret__script, value_));
 			}
 
-			float priority(task value_) {
+			float priority(const task &value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__priority__task__ret__scalar, value_));
 			}
 
-			bool script_done(script value_) {
+			bool script_done(const script &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__scriptdone__script__ret__bool, value_));
 			}
 
-			bool task_completed(task value_) {
+			bool task_completed(const task &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__taskcompleted__task__ret__bool, value_));
 			}
 
-			task task_parent(task value_) {
+			task task_parent(const task &value_) {
 				return task(host::functions.invoke_raw_unary(client::__sqf::unary__taskparent__task__ret__task, value_));
 			}
 
-			std::string task_state(task value_) {
+			std::string task_state(const task &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__taskstate__task__ret__string, value_));
 			}
 
-			void terminate(script value_) {
+			void terminate(const script &value_) {
 				host::functions.invoke_raw_unary(client::__sqf::unary__terminate__script__ret__nothing, value_);
 			}
 
-			std::string type(task value_) {
+			std::string type(const task &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__type__task__ret__string, value_));
 			}
 		}

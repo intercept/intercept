@@ -370,6 +370,7 @@ namespace intercept {
                 }
                 else {
                     rv_data.data = copy_.rv_data.data;
+                    rv_data.data->ref_count_internal += 1;
                 }
             }
         }
@@ -459,12 +460,7 @@ namespace intercept {
                  and we can just null out the ptr here, effectively freeing the memory in the context
                  of the object (the actual memory will be freed later by the game process).
                 */
-                if (rv_data.data && (
-                    rv_data.data->type == game_data_number::type_def ||
-                    rv_data.data->type == game_data_bool::type_def ||
-                    rv_data.data->type == game_data_array::type_def ||
-                    rv_data.data->type == game_data_string::type_def
-                    )) {
+                if (rv_data.data) {
                     client::host::functions.free_value(this);
                     rv_data.data = nullptr;
                 }

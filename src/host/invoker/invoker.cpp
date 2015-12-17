@@ -10,16 +10,19 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            types::object player = invoker::get().invoke_raw("player");
+            const types::object player = invoker::get().invoke_raw("player");
             game_value tick_time = invoker::get().invoke_raw("diag_ticktime");
 
+            game_value oops(player);
+
+            std::vector<game_value> test = { player };
             game_value args = game_value({
                 "Testers: %1 %2",
                 player,
                 tick_time
             });
             game_value message = invoker::get().invoke_raw("format", &args, "ARRAY");
-            invoker::get().invoke_raw("sidechat", player, "OBJECT", &message, "STRING");
+            invoker::get().invoke_raw("sidechat", &player, "OBJECT", &message, "STRING");
 
             Sleep(10);
         }

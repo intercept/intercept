@@ -64,8 +64,8 @@ namespace intercept {
                 game_value array_input = game_value({
 					begin_pos_asl_,
 					end_pos_asl_,
-					game_value(ignore_obj1_),
-                    game_value(ignore_obj2_),
+					ignore_obj1_,
+                    ignore_obj2_,
 					sort_mode_,
 					(float)max_results_,
 					lod1_,

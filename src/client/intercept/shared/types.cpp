@@ -426,8 +426,7 @@ namespace intercept {
         }
         game_value::game_value(const internal_object &internal_)
         {
-            rv_data.data = internal_.value->value.rv_data.data;
-            rv_data.__vptr = internal_.value->value.rv_data.__vptr;
+            rv_data = internal_.rv_data;
         }
         game_value::~game_value() {
             _free();

@@ -68,7 +68,7 @@ namespace intercept {
 
 			void __empty_unary_vector(unary_function fnc_, const vector3 &vec_)
 			{
-				host::functions.invoke_raw_unary(fnc_, game_value(vec_));
+				host::functions.invoke_raw_unary(fnc_, vec_);
 			}
 
 			void __empty_unary_string(unary_function fnc_, const std::string &str_)

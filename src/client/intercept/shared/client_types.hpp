@@ -13,18 +13,17 @@ namespace intercept {
             game_value value;
         };
 
-        class internal_object {
+        class internal_object : public game_value {
         public:
             internal_object();
-            internal_object(rv_game_value value_);
+            internal_object(const rv_game_value &value_);
             internal_object(const internal_object &copy_);
-            operator game_value();
-            operator game_value() const;
+            internal_object(internal_object &&move_);
+            internal_object & operator = (internal_object &&move_);
             operator game_value *();
             operator game_value *() const;
-            operator game_value &() const;
-
-            std::shared_ptr<game_value_shared_wrapper> value;
+        protected:
+            internal_object & operator = (const internal_object &copy_);
         };
 
 #define RV_GENERIC_OBJECT_DEC(type) class type : public internal_object {\
@@ -32,6 +31,10 @@ namespace intercept {
                 type##();\
                 type##(rv_game_value value_);\
                 type##(const type &copy_);\
+                type##(type &&move_);\
+                type & operator = (type &&move_);\
+            protected:\
+                type & operator = (const type &copy_);\
             }
 
         RV_GENERIC_OBJECT_DEC(object);

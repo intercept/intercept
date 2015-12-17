@@ -13,9 +13,15 @@ namespace intercept {
 			group wgroup;
 			float windex;
 
-			waypoint( group& rv_game_value, uint32_t windex)
+			waypoint( const group& rv_game_value, uint32_t windex)
 				: wgroup(rv_game_value),
 				  windex((float)windex)
+			{
+			}
+
+			waypoint(const game_value& rv_game_value)
+				: wgroup(group(rv_game_value[0].rv_data)),
+				windex(rv_game_value[1])
 			{
 			}
 
@@ -122,7 +128,7 @@ namespace intercept {
 						return static_cast<speed>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 			static show __parse_show(const std::string& subject_)
 			{
@@ -133,7 +139,7 @@ namespace intercept {
 						return static_cast<show>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 			static type __parse_type(const std::string& subject_)
 			{
@@ -144,7 +150,7 @@ namespace intercept {
 						return static_cast<type>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 			static behaviour __parse_behaviour(const std::string& subject_)
 			{
@@ -155,7 +161,7 @@ namespace intercept {
 						return static_cast<behaviour>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 			static combat_mode __parse_combat_mode(const std::string& subject_)
 			{
@@ -166,7 +172,7 @@ namespace intercept {
 						return static_cast<combat_mode>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712; 
 			}
 			static formation __parse_formation(const std::string& subject_)
 			{
@@ -177,7 +183,7 @@ namespace intercept {
 						return static_cast<formation>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 			static loiter_type __parse_loiter_type(const std::string& subject_)
 			{
@@ -188,7 +194,7 @@ namespace intercept {
 						return static_cast<loiter_type>(i);
 					}
 				}
-				throw 712; // TODO This should really be an exception.
+				throw 712;
 			}
 
 			static std::string __get_enum_as_str(speed subject_)
@@ -255,8 +261,8 @@ namespace intercept {
 
 			bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.
 
-			waypoint add_waypoint(group & gp_, vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-			waypoint add_waypoint(group & gp_, object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
 			void delete_waypoint(waypoint & wp_); 
 			void copy_waypoints(group & to_, group & from_);
 
@@ -275,7 +281,7 @@ namespace intercept {
 			void set_waypoint_name(waypoint & wp_, std::string name_);
 			void set_waypoint_position(waypoint & wp_, vector3 & pos_, float radius_);
 			void set_waypoint_script(waypoint & wp_, std::string command_);
-			void set_waypoint_speed(waypoint& wp_, waypoint::speed mode_); // TODO enumerate for mode param
+			void set_waypoint_speed(waypoint& wp_, waypoint::speed mode_);
 			void set_waypoint_statements(waypoint& wp_, std::string condition_, std::string statement_);
 			void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_);
 			void set_waypoint_type(waypoint& wp_, waypoint::type type_);

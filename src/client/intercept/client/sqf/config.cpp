@@ -17,7 +17,7 @@ namespace intercept {
 
             std::vector<config> config_properties(const config &config_entry, const std::string& condition_ = "true", bool inherit = true) {
                 game_value array_entry({
-                    game_value(config_entry),
+                    config_entry,
                     condition_,
                     inherit
                 });

@@ -347,8 +347,8 @@ namespace intercept {
 			object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/)
 			{
 				std::vector<game_value> markers;
-				for (auto it : markers_)
-					markers.push_back(game_value(it));
+				for (auto &it : markers_)
+					markers.push_back(it);
 
 				game_value args({
 					type_,
@@ -422,8 +422,8 @@ namespace intercept {
 			object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
-				for (auto it : markers_)
-					markers.push_back(game_value(it));
+				for (auto &it : markers_)
+					markers.push_back(it);
 
 				game_value args({
 					type_,
@@ -439,7 +439,7 @@ namespace intercept {
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
-					markers.push_back(game_value(it));
+					markers.push_back(it);
 
 				game_value args({
 					type_,

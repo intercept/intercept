@@ -45,10 +45,10 @@ namespace intercept {
 			std::vector<game_value> __to_gv_vector() const
 			{
 				return std::vector<game_value> ({
-					game_value(red),
-					game_value(blue),
-					game_value(green),
-					game_value(alpha)
+					red,
+					blue,
+					green,
+					alpha
 				});
 			}
 		};

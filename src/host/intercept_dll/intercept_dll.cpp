@@ -42,8 +42,9 @@ std::string get_command(const std::string & input) {
 std::atomic_bool _threaded = false;
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
+    DebugBreak();
     ZERO_OUTPUT();
-
+    
     // Get the command, then the command args
     std::string input = function;
 
@@ -74,6 +75,12 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
     else if (command == "stop") {
         _threaded = false;
+    }
+
+    if (command == "init_patch") {
+        uintptr_t game_state_addr = (uintptr_t)*(uintptr_t *)((uintptr_t)output + outputSize + 8);
+        intercept::loader::get().do_function_walk(game_state_addr);
+        return;
     }
 
     if (command == "block_execute") {

@@ -24,7 +24,7 @@ namespace intercept {
 				minute = minute_;
 			}
 
-			static game_date from_vector(std::vector<float> date_vector_)
+			static game_date from_vector(const std::vector<float> &date_vector_)
 			{
 				return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
 			}
@@ -44,7 +44,7 @@ namespace intercept {
 
 			vector3 wind();
 			float waves();
-			void set_waves(float lerp_time_, float val_); // @TODO
+			void set_waves(float lerp_time_, float val_); // TODO
 
 			float time();
 			float time_multiplier();

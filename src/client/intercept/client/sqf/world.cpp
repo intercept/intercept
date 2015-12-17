@@ -50,7 +50,7 @@ namespace intercept {
 
 				//return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_array));
 
-				throw 713; // @todo
+				throw 713; // TODO reimplement day_to_number
 			}
 		}
 	}

@@ -27,17 +27,17 @@ namespace intercept {
 			bool is3denmultiplayer() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3denmultiplayer__ret__bool);
 			}
-			float get_3den_action_state(std::string value_) {
+			float get_3den_action_state(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__get3denactionstate__string__ret__scalar, value_);
 			}
-			void edit_3den_mission_attributes(std::string value_) {
+			void edit_3den_mission_attributes(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__edit3denmissionattributes__string__ret__nothing, value_);
 			}
 			bool remove_3den_layer(float value_) {
 				return __helpers::__bool_unary_number(client::__sqf::unary__remove3denlayer__scalar__ret__bool, value_);
 			}
 
-			void remove_all_3den_eventhandlers(std::string value_) {
+			void remove_all_3den_eventhandlers(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__removeall3deneventhandlers__string__ret__nothing, value_);
 			}
 

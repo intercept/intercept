@@ -33,14 +33,14 @@ namespace intercept {
 				}
 			}
 
-			bool intersect(vector3 begin_pos_, vector3 end_pos_, const object& obj_, std::string lodname_) {
+			bool intersect(const vector3 &begin_pos_, const vector3 &end_pos_, const object& obj_, const std::string &lodname_) {
 				return game_value(host::functions.invoke_raw_binary(
 					client::__sqf::binary__intersect__array__array__ret__array,
 					begin_pos_,
 					end_pos_));
 			}
 
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_) {
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_) {
 				game_value array_input({
 					begin_pos_asl_,
 					end_pos_asl_
@@ -50,7 +50,7 @@ namespace intercept {
 				return __helpers::__line_intersects_surfaces(intersects_value);
 			}
 
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_, object ignore_obj1_) {
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_) {
 				game_value array_input({
 					begin_pos_asl_,
 					end_pos_asl_,
@@ -60,12 +60,12 @@ namespace intercept {
 				return __helpers::__line_intersects_surfaces(intersects_value);
 			}
 
-			intersect_surfaces_list line_intersects_surfaces(vector3 begin_pos_asl_, vector3 end_pos_asl_, object& ignore_obj1_, object& ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, std::string lod1_ = "VIEW", std::string lod2_ = "FIRE") {
+			intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, const std::string &lod1_ = "VIEW", const std::string &lod2_ = "FIRE") {
                 game_value array_input = game_value({
 					begin_pos_asl_,
 					end_pos_asl_,
 					ignore_obj1_,
-					ignore_obj2_,
+                    ignore_obj2_,
 					sort_mode_,
 					(float)max_results_,
 					lod1_,
@@ -76,7 +76,7 @@ namespace intercept {
 				return __helpers::__line_intersects_surfaces(intersects_value);
 			}
 
-			std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_ = true) {
+			std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = true) {
                 game_value array_input({
                     begin_pos_,
                     end_pos_,
@@ -96,7 +96,7 @@ namespace intercept {
 				return output;
 			}
 
-            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, object& ignore_obj_one_) {
+            std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_) {
                 game_value array_input({
                     begin_pos_,
                     end_pos_,
@@ -116,7 +116,7 @@ namespace intercept {
                 return output;
             }
 
-            std::vector<object> line_intersects_with(vector3 begin_pos_, vector3 end_pos_, bool sort_by_distance_, object& ignore_obj_one_, object& ignore_obj_two_) {
+            std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_, const object & ignore_obj_two_) {
                 game_value array_input({
                     begin_pos_,
                     end_pos_,
@@ -136,7 +136,7 @@ namespace intercept {
                 return output;
             }
 
-			bool terrain_intersect(vector3 begin_pos_, vector3 end_pos_) {
+			bool terrain_intersect(const vector3 &begin_pos_, const vector3 &end_pos_) {
 				game_value array_input({
 					begin_pos_,
 					end_pos_
@@ -145,7 +145,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__terrainintersect__array__ret__bool, array_input));
 			}
 
-			bool terrain_intersect_asl(vector3 begin_pos_, vector3 end_pos_) {
+			bool terrain_intersect_asl(const vector3 &begin_pos_, const vector3 &end_pos_) {
 				game_value array_input({
 					begin_pos_,
 					end_pos_
@@ -153,7 +153,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__terrainintersectasl__array__ret__bool, array_input));
 			}
 
-			bool line_intersects(vector3 begin_position_, vector3 end_position_) {
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_) {
 
 				game_value array_input({
 					begin_position_,
@@ -162,7 +162,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input));
 			}
 
-			bool line_intersects(vector3 begin_position_, vector3 end_position_, object& ignore_obj_one_) {
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object & ignore_obj_one_) {
 				game_value array_input({
 					begin_position_,
 					end_position_,
@@ -171,23 +171,23 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input));
 			}
 
-			bool line_intersects(vector3 begin_position_, vector3 end_position_, object& ignore_obj_one_, object& ignore_obj_two_) {
+			bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object & ignore_obj_one_, const object & ignore_obj_two_) {
 
 				game_value array_input({
 					begin_position_,
 					end_position_,
-					ignore_obj_one_,
-					ignore_obj_two_
+                    ignore_obj_one_,
+                    ignore_obj_two_
 				});
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input));
 			}
 
-			std::vector<object> line_intersects_objs(vector3 begin_position_, vector3 end_position_, object& with_obj_, object& ignore_obj_, bool sort_by_distance_, int flags_) {
+			std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object & with_obj_, const object & ignore_obj_, bool sort_by_distance_, int flags_) {
 				game_value array_input({
 					begin_position_,
 					end_position_,
 					with_obj_,
-					ignore_obj_,
+                    ignore_obj_,
 					sort_by_distance_,
 					(float)flags_
 				});

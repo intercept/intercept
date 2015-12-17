@@ -56,6 +56,8 @@ namespace intercept {
         */
         void attach_controller();
 
+        void do_function_walk(uintptr_t state_addr_);
+        
         /*!
         @brief Returns a unary SQF function from the loaders library of found SQF functions.
         
@@ -63,7 +65,7 @@ namespace intercept {
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-
+        
         @return true if function is found, false if function is not found.
 
         @todo Throw exception if overloads are found so that unexpected results
@@ -293,7 +295,6 @@ namespace intercept {
         gets their comref information, arguement types, and the pointer to the 
         actual function and stores them.
         */
-        void _do_function_walk(uintptr_t state_addr_);
 
         /*!
         @name Function Maps

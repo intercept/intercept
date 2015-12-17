@@ -84,14 +84,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 }
 ```
 
-## Performance Discussion
-
-Since our initial release, there has been some confusion on what Intercept actually provides. This documentation should make it clear that we completely bypass all SQF code - meaning, that all inherent performance issues due to the SQF engine, its scheduler, and lexing and parsing are no longer applicable. We have created a purely C++/native machine code interface to the game engine itself. There is no overhead in calling engine functions, and all calls exist directly and purely within native code. This library, in its purest form, is a direct API into the game engine.
-
-
 ## Completion Status
 
-As of now (12/2/15) Intercept is _not_ language feature complete. It still requires that hundreds of wrapper functions be written to facilitate smooth interaction with the RV engine. Most of these will come in the form of simple macros for repititous simple functions (for example any SQF functions that returns nothing, and takes a standard set of simple arguments like `OBJECT` and `SCALAR`), but others will require more hand tuning to take and return relevant results. Also event handling is not completed in any significant fashion, and a structure for handling engine events needs to be implemented.
+As of now (12/16/15) Intercept is only just over 50% language feature complete. It still requires that hundreds of wrapper functions be written to facilitate smooth interaction with the RV engine. Most of these will come in the form of simple macros for repititous simple functions (for example any SQF functions that returns nothing, and takes a standard set of simple arguments like `OBJECT` and `SCALAR`), but others will require more hand tuning to take and return relevant results. Also event handling is not completed in any significant fashion, and a structure for handling engine events needs to be implemented.
 
 ## Contributions
 

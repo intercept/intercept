@@ -10,16 +10,19 @@ namespace intercept {
 
     void threaded_invoke_demo() {
         while (true) {
-            types::object player = invoker::get().invoke_raw("player");
+            const types::object player = invoker::get().invoke_raw("player");
             game_value tick_time = invoker::get().invoke_raw("diag_ticktime");
 
+            game_value oops(player);
+
+            std::vector<game_value> test = { player };
             game_value args = game_value({
                 "Testers: %1 %2",
                 player,
                 tick_time
             });
             game_value message = invoker::get().invoke_raw("format", &args, "ARRAY");
-            invoker::get().invoke_raw("sidechat", player, "OBJECT", &message, "STRING");
+            invoker::get().invoke_raw("sidechat", &player, "OBJECT", &message, "STRING");
 
             Sleep(10);
         }
@@ -194,7 +197,7 @@ namespace intercept {
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(unary_function function_, game_value *right_)
+    rv_game_value invoker::invoke_raw(unary_function function_, const game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
@@ -206,7 +209,7 @@ namespace intercept {
         return ret;
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value * right_, std::string right_type_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function, right_type_)) {
@@ -215,7 +218,7 @@ namespace intercept {
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, game_value *right_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value *right_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
@@ -224,7 +227,7 @@ namespace intercept {
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(binary_function function_, game_value *left_, game_value *right_)
+    rv_game_value invoker::invoke_raw(binary_function function_, const game_value *left_, const game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
@@ -236,7 +239,7 @@ namespace intercept {
         return ret;
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, game_value *left_, game_value *right_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value *left_, const game_value *right_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
@@ -245,7 +248,7 @@ namespace intercept {
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, game_value * left_, std::string left_type_, game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value * left_, std::string left_type_, const game_value * right_, std::string right_type_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
@@ -254,14 +257,15 @@ namespace intercept {
         return rv_game_value();
     }
 
-    const value_type invoker::get_type(game_value *value_)
+    const value_type invoker::get_type(const game_value *value_) const
     {
         return value_type();
     }
 
-    const std::string invoker::get_type_str(game_value *value_)
+    const std::string invoker::get_type_str(const game_value *value_) const
     {
-        return type_map[value_->type()];
+        auto type = value_->type();
+        return type_map.at(type);
     }
 
     bool invoker::release_value(game_value *value_, bool immediate_) {

@@ -65,7 +65,7 @@ namespace intercept {
             return std::string((char *)&char_string);
         }
 
-        value_type op_value_entry::type() {
+        value_types op_value_entry::type() {
             if (single_type != NULL) {
                 return{ single_type->type_name->string() };
             }
@@ -195,7 +195,7 @@ namespace intercept {
             raw_string->ref_count_internal = 1;
         }
 
-        game_data_string::game_data_string(std::string str_)
+        game_data_string::game_data_string(const std::string &str_)
         {
             type = type_def;
             data_type = data_type_def;
@@ -370,6 +370,7 @@ namespace intercept {
                 }
                 else {
                     rv_data.data = copy_.rv_data.data;
+                    rv_data.data->ref_count_internal += 1;
                 }
             }
         }
@@ -384,7 +385,7 @@ namespace intercept {
             move_.rv_data.data = nullptr;
         }
 
-        game_value::game_value(rv_game_value internal_)
+        game_value::game_value(const rv_game_value &internal_)
         {
             rv_data.__vptr = internal_.__vptr;
             rv_data.data = (game_data *)internal_.data;
@@ -415,19 +416,18 @@ namespace intercept {
             rv_data.data = new game_data_array(list_);
         }
 
-        game_value::game_value(vector3 & vec_)
+        game_value::game_value(const vector3 & vec_)
         {
             rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });
         }
 
-        game_value::game_value(vector2 & vec_)
+        game_value::game_value(const vector2 & vec_)
         {
             rv_data.data = new game_data_array({ vec_.x, vec_.y });
         }
-        game_value::game_value(internal_object internal_)
+        game_value::game_value(const internal_object &internal_)
         {
-            rv_data.data = internal_.value->value.rv_data.data;
-            rv_data.__vptr = internal_.value->value.rv_data.__vptr;
+            rv_data = internal_.rv_data;
         }
         game_value::~game_value() {
             _free();
@@ -460,12 +460,7 @@ namespace intercept {
                  and we can just null out the ptr here, effectively freeing the memory in the context
                  of the object (the actual memory will be freed later by the game process).
                 */
-                if (rv_data.data && (
-                    rv_data.data->type == game_data_number::type_def ||
-                    rv_data.data->type == game_data_bool::type_def ||
-                    rv_data.data->type == game_data_array::type_def ||
-                    rv_data.data->type == game_data_string::type_def
-                    )) {
+                if (rv_data.data) {
                     client::host::functions.free_value(this);
                     rv_data.data = nullptr;
                 }
@@ -503,7 +498,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(std::string val_)
+        game_value & game_value::operator=(const std::string val_)
         {
             if (rv_data.data)
                 _free();
@@ -527,7 +522,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(vector3 vec_)
+        game_value & game_value::operator=(const vector3 vec_)
         {
             if (rv_data.data)
                 _free();
@@ -535,7 +530,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(vector2 vec_)
+        game_value & game_value::operator=(const vector2 vec_)
         {
             if (rv_data.data)
                 _free();
@@ -543,7 +538,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(internal_object internal_)
+        game_value & game_value::operator=(const internal_object internal_)
         {
             if (rv_data.data)
                 _free();
@@ -552,7 +547,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(rv_game_value internal_)
+        game_value & game_value::operator=(const rv_game_value internal_)
         {
             if (rv_data.data)
                 _free();
@@ -652,19 +647,19 @@ namespace intercept {
             return ((game_data_array *)rv_data.data)->data[i_];
         }
 
-        uintptr_t game_value::type() {
+        uintptr_t game_value::type() const {
             if (rv_data.data)
                 return rv_data.data->type;
             return 0x0;
         }
 
-        size_t game_value::length() {
+        size_t game_value::length() const {
             if (type() == game_data_array::type_def)
                 return ((game_data_array *)rv_data.data)->length;
             return 0;
         }
 
-        bool game_value::client_owned() {
+        bool game_value::client_owned() const {
             if (rv_data.data && rv_data.data->ref_count_internal == 0x0000dede)
                 return true;
             return false;

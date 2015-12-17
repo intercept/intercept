@@ -13,7 +13,7 @@
 using namespace intercept::types;
 
 namespace intercept {
-    typedef uintptr_t value_type;
+    
     class invoker
         : public singleton<invoker>
     {
@@ -43,25 +43,25 @@ namespace intercept {
         
         void invoke_delete();
 
-        rv_game_value invoke_raw(unary_function function_, game_value * right_);
-        rv_game_value invoke_raw(std::string function_name_, game_value *right_);
-        rv_game_value invoke_raw(std::string function_name_, game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw(unary_function function_, const game_value * right_);
+        rv_game_value invoke_raw(std::string function_name_, const game_value *right_);
+        rv_game_value invoke_raw(std::string function_name_, const game_value *right_, std::string right_type_);
         
-        rv_game_value invoke_raw(binary_function function_, game_value * left_, game_value * right_);
-        rv_game_value invoke_raw(std::string function_name_, game_value *left_, game_value *right_);
-        rv_game_value invoke_raw(std::string function_name_, game_value *left_, std::string left_type_, game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw(binary_function function_, const game_value * left_, const game_value * right_);
+        rv_game_value invoke_raw(std::string function_name_, const game_value *left_, const game_value *right_);
+        rv_game_value invoke_raw(std::string function_name_, const game_value *left_, std::string left_type_, const game_value *right_, std::string right_type_);
 
-        const value_type get_type(game_value *value_);
+        const uintptr_t get_type(const game_value *value_) const;
 
-        const std::string get_type_str(game_value *value_);
+        const std::string get_type_str(const game_value *value_) const;
 
         bool release_value(game_value * value_, bool immediate_ = false);
 
         void collect_string(rv_string *str_);
 
 
-        std::unordered_map<value_type, std::string> type_map;
-        std::unordered_map<std::string, std::pair<value_type, value_type>> type_structures;
+        std::unordered_map<uintptr_t, std::string> type_map;
+        std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
         uintptr_t game_value_vptr;
     protected:
         std::thread _collection_thread;

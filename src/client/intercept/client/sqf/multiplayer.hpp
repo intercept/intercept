@@ -8,7 +8,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
 		namespace multiplayer {
-			bool local(object value_);
+			bool local(const object &value_);
 			bool local(group value_);
 			bool is_server();
 			bool is_multiplayer();

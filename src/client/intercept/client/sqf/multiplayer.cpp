@@ -5,7 +5,7 @@
 namespace intercept {
     namespace sqf {
 		namespace multiplayer {
-			bool local(object value_) {
+			bool local(const object &value_) {
 				return __helpers::__bool_unary_object(client::__sqf::unary__local__object__ret__bool, value_);
 			}
 

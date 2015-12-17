@@ -21,9 +21,9 @@ namespace intercept {
 			bool set_group_owner(float value0_, group value1_);
 
 			object leader(group value_);
-			void group_radio(object value0_, const std::string& value1_);
+			void group_radio(const object &value0_, const std::string& value1_);
 			void remove_group_icon(float value0_, group value1_);
-			void select_leader(object value0_, group value1_);
+			void select_leader(const object &value0_, group value1_);
 			void set_group_icons_selectable(bool value_);
 		}
     }

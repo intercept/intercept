@@ -47,7 +47,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, value_));
 			}
 
-			void group_radio(object value0_, const std::string& value1_) {
+			void group_radio(const object &value0_, const std::string& value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, game_value(value1_));
 			}
 
@@ -55,7 +55,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, game_value(value0_), value1_);
 			}
 
-			void select_leader(object value0_, group value1_) {
+			void select_leader(const object &value0_, group value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value1_, value0_);
 			}
 

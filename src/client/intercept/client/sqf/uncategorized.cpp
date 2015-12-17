@@ -124,12 +124,12 @@ namespace intercept {
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__allmissionobjects__string__ret__array, game_value(type_)));
 			}
 
-			std::vector<object> assigned_cargo(object veh_)
+			std::vector<object> assigned_cargo(const object &veh_)
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__assignedcargo__object__ret__array, veh_));
 			}
 
-			std::vector<std::string> assigned_items(object unit_)
+			std::vector<std::string> assigned_items(const object &unit_)
 			{
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__assigneditems__object__ret__array, unit_));
 			}
@@ -139,17 +139,17 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobject__location__ret__object, loc_));
 			}
 
-			std::vector<object> attached_objects(object obj_)
+			std::vector<object> attached_objects(const object &obj_)
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobjects__object__ret__array, obj_));
 			}
 
-			object attached_to(object obj_)
+			object attached_to(const object &obj_)
 			{
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedto__object__ret__array, obj_));
 			}
 
-			bool attack_enabled(object unit_)
+			bool attack_enabled(const object &unit_)
 			{
 				return __helpers::__bool_unary_object(client::__sqf::unary__attackenabled__object_group__ret__bool, unit_);
 			}
@@ -159,22 +159,22 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__attackenabled__object_group__ret__bool, group_));
 			}
 
-			std::vector<std::string> backpack_cargo(object box_)
+			std::vector<std::string> backpack_cargo(const object &box_)
 			{
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackcargo__object__ret__array, box_));
 			}
 
-			std::vector<std::string> backpack_items(object unit_)
+			std::vector<std::string> backpack_items(const object &unit_)
 			{
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackitems__object__ret__array, unit_));
 			}
 
-			std::vector<std::string> backpack_magazines(object unit_)
+			std::vector<std::string> backpack_magazines(const object &unit_)
 			{
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackmagazines__object__ret__array, unit_));
 			}
 
-			sqf::bounding_box bounding_box(object model_)
+			sqf::bounding_box bounding_box(const object &model_)
 			{
 				//game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingbox__object__ret__array, model_);
 				//game_data_array* array_value = ((game_data_array *)input.data);
@@ -196,7 +196,7 @@ namespace intercept {
 				throw 713; // TODO
 			}
 
-			sqf::bounding_box bounding_box_real(object model_)
+			sqf::bounding_box bounding_box_real(const object &model_)
 			{
 				//game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingboxreal__object__ret__array, model_);
 				//game_data_array* array_value = ((game_data_array *)input.data);
@@ -218,7 +218,7 @@ namespace intercept {
 				throw 713; // TODO
 			}
 
-			vector3 bounding_center(object obj_)
+			vector3 bounding_center(const object &obj_)
 			{
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__boundingcenter__object__ret__array, obj_));
 			}
@@ -313,12 +313,12 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_));
 			}
 
-			std::string combat_mode(object unit_)
+			std::string combat_mode(const object &unit_)
 			{
 				return __helpers::__string_unary_object(client::__sqf::unary__combatmode__object_group__ret__string, unit_);
 			}
 
-			void command_get_out(object unit_)
+			void command_get_out(const object &unit_)
 			{
 				return __helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
 			}
@@ -334,7 +334,7 @@ namespace intercept {
 				throw 713;
 			}
 
-			void command_stop(object unit_)
+			void command_stop(const object &unit_)
 			{
 				return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
 			}
@@ -362,10 +362,10 @@ namespace intercept {
 
 			}
 
-			void create_gear_dialog(object unit_, const std::string &resource_)
+			void create_gear_dialog(const object &unit_, const std::string &resource_)
 			{
 				game_value params({
-					unit_,
+					game_value(unit_),
 					resource_
 				});
 
@@ -488,7 +488,7 @@ namespace intercept {
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
 			}
 
-			std::string current_magazine_detail(object veh_)
+			std::string current_magazine_detail(const object &veh_)
 			{
 				return __helpers::__string_unary_object(client::__sqf::unary__currentmagazinedetail__object__ret__array, veh_);
 			}
@@ -567,7 +567,7 @@ namespace intercept {
 				//host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
 			}
 
-			std::string formation(object leader_)
+			std::string formation(const object &leader_)
 			{
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, leader_));
 			}
@@ -577,17 +577,17 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, group_));
 			}
 
-			std::vector<object> formation_members(object unit_)
+			std::vector<object> formation_members(const object &unit_)
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
 			}
 
-			vector3 formation_position(object unit_)
+			vector3 formation_position(const object &unit_)
 			{
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
 			}
 
-			std::vector<rv_crew_member> full_crew(object veh_, const std::string & filter_)
+			std::vector<rv_crew_member> full_crew(const object &veh_, const std::string & filter_)
 			{
 				//game_value crew_list;
 
@@ -634,7 +634,7 @@ namespace intercept {
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getartilleryammo__array__ret__array, units));
 			}
 
-			vector3 get_center_of_mass(object obj_)
+			vector3 get_center_of_mass(const object &obj_)
 			{
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__getcenterofmass__object__ret__array, obj_));
 			}

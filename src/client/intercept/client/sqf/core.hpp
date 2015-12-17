@@ -24,12 +24,12 @@ namespace intercept {
 			object player();
 			object create_vehicle(const std::string &type_, const vector3 &pos_);
 			object create_vehicle(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_, float placement_, const std::string &special_);
-			void delete_vehicle(object obj_);
+			void delete_vehicle(const object &obj_);
 
 			float server_time();
 			std::string server_name();
 
-			bool is_null(object value_);
+			bool is_null(const object &value_);
 			bool is_null(group value_);
 			bool is_null(control value_);
 			bool is_null(display value_);
@@ -48,11 +48,11 @@ namespace intercept {
 
             std::vector<control> all_controls(display display_);
 
-            std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_);
+            std::vector<std::string> all_turrets(const object &vehicle_, bool person_turrets_);
 
-            std::vector<std::string> all_turrets(object vehicle_);
+            std::vector<std::string> all_turrets(const object &vehicle_);
 
-            std::vector<std::string> all_variables(object value_);
+            std::vector<std::string> all_variables(const object &value_);
             std::vector<std::string> all_variables(control value_);
             std::vector<std::string> all_variables(team_member value_);
             std::vector<std::string> all_variables(rv_namespace value_);

@@ -32,7 +32,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
 			}
 
-			void delete_vehicle(object obj_)
+			void delete_vehicle(const object &obj_)
 			{
 				host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
 			}
@@ -89,7 +89,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__servername__ret__string));
 			}
 
-			bool is_null(object value_) {
+			bool is_null(const object &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_));
 			}
 
@@ -174,22 +174,22 @@ namespace intercept {
 				return output;
             }
 
-            std::vector<std::string> all_turrets(object vehicle_, bool person_turrets_) {
-               game_value array_input({
-                    vehicle_,
-                    game_value(person_turrets_)
+            std::vector<std::string> all_turrets(const object &vehicle_, bool person_turrets_) {
+               game_value array_input(std::vector<game_value>{
+                    game_value(vehicle_),
+                    person_turrets_
                 });
 
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allturrets__array__ret__array, array_input));
             }
 
-            std::vector<std::string> all_turrets(object vehicle_) {
+            std::vector<std::string> all_turrets(const object &vehicle_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allturrets__object__ret__array, vehicle_));
             }
 
-            std::vector<std::string> all_variables(object value_) {
+            std::vector<std::string> all_variables(const object &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__object__ret__array, value_));
             }

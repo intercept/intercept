@@ -90,27 +90,27 @@ namespace intercept {
 			std::vector<object> all_mission_objects(const std::string &type_);
 
 			/* potential namespace: vehicle, core, cargo */
-			std::vector<object> assigned_cargo(object veh_);
-			std::vector<std::string> assigned_items(object unit_);
+			std::vector<object> assigned_cargo(const object &veh_);
+			std::vector<std::string> assigned_items(const object &unit_);
 
 			/* potential namespace: misc, attach */
 			object attached_object(location loc_);
-			std::vector<object> attached_objects(object obj_);
-			object attached_to(object obj_);
+			std::vector<object> attached_objects(const object &obj_);
+			object attached_to(const object &obj_);
 
 			/* potential namespace: ai */
-			bool attack_enabled(object unit_);
+			bool attack_enabled(const object &unit_);
 			bool attack_enabled(group group_);
 
 			/* potential namespace: cargo */
-			std::vector<std::string> backpack_cargo(object box_);
-			std::vector<std::string> backpack_items(object unit_);
-			std::vector<std::string> backpack_magazines(object unit_);
+			std::vector<std::string> backpack_cargo(const object &box_);
+			std::vector<std::string> backpack_items(const object &unit_);
+			std::vector<std::string> backpack_magazines(const object &unit_);
 
 			/* potential namespace: misc, model, position? */
-			sqf::bounding_box bounding_box(object model_);
-			sqf::bounding_box bounding_box_real(object model_);
-			vector3 bounding_center(object obj_);
+			sqf::bounding_box bounding_box(const object &model_);
+			sqf::bounding_box bounding_box_real(const object &model_);
+			vector3 bounding_center(const object &obj_);
 
 			/* potential namespace: controls, ui, gui, misc */
 			void button_set_action(int control_id_, const std::string &code_);
@@ -130,12 +130,12 @@ namespace intercept {
 
 			/* potential namespace: ai, group, unit */
 			std::string combat_mode(group loc_);
-			std::string combat_mode(object loc_);
+			std::string combat_mode(const object &loc_);
 
 			/* potential namespace: ai */
-			void command_get_out(object unit_);
+			void command_get_out(const object &unit_);
 			void command_get_out(std::vector<object> units_);
-			void command_stop(object unit_);
+			void command_stop(const object &unit_);
 			void command_stop(std::vector<object> units_);
 
 			/* potential namespace: core, create */
@@ -149,7 +149,7 @@ namespace intercept {
 			team_member create_team(const std::string &type_, const std::string &name_);
 
 			/* potential namespace: gui, ui */
-			void create_gear_dialog(object unit_, const std::string &resource_);
+			void create_gear_dialog(const object &unit_, const std::string &resource_);
 
 			/* potential namespace: misc */
 			void create_guarded_point(side side_, const vector3 &pos_, float idstatic_, const object &veh_);
@@ -158,7 +158,7 @@ namespace intercept {
 			std::vector<object> crew(object _veh);
 
 			/* potential namespace: magazine, items, inventory */
-			std::string current_magazine_detail(object veh_);
+			std::string current_magazine_detail(const object &veh_);
 
 			/* potential namespace: teams */
 			std::vector<task> current_tasks(team_member team_member_);
@@ -174,41 +174,41 @@ namespace intercept {
 			void enable_saving(bool enable_, bool autosave_);
 			
 			/* potential namespace: rtd, vehicles, afm */
-			std::vector<bool> engines_is_on_rtd(object helicopter_);
-			std::vector<float> engines_torque_rtd(object helicopter_);
-			std::vector<float> engines_rpm_rtd(object helicopter_);
+			std::vector<bool> engines_is_on_rtd(const object &helicopter_);
+			std::vector<float> engines_torque_rtd(const object &helicopter_);
+			std::vector<float> engines_rpm_rtd(const object &helicopter_);
 
 			/* potential namespace: core */
 			std::vector<object> entities(const std::string &type_);
 
 			/* potential namespace: backpack, containers, inventory */
-			std::vector<object> every_backpack(object box_);
+			std::vector<object> every_backpack(const object &box_);
 
 			/* potential namespace: containers, inventory */
-			std::vector<rv_container> every_container(object box_);
+			std::vector<rv_container> every_container(const object &box_);
 
 			/* potential namespace: ai */
-			rv_destination expected_destination(object unit_);
+			rv_destination expected_destination(const object &unit_);
 
 			/* potential namespace: position */
-			vector3 eye_direction(object unit_);
-			vector3 eye_pos(object unit_);
+			vector3 eye_direction(const object &unit_);
+			vector3 eye_pos(const object &unit_);
 
 			/* potential namespace: groups, ai */
-			std::string formation(object leader_);
+			std::string formation(const object &leader_);
 			std::string formation(group group_);
 
-			std::vector<object> formation_members(object unit_);
-			vector3 formation_position(object unit_);
+			std::vector<object> formation_members(const object &unit_);
+			vector3 formation_position(const object &unit_);
 			
 			/* Potential namespace: core */
-			std::vector<rv_crew_member> full_crew(object veh_, const std::string &filter_ = "");
+			std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
 
 			/* potential namespace: misc */
 			std::vector<std::string> get_artillery_ammo(const std::vector<object> &units_);
 
 			/* potential namespace: physics, physx, core */
-			vector3 get_center_of_mass(object obj_);
+			vector3 get_center_of_mass(const object &obj_);
 
 			/* potential namespace: misc */
 			std::vector<float> get_dlcs(float filter_);

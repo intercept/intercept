@@ -210,7 +210,7 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_string();
-            game_data_string(std::string str_);
+            game_data_string(const std::string &str_);
             game_data_string(const game_data_string &copy_);
             game_data_string(game_data_string &&move_);
             game_data_string & game_data_string::operator = (const game_data_string &copy_);

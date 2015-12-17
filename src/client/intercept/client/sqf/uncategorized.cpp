@@ -8,7 +8,7 @@ using namespace intercept::types;
 namespace intercept {
 	namespace sqf {
 		namespace __uncategorized {
-			std::vector<std::string> action_keys(std::string user_action_)
+			std::vector<std::string> action_keys(const std::string &user_action_)
 			{
 				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, game_value(user_action_));
 				std::vector<std::string> r_arr = __helpers::__convert_to_strings_vector(act_keys);
@@ -17,22 +17,22 @@ namespace intercept {
 				return r_arr;
 			}
 
-			text action_keys_images(std::string user_action_)
+			text action_keys_images(const std::string &user_action_)
 			{
 				return text(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysimages__string_array__ret__text, user_action_));
 			}
 
-			std::string action_keys_names(std::string user_action_)
+			std::string action_keys_names(const std::string &user_action_)
 			{
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, user_action_));
 			}
 
-			std::string action_keys_names(std::string user_action_, int max_keys_)
+			std::string action_keys_names(const std::string &user_action_, int max_keys_)
 			{
 				std::vector<game_value> params{ game_value(user_action_), game_value((float)max_keys_) };
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
-			std::string action_keys_names(std::string user_action_, int max_keys_, std::string input_device_priority_)
+			std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_)
 			{
 				game_value params({
 					user_action_,
@@ -43,7 +43,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params));
 			}
 			
-			std::vector<std::string> action_keys_names_array(std::string user_action_)
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_)
 			{
 				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, game_value(user_action_));
 				std::vector<std::string> r_arr = __helpers::__convert_to_strings_vector(act_keys);
@@ -52,13 +52,13 @@ namespace intercept {
 				return r_arr;
 			}
 
-			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_)
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_)
 			{
 				std::vector<game_value> params{ game_value(user_action_), game_value((float)max_keys_) };
 
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
 			}
-			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_, std::string input_device_priority_)
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_)
 			{
 				game_value params({
 					user_action_,
@@ -87,14 +87,14 @@ namespace intercept {
 			}
 
 			/* potential namespace: items, inventory, campaign */
-			void add_item_pool(std::string item_name_, int item_count_)
+			void add_item_pool(const std::string &item_name_, int item_count_)
 			{
 				std::vector<game_value> params{ game_value(item_name_), game_value((float)item_count_) };
 
 				host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
 			}
 
-			void add_magazine_pool(std::string mag_name_, int mag_count_)
+			void add_magazine_pool(const std::string &mag_name_, int mag_count_)
 			{
 				std::vector<game_value> params{ game_value(mag_name_), game_value((float)mag_count_) };
 				host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
@@ -119,7 +119,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__aisfinishheal__array__ret__nothing, params);
 			}
 
-			std::vector<object> all_mission_objects(std::string type_)
+			std::vector<object> all_mission_objects(const std::string &type_)
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__allmissionobjects__string__ret__array, game_value(type_)));
 			}
@@ -223,7 +223,7 @@ namespace intercept {
 				return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__boundingcenter__object__ret__array, obj_));
 			}
 
-			void button_set_action(int control_id_, std::string code_)
+			void button_set_action(int control_id_, const std::string &code_)
 			{
 				game_value params({
 					(float)control_id_,
@@ -233,7 +233,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__buttonsetaction__array__ret__nothing, params);
 			}
 
-			void button_set_action(control control_, std::string code_)
+			void button_set_action(control control_, const std::string &code_)
 			{
 				game_value params({
 					control_,
@@ -263,7 +263,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlenable__array__ret__nothing, params);
 			}
 
-			void ctrl_set_text(int control_id_, std::string text_)
+			void ctrl_set_text(int control_id_, const std::string &text_)
 			{
 				game_value params({
 					(float)control_id_,
@@ -273,7 +273,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__ctrlsettext__array__ret__nothing, params);
 			}
 
-			void ctrl_set_text(control control_, std::string text_)
+			void ctrl_set_text(control control_, const std::string &text_)
 			{
 				game_value params({
 					control_,
@@ -344,7 +344,7 @@ namespace intercept {
 				//return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
 			}
 
-			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ /* = {}*/, float placement_ /*= 0.0f*/, std::string special_ /*= "NONE"*/)
+			object create_agent(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
@@ -362,7 +362,7 @@ namespace intercept {
 
 			}
 
-			void create_gear_dialog(object unit_, std::string resource_)
+			void create_gear_dialog(object unit_, const std::string &resource_)
 			{
 				game_value params({
 					unit_,
@@ -372,7 +372,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(__sqf::unary__creategeardialog__array__ret__nothing, params);
 			}
 
-			void create_guarded_point(side side_, vector3 pos_, float idstatic_, const object &veh_)
+			void create_guarded_point(side side_, const vector3 &pos_, float idstatic_, const object &veh_)
 			{
 				game_value params({
 					side_,
@@ -384,7 +384,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
 			}
 
-			location create_location(std::string classname_, vector3 pos_, float size_x_, float size_y_)
+			location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_)
 			{
 				game_value params({
 					classname_,
@@ -396,7 +396,7 @@ namespace intercept {
 				return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 			}
 
-			location create_location(std::string classname_, vector2 pos_, float size_x_, float size_y_)
+			location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_)
 			{
 				game_value params({
 					classname_,
@@ -435,7 +435,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createmine__array__ret__object, args));
 			}
 
-			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
+			object create_sound_source(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_/* = {}*/, float placement_/* = 0.0f*/)
 			{
 				std::vector<game_value> markers;
 				for (auto it : markers_)
@@ -451,7 +451,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsource__array__ret__object, args));
 			}
 
-			team_member create_team(std::string type_, std::string name_)
+			team_member create_team(const std::string &type_, const std::string &name_)
 			{
 				game_value args({
 					(type_),
@@ -461,7 +461,7 @@ namespace intercept {
 				return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
 			}
 
-			object create_trigger(std::string type_, vector3 pos_, bool make_global_/* = true*/)
+			object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_/* = true*/)
 			{
 				game_value args({
 					(type_),
@@ -472,7 +472,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
 			}
 
-			object create_trigger(std::string type_, const object &pos_, bool make_global_ /*= true*/)
+			object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/)
 			{
 				game_value args({
 					(type_),
@@ -505,7 +505,7 @@ namespace intercept {
 				return output;
 			}
 
-			void cut_obj(std::string name_, std::string type_, float speed_)
+			void cut_obj(const std::string &name_, const std::string &type_, float speed_)
 			{
 				game_value args({
 					(name_),
@@ -516,7 +516,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(__sqf::unary__cutobj__array__ret__nothing, args);
 			}
 
-			void cut_rsc(std::string name_, std::string type_, float speed_, bool show_on_map_)
+			void cut_rsc(const std::string &name_, const std::string &type_, float speed_, bool show_on_map_)
 			{
 				game_value args({
 					(name_),
@@ -528,7 +528,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(__sqf::unary__cutrsc__array__ret__nothing, args);
 			}
 
-			void cut_text(std::string name_, std::string type_, float speed_, bool show_on_map_)
+			void cut_text(const std::string &name_, const std::string &type_, float speed_, bool show_on_map_)
 			{
 				game_value args({
 					(name_),
@@ -646,7 +646,7 @@ namespace intercept {
 
 #pragma region listbox
 			/****************************************************************************** LISTBOX ***************************************************************************/
-			float lb_add(int control_id_, std::string text_)
+			float lb_add(int control_id_, const std::string &text_)
 			{
 				game_value args({
 					(float)(control_id_),
@@ -656,7 +656,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbadd__array__ret__scalar, args));
 			}
 
-			float lb_add(control control_, std::string text_)
+			float lb_add(control control_, const std::string &text_)
 			{
 				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbadd__control__string__ret__scalar, control_, text_));
 			}
@@ -787,7 +787,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, (float)index_);
 			}
 
-			void lb_set_data(int control_id_, int index_, std::string data_)
+			void lb_set_data(int control_id_, int index_, const std::string &data_)
 			{
 				game_value args({
 					(float)(control_id_),
@@ -799,7 +799,7 @@ namespace intercept {
 			}
 
 
-			void lb_set_data(control control_, int index_, std::string data_)
+			void lb_set_data(control control_, int index_, const std::string &data_)
 			{
 				game_value args({
 					(float)(index_),
@@ -809,7 +809,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetdata__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture(int control_id_, int index_, std::string name_)
+			void lb_set_picture(int control_id_, int index_, const std::string &name_)
 			{
 				game_value args({
 					(float)(control_id_),
@@ -820,7 +820,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicture__array__ret__nothing, args);
 			}
 
-			void lb_set_picture(control control_, int index_, std::string name_)
+			void lb_set_picture(control control_, int index_, const std::string &name_)
 			{
 				game_value args({
 					(float)(index_),
@@ -830,7 +830,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicture__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_picture_right(int control_id_, int index_, std::string name_)
+			void lb_set_picture_right(int control_id_, int index_, const std::string &name_)
 			{
 				game_value args({
 					(float)(control_id_),
@@ -841,7 +841,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpictureright__array__ret__nothing, args);
 			}
 
-			void lb_set_picture_right(control control_, int index_, std::string name_)
+			void lb_set_picture_right(control control_, int index_, const std::string &name_)
 			{
 				game_value args({
 					(float)(index_),
@@ -915,7 +915,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolorselected__control__array__ret__nothing, control_, args);
 			}
 
-			void lb_set_tooltip(int control_id_, int index_, std::string tooltip_)
+			void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_)
 			{
 				game_value args({
 					(float)(control_id_),
@@ -926,7 +926,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsettooltip__array__ret__nothing, args);
 			}
 
-			void lb_set_tooltip(control control_, int index_, std::string tooltip_)
+			void lb_set_tooltip(control control_, int index_, const std::string &tooltip_)
 			{
 				game_value args({
 					(float)(index_),
@@ -955,7 +955,7 @@ namespace intercept {
 				host::functions.invoke_raw_unary(client::__sqf::unary__lbsort__control__ret__scalar, control_);
 			}
 
-			void lb_sort(control control_, std::string sort_order_)
+			void lb_sort(control control_, const std::string &sort_order_)
 			{
 				game_value args({
 					(control_),

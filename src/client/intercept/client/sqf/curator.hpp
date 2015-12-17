@@ -26,7 +26,7 @@ namespace intercept {
 			void unassign_curator(object value_);
 			void add_curator_points(float value0_, const object &value1_);
 			void allow_curator_logic_ignore_areas(bool value0_, const object &value1_);
-			float curator_coef(object value0_, std::string value1_);
+			float curator_coef(object value0_, const std::string &value1_);
 			void remove_curator_camera_area(float value0_, const object &value1_);
 			void remove_curator_editing_area(float value0_, const object &value1_);
 			void set_curator_camera_area_ceiling(float value0_, const object &value1_);

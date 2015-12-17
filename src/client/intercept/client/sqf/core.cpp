@@ -10,12 +10,12 @@ namespace intercept {
 				return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
 			}
 
-			object create_vehicle(std::string type_, vector3 pos_)
+			object create_vehicle(const std::string &type_, const vector3 &pos_)
 			{
 				return object(host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, type_, pos_));
 			}
 
-			object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE")
+			object create_vehicle(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE")
 			{
                 std::vector<game_value> markers;
                 for (auto it : markers_) {

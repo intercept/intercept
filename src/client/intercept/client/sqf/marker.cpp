@@ -128,7 +128,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
 			}
 
-			std::string create_marker_local(const std::string &name_, vector3 pos_)
+			std::string create_marker_local(const std::string &name_, const vector3 &pos_)
 			{
 				game_value params({
 					name_,

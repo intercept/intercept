@@ -584,11 +584,11 @@ namespace intercept {
 				__helpers::__empty_nular(client::__sqf::nular__saveprofilenamespace__ret__nothing);
 			}
 
-			std::string action_name(std::string value_) {
+			std::string action_name(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__actionname__string__ret__string, value_);
 			}
 
-			void activate_key(std::string value_) {
+			void activate_key(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__activatekey__string__ret__nothing, value_);
 			}
 
@@ -652,11 +652,11 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__binocular__object__ret__string, value_);
 			}
 
-			void break_out(std::string value_) {
+			void break_out(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__breakout__string__ret__nothing, value_);
 			}
 
-			void break_to(std::string value_) {
+			void break_to(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__breakto__string__ret__nothing, value_);
 			}
 
@@ -664,7 +664,7 @@ namespace intercept {
 				__helpers::__empty_unary_bool(client::__sqf::unary__buldozer_enableroaddiag__bool__ret__nothing, value_);
 			}
 
-			bool buldozer(std::string value_) {
+			bool buldozer(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__buldozer_loadnewroads__string__ret__bool, value_);
 			}
 
@@ -736,7 +736,7 @@ namespace intercept {
 				return __helpers::__bool_unary_number(client::__sqf::unary__channelenabled__scalar__ret__bool, value_);
 			}
 
-			bool check_aifeature(std::string value_) {
+			bool check_aifeature(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__checkaifeature__string__ret__bool, value_);
 			}
 
@@ -800,7 +800,7 @@ namespace intercept {
 				return __helpers::__object_unary_object(client::__sqf::unary__commander__object__ret__object, value_);
 			}
 
-			void comment(std::string value_) {
+			void comment(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__comment__string__ret__nothing, value_);
 			}
 
@@ -812,15 +812,15 @@ namespace intercept {
 				return __helpers::__bool_unary_number(client::__sqf::unary__completedfsm__scalar__ret__bool, value_);
 			}
 
-			void copy_to_clipboard(std::string value_) {
+			void copy_to_clipboard(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__copytoclipboard__string__ret__nothing, value_);
 			}
 
-			float count(std::string value_) {
+			float count(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__count__string__ret__scalar, value_);
 			}
 
-			bool create_dialog(std::string value_) {
+			bool create_dialog(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, value_);
 			}
 
@@ -860,11 +860,11 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__damage__object__ret__scalar, value_);
 			}
 
-			void de_activate_key(std::string value_) {
+			void de_activate_key(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__deactivatekey__string__ret__nothing, value_);
 			}
 
-			float debriefing_text(std::string value_) {
+			float debriefing_text(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__debriefingtext__string__ret__scalar, value_);
 			}
 
@@ -872,7 +872,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__deletecollection__object__ret__nothing, value_);
 			}
 
-			bool delete_identity(std::string value_) {
+			bool delete_identity(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__deleteidentity__string__ret__bool, value_);
 			}
 
@@ -880,7 +880,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__deletesite__object__ret__nothing, value_);
 			}
 
-			bool delete_status(std::string value_) {
+			bool delete_status(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__deletestatus__string__ret__bool, value_);
 			}
 
@@ -892,7 +892,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__didjipowner__object__ret__bool, value_);
 			}
 
-			bool difficulty_enabled(std::string value_) {
+			bool difficulty_enabled(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__difficultyenabled__string__ret__bool, value_);
 			}
 
@@ -908,7 +908,7 @@ namespace intercept {
 				__helpers::__empty_unary_bool(client::__sqf::unary__disableuserinput__bool__ret__nothing, value_);
 			}
 
-			void dissolve_team(std::string value_) {
+			void dissolve_team(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__dissolveteam__string__ret__nothing, value_);
 			}
 
@@ -916,7 +916,7 @@ namespace intercept {
 				return __helpers::__object_unary_object(client::__sqf::unary__driver__object__ret__object, value_);
 			}
 
-			void echo(std::string value_) {
+			void echo(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__echo__string__ret__nothing, value_);
 			}
 
@@ -968,7 +968,7 @@ namespace intercept {
 				__helpers::__empty_unary_bool(client::__sqf::unary__enabletraffic__bool__ret__nothing, value_);
 			}
 
-			void end_mission(std::string value_) {
+			void end_mission(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__endmission__string__ret__nothing, value_);
 			}
 
@@ -976,11 +976,11 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__estimatedtimeleft__scalar__ret__nothing, value_);
 			}
 
-			float exec_fsm(std::string value_) {
+			float exec_fsm(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__execfsm__string__ret__scalar, value_);
 			}
 
-			void export_jipmessages(std::string value_) {
+			void export_jipmessages(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__exportjipmessages__string__ret__nothing, value_);
 			}
 
@@ -992,7 +992,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__faction__object__ret__string, value_);
 			}
 
-			void fail_mission(std::string value_) {
+			void fail_mission(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__failmission__string__ret__nothing, value_);
 			}
 
@@ -1164,7 +1164,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__getstamina__object__ret__scalar, value_);
 			}
 
-			float get_stat_value(std::string value_) {
+			float get_stat_value(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__getstatvalue__string__ret__scalar, value_);
 			}
 
@@ -1228,16 +1228,12 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__hideobjectglobal__object__ret__nothing, value_);
 			}
 
-			void hint_c(std::string value_) {
+			void hint_c(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__hintc__string__ret__nothing, value_);
 			}
 
 			std::string hmd(object value_) {
 				return __helpers::__string_unary_object(client::__sqf::unary__hmd__object__ret__string, value_);
-			}
-
-			std::string image(std::string value_) {
-				return nullptr; // TODO implement
 			}
 
 			void import_all_groups(control value_) {
@@ -1252,7 +1248,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__inflamed__object__ret__bool, value_);
 			}
 
-			float input_action(std::string value_) {
+			float input_action(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__inputaction__string__ret__scalar, value_);
 			}
 
@@ -1316,7 +1312,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__isinremainscollector__object__ret__bool, value_);
 			}
 
-			bool is_key_active(std::string value_) {
+			bool is_key_active(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__iskeyactive__string__ret__bool, value_);
 			}
 
@@ -1324,7 +1320,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__islighton__object__ret__bool, value_);
 			}
 
-			bool is_localized(std::string value_) {
+			bool is_localized(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__islocalized__string__ret__bool, value_);
 			}
 
@@ -1432,19 +1428,19 @@ namespace intercept {
 				return __helpers::__object_unary_object(client::__sqf::unary__leader__object__ret__object, value_);
 			}
 
-			bool leaderboard_de_init(std::string value_) {
+			bool leaderboard_de_init(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__leaderboarddeinit__string__ret__bool, value_);
 			}
 
-			bool leaderboard_init(std::string value_) {
+			bool leaderboard_init(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__leaderboardinit__string__ret__bool, value_);
 			}
 
-			bool leaderboard_request_rows_friends(std::string value_) {
+			bool leaderboard_request_rows_friends(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__leaderboardrequestrowsfriends__string__ret__bool, value_);
 			}
 
-			float leaderboard_state(std::string value_) {
+			float leaderboard_state(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__leaderboardstate__string__ret__scalar, value_);
 			}
 
@@ -1488,7 +1484,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__loadbackpack__object__ret__scalar, value_);
 			}
 
-			std::string load_file(std::string value_) {
+			std::string load_file(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__loadfile__string__ret__string, value_);
 			}
 
@@ -1500,7 +1496,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__loadvest__object__ret__scalar, value_);
 			}
 
-			std::string localize(std::string value_) {
+			std::string localize(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__localize__string__ret__string, value_);
 			}
 
@@ -1568,27 +1564,23 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__numberofenginesrtd__object__ret__scalar, value_);
 			}
 
-			object object_from_net_id(std::string value_) {
-				return object(); // TODO implement
-			}
-
 			object object_parent(object value_) {
 				return __helpers::__object_unary_object(client::__sqf::unary__objectparent__object__ret__object, value_);
 			}
 
-			void on_briefing_group(std::string value_) {
+			void on_briefing_group(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__onbriefinggroup__string__ret__nothing, value_);
 			}
 
-			void on_briefing_notes(std::string value_) {
+			void on_briefing_notes(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__onbriefingnotes__string__ret__nothing, value_);
 			}
 
-			void on_briefing_plan(std::string value_) {
+			void on_briefing_plan(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__onbriefingplan__string__ret__nothing, value_);
 			}
 
-			void on_briefing_team_switch(std::string value_) {
+			void on_briefing_team_switch(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__onbriefingteamswitch__string__ret__nothing, value_);
 			}
 
@@ -1596,7 +1588,7 @@ namespace intercept {
 				return __helpers::__bool_unary_number(client::__sqf::unary__opendlcpage__scalar__ret__bool, value_);
 			}
 
-			bool open_youtube_video(std::string value_) {
+			bool open_youtube_video(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__openyoutubevideo__string__ret__bool, value_);
 			}
 
@@ -1604,7 +1596,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__owner__object__ret__scalar, value_);
 			}
 
-			float parse_number(std::string value_) {
+			float parse_number(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__parsenumber__string__ret__scalar, value_);
 			}
 
@@ -1616,15 +1608,15 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__pitch__object__ret__string, value_);
 			}
 
-			void play_music(std::string value_) {
+			void play_music(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__playmusic__string__ret__nothing, value_);
 			}
 
-			void play_sound(std::string value_) {
+			void play_sound(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__playsound__string__ret__nothing, value_);
 			}
 
-			bool pp_effect_committed(std::string value_) {
+			bool pp_effect_committed(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__ppeffectcommitted__string__ret__bool, value_);
 			}
 
@@ -1644,15 +1636,15 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__precision__object__ret__scalar, value_);
 			}
 
-			bool preload_sound(std::string value_) {
+			bool preload_sound(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__preloadsound__string__ret__bool, value_);
 			}
 
-			std::string preprocess_file(std::string value_) {
+			std::string preprocess_file(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__preprocessfile__string__ret__string, value_);
 			}
 
-			std::string preprocess_file_line_numbers(std::string value_) {
+			std::string preprocess_file_line_numbers(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__preprocessfilelinenumbers__string__ret__string, value_);
 			}
 
@@ -1660,7 +1652,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__primaryweapon__object__ret__string, value_);
 			}
 
-			void process_diary_link(std::string value_) {
+			void process_diary_link(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__processdiarylink__string__ret__nothing, value_);
 			}
 
@@ -1672,11 +1664,11 @@ namespace intercept {
 				return __helpers::__number_unary_control(client::__sqf::unary__progressposition__control__ret__scalar, value_);
 			}
 
-			void public_variable(std::string value_) {
+			void public_variable(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__publicvariable__string__ret__nothing, value_);
 			}
 
-			void public_variable_server(std::string value_) {
+			void public_variable_server(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__publicvariableserver__string__ret__nothing, value_);
 			}
 
@@ -1684,15 +1676,15 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__putweaponpool__object__ret__nothing, value_);
 			}
 
-			float query_items_pool(std::string value_) {
+			float query_items_pool(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__queryitemspool__string__ret__scalar, value_);
 			}
 
-			float query_magazine_pool(std::string value_) {
+			float query_magazine_pool(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__querymagazinepool__string__ret__scalar, value_);
 			}
 
-			float query_weapon_pool(std::string value_) {
+			float query_weapon_pool(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__queryweaponpool__string__ret__scalar, value_);
 			}
 
@@ -1740,11 +1732,11 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__removeallitemswithmagazines__object__ret__nothing, value_);
 			}
 
-			void remove_all_mission_event_handlers(std::string value_) {
+			void remove_all_mission_event_handlers(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__removeallmissioneventhandlers__string__ret__nothing, value_);
 			}
 
-			void remove_all_music_event_handlers(std::string value_) {
+			void remove_all_music_event_handlers(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__removeallmusiceventhandlers__string__ret__nothing, value_);
 			}
 
@@ -1784,7 +1776,7 @@ namespace intercept {
 				__helpers::__empty_unary_object(client::__sqf::unary__removevest__object__ret__nothing, value_);
 			}
 
-			bool required_version(std::string value_) {
+			bool required_version(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__requiredversion__string__ret__bool, value_);
 			}
 
@@ -1824,11 +1816,11 @@ namespace intercept {
 				__helpers::__empty_unary_control(client::__sqf::unary__saveoverlay__control__ret__nothing, value_);
 			}
 
-			void save_var(std::string value_) {
+			void save_var(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__savevar__string__ret__nothing, value_);
 			}
 
-			void scope_name(std::string value_) {
+			void scope_name(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__scopename__string__ret__nothing, value_);
 			}
 
@@ -1836,7 +1828,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__score__object__ret__scalar, value_);
 			}
 
-			void script_name(std::string value_) {
+			void script_name(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__scriptname__string__ret__nothing, value_);
 			}
 
@@ -1856,15 +1848,15 @@ namespace intercept {
 				__helpers::__empty_unary_control(client::__sqf::unary__selectededitorobjects__control__ret__nothing, value_);
 			}
 
-			bool server_command(std::string value_) {
+			bool server_command(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__servercommand__string__ret__bool, value_);
 			}
 
-			bool server_command_available(std::string value_) {
+			bool server_command_available(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__servercommandavailable__string__ret__bool, value_);
 			}
 
-			bool server_command_executable(std::string value_) {
+			bool server_command_executable(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__servercommandexecutable__string__ret__bool, value_);
 			}
 
@@ -1908,7 +1900,7 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__setsimulweatherlayers__scalar__ret__nothing, value_);
 			}
 
-			void set_stamina_scheme(std::string value_) {
+			void set_stamina_scheme(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__setstaminascheme__string__ret__nothing, value_);
 			}
 
@@ -1940,7 +1932,7 @@ namespace intercept {
 				__helpers::__empty_unary_bool(client::__sqf::unary__showcinemaborder__bool__ret__nothing, value_);
 			}
 
-			void show_commanding_menu(std::string value_) {
+			void show_commanding_menu(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__showcommandingmenu__string__ret__nothing, value_);
 			}
 
@@ -1984,7 +1976,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__simulationenabled__object__ret__bool, value_);
 			}
 
-			float size_of(std::string value_) {
+			float size_of(const std::string &value_) {
 				return __helpers::__number_unary_string(client::__sqf::unary__sizeof__string__ret__scalar, value_);
 			}
 
@@ -2032,11 +2024,11 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__stopped__object__ret__bool, value_);
 			}
 
-			void system_chat(std::string value_) {
+			void system_chat(const std::string &value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__systemchat__string__ret__nothing, value_);
 			}
 
-			std::string text(std::string value_) {
+			std::string text(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__text__location__ret__string, value_);
 			}
 
@@ -2044,11 +2036,11 @@ namespace intercept {
 				__helpers::__empty_unary_number(client::__sqf::unary__titlefadeout__scalar__ret__nothing, value_);
 			}
 
-			std::string to_lower(std::string value_) {
+			std::string to_lower(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__tolower__string__ret__string, value_);
 			}
 
-			std::string to_upper(std::string value_) {
+			std::string to_upper(const std::string &value_) {
 				return __helpers::__string_unary_string(client::__sqf::unary__toupper__string__ret__string, value_);
 			}
 
@@ -2120,7 +2112,7 @@ namespace intercept {
 				return __helpers::__number_unary_object(client::__sqf::unary__unitrecoilcoefficient__object__ret__scalar, value_);
 			}
 
-			bool unlock_achievement(std::string value_) {
+			bool unlock_achievement(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__unlockachievement__string__ret__bool, value_);
 			}
 
@@ -2136,7 +2128,7 @@ namespace intercept {
 				return __helpers::__string_unary_object(client::__sqf::unary__vehiclevarname__object__ret__string, value_);
 			}
 
-			bool verify_signature(std::string value_) {
+			bool verify_signature(const std::string &value_) {
 				return __helpers::__bool_unary_string(client::__sqf::unary__verifysignature__string__ret__bool, value_);
 			}
 

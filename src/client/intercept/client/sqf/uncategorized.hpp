@@ -55,17 +55,17 @@ namespace intercept {
 
 		namespace __uncategorized {
 			/* potential namespace: */
-			std::vector<std::string> action_keys(std::string user_action_);
+			std::vector<std::string> action_keys(const std::string &user_action_);
 
-			text action_keys_images(std::string user_action_);
+			text action_keys_images(const std::string &user_action_);
 
-			std::string action_keys_names(std::string user_action_);
-			std::string action_keys_names(std::string user_action_, int max_keys_);
-			std::string action_keys_names(std::string user_action_, int max_keys_, std::string input_device_priority_);
+			std::string action_keys_names(const std::string &user_action_);
+			std::string action_keys_names(const std::string &user_action_, int max_keys_);
+			std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_);
 
-			std::vector<std::string> action_keys_names_array(std::string user_action_);
-			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_);
-			std::vector<std::string> action_keys_names_array(std::string user_action_, int max_keys_, std::string input_device_priority_);
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_);
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_);
+			std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_);
 
 			/* potential namespace: misc, missions */
 			void activate_addons(std::vector<std::string> &addons_);
@@ -74,8 +74,8 @@ namespace intercept {
 			void add_cam_shake(float power_, float duration_, float frequency_);
 
 			/* potential namespace: items, inventory, campaign */
-			void add_item_pool(std::string item_name_, int item_count_);
-			void add_magazine_pool(std::string mag_name_, int mag_count_);
+			void add_item_pool(const std::string &item_name_, int item_count_);
+			void add_magazine_pool(const std::string &mag_name_, int mag_count_);
 
 			/* potential namespace: core, misc, world */
 			void add_to_remains_collector(std::vector<object> objects_);
@@ -87,7 +87,7 @@ namespace intercept {
 			std::vector<control> all_controls(display display_); // TODO implement all_controls
 
 			/* potential namespace: core, all */
-			std::vector<object> all_mission_objects(std::string type_);
+			std::vector<object> all_mission_objects(const std::string &type_);
 
 			/* potential namespace: vehicle, core, cargo */
 			std::vector<object> assigned_cargo(object veh_);
@@ -113,20 +113,20 @@ namespace intercept {
 			vector3 bounding_center(object obj_);
 
 			/* potential namespace: controls, ui, gui, misc */
-			void button_set_action(int control_id_, std::string code_);
-			void button_set_action(control control_, std::string code_);
+			void button_set_action(int control_id_, const std::string &code_);
+			void button_set_action(control control_, const std::string &code_);
 			void ctrl_enable(int control_id_, bool enable_);
 			void ctrl_enable(control control_, bool enable_);
-			void ctrl_set_text(int control_id_, std::string code_);
-			void ctrl_set_text(control control_, std::string code_);
+			void ctrl_set_text(int control_id_, const std::string &code_);
+			void ctrl_set_text(control control_, const std::string &code_);
 			void ctrl_show(int control_id_, bool show_);
 			void ctrl_show(control control_, bool show_);
 
 			/* potential namespace: locations */
 			std::string class_name(location loc_);
-			location create_location(std::string classname_, vector3 pos_, float size_x_, float size_y_);
-			location create_location(std::string classname_, vector2 pos_, float size_x_, float size_y_);
-			location create_location(std::string classname_, const object &obj_, float size_x_, float size_y_);
+			location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
+			location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_);
+			location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
 
 			/* potential namespace: ai, group, unit */
 			std::string combat_mode(group loc_);
@@ -139,20 +139,20 @@ namespace intercept {
 			void command_stop(std::vector<object> units_);
 
 			/* potential namespace: core, create */
-			object create_agent(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, std::string special_ = "NONE");
-			object create_mine(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
-			object create_sound_source(std::string type_, vector3 pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
-			object create_trigger(std::string type_, vector3 pos_, bool make_global_ = true);
-			object create_trigger(std::string type_, const object &pos_, bool make_global_ = true);
+			object create_agent(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
+			object create_mine(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+			object create_sound_source(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_ = {}, float placement_ = 0.0f);
+			object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
+			object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
 
 			/* potential namespace: core, create, teams */
-			team_member create_team(std::string type_, std::string name_);
+			team_member create_team(const std::string &type_, const std::string &name_);
 
 			/* potential namespace: gui, ui */
-			void create_gear_dialog(object unit_, std::string resource_);
+			void create_gear_dialog(object unit_, const std::string &resource_);
 
 			/* potential namespace: misc */
-			void create_guarded_point(side side_, vector3 pos_, float idstatic_, const object &veh_);
+			void create_guarded_point(side side_, const vector3 &pos_, float idstatic_, const object &veh_);
 
 			/* potential namespace: vehicle */
 			std::vector<object> crew(object _veh);
@@ -164,9 +164,9 @@ namespace intercept {
 			std::vector<task> current_tasks(team_member team_member_);
 
 			/* potential namespace: gui, ui */
-			void cut_obj(std::string name_, std::string type_, float speed_ = 1.0f);
-			void cut_rsc(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
-			void cut_text(std::string name_, std::string type_, float speed_ = 1.0f, bool show_on_map_ = false);
+			void cut_obj(const std::string &name_, const std::string &type_, float speed_ = 1.0f);
+			void cut_rsc(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
+			void cut_text(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
 			void enable_debriefing_stats(float left_, float top_, float width_, float height_);
 
 			/* potential namespace: misc */
@@ -179,7 +179,7 @@ namespace intercept {
 			std::vector<float> engines_rpm_rtd(object helicopter_);
 
 			/* potential namespace: core */
-			std::vector<object> entities(std::string type_);
+			std::vector<object> entities(const std::string &type_);
 
 			/* potential namespace: backpack, containers, inventory */
 			std::vector<object> every_backpack(object box_);
@@ -214,8 +214,8 @@ namespace intercept {
 			std::vector<float> get_dlcs(float filter_);
 
 			/* potential namespace: dialogs, ui, listbox */
-			float lb_add(int control_id_, std::string text_);
-			float lb_add(control control_, std::string text_);
+			float lb_add(int control_id_, const std::string &text_);
+			float lb_add(control control_, const std::string &text_);
 			float lb_color(int control_id_, int index_);
 			float lb_color(control control_, int index_);
 			float lb_color_right(int control_id_, int index_);
@@ -235,24 +235,24 @@ namespace intercept {
 			void lb_set_color_right(control control_, int index_, rv_color color_);
 			void lb_set_cur_sel(int control_id_, int index_);
 			void lb_set_cur_sel(control control_, int index_);
-			void lb_set_data(int control_id_, int index_, std::string data_);
-			void lb_set_data(control control_, int index_, std::string data_);
-			void lb_set_picture(int control_id_, int index_, std::string name_);
-			void lb_set_picture(control control_, int index_, std::string name_);
-			void lb_set_picture_right(int control_id_, int index_, std::string name_);
-			void lb_set_picture_right(control control_, int index_, std::string name_);
+			void lb_set_data(int control_id_, int index_, const std::string &data_);
+			void lb_set_data(control control_, int index_, const std::string &data_);
+			void lb_set_picture(int control_id_, int index_, const std::string &name_);
+			void lb_set_picture(control control_, int index_, const std::string &name_);
+			void lb_set_picture_right(int control_id_, int index_, const std::string &name_);
+			void lb_set_picture_right(control control_, int index_, const std::string &name_);
 			void lb_set_picture_color(int control_id_, int index_, rv_color color_);
 			void lb_set_picture_color(control control_, int index_, rv_color color_);
 			void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_);
 			void lb_set_picture_color_disabled(control control_, int index_, rv_color color_);
 			void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
 			void lb_set_picture_color_selected(control control_, int index_, rv_color color_);
-			void lb_set_tooltip(int control_id_, int index_, std::string tooltip_);
-			void lb_set_tooltip(control control_, int index_, std::string tooltip_);
+			void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
+			void lb_set_tooltip(control control_, int index_, const std::string &tooltip_);
 			void lb_set_value(int control_id_, int index_, float val_);
 			void lb_set_value(control control_, int index_, float val_);
 			void lb_sort(control control_);
-			void lb_sort(control control_, std::string sort_order_);
+			void lb_sort(control control_, const std::string &sort_order_);
 			std::string lb_text(int control_id_, int index_);
 			std::string lb_text(control control_, int index_);
 			std::string lb_text_right(int control_id_, int index_);

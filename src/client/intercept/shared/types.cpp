@@ -195,7 +195,7 @@ namespace intercept {
             raw_string->ref_count_internal = 1;
         }
 
-        game_data_string::game_data_string(std::string str_)
+        game_data_string::game_data_string(const std::string &str_)
         {
             type = type_def;
             data_type = data_type_def;
@@ -503,7 +503,7 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(std::string val_)
+        game_value & game_value::operator=(const std::string val_)
         {
             if (rv_data.data)
                 _free();

@@ -22,8 +22,8 @@ namespace intercept {
 			std::vector<object> all_units_uav();
 
 			object player();
-			object create_vehicle(std::string type_, vector3 pos_);
-			object create_vehicle(std::string type_, vector3 pos_, std::vector<marker> markers_, float placement_, std::string special_);
+			object create_vehicle(const std::string &type_, const vector3 &pos_);
+			object create_vehicle(const std::string &type_, const vector3 &pos_, std::vector<marker> markers_, float placement_, const std::string &special_);
 			void delete_vehicle(object obj_);
 
 			float server_time();

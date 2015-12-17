@@ -55,7 +55,7 @@ namespace intercept {
 
         const std::string get_type_str(const game_value *value_) const;
 
-        bool release_value(game_value * value_, bool immediate_ = true);
+        bool release_value(game_value * value_, bool immediate_ = false);
 
         void collect_string(rv_string *str_);
 

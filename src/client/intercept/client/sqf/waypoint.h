@@ -43,7 +43,7 @@ namespace intercept {
 
 			game_value __to_gv()
 			{
-				return game_value({ wgroup, windex });
+				return game_value({ &wgroup, windex });
 			}
 
 			static const std::string __speed_lookup[4];
@@ -254,6 +254,51 @@ namespace intercept {
 		 */
 		namespace waypoints {
 			/*!
+			* @brief  	Adds (or inserts when index is given) a new waypoint to a group.
+			*
+			*			The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
+			*
+			* @method 	add_waypoint
+			* @param  	gp_                     	 	The group to add the waypoint to.
+			* @param  	center_                     	The poition of the center of the waypoint placement radius.
+			* @param  	radius_                     	The radius of the waypoint placement area.
+			* @param  	index_                     	 	[OPTIONAL] The index of the waypoint to insert this waypoint after.
+			* @param  	name_                     	 	[OPTIONAL] The waypoint name
+			* @return                          			Returns the placed waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/addWaypoint</a>
+			*/
+			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+
+			/*!
+			* @brief  	Adds (or inserts when index is given) a new waypoint to a group.
+			*
+			*			The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
+			*
+			* @method 	add_waypoint
+			* @param  	gp_                     	 	The group to add the waypoint to.
+			* @param  	center_                     	An object to be the center of the waypoint placement radius.
+			* @param  	radius_                     	The radius of the waypoint placement area.
+			* @param  	index_                     	 	[OPTIONAL] The index of the waypoint to insert this waypoint after.
+			* @param  	name_                     	 	[OPTIONAL] The waypoint name
+			* @return                          			Returns the placed waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/addWaypoint</a>
+			*/
+			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+
+			/*!
+			* @brief  Removes the specified waypoint.
+			* @method delete_waypoint
+			* @param  wp_                      Waypoint to delete
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/deleteWaypoint</a>
+			*/
+			void delete_waypoint(waypoint & wp_);
+
+
+			void copy_waypoints(group & to_, group & from_);
+
+			/************************************************  GETTERS   ************************************************/
+
+			/*!
 			 * @brief  Gets the object attached to the waypoint.
 		     * @method waypoint_attached_object
 			 * @param  wp_                      Waypoint to use
@@ -266,6 +311,7 @@ namespace intercept {
 			 * @method waypoint_attached_vehicle
 			 * @param  wp_                      Waypoint to use
 			 * @return                          Vehicle attached to the waypoint, if any.
+			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointAttachedVehicle</a>
 			 */
 			object waypoint_attached_vehicle(waypoint & wp_);
 
@@ -314,26 +360,108 @@ namespace intercept {
 			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointFormation</a>
 			 */
 			waypoint::formation waypoint_formation(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the house position assigned to the waypoint.
+			* @method 	waypoint_house_position
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			Returns the house position.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointHousePosition</a>
+			*/
 			float waypoint_house_position(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the waypoint loiter radius.
+			* @method 	waypoint_loiter_radius
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			Returns the loiter radius.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointLoiterRadius</a>
+			*/
 			float waypoint_loiter_radius(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the waypoint loiter type.
+			* @method 	waypoint_loiter_type
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			Returns the loiter type, enumerated.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointLoiterType</a>
+			*/
 			waypoint::loiter_type waypoint_loiter_type(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the waypoint name.
+			* @method 	waypoint_name
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			The name assigned to the waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointName</a>
+			*/
 			std::string waypoint_name(waypoint & wp_);
+
+			/*!
+			* @brief  	Get Waypoint's Position.
+			* @method 	waypoint_name
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			The position of the waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointPosition</a>
+			*/
 			vector3 waypoint_position(waypoint & wp_);
+
+			/*!
+			* @brief  	Returns an array of waypoints for the specified unit/group
+			* @method 	waypoints
+			* @param  	gp_                     	 	Group to retrieve waypoints of.
+			* @return                          			The position of the waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypoints</a>
+			*/
 			std::vector<waypoint> waypoints( group & gp_);
+
+			/*!
+			* @brief  	Gets the waypoint script.
+			* @method 	waypoints
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			The position of the waypoint.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointScript</a>
+			*/
 			std::string waypoint_script(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the waypoint show/hide status. 
+			* @method 	waypoints
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			Gets the showhide status, enumerated.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointShow</a>
+			*/
 			waypoint::show waypoint_show(waypoint & wp_);
+
+			/*!
+			* @brief  	Gets the waypoint movement speed.
+			* @method 	waypoints
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			Gets the waypoint speed, enumerated.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointSpeed</a>
+			*/
 			waypoint::speed waypoint_speed(waypoint & wp_);
 			// TODO waypoint_statements needs struct for return value
 			// TODO waypoint_timeout needs struct for return value
+
+			/*!
+			* @brief  	Gets the waypoint type.
+			* @method 	waypoints
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			The waypoint type, enumerated.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointType</a>
+			*/
 			waypoint::type waypoint_type(waypoint & wp_); // TODO enumerate waypoint_type return
+
+			/*!
+			* @brief  	Returns the visibility of the waypoint.
+			* @method 	waypoints
+			* @param  	wp_                     	 	Waypoint to use
+			* @return                          			The waypoint visibility.
+			* @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointVisible</a>
+			*/
 			bool waypoint_visible(waypoint & wp_);
-
 			bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.
-
-			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-			void delete_waypoint(waypoint & wp_);
-			void copy_waypoints(group & to_, group & from_);
 
 			std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
 			std::vector<waypoint> synchronized_waypoints(object & obj_);

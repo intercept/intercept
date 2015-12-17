@@ -134,7 +134,7 @@ namespace intercept {
             game_value(const game_value &copy_);
             game_value(game_value &&move_);
 
-            game_value(const rv_game_value internal_);
+            game_value(const rv_game_value &internal_);
             game_value(float val_);
             game_value(bool val_);
             game_value(const std::string &val_);

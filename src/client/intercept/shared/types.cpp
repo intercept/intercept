@@ -385,7 +385,7 @@ namespace intercept {
             move_.rv_data.data = nullptr;
         }
 
-        game_value::game_value(const rv_game_value internal_)
+        game_value::game_value(const rv_game_value &internal_)
         {
             rv_data.__vptr = internal_.__vptr;
             rv_data.data = (game_data *)internal_.data;

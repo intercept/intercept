@@ -8,11 +8,11 @@ namespace intercept {
             return intercept::invoker::get().invoke_raw(function_);
         }
 
-        rv_game_value invoke_raw_unary(unary_function function_, game_value right_arg_) {
+        rv_game_value invoke_raw_unary(unary_function function_, const game_value &right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &right_arg_);
         }
 
-        rv_game_value invoke_raw_binary(binary_function function_, game_value left_arg_, game_value right_arg_) {
+        rv_game_value invoke_raw_binary(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &left_arg_, &right_arg_);
         }
 

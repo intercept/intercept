@@ -7,8 +7,8 @@ using namespace intercept::types;
 namespace intercept {
     namespace client_function_defs {
         rv_game_value invoke_raw_nular(nular_function function_);
-        rv_game_value invoke_raw_unary(unary_function function_, game_value right_arg_);
-        rv_game_value invoke_raw_binary(binary_function function_, game_value left_arg_, game_value right_arg_);
+        rv_game_value invoke_raw_unary(unary_function function_, const game_value &right_arg_);
+        rv_game_value invoke_raw_binary(binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
 
         void get_type_structure(char *type_name, uintptr_t &type_def_, uintptr_t &data_type_def_);
 

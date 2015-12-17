@@ -1,3 +1,13 @@
+/*!
+@file
+@author Verox (verox.averre@gmail.com)
+
+@brief Wrappers for the waypoint family of commands.
+
+This file contains all the wrappers for the Waypoint family of commands and
+associated structs and enumerations.
+*/
+
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"
@@ -7,6 +17,7 @@
 using namespace intercept::types;
 namespace intercept {
 	namespace sqf {
+
 
 		struct waypoint
 		{
@@ -119,6 +130,7 @@ namespace intercept {
 				CIRCLE_L
 			};
 
+
 			static speed __parse_speed(const std::string& subject_)
 			{
 				for (size_t i = 0; i < __speed_lookup->length(); i++)
@@ -172,7 +184,7 @@ namespace intercept {
 						return static_cast<combat_mode>(i);
 					}
 				}
-				throw 712; 
+				throw 712;
 			}
 			static formation __parse_formation(const std::string& subject_)
 			{
@@ -236,13 +248,71 @@ namespace intercept {
 		const std::string waypoint::__formation_lookup[10] = { "NO_CHANGE","COLUMN","STAG_COLUMN","WEDGE","ECH_LEFT","ECH_RIGHT","VEE","LINE","FILE","DIAMOND" };
 		const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
 
+		/*!
+		 * @namespace waypoints
+		 * @brief The namespace housing the Waypoint family of commands.
+		 */
 		namespace waypoints {
+			/*!
+			 * @brief  Gets the object attached to the waypoint.
+		     * @method waypoint_attached_object
+			 * @param  wp_                      Waypoint to use
+			 * @return                          Object attached to the waypoint, if any.
+			 */
 			object waypoint_attached_object(waypoint& wp_);
+
+			/*!
+			 * @brief  Gets the vehicle attached to the waypoint.
+			 * @method waypoint_attached_vehicle
+			 * @param  wp_                      Waypoint to use
+			 * @return                          Vehicle attached to the waypoint, if any.
+			 */
 			object waypoint_attached_vehicle(waypoint & wp_);
+
+			/*!
+			 * @brief  	Gets the waypoint behavior.
+			 * @method 	waypoint_behaviour
+			 * @param  	wp_                     	 	Waypoint to use
+			 * @return                          		Returns the behaviour of the waypoint.
+			 * @sa		waypoint::behaviour
+			 */
 			waypoint::behaviour waypoint_behaviour(waypoint & wp_);
+
+			/*!
+			 * @brief  	Gets the waypoint combat mode.
+			 * @method 	waypoint_combat_mode
+			 * @param  	wp_                     	 	Waypoint to use
+			 * @return                          		Returns the combat mode of the waypoint.
+			 * @sa		waypoint::combat_mode
+			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/2D_Editor:_Waypoints#Combat_Mode</a>
+			 */
 			waypoint::combat_mode waypoint_combat_mode(waypoint & wp_);
+
+			/*!
+			 * @brief  	Gets the radius around the waypoint where the waypoint is completed.
+			 * @method 	waypoint_completeion_radius
+			 * @param  	wp_                     	 	Waypoint to use
+			 * @return                          		Returns the completeion radius of the waypoint.
+			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointCompletionRadius</a>
+			 */
 			float waypoint_completeion_radius(waypoint & wp_);
+
+			/*!
+			 * @brief  	Gets the waypoint description.
+			 * @method 	waypoint_description
+			 * @param  	wp_                     	 	Waypoint to use
+			 * @return                          		Returns the waypoint description
+			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointDescription</a>
+			 */
 			std::string waypoint_description(waypoint & wp_);
+
+			/*!
+			 * @brief  	Gets the waypoint description.
+			 * @method 	waypoint_formation
+			 * @param  	wp_                     	 	Waypoint to use
+			 * @return                          		Returns the waypoint formation, enumeratred.
+			 * @sa 		<a href="linkURL">https://community.bistudio.com/wiki/waypointFormation</a>
+			 */
 			waypoint::formation waypoint_formation(waypoint & wp_);
 			float waypoint_house_position(waypoint & wp_);
 			float waypoint_loiter_radius(waypoint & wp_);
@@ -250,7 +320,7 @@ namespace intercept {
 			std::string waypoint_name(waypoint & wp_);
 			vector3 waypoint_position(waypoint & wp_);
 			std::vector<waypoint> waypoints( group & gp_);
-			std::string waypoint_script(waypoint & wp_); 
+			std::string waypoint_script(waypoint & wp_);
 			waypoint::show waypoint_show(waypoint & wp_);
 			waypoint::speed waypoint_speed(waypoint & wp_);
 			// TODO waypoint_statements needs struct for return value
@@ -262,7 +332,7 @@ namespace intercept {
 
 			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
 			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-			void delete_waypoint(waypoint & wp_); 
+			void delete_waypoint(waypoint & wp_);
 			void copy_waypoints(group & to_, group & from_);
 
 			std::vector<waypoint> synchronized_waypoints(waypoint & wp_);

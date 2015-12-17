@@ -2218,7 +2218,7 @@ namespace intercept {
 				host::functions.invoke_raw_binary(client::__sqf::binary__adduniform__object__string__ret__nothing, value0_, value1_);
 			}
 
-			void add_vehicle(group value0_, const object &value1_) {
+			void add_vehicle(const group &value0_, const object &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__addvehicle__group__object__ret__nothing, value0_, value1_);
 			}
 
@@ -2506,7 +2506,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, value0_, value1_));
 			}
 
-			void hc_oup(const object &value0_, group value1_) {
+			void hc_oup(const object &value0_, const group &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__hcremovegroup__object__group__ret__nothing, value0_, value1_);
 			}
 
@@ -2614,7 +2614,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, value0_, value1_));
 			}
 
-			void leave_vehicle(const object &value0_, group value1_) {
+			void leave_vehicle(const object &value0_, const group &value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__leavevehicle__group__object__ret__nothing, value0_, value1_);
 			}
 
@@ -3210,7 +3210,7 @@ namespace intercept {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__geteditorcamera__control__ret__object, value_));
 			}
 
-			object hc_leader(group value_) {
+			object hc_leader(const group &value_) {
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__hcleader__group__ret__object, value_));
 			}
 
@@ -3234,7 +3234,7 @@ namespace intercept {
 				return team_member(host::functions.invoke_raw_unary(client::__sqf::unary__leader__team_member__ret__team_member, value_));
 			}
 
-			std::string net_id(group value_) {
+			std::string net_id(const group &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__netid__group__ret__string, value_));
 			}
 

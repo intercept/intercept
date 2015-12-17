@@ -154,7 +154,7 @@ namespace intercept {
 				return __helpers::__bool_unary_object(client::__sqf::unary__attackenabled__object_group__ret__bool, unit_);
 			}
 
-			bool attack_enabled(group group_)
+			bool attack_enabled(const group &group_)
 			{
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__attackenabled__object_group__ret__bool, group_));
 			}
@@ -308,7 +308,7 @@ namespace intercept {
 				return game_value( host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_) );
 			}
 
-			std::string combat_mode(group grp_)
+			std::string combat_mode(const group &grp_)
 			{
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_));
 			}
@@ -572,7 +572,7 @@ namespace intercept {
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, leader_));
 			}
 
-			std::string formation(group group_)
+			std::string formation(const group &group_)
 			{
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, group_));
 			}

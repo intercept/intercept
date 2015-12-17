@@ -93,7 +93,7 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_));
 			}
 
-			bool is_null(group value_) {
+			bool is_null(const group &value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
 			}
 
@@ -205,7 +205,7 @@ namespace intercept {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__namespace__ret__array, value_));
             }
-            std::vector<std::string> all_variables(group value_) {
+            std::vector<std::string> all_variables(const group &value_) {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__group__ret__array, value_));
             }

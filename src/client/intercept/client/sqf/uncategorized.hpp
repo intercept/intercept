@@ -100,7 +100,7 @@ namespace intercept {
 
 			/* potential namespace: ai */
 			bool attack_enabled(const object &unit_);
-			bool attack_enabled(group group_);
+			bool attack_enabled(const group &group_);
 
 			/* potential namespace: cargo */
 			std::vector<std::string> backpack_cargo(const object &box_);
@@ -129,7 +129,7 @@ namespace intercept {
 			location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
 
 			/* potential namespace: ai, group, unit */
-			std::string combat_mode(group loc_);
+			std::string combat_mode(const group &loc_);
 			std::string combat_mode(const object &loc_);
 
 			/* potential namespace: ai */
@@ -196,7 +196,7 @@ namespace intercept {
 
 			/* potential namespace: groups, ai */
 			std::string formation(const object &leader_);
-			std::string formation(group group_);
+			std::string formation(const group &group_);
 
 			std::vector<object> formation_members(const object &unit_);
 			vector3 formation_position(const object &unit_);

@@ -9,7 +9,7 @@ namespace intercept {
     namespace sqf {
 		namespace multiplayer {
 			bool local(const object &value_);
-			bool local(group value_);
+			bool local(const group &value_);
 			bool is_server();
 			bool is_multiplayer();
 			bool is_dedicated();

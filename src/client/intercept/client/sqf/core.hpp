@@ -30,7 +30,7 @@ namespace intercept {
 			std::string server_name();
 
 			bool is_null(const object &value_);
-			bool is_null(group value_);
+			bool is_null(const group &value_);
 			bool is_null(control value_);
 			bool is_null(display value_);
 			bool is_null(script value_);
@@ -56,7 +56,7 @@ namespace intercept {
             std::vector<std::string> all_variables(control value_);
             std::vector<std::string> all_variables(team_member value_);
             std::vector<std::string> all_variables(rv_namespace value_);
-            std::vector<std::string> all_variables(group value_);
+            std::vector<std::string> all_variables(const group &value_);
             std::vector<std::string> all_variables(task value_);
             std::vector<std::string> all_variables(location value_);
 		}

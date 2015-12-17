@@ -352,7 +352,7 @@ namespace intercept {
 			std::string handgun_magazine(const object &value_);
 			std::string handgun_weapon(const object &value_);
 			float hands_hit(const object &value_);
-			object hc_leader(group value_);
+			object hc_leader(const group &value_);
 			void hc_remove_all_groups(const object &value_);
 			void hc_show_bar(bool value_);
 			std::string headgear(const object &value_);
@@ -445,7 +445,7 @@ namespace intercept {
 			object nearest_building(const object &value_);
 			float need_reload(const object &value_);
 			std::string net_id(const object &value_);
-			std::string net_id(group value_);
+			std::string net_id(const group &value_);
 			float next_menu_item_index(control value_);
 			float number_of_engines_rtd(const object &value_);
 			object object_from_net_id(const std::string &value_);
@@ -602,7 +602,7 @@ namespace intercept {
 			bool verify_signature(const std::string &value_);
 			std::string vest(const object &value_);
 			object vest_container(const object &value_);
-			float waypoint_timeout_current(group value_);
+			float waypoint_timeout_current(const group &value_);
 			bool weapon_lowered(const object &value_);
 
 			void add_backpack(const object &value0_, const std::string& value1_);
@@ -623,7 +623,7 @@ namespace intercept {
 			void add_score_side(side value0_, float value1_);
 			void add_secondary_weapon_item(const object &value0_, const std::string& value1_);
 			void add_uniform(const object &value0_, const std::string& value1_);
-			void add_vehicle(group value0_, const object &value1_);
+			void add_vehicle(const group &value0_, const object &value1_);
 			void add_vest(const object &value0_, const std::string& value1_);
 			void add_weapon(const object &value0_, const std::string& value1_);
 			void add_weapon_global(const object &value0_, const std::string& value1_);
@@ -697,7 +697,7 @@ namespace intercept {
 			float get_speed(const object &value0_, const std::string& value1_);
 			void global_radio(const object &value0_, const std::string& value1_);
 			bool has_weapon(const object &value0_, const std::string& value1_);
-			void hc_remove_group(const object &value0_, group value1_);
+			void hc_remove_group(const object &value0_, const group &value1_);
 			void hide_object(bool value0_, const object &value1_);
 			void hide_object_global(bool value0_, const object &value1_);
 			void hint_c(const std::string& value0_, const std::string& value1_);
@@ -724,7 +724,7 @@ namespace intercept {
 			std::string lb_text(float value0_, control value1_);
 			std::string lb_text_right(float value0_, control value1_);
 			float lb_value(float value0_, control value1_);
-			void leave_vehicle(const object &value0_, group value1_);
+			void leave_vehicle(const object &value0_, const group &value1_);
 			void limit_speed(float value0_, const object &value1_);
 			void link_item(const object &value0_, const std::string& value1_);
 			float lnb_add_column(float value0_, control value1_);
@@ -876,14 +876,14 @@ namespace intercept {
 			bool from_editor(team_member value_);
 			void get3dengrid(const std::string& value_);
 			object get_editor_camera(control value_);
-			object hc_leader(group value_);
+			object hc_leader(const group &value_);
 			std::string image(const std::string& value_);
 			bool is_agent(team_member value_);
 			std::string key_image(float value_);
 			std::string key_name(float value_);
 			team_member leader(team_member value_);
-			bool local(group value_);
-			std::string net_id(group value_);
+			bool local(const group &value_);
+			std::string net_id(const group &value_);
 			object object_from_net_id(const std::string& value_);
 			bool open_map(bool value_);
 			float parse_number(bool value_);

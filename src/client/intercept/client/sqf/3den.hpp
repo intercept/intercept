@@ -2,11 +2,12 @@
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
+@author Glowbal (thomasskooi@live.nl)
 
-@brief Wrappers for the waypoint family of commands.
+@brief Wrappers for the 3den 3D editor functions.
 
-This file contains all the wrappers for the Waypoint family of commands and
-associated structs and enumerations.
+These are wrappers for the 3den 3D editor that will be released in the next major
+Arma 3 release.
 
 https://github.com/NouberNou/intercept
 */

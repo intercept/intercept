@@ -4,9 +4,9 @@
 @author Nou (korewananda@gmail.com)
 @author Glowbal (thomasskooi@live.nl)
 
-@brief Chat function wrappers.
+@brief Common helper functions for SQF wrappers.
 
-These are wrappers for the `sideChat`, `globalChat`, `commandChat`, etc SQF commands.
+These are helpers that are used to do repetitive tasks in similar SQF wrappers.
 
 https://github.com/NouberNou/intercept
 */

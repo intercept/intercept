@@ -4,9 +4,10 @@
 #include "shared\client_types.hpp"
 
 namespace intercept {
-
+    /*!
+    @brief Flag for when the invoker is able to access the RV Engine
+    */
     bool invoker_accessisble = false;
-    int total_memory_count = 0;
 
     void threaded_invoke_demo() {
         while (true) {
@@ -28,7 +29,6 @@ namespace intercept {
         }
     }
 
-    nular_function invoker::_state_hook_trampoline = NULL;
     unary_function invoker::_register_hook_trampoline = NULL;
 
     invoker::invoker() : _attached(false), _patched(false), _delete_index(0)
@@ -128,8 +128,6 @@ namespace intercept {
         _delete_size_zero = game_value(0.0f);
         _delete_size_max = game_value(100.0f);
 
-        
-        
         return true;
     }
 
@@ -141,7 +139,7 @@ namespace intercept {
         return true;
     }
 
-    /**
+    /*
     DO NOT EXECUTE THIS VIA A BLOCKING CALL EXTENSION!
     */
     bool invoker::invoker_demo(const arguments & args_, std::string & result_)
@@ -150,17 +148,6 @@ namespace intercept {
         _demo_threads.push_back(std::thread(threaded_invoke_demo));
         LOG(INFO) << "Started Demo Thread #" << _demo_threads.size();
         return true;
-    }
-
-    void invoker::invoke_lock_test()
-    {
-        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting state lock...";
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " waiting for invoker...";
-        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        //LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " attempting invoker lock...";
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-       // LOG(DEBUG) << "Thread " << std::this_thread::get_id() << " invoker locked...";
     }
 
     rv_game_value invoker::invoke_raw(nular_function function_)
@@ -174,7 +161,6 @@ namespace intercept {
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
         return ret;
     }
-
 
     void invoker::invoke_delete()
     {
@@ -257,9 +243,9 @@ namespace intercept {
         return rv_game_value();
     }
 
-    const value_type invoker::get_type(const game_value *value_) const
+    value_type invoker::get_type(const game_value *value_) const
     {
-        return value_type();
+        return value_->type();
     }
 
     const std::string invoker::get_type_str(const game_value *value_) const
@@ -319,13 +305,6 @@ namespace intercept {
         }
     }
 
-    int invoker::_state_hook(char * sqf_this_, uintptr_t sqf_game_state_)
-    {
-        invoker::get()._sqf_this = sqf_this_;
-        invoker::get()._sqf_game_state = sqf_game_state_;
-        return _state_hook_trampoline(sqf_this_, sqf_game_state_);
-    }
-
     int invoker::_register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_)
     {
         LOG(INFO) << "Registration Hook Function Called: " << invoker::get()._registration_type;
@@ -334,7 +313,7 @@ namespace intercept {
         invoker::get()._sqf_this = sqf_this_;
 
         std::pair<value_type, value_type> gv_structure;
-        invoker::get().game_value_vptr = *(uintptr_t *)right_arg_;
+
         rv_game_value::__vptr_def = *(uintptr_t *)right_arg_;
         gv_structure.first = rv_game_value::__vptr_def;
         gv_structure.second = rv_game_value::__vptr_def;

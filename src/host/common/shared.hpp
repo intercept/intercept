@@ -70,7 +70,7 @@ namespace intercept {
 }
 
 #ifdef _DEBUG
-#define ACRE_ASSERT assert()
+#define INTERCEPT_ASSERT assert()
 #else
-#define ACRE_ASSERT intercept::runtime_assert()
+#define INTERCEPT_ASSERT intercept::runtime_assert()
 #endif

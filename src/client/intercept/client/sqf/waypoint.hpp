@@ -251,46 +251,50 @@ namespace intercept {
 
 		/*!
 		 @namespace waypoints
+
 		 @brief The namespace housing the Waypoint family of commands.
 		 */
 		namespace waypoints {
 			/*!
-			@brief  	Adds (or inserts when index is given) a new waypoint to a group.
+			@brief Adds (or inserts when index is given) a new waypoint to a group.
 			
-						The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
+            The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
 			
-			@method 	add_waypoint
-			@param  	gp_                     	 	The group to add the waypoint to.
-			@param  	center_                     	The poition of the center of the waypoint placement radius.
-			@param  	radius_                     	The radius of the waypoint placement area.
-			@param  	index_                     	 	[OPTIONAL] The index of the waypoint to insert this waypoint after.
-			@param  	name_                     	 	[OPTIONAL] The waypoint name
-			@return                          			Returns the placed waypoint.
-			@sa 		https://community.bistudio.com/wiki/addWaypoint
+			@param gp_ The group to add the waypoint to.
+			@param center_ The poition of the center of the waypoint placement radius.
+			@param radius_ The radius of the waypoint placement area.
+			@param index_ [OPTIONAL] The index of the waypoint to insert this waypoint after.
+			@param name_ [OPTIONAL] The waypoint name
+
+			@return Returns the placed waypoint.
+
+			@sa https://community.bistudio.com/wiki/addWaypoint
 			*/
 			waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
 
 			/*!
-			@brief  	Adds (or inserts when index is given) a new waypoint to a group.
+			@brief Adds (or inserts when index is given) a new waypoint to a group.
 			
-						The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
+			The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
 			
-			@method 	add_waypoint
-			@param  	gp_                     	 	The group to add the waypoint to.
-			@param  	center_                     	An object to be the center of the waypoint placement radius.
-			@param  	radius_                     	The radius of the waypoint placement area.
-			@param  	index_                     	 	[OPTIONAL] The index of the waypoint to insert this waypoint after.
-			@param  	name_                     	 	[OPTIONAL] The waypoint name
-			@return                          			Returns the placed waypoint.
+			@param gp_ The group to add the waypoint to.
+			@param center_ An object to be the center of the waypoint placement radius.
+			@param radius_ The radius of the waypoint placement area.
+			@param index_ [OPTIONAL] The index of the waypoint to insert this waypoint after.
+			@param name_ [OPTIONAL] The waypoint name
+
+			@return Returns the placed waypoint.
+
 			@sa 		https://community.bistudio.com/wiki/addWaypoint
 			*/
 			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
 
 			/*!
 			@brief  Removes the specified waypoint.
-			@method delete_waypoint
-			@param  wp_                      Waypoint to delete
-			@sa 		https://community.bistudio.com/wiki/deleteWaypoint
+
+			@param  wp_ Waypoint to delete
+
+			@sa https://community.bistudio.com/wiki/deleteWaypoint
 			*/
 			void delete_waypoint(waypoint & wp_);
 
@@ -300,166 +304,201 @@ namespace intercept {
 			/************************************************  GETTERS   ************************************************/
 
 			/*!
-			 @brief  Gets the object attached to the waypoint.
-		     @method waypoint_attached_object
-			 @param  wp_                      Waypoint to use
-			 @return                          Object attached to the waypoint, if any.
-			 */
+			@brief Gets the object attached to the waypoint.
+
+			@param wp_ Waypoint to use
+
+			@return Object attached to the waypoint, if any.
+			*/
 			object waypoint_attached_object(waypoint& wp_);
 
 			/*!
-			 @brief  Gets the vehicle attached to the waypoint.
-			 @method waypoint_attached_vehicle
-			 @param  wp_                      Waypoint to use
-			 @return                          Vehicle attached to the waypoint, if any.
-			 @sa 		https://community.bistudio.com/wiki/waypointAttachedVehicle
-			 */
+		    @brief Gets the vehicle attached to the waypoint.
+
+		    @param wp_ Waypoint to use
+
+		    @return Vehicle attached to the waypoint, if any.
+
+		    @sa https://community.bistudio.com/wiki/waypointAttachedVehicle
+			*/
 			object waypoint_attached_vehicle(waypoint & wp_);
 
 			/*!
-			 @brief  	Gets the waypoint behavior.
-			 @method 	waypoint_behaviour
-			 @param  	wp_                     	 	Waypoint to use
-			 @return                          		Returns the behaviour of the waypoint.
-			 @sa		waypoint::behaviour
-			 */
+			@brief Gets the waypoint behavior.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the behaviour of the waypoint.
+
+			@sa waypoint::behaviour
+			*/
 			waypoint::behaviour waypoint_behaviour(waypoint & wp_);
 
 			/*!
-			 @brief  	Gets the waypoint combat mode.
-			 @method 	waypoint_combat_mode
-			 @param  	wp_                     	 	Waypoint to use
-			 @return                          		Returns the combat mode of the waypoint.
-			 @sa		waypoint::combat_mode
-			 @sa 		https://community.bistudio.com/wiki/2D_Editor:_Waypoints#Combat_Mode
-			 */
+			@brief Gets the waypoint combat mode.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the combat mode of the waypoint.
+
+			@sa waypoint::combat_mode
+			@sa https://community.bistudio.com/wiki/2D_Editor:_Waypoints#Combat_Mode
+			*/
 			waypoint::combat_mode waypoint_combat_mode(waypoint & wp_);
 
 			/*!
-			 @brief  	Gets the radius around the waypoint where the waypoint is completed.
-			 @method 	waypoint_completeion_radius
-			 @param  	wp_                     	 	Waypoint to use
-			 @return                          		Returns the completeion radius of the waypoint.
-			 @sa 		https://community.bistudio.com/wiki/waypointCompletionRadius
-			 */
+			@brief Gets the radius around the waypoint where the waypoint is completed.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the completeion radius of the waypoint.
+
+			@sa https://community.bistudio.com/wiki/waypointCompletionRadius
+			*/
 			float waypoint_completeion_radius(waypoint & wp_);
 
 			/*!
-			 @brief  	Gets the waypoint description.
-			 @method 	waypoint_description
-			 @param  	wp_                     	 	Waypoint to use
-			 @return                          		Returns the waypoint description
-			 @sa 		https://community.bistudio.com/wiki/waypointDescription
-			 */
+			@brief Gets the waypoint description.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the waypoint description
+
+			@sa https://community.bistudio.com/wiki/waypointDescription
+			*/
 			std::string waypoint_description(waypoint & wp_);
 
 			/*!
-			 @brief  	Gets the waypoint description.
-			 @method 	waypoint_formation
-			 @param  	wp_                     	 	Waypoint to use
-			 @return                          		Returns the waypoint formation, enumeratred.
-			 @sa 		https://community.bistudio.com/wiki/waypointFormation
-			 */
+			@brief Gets the waypoint description.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the waypoint formation, enumeratred.
+
+			@sa https://community.bistudio.com/wiki/waypointFormation
+			*/
 			waypoint::formation waypoint_formation(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the house position assigned to the waypoint.
-			@method 	waypoint_house_position
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			Returns the house position.
-			@sa 		https://community.bistudio.com/wiki/waypointHousePosition
+			@brief Gets the house position assigned to the waypoint.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the house position.
+
+			@sa https://community.bistudio.com/wiki/waypointHousePosition
 			*/
 			float waypoint_house_position(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the waypoint loiter radius.
-			@method 	waypoint_loiter_radius
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			Returns the loiter radius.
-			@sa 		https://community.bistudio.com/wiki/waypointLoiterRadius
+			@brief Gets the waypoint loiter radius.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the loiter radius.
+
+			@sa https://community.bistudio.com/wiki/waypointLoiterRadius
 			*/
 			float waypoint_loiter_radius(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the waypoint loiter type.
-			@method 	waypoint_loiter_type
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			Returns the loiter type, enumerated.
-			@sa 		https://community.bistudio.com/wiki/waypointLoiterType
+			@brief Gets the waypoint loiter type.
+
+			@param wp_ Waypoint to use
+
+			@return Returns the loiter type, enumerated.
+
+			@sa https://community.bistudio.com/wiki/waypointLoiterType
 			*/
 			waypoint::loiter_type waypoint_loiter_type(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the waypoint name.
-			@method 	waypoint_name
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			The name assigned to the waypoint.
-			@sa 		https://community.bistudio.com/wiki/waypointName
+			@brief Gets the waypoint name.
+
+			@param wp_ Waypoint to use
+
+			@return The name assigned to the waypoint.
+
+			@sa https://community.bistudio.com/wiki/waypointName
 			*/
 			std::string waypoint_name(waypoint & wp_);
 
 			/*!
-			@brief  	Get Waypoint's Position.
-			@method 	waypoint_name
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			The position of the waypoint.
-			@sa 		https://community.bistudio.com/wiki/waypointPosition
+			@brief Get Waypoint's Position.
+
+			@param wp_ Waypoint to use
+
+			@return The position of the waypoint.
+
+			@sa https://community.bistudio.com/wiki/waypointPosition
 			*/
 			vector3 waypoint_position(waypoint & wp_);
 
 			/*!
 			@brief  	Returns an array of waypoints for the specified unit/group
-			@method 	waypoints
-			@param  	gp_                     	 	Group to retrieve waypoints of.
-			@return                          			The position of the waypoint.
-			@sa 		https://community.bistudio.com/wiki/waypoints
+
+			@param  	gp_ Group to retrieve waypoints of.
+
+			@return The position of the waypoint.
+
+			@sa https://community.bistudio.com/wiki/waypoints
 			*/
             std::vector<waypoint> waypoints(group & gp_);
 
 			/*!
-			@brief  	Gets the waypoint script.
-			@method 	waypoints
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			The position of the waypoint.
-			@sa 		https://community.bistudio.com/wiki/waypointScript
+			@brief Gets the waypoint script.
+
+			@param wp_ Waypoint to use
+
+			@return The position of the waypoint.
+
+			@sa https://community.bistudio.com/wiki/waypointScript
 			*/
 			std::string waypoint_script(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the waypoint show/hide status. 
-			@method 	waypoints
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			Gets the showhide status, enumerated.
-			@sa 		https://community.bistudio.com/wiki/waypointShow
+			@brief Gets the waypoint show/hide status. 
+
+			@param wp_ Waypoint to use
+
+			@return Gets the showhide status, enumerated.
+
+			@sa https://community.bistudio.com/wiki/waypointShow
 			*/
 			waypoint::show waypoint_show(waypoint & wp_);
 
 			/*!
-			@brief  	Gets the waypoint movement speed.
-			@method 	waypoints
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			Gets the waypoint speed, enumerated.
-			@sa 		https://community.bistudio.com/wiki/waypointSpeed
+			@brief Gets the waypoint movement speed.
+
+			@param wp_ Waypoint to use
+
+			@return Gets the waypoint speed, enumerated.
+
+			@sa https://community.bistudio.com/wiki/waypointSpeed
 			*/
 			waypoint::speed waypoint_speed(waypoint & wp_);
 			// TODO waypoint_statements needs struct for return value
 			// TODO waypoint_timeout needs struct for return value
 
 			/*!
-			@brief  	Gets the waypoint type.
-			@method 	waypoints
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			The waypoint type, enumerated.
-			@sa 		https://community.bistudio.com/wiki/waypointType
+			@brief Gets the waypoint type.
+
+			@param wp_ Waypoint to use
+
+			@return The waypoint type, enumerated.
+
+			@sa https://community.bistudio.com/wiki/waypointType
 			*/
 			waypoint::type waypoint_type(waypoint & wp_); // TODO enumerate waypoint_type return
 
 			/*!
-			@brief  	Returns the visibility of the waypoint.
-			@method 	waypoints
-			@param  	wp_                     	 	Waypoint to use
-			@return                          			The waypoint visibility.
-			@sa 		https://community.bistudio.com/wiki/waypointVisible
+			@brief Returns the visibility of the waypoint.
+
+			@param wp_ Waypoint to use
+
+			@return The waypoint visibility.
+
+			@sa https://community.bistudio.com/wiki/waypointVisible
 			*/
 			bool waypoint_visible(waypoint & wp_);
 			bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.

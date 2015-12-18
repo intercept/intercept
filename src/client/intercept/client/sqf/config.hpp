@@ -5,9 +5,10 @@
 @author Nou (korewananda@gmail.com)
 @author Glowbal (thomasskooi@live.nl)
 
-@brief Chat function wrappers.
+@brief Functions used to access and parse RV Engine configuration files.
 
-These are wrappers for the `sideChat`, `globalChat`, `commandChat`, etc SQF commands.
+These are functions that are used to access the config class structure in the RV
+Engine.
 
 https://github.com/NouberNou/intercept
 */

@@ -1,4 +1,5 @@
 #error Documentation only. DO NOT INCLUDE ONLY FOR DOXYGEN GLOBAL COMMENTS
+// Namespaces
 
 /*!
 @namespace intercept
@@ -18,3 +19,10 @@ SQF commands accessible to client plugin developers are contained within. They
 are broken up according to their functionality as best as possible in sub-namespaces.
 */
 
+/*!
+@namespace client_function_defs
+@brief Contains all of the exported functions to client plugins.
+
+These are the functions that are exported via struct to the client plugins. They
+are used to interface with the host.
+*/

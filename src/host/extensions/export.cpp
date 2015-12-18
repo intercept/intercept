@@ -16,8 +16,8 @@ namespace intercept {
             return intercept::invoker::get().invoke_raw(function_, &left_arg_, &right_arg_);
         }
 
-        void get_type_structure(char *type_name, uintptr_t &type_def_, uintptr_t &data_type_def_) {
-            auto structure = invoker::get().type_structures[std::string(type_name)];
+        void get_type_structure(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_) {
+            auto structure = invoker::get().type_structures[std::string(type_name_)];
             type_def_ = structure.first;
             data_type_def_ = structure.second;
         }

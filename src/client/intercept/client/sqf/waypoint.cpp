@@ -1,4 +1,4 @@
-#include "waypoint.h"
+#include "waypoint.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -109,7 +109,7 @@ namespace intercept {
 				return waypoint(game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
 			}
 
-			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "")
+			waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_, const std::string & name_)
 			{
 				game_value args({ 
                     center_, 

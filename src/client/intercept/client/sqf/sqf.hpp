@@ -5,7 +5,7 @@
 #include "position.hpp"
 #include "misc.hpp"
 #include "intersects.hpp"
-#include "world.h"
+#include "world.hpp"
 #include "ctrl.hpp"
 #include "marker.hpp"
 #include "curator.hpp"

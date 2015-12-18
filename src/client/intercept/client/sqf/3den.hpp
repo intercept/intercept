@@ -1,3 +1,15 @@
+/*!
+@file
+@author Verox (verox.averre@gmail.com)
+@author Nou (korewananda@gmail.com)
+
+@brief Wrappers for the waypoint family of commands.
+
+This file contains all the wrappers for the Waypoint family of commands and
+associated structs and enumerations.
+
+https://github.com/NouberNou/intercept
+*/
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"

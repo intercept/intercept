@@ -1,3 +1,16 @@
+/*!
+@file
+@author Verox (verox.averre@gmail.com)
+@author Nou (korewananda@gmail.com)
+@author Glowbal (thomasskooi@live.nl)
+
+@brief Intersection command wrappers.
+
+These are commands that are used to test 3D intersections and collisions in the
+game world.
+
+https://github.com/NouberNou/intercept
+*/
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"

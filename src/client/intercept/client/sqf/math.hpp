@@ -1,3 +1,17 @@
+/*!
+@file
+@author Verox (verox.averre@gmail.com)
+@author Nou (korewananda@gmail.com)
+@author Glowbal (thomasskooi@live.nl)
+
+@brief Math functions.
+
+These are hidden, as they are useless when native math functions work faster.
+
+Basically do not use any of these. They are only provided here for code completion.
+
+https://github.com/NouberNou/intercept
+*/
 #pragma once
 #include "shared.hpp"
 #include "client\client.hpp"

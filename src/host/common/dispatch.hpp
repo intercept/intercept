@@ -33,11 +33,11 @@ namespace intercept {
 		dispatcher() : _ready(true) { }
 
         virtual bool call(const std::string & name_, arguments & args_, std::string & result_) {
-            if (_methods.find(name_) == _methods.end()) {
-                // @TODO: Exceptions
-                return false;
+            auto method = _methods.find(name_);
+            if (method != _methods.end()) {
+                return method->second(args_, result_);
             }
-            return _methods[name_](args_, result_);
+            return false;
         }
 
         bool add(const std::string & name_, std::function<bool(arguments &, std::string &)> func_) {

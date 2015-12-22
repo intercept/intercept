@@ -49,7 +49,7 @@ namespace intercept {
             return false;
         }
 
-        
+
         auto new_module = module::entry(args_.as_string(0), dllHandle);
 
         new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
@@ -93,31 +93,6 @@ namespace intercept {
         _modules.erase(args_.as_string(0));
 
         LOG(INFO) << "Unload complete [" << args_.as_string(0) << "]";
-
-        return true;
-    }
-
-    bool extensions::call(const arguments & args_, std::string & result) {
-        //LOG(INFO) << "Calling [" << args_.as_string(0) << "]";
-
-        if (_modules.find(args_.as_string(0)) == _modules.end()) {
-            return false;
-        }
-
-        result = "";
-        result.resize(4096);
-
-        std::string function_str;
-        std::vector<std::string> temp = intercept::split(args_.get(), ',');
-
-        if (temp.size() < 3) {
-            function_str = temp[1];
-        }
-        else {
-            for (size_t x = 1; x < temp.size(); x++)
-                function_str = function_str + temp[x] + ",";
-        }
-        //_modules[args_.as_string(0)].function((char *)result.c_str(), 4096, (const char *)function_str.c_str());
 
         return true;
     }

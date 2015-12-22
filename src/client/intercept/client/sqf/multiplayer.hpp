@@ -19,11 +19,11 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-			bool local(const object &value_);
-			bool local(const group &value_);
-			bool is_server();
-			bool is_multiplayer();
-			bool is_dedicated();
-			bool did_jip();
+		bool local(const object &value_);
+		bool local(const group &value_);
+		bool is_server();
+		bool is_multiplayer();
+		bool is_dedicated();
+		bool did_jip();
     }
 }

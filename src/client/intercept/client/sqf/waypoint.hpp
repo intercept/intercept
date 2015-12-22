@@ -249,12 +249,6 @@ namespace intercept {
 		const std::string waypoint::__formation_lookup[10] = { "NO_CHANGE","COLUMN","STAG_COLUMN","WEDGE","ECH_LEFT","ECH_RIGHT","VEE","LINE","FILE","DIAMOND" };
 		const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
 
-		/*!
-		 @namespace waypoints
-
-		 @brief The namespace housing the Waypoint family of commands.
-		 */
-		namespace waypoints {
 			/*!
 			@brief Adds (or inserts when index is given) a new waypoint to a group.
 			
@@ -538,6 +532,5 @@ namespace intercept {
 			float waypoint_timeout_current(group value_);
 
 			// TODO Does `unary__curatorwaypointcost__object__ret__scalar` and `binary__setcuratorwaypointcost__object__scalar__ret__nothing` belong in curator namespace or waypoint namespace.
-		}
 	}
 }

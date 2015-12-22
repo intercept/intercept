@@ -19,7 +19,6 @@ using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
-		namespace ctrl {
 			void ctrl_activate(const control &value_);
 			float ctrl_auto_scroll_delay(const control &value_);
 			bool ctrl_auto_scroll_rewind(const control &value_);
@@ -93,6 +92,5 @@ namespace intercept {
 			void ctrl_set_text_secondary(const control &value0_, const std::string& value1_);
 			void ctrl_set_tooltip(const control &value0_, const std::string& value1_);
 			void ctrl_show(const control &value0_, bool value1_);
-		}
     }
 }

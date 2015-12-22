@@ -4,7 +4,6 @@
 
 namespace intercept {
 	namespace sqf {
-		namespace world {
 			float world_size() {
 				return sqf::__helpers::__retrieve_nular_number(client::__sqf::nular__worldsize__ret__scalar);
 			}
@@ -52,6 +51,5 @@ namespace intercept {
 
 				throw 713; // TODO reimplement day_to_number
 			}
-		}
 	}
 }

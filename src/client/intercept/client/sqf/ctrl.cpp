@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace ctrl {
 			void ctrl_activate(const control &value_) {
 				__helpers::__empty_unary_control(client::__sqf::unary__ctrlactivate__control__ret__nothing, value_);
 			}
@@ -292,6 +291,5 @@ namespace intercept {
 			void ctrl_show(const control &value0_, bool value1_) {
 				host::functions.invoke_raw_binary(client::__sqf::binary__ctrlshow__control__bool__ret__nothing, value0_, value1_);
 			}
-		}
     }
 }

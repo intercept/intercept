@@ -21,7 +21,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace eden {
 			std::string current3denoperation();
 			object get3dencamera();
 			bool get3deniconsvisible();
@@ -34,6 +33,5 @@ namespace intercept {
 			float add_3den_layer(float value0_, const std::string& value1_);
 			bool remove_3den_layer(float value_);
 			void remove_all_3den_eventhandlers(const std::string &value_);
-		}
     }
 }

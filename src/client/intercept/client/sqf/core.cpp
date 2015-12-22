@@ -5,7 +5,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace core {
 			object player() {
 				return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
 			}
@@ -217,6 +216,5 @@ namespace intercept {
                 return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                     client::__sqf::unary__allvariables__location__ret__array, value_));
             }
-		}
     }
 }

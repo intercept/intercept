@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace eden{
 			std::string current3denoperation() {
 				return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
 			}
@@ -44,6 +43,5 @@ namespace intercept {
 			float add_3den_layer(float value0_, const std::string& value1_) {
 				return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, value0_, value1_));
 			}
-		}
     }
 }

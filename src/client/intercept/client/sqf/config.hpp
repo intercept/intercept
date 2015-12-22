@@ -20,7 +20,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        namespace configs {
             std::vector<config> config_hierarchy(const config &config_entry_);
             std::string config_name(const config &config_entry_);
             std::vector<config> config_properties(const config &config_entry,const std::string& condition_, bool inherit);
@@ -45,6 +44,5 @@ namespace intercept {
             config config_file();
             config config_null();
             config mission_config_file();
-        }
     }
 }

@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace position {
 			namespace __helpers {
 				vector3 get_pos_obj(unary_function fnc_, const object & obj_)
 				{
@@ -118,7 +117,6 @@ namespace intercept {
 			{
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__asltoatl__array__ret__array, asl_));
 			}
-		}
     }
 }
 

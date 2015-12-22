@@ -7,7 +7,6 @@ using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
-		namespace __uncategorized {
 			std::vector<std::string> action_keys(const std::string &user_action_)
 			{
 				game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, user_action_);
@@ -174,12 +173,12 @@ namespace intercept {
 				return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__backpackmagazines__object__ret__array, unit_));
 			}
 
-			sqf::bounding_box bounding_box(const object &model_)
+			sqf::rv_bounding_box bounding_box(const object &model_)
 			{
 				//game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingbox__object__ret__array, model_);
 				//game_data_array* array_value = ((game_data_array *)input.data);
 
-				//sqf::bounding_box bb;
+				//sqf::rv_bounding_box bb;
 
 				//float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
 				//float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
@@ -196,12 +195,12 @@ namespace intercept {
 				throw 713; // TODO
 			}
 
-			sqf::bounding_box bounding_box_real(const object &model_)
+			sqf::rv_bounding_box bounding_box_real(const object &model_)
 			{
 				//game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingboxreal__object__ret__array, model_);
 				//game_data_array* array_value = ((game_data_array *)input.data);
 
-				//sqf::bounding_box bb;
+				//sqf::rv_bounding_box bb;
 
 				//float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
 				//float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
@@ -1003,6 +1002,5 @@ namespace intercept {
 
 			/*************************************************************** LISTBOX END *****************************************************************************/
 #pragma endregion listbox 
-		}
 	}
 }

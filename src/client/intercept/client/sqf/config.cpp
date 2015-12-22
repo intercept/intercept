@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-        namespace configs {
 
             std::vector<config> config_hierarchy(const config &config_entry_) {
                 game_value output = host::functions.invoke_raw_unary(client::__sqf::unary__confighierarchy__config__ret__array, config_entry_);
@@ -110,7 +109,6 @@ namespace intercept {
             config mission_config_file() {
                 return config(host::functions.invoke_raw_nular(client::__sqf::nular__missionconfigfile__ret__config));
             }
-            
-        }
+
     }
 }

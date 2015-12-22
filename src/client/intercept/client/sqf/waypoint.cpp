@@ -4,7 +4,6 @@
 
 namespace intercept {
 	namespace sqf {
-		namespace waypoints {
 			object waypoint_attached_object(waypoint &wp_)
 			{
 				return object(host::functions.invoke_raw_unary(client::__sqf::unary__waypointattachedobject__array__ret__object, wp_.__to_gv()));
@@ -275,6 +274,5 @@ namespace intercept {
 			float waypoint_timeout_current(group value_) {
 				return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_));
 			}
-		}
 	}
 }

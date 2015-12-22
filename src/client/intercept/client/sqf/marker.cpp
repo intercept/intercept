@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace markers {
 			void delete_marker(const std::string& value_) {
 				__helpers::__empty_unary_string(client::__sqf::unary__deletemarker__string__ret__nothing, value_);
 			}
@@ -147,6 +146,5 @@ namespace intercept {
 
 				return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
 			}
-		}
     }
 }

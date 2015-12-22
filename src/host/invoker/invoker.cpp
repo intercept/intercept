@@ -56,22 +56,6 @@ namespace intercept {
         }
     }
 
-    void invoker::allow_access() {
-        std::unique_lock<std::mutex> invoke_lock(_invoke_mutex, std::defer_lock);
-        {
-            std::lock_guard<std::mutex> lock(_state_mutex);
-            invoke_lock.lock();
-            invoker_accessisble = true;
-        }
-        _invoke_condition.notify_all();
-    }
-
-    void invoker::deny_access() {
-        std::lock_guard<std::mutex> lock(_state_mutex);
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
-        invoker_accessisble = false;
-    }
-
     bool invoker::invoker_begin_register(const arguments & args_, std::string & result_)
     {
         if (loader::get().hook_function("str", _register_hook, _register_hook_trampoline)) {
@@ -102,8 +86,7 @@ namespace intercept {
 
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
-        LOG(DEBUG) << "-------------------------------- EXECUTE PERIOD BEGIN!";
-        allow_access();
+        invoker_lock period_lock(this, true);
         long timeout = clock() + 3;
         while (clock() < timeout) continue;
         // do the per-frame handler here.
@@ -112,13 +95,28 @@ namespace intercept {
                 module.second.functions.on_frame();
             }
         }
-        deny_access();
-        LOG(DEBUG) << "-------------------------------- EXECUTE PERIOD END!";
         return true;
+    }
+
+#define RV_EVENT(event_handler) allow_access();\
+    for (auto module : extensions::get().modules()) {\
+        if (module.second.functions.##event_handler##) {\
+            module.second.functions.##event_handler##();\
+        }\
+    }\
+    deny_access();
+
+    bool invoker::rv_event(const arguments & args_, std::string & result_)
+    {
+        std::string event_name = args_.as_string(0);
+
+        return false;
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
+        invoker_lock init_lock(this);
+
         // @TODO These values need to get cleaned up, but when the release_value() is
         // called this early it crashes the game with some weird race. Need to look at.
         game_value delete_ptr_name = "INVOKER_DELETE_ARRAY";
@@ -127,12 +125,12 @@ namespace intercept {
 
         _delete_size_zero = game_value(0.0f);
         _delete_size_max = game_value(100.0f);
-
         return true;
     }
 
     bool invoker::test_invoker(const arguments & args_, std::string & result_)
     {
+        invoker_lock test_lock(this);
         result_ = "-1";
         game_value res = invoke_raw("profilenamesteam");
         result_ = res;
@@ -426,4 +424,28 @@ namespace intercept {
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);
     }
 
+    invoker_lock::invoker_lock(invoker * instance_, bool all_) : _all(all_), _instance(instance_)
+    {
+        if (_all) {
+            std::unique_lock<std::mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
+            {
+                std::lock_guard<std::mutex> lock(_instance->_state_mutex);
+                invoke_lock.lock();
+                invoker_accessisble = true;
+            }
+            _instance->_invoke_condition.notify_all();
+        }
+        else {
+            invoker_accessisble = true;
+        }
+    }
+
+    invoker_lock::~invoker_lock()
+    {
+        if (_all) {
+            std::lock_guard<std::mutex> lock(_instance->_state_mutex);
+            std::lock_guard<std::mutex> invoke_lock(_instance->_invoke_mutex);
+        }
+        invoker_accessisble = false;
+    }
 }

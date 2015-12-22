@@ -22,6 +22,7 @@ using namespace intercept::types;
 
 
 namespace intercept {
+    class invoker_lock;
     /*!
     @brief Handles invoking SQF functions. Used as an interface between clients, 
     RV Engine, and the intercept::loader.
@@ -49,24 +50,6 @@ namespace intercept {
         */
         void attach_controller();
         
-        /*!
-        @brief This function handles thread synchronization and blocking for when
-        client plugins can access the RV engine. 
-        
-        When this function is called it notifies all threads waiting to access 
-        the RV engine that they can now execute.
-        */
-        void allow_access();
-
-        /*!
-        @brief Handles removing access to the RV Engine. 
-        
-        It waits until all current threads have finished their access and then 
-        it re-locks the engine until the next period of time in which access is
-        allowed.
-        */
-        void deny_access();
-
         /*!
         @name Invoke Functions
         */
@@ -236,6 +219,11 @@ namespace intercept {
         execution.
         */
         bool do_invoke_period(const arguments & args_, std::string & result_);
+
+        /*!
+        @brief Consume an event from the RV Engine and dispatches it.
+        */
+        bool rv_event(const arguments & args_, std::string & result_);
         
         /*!
         This is a general purpose function to test the invoker. It is not meant
@@ -253,6 +241,8 @@ namespace intercept {
         @brief A map of string type names to their corresponding vtable ptrs.
         */
         std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
+
+        friend class invoker_lock;
     protected:
         /*!
         @brief Thread for the string collector.
@@ -343,5 +333,18 @@ namespace intercept {
 
         bool _patched;
         bool _attached;
+    };
+
+    class invoker_lock {
+    public:
+        invoker_lock(invoker *instance_, bool all_ = false);
+        invoker_lock(const invoker &) = delete;
+        invoker_lock(invoker &&) = delete;
+        invoker_lock & operator=(const invoker_lock &) = delete;
+        invoker_lock & operator=(invoker_lock &&) = delete;
+        ~invoker_lock();
+    protected:
+        invoker *_instance;
+        bool _all;
     };
 }

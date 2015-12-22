@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace groups {
 			bool group_icon_selectable() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__groupiconselectable__ret__bool);
 			}
@@ -66,6 +65,5 @@ namespace intercept {
 			void set_group_icons_selectable(bool value_) {
 				__helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, value_);
 			}
-		}
     }
 }

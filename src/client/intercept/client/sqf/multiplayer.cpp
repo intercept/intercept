@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace multiplayer {
 			bool local(const object &value_) {
 				return __helpers::__bool_unary_object(client::__sqf::unary__local__object__ret__bool, value_);
 			}
@@ -28,6 +27,5 @@ namespace intercept {
 			bool did_jip() {
 				return __helpers::__retrieve_nular_bool(client::__sqf::nular__didjip__ret__bool);
 			}
-		}
     }
 }

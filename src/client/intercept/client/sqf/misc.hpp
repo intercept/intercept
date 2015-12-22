@@ -29,7 +29,6 @@ namespace intercept {
 			float ui_scale;
 		};
 
-		namespace misc {
 			float acc_time();
 			object agent(const team_member &value_);
 			std::vector<std::string> activated_addons();
@@ -932,6 +931,5 @@ namespace intercept {
 			std::string task_state(task value_);
 			void terminate(script value_);
 			std::string type(task value_);
-		}
     }
 }

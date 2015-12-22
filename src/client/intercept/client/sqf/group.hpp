@@ -19,7 +19,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace groups {
 			bool group_icon_selectable();
 			std::array<bool, 2> group_icons_visible();
 			group grp_null();
@@ -38,6 +37,5 @@ namespace intercept {
 			void select_leader(const object &value0_, const group &value1_);
 			float current_waypoint(const group &value_);
 			void set_group_icons_selectable(bool value_);
-		}
     }
 }

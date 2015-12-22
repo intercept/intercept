@@ -3,7 +3,6 @@
 
 namespace intercept {
 	namespace sqf {
-		namespace chat {
 			namespace __helpers {
 				void chat_message(binary_function fnc_, const object & obj_, const std::string &message_) {
 					host::functions.invoke_raw_binary(fnc_, obj_, message_);
@@ -38,6 +37,5 @@ namespace intercept {
 				game_value args = game_value({ ((float)channel_id_), message_ });
 				host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
 			}
-		}
     }
 }

@@ -19,7 +19,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace core {
 			std::vector<object> all_3den_entities();
 			std::vector<object> all_curators();
 			std::vector<object> all_dead();
@@ -71,6 +70,5 @@ namespace intercept {
             std::vector<std::string> all_variables(const group &value_);
             std::vector<std::string> all_variables(const task &value_);
             std::vector<std::string> all_variables(const location &value_);
-		}
     }
 }

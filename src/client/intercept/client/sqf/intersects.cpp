@@ -4,7 +4,6 @@
 
 namespace intercept {
 	namespace sqf {
-		namespace intersects {
 			namespace __helpers {
 				intersect_surfaces_list __line_intersects_surfaces(game_value& intersects_value_) {
 					game_data_array* intersects = ((game_data_array *)intersects_value_.rv_data.data);
@@ -201,6 +200,5 @@ namespace intercept {
 				}
 				return output;
 			}
-		}
     }
 }

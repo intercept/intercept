@@ -21,7 +21,7 @@ using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
-		struct bounding_box
+		struct rv_bounding_box
 		{
 			vector3 min;
 			vector3 max;
@@ -66,8 +66,6 @@ namespace intercept {
 				});
 			}
 		};
-
-		namespace __uncategorized {
 			/* potential namespace: */
 			std::vector<std::string> action_keys(const std::string &user_action_);
 
@@ -122,8 +120,8 @@ namespace intercept {
 			std::vector<std::string> backpack_magazines(const object &unit_);
 
 			/* potential namespace: misc, model, position? */
-			sqf::bounding_box bounding_box(const object &model_);
-			sqf::bounding_box bounding_box_real(const object &model_);
+			sqf::rv_bounding_box bounding_box(const object &model_);
+			sqf::rv_bounding_box bounding_box_real(const object &model_);
 			vector3 bounding_center(const object &obj_);
 
 			/* potential namespace: controls, ui, gui, misc */
@@ -274,7 +272,5 @@ namespace intercept {
 			float lb_value(int control_id_, int index_);
 			float lb_value(const control &control_, int index_);
 
-
-		}
 	}
 }

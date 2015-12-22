@@ -26,9 +26,6 @@ namespace intercept {
 			object intersectObject; // the object the surface belongs to(could be proxy object)
 			object parentObject; // the object proxy object belongs to(not always the same as intersect object)
 		};
-
-		namespace intersects {
-
 			typedef std::vector<std::shared_ptr<intersect_surfaces>> intersect_surfaces_list;
 
 			namespace __helpers {
@@ -122,6 +119,5 @@ namespace intercept {
 			* Find list of objects intersected by given line from begin_position_ to end_position_
 			*/
 			std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
-		}
     }
 }

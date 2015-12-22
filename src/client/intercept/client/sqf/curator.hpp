@@ -19,7 +19,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace curator {
 			object curatorcamera();
 			object curatormouseover();
 			std::vector<object> curatorselected();
@@ -47,6 +46,5 @@ namespace intercept {
 
 			std::vector<std::string> curator_addons(const object &curator_module_);
 			std::vector<object> curator_editable_objects(const object &curator_module_);
-		}
     }
 }

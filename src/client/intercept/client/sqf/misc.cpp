@@ -5,7 +5,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace misc {
 			float acc_time() {
 				return __helpers::__retrieve_nular_number(client::__sqf::nular__acctime__ret__scalar);
 			}
@@ -3374,6 +3373,5 @@ namespace intercept {
 			std::string type(task value_) {
                 return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__type__task__ret__string, value_));
 			}
-		}
     }
 }

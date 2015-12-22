@@ -19,7 +19,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace markers {
 			void delete_marker(const std::string& value_);
 			void delete_marker_local(const std::string& value_);
 			float marker_alpha(const std::string& value_);
@@ -47,6 +46,5 @@ namespace intercept {
             std::string create_marker_local(const std::string &name_, const vector3 &pos_);
             std::string create_marker_local(const std::string &name_, const vector2 &pos_);
             std::string create_marker_local(const std::string &name_, const object &pos_);
-		}
     }
 }

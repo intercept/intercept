@@ -20,7 +20,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace chat {
 			namespace __helpers {
 				void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
 			}
@@ -31,6 +30,5 @@ namespace intercept {
 			void command_chat(const object & obj_, const std::string & message_);
 			void system_chat(const std::string &message_);
 			void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_);
-		}
     }
 }

@@ -20,7 +20,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		namespace position {
 			/*
 			getPosASLVisual
 			getPosATLVisual
@@ -54,8 +53,5 @@ namespace intercept {
 			vector3 asl_to_agl(const vector3 & asl_);
 			vector3 atl_to_asl(const vector3 & atl_);
 			vector3 asl_to_atl(const vector3 & asl_);
-			
-		}
-
     }
 }

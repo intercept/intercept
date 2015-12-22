@@ -4,7 +4,6 @@
 
 namespace intercept {
     namespace sqf {
-		namespace curator {
 			object curatorcamera() {
 				return __helpers::__retrieve_nular_object(client::__sqf::nular__curatorcamera__ret__object);
 			}
@@ -109,6 +108,5 @@ namespace intercept {
 			{
 				return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__curatoreditableobjects__object__ret__array, curator_module_));
 			}
-		}
     }
 }

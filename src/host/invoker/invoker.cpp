@@ -86,7 +86,7 @@ namespace intercept {
 
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
-        invoker_lock period_lock(this, true);
+        invoker_unlock period_lock(this, true);
         long timeout = clock() + 3;
         while (clock() < timeout) continue;
         // do the per-frame handler here.
@@ -115,7 +115,7 @@ namespace intercept {
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        invoker_lock init_lock(this);
+        invoker_unlock init_lock(this);
 
         // @TODO These values need to get cleaned up, but when the release_value() is
         // called this early it crashes the game with some weird race. Need to look at.
@@ -130,7 +130,7 @@ namespace intercept {
 
     bool invoker::test_invoker(const arguments & args_, std::string & result_)
     {
-        invoker_lock test_lock(this);
+        invoker_unlock test_lock(this);
         result_ = "-1";
         game_value res = invoke_raw("profilenamesteam");
         result_ = res;
@@ -424,28 +424,39 @@ namespace intercept {
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);
     }
 
-    invoker_lock::invoker_lock(invoker * instance_, bool all_) : _all(all_), _instance(instance_)
+    invoker_unlock::invoker_unlock(invoker * instance_, bool all_, bool delayed_) : _all(all_), _instance(instance_), _unlocked(false)
     {
-        if (_all) {
-            std::unique_lock<std::mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
-            {
-                std::lock_guard<std::mutex> lock(_instance->_state_mutex);
-                invoke_lock.lock();
-                invoker_accessisble = true;
-            }
-            _instance->_invoke_condition.notify_all();
-        }
-        else {
-            invoker_accessisble = true;
+        if (!delayed_) {
+            unlock();
         }
     }
 
-    invoker_lock::~invoker_lock()
+    invoker_unlock::~invoker_unlock()
     {
-        if (_all) {
-            std::lock_guard<std::mutex> lock(_instance->_state_mutex);
-            std::lock_guard<std::mutex> invoke_lock(_instance->_invoke_mutex);
+        if (_unlocked) {
+            if (_all) {
+                std::lock_guard<std::mutex> lock(_instance->_state_mutex);
+                std::lock_guard<std::mutex> invoke_lock(_instance->_invoke_mutex);
+            }
+            invoker_accessisble = false;
         }
-        invoker_accessisble = false;
+    }
+    void invoker_unlock::unlock()
+    {
+        if (!_unlocked) {
+            if (_all) {
+                std::unique_lock<std::mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
+                {
+                    std::lock_guard<std::mutex> lock(_instance->_state_mutex);
+                    invoke_lock.lock();
+                    invoker_accessisble = true;
+                }
+                _instance->_invoke_condition.notify_all();
+            }
+            else {
+                invoker_accessisble = true;
+            }
+            _unlocked = true;
+        }
     }
 }

@@ -22,7 +22,7 @@ using namespace intercept::types;
 
 
 namespace intercept {
-    class invoker_lock;
+    class invoker_unlock;
     /*!
     @brief Handles invoking SQF functions. Used as an interface between clients, 
     RV Engine, and the intercept::loader.
@@ -242,7 +242,7 @@ namespace intercept {
         */
         std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
 
-        friend class invoker_lock;
+        friend class invoker_unlock;
     protected:
         /*!
         @brief Thread for the string collector.
@@ -335,15 +335,17 @@ namespace intercept {
         bool _attached;
     };
 
-    class invoker_lock {
+    class invoker_unlock {
     public:
-        invoker_lock(invoker *instance_, bool all_ = false);
-        invoker_lock(const invoker &) = delete;
-        invoker_lock(invoker &&) = delete;
-        invoker_lock & operator=(const invoker_lock &) = delete;
-        invoker_lock & operator=(invoker_lock &&) = delete;
-        ~invoker_lock();
+        invoker_unlock(invoker *instance_, bool all_ = false, bool delayed_ = false);
+        invoker_unlock(const invoker &) = delete;
+        invoker_unlock(invoker &&) = delete;
+        invoker_unlock & operator=(const invoker_unlock &) = delete;
+        invoker_unlock & operator=(invoker_unlock &&) = delete;
+        ~invoker_unlock();
+        void unlock();
     protected:
+        bool _unlocked;
         invoker *_instance;
         bool _all;
     };

@@ -58,6 +58,9 @@ namespace intercept {
         new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
         new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
         new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
+        new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
+        new_module.functions.fired = (module::fired_func)GetProcAddress(dllHandle, "fired");
+
 
         if (!new_module.functions.api_version) {
             LOG(ERROR) << "Module " << args_.as_string(0) << " failed to define the api_version function.";

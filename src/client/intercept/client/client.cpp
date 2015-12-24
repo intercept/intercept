@@ -32,12 +32,14 @@ namespace intercept {
             game_data_string::data_type_def = data_type_def;
 
             host::functions.get_type_structure("OBJECT", type_def, data_type_def);
+            game_data_object::type_def = type_def;
+            game_data_object::data_type_def = data_type_def;
 
             host::functions.get_type_structure("BOOL", type_def, data_type_def);
             game_data_bool::type_def = type_def;
             game_data_bool::data_type_def = data_type_def;
 
-            /*
+            
             host::functions.get_type_structure("CODE", type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
@@ -81,7 +83,7 @@ namespace intercept {
             host::functions.get_type_structure("NAMESPACE", type_def, data_type_def);
             game_data_namespace::type_def = type_def;
             game_data_namespace::data_type_def = data_type_def;
-            */
+            
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);

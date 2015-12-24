@@ -1,4 +1,5 @@
 //boot.sqf
+intercept_params_var = [];
 diag_log text format["_________________________________________Doing Intercept Boot Load"];
 _res = "intercept" callExtension "init:";
 diag_log text format["Initiated: %1", _res];
@@ -47,4 +48,5 @@ _res = "intercept" callExtension format["init_patch:%1", (productVersion select 
     str parsingNamespace;
     "intercept" callExtension "invoker_end_register:";
 // };
+"intercept" callExtension "load_extension:z\intercept\build\win32\example_dll\Debug\example_dll.dll";
 diag_log text format["_________________________________________Intercept Res: %1", _res];

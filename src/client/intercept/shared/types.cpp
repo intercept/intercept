@@ -389,6 +389,7 @@ namespace intercept {
         {
             rv_data.__vptr = internal_.__vptr;
             rv_data.data = (game_data *)internal_.data;
+            rv_data.data->ref_count_internal += 1;
         }
 
         game_value::game_value(float val_)
@@ -428,6 +429,7 @@ namespace intercept {
         game_value::game_value(const internal_object &internal_)
         {
             rv_data = internal_.rv_data;
+            rv_data.data->ref_count_internal += 1;
         }
         game_value::~game_value() {
             _free();
@@ -461,6 +463,7 @@ namespace intercept {
                  of the object (the actual memory will be freed later by the game process).
                 */
                 if (rv_data.data) {
+                    rv_data.data->ref_count_internal -= 1;
                     client::host::functions.free_value(this);
                     rv_data.data = nullptr;
                 }
@@ -544,6 +547,7 @@ namespace intercept {
                 _free();
             rv_data.data = ((game_value)internal_).rv_data.data;
             rv_data.__vptr = ((game_value)internal_).rv_data.__vptr;
+            rv_data.data->ref_count_internal += 1;
             return *this;
         }
 
@@ -553,6 +557,7 @@ namespace intercept {
                 _free();
             rv_data.data = internal_.data;
             rv_data.__vptr = internal_.__vptr;
+            rv_data.data->ref_count_internal += 1;
             return *this;
         }
 

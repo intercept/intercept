@@ -16,13 +16,14 @@ https://github.com/NouberNou/intercept
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include "eventhandlers.hpp"
 
 
 using namespace intercept::types;
 
 
 namespace intercept {
-    class invoker_unlock;
+    class _invoker_unlock;
     /*!
     @brief Handles invoking SQF functions. Used as an interface between clients, 
     RV Engine, and the intercept::loader.
@@ -143,7 +144,7 @@ namespace intercept {
         if the value was not released (due to it not being properly owned by the
         RV Engine).
         */
-        bool release_value(game_value * value_, bool immediate_ = false);
+        bool release_value(game_value * value_, bool immediate_ = true);
 
         /*!
         @brief Actually resizes the collection array to 0 and back to its normal
@@ -233,6 +234,19 @@ namespace intercept {
         //!@}
 
         /*!
+        @brief Adds a bound event handler-handler to the map of event handler binds 
+        for invoking a RV event handler in the client plugins.
+
+        @param name_ The name of the event being raised from SQF (these need to
+        be bound in SQF to call into the `rv_event` `callExtension` event in this
+        class).
+        @param func_ The function bind.
+
+        @return Returns `true` if it was bound, `false` if it was not.
+        */
+        bool add_eventhandler(const std::string & name_, std::function<void(const std::string &, game_value &)> func_);
+
+        /*!
         @brief A map of vtable ptrs to string stypes.
         */
         std::unordered_map<uintptr_t, std::string> type_map;
@@ -242,7 +256,6 @@ namespace intercept {
         */
         std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
 
-        friend class invoker_unlock;
     protected:
         /*!
         @brief Thread for the string collector.
@@ -274,6 +287,11 @@ namespace intercept {
         std::string _registration_type;
 
         /*!
+        @brief The mission namespace, used for getting variables.
+        */
+        game_value _mission_namespace;
+
+        /*!
         @brief The delete array for collecting values.
         */
         game_value _delete_array_ptr;
@@ -288,6 +306,8 @@ namespace intercept {
         max size.
         */
         game_value _delete_size_max;
+
+        game_value _eh_params;
 
         /*!
         @brief The index counter for the delete array.
@@ -319,7 +339,7 @@ namespace intercept {
         @brief Various mutexes and `std::` locking devices used for concurrency
         and RV Engine access.
         */
-        std::mutex _invoke_mutex;
+        std::recursive_mutex _invoke_mutex;
         std::mutex _state_mutex;
         std::mutex _delete_mutex;
         std::mutex _string_collection_mutex;
@@ -331,22 +351,44 @@ namespace intercept {
         */
         std::vector<std::thread> _demo_threads;
 
+        /*!
+        @brief A collection of bound functions for processing event handlers in
+        the client plugins.
+        */
+        std::unordered_map < std::string, std::function<void(const std::string &, game_value &)> > _eventhandlers;
+
         bool _patched;
         bool _attached;
+
+        std::queue<game_data *> _to_delete;
+
+        /*!
+        @brief A RAII style mutex handler for access to the RV Engine
+
+        Provides a safe way to unlock other threads or invokes to the RV engine. 
+        Will unlock an invoker passed in, by default only allowing access to invokes
+        from the invokers own thread. If `all_threads_` is set to true in the constructor
+        it will unlock all threads attempting to invoke. It is also possible to
+        delay unlocking, so that the unlock can happen based on a condition but
+        still retain the safety of being bound to the scope in which it was declared.
+
+        Instances of this class are NOT moveable or copyable.
+        */
+        class _invoker_unlock {
+        public:
+            _invoker_unlock(invoker *instance_, bool all_threads_ = false, bool delayed_ = false);
+            _invoker_unlock(const invoker &) = delete;
+            _invoker_unlock(invoker &&) = delete;
+            _invoker_unlock & operator=(const _invoker_unlock &) = delete;
+            _invoker_unlock & operator=(_invoker_unlock &&) = delete;
+            ~_invoker_unlock();
+            void unlock();
+        protected:
+            bool _unlocked;
+            invoker *_instance;
+            bool _all;
+        };
     };
 
-    class invoker_unlock {
-    public:
-        invoker_unlock(invoker *instance_, bool all_ = false, bool delayed_ = false);
-        invoker_unlock(const invoker &) = delete;
-        invoker_unlock(invoker &&) = delete;
-        invoker_unlock & operator=(const invoker_unlock &) = delete;
-        invoker_unlock & operator=(invoker_unlock &&) = delete;
-        ~invoker_unlock();
-        void unlock();
-    protected:
-        bool _unlocked;
-        invoker *_instance;
-        bool _all;
-    };
+
 }

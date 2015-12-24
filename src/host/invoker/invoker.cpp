@@ -52,7 +52,9 @@ namespace intercept {
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("rv_event", std::bind(&intercept::invoker::rv_event, this, std::placeholders::_1, std::placeholders::_2));
             _collection_thread = std::thread(&invoker::_string_collector, this);
+            eventhandlers::get().initialize();
         }
     }
 
@@ -86,51 +88,71 @@ namespace intercept {
 
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
-        invoker_unlock period_lock(this, true);
-        long timeout = clock() + 3;
-        while (clock() < timeout) continue;
-        // do the per-frame handler here.
-        for (auto module : extensions::get().modules()) {
-            if (module.second.functions.on_frame) {
-                module.second.functions.on_frame();
+        {
+            _invoker_unlock period_lock(this, true);
+            long timeout = clock() + 3;
+            while (clock() < timeout) continue;
+        }
+        {
+            _invoker_unlock on_frame_lock(this);
+            // do the per-frame handler here.
+            for (auto module : extensions::get().modules()) {
+                if (module.second.functions.on_frame) {
+                    module.second.functions.on_frame();
+                }
+            }
+        }
+        {
+            std::lock_guard<std::mutex> delete_lock(_delete_mutex);
+            if (_to_delete.size() > 100) {
+                for (uint32_t index = 0; index < 100; ++index) {
+                    ((rv_game_value *)_delete_array_ptr[index])->__vptr = rv_game_value::__vptr_def;
+                    ((rv_game_value *)_delete_array_ptr[index])->data = _to_delete.front();
+                    _to_delete.pop();
+                }
+                _invoker_unlock delete_invoke_lock(this);
+                invoke_delete();
             }
         }
         return true;
     }
 
-#define RV_EVENT(event_handler) allow_access();\
-    for (auto module : extensions::get().modules()) {\
-        if (module.second.functions.##event_handler##) {\
-            module.second.functions.##event_handler##();\
-        }\
-    }\
-    deny_access();
-
     bool invoker::rv_event(const arguments & args_, std::string & result_)
     {
         std::string event_name = args_.as_string(0);
-
+        LOG(DEBUG) << "EH " << event_name << " START";
+        auto handler = _eventhandlers.find(event_name);
+        if (handler != _eventhandlers.end()) {
+            bool all = false;
+            // If we are stopping a mission it is assumed that threads will be
+            // stopped and joined here. Deadlocks can occur if we do not open up
+            // the invoker to all threads.
+            if (event_name == "mission_stopped")
+                all = true;
+            _invoker_unlock eh_lock(this, all);
+            _eh_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_params_var"), "STRING");
+            handler->second(event_name, _eh_params);
+            LOG(DEBUG) << "EH " << event_name << " END";
+            return true;
+        }
         return false;
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        invoker_unlock init_lock(this);
-
-        // @TODO These values need to get cleaned up, but when the release_value() is
-        // called this early it crashes the game with some weird race. Need to look at.
+        _invoker_unlock init_lock(this);
         game_value delete_ptr_name = "INVOKER_DELETE_ARRAY";
-        game_value mission_namespace = invoke_raw("missionnamespace");
-        invoker::get()._delete_array_ptr = invoke_raw("getvariable", &mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
-
+        _mission_namespace = invoke_raw("missionnamespace");
+        invoker::get()._delete_array_ptr = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
+        _eh_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_params_var"), "STRING");
         _delete_size_zero = game_value(0.0f);
-        _delete_size_max = game_value(100.0f);
+        _delete_size_max = game_value(1000.0f);
         return true;
     }
 
     bool invoker::test_invoker(const arguments & args_, std::string & result_)
     {
-        invoker_unlock test_lock(this);
+        _invoker_unlock test_lock(this);
         result_ = "-1";
         game_value res = invoke_raw("profilenamesteam");
         result_ = res;
@@ -152,7 +174,7 @@ namespace intercept {
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -166,7 +188,8 @@ namespace intercept {
         if (loader::get().get_function("resize", function)) {
             std::unique_lock<std::mutex> lock(_state_mutex);
             _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-            std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+            std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
+            LOG(DEBUG) << "FLUSHING MEMORY";
             function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_zero);
             function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_max);
         }
@@ -185,7 +208,7 @@ namespace intercept {
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -215,7 +238,7 @@ namespace intercept {
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessisble;});
-        std::lock_guard<std::mutex> invoke_lock(_invoke_mutex);
+        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -255,20 +278,23 @@ namespace intercept {
     bool invoker::release_value(game_value *value_, bool immediate_) {
         if (!value_->client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
+            _to_delete.push(value_->rv_data.data);
+            /*
             // We do not need a deep copy here, so we cast to the internal data type, and just copy the ptr.
             // The game_value destructor should set this pointer to null after, so it is effectively deleted
             // in the context of the passed objects lifespan, but the memory remains until we free it in the
             // RV engine itself later.
-            LOG(DEBUG) << "Adding delete...";
+            //LOG(DEBUG) << "Adding delete...";
             ((rv_game_value *)_delete_array_ptr[_delete_index])->data = ((rv_game_value *)value_)->data;
             ((rv_game_value *)_delete_array_ptr[_delete_index])->__vptr = ((rv_game_value *)value_)->__vptr;
-            LOG(DEBUG) << "Ptr: " << ((rv_game_value *)value_)->data->type << " <-> " << ((rv_game_value *)_delete_array_ptr[_delete_index])->data->type;
+            //LOG(DEBUG) << "Ptr: " << ((rv_game_value *)value_)->data->type << " <-> " << ((rv_game_value *)_delete_array_ptr[_delete_index])->data->type;
             _delete_index++;
-            if (_delete_index >= 100 || immediate_) {
-                LOG(DEBUG) << "Flushing Memory...";
+            if (_delete_index >= 1000 || immediate_) {
+                //LOG(DEBUG) << "Flushing Memory...";
                 invoke_delete();
                 _delete_index = 0;
             }
+            */
             return true;
         }
         return false;
@@ -288,7 +314,7 @@ namespace intercept {
                 std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
                 for (auto it = _string_collection.begin(); it != _string_collection.end();) {
                     if ((*it)->ref_count_internal <= 1) {
-                        LOG(DEBUG) << "Freeing string: " << (&(*it)->char_string);
+                        //LOG(DEBUG) << "Freeing string: " << (&(*it)->char_string);
                         rv_string *to_delete = *it;
                         _string_collection.erase(it++);
                         delete[] to_delete;
@@ -424,28 +450,38 @@ namespace intercept {
         return _register_hook_trampoline(sqf_this_, sqf_game_state_, right_arg_);
     }
 
-    invoker_unlock::invoker_unlock(invoker * instance_, bool all_, bool delayed_) : _all(all_), _instance(instance_), _unlocked(false)
-    {
+    bool invoker::add_eventhandler(const std::string & name_, std::function<void(const std::string&, game_value&)> func_) {
+        if (_eventhandlers.find(name_) != _eventhandlers.end()) {
+            // @TODO: Exceptions
+            return false;
+        }
+        _eventhandlers[name_] = func_;
+
+        return true;
+    }
+
+    invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _all(all_threads_), _instance(instance_), _unlocked(false) {
         if (!delayed_) {
             unlock();
         }
     }
 
-    invoker_unlock::~invoker_unlock()
-    {
+    invoker::_invoker_unlock::~_invoker_unlock() {
         if (_unlocked) {
             if (_all) {
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
-                std::lock_guard<std::mutex> invoke_lock(_instance->_invoke_mutex);
+                std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
             }
             invoker_accessisble = false;
+            //LOG(DEBUG) << "LOCKED";
         }
     }
-    void invoker_unlock::unlock()
-    {
+
+    void invoker::_invoker_unlock::unlock() {
         if (!_unlocked) {
+            //LOG(DEBUG) << "UNLOCKING";
             if (_all) {
-                std::unique_lock<std::mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
+                std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
                     std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                     invoke_lock.lock();

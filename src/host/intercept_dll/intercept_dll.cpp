@@ -82,18 +82,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
         return;
     }
 
-    if (command == "block_execute") {
-        block_execute = true;
-        command = _args.as_string(0);
-        _threaded = false;
-    }
-    if (block_execute) {
-        intercept::invoker::get().allow_access();
-    }
     intercept::controller::get().call(command, _args, result, _threaded);
-    if (block_execute) {
-        intercept::invoker::get().deny_access();
-    }
+
     if (result.length() > 0) {
         sprintf_s(output, outputSize, "%s", result.c_str());
     }

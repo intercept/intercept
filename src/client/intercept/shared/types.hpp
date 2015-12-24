@@ -183,6 +183,11 @@ namespace intercept {
 
             size_t length() const;
 
+            template<typename T = game_data_object>
+            bool is_null() const
+            {
+                return !(rv_data.data->type == T::type_def && rv_data.data->data_type == T::data_type_def);
+            }
             bool client_owned() const;
             rv_game_value rv_data;
         protected:

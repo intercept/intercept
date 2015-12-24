@@ -14,6 +14,7 @@ https://github.com/NouberNou/intercept
 #include "logging.hpp"
 #include "arguments.hpp"
 #include "shared\functions.hpp"
+#include "shared\client_types.hpp"
 
 namespace intercept {
     /*!
@@ -32,7 +33,16 @@ namespace intercept {
         typedef void(__cdecl *pre_init_func)();
         typedef void(__cdecl *post_init_func)();
         typedef void(__cdecl *mission_end_func)();
+        typedef void(__cdecl *mission_stopped_func)();
         typedef void(__cdecl *on_frame_func)();
+        typedef void(__cdecl *fired_func)(
+            object unit_,
+            std::string weapon_,
+            std::string muzzle_,
+            std::string mode_,
+            std::string ammo_,
+            std::string magazine,
+            object projectile_);
         //!@}
 
         /*!
@@ -47,7 +57,9 @@ namespace intercept {
             pre_init_func pre_init;
             post_init_func post_init;
             mission_end_func mission_end;
+            mission_stopped_func mission_stopped;
             on_frame_func on_frame;
+            fired_func fired;
             //!@}
         };
 

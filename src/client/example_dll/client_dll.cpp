@@ -35,13 +35,24 @@ void __cdecl intercept::on_frame() {
     */
     auto it = bullets.begin();
     while (it != bullets.end()) {
-        if (it->is_null<game_data_object>()) {
-            bullets.erase(it++);
-            LOG(DEBUG) << "Null Bullet!";
+        uintptr_t data = (uintptr_t)(it->rv_data.data);
+        uintptr_t data_1 = data + 12;
+        uintptr_t data_2 = *(uintptr_t *)data_1;
+        if (data_2) {
+            uintptr_t data_3 = data_2 + 4;
+            uintptr_t val = *(uintptr_t *)data_3;
+            if (!val) {
+                bullets.erase(it++);
+                LOG(DEBUG) << "Null Bullet!";
+            }
+            else {
+                LOG(DEBUG) << "Bullet Fly!";
+                ++it;
+            }
         }
         else {
-            LOG(DEBUG) << "Bullet Fly!";
-            ++it;
+            bullets.erase(it++);
+            LOG(DEBUG) << "Null Bullet!";
         }
     }
 }

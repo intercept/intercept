@@ -65,11 +65,14 @@ namespace intercept {
 					alpha
 				});
 			}
+
 		};
+        void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
+
 		/* potential namespace: */
 		std::vector<std::string> action_keys(const std::string &user_action_);
 
-		text action_keys_images(const std::string &user_action_);
+		//text action_keys_images(const std::string &user_action_);
 
 		std::string action_keys_names(const std::string &user_action_);
 		std::string action_keys_names(const std::string &user_action_, int max_keys_);

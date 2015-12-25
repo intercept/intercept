@@ -41,6 +41,29 @@ namespace intercept {
             return (game_value *)this;
         }
 
+        bool internal_object::operator<(const internal_object& compare_) const {
+            return ((game_data_object *)rv_data.data)->object < ((game_data_object *)compare_.rv_data.data)->object;
+        }
+
+        bool internal_object::operator>(const internal_object& compare_) const {
+            return ((game_data_object *)rv_data.data)->object > ((game_data_object *)compare_.rv_data.data)->object;
+        }
+
+        bool internal_object::is_null()
+        {
+            uintptr_t data = (uintptr_t)(rv_data.data);
+            uintptr_t data_1 = data + 12;
+            uintptr_t data_2 = *(uintptr_t *)data_1;
+            if (data_2) {
+                uintptr_t data_3 = data_2 + 4;
+                uintptr_t val = *(uintptr_t *)data_3;
+                return !val;
+            }
+            else {
+                return true;
+            }
+        }
+
         
 
 #define RV_GENERIC_OBJECT_DEF(type)         type##::##type##() {}\

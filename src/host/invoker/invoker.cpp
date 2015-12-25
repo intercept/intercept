@@ -442,8 +442,8 @@ namespace intercept {
         else if (step == "namespace_type") {
             invoker::get().type_map[structure.first] = "NAMESPACE";
             invoker::get().type_structures["NAMESPACE"] = structure;
-            game_data_namespace::type_def = structure.first;
-            game_data_namespace::data_type_def = structure.second;
+            game_data_rv_namespace::type_def = structure.first;
+            game_data_rv_namespace::data_type_def = structure.second;
         }
         
 

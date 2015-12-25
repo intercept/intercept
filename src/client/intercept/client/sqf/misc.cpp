@@ -1411,10 +1411,6 @@ namespace intercept {
 			return __helpers::__number_unary_number(client::__sqf::unary__lbsize__scalar__ret__scalar, value_);
 		}
 
-		float lb_sort(const control &value_) {
-			return __helpers::__number_unary_control(client::__sqf::unary__lbsort__control__ret__scalar, value_);
-		}
-
 		float lb_sort_by_value(const control &value_) {
 			return __helpers::__number_unary_control(client::__sqf::unary__lbsortbyvalue__control__ret__scalar, value_);
 		}

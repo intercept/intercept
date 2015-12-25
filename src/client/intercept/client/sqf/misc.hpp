@@ -421,7 +421,6 @@ namespace intercept {
 		float lb_cur_sel(float value_);
 		float lb_size(const control &value_);
 		float lb_size(float value_);
-		float lb_sort(const control &value_);
 		float lb_sort_by_value(const control &value_);
 		object leader(const object &value_);
 		bool leaderboard_de_init(const std::string &value_);

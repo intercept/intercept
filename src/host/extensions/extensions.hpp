@@ -36,13 +36,13 @@ namespace intercept {
         typedef void(__cdecl *mission_stopped_func)();
         typedef void(__cdecl *on_frame_func)();
         typedef void(__cdecl *fired_func)(
-            object unit_,
-            std::string weapon_,
-            std::string muzzle_,
-            std::string mode_,
-            std::string ammo_,
-            std::string magazine,
-            object projectile_);
+            object &unit_,
+            std::string &weapon_,
+            std::string &muzzle_,
+            std::string &mode_,
+            std::string &ammo_,
+            std::string &magazine,
+            object &projectile_);
         //!@}
 
         /*!

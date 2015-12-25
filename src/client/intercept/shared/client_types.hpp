@@ -17,6 +17,12 @@ namespace intercept {
             operator game_value *() const;
             
             internal_object & operator = (const internal_object &copy_);
+
+            bool operator<(const internal_object& compare_) const;
+            bool operator>(const internal_object& compare_) const;
+
+            bool is_null();
+
         };
 
 #define RV_GENERIC_OBJECT_DEC(type) class type : public internal_object {\

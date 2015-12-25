@@ -49,8 +49,8 @@ namespace intercept {
         uintptr_t game_data_team::type_def;
         uintptr_t game_data_team::data_type_def;
 
-        uintptr_t game_data_namespace::type_def;
-        uintptr_t game_data_namespace::data_type_def;
+        uintptr_t game_data_rv_namespace::type_def;
+        uintptr_t game_data_rv_namespace::data_type_def;
 
         uintptr_t game_data_object::type_def;
         uintptr_t game_data_object::data_type_def;

@@ -7,7 +7,17 @@ using namespace intercept::types;
 
 namespace intercept {
 	namespace sqf {
-		std::vector<std::string> action_keys(const std::string &user_action_)
+        void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_)
+        {
+            game_value args({
+                pos1_,
+                pos2_,
+                color_.__to_gv_vector()
+            });
+            host::functions.invoke_raw_unary(client::__sqf::unary__drawline3d__array__ret__nothing, args);
+        }
+
+        std::vector<std::string> action_keys(const std::string &user_action_)
 		{
 			game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, user_action_);
 			std::vector<std::string> r_arr = __helpers::__convert_to_strings_vector(act_keys);

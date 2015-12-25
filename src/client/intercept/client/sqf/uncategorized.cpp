@@ -17,6 +17,24 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__drawline3d__array__ret__nothing, args);
         }
 
+        void draw_icon_3d(const std::string & texture_, const rv_color & color_, const vector3 & pos_agl_, const float width_, const float height_, const float angle_, const std::string & text_, const bool shadow_, const float text_size_, const std::string & font_)
+        {
+            game_value args({
+                texture_,
+                color_.__to_gv_vector(),
+                pos_agl_,
+                width_,
+                height_,
+                angle_,
+                text_,
+                (float)shadow_,
+                text_size_,
+                font_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__drawicon3d__array__ret__nothing, args);
+        }
+
         std::vector<std::string> action_keys(const std::string &user_action_)
 		{
 			game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, user_action_);

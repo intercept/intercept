@@ -17,24 +17,16 @@ std::atomic<bool> stop_thread;
 std::list<object> bullets;
 std::map<object, std::vector<vector3>> lines;
 
+std::mutex track_lock;
+
 int __cdecl intercept::api_version() {
     return 1;
 }
 
 void __cdecl intercept::on_frame() {
-    auto it = bullets.begin();
-    while (it != bullets.end()) {
-        if (it->is_null()) {
-            lines.erase(*it);
-            bullets.erase(it++);
-            LOG(INFO) << "Null Bullet!";
-        }
-        else {
-            lines[*it].push_back(intercept::sqf::get_pos(*it));
-            ++it;
-        }
-    }
+
     intercept::sqf::rv_color color{ 1.0f, 0.0f, 0.0f, 1.0f };
+    std::lock_guard<std::mutex> drawing(track_lock);
     for (auto bullet : lines) {
         auto point = bullet.second.begin();
         while (point != bullet.second.end()) {
@@ -47,11 +39,24 @@ void __cdecl intercept::on_frame() {
         }
     }
 }
-/*
 void test_thread_func() {
     LOG(DEBUG) << "START TEST THREAD";
     while (!stop_thread) {
-
+        {
+            std::lock_guard<std::mutex> polling(track_lock);
+            auto it = bullets.begin();
+            while (it != bullets.end()) {
+                if (it->is_null()) {
+                    lines.erase(*it);
+                    bullets.erase(it++);
+                    LOG(INFO) << "Null Bullet!";
+                }
+                else {
+                    lines[*it].push_back(intercept::sqf::get_pos(*it));
+                    ++it;
+                }
+            }
+        }
         sleep(100);
     }
     LOG(DEBUG) << "SHUT DOWN TEST THREAD";
@@ -61,10 +66,9 @@ void __cdecl intercept::post_init() {
     stop_thread = false;
     test_thread = std::thread(&test_thread_func);
 }
-*/
 void __cdecl intercept::mission_stopped() {
-    //stop_thread = true;
-    //test_thread.join();
+    stop_thread = true;
+    test_thread.join();
     lines.clear();
 }
 

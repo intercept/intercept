@@ -25,6 +25,7 @@ void __cdecl intercept::on_frame() {
     auto it = bullets.begin();
     while (it != bullets.end()) {
         if (it->is_null()) {
+            lines.erase(*it);
             bullets.erase(it++);
             LOG(INFO) << "Null Bullet!";
         }

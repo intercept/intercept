@@ -468,8 +468,8 @@ namespace intercept {
 
     invoker::_invoker_unlock::~_invoker_unlock() {
         if (_unlocked) {
+            std::lock_guard<std::mutex> lock(_instance->_state_mutex);
             if (_all) {
-                std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
             }
             invoker_accessisble = false;
@@ -490,6 +490,7 @@ namespace intercept {
                 _instance->_invoke_condition.notify_all();
             }
             else {
+                std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 invoker_accessisble = true;
             }
             _unlocked = true;

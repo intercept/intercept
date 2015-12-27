@@ -23,18 +23,11 @@ namespace intercept {
         }
 
         rv_string * allocate_string(size_t size_) {
-            char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + size_];
-            ((rv_string *)raw_data)->length = size_;
-            ((rv_string *)raw_data)->ref_count_internal = 1;
-            return (rv_string *)raw_data;
+            return invoker::string_pool.acquire(size_);
         }
 
         void free_string(rv_string *value_) {
-            if (value_->ref_count_internal <= 1)
-                delete[] value_;
-            else {
-                invoker::get().collect_string(value_);
-            }
+            invoker::string_pool.release(value_);
         }
 
         void free_value(game_value *value_) {

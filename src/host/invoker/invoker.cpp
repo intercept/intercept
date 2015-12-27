@@ -4,6 +4,8 @@
 #include "shared\client_types.hpp"
 
 namespace intercept {
+    game_data_string_pool<> invoker::string_pool;
+
     /*!
     @brief Flag for when the invoker is able to access the RV Engine
     */
@@ -53,7 +55,6 @@ namespace intercept {
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("rv_event", std::bind(&intercept::invoker::rv_event, this, std::placeholders::_1, std::placeholders::_2));
-            _collection_thread = std::thread(&invoker::_string_collector, this);
             eventhandlers::get().initialize();
         }
     }
@@ -300,34 +301,6 @@ namespace intercept {
         return false;
     }
 
-    void invoker::collect_string(rv_string * str_)
-    {
-        std::lock_guard<std::mutex> string_lock(_string_collection_mutex);
-        _string_collection.push_back(str_);
-    }
-
-    void invoker::_string_collector()
-    {
-        LOG(INFO) << "Started string collector thread.";
-        while (true) {
-            {
-                std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
-                for (auto it = _string_collection.begin(); it != _string_collection.end();) {
-                    if ((*it)->ref_count_internal <= 1) {
-                        //LOG(DEBUG) << "Freeing string: " << (&(*it)->char_string);
-                        rv_string *to_delete = *it;
-                        _string_collection.erase(it++);
-                        delete[] to_delete;
-                        
-                    }
-                    else {
-                        ++it;
-                    }
-                }
-            }
-            sleep(250);
-        }
-    }
 
     int invoker::_register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_)
     {

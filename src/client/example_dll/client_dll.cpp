@@ -24,7 +24,6 @@ int __cdecl intercept::api_version() {
 }
 
 void __cdecl intercept::on_frame() {
-
     intercept::sqf::rv_color color{ 1.0f, 0.0f, 0.0f, 1.0f };
     std::lock_guard<std::mutex> drawing(track_lock);
     for (auto bullet : lines) {
@@ -38,6 +37,8 @@ void __cdecl intercept::on_frame() {
             }
         }
     }
+    object player = sqf::player();
+    sqf::side_chat(player, "banana");
 }
 void test_thread_func() {
     LOG(DEBUG) << "START TEST THREAD";

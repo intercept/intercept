@@ -156,21 +156,6 @@ namespace intercept {
         might accidently race and be added to a 0 size array.
         */
         void invoke_delete();
-
-        /*!
-        @brief Collects a string and adds it to a queue that waits for its internal
-        ref counter to reach 1, at which point it can be safely released.
-
-        Strings allocated by Intercept are allocated in the Intercept host memory
-        because the engine may or may not use them right away. In some cases the
-        string may be held in some sort of execution logic for a significant time.
-        Since these strings are normal internal strings, the engine will adjust
-        their ref counter to account for this, and we need to monitor the ref counter
-        to make sure that we can safely release it.
-
-        @param str_ A pointer to the string to release.
-        */
-        void collect_string(rv_string *str_);
         //!@}
 
         /*!
@@ -256,21 +241,8 @@ namespace intercept {
         */
         std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
 
+        static game_data_string_pool<> string_pool;
     protected:
-        /*!
-        @brief Thread for the string collector.
-        */
-        std::thread _collection_thread;
-
-        /*!
-        @brief Monitors collected strings for deletion.
-        
-        This function runs in its own thread, and contains a loop to monitor
-        the ref count of freed strings, freeing the memory of them when their ref
-        counter allows for deletion.
-        */
-        void _string_collector();
-
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.
         */
@@ -329,11 +301,6 @@ namespace intercept {
         This address needs to be passed to every SQF function for proper execution.
         */
         uintptr_t _sqf_game_state;
-        
-        /*!
-        @brief A list of strings to monitor for deletion, used by the string collector.
-        */
-        std::list<rv_string *> _string_collection;
 
         /*!@{
         @brief Various mutexes and `std::` locking devices used for concurrency
@@ -342,7 +309,6 @@ namespace intercept {
         std::recursive_mutex _invoke_mutex;
         std::mutex _state_mutex;
         std::mutex _delete_mutex;
-        std::mutex _string_collection_mutex;
         std::condition_variable _invoke_condition;
         //!@}
 
@@ -361,6 +327,8 @@ namespace intercept {
         bool _attached;
 
         std::queue<game_data *> _to_delete;
+
+        
 
         /*!
         @brief A RAII style mutex handler for access to the RV Engine

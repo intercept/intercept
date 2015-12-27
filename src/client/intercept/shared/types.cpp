@@ -398,28 +398,8 @@ namespace intercept {
         void game_value::copy(const game_value & copy_) {
             rv_data.__vptr = copy_.rv_data.__vptr;
             if (copy_.rv_data.data) {
-                /*
-                if (copy_.rv_data.data->type == game_data_number::type_def) {
-                    rv_data.data = new (game_data_number::data_pool.acquire()) game_data_number();
-                    ((game_data_number *)rv_data.data)->operator=(*((game_data_number *)copy_.rv_data.data));
-                }
-                else if (copy_.rv_data.data->type == game_data_bool::type_def) {
-                    rv_data.data = new (game_data_bool::data_pool.acquire()) game_data_bool();
-                    ((game_data_bool *)rv_data.data)->operator=(*((game_data_bool *)copy_.rv_data.data));
-                }
-                else if (copy_.rv_data.data->type == game_data_array::type_def) {
-                    rv_data.data = new game_data_array();
-                    ((game_data_array *)rv_data.data)->operator=(*((game_data_array *)copy_.rv_data.data));
-                }
-                else if (copy_.rv_data.data->type == game_data_string::type_def) {
-                    rv_data.data = new game_data_string();
-                    ((game_data_string *)rv_data.data)->operator=(*((game_data_string *)copy_.rv_data.data));
-                }
-                else {
-                */
-                    rv_data.data = copy_.rv_data.data;
-                    rv_data.data->ref_count_internal += 1;
-                //}
+                rv_data.data = copy_.rv_data.data;
+                rv_data.data->ref_count_internal += 1;
             }
         }
 
@@ -498,12 +478,16 @@ namespace intercept {
                     if (rv_data.data->ref_count_internal < INTERNAL_TAG) {
                         if (rv_data.data && rv_data.data->type == game_data_number::type_def)
                             delete (game_data_number *)rv_data.data;
+
                         else if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                            ((game_data_string *)rv_data.data)->free(); // ... that is what you are.
+                            delete (game_data_string *)rv_data.data;
+
                         else if (rv_data.data && rv_data.data->type == game_data_array::type_def)
-                            ((game_data_array *)rv_data.data)->free(); // ... that is what you are.
+                            delete (game_data_array *)rv_data.data; 
+
                         else if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
                             delete (game_data_bool *)rv_data.data;
+
                         else if(rv_data.data)
                             delete rv_data.data;
                     }

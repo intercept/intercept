@@ -94,5 +94,25 @@ namespace intercept {
             rv_game_value::__vptr_def = type_def;
 
         }
+
+        invoker_lock::invoker_lock(bool delayed_) : _locked(false)
+        {
+            if (!delayed_)
+                lock();
+        }
+
+        invoker_lock::~invoker_lock()
+        {
+            if (_locked)
+                host::functions.invoker_unlock();
+        }
+
+        inline void invoker_lock::lock()
+        {
+            if (!_locked) {
+                host::functions.invoker_lock();
+                _locked = true;
+            }
+        }
     }
 }

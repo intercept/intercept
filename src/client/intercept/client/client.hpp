@@ -17,6 +17,19 @@ namespace intercept {
         }
 
         void __initialize();
+
+        class invoker_lock {
+        public:
+            invoker_lock(bool delayed_ = false);
+            invoker_lock(const invoker_lock &) = delete;
+            invoker_lock(invoker_lock &&) = delete;
+            invoker_lock & operator=(const invoker_lock &) = delete;
+            invoker_lock & operator=(invoker_lock &&) = delete;
+            ~invoker_lock();
+            void lock();
+        protected:
+            bool _locked;
+        };
     }
 
 

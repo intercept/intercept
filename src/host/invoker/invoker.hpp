@@ -352,8 +352,8 @@ namespace intercept {
         class _invoker_unlock {
         public:
             _invoker_unlock(invoker *instance_, bool all_threads_ = false, bool delayed_ = false);
-            _invoker_unlock(const invoker &) = delete;
-            _invoker_unlock(invoker &&) = delete;
+            _invoker_unlock(const _invoker_unlock &) = delete;
+            _invoker_unlock(_invoker_unlock &&) = delete;
             _invoker_unlock & operator=(const _invoker_unlock &) = delete;
             _invoker_unlock & operator=(_invoker_unlock &&) = delete;
             ~_invoker_unlock();

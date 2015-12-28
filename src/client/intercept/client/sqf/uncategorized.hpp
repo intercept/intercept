@@ -586,7 +586,7 @@ namespace intercept {
 		vector3 asl_to_atl(const vector3 & asl_);
 		
 		/* Waypoint */
-		       struct waypoint
+		struct waypoint
         {
             group wgroup;
             float windex;
@@ -807,14 +807,9 @@ namespace intercept {
 
         };
         // It's ficking replaced at compile time anyway, why is this nessecary.................
-        const std::string waypoint::__speed_lookup[4] = { "UNCHANGED", "LIMITED", "NORMAL", "FULL" };
-        const std::string waypoint::__show_lookup[4] = { "NEVER", "EASY", "ALWAYS", "ERROR" };
-        const std::string waypoint::__type_lookup[22] = { "MOVE","DESTROY","GETIN","SAD","JOIN","LEADER","GETOUT","CYCLE","LOAD","UNLOAD","TR UNLOAD","HOLD","SENTRY","GUARD","TALK","SCRIPTED","SUPPORT","GETIN NEAREST","DISMISS","LOITER","AND","OR" };
-        const std::string waypoint::__behaviour_lookup[6] = { "UNCHANGED", "CARELESS", "SAFE", "AWARE", "COMBAT", "STEALTH" };
-        const std::string waypoint::__combat_mode_lookup[6] = { "NO CHANGE", "BLUE", "GREEN", "WHITE", "YELLOW", "RED" };
-        const std::string waypoint::__formation_lookup[10] = { "NO_CHANGE","COLUMN","STAG_COLUMN","WEDGE","ECH_LEFT","ECH_RIGHT","VEE","LINE","FILE","DIAMOND" };
-        const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
+        /*
 
+        */
         /*!
         @brief Adds (or inserts when index is given) a new waypoint to a group.
 

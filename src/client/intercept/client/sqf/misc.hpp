@@ -60,7 +60,6 @@ namespace intercept {
 		float currentchannel();
 		rv_namespace currentnamespace();
 		object cursortarget();
-		std::vector<float> date();
 		float daytime();
 
 		std::vector<script> diag_activemissionfsms();

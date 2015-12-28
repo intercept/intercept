@@ -403,7 +403,7 @@ namespace intercept {
                     _buy_entry(Alloc_Length);
             }
 
-            rv_string * acquire(size_t alloc_length_) {
+            inline rv_string * acquire(size_t alloc_length_) {
                 std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
                 if (_pool_queue.size() == 0 || alloc_length_ > Alloc_Length)
                     _buy_entry(alloc_length_);
@@ -415,7 +415,7 @@ namespace intercept {
                 return ret;
             }
 
-            void release(rv_string *_ptr) {
+            inline void release(rv_string *_ptr) {
                 std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
                 if (_ptr->ref_count_internal <= 1) {
                     _ptr->ref_count_internal = 0;

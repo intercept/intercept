@@ -15,8 +15,13 @@ namespace intercept {
         functions.get_unary_function = client_function_defs::get_unary_function;
         functions.get_unary_function_typed = client_function_defs::get_unary_function_typed;
         functions.invoke_raw_binary = client_function_defs::invoke_raw_binary;
+        functions.invoke_raw_binary_nolock = client_function_defs::invoke_raw_binary_nolock;
         functions.invoke_raw_nular = client_function_defs::invoke_raw_nular;
+        functions.invoke_raw_nular_nolock = client_function_defs::invoke_raw_nular_nolock;
         functions.invoke_raw_unary = client_function_defs::invoke_raw_unary;
+        functions.invoke_raw_unary_nolock = client_function_defs::invoke_raw_unary_nolock;
+        functions.invoker_lock = client_function_defs::invoker_lock;
+        functions.invoker_unlock = client_function_defs::invoker_unlock;
     }
 
     extensions::~extensions() {

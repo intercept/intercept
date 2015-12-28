@@ -9,7 +9,8 @@ namespace intercept {
     /*!
     @brief Flag for when the invoker is able to access the RV Engine
     */
-    bool invoker_accessisble = false;
+    bool invoker_accessible = false;
+    bool invoker_accessible_all = false;
 
     void threaded_invoke_demo() {
         while (true) {
@@ -174,8 +175,17 @@ namespace intercept {
     rv_game_value invoker::invoke_raw(nular_function function_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        _invoke_condition.wait(lock, [] {return invoker_accessible;});
         std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
+    }
+
+    rv_game_value invoker::invoke_raw_nolock(nular_function function_)
+    {
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -188,7 +198,7 @@ namespace intercept {
         binary_function function;
         if (loader::get().get_function("resize", function)) {
             std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+            _invoke_condition.wait(lock, [] {return invoker_accessible;});
             std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
             LOG(DEBUG) << "FLUSHING MEMORY";
             function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_zero);
@@ -208,8 +218,17 @@ namespace intercept {
     rv_game_value invoker::invoke_raw(unary_function function_, const game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        _invoke_condition.wait(lock, [] {return invoker_accessible;});
         std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
+    }
+
+    rv_game_value invoker::invoke_raw_nolock(unary_function function_, const game_value *right_)
+    {
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -238,8 +257,17 @@ namespace intercept {
     rv_game_value invoker::invoke_raw(binary_function function_, const game_value *left_, const game_value *right_)
     {
         std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessisble;});
+        _invoke_condition.wait(lock, [] {return invoker_accessible;});
         std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
+        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        return ret;
+    }
+
+    rv_game_value invoker::invoke_raw_nolock(binary_function function_, const game_value *left_, const game_value *right_)
+    {
         uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
@@ -433,6 +461,18 @@ namespace intercept {
         return true;
     }
 
+    void invoker::lock() {
+        std::unique_lock<std::mutex> lock(_state_mutex);
+        _invoke_condition.wait(lock, [] {return invoker_accessible_all;});
+        _invoke_mutex.lock();
+        LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE";
+    }
+
+    void invoker::unlock() {
+        _invoke_mutex.unlock();
+        LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE";
+    }
+
     invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _all(all_threads_), _instance(instance_), _unlocked(false) {
         if (!delayed_) {
             unlock();
@@ -444,27 +484,35 @@ namespace intercept {
             std::lock_guard<std::mutex> lock(_instance->_state_mutex);
             if (_all) {
                 std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
+                invoker_accessible = false;
+                invoker_accessible_all = false;
+                LOG(DEBUG) << "LOCKED ALL";
             }
-            invoker_accessisble = false;
-            //LOG(DEBUG) << "LOCKED";
+            else {
+                invoker_accessible = false;
+                LOG(DEBUG) << "LOCKED";
+            }
+            
         }
     }
 
     void invoker::_invoker_unlock::unlock() {
         if (!_unlocked) {
-            //LOG(DEBUG) << "UNLOCKING";
             if (_all) {
+                LOG(DEBUG) << "UNLOCKING ALL";
                 std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
                     std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                     invoke_lock.lock();
-                    invoker_accessisble = true;
+                    invoker_accessible = true;
+                    invoker_accessible_all = true;
                 }
                 _instance->_invoke_condition.notify_all();
             }
             else {
+                LOG(DEBUG) << "UNLOCKING";
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
-                invoker_accessisble = true;
+                invoker_accessible = true;
             }
             _unlocked = true;
         }

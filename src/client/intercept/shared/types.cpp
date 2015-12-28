@@ -704,7 +704,7 @@ namespace intercept {
         }
 
         bool game_value::client_owned() const {
-            if (rv_data.data && rv_data.data->ref_count_internal == 0x0000dede)
+            if (rv_data.data && rv_data.data->ref_count_internal >= 0x0000dede)
                 return true;
             return false;
         }

@@ -66,6 +66,7 @@ namespace intercept {
         or `group`, etc.
         */
         rv_game_value invoke_raw(nular_function function_);
+        rv_game_value invoke_raw_nolock(nular_function function_);
         rv_game_value invoke_raw(std::string function_name_);
         //!@}
 
@@ -81,6 +82,7 @@ namespace intercept {
         or `group`, etc.
         */
         rv_game_value invoke_raw(unary_function function_, const game_value * right_);
+        rv_game_value invoke_raw_nolock(unary_function function_, const game_value * right_);
         rv_game_value invoke_raw(std::string function_name_, const game_value *right_);
         rv_game_value invoke_raw(std::string function_name_, const game_value *right_, std::string right_type_);
         //!@}
@@ -97,6 +99,7 @@ namespace intercept {
         or `group`, etc.
         */
         rv_game_value invoke_raw(binary_function function_, const game_value * left_, const game_value * right_);
+        rv_game_value invoke_raw_nolock(binary_function function_, const game_value * left_, const game_value * right_);
         rv_game_value invoke_raw(std::string function_name_, const game_value *left_, const game_value *right_);
         rv_game_value invoke_raw(std::string function_name_, const game_value *left_, std::string left_type_, const game_value *right_, std::string right_type_);
         //!@}
@@ -240,6 +243,10 @@ namespace intercept {
         @brief A map of string type names to their corresponding vtable ptrs.
         */
         std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
+
+        void lock();
+
+        void unlock();
 
         static game_data_string_pool<> string_pool;
     protected:

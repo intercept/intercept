@@ -8,12 +8,27 @@ namespace intercept {
             return intercept::invoker::get().invoke_raw(function_);
         }
 
+        rv_game_value invoke_raw_nular_nolock(nular_function function_)
+        {
+            return intercept::invoker::get().invoke_raw_nolock(function_);
+        }
+
         rv_game_value invoke_raw_unary(unary_function function_, const game_value &right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &right_arg_);
         }
 
+        rv_game_value invoke_raw_unary_nolock(unary_function function_, const game_value & right_arg_)
+        {
+            return intercept::invoker::get().invoke_raw_nolock(function_, &right_arg_);
+        }
+
         rv_game_value invoke_raw_binary(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
             return intercept::invoker::get().invoke_raw(function_, &left_arg_, &right_arg_);
+        }
+
+        rv_game_value invoke_raw_binary_nolock(binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
+        {
+            return intercept::invoker::get().invoke_raw_nolock(function_, &left_arg_, &right_arg_);
         }
 
         void get_type_structure(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_) {
@@ -72,6 +87,16 @@ namespace intercept {
                 return function;
             }
             return NULL;
+        }
+
+        void invoker_lock()
+        {
+            invoker::get().lock();
+        }
+
+        void invoker_unlock()
+        {
+            invoker::get().unlock();
         }
     }
 }

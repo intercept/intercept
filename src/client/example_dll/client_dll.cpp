@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <atomic>
 
+#define INTERCEPT_NO_THREAD_SAFETY
+
 #include "intercept.hpp"
 #include "logging.hpp"
 #include "client\client.hpp"
@@ -25,7 +27,6 @@ int __cdecl intercept::api_version() {
 
 void __cdecl intercept::on_frame() {
     intercept::sqf::rv_color color{ 1.0f, 0.0f, 0.0f, 1.0f };
-    std::lock_guard<std::mutex> drawing(track_lock);
     for (auto bullet : lines) {
         auto point = bullet.second.begin();
         while (point != bullet.second.end()) {
@@ -44,7 +45,7 @@ void test_thread_func() {
     LOG(DEBUG) << "START TEST THREAD";
     while (!stop_thread) {
         {
-            std::lock_guard<std::mutex> polling(track_lock);
+            host::functions.invoker_lock();
             auto it = bullets.begin();
             while (it != bullets.end()) {
                 if (it->is_null()) {
@@ -57,6 +58,7 @@ void test_thread_func() {
                     ++it;
                 }
             }
+            host::functions.invoker_unlock();
         }
         sleep(100);
     }

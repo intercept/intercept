@@ -11,7 +11,7 @@ namespace intercept {
                 _buy_entry();
         }
 
-        T * acquire() {
+        inline T * acquire() {
             if (_pool_queue.size() == 0)
                 _buy_entry();
             T * ret = _pool_queue.front();
@@ -19,7 +19,7 @@ namespace intercept {
             return ret;
         }
 
-        void release(T *_ptr) {
+        inline void release(T *_ptr) {
             memset((void *)_ptr, 0xcdf3cdf3, sizeof(T));
             _pool_queue.push(_ptr);
         }
@@ -53,7 +53,7 @@ namespace intercept {
                 _buy_entry(Alloc_Count);
         }
 
-        T * acquire(size_t alloc_count_) {
+        inline T * acquire(size_t alloc_count_) {
             if (_pool_queue.size() == 0 || alloc_count_ > Alloc_Count)
                 _buy_entry(alloc_count_);                
             T * ret = _pool_queue.front();
@@ -63,7 +63,7 @@ namespace intercept {
             return ret;
         }
 
-        void release(T *_ptr) {
+        inline void release(T *_ptr) {
             size_t *count = (size_t *)((char *)_ptr - sizeof(size_t));
             for (size_t i = 0; i < *count; ++i)
                 _ptr[i].~T();

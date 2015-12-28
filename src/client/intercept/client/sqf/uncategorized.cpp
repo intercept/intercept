@@ -35,12 +35,25 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
+        vector3 vector_dir(object obj_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__vectordir__object__ret__array, obj_));
+        }
+
+        vector3 vector_dir_visual(object obj_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__vectordirvisual__object__ret__array, obj_));
+        }
+
+        vector3 selection_positon(object obj_, std::string selection_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_));
+        }
+
         std::vector<std::string> action_keys(const std::string &user_action_)
 		{
 			game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, user_action_);
 			std::vector<std::string> r_arr = __helpers::__convert_to_strings_vector(act_keys);
-
-			host::functions.free_value(&act_keys);
 			return r_arr;
 		}
 

@@ -69,20 +69,6 @@ namespace intercept {
 		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
-        /*
-        texture: String
-        color: Color
-        pos: PositionAGL
-        width: Number
-        height: Number
-        angle: Number
-        text: String - (optional)
-        shadow: Number - (optional)
-        textSize: Number - (optional)
-        font: String - (optional)
-        textAlign: String - (optional)
-        drawSideArrows: Boolean - (optional)
-        */
         void draw_icon_3d(
             const std::string &texture_,
             const rv_color &color_,
@@ -95,6 +81,11 @@ namespace intercept {
             const float text_size_ = 1.0f,
             const std::string &font_ = "TahomaB"
             );
+
+        vector3 vector_dir(object obj_);
+        vector3 vector_dir_visual(object obj_);
+        vector3 selection_positon(object obj_, std::string selection_name_);
+
 		/* potential namespace: */
 		std::vector<std::string> action_keys(const std::string &user_action_);
 

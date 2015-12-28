@@ -3,8 +3,6 @@
 #include <cstdint>
 #include <atomic>
 
-#define INTERCEPT_NO_THREAD_SAFETY
-
 #include "intercept.hpp"
 #include "logging.hpp"
 #include "client\client.hpp"
@@ -18,8 +16,6 @@ std::atomic<bool> stop_thread;
 
 std::list<object> bullets;
 std::map<object, std::vector<vector3>> lines;
-
-std::mutex track_lock;
 
 int __cdecl intercept::api_version() {
     return 1;
@@ -41,11 +37,12 @@ void __cdecl intercept::on_frame() {
     object player = sqf::player();
     sqf::side_chat(player, "banana");
 }
+
 void test_thread_func() {
     LOG(DEBUG) << "START TEST THREAD";
     while (!stop_thread) {
-        {
-            host::functions.invoker_lock();
+        if (bullets.size()) {
+            invoker_lock track_lock;
             auto it = bullets.begin();
             while (it != bullets.end()) {
                 if (it->is_null()) {
@@ -54,11 +51,11 @@ void test_thread_func() {
                     LOG(INFO) << "Null Bullet!";
                 }
                 else {
+                    LOG(DEBUG) << "GET POS!";
                     lines[*it].push_back(intercept::sqf::get_pos(*it));
                     ++it;
                 }
             }
-            host::functions.invoker_unlock();
         }
         sleep(100);
     }

@@ -49,7 +49,11 @@ def parse():
     parsed_impl = []
     # strip default values
     for impl in implementations:
-        impl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", impl[2]).lower()
+        match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", impl[2])
+        if (match):
+            warnings_found.append("Found a default value ({}) in implementation parameters ({}, {} line {})".format(match.group(1), impl[1], impl[3][0], impl[3][1]))
+            impl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", impl[2]).lower()
+
         elements = impl[2].split(',')
         if (impl[2] == "()"):
             parsed_impl.append(impl)
@@ -76,7 +80,6 @@ def parse():
     for decl in declarations:
         match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", decl[2])
         if (match):
-            warnings_found.append("Found a default value in declaration parameters ({}, {} line {})".format(decl[1], decl[3][0], decl[3][1]))
             decl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", decl[2]).lower() # get rid of them here, so we can continue checking for errors
 
         # split up using , seperators

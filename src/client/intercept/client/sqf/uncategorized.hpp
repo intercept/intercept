@@ -197,7 +197,7 @@ namespace intercept {
 		/* potential namespace: misc */
 		void enable_saving(bool enable_);
 		void enable_saving(bool enable_, bool autosave_);
-			
+
 		/* potential namespace: rtd, vehicles, afm */
 		std::vector<bool> engines_is_on_rtd(const object &helicopter_);
 		std::vector<float> engines_torque_rtd(const object &helicopter_);
@@ -216,8 +216,8 @@ namespace intercept {
 		rv_destination expected_destination(const object &unit_);
 
 		/* potential namespace: position */
-		vector3 eye_direction(const object &unit_);
-		vector3 eye_pos(const object &unit_);
+		// TODO vector3 eye_direction(const object &unit_);
+		// TODO vector3 eye_pos(const object &unit_);
 
 		/* potential namespace: groups, ai */
 		std::string formation(const object &leader_);
@@ -225,7 +225,7 @@ namespace intercept {
 
 		std::vector<object> formation_members(const object &unit_);
 		vector3 formation_position(const object &unit_);
-			
+
 		/* Potential namespace: core */
 		std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
 
@@ -253,7 +253,7 @@ namespace intercept {
 		std::string lb_picture(const control &control_, int index_);
 		std::string lb_picture_right(int control_id_, int index_);
 		std::string lb_picture_right(const control &control_, int index_);
-		std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
+		// TODO std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 		void lb_set_color(int control_id_, int index_, rv_color color_);
 		void lb_set_color(const control &control_, int index_, rv_color color_);
 		void lb_set_color_right(int control_id_, int index_, rv_color color_);
@@ -284,8 +284,8 @@ namespace intercept {
 		std::string lb_text_right(const control &control_, int index_);
 		float lb_value(int control_id_, int index_);
 		float lb_value(const control &control_, int index_);
-		
-		
+
+
 		/* 3den */
 		std::string current3denoperation();
 		object get3dencamera();
@@ -299,7 +299,7 @@ namespace intercept {
 		float add_3den_layer(float value0_, const std::string& value1_);
 		bool remove_3den_layer(float value_);
 		void remove_all_3den_eventhandlers(const std::string &value_);
-		
+
 		/* Chat */
 		namespace __helpers {
 			void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
@@ -311,7 +311,7 @@ namespace intercept {
 		void command_chat(const object & obj_, const std::string & message_);
 		void system_chat(const std::string &message_);
 		void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_);
-		
+
 		/* Config */
 		std::vector<config> config_hierarchy(const config &config_entry_);
         std::string config_name(const config &config_entry_);
@@ -337,7 +337,7 @@ namespace intercept {
         config config_file();
         config config_null();
         config mission_config_file();
-		
+
 		/* Core */
 				std::vector<object> all_3den_entities();
 		std::vector<object> all_curators();
@@ -390,7 +390,7 @@ namespace intercept {
         std::vector<std::string> all_variables(const group &value_);
         std::vector<std::string> all_variables(const task &value_);
         std::vector<std::string> all_variables(const location &value_);
-		
+
 		/* Ctrl */
 				void ctrl_activate(const control &value_);
 		float ctrl_auto_scroll_delay(const control &value_);
@@ -468,7 +468,7 @@ namespace intercept {
 		void ctrl_set_tooltip(const control &value0_, const std::string& value1_);
 		void ctrl_show(const control &value0_, bool value1_);
         void ctrl_show(int control_id_, bool show_);
-		
+
 		/* Curator */
 		object curatorcamera();
 		object curatormouseover();
@@ -488,7 +488,7 @@ namespace intercept {
 		void unassign_curator(const object &value_);
 		void add_curator_points(const object &value0_, float value1_);
 		void allow_curator_logic_ignore_areas(const object &value0_, bool value1_);
-		float curator_coef(const object &value0_, std::string value1_);
+		float curator_coef(const object &value0_, const std::string &value1_);
 		void remove_curator_camera_area(const object &value0_, float value1_);
 		void remove_curator_editing_area(const object &value0_, float value1_);
 		void set_curator_camera_area_ceiling(const object &value0_, float value1_);
@@ -497,10 +497,10 @@ namespace intercept {
 
 		std::vector<std::string> curator_addons(const object &curator_module_);
 		std::vector<object> curator_editable_objects(const object &curator_module_);
-		
+
 		/* Group */
 		bool group_icon_selectable();
-		std::array<bool, 2> group_icons_visible();
+		// TODO std::array<bool, 2> group_icons_visible();
 		group grp_null();
 		void clear_group_icons(const group &value_);
 		group create_group(const side &value_);
@@ -517,7 +517,7 @@ namespace intercept {
 		void select_leader(const object &value0_, const group &value1_);
 		float current_waypoint(const group &value_);
 		void set_group_icons_selectable(bool value_);
-		
+
 		/* Marker */
 		void delete_marker(const std::string& value_);
 		void delete_marker_local(const std::string& value_);
@@ -546,7 +546,7 @@ namespace intercept {
         std::string create_marker_local(const std::string &name_, const vector3 &pos_);
         std::string create_marker_local(const std::string &name_, const vector2 &pos_);
         std::string create_marker_local(const std::string &name_, const object &pos_);
-		
+
 		/* Multiplayer */
 		bool local(const object &value_);
 		bool local(const group &value_);
@@ -554,14 +554,14 @@ namespace intercept {
 		bool is_multiplayer();
 		bool is_dedicated();
 		bool did_jip();
-		
+
 		/* Position */
 		namespace __helpers {
 			vector3 get_pos_obj(unary_function fnc_, const object & obj_);
 		}
 
-		vector3 get_pos(const object &obj_);
-		vector3 get_pos(const location *loc_);
+		vector3 get_pos(const object & obj_);
+		vector3 get_pos(const location & loc_);
 		vector3 get_pos_asl(const object & obj_);
 		vector3 get_pos_atl(const object & obj_);
 		vector3 get_pos_aslw(const object & obj_);
@@ -584,7 +584,7 @@ namespace intercept {
 		vector3 asl_to_agl(const vector3 & asl_);
 		vector3 atl_to_asl(const vector3 & atl_);
 		vector3 asl_to_atl(const vector3 & asl_);
-		
+
 		/* Waypoint */
 		struct waypoint
         {
@@ -1091,9 +1091,9 @@ namespace intercept {
         bool waypoints_enabled_uav(object value_);
         void enable_uavwaypoints(bool value0_, object value1_);
         float waypoint_timeout_current(group value_);
-		
+
 		/* World */
-		
+
         struct game_date
         {
             float year;
@@ -1130,10 +1130,10 @@ namespace intercept {
 
         vector3 wind();
         float waves();
-        void set_waves(float lerp_time_, float val_); // TODO
+        // TODO void set_waves(float lerp_time_, float val_); // TODO
 
         float time();
-		game_date date();
+		// TODO game_date date();
 
         float time_multiplier();
 

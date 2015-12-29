@@ -573,7 +573,7 @@ namespace intercept {
 		float size_of(const std::string &value_);
 		float skill(const object &value_);
 		void skip_time(float value_);
-		//void sleep(float value_);
+		void sleep(float value_);
 		float slider_position(const control &value_);
 		float slider_position(float value_);
 		bool some_ammo(const object &value_);

@@ -23,21 +23,24 @@ def parse():
                 filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
                 filecontents = re.sub("(//.*?\n)", '', filecontents)
 
-                if file.endswith(".cpp"):
-                    match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
-                    for match_impl in match_impls:
-                        if (match_impl):
-                            foundInFile += 1
-                            if (match_impl[1].startswith("__")):
-                                continue
-                            implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
-                if file.endswith(".hpp"):
-                    match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
-                    for match_impl in match_impls:
-                        if (match_impl):
-                            foundInFile += 1
-                            if (match_impl[1].startswith("__")):
-                                continue
+                #if file.endswith(".cpp"):
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
+                for match_impl in match_impls:
+                    if (match_impl):
+                        foundInFile += 1
+                        if (match_impl[1].startswith("__")):
+                            continue
+                        implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
+                #if file.endswith(".hpp"):
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
+                for match_impl in match_impls:
+                    if (match_impl):
+                        foundInFile += 1
+                        if (match_impl[1].startswith("__")):
+                            continue
+                        # Check if we have actually matched a valid declaration
+                        valid_match = re.search("[a-zA-Z0-9:<>_]+\s?[&\*]?\s+[&\*]?[a-zA-Z0-9_]+", match_impl[2])
+                        if (valid_match or match_impl[2] == "()"):
                             declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
 
     errors_found = []

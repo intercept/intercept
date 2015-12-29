@@ -25,6 +25,7 @@ namespace intercept {
             });
             host::functions.invoke_raw_unary(client::__sqf::unary__drawline3d__array__ret__nothing, args);
         }
+		
 
         void draw_icon_3d(const std::string & texture_, const rv_color & color_, const vector3 & pos_agl_, const float width_, const float height_, const float angle_, const std::string & text_, const bool shadow_, const float text_size_, const std::string & font_)
         {

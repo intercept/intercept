@@ -43,20 +43,32 @@ def parse():
     errors_found = []
     warnings_found = []
 
+    parsed_impl = []
     # strip default values
     for impl in implementations:
         impl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", impl[2]).lower()
         elements = impl[2].split(',')
+        if (impl[2] == "()"):
+            parsed_impl.append(impl)
+            continue
         impl[2] = ''
+        to_add = False
         for el in elements:
-            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)", el)
+            # element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)[a-zA-Z0-9]*", el)
+            el = re.sub("(\*|&)", r" \1 ", el)
+            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]?|[a-zA-Z0-9:<>_]+\s*[&\*]?)\s+[a-zA-Z_]*?", el)
             if (element_type):
                 element_type = element_type.group(1)
                 impl[2] += element_type + ', '
+                to_add = True
         impl[2] = "(" + impl[2] + ")"
         impl[2] = re.sub(", \)", ')', impl[2])
         impl[2] = re.sub("\s+(\&|\*)", r'\1', impl[2])
+        if to_add:
+            parsed_impl.append(impl)
 
+    implementations = parsed_impl
+    parsed_impl = []
     # Check for default values in declarations
     for decl in declarations:
         match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", decl[2])
@@ -68,16 +80,25 @@ def parse():
         # for each element, find type and remove parameter name
         # combine all elements, we now got our function contract
         elements = decl[2].split(',')
+        if (decl[2] == "()"):
+            parsed_impl.append(decl)
+            continue
         decl[2] = ''
+        to_add = False
         for el in elements:
-            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)", el)
+            # element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)[a-zA-Z0-9]*", el)
+            el = re.sub("(\*|&)", r" \1 ", el)
+            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]?|[a-zA-Z0-9:<>_]+\s*[&\*]?)\s+[a-zA-Z_]*?", el)
             if (element_type):
                 element_type = element_type.group(1)
                 decl[2] += element_type + ', '
+                to_add = True
         decl[2] = "(" + decl[2] + ")"
         decl[2] = re.sub(", \)", ')', decl[2])
         decl[2] = re.sub("\s+(\&|\*)", r'\1', decl[2])
-
+        if to_add:
+            parsed_impl.append(decl)
+    declarations = parsed_impl
 
     ##### START VALIDATION #####
 
@@ -89,7 +110,7 @@ def parse():
                 found = True
                 break
         if (not found):
-            errors_found.append("Missing declaration for implementation {} {} {}".format(impl[0], impl[1], impl[2]))
+            errors_found.append("Missing declaration for implementation {} {}{} [{}]".format(impl[0], impl[1], impl[2], impl[3][0]))
 
     # Check for duplicate implementations
     for impl in implementations:
@@ -113,7 +134,7 @@ def parse():
                 break
 
         if (not found):
-            errors_found.append("Missing implementation for declaration {} {} {} [{}]".format(decl[0], decl[1], decl[2], decl[3][0]))
+            errors_found.append("Missing implementation for declaration {} {}{} [{}]".format(decl[0], decl[1], decl[2], decl[3][0]))
 
     for warning in warnings_found:
         print("WARNING: " +warning)

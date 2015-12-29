@@ -16,6 +16,9 @@ notifications:
     on_success: never
     on_failure: change
   slack:
+    on_success: never
+    on_failure: always
+    on_start: never
     secure: EqEjlYaUPJnyq68WSgKHEQ8HGto4hu+2amivPDE/5b9fEbugz0dtHC2bNoCvAFX+5sQJ6qqSWyVAcZ5KqNCW8fRs5BqS1lODSHygprlo6vyShjl36KBjvwLABVsyTUosmwNNyhW+XKy4O951KW8zix2N2amg1PaTko3YgZVIPLaPCgnzawj/2mPP+0tNT4Mz1qpJ3/JEwXcZ7zCu+ONbFifjjmpnwfGHCSs8cEDGFONiokAOnV7/M+PSwkYdMGxVLhr3HxrvlEFCUO+p+7CyHDL0M+isJrrloqMUTAgqaV/RVVtk19tQ6zno5iSTTrpycLZ7YkHuhC5fuTGozWUSQwSdE9YtC4xugygdjkx6Hxqwdw9pAjtx2ZnDoraNq285qk8ONIJGS8ZAYX1tbTXjVlFSvoxRE56t0+yS+8DVP41QY9WXmzT7hdqBno2fFLzgATx+EqIms6DUVw1a9B2jYZYj/hqlNmTOZcGjFCx5en+FgBzMBokRnIPFfhe1g0WgTeg2q3K3SuCFMOzRli8ZZNYAkSA5/slx0Nw0k7wQT0iYVnZqRcZdn+PxVqR4d4RWDlYyxQyKZUJPMQykfweqJTt7LyNYjmQOXtzcg5QCOlbyKAozknzaLAvvzkQ3xCcsD5pKFn/ZRS8w9E8nR8b3mmUY7u2ysEq8RloCOi0bUSo=
 env:
   global:

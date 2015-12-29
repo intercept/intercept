@@ -5756,10 +5756,6 @@ namespace intercept {
 			host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
 		}
 
-		float waypoint_timeout_current(group value_) {
-			return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_));
-		}
-
 		/* World */
 		        float world_size() {
             return sqf::__helpers::__retrieve_nular_number(client::__sqf::nular__worldsize__ret__scalar);

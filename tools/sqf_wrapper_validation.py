@@ -107,6 +107,19 @@ def parse():
     declarations = parsed_impl
 
     ##### START VALIDATION #####
+    for impl in implementations:
+        file_name = impl[3][0].split('.')[0]
+        if (impl[3][0].endswith(".hpp")):
+            warnings_found.append("Implementation ({} {}{}) in header file ({})".format(impl[0], impl[1], impl[2], impl[3][0]))
+
+        for decl in declarations:
+            if (decl[1] == impl[1]): # same name
+                if (decl[3][0].split('.')[0] != file_name):
+                    warnings_found.append("Found implemenation with filename mismatch ({} {}{}) ({} should be {})".format(impl[0], impl[1], impl[2], file_name, decl[3][0].split('.')[0]))
+
+    for impl in declarations:
+        if (impl[3][0].endswith(".cpp")):
+            errors_found.append("Declaration ({} {}{}) in source file ({})".format(impl[0], impl[1], impl[2], impl[3][0]))
 
     # Check for implementations without declarations
     for impl in implementations:
@@ -118,6 +131,16 @@ def parse():
         if (not found):
             errors_found.append("Missing declaration for implementation {} {}{} [{}]".format(impl[0], impl[1], impl[2], impl[3][0]))
 
+    # Check for declarations without implementation
+    for decl in declarations:
+        found = False
+        for impl in implementations:
+            if (impl[1] == decl[1] and impl[2] == decl[2] and impl[0] == decl[0]):
+                found = True
+                break
+
+        if (not found):
+            errors_found.append("Missing implementation for declaration {} {}{} [{}]".format(decl[0], decl[1], decl[2], decl[3][0]))
     # Check for duplicate implementations
     for impl in implementations:
         duplicate_counter = 0
@@ -130,17 +153,18 @@ def parse():
 
                 if duplicate_counter > 1:
                     errors_found.append("Found a duplicate implementation for {} in {}, line {}\n".format(impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
+    # Check for duplicate declarations
+    for impl in declarations:
+        duplicate_counter = 0
+        for impl_comp in declarations: # check everything against each other. Yay, go brute force
+            if (impl[1] == impl_comp[1]): # ignoring return value, since we can only overload parameters. If name and parameters match, we got a duplicate.
+                if impl[2] == impl_comp[2]:
+                    duplicate_counter+=1
+                    if (impl[0] != impl_comp[0]): # this is invalid, cannot overload return values
+                        errors_found.append("Return value in function contract mismatch. Expected: {}. Found: {} at {} in {}, line {}\n".format(impl[0], impl_comp[0], impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
 
-    # Check for declarations without implementation
-    for decl in declarations:
-        found = False
-        for impl in implementations:
-            if (impl[1] == decl[1] and impl[2] == decl[2] and impl[0] == decl[0]):
-                found = True
-                break
-
-        if (not found):
-            errors_found.append("Missing implementation for declaration {} {}{} [{}]".format(decl[0], decl[1], decl[2], decl[3][0]))
+                if duplicate_counter > 1:
+                    errors_found.append("Found a duplicate declaration for {} in {}, line {}\n".format(impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
 
     for warning in warnings_found:
         print("WARNING: " +warning)

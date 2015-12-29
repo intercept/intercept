@@ -20,7 +20,10 @@ def parse():
             source_file = os.path.join(projectpath_sqf, file)
             lineN = 0
             with open(source_file) as f:
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*\))(?=\s*\{)", f.read())
+                filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
+                filecontents = re.sub("(//.*?\n)", '', filecontents)
+
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1
@@ -32,14 +35,19 @@ def parse():
             source_file = os.path.join(projectpath_sqf, file)
             lineN = 0
             with open(source_file) as f:
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*\))(?=\s*\;)", f.read())
+                filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
+                filecontents = re.sub("(//.*?\n)", '', filecontents)
+
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1
                         if (match_impl[1].startswith("__")):
                             continue
                         declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
-    print("Total implementations {0} | Total Declarations {1}".format(len(implementations), len(declarations)))
+
+    errors_found = []
+    warnings_found = []
 
     # strip default values
     for impl in implementations:
@@ -59,7 +67,7 @@ def parse():
     for decl in declarations:
         match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", decl[2])
         if (match):
-            print("WARNING: Found a default value in declaration parameters ({}, {} line {})".format(decl[1], decl[3][0], decl[3][1]))
+            warnings_found.append("Found a default value in declaration parameters ({}, {} line {})".format(decl[1], decl[3][0], decl[3][1]))
             decl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", decl[2]).lower() # get rid of them here, so we can continue checking for errors
 
         # split up using , seperators
@@ -87,7 +95,7 @@ def parse():
                 found = True
                 break
         if (not found):
-            print("ERROR: Missing declaration for implementation {} {} {}".format(impl[0], impl[1], impl[2]))
+            errors_found.append("Missing declaration for implementation {} {} {}".format(impl[0], impl[1], impl[2]))
 
     # Check for duplicate implementations
     for impl in implementations:
@@ -97,10 +105,10 @@ def parse():
                 if impl[2] == impl_comp[2]:
                     duplicate_counter+=1
                     if (impl[0] != impl_comp[0]): # this is invalid, cannot overload return values
-                        print("Return value in function contract mismatch. Expected: {}. Found: {} at {} in {}, line {}\n".format(impl[0], impl_comp[0], impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
+                        errors_found.append("Return value in function contract mismatch. Expected: {}. Found: {} at {} in {}, line {}\n".format(impl[0], impl_comp[0], impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
 
                 if duplicate_counter > 1:
-                    print("Found a duplicate implementation for {} in {}, line {}\n".format(impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
+                    errors_found.append("Found a duplicate implementation for {} in {}, line {}\n".format(impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
 
     # Check for declarations without implementation
     for decl in declarations:
@@ -111,9 +119,22 @@ def parse():
                 break
 
         if (not found):
-            print("ERROR: Missing implementation for declaration {} {} {}".format(decl[0], decl[1], decl[2]))
+            errors_found.append("Missing implementation for declaration {} {} {} [{}]".format(decl[0], decl[1], decl[2], decl[3][0]))
 
-    return []
+    for warning in warnings_found:
+        print("WARNING: " +warning)
+    for error in errors_found:
+        print("ERROR: "+ error)
+
+    print("\n\n-------\nWarnings: {} Errors: {}".format(len(warnings_found), len(errors_found)))
+    print("Total implementations {0} | Total Declarations {1}".format(len(implementations), len(declarations)))
+
+    if (len(errors_found) > 0):
+        print("FAILED")
+        return 1
+    else:
+        print("PASSED")
+        return 0
 
 if __name__ == "__main__":
     parse()

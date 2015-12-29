@@ -131,4 +131,4 @@ def parse():
         return 0
 
 if __name__ == "__main__":
-    parse()
+    sys.exit(parse())

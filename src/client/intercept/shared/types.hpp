@@ -331,16 +331,16 @@ namespace intercept {
             void *side;
         };
 
-        class game_data_text : public game_data {
+        class game_data_rv_text : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_text() {
+            game_data_rv_text() {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal = 1;
             };
-            void *text;
+            void *rv_text;
         };
 
         class game_data_team : public game_data {

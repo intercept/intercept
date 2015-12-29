@@ -15,7 +15,7 @@ namespace intercept {
             internal_object & operator = (internal_object &&move_);
             operator game_value *();
             operator game_value *() const;
-            
+
             internal_object & operator = (const internal_object &copy_);
 
             bool operator<(const internal_object& compare_) const;
@@ -44,7 +44,7 @@ namespace intercept {
         RV_GENERIC_OBJECT_DEC(location);
         RV_GENERIC_OBJECT_DEC(script);
         RV_GENERIC_OBJECT_DEC(side);
-        RV_GENERIC_OBJECT_DEC(text);
+        RV_GENERIC_OBJECT_DEC(rv_text);
         RV_GENERIC_OBJECT_DEC(team_member);
         RV_GENERIC_OBJECT_DEC(rv_namespace);
         RV_GENERIC_OBJECT_DEC(task);

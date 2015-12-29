@@ -64,7 +64,7 @@ namespace intercept {
             }
         }
 
-        
+
 
 #define RV_GENERIC_OBJECT_DEF(type)         type##::##type##() {}\
         type##::##type##(const rv_game_value &value_) : internal_object(value_) {}\
@@ -106,7 +106,7 @@ namespace intercept {
 
         RV_GENERIC_OBJECT_DEF(side)
 
-        RV_GENERIC_OBJECT_DEF(text)
+        RV_GENERIC_OBJECT_DEF(rv_text)
 
         RV_GENERIC_OBJECT_DEF(team_member)
 

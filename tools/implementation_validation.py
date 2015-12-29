@@ -1,0 +1,119 @@
+import os
+import sys
+import re
+
+from xml.dom import minidom
+
+def parse():
+    scriptpath = os.path.realpath(__file__)
+    projectpath = os.path.dirname(os.path.dirname(scriptpath))
+    projectpath = os.path.join(projectpath, "src/client/intercept/client")
+    projectpath_sqf = os.path.join(projectpath, "sqf")
+
+    implementations = []
+    declarations = []
+
+    # Walk through our source files and figure out which ones are used in our code
+    for file in os.listdir(projectpath_sqf):
+        foundInFile = 0
+        if file.endswith(".cpp"):
+            source_file = os.path.join(projectpath_sqf, file)
+            lineN = 0
+            with open(source_file) as f:
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*\))(?=\s*\{)", f.read())
+                for match_impl in match_impls:
+                    if (match_impl):
+                        foundInFile += 1
+                        if (match_impl[1].startswith("__")):
+                            continue
+                        implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
+
+        if file.endswith(".hpp"):
+            source_file = os.path.join(projectpath_sqf, file)
+            lineN = 0
+            with open(source_file) as f:
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*\))(?=\s*\;)", f.read())
+                for match_impl in match_impls:
+                    if (match_impl):
+                        foundInFile += 1
+                        if (match_impl[1].startswith("__")):
+                            continue
+                        declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
+    print("Total implementations {0} | Total Declarations {1}".format(len(implementations), len(declarations)))
+
+    # strip default values
+    for impl in implementations:
+        impl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", impl[2]).lower()
+        elements = impl[2].split(',')
+        impl[2] = ''
+        for el in elements:
+            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)", el)
+            if (element_type):
+                element_type = element_type.group(1)
+                impl[2] += element_type + ', '
+        impl[2] = "(" + impl[2] + ")"
+        impl[2] = re.sub(", \)", ')', impl[2])
+        impl[2] = re.sub("\s+(\&|\*)", r'\1', impl[2])
+
+    # Check for default values in declarations
+    for decl in declarations:
+        match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", decl[2])
+        if (match):
+            print("WARNING: Found a default value in declaration parameters ({}, {} line {})".format(decl[1], decl[3][0], decl[3][1]))
+            decl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", decl[2]).lower() # get rid of them here, so we can continue checking for errors
+
+        # split up using , seperators
+        # for each element, find type and remove parameter name
+        # combine all elements, we now got our function contract
+        elements = decl[2].split(',')
+        decl[2] = ''
+        for el in elements:
+            element_type = re.search("(const\s+[a-zA-Z0-9:<>_]+\s*[&\*]*|[a-zA-Z0-9:<>_]+\s*[&\*]*)", el)
+            if (element_type):
+                element_type = element_type.group(1)
+                decl[2] += element_type + ', '
+        decl[2] = "(" + decl[2] + ")"
+        decl[2] = re.sub(", \)", ')', decl[2])
+        decl[2] = re.sub("\s+(\&|\*)", r'\1', decl[2])
+
+
+    ##### START VALIDATION #####
+
+    # Check for implementations without declarations
+    for impl in implementations:
+        found = False
+        for decl in declarations:
+            if (impl[1] == decl[1] and impl[2] == decl[2] and impl[0] == decl[0]):
+                found = True
+                break
+        if (not found):
+            print("ERROR: Missing declaration for implementation {} {} {}".format(impl[0], impl[1], impl[2]))
+
+    # Check for duplicate implementations
+    for impl in implementations:
+        duplicate_counter = 0
+        for impl_comp in implementations: # check everything against each other. Yay, go brute force
+            if (impl[1] == impl_comp[1]): # ignoring return value, since we can only overload parameters. If name and parameters match, we got a duplicate.
+                if impl[2] == impl_comp[2]:
+                    duplicate_counter+=1
+                    if (impl[0] != impl_comp[0]): # this is invalid, cannot overload return values
+                        print("Return value in function contract mismatch. Expected: {}. Found: {} at {} in {}, line {}\n".format(impl[0], impl_comp[0], impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
+
+                if duplicate_counter > 1:
+                    print("Found a duplicate implementation for {} in {}, line {}\n".format(impl_comp[1], impl_comp[3][0], impl_comp[3][1]))
+
+    # Check for declarations without implementation
+    for decl in declarations:
+        found = False
+        for impl in implementations:
+            if (impl[1] == decl[1] and impl[2] == decl[2] and impl[0] == decl[0]):
+                found = True
+                break
+
+        if (not found):
+            print("ERROR: Missing implementation for declaration {} {} {}".format(decl[0], decl[1], decl[2]))
+
+    return []
+
+if __name__ == "__main__":
+    parse()

@@ -69,18 +69,7 @@ namespace intercept {
 		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
-        void draw_icon_3d(
-            const std::string &texture_,
-            const rv_color &color_,
-            const vector3 &pos_agl_,
-            const float width_,
-            const float height_,
-            const float angle_,
-            const std::string &text_ = "",
-            const bool shadow_ = false,
-            const float text_size_ = 1.0f,
-            const std::string &font_ = "TahomaB"
-            );
+        void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, const float width_, const float height_, const float angle_, const std::string &text_ = "", const bool shadow_ = false, const float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
 
         vector3 vector_dir(object obj_);
         vector3 vector_dir_visual(object obj_);
@@ -89,8 +78,7 @@ namespace intercept {
 		/* potential namespace: */
 		std::vector<std::string> action_keys(const std::string &user_action_);
 
-		//text action_keys_images(const std::string &user_action_);
-
+		text action_keys_images(const std::string &user_action_);
 		std::string action_keys_names(const std::string &user_action_);
 		std::string action_keys_names(const std::string &user_action_, int max_keys_);
 		std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_);
@@ -199,21 +187,21 @@ namespace intercept {
 		void enable_saving(bool enable_, bool autosave_);
 
 		/* potential namespace: rtd, vehicles, afm */
-		std::vector<bool> engines_is_on_rtd(const object &helicopter_);
-		std::vector<float> engines_torque_rtd(const object &helicopter_);
-		std::vector<float> engines_rpm_rtd(const object &helicopter_);
+		// TODO std::vector<bool> engines_is_on_rtd(const object &helicopter_);
+		// TODO std::vector<float> engines_torque_rtd(const object &helicopter_);
+		// TODO std::vector<float> engines_rpm_rtd(const object &helicopter_);
 
 		/* potential namespace: core */
-		std::vector<object> entities(const std::string &type_);
+		// TODO std::vector<object> entities(const std::string &type_);
 
 		/* potential namespace: backpack, containers, inventory */
-		std::vector<object> every_backpack(const object &box_);
+		// TODO std::vector<object> every_backpack(const object &box_);
 
 		/* potential namespace: containers, inventory */
-		std::vector<rv_container> every_container(const object &box_);
+		// TODO std::vector<rv_container> every_container(const object &box_);
 
 		/* potential namespace: ai */
-		rv_destination expected_destination(const object &unit_);
+		// TODO rv_destination expected_destination(const object &unit_);
 
 		/* potential namespace: position */
 		// TODO vector3 eye_direction(const object &unit_);
@@ -303,6 +291,7 @@ namespace intercept {
 		/* Chat */
 		namespace __helpers {
 			void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
+			vector3 get_pos_loc(unary_function fnc_, const location & loc_);
 		}
 		void side_chat(const object & obj_, const std::string &message_);
 		void global_chat(const object & obj_, const std::string & message_);
@@ -339,7 +328,7 @@ namespace intercept {
         config mission_config_file();
 
 		/* Core */
-				std::vector<object> all_3den_entities();
+		std::vector<object> all_3den_entities();
 		std::vector<object> all_curators();
 		std::vector<object> all_dead();
 		std::vector<object> all_deadmen();

@@ -1941,7 +1941,7 @@ namespace intercept {
 			return vector2(function_return_array[0], function_return_array[1]);
 		}
 
-		std::string create_marker(const std::string &name_, const vector2 pos_)
+		std::string create_marker(const std::string &name_, const vector2 &pos_)
 		{
 			game_value params({
 				name_,
@@ -1971,7 +1971,7 @@ namespace intercept {
 			return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
 		}
 
-		std::string create_marker_local(const std::string &name_, const vector2 pos_)
+		std::string create_marker_local(const std::string &name_, const vector2 &pos_)
 		{
 			game_value params({
 				name_,
@@ -4491,7 +4491,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, value0_, value1_));
 		}
 
-		void hc_oup(const object &value0_, const group &value1_) {
+		void hc_remove_group(const object &value0_, const group &value1_) {
 			host::functions.invoke_raw_binary(client::__sqf::binary__hcremovegroup__object__group__ret__nothing, value0_, value1_);
 		}
 
@@ -5374,7 +5374,7 @@ namespace intercept {
 		}
 
 		/* Position */
-				namespace __helpers {
+		namespace __helpers {
 			vector3 get_pos_obj(unary_function fnc_, const object & obj_)
 			{
 				return game_value(host::functions.invoke_raw_unary(fnc_, obj_));

@@ -28,7 +28,7 @@ def parse():
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1
-                        if (match_impl[1].startswith("__")):
+                        if (match_impl[1].startswith("__") or file.endswith(".hpp")):
                             continue
                         implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
                 #if file.endswith(".hpp"):
@@ -36,7 +36,7 @@ def parse():
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1
-                        if (match_impl[1].startswith("__")):
+                        if (match_impl[1].startswith("__") or file.endswith(".cpp")):
                             continue
                         # Check if we have actually matched a valid declaration
                         valid_match = re.search("[a-zA-Z0-9:<>_]+\s?[&\*]?\s+[&\*]?[a-zA-Z0-9_]+", match_impl[2])

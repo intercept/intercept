@@ -56,15 +56,10 @@ namespace intercept {
 		config confignull();
 		control controlnull();
 		std::string copyfromclipboard();
-
 		float currentchannel();
 		rv_namespace currentnamespace();
 		object cursortarget();
 		float daytime();
-
-		std::vector<script> diag_activemissionfsms();
-		std::vector<script> diag_activesqfscripts();
-		std::vector<script> diag_activesqsscripts();
 		float diag_fps();
 		float diag_fpsmin();
 		float diag_frameno();
@@ -84,7 +79,7 @@ namespace intercept {
 		void finish_mission_init();
 		bool fog();
 		float fog_forecast();
-		std::vector<float> fog_params();
+		// TODO std::vector<float> fog_params();
 		void force_end();
 		void force_weather_change();
 		bool free_look();
@@ -93,10 +88,10 @@ namespace intercept {
 		// TODO not on biki getdlcassetsusage();
 		float getelevationoffset();
 		// TODO not on biki std::vector<std::string> getmissiondlcs();
-		vector2 get_mouse_position();
-		std::array<float, 2> get_object_view_distance();
+		// TODO vector2 get_mouse_position();
+		// TODO std::array<float, 2> get_object_view_distance();
 		bool get_remote_sensors_disabled();
-		game_resolution get_resolution();
+		// TODO game_resolution get_resolution();
 		float get_shadow_distance();
 		float get_total_dlc_usage_time();
 		float gusts();
@@ -116,7 +111,7 @@ namespace intercept {
 		bool is_stress_damage_enabled();
 		bool is_tut_hints_enabled();
 		std::string language();
-		std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
+		// TODO std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
 		std::vector<std::string> library_disclaimers();
 		float lightnings();
 		std::string line_break();
@@ -130,7 +125,6 @@ namespace intercept {
 		float mission_difficulty();
 		std::string mission_name();
 		rv_namespace mission_namespace();
-		std::array<float, 6> mission_start();
 		float moon_intensity();
 		float music_volume();
 		float next_weather_change();
@@ -285,7 +279,7 @@ namespace intercept {
 		void dissolve_team(const std::string &value_);
 		object driver(const object &value_);
 		void echo(const std::string &value_);
-		void edit(const std::string &value_);
+		// TODO void edit(const std::string &value_); // Are we sure this is a valid sqf script command?
 		object effective_commander(const object &value_);
 		void enable_cam_shake(bool value_);
 		void enable_caustics(bool value_);

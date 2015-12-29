@@ -48,8 +48,8 @@ namespace intercept {
         uintptr_t game_data_side::type_def;
         uintptr_t game_data_side::data_type_def;
 
-        uintptr_t game_data_text::type_def;
-        uintptr_t game_data_text::data_type_def;
+        uintptr_t game_data_rv_text::type_def;
+        uintptr_t game_data_rv_text::data_type_def;
 
         uintptr_t game_data_team::type_def;
         uintptr_t game_data_team::data_type_def;

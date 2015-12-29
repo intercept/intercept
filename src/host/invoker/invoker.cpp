@@ -431,8 +431,8 @@ namespace intercept {
         else if (step == "text_type") {
             invoker::get().type_map[structure.first] = "TEXT";
             invoker::get().type_structures["TEXT"] = structure;
-            game_data_text::type_def = structure.first;
-            game_data_text::data_type_def = structure.second;
+            game_data_rv_text::type_def = structure.first;
+            game_data_rv_text::data_type_def = structure.second;
         }
         else if (step == "team_type") {
             invoker::get().type_map[structure.first] = "TEAM_MEMBER";

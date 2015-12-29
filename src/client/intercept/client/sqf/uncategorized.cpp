@@ -66,9 +66,9 @@ namespace intercept {
 			return r_arr;
 		}
 
-		text action_keys_images(const std::string &user_action_)
+		rv_text action_keys_images(const std::string &user_action_)
 		{
-			return text(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysimages__string_array__ret__text, user_action_));
+			return rv_text(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysimages__string_array__ret__text, user_action_));
 		}
 
 		std::string action_keys_names(const std::string &user_action_)
@@ -5757,7 +5757,7 @@ namespace intercept {
 		}
 
 		/* World */
-		        float world_size() {
+		float world_size() {
             return sqf::__helpers::__retrieve_nular_number(client::__sqf::nular__worldsize__ret__scalar);
         }
 

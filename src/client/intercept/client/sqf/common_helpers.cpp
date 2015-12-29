@@ -21,8 +21,8 @@ namespace intercept {
 				return object(host::functions.invoke_raw_nular(fnc_));
 			}
 
-			text __retrieve_nular_text(nular_function fnc_) {
-				return text(host::functions.invoke_raw_nular(fnc_));
+			rv_text __retrieve_nular_text(nular_function fnc_) {
+				return rv_text(host::functions.invoke_raw_nular(fnc_));
 			}
 
 			rv_namespace __retrieve_nular_namespace(nular_function fnc_) {

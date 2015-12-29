@@ -77,8 +77,8 @@ namespace intercept {
             game_data_side::data_type_def = data_type_def;
 
             host::functions.get_type_structure("TEXT", type_def, data_type_def);
-            game_data_text::type_def = type_def;
-            game_data_text::data_type_def = data_type_def;
+            game_data_rv_text::type_def = type_def;
+            game_data_rv_text::data_type_def = data_type_def;
 
             host::functions.get_type_structure("TEAM_MEMBER", type_def, data_type_def);
             game_data_team::type_def = type_def;

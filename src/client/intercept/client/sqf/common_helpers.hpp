@@ -27,7 +27,7 @@ namespace intercept {
 			vector3 __retrieve_nular_vector3(nular_function fnc_);
 			bool __retrieve_nular_bool(nular_function fnc_);
             object __retrieve_nular_object(nular_function fnc_);
-            text __retrieve_nular_text(nular_function fnc_);
+            rv_text __retrieve_nular_text(nular_function fnc_);
             rv_namespace __retrieve_nular_namespace(nular_function fnc_);
             location __retrieve_nular_location(nular_function fnc_);
             side __retrieve_nular_side(nular_function fnc_);

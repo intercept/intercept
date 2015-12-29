@@ -78,7 +78,7 @@ namespace intercept {
 		/* potential namespace: */
 		std::vector<std::string> action_keys(const std::string &user_action_);
 
-		text action_keys_images(const std::string &user_action_);
+		rv_text action_keys_images(const std::string &user_action_);
 		std::string action_keys_names(const std::string &user_action_);
 		std::string action_keys_names(const std::string &user_action_, int max_keys_);
 		std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_);

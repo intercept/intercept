@@ -16,35 +16,29 @@ def parse():
     # Walk through our source files and figure out which ones are used in our code
     for file in os.listdir(projectpath_sqf):
         foundInFile = 0
-        if file.endswith(".cpp"):
+        if file.endswith(".cpp") or file.endswith(".hpp"):
             source_file = os.path.join(projectpath_sqf, file)
             lineN = 0
             with open(source_file) as f:
                 filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
                 filecontents = re.sub("(//.*?\n)", '', filecontents)
 
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
-                for match_impl in match_impls:
-                    if (match_impl):
-                        foundInFile += 1
-                        if (match_impl[1].startswith("__")):
-                            continue
-                        implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
-
-        if file.endswith(".hpp"):
-            source_file = os.path.join(projectpath_sqf, file)
-            lineN = 0
-            with open(source_file) as f:
-                filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
-                filecontents = re.sub("(//.*?\n)", '', filecontents)
-
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
-                for match_impl in match_impls:
-                    if (match_impl):
-                        foundInFile += 1
-                        if (match_impl[1].startswith("__")):
-                            continue
-                        declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
+                if file.endswith(".cpp"):
+                    match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
+                    for match_impl in match_impls:
+                        if (match_impl):
+                            foundInFile += 1
+                            if (match_impl[1].startswith("__")):
+                                continue
+                            implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
+                if file.endswith(".hpp"):
+                    match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
+                    for match_impl in match_impls:
+                        if (match_impl):
+                            foundInFile += 1
+                            if (match_impl[1].startswith("__")):
+                                continue
+                            declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
 
     errors_found = []
     warnings_found = []

@@ -42,25 +42,31 @@ namespace intercept {
                 z = buffer[2];
             }
 
-            vector3_base<T> & operator= (const vector3_base<T>& other) { x = other.x; y = other.x; z = other.x; return *this; }
+            vector3_base(const vector3_base<T>& copy_) {
+                x = copy_.x;
+                y = copy_.y;
+                z = copy_.z;
+            }
+
+            vector3_base<T> & operator= (const vector3_base<T>& other) { x = other.x; y = other.y; z = other.z; return *this; }
             vector3_base operator * (const T &val) const { return vector3_base(x * val, y * val, z * val); }
             vector3_base operator / (const T &val) const { T invVal = T(1) / val; return vector3_base(x * invVal, y * invVal, z * invVal); }
-            vector3_base operator + (const vector3_base<T> &v) const { return vector3_base(x + v.x, y + v.x, z + v.x); }
-            vector3_base operator / (const vector3_base &v) const { return vector3_base(x / v.x, y / v.x, z / v.x); }
-            vector3_base operator * (const vector3_base &v) const { return vector3_base(x * v.x, y * v.x, z * v.x); }
-            vector3_base operator - (const vector3_base &v) const { return vector3_base(x - v.x, y - v.x, z - v.x); }
+            vector3_base operator + (const vector3_base<T> &v) const { return vector3_base(x + v.x, y + v.y, z + v.z); }
+            vector3_base operator / (const vector3_base &v) const { return vector3_base(x / v.x, y / v.y, z / v.z); }
+            vector3_base operator * (const vector3_base &v) const { return vector3_base(x * v.x, y * v.y, z * v.z); }
+            vector3_base operator - (const vector3_base &v) const { return vector3_base(x - v.x, y - v.y, z - v.z); }
             vector3_base operator - () const { return vector3_base(-x, -y, -z); }
 
-            bool operator == (const vector3_base &r) const { return (x == r.x && y == r.x && z == r.x); }
+            bool operator == (const vector3_base &r) const { return (x == r.x && y == r.y && z == r.z); }
             bool operator >  (const vector3_base &r) const { throw 1; }
             bool operator <  (const vector3_base &r) const { throw 1; }
             bool operator <= (const vector3_base &r) const { throw 1; }
             bool operator >= (const vector3_base &r) const { throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y + z * z); }
-            T dot(const vector3_base &v) const { return (x * v.x + y * v.x + z * v.x); }
-            T distance(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.x + dist.x); }
-            vector3_base cross(const vector3_base &v) const { return vector3_base(y * v.x - z * v.x, z * v.x - x * v.x, x * v.x - y * v.x); }
+            T dot(const vector3_base &v) const { return (x * v.x + y * v.y + z * v.z); }
+            T distance(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y + dist.z); }
+            vector3_base cross(const vector3_base &v) const { return vector3(_y * v.z - _z * v.y, _z * v.x - _x * v.z, _x * v.y - _y * v.x); }
             vector3_base normalize(void) const { return (*this / abs(magnitude())); };
             bool zero_distance() { return ((x == 0.0f && y == 0.0f && z == 0.0f) ? true : false); }
 
@@ -112,6 +118,11 @@ namespace intercept {
                 y = buffer[1];
             }
 
+            vector2_base(const vector2_base<T>& copy_) {
+                x = copy_.x;
+                y = copy_.y;
+            }
+
             vector2_base<T> & operator= (const vector2_base<T>& other) { x = other.x; y = other.y; return *this; }
             vector2_base operator * (const T &val) const { return vector2_base(x * val, y * val); }
             vector2_base operator / (const T &val) const { T invVal = T(1) / val; return vector2_base(x * invVal, y * invVal); }
@@ -128,7 +139,7 @@ namespace intercept {
             bool operator >= (const vector2_base &r) const { throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y); }
-            T dot(const vector2_base &v) const { return (x * v.x() + y * v.y()); }
+            T dot(const vector2_base &v) const { return (x * v.x + y * v.y); }
             T distance(const vector2_base &v) const { vector2_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y); }
             vector2_base cross(const vector2_base &v) const { return vector2_base(v.y, -v.x); }
             vector2_base normalize(void) const { return (*this / abs(magnitude())); };

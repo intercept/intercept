@@ -66,7 +66,7 @@ namespace intercept {
             T magnitude() const { return sqrt(x * x + y * y + z * z); }
             T dot(const vector3_base &v) const { return (x * v.x + y * v.y + z * v.z); }
             T distance(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y + dist.z); }
-            vector3_base cross(const vector3_base &v) const { return vector3(_y * v.z - _z * v.y, _z * v.x - _x * v.z, _x * v.y - _y * v.x); }
+            vector3_base cross(const vector3_base &v) const { return vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
             vector3_base normalize(void) const { return (*this / abs(magnitude())); };
             bool zero_distance() { return ((x == 0.0f && y == 0.0f && z == 0.0f) ? true : false); }
 

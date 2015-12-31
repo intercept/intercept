@@ -26,6 +26,7 @@ else()
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /Zi /O2 /Ob1 /D /EHsc NDEBUG")
 endif()
 include_directories("example_dll")
+include_directories("example_hud")
 
 
 if(DEVEL)
@@ -33,11 +34,14 @@ if(DEVEL)
 endif()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_dll)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_hud)
+
 
 set(GLOBAL_SOURCES ${GLOBAL_RC})
 
 
 add_subdirectory(example_dll)
+add_subdirectory(example_hud)
 
 
 message("Build Type: ${CMAKE_BUILD_TYPE}")

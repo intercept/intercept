@@ -621,19 +621,23 @@ namespace intercept {
 
         game_value::operator vector3()
         {
-            return vector3(
-                ((game_data_array *)rv_data.data)->data[0],
-                ((game_data_array *)rv_data.data)->data[1],
-                ((game_data_array *)rv_data.data)->data[2]
-                );
+            if (((game_data_array *)rv_data.data)->length == 3)
+                return vector3(
+                    ((game_data_array *)rv_data.data)->data[0],
+                    ((game_data_array *)rv_data.data)->data[1],
+                    ((game_data_array *)rv_data.data)->data[2]
+                    );
+            return vector3();
         }
 
         game_value::operator vector2()
         {
-            return vector2(
-                ((game_data_array *)rv_data.data)->data[0],
-                ((game_data_array *)rv_data.data)->data[1]
-                );
+            if(((game_data_array *)rv_data.data)->length == 2)
+                return vector2(
+                    ((game_data_array *)rv_data.data)->data[0],
+                    ((game_data_array *)rv_data.data)->data[1]
+                    );
+            return vector2();
         }
 
         game_value::operator float() const

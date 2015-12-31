@@ -69,11 +69,32 @@ namespace intercept {
 		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
-        void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, const float width_, const float height_, const float angle_, const std::string &text_ = "", const bool shadow_ = false, const float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
+        void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
 
-        vector3 vector_dir(object obj_);
-        vector3 vector_dir_visual(object obj_);
-        vector3 selection_positon(object obj_, std::string selection_name_);
+        vector3 vector_dir(const object & obj_);
+        vector3 vector_dir_visual(const object & obj_);
+        vector3 selection_positon(const object & obj_, const std::string & selection_name_);
+
+        rv_game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+
+        vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
+
+        vector2 world_to_screen(const vector3 &pos_agl_);
+        vector2 world_to_screen(const vector3 &pos_agl_, bool &in_screen_);
+
+        void ctrl_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
+        void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_);
+        vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
+
+        
+
+        void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, const std::string &fill_texture_);
+        
+        //@TODO: draw_icon could stand to have a few enums probably for arguments like shadow and align.
+        void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const vector2 &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);
+        void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const object &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);
+
+        vector3 velocity(const object &obj_);
 
 		/* potential namespace: */
 		std::vector<std::string> action_keys(const std::string &user_action_);

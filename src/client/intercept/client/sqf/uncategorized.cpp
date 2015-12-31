@@ -26,7 +26,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__drawline3d__array__ret__nothing, args);
         }
 
-        void draw_icon_3d(const std::string & texture_, const rv_color & color_, const vector3 & pos_agl_, const float width_, const float height_, const float angle_, const std::string & text_, const bool shadow_, const float text_size_, const std::string & font_)
+        void draw_icon_3d(const std::string & texture_, const rv_color & color_, const vector3 & pos_agl_, float width_, float height_, float angle_, const std::string & text_, float shadow_, float text_size_, const std::string & font_)
         {
             game_value args({
                 texture_,
@@ -36,7 +36,7 @@ namespace intercept {
                 height_,
                 angle_,
                 text_,
-                (float)shadow_,
+                shadow_,
                 text_size_,
                 font_
             });
@@ -44,19 +44,124 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
-        vector3 vector_dir(object obj_)
+        vector3 vector_dir(const object &obj_)
         {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__vectordir__object__ret__array, obj_));
         }
 
-        vector3 vector_dir_visual(object obj_)
+        vector3 vector_dir_visual(const object & obj_)
         {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__vectordirvisual__object__ret__array, obj_));
         }
 
-        vector3 selection_positon(object obj_, std::string selection_name_)
+        vector3 selection_positon(const object & obj_, const std::string & selection_name_)
         {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_));
+        }
+
+        rv_game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_)
+        {
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_);
+        }
+
+        vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_));
+        }
+
+        vector2 world_to_screen(const vector3 & pos_agl_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_));
+        }
+
+        vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_)
+        {
+            rv_game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
+            if (((game_data_array *)result.data)->length == 2)
+                in_screen_ = true;
+            else
+                in_screen_ = false;
+            return game_value(result);
+        }
+
+        void ctrl_set_position(const control & ctrl_, float x_, float y_, float width_, float height_)
+        {
+            game_value args(std::vector<game_value>{
+                x_,
+                y_,
+                width_,
+                height_
+            });
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetposition__control__array__ret__nothing, ctrl_, args);
+        }
+
+        void ctrl_map_anim_add(const control & ctrl_, float time_, float zoom_, vector2 pos_)
+        {
+            game_value args({
+                time_,
+                zoom_,
+                pos_
+            });
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapanimadd__control__array__ret__nothing, ctrl_, args);
+        }
+
+        vector2 ctrl_map_screen_to_world(const control & ctrl_, const vector2 & screen_pos_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapscreentoworld__control__array__ret__array, ctrl_, screen_pos_));
+        }
+
+        void draw_rectangle(const control & ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color & color_, const std::string & fill_texture_)
+        {
+            game_value args({
+                center_pos_,
+                a_,
+                b_,
+                angle_,
+                color_.__to_gv_vector(),
+                fill_texture_
+            });
+            host::functions.invoke_raw_binary(client::__sqf::binary__drawrectangle__control__array__ret__nothing, ctrl_, args);
+        }
+
+        void draw_icon(const control & ctrl_, const std::string & texture_, const rv_color & color_, const vector2 & pos_, float width_, float height_, float angle_, const std::string & text_, uint32_t shadow_, float text_size_, const std::string & font_, const std::string & align_)
+        {
+            game_value args({
+                texture_,
+                color_.__to_gv_vector(),
+                pos_,
+                width_,
+                height_,
+                angle_,
+                text_,
+                (float)shadow_,
+                text_size_,
+                font_,
+                align_
+            });
+            host::functions.invoke_raw_binary(client::__sqf::binary__drawicon__control__array__ret__nothing, ctrl_, args);
+        }
+
+        void draw_icon(const control & ctrl_, const std::string & texture_, const rv_color & color_, const object & pos_, float width_, float height_, float angle_, const std::string & text_, uint32_t shadow_, float text_size_, const std::string & font_, const std::string & align_)
+        {
+            game_value args({
+                texture_,
+                color_.__to_gv_vector(),
+                pos_,
+                width_,
+                height_,
+                angle_,
+                text_,
+                (float)shadow_,
+                text_size_,
+                font_,
+                align_
+            });
+            host::functions.invoke_raw_binary(client::__sqf::binary__drawicon__control__array__ret__nothing, ctrl_, args);
+        }
+
+        vector3 velocity(const object & obj_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__velocity__object__ret__array, obj_));
         }
 
         std::vector<std::string> action_keys(const std::string &user_action_)

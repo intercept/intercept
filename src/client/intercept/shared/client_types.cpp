@@ -51,17 +51,11 @@ namespace intercept {
 
         bool internal_object::is_null()
         {
-            uintptr_t data = (uintptr_t)(rv_data.data);
-            uintptr_t data_1 = data + 12;
-            uintptr_t data_2 = *(uintptr_t *)data_1;
-            if (data_2) {
-                uintptr_t data_3 = data_2 + 4;
-                uintptr_t val = *(uintptr_t *)data_3;
-                return !val;
-            }
-            else {
-                return true;
-            }
+            uintptr_t data = (uintptr_t)rv_data.data;
+            data = *(unsigned int *)(data+12);
+            if (data)
+                return !*(unsigned int *)(data+4);
+            return true;
         }
 
 

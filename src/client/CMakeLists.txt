@@ -27,6 +27,7 @@ else()
 endif()
 include_directories("example_dll")
 include_directories("example_hud")
+include_directories("example_frag")
 
 
 if(DEVEL)
@@ -35,6 +36,7 @@ endif()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_dll)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_hud)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_frag)
 
 
 set(GLOBAL_SOURCES ${GLOBAL_RC})
@@ -42,6 +44,8 @@ set(GLOBAL_SOURCES ${GLOBAL_RC})
 
 add_subdirectory(example_dll)
 add_subdirectory(example_hud)
+add_subdirectory(example_frag)
+
 
 
 message("Build Type: ${CMAKE_BUILD_TYPE}")

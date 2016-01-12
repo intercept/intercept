@@ -16,9 +16,7 @@ if(intercept_invoker_ok) then {
     }];
     
     player addEventHandler ["fired", {
-        diag_log text format["f data 1: %1", _this];
         missionNamespace setVariable ["intercept_params_var", +_this];
-        diag_log text format["f data 2: %1", intercept_params_var];
         _res = "intercept" callExtension "rv_event:fired,intercept_params_var";
     }];
 };

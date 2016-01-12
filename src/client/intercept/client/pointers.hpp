@@ -14,6 +14,7 @@ namespace intercept {
         public:
             static void __initialize();
 #include "sqf_pointers_declaration.hpp"
+            static binary_function binary__configaccessor__config__string__ret__config;
         };
 
         

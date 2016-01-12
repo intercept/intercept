@@ -86,7 +86,12 @@ namespace intercept {
         void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_);
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
 
-        
+        std::vector<object> near_entities(const vector3 &pos_agl_, const std::vector<std::string> &types_, float range_);
+
+        void set_vector_dir(const object &obj_, const vector3 &vec_);
+        void set_velocity(const object &obj_, const vector3 &vel_);
+
+        object create_vehicle_local(const std::string &type_, const vector3 &pos_atl_);
 
         void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, const std::string &fill_texture_);
         

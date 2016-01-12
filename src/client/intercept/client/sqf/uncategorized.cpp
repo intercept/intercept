@@ -110,6 +110,38 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapscreentoworld__control__array__ret__array, ctrl_, screen_pos_));
         }
 
+        std::vector<object> near_entities(const vector3 & pos_agl_, const std::vector<std::string>& types_, float range_)
+        {
+            std::vector<game_value> types;
+            for (auto type : types_)
+                types.push_back(type);
+            game_value args(std::vector<game_value>{
+                types,
+                range_
+            });
+
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args);
+            std::vector<object> ret_objects;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                ret_objects.push_back(object(ret[i].rv_data));
+            return ret_objects;
+        }
+
+        void set_vector_dir(const object & obj_, const vector3 & vec_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);
+        }
+
+        void set_velocity(const object & obj_, const vector3 & vel_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__setvelocity__object__array__ret__nothing, obj_, vel_);
+        }
+
+        object create_vehicle_local(const std::string & type_, const vector3 & pos_atl_)
+        {
+            return object(host::functions.invoke_raw_binary(__sqf::binary__createvehiclelocal__string__array__ret__object, type_, pos_atl_));
+        }
+
         void draw_rectangle(const control & ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color & color_, const std::string & fill_texture_)
         {
             game_value args({

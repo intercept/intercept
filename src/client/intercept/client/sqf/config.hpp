@@ -20,6 +20,20 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        class config_entry {
+        public:
+            config_entry();
+            config_entry(types::config entry_);
+            config_entry(config_entry const &copy_);
+            config_entry(config_entry &&move_);
+            config_entry & operator=(const config_entry &copy_);
+            config_entry & operator=(config_entry &&move_);
+            config_entry operator>>(const std::string &entry_);
 
+            operator config &();
+        protected:
+            types::config _config_entry;
+            bool _initialized;
+        };
     }
 }

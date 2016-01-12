@@ -19,6 +19,31 @@ using namespace intercept::types;
 
 namespace intercept {
 
+    template<typename DurationT = double>
+    class stopwatch
+    {
+    private:
+        LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+        LARGE_INTEGER Frequency;
+    public:
+        stopwatch() { start(); }
+        void start() {
+            QueryPerformanceFrequency(&Frequency);
+            QueryPerformanceCounter(&StartingTime);
+        }
+        DurationT stop() {
+            QueryPerformanceCounter(&EndingTime);
+            return elapsed();
+        }
+        DurationT elapsed() {
+            ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+
+            ElapsedMicroseconds.QuadPart *= 1000000000;
+            ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+            return ((double)ElapsedMicroseconds.QuadPart) / 1000.0;
+        }
+    };
+
     namespace client_function_defs {
         /*!
         @brief Invokes a raw nular SQF function from a nular function pointer.

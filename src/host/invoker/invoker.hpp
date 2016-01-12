@@ -249,6 +249,8 @@ namespace intercept {
         void unlock();
 
         static game_data_string_pool<> string_pool;
+        static uintptr_t sqf_game_state;
+        static char *sqf_this;
     protected:
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.

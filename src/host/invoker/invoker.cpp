@@ -33,6 +33,8 @@ namespace intercept {
     }
 
     unary_function invoker::_register_hook_trampoline = NULL;
+    uintptr_t invoker::sqf_game_state = NULL;
+    char * invoker::sqf_this = NULL;
 
     invoker::invoker() : _attached(false), _patched(false), _delete_index(0)
     {
@@ -335,7 +337,9 @@ namespace intercept {
         LOG(INFO) << "Registration Hook Function Called: " << invoker::get()._registration_type;
         auto step = invoker::get()._registration_type;
         invoker::get()._sqf_game_state = sqf_game_state_;
+        sqf_game_state = sqf_game_state_;
         invoker::get()._sqf_this = sqf_this_;
+        sqf_this = sqf_this_;
 
         std::pair<value_type, value_type> gv_structure;
 

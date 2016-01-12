@@ -10,7 +10,16 @@ namespace intercept {
 
         rv_game_value invoke_raw_nular_nolock(nular_function function_)
         {
-            return intercept::invoker::get().invoke_raw_nolock(function_);
+            //@TODO: Yea, there should be some sort of transparent indirection (as in it compiles out the function call) to the invoker,
+            //but for right now there is not, so this will have to do.
+            //stopwatch<> timer;
+            uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state);
+            //double time = timer.stop();
+            //LOG(INFO) << "Raw nular call time: " << time << " microseconds.";
+            rv_game_value ret;
+            ret.__vptr = *(uintptr_t *)ret_ptr;
+            ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            return ret;
         }
 
         rv_game_value invoke_raw_unary(unary_function function_, const game_value &right_arg_) {
@@ -19,7 +28,16 @@ namespace intercept {
 
         rv_game_value invoke_raw_unary_nolock(unary_function function_, const game_value & right_arg_)
         {
-            return intercept::invoker::get().invoke_raw_nolock(function_, &right_arg_);
+            //@TODO: Yea, there should be some sort of transparent indirection (as in it compiles out the function call) to the invoker,
+            //but for right now there is not, so this will have to do.
+            //stopwatch<> timer;
+            uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&right_arg_);
+            //double time = timer.stop();
+            //LOG(INFO) << "Raw unary call time: " << time << " microseconds.";
+            rv_game_value ret;
+            ret.__vptr = *(uintptr_t *)ret_ptr;
+            ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            return ret;
         }
 
         rv_game_value invoke_raw_binary(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
@@ -28,7 +46,16 @@ namespace intercept {
 
         rv_game_value invoke_raw_binary_nolock(binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
         {
-            return intercept::invoker::get().invoke_raw_nolock(function_, &left_arg_, &right_arg_);
+            //@TODO: Yea, there should be some sort of transparent indirection (as in it compiles out the function call) to the invoker,
+            //but for right now there is not, so this will have to do.
+            //stopwatch<> timer;
+            uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&left_arg_, (uintptr_t)&right_arg_);
+            //double time = timer.stop();
+            //LOG(INFO) << "Raw binary call time: " << time << " microseconds.";
+            rv_game_value ret;
+            ret.__vptr = *(uintptr_t *)ret_ptr;
+            ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            return ret;
         }
 
         void get_type_structure(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_) {

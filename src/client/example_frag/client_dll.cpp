@@ -56,8 +56,7 @@ void __cdecl intercept::fired(
     float test_val = sqf::get_number(test);
     LOG(DEBUG) << "HIT: " << test_val;
     */
-    example::shot new_shot(projectile_, ammo_);
-    tracker.add(new_shot);
+    tracker.add_shot(projectile_, ammo_);
 }
 
 

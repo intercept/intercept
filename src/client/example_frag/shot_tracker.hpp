@@ -10,7 +10,7 @@ namespace intercept {
             shot();
             shot(types::object &ammo_object_, std::string &type_);
             ~shot();
-            void on_frame();
+            bool on_frame();
             void on_destroy();
 
             static void on_frame_setup();

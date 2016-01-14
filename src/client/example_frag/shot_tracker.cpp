@@ -16,11 +16,15 @@ namespace intercept {
         {
             sqf::config_entry ammo_reader;
             air_friction = sqf::get_number(ammo_reader >> "CfgAmmo" >> type >> "airFriction");
+            if (air_friction > 0.0f) {
+                air_friction = std::pow(air_friction, 5.0f);
+                air_friction *= -1;
+            }
         }
         shot::~shot()
         {
         }
-        void shot::on_frame()
+        bool shot::on_frame()
         {
             /*
                 _trueVelocity = _bulletVelocity vectorDiff ACE_wind;
@@ -36,7 +40,8 @@ namespace intercept {
             */
             vector3 bullet_velocity = sqf::velocity(ammo_object);
             float bullet_speed = bullet_velocity.magnitude();
-
+            if (bullet_speed < 25.0f)
+                return false;
             vector3 true_velocity = bullet_velocity - _wind_dir;
             float true_speed = true_velocity.magnitude();
 
@@ -49,6 +54,7 @@ namespace intercept {
             bullet_velocity = bullet_velocity + accel;
 
             sqf::set_velocity(ammo_object, bullet_velocity);
+            return true;
         }
         void shot::on_destroy()
         {
@@ -82,8 +88,10 @@ namespace intercept {
                     _shots.erase(shot++);
                 }
                 else {
-                    shot->on_frame();
-                    shot++;
+                    if(!shot->on_frame())
+                        _shots.erase(shot++);
+                    else
+                        shot++;
                 }
             }
         }

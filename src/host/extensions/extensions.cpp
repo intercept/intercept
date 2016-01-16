@@ -64,7 +64,53 @@ namespace intercept {
         new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
         new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
         new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
-        new_module.functions.fired = (module::fired_func)GetProcAddress(dllHandle, "fired");
+
+#define EH_PROC_DEF(x) new_module.eventhandlers.##x = (module::##x##_func)GetProcAddress(dllHandle, #x)
+
+        EH_PROC_DEF(anim_changed);
+        EH_PROC_DEF(anim_done);
+        EH_PROC_DEF(anim_state_changed);
+        EH_PROC_DEF(container_closed);
+        EH_PROC_DEF(controls_shifted);
+        EH_PROC_DEF(dammaged);
+        EH_PROC_DEF(engine);
+        EH_PROC_DEF(epe_contact);
+        EH_PROC_DEF(epe_contact_end);
+        EH_PROC_DEF(epe_contact_start);
+        EH_PROC_DEF(explosion);
+        EH_PROC_DEF(fired);
+        EH_PROC_DEF(fired_near);
+        EH_PROC_DEF(fuel);
+        EH_PROC_DEF(gear);
+        EH_PROC_DEF(get_in);
+        EH_PROC_DEF(get_out);
+        EH_PROC_DEF(handle_damage);
+        EH_PROC_DEF(handle_heal);
+        EH_PROC_DEF(handle_rating);
+        EH_PROC_DEF(handle_score);
+        EH_PROC_DEF(hit);
+        EH_PROC_DEF(hit_part);
+        EH_PROC_DEF(init);
+        EH_PROC_DEF(incoming_missile);
+        EH_PROC_DEF(inventory_closed);
+        EH_PROC_DEF(inventory_opened);
+        EH_PROC_DEF(killed);
+        EH_PROC_DEF(landed_touch_down);
+        EH_PROC_DEF(landed_stopped);
+        EH_PROC_DEF(local);
+        EH_PROC_DEF(post_reset);
+        EH_PROC_DEF(put);
+        EH_PROC_DEF(respawn);
+        EH_PROC_DEF(rope_attach);
+        EH_PROC_DEF(rope_break);
+        EH_PROC_DEF(seat_switched);
+        EH_PROC_DEF(sound_played);
+        EH_PROC_DEF(take);
+        EH_PROC_DEF(task_set_as_current);
+        EH_PROC_DEF(weapon_assembled);
+        EH_PROC_DEF(weapon_disassembled);
+        EH_PROC_DEF(weapon_deployed);
+        EH_PROC_DEF(weapon_rested);
 
 
         if (!new_module.functions.api_version) {

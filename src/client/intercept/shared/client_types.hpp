@@ -10,6 +10,7 @@ namespace intercept {
         public:
             internal_object();
             internal_object(const rv_game_value &value_);
+            internal_object(const game_value &value_);
             internal_object(const internal_object &copy_);
             internal_object(internal_object &&move_);
             internal_object & operator = (internal_object &&move_);
@@ -29,6 +30,7 @@ namespace intercept {
             public:\
                 type##();\
                 type##(const rv_game_value &value_);\
+                type##(const game_value &value_);\
                 type##(const type &copy_);\
                 type##(type &&move_);\
                 type & operator = (type &&move_);\

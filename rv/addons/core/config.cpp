@@ -1,18 +1,12 @@
 //config.cpp
 class CfgPatches {
-	class Intercept {
+	class Intercept_Core {
 		units[] = {""};
 		weapons[] = {};
 		requiredVersion = 0.1;
 		requiredAddons[] = {};
 		version = 0.1;
 	};
-};
-
-class InterceptBlank {
-    class InterceptDummy {
-        val = 1;
-    };
 };
 
 class CfgFunctions

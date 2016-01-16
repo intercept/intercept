@@ -7,6 +7,10 @@ namespace intercept {
 
         internal_object::internal_object() {}
         internal_object::internal_object(const rv_game_value &value_) : game_value(value_) {}
+        internal_object::internal_object(const game_value & value_) : game_value(value_.rv_data)
+        {
+
+        }
         internal_object::internal_object(const internal_object & copy_)
         {
             copy(copy_);
@@ -68,6 +72,7 @@ namespace intercept {
 
 #define RV_GENERIC_OBJECT_DEF(type)         type##::##type##() {}\
         type##::##type##(const rv_game_value &value_) : internal_object(value_) {}\
+        type##::##type##(const game_value & value_) : internal_object(value_.rv_data) {}\
         type##::##type##(const type &copy_) {\
             copy(copy_);\
         }\

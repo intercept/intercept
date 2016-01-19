@@ -55,32 +55,7 @@ namespace intercept {
             //!@}
         };
 
-        struct hit_part_ammo {
-            float hit;
-            float indirect_hit;
-            float indirect_hit_range;
-            float explosive;
-        };
 
-        struct hit_part_impulse {
-
-        };
-
-        struct hit_part_data {
-            object target;
-            object shooter;
-            object bullet;
-            vector3 position;
-            vector3 velocity;
-            std::vector<std::string> selections;
-            std::string ammo_type;
-            hit_part_ammo ammo_data;
-            hit_part_impulse impulse_data;
-            vector3 direction;
-            float radius;
-            std::string surface;
-            bool direct;
-        };
 
 #define EH(x) typedef void(__cdecl *##x##_func)
         

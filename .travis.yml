@@ -10,7 +10,6 @@ before_script:
 script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then python3 tools/deploy.py; fi
-- python3 tools/sqf_wrapper_validation.py
 notifications:
   email:
     on_success: never

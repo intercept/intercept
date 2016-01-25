@@ -4654,6 +4654,7 @@ namespace intercept {
 
 		void hint_c(const std::string& value0_, const std::string& value1_) {
 			host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__text__ret__nothing, value0_, value1_);
+            //binary__hintc__string__string__ret__nothing
 		}
 
 		void html_load(const control &value0_, const std::string& value1_) {

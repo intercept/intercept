@@ -546,6 +546,10 @@ namespace intercept {
 			return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
 		}
 
+        void delete_location(const location &loc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__deletelocation__location__ret__nothing, loc_);
+        }
+
 		object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/)
 		{
 			std::vector<game_value> markers;
@@ -3025,6 +3029,10 @@ namespace intercept {
 		float direction(const object &value_) {
 			return __helpers::__number_unary_object(client::__sqf::unary__direction__object__ret__scalar, value_);
 		}
+
+        float direction(const location &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__direction__location__ret__scalar, value_);
+        }
 
 		void disable_remote_sensors(bool value_) {
 			__helpers::__empty_unary_bool(client::__sqf::unary__disableremotesensors__bool__ret__nothing, value_);
@@ -5993,6 +6001,17 @@ namespace intercept {
             return ret_objects;
         }
 
+        void hint(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hint__text_string__ret__nothing, text_);
+        }
+
+        void hint_cadet(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hintcadet__text_string__ret__nothing, text_);
+        }
+
+        void hint_silent(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hintsilent__text_string__ret__nothing, text_);
+        }
 
 	}
 }

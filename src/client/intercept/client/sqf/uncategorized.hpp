@@ -164,6 +164,7 @@ namespace intercept {
 		location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
 		location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_);
 		location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
+        void delete_location(const location &loc_);
 
 		/* potential namespace: ai, group, unit */
 		std::string combat_mode(const group &loc_);
@@ -1394,6 +1395,7 @@ namespace intercept {
 		bool did_jipowner(const object &value_);
 		bool difficulty_enabled(const std::string &value_);
 		float direction(const object &value_);
+        float direction(const location &value_);
 		void disable_remote_sensors(bool value_);
 		void disable_user_input(bool value_);
 		void dissolve_team(const std::string &value_);
@@ -2025,5 +2027,9 @@ namespace intercept {
         std::vector<object> near_objects(const object &object_, const float &radius_);
         std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_);
         std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_);
+
+        void hint(const std::string &text_);
+        void hint_cadet(const std::string &text_);
+        void hint_silent(const std::string &text_);
 	}
 }

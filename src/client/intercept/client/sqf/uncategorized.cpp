@@ -3670,6 +3670,10 @@ namespace intercept {
 			return __helpers::__object_unary_object(client::__sqf::unary__nearestbuilding__object__ret__object, value_);
 		}
 
+        object nearest_building(const vector3 &value_) {
+            return object(host::functions.invoke_raw_unary(client::__sqf::unary__nearestbuilding__array__ret__object, value_));
+        }
+
 		float need_reload(const object &value_) {
 			return __helpers::__number_unary_object(client::__sqf::unary__needreload__object__ret__scalar, value_);
 		}
@@ -5927,8 +5931,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__timemultiplier__ret__scalar);
         }
 
-        float date_to_number(game_date date_)
-        {
+        float date_to_number(game_date date_) {
             //game_value date_array({
             //	(date_.year),
             //	(date_.month),
@@ -5938,6 +5941,56 @@ namespace intercept {
             //})
 
             throw 713; // TODO reimplement day_to_number
+        }
+
+        std::vector<object> near_objects(const vector3 &pos_, const float &radius_) {
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, radius_);
+
+            std::vector<object> ret_objects;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                ret_objects.push_back(object(ret[i].rv_data));
+
+            return ret_objects;
+        }
+
+        std::vector<object> near_objects(const object &object_, const float &radius_) {
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, radius_);
+
+            std::vector<object> ret_objects;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                ret_objects.push_back(object(ret[i].rv_data));
+
+            return ret_objects;
+        }
+
+        std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_) {
+            game_value args(std::vector<game_value>{
+                type_,
+                radius_
+            });
+
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args);
+
+            std::vector<object> ret_objects;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                ret_objects.push_back(object(ret[i].rv_data));
+
+            return ret_objects;
+        }
+
+        std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_) {
+            game_value args(std::vector<game_value>{
+                type_,
+                radius_
+            });
+
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, args);
+
+            std::vector<object> ret_objects;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                ret_objects.push_back(object(ret[i].rv_data));
+
+            return ret_objects;
         }
 
 

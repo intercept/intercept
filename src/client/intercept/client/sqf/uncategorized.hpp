@@ -1566,6 +1566,7 @@ namespace intercept {
 		std::string name(const object &value_);
 		std::string name_sound(const object &value_);
 		object nearest_building(const object &value_);
+        object nearest_building(const vector3 &value_);
 		float need_reload(const object &value_);
 		std::string net_id(const object &value_);
 		std::string net_id(const group &value_);
@@ -2019,5 +2020,10 @@ namespace intercept {
 		std::string task_state(task value_);
 		void terminate(script value_);
 		std::string type(task value_);
+
+        std::vector<object> near_objects(const vector3 &pos_, const float &radius_);
+        std::vector<object> near_objects(const object &object_, const float &radius_);
+        std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_);
+        std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_);
 	}
 }

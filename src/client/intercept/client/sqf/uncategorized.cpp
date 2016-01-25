@@ -59,9 +59,9 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_));
         }
 
-        rv_game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_)
+        game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_)
         {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_);
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_));
         }
 
         vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_)

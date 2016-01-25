@@ -8,8 +8,8 @@ _res = "intercept" callExtension format["init_patch:%1", (productVersion select 
     // diag_log text format["Found: %1", _res];
     // ceil 9.5; // this did our patch... probably. :)
     // _res = "intercept" callExtension "remove_patch:"; // clear the patch
-    
-    
+
+
     "intercept" callExtension "invoker_begin_register:";
     "intercept" callExtension "invoker_register:delete_ptr";
     str [1,2,3];
@@ -48,5 +48,6 @@ _res = "intercept" callExtension format["init_patch:%1", (productVersion select 
     str parsingNamespace;
     "intercept" callExtension "invoker_end_register:";
 // };
-"intercept" callExtension "load_extension:z\intercept\build\win32\example_frag\RelWithDebInfo\example_frag.dll";
+//"intercept" callExtension "load_extension:z\intercept\build\win32\example_frag\RelWithDebInfo\example_frag.dll";
 diag_log text format["_________________________________________Intercept Res: %1", _res];
+intercept_core_enabled = true;

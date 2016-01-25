@@ -75,7 +75,7 @@ namespace intercept {
         vector3 vector_dir_visual(const object & obj_);
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
-        rv_game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -94,7 +94,7 @@ namespace intercept {
         object create_vehicle_local(const std::string &type_, const vector3 &pos_atl_);
 
         void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, const std::string &fill_texture_);
-        
+
         //@TODO: draw_icon could stand to have a few enums probably for arguments like shadow and align.
         void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const vector2 &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);
         void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const object &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);

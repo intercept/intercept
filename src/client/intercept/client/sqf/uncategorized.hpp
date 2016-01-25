@@ -122,6 +122,10 @@ namespace intercept {
 		/* potential namespace: items, inventory, campaign */
 		void add_item_pool(const std::string &item_name_, int item_count_);
 		void add_magazine_pool(const std::string &mag_name_, int mag_count_);
+        void add_backpack_cargo(const object &vehicle_, const std::string &packClassName_, int count_);
+        void add_backpack_cargo_global(const object &vehicle_, const std::string &packClassName_, int count_);
+        void add_item_cargo(const object &object_, const std::string &item_, int count_);
+        void add_item_cargo_global(const object &object_, const std::string &item_, int count_);
 
 		/* potential namespace: core, misc, world */
 		void add_to_remains_collector(std::vector<object> objects_);
@@ -140,6 +144,8 @@ namespace intercept {
 		object attached_object(const location &loc_);
 		std::vector<object> attached_objects(const object &obj_);
 		object attached_to(const object &obj_);
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
 
 		/* potential namespace: ai */
 		bool attack_enabled(const object &unit_);
@@ -190,6 +196,9 @@ namespace intercept {
 
 		/* potential namespace: misc */
 		void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
+		void action(const object &unit_, const std::vector<game_value> &action_array_);
+        float add_event_handler(const object &object_, const std::string &type_, const game_data_code &command_);
+        float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 
 		/* potential namespace: vehicle */
 		std::vector<object> crew(object _veh);
@@ -205,6 +214,9 @@ namespace intercept {
 		void cut_rsc(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
 		void cut_text(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
 		void enable_debriefing_stats(float left_, float top_, float width_, float height_);
+        //TODO: arguments default value is nil
+        float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
+        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
 
 		/* potential namespace: misc */
 		void enable_saving(bool enable_);
@@ -506,6 +518,11 @@ namespace intercept {
 		void set_curator_camera_area_ceiling(const object &value0_, float value1_);
 		void set_curator_editing_area_type(const object &value0_, bool value1_);
 		void set_curator_waypoint_cost(const object &value0_, float value1_);
+        void add_curator_addons(const object &curator_object_, const std::vector<std::string> &addons_);
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
+        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
+        void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
 
 		std::vector<std::string> curator_addons(const object &curator_module_);
 		std::vector<object> curator_editable_objects(const object &curator_module_);

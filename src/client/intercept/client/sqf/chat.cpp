@@ -2,6 +2,6 @@
 #include "client\pointers.hpp"
 
 namespace intercept {
-	namespace sqf {
+    namespace sqf {
     }
 }

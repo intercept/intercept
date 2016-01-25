@@ -20,11 +20,11 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-		/*
-		getPosASLVisual
-		getPosATLVisual
-		getPosVisual
-		*/
+        /*
+        getPosASLVisual
+        getPosATLVisual
+        getPosVisual
+        */
 
     }
 }

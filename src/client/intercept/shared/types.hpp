@@ -179,12 +179,14 @@ namespace intercept {
             operator float();
             operator bool();
             operator std::string();
+            operator rv_string();
             operator rv_game_value *();
             operator vector3();
             operator vector2();
             operator float() const;
             operator bool() const;
             operator std::string() const;
+            operator rv_string() const;
             operator vector3() const;
             operator vector2() const;
 

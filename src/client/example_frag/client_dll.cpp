@@ -43,11 +43,11 @@ void __cdecl intercept::mission_stopped() {
 
 void __cdecl intercept::fired(
     object &unit_,
-    std::string &weapon_,
-    std::string &muzzle_,
-    std::string &mode_,
-    std::string &ammo_,
-    std::string &magazine_,
+    rv_string &weapon_,
+    rv_string &muzzle_,
+    rv_string &mode_,
+    rv_string &ammo_,
+    rv_string &magazine_,
     object &projectile_) 
 {
     /*
@@ -56,7 +56,7 @@ void __cdecl intercept::fired(
     float test_val = sqf::get_number(test);
     LOG(DEBUG) << "HIT: " << test_val;
     */
-    tracker.add_shot(projectile_, ammo_);
+    tracker.add_shot(projectile_, ammo_.string());
 }
 
 

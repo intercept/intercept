@@ -614,6 +614,13 @@ namespace intercept {
             return false;
         }
 
+        game_value::operator rv_string()
+        {
+            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                return *((game_data_string *)rv_data.data)->raw_string;
+            return rv_string();
+        }
+
         game_value::operator rv_game_value *()
         {
             return &rv_data;
@@ -652,6 +659,13 @@ namespace intercept {
             if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
                 return ((game_data_bool *)rv_data.data)->val;
             return false;
+        }
+
+        game_value::operator rv_string() const
+        {
+            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                return *((game_data_string *)rv_data.data)->raw_string;
+            return rv_string();
         }
 
         game_value::operator vector3() const

@@ -1167,7 +1167,6 @@ namespace intercept {
 
         float date_to_number(game_date date_);
 
-
         float acc_time();
         object agent(const team_member &value_);
         std::vector<std::string> activated_addons();

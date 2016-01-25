@@ -58,10 +58,11 @@ namespace intercept {
         public:
             rv_list() : _length(0), _data(nullptr) {};
             rv_list(size_t _init_length) : _length(_init_length) {
-                T *_data = new T[_init_length];
+                _data = new T[_init_length];
             }
 
             rv_list(const rv_list<T> &copy_) {
+                _data = new T[copy_.length];
                 memcpy(_data, copy_._data, sizeof(T)*copy_._length);
                 _length = copy_._length;
             }
@@ -81,6 +82,7 @@ namespace intercept {
             }
 
             rv_list<T> & operator= (const rv_list<T> &copy_) {
+                _data = new T[copy_.length];
                 memcpy(_data, copy_._data, sizeof(T)*copy_._length);
                 _length = copy_._length;
                 return *this;

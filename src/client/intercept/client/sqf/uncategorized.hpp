@@ -196,7 +196,7 @@ namespace intercept {
 
 		/* potential namespace: misc */
 		void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
-		void action(const object &unit_, const std::vector<game_value> &action_array_);
+        void action(const object &unit_, const std::vector<game_value> &action_array_);
         float add_event_handler(const object &object_, const std::string &type_, const game_data_code &command_);
         float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 

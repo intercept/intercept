@@ -286,6 +286,42 @@ namespace intercept {
 			host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
 		}
 
+        void add_backpack_cargo(const object & vehicle_, const std::string & packClassName_, int count_) {
+            std::vector<game_value> args{
+                packClassName_,
+                (float)count_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackcargo__object__array__ret__nothing, vehicle_, args);
+        }
+
+        void add_backpack_cargo_global(const object & vehicle_, const std::string & packClassName_, int count_) {
+            std::vector<game_value> args{
+                packClassName_,
+                (float)count_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackcargoglobal__object__array__ret__nothing, vehicle_, args);
+        }
+
+        void add_item_cargo(const object & object_, const std::string & item_, int count_) {
+            std::vector<game_value> args{
+                item_,
+                (float)count_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__additemcargo__object__array__ret__nothing, object_, args);
+        }
+
+        void add_item_cargo_global(const object & object_, const std::string & item_, int count_) {
+            std::vector<game_value> args{
+                item_,
+                (float)count_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__additemcargoglobal__object__array__ret__nothing, object_, args);
+        }
+
 		void add_to_remains_collector(std::vector<object> objects_)
 		{
             std::vector<game_value> objects;
@@ -334,6 +370,23 @@ namespace intercept {
 		{
 			return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedto__object__ret__array, obj_));
 		}
+
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_) {
+            std::vector<game_value> args{
+                object2_,
+                offset_,
+                memPoint_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
+        }
+
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_) {
+            std::vector<game_value> args{
+                object2_,
+                offset_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
+        }
 
 		bool attack_enabled(const object &unit_)
 		{
@@ -511,6 +564,28 @@ namespace intercept {
 			host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
 		}
 
+        void action(const object & unit_, const std::vector<game_value>& action_array_) {
+            host::functions.invoke_raw_binary(__sqf::binary__action__object__array__ret__nothing, unit_, action_array_);
+        }
+
+        float add_event_handler(const object & object_, const std::string & type_, const game_data_code & command_) {
+            std::vector<game_value> args{
+                type_,
+                game_value(command_.code_string)
+            };
+            
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args));
+        }
+
+        float add_event_handler(const object & object_, const std::string & type_, const std::string & command_) {
+            std::vector<game_value> args{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args));
+        }
+
 		location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_)
 		{
 			game_value params({
@@ -681,6 +756,36 @@ namespace intercept {
 			//});
 
 			//host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, args);
+		}
+
+        float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
+            std::vector<game_value> args{
+                title_,
+                script_,
+                arguments_,
+                priority_,
+                show_window_,
+                hide_on_use_,
+                shortcut_,
+                condition_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args));
+		}
+
+        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
+            std::vector<game_value> args{
+                title_,
+                game_value(script_.code_string),
+                arguments_,
+                priority_,
+                show_window_,
+                hide_on_use_,
+                shortcut_,
+                condition_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args));
 		}
 
 		void enable_saving(bool enable_)
@@ -1934,6 +2039,57 @@ namespace intercept {
 		void set_curator_waypoint_cost(const object &value1_, float value0_) {
 			host::functions.invoke_raw_binary(client::__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, value0_, value1_);
 		}
+
+        void add_curator_addons(const object & curator_object_, const std::vector<std::string>& addons_) {  
+            std::vector<game_value> addons;
+            for (std::string addon : addons_) {
+                addons.push_back(game_value(addon));
+            }
+            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, addons);
+        }
+
+        void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector2 & position_, float radius_) {
+            std::vector<game_value> args{
+                (float)camera_area_id_,
+                position_,
+                radius_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
+        }
+
+        void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector3 & position_, float radius_) {
+            std::vector<game_value> args{
+                (float)camera_area_id_,
+                position_,
+                radius_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
+        }
+
+        void add_curator_editable_object(const object & curator_object_, const std::vector<object>& objects_, bool add_crew_) {
+            std::vector<game_value> objects;
+            for (object cobject : objects_) {
+                objects.push_back(game_value(cobject));
+            }
+            std::vector<game_value> args{
+                objects,
+                add_crew_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratoreditableobjects__object__array__ret__nothing, curator_object_, args);
+        }
+
+        void add_curator_editing_area(const object & curator_object_, int edit_area_id_, const vector2 & position_, float radius_) {
+            std::vector<game_value> args{
+                (float)edit_area_id_,
+                position_,
+                radius_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addcuratoreditingarea__object__array__ret__nothing, curator_object_, args);
+        }
 
 		std::vector<std::string> curator_addons(const object &curator_module_)
 		{

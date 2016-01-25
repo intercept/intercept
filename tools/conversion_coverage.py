@@ -47,7 +47,7 @@ def parse():
     duplicate_unary_functions_loc = []
     duplicate_binary_functions_loc = []
     duplicate_nular_functions_loc = []
-    
+
     unary_functions_cpy = list(unary_functions)
     binary_functions_cpy = list(binary_functions)
     nular_functions_cpy = list(nular_functions)
@@ -117,30 +117,30 @@ def parse():
     print("### Unary Functions")
     index = 0
     for function in unary_functions_used: # Output any unary functions completed
-        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, unary_functions_found_at[index][0], unary_functions_found_at[index][1]))
+        print("- [x] [{}](/blob/master/{}#L{})".format(function, unary_functions_found_at[index][0], unary_functions_found_at[index][1]))
         index+=1
     print("\n----")
 
     print("### Binary Functions")
     index = 0
     for function in binary_functions_used: # Output any binary functions completed
-        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
+        print("- [x] [{}](/blob/master/{}#L{})".format(function, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
         index+=1
     print("\n----")
 
     print("### Nular Functions")
     index = 0
     for function in nular_functions_used: # Output any nular functions completed
-        print("- [x] [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, nular_functions_found_at[index][0], nular_functions_found_at[index][1]))
+        print("- [x] [{}](/blob/master/{}#L{})".format(function, nular_functions_found_at[index][0], nular_functions_found_at[index][1]))
         index+=1
     print("\n----")
-    
+
     print("## DUPLICATE INVOKE WARNINGS:")
     print("### Unary Functions")
     index = 0
     if (len(duplicate_unary_functions) != 0):
         for function in duplicate_unary_functions: # Output any unary functions completed
-            print("- [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, duplicate_unary_functions_loc[index][0], duplicate_unary_functions_loc[index][1]))
+            print("- [{}](/blob/master/{}#L{})".format(function, duplicate_unary_functions_loc[index][0], duplicate_unary_functions_loc[index][1]))
             index+=1
     else:
         print("None :)\n")
@@ -150,7 +150,7 @@ def parse():
     index = 0
     if (len(duplicate_binary_functions) != 0):
         for function in duplicate_binary_functions: # Output any binary functions completed
-            print("- [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, duplicate_binary_functions_loc[index][0], duplicate_binary_functions_loc[index][1]))
+            print("- [{}](/blob/master/{}#L{})".format(function, duplicate_binary_functions_loc[index][0], duplicate_binary_functions_loc[index][1]))
             index+=1
     else:
         print("None :)\n")
@@ -160,12 +160,12 @@ def parse():
     index = 0
     if (len(duplicate_nular_functions) != 0):
         for function in duplicate_nular_functions: # Output any nular functions completed
-            print("- [{}](https://github.com/NouberNou/intercept/blob/master/{}#L{})".format(function, duplicate_nular_functions_loc[index][0], duplicate_nular_functions_loc[index][1]))
+            print("- [{}](/blob/master/{}#L{})".format(function, duplicate_nular_functions_loc[index][0], duplicate_nular_functions_loc[index][1]))
             index+=1
     else:
         print("None :)\n")
     print("\n----")
-                                          
+
 
     return [unary_functions_used, binary_functions_used, nular_functions_used]
 

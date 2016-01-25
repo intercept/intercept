@@ -3182,6 +3182,10 @@ namespace intercept {
             return __helpers::__number_unary_object(client::__sqf::unary__direction__object__ret__scalar, value_);
         }
 
+        float direction(const location &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__direction__location__ret__scalar, value_);
+        }
+
         void disable_remote_sensors(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__disableremotesensors__bool__ret__nothing, value_);
         }
@@ -4802,6 +4806,7 @@ namespace intercept {
 
         void hint_c(const std::string& value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__text__ret__nothing, value0_, value1_);
+            //binary__hintc__string__string__ret__nothing
         }
 
         void html_load(const control &value0_, const std::string& value1_) {
@@ -6149,6 +6154,17 @@ namespace intercept {
             return ret_objects;
         }
 
+        void hint(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hint__text_string__ret__nothing, text_);
+        }
+
+        void hint_cadet(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hintcadet__text_string__ret__nothing, text_);
+        }
+
+        void hint_silent(const std::string &text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__hintsilent__text_string__ret__nothing, text_);
+        }
 
     }
 }

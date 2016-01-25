@@ -2042,5 +2042,9 @@ namespace intercept {
         std::vector<object> near_objects(const object &object_, const float &radius_);
         std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_);
         std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_);
+
+        void hint(const std::string &text_);
+        void hint_cadet(const std::string &text_);
+        void hint_silent(const std::string &text_);
     }
 }

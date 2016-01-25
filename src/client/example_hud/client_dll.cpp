@@ -143,7 +143,7 @@ void draw_hud() {
     if (!is_ok)
         return;
 
-    
+
     //_infinitePosHudCanvas = _ctrlMap ctrlMapScreenToWorld _infinitePosScreen;
     vector2 infinite_pos_hud_canvas = sqf::ctrl_map_screen_to_world(ctrl_map, infinite_pos_screen);
 
@@ -174,7 +174,7 @@ void draw_hud() {
     //_negHalfHeight = _height*-0.5;
     float neg_half_width = width * -0.5f;
     float neg_half_height = height * -0.5f;
-    
+
 
     //_offset = _infinitePosHudCanvas;
     vector2 offset = infinite_pos_hud_canvas;
@@ -355,7 +355,7 @@ vector2 world_to_hud_constrained(const control &map_, const vector3 &world_pos_)
         vector2 hp = sqf::ctrl_map_screen_to_world(map_, wp);
         //_diff = _hp vectorDiff GVAR(hudPos);
         vector2 diff = hp - ace_hud_pos;
-        
+
         //[((_diff select 0) / (GVAR(hudSize) select 0)) max 0 min 1, ((_diff select 1) / (GVAR(hudSize) select 1)) max 0 min 1];
         return vector2(clamp(diff.x / ace_hud_size.x, 0.0f, 1.0f), clamp(diff.y / ace_hud_size.y, 0.0f, 1.0f));
     }
@@ -389,7 +389,7 @@ void calculate_hud() {
 
     //_center = _mLl vectorAdd((_mUr vectorDiff _mLl) vectorMultiply 0.5);
     vector3 center = m_ll + ((m_ur - m_ll) * 0.5f);
-    
+
     //_vehiclePos = getPosASL _vehicle; //ATLtoASL (_vehicle modelToWorldVisual _center);
     vector3 vehicle_pos = sqf::get_pos_asl(vehicle);
 
@@ -914,12 +914,12 @@ void __cdecl intercept::mission_stopped() {
 
 void __cdecl intercept::fired(
     object &unit_,
-    std::string &weapon_,
-    std::string &muzzle_,
-    std::string &mode_,
-    std::string &ammo_,
-    std::string &magazine,
-    object &projectile_) 
+    rv_string &weapon_,
+    rv_string &muzzle_,
+    rv_string &mode_,
+    rv_string &ammo_,
+    rv_string &magazine,
+    object &projectile_)
 {
 }
 

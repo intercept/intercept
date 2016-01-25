@@ -94,7 +94,7 @@ namespace intercept {
         object create_vehicle_local(const std::string &type_, const vector3 &pos_atl_);
 
         void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, const std::string &fill_texture_);
-        
+
         //@TODO: draw_icon could stand to have a few enums probably for arguments like shadow and align.
         void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const vector2 &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);
         void draw_icon(const control &ctrl_, const std::string &texture_, const rv_color &color_, const object &pos_, float width_, float height_, float angle_, const std::string &text_, uint32_t shadow_, float text_size_, const std::string &font_, const std::string &align_);
@@ -1566,6 +1566,7 @@ namespace intercept {
 		std::string name(const object &value_);
 		std::string name_sound(const object &value_);
 		object nearest_building(const object &value_);
+        object nearest_building(const vector3 &value_);
 		float need_reload(const object &value_);
 		std::string net_id(const object &value_);
 		std::string net_id(const group &value_);
@@ -2019,5 +2020,10 @@ namespace intercept {
 		std::string task_state(task value_);
 		void terminate(script value_);
 		std::string type(task value_);
+
+        std::vector<object> near_objects(const vector3 &pos_, const float &radius_);
+        std::vector<object> near_objects(const object &object_, const float &radius_);
+        std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_);
+        std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_);
 	}
 }

@@ -1584,7 +1584,6 @@ namespace intercept {
         std::string name(const object &value_);
         std::string name_sound(const object &value_);
         object nearest_building(const object &value_);
->>>>>>> master
         object nearest_building(const vector3 &value_);
         float need_reload(const object &value_);
         std::string net_id(const object &value_);

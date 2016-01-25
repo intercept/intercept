@@ -3,6 +3,6 @@
 #include "common_helpers.hpp"
 
 namespace intercept {
-	namespace sqf {
-	}
+    namespace sqf {
+    }
 }

@@ -18,7 +18,7 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
-	namespace sqf {
+    namespace sqf {
 
     }
 }

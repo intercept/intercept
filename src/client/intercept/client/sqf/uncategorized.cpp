@@ -568,10 +568,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__action__object__array__ret__nothing, unit_, action_array_);
         }
 
-        float add_event_handler(const object & object_, const std::string & type_, const game_data_code & command_) {
+        float add_event_handler(const object & object_, const std::string & type_, const code & command_) {
             std::vector<game_value> args{
                 type_,
-                game_value(command_.code_string)
+                command_
             };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args));
@@ -769,10 +769,10 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args));
         }
 
-        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
+        float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
             std::vector<game_value> args{
                 title_,
-                game_value(script_.code_string),
+                script_,
                 arguments_,
                 priority_,
                 show_window_,

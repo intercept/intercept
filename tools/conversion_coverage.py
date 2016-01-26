@@ -128,7 +128,7 @@ def parse():
     for function in binary_functions_used: # Output any binary functions completed
         function_name = re.search('(?<=binary__)[a-zA-Z0-9]+', function).group(0)
         function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-        print("- [x] [{}](/noubernou/intercept/blob/master/{}#L{})".format(function, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
+        print("- [x] [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
         index+=1
     print("\n----")
 

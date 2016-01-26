@@ -10,7 +10,7 @@
  * Success <BOOL>
  *
  * Example:
- * ["example_frag", myParameters] call intercept_fnc_signal
+ * ["z\intercept\build\win32\example_frag\RelWithDebInfo\example_frag.dll", myParameters] call intercept_fnc_signal
  *
  * Public: No
  */

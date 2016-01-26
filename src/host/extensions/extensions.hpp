@@ -35,7 +35,7 @@ namespace intercept {
         typedef void(__cdecl *mission_end_func)();
         typedef void(__cdecl *mission_stopped_func)();
         typedef void(__cdecl *on_frame_func)();
-        typedef void(__cdecl *on_signal_func)(game_value& value1);
+        typedef void(__cdecl *on_signal_func)(game_value& value1_);
 
         //!@}
 

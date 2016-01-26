@@ -1,16 +1,23 @@
 branches:
   only:
   - master
-language: python
-python:
-- '3.4'
+language: cpp
+compiler:
+- gcc
+- clang
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi
+- mkdir build
+- cd build
+- cmake ..
+- cd ..
 script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then python3 tools/deploy.py; fi
 - python3 tools/sqf_wrapper_validation.py
+- cd build
+- make
 notifications:
   email:
     on_success: never

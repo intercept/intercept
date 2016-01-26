@@ -340,7 +340,7 @@ namespace intercept {
         /* Config */
         std::vector<config> config_hierarchy(const config &config_entry_);
         std::string config_name(const config &config_entry_);
-        std::vector<config> config_properties(const config &config_entry,const std::string& condition_, bool inherit);
+        std::vector<config> config_properties(const config &config_entry,const std::string& condition_ = "true", bool inherit = true);
         std::string config_source_mod(const config &config_entry_);
         std::vector<std::string> config_source_mod_list(const config &config_entry_);
         float count(const config &config_entry_);
@@ -378,7 +378,7 @@ namespace intercept {
         std::vector<object> all_units_uav();
 
         object create_vehicle(const std::string &type_, const vector3 &pos_);
-        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_);
+        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
         void delete_vehicle(const object &obj_);
 
         float server_time();

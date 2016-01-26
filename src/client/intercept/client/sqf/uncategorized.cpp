@@ -1324,7 +1324,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__configname__config__ret__string, config_entry_));
         }
 
-        std::vector<config> config_properties(const config &config_entry, const std::string& condition_ = "true", bool inherit = true) {
+        std::vector<config> config_properties(const config &config_entry, const std::string& condition_, bool inherit) {
             game_value array_entry({
                 config_entry,
                 condition_,
@@ -1430,8 +1430,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_binary(__sqf::binary__createvehicle__string__array__ret__object, type_, pos_));
         }
 
-        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE")
-        {
+        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_) {
             std::vector<game_value> markers;
             for (auto it : markers_) {
                 markers.push_back(it);

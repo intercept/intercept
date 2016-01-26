@@ -197,7 +197,7 @@ namespace intercept {
         /* potential namespace: misc */
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         void action(const object &unit_, const std::vector<game_value> &action_array_);
-        float add_event_handler(const object &object_, const std::string &type_, const game_data_code &command_);
+        float add_event_handler(const object &object_, const std::string &type_, const code &command_);
         float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 
         /* potential namespace: vehicle */
@@ -216,7 +216,7 @@ namespace intercept {
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         //TODO: arguments default value is nil
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
-        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
+        float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
 
         /* potential namespace: misc */
         void enable_saving(bool enable_);

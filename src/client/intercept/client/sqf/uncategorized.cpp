@@ -2229,7 +2229,7 @@ namespace intercept {
         vector2 get_marker_size(const std::string& value_) {
             game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkersize__string__ret__array, value_);
             return vector2(function_return_array[0], function_return_array[1]);
-            // Indentical: unary__markersize__string__ret__array
+            // Identical: unary__markersize__string__ret__array
         }
 
         std::string create_marker(const std::string &name_, const vector2 &pos_)
@@ -4808,7 +4808,7 @@ namespace intercept {
 
         void hint_c(const std::string& value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__text__ret__nothing, value0_, value1_);
-            // Indetical from intercept's side: binary__hintc__string__string__ret__nothing
+            // Identical from intercept's side: binary__hintc__string__string__ret__nothing
         }
 
         void html_load(const control &value0_, const std::string& value1_) {

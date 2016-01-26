@@ -130,12 +130,12 @@ namespace intercept {
             vector3 position;
             vector3 velocity;
             std::vector<std::string> selections;
-            std::string ammo_type;
+            rv_string ammo_type;
             hit_part_ammo ammo_data;
             hit_part_impulse impulse_data;
             vector3 direction;
             float radius;
-            std::string surface;
+            rv_string surface;
             bool direct;
         };
     }

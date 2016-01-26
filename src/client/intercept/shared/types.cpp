@@ -66,6 +66,10 @@ namespace intercept {
 
 
 
+        rv_string::rv_string() : length(0), ref_count_internal(0)
+        {
+        }
+
         std::string rv_string::string() {
             return std::string((char *)&char_string);
         }
@@ -614,11 +618,9 @@ namespace intercept {
             return false;
         }
 
-        game_value::operator rv_string()
+        game_value::operator rv_string &()
         {
-            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                return *((game_data_string *)rv_data.data)->raw_string;
-            return rv_string();
+            return *((game_data_string *)rv_data.data)->raw_string;
         }
 
         game_value::operator rv_game_value *()
@@ -661,11 +663,9 @@ namespace intercept {
             return false;
         }
 
-        game_value::operator rv_string() const
+        game_value::operator rv_string &() const
         {
-            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                return *((game_data_string *)rv_data.data)->raw_string;
-            return rv_string();
+            return *((game_data_string *)rv_data.data)->raw_string;
         }
 
         game_value::operator vector3() const

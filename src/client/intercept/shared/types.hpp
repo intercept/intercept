@@ -18,6 +18,12 @@ namespace intercept {
 
         class rv_string {
         public:
+            rv_string();
+            rv_string(const rv_string &) = delete;
+            rv_string(rv_string &&) = delete;
+            rv_string & operator=(const rv_string &) = delete;
+            rv_string & operator=(rv_string &&) = delete;
+
             uint32_t ref_count_internal;
             uint32_t length;
             char char_string;
@@ -179,14 +185,14 @@ namespace intercept {
             operator float();
             operator bool();
             operator std::string();
-            operator rv_string();
+            operator rv_string &();
             operator rv_game_value *();
             operator vector3();
             operator vector2();
             operator float() const;
             operator bool() const;
             operator std::string() const;
-            operator rv_string() const;
+            operator rv_string &() const;
             operator vector3() const;
             operator vector2() const;
 

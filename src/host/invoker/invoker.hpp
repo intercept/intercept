@@ -215,6 +215,10 @@ namespace intercept {
         bool rv_event(const arguments & args_, std::string & result_);
         
         /*!
+        @brief Get signal from sqf code dispatch it.
+        */
+        bool signal(const arguments & args_, std::string & result_);
+        /*!
         This is a general purpose function to test the invoker. It is not meant
         for public use and is only there to serve as an easy test bed for development.
         */
@@ -289,6 +293,7 @@ namespace intercept {
         game_value _delete_size_max;
 
         game_value _eh_params;
+        game_value _signal_params;
 
         /*!
         @brief The index counter for the delete array.

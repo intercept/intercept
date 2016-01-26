@@ -22,7 +22,7 @@ class CfgFunctions
                 headerType = -1;
 			};
 		};
-        class initialization 
+        class initialization
         {
             class lib_loader
             {
@@ -34,6 +34,14 @@ class CfgFunctions
             {
                 postInit = 1;
                 file = "z\intercept\rv\addons\core\post_init.sqf";
+                headerType = -1;
+            };
+        };
+        class api
+        {
+            class signal
+            {
+                file = "z\intercept\rv\addons\core\signal.sqf";
                 headerType = -1;
             };
         };

@@ -35,7 +35,8 @@ namespace intercept {
         typedef void(__cdecl *mission_end_func)();
         typedef void(__cdecl *mission_stopped_func)();
         typedef void(__cdecl *on_frame_func)();
-        
+        typedef void(__cdecl *on_signal_func)(game_value& value1);
+
         //!@}
 
         /*!
@@ -52,13 +53,14 @@ namespace intercept {
             mission_end_func mission_end;
             mission_stopped_func mission_stopped;
             on_frame_func on_frame;
+            on_signal_func on_signal;
             //!@}
         };
 
 
 
 #define EH(x) typedef void(__cdecl *##x##_func)
-        
+
         EH(anim_changed)(object &unit_, rv_string &anim_name_);
         EH(anim_done)(object &unit_, rv_string &anim_name_);
         EH(anim_state_changed)(object &unit_, rv_string &anim_name_);

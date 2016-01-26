@@ -58,6 +58,7 @@ namespace intercept {
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("rv_event", std::bind(&intercept::invoker::rv_event, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("signal", std::bind(&intercept::invoker::signal, this, std::placeholders::_1, std::placeholders::_2));
             eventhandlers::get().initialize();
         }
     }
@@ -140,6 +141,25 @@ namespace intercept {
             return true;
         }
         return false;
+    }
+
+    bool invoker::signal(const arguments & args_, std::string & result_)
+    {
+        std::string extension_name = args_.as_string(0);
+        LOG(DEBUG) << "Signal " << extension_name << " START";
+
+        auto modules = extensions::get().modules();
+        if (modules.find(extension_name) == modules.end()) {
+            return false;
+        }
+        auto module = modules[extension_name];
+
+        _signal_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_signal_var"), "STRING");
+        if (module.functions.on_signal) {
+            module.functions.on_signal(_signal_params);
+        }
+        LOG(DEBUG) << "Signal " << extension_name << " END";
+        return true;
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)

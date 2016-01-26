@@ -2221,17 +2221,15 @@ namespace intercept {
             return __helpers::__string_unary_string(client::__sqf::unary__getmarkertype__string__ret__string, value_);
         }
 
-        vector3 get_marker_pos(const std::string& value_)
-        {
-            game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkerpos__string__ret__array, value_);
-
-            return __helpers::__convert_to_vector3(function_return_array);
+        vector3 get_marker_pos(const std::string& value_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getmarkerpos__string__ret__array, value_));
+            // Identical: unary__markerpos__string__ret__array
         }
 
-        vector2 get_marker_size(const std::string& value_)
-        {
+        vector2 get_marker_size(const std::string& value_) {
             game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkersize__string__ret__array, value_);
             return vector2(function_return_array[0], function_return_array[1]);
+            // Identical: unary__markersize__string__ret__array
         }
 
         std::string create_marker(const std::string &name_, const vector2 &pos_)
@@ -3822,6 +3820,10 @@ namespace intercept {
             return __helpers::__string_unary_object(client::__sqf::unary__name__object__ret__string, value_);
         }
 
+        std::string name(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__name__location__ret__string, loc_));
+        }
+
         std::string name_sound(const object &value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__namesound__object__ret__string, value_);
         }
@@ -4806,7 +4808,7 @@ namespace intercept {
 
         void hint_c(const std::string& value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__text__ret__nothing, value0_, value1_);
-            //binary__hintc__string__string__ret__nothing
+            // Identical from intercept's side: binary__hintc__string__string__ret__nothing
         }
 
         void html_load(const control &value0_, const std::string& value1_) {
@@ -5391,6 +5393,15 @@ namespace intercept {
 
         float skill_final(const object &value0_, const std::string& value1_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__skillfinal__object__string__ret__scalar, value0_, value1_));
+        }
+
+        void slider_set_position(float value0_, float value1_) {
+            game_value args(std::vector<game_value>{
+                value0_,
+                value1_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__slidersetposition__array__ret__nothing, args);
         }
 
         void slider_set_position(const control &value0_, float value1_) {
@@ -6105,23 +6116,11 @@ namespace intercept {
         }
 
         std::vector<object> near_objects(const vector3 &pos_, const float &radius_) {
-            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, radius_);
-
-            std::vector<object> ret_objects;
-            for (uint32_t i = 0; i < ret.length(); ++i)
-                ret_objects.push_back(object(ret[i].rv_data));
-
-            return ret_objects;
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, radius_));
         }
 
         std::vector<object> near_objects(const object &object_, const float &radius_) {
-            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, radius_);
-
-            std::vector<object> ret_objects;
-            for (uint32_t i = 0; i < ret.length(); ++i)
-                ret_objects.push_back(object(ret[i].rv_data));
-
-            return ret_objects;
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, radius_));
         }
 
         std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_) {
@@ -6130,13 +6129,7 @@ namespace intercept {
                 radius_
             });
 
-            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args);
-
-            std::vector<object> ret_objects;
-            for (uint32_t i = 0; i < ret.length(); ++i)
-                ret_objects.push_back(object(ret[i].rv_data));
-
-            return ret_objects;
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args));
         }
 
         std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_) {
@@ -6145,13 +6138,7 @@ namespace intercept {
                 radius_
             });
 
-            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, args);
-
-            std::vector<object> ret_objects;
-            for (uint32_t i = 0; i < ret.length(); ++i)
-                ret_objects.push_back(object(ret[i].rv_data));
-
-            return ret_objects;
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, args));
         }
 
         void hint(const std::string &text_) {
@@ -6164,6 +6151,106 @@ namespace intercept {
 
         void hint_silent(const std::string &text_) {
             __helpers::__empty_unary_string(client::__sqf::unary__hintsilent__text_string__ret__nothing, text_);
+        }
+
+        float importance(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__importance__location__ret__scalar, loc_));
+        }
+
+        void set_importance(const location &loc_, const float &value_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setimportance__location__scalar__ret__nothing, loc_, value_);
+        }
+
+        std::string map_grid_position(const object &obj_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__mapgridposition__object_array__ret__string, obj_);
+        }
+
+        std::string map_grid_position(const vector2 &pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__mapgridposition__object_array__ret__string, pos_));
+        }
+
+        std::vector<object> roads_connected_to(const object &obj_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
+        }
+
+        std::vector<object> rope_attached_objects(const object &obj_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropeattachedobjects__object__ret__array, obj_));
+        }
+
+        std::vector<object> ropes(const object &obj_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropes__object__ret__array, obj_));
+        }
+
+        vector3 screen_to_world(const vector2 &pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__screentoworld__array__ret__array, pos_));
+        }
+
+        vector2 size(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__size__location__ret__array, loc_));
+        }
+
+        vector2 slider_range(const float &value_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__sliderrange__scalar__ret__array, value_));
+        }
+
+        vector2 slider_range(const control &ctrl_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__sliderrange__control__ret__array, ctrl_));
+        }
+
+        void slider_set_range(float value0_, float value1_, float value2_) {
+            game_value args(std::vector<game_value>{
+                value0_,
+                value1_,
+                value2_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__slidersetrange__array__ret__nothing, args);
+        }
+
+        void slider_set_range(const control &value0_, float value1_, float value2_) {
+            game_value args(std::vector<game_value>{
+                value0_,
+                value1_,
+                value2_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__slidersetrange__array__ret__nothing, args);
+        }
+
+        vector2 slider_speed(const float &value_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__sliderspeed__scalar__ret__array, value_));
+        }
+
+        vector2 slider_speed(const control &ctrl_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__sliderspeed__control__ret__array, ctrl_));
+        }
+
+        void slider_set_speed(float value0_, float value1_, float value2_) {
+            game_value args(std::vector<game_value>{
+                value0_,
+                value1_,
+                value2_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__slidersetspeed__array__ret__nothing, args);
+        }
+
+        void slider_set_speed(const control &value0_, float value1_, float value2_) {
+            game_value args(std::vector<game_value>{
+                value0_,
+                value1_,
+                value2_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__slidersetspeed__array__ret__nothing, args);
+        }
+
+        std::string speed_mode(const object &obj_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__speedmode__object_group__ret__string, obj_);
+        }
+
+        std::string speed_mode(const group &grp_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__speedmode__object_group__ret__string, grp_));
         }
 
     }

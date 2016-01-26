@@ -1581,6 +1581,7 @@ namespace intercept {
         bool move_to_completed(const object &value_);
         bool move_to_failed(const object &value_);
         std::string name(const object &value_);
+        std::string name(const location &loc_);
         std::string name_sound(const object &value_);
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
@@ -1990,6 +1991,7 @@ namespace intercept {
         void show_legend(const control &value0_, bool value1_);
         float skill(const object &value0_, const std::string& value1_);
         float skill_final(const object &value0_, const std::string& value1_);
+        void slider_set_position(float value0_, float value1_);
         void slider_set_position(const control &value0_, float value1_);
         void stop(const object &value0_, bool value1_);
         void suppress_for(const object &value0_, float value1_);
@@ -2046,5 +2048,32 @@ namespace intercept {
         void hint(const std::string &text_);
         void hint_cadet(const std::string &text_);
         void hint_silent(const std::string &text_);
+
+        float importance(const location &loc_);
+        void set_importance(const location &loc_, const float &value_);
+
+        std::string map_grid_position(const object &obj_);
+        std::string map_grid_position(const vector2 &pos_);
+
+        std::vector<object> roads_connected_to(const object &obj_);
+        std::vector<object> rope_attached_objects(const object &obj_);
+        std::vector<object> ropes(const object &obj_);
+
+        vector3 screen_to_world(const vector2 &pos_);
+
+        vector2 size(const location &loc_);
+
+        vector2 slider_range(const float &value_);
+        vector2 slider_range(const control &ctrl_);
+        vector2 slider_speed(const float &value_);
+        vector2 slider_speed(const control &ctrl_);
+        void slider_set_range(float value0_, float value1_, float value2_);
+        void slider_set_range(const control &value0_, float value1_, float value2_);
+        void slider_set_speed(float value0_, float value1_, float value2_);
+        void slider_set_speed(const control &value0_, float value1_, float value2_);
+
+        std::string speed_mode(const object &obj_);
+        std::string speed_mode(const group &grp_);
+
     }
 }

@@ -1411,6 +1411,7 @@ namespace intercept {
         bool did_jipowner(const object &value_);
         bool difficulty_enabled(const std::string &value_);
         float direction(const object &value_);
+        float direction(const location &value_);
         void disable_remote_sensors(bool value_);
         void disable_user_input(bool value_);
         void dissolve_team(const std::string &value_);

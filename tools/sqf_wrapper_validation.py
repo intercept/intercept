@@ -22,9 +22,10 @@ def parse():
             with open(source_file) as f:
                 filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
                 filecontents = re.sub("(//.*?\n)", '', filecontents)
-
+                filecontents = re.sub("(public:\s+|private:\s+)", '', filecontents)
+                
                 #if file.endswith(".cpp"):
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\{)", filecontents)
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9:_]+)(\(.*?\))(?=\s*\{)", filecontents)
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1
@@ -32,7 +33,7 @@ def parse():
                             continue
                         implementations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our implementation
                 #if file.endswith(".hpp"):
-                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9_]+)(\(.*?\))(?=\s*\;)", filecontents)
+                match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9:_]+)(\(.*?\))(?=\s*\;)", filecontents)
                 for match_impl in match_impls:
                     if (match_impl):
                         foundInFile += 1

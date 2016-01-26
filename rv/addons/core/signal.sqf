@@ -18,5 +18,5 @@ params ["_extensionName", "_parameters"];
 
 if !(intercept_invoker_ok) exitWith {false};
 
-intercept_signal_var = +_parameters;
+intercept_signal_var = _parameters;
 "intercept" callExtension format ["signal:%1",_extensionName];

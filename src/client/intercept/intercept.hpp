@@ -15,7 +15,7 @@ namespace intercept {
         DLLEXPORT void __cdecl mission_end();
         DLLEXPORT void __cdecl mission_stopped();
         DLLEXPORT void __cdecl on_frame();
-        DLLEXPORT void __cdecl on_signal(game_value& value1_);
+        DLLEXPORT void __cdecl on_signal(std::string &signal_name_, game_value& value1_);
 
 #define EH(x) DLLEXPORT void __cdecl x
 

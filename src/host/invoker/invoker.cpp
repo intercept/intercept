@@ -146,7 +146,8 @@ namespace intercept {
     bool invoker::signal(const arguments & args_, std::string & result_)
     {
         std::string extension_name = args_.as_string(0);
-        LOG(DEBUG) << "Signal " << extension_name << " START";
+        std::string signal_name = args_.as_string(1);
+        LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " START";
 
         auto modules = extensions::get().modules();
         if (modules.find(extension_name) == modules.end()) {
@@ -156,9 +157,9 @@ namespace intercept {
         _invoker_unlock signal_lock(this);
         _signal_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_signal_var"), "STRING");
         if (module.functions.on_signal) {
-            module.functions.on_signal(_signal_params);
+            module.functions.on_signal(signal_name, _signal_params);
         }
-        LOG(DEBUG) << "Signal " << extension_name << " END";
+        LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " END";
         return true;
     }
 

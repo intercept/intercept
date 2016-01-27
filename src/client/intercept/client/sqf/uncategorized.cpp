@@ -2196,9 +2196,9 @@ namespace intercept {
             return __helpers::__string_unary_string(client::__sqf::unary__markertype__string__ret__string, value_);
         }
         
-		void set_marker_color(const std::string& marker_, const std::string& color_) {
-			host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolor__string__string__ret__nothing, marker_, color_);
-		}
+        void set_marker_color(const std::string& marker_, const std::string& color_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolor__string__string__ret__nothing, marker_, color_);
+        }
         
         void set_marker_color_local(const std::string& marker_, const std::string& color_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolorlocal__string__string__ret__nothing, marker_, color_);

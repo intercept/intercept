@@ -16,6 +16,122 @@ namespace intercept {
         const std::string waypoint::__formation_lookup[10] = { "NO_CHANGE","COLUMN","STAG_COLUMN","WEDGE","ECH_LEFT","ECH_RIGHT","VEE","LINE","FILE","DIAMOND" };
         const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
 
+		/////////////////////// DO NOT IMPLEMENT THESE FUNCTIONS /////////////////////////
+		///////// They are haram. Discuss on slack prior to removing from list. //////////
+		// unary__case__any__ret__switch
+		// unary__count__array__ret__scalar
+		// unary__debuglog__any__ret__nothing
+		// unary__default__code__ret__nothing
+		// unary__for__string__ret__for
+		// unary__for__array__ret__for
+		// unary__goto__string__ret__nothing
+		// unary__if__bool__ret__if
+		// unary__not__bool__ret__bool
+		// unary__oneachframe__code_string__ret__nothing
+		// unary__ongroupiconclick__code_string__ret__nothing
+		// unary__ongroupiconoverenter__code_string__ret__nothing
+		// unary__ongroupiconoverleave__code_string__ret__nothing
+		// unary__onhcgroupselectionchanged__code_string__ret__nothing
+		// unary__onmapsingleclick__code_string__ret__nothing
+		// unary__onplayerconnected__code_string__ret__nothing
+		// unary__onplayerdisconnected__code_string__ret__nothing
+		// unary__onpreloadfinished__code_string__ret__nothing
+		// unary__onpreloadstarted__code_string__ret__nothing
+		// unary__onteamswitch__code_string__ret__nothing
+		// unary__param__array__ret__any
+		// unary__params__array__ret__bool
+		// unary__private__string_array__ret__nothing
+		// unary__random__array__ret__scalar_nan
+		// unary__reverse__array__ret__nothing 
+		// unary__selectrandom__array__ret__any
+		// unary__str__any__ret__string
+		// unary__switch__any__ret__switch
+		// unary__throw__any__ret__nothing
+		// unary__toarray__string__ret__array
+		// unary__tostring__array__ret__string
+		// unary__try__code__ret__exception
+		// unary__vectormagnitude__array__ret__scalar
+		// unary__vectormagnitudesqr__array__ret__scalar
+		// unary__vectornormalized__array__ret__array
+		// unary__waituntil__code__ret__nothing
+		// unary__while__code__ret__while
+		// unary__with__namespace__ret__with
+		
+		// binary__and__bool__bool__ret__bool
+		// binary__and__bool__code__ret__bool
+		// binary__append__array__array__ret__nothing
+		// binary__arrayintersect__array__array__ret__array
+		// binary__atan2__scalar_nan__scalar_nan__ret__scalar_nan
+		// binary__breakout__any__string__ret__any
+		// binary__catch__exception__code__ret__any
+		// binary__count__code__array__ret__scalar
+		// binary__deleteat__array__scalar__ret__any
+		// binary__deleterange__array__array__ret__nothing
+		// binary__do__while__code__ret__nothing
+		// binary__do__with__code__ret__nothing
+		// binary__do__for__code__ret__any
+		// binary__do__switch__code__ret__any
+		// binary__else__code__code__ret__array
+		// binary__exitwith__if__code__ret__any
+		// binary__find__array__any__ret__scalar
+		// binary__find__string__string__ret__scalar
+		// binary__foreach__code__array__ret__nothing
+		// binary__foreachmember__code__team_member__ret__nothing
+		// binary__foreachmemberagent__code__team_member__ret__nothing
+		// binary__foreachmemberteam__code__team_member__ret__nothing
+		// binary__from__for__scalar__ret__for
+		// binary__in__any__array__ret__bool
+		// binary__isequalto__any__any__ret__bool
+		// binary__isequaltype__any__any__ret__bool
+		// binary__isequaltypeall__array__any__ret__bool
+		// binary__isequaltypeany__any__array__ret__bool
+		// binary__isequaltypearray__array__array__ret__bool
+		// binary__isequaltypeparams__any__array__ret__bool
+		// binary__joinstring__array__string__ret__string
+		// binary__max__scalar_nan__scalar_nan__ret__scalar_nan
+		// binary__min__scalar_nan__scalar_nan__ret__scalar_nan
+		// binary__mod__scalar_nan__scalar_nan__ret__scalar_nan
+		// binary__or__bool__bool__ret__bool
+		// binary__or__bool__code__ret__bool
+		// binary__param__any__array__ret__any
+		// binary__params__any__array__ret__bool
+		// binary__pushback__array__any__ret__scalar
+		// binary__resize__array__scalar__ret__nothing
+		// binary__select__array__scalar__ret__any
+		// binary__select__array__bool__ret__any
+		// binary__select__array__array__ret__array
+		// binary__select__string__array__ret__string
+		// binary__set__array__array__ret__nothing
+		// binary__sort__array__bool__ret__nothing
+		// binary__spawn__any__code__ret__script ------------------------------------------------------------------------
+		// binary__splitstring__string__string__ret__array
+		// binary__step__for__scalar__ret__for
+		// binary__then__if__code__ret__any
+		// binary__then__if__array__ret__any
+		// binary__throw__if__any__ret__nothing
+		// binary__to__for__scalar__ret__for
+		// binary__try__any__code__ret__exception
+		// binary__vectoradd__array__array__ret__array
+		// binary__vectorcos__array__array__ret__scalar
+		// binary__vectorcrossproduct__array__array__ret__array
+		// binary__vectordiff__array__array__ret__array
+		// binary__vectordistance__array__array__ret__scalar
+		// binary__vectordistancesqr__array__array__ret__scalar
+		// binary__vectordotproduct__array__array__ret__scalar
+		// binary__vectorfromto__array__array__ret__array
+		// binary__vectormultiply__array__scalar__ret__array
+		
+		// nular__false__ret__bool
+		// nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
+		// nular__nil__ret__any
+		// nular__true__ret__bool
+
+		/// investigate
+		// unary__sendaumessage__array__ret__nothing
+		// unary__sendudpmessage__array__ret__bool
+		/////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
+
+
         void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_)
         {
             game_value args({

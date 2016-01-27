@@ -2195,31 +2195,71 @@ namespace intercept {
         std::string marker_type(const std::string& value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__markertype__string__ret__string, value_);
         }
-        
+
+        void set_marker_size(const std::string& marker_, const vector2& size_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkersize__string__array__ret__nothing, marker_, size_);
+        }
+
+        void set_marker_size_local(const std::string& marker_, const vector2& size_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkersizelocal__string__array__ret__nothing, marker_, size_);
+        }
+
+        void set_marker_shape(const std::string& marker_, const std::string& shape_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkershape__string__string__ret__nothing, marker_, shape_);
+        }
+
+        void set_marker_shape_local(const std::string& marker_, const std::string& shape_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkershapelocal__string__string__ret__nothing, marker_, shape_);
+        }
+
+        void set_marker_pos(const std::string& marker_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerpos__string__array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_pos_local(const std::string& marker_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerposlocal__string__array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_pos(const std::string& marker_, const vector2& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerpos__string__array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_pos_local(const std::string& marker_, const vector2& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerposlocal__string__array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_brush(const std::string& marker_, const std::string& brush_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerbrush__string__string__ret__nothing, marker_, brush_);
+        }
+
+        void set_marker_brush_local(const std::string& marker_, const std::string& brush_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerbrushlocal__string__string__ret__nothing, marker_, brush_);
+        }
+
         void set_marker_color(const std::string& marker_, const std::string& color_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolor__string__string__ret__nothing, marker_, color_);
         }
-        
+
         void set_marker_color_local(const std::string& marker_, const std::string& color_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolorlocal__string__string__ret__nothing, marker_, color_);
         }
-        
+
         void set_marker_alpha(const std::string& marker_, float alpha_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralpha__string__scalar__ret__nothing, marker_, alpha_);
         }
-        
+
         void set_marker_alpha_local(const std::string& marker_, float alpha_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralphalocal__string__scalar__ret__nothing, marker_, alpha_);
         }
-        
+
         void set_marker_dir(const std::string& marker_, float dir_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdir__string__scalar__ret__nothing, marker_, dir_);
         }
-        
+
         void set_marker_dir_local(const std::string& marker_, float dir_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdirlocal__string__scalar__ret__nothing, marker_, dir_);
         }
-        
+
         std::string get_marker_color(const std::string& value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__getmarkercolor__string__ret__string, value_);
         }

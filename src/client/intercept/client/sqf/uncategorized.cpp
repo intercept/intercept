@@ -2196,20 +2196,28 @@ namespace intercept {
             return __helpers::__string_unary_string(client::__sqf::unary__markertype__string__ret__string, value_);
         }
 
-        void set_marker_alpha(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralpha__string__scalar__ret__nothing, value0_, value1_);
+		void set_marker_color(const std::string& marker_, const std::string& color_) {
+			host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolor__string__string__ret__nothing, marker_, color_);
+		}
+
+		void set_marker_color_local(const std::string& marker_, const std::string& color_) {
+			host::functions.invoke_raw_binary(client::__sqf::binary__setmarkercolorlocal__string__string__ret__nothing, marker_, color_);
+		}
+
+        void set_marker_alpha(const std::string& marker_, float alpha_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralpha__string__scalar__ret__nothing, marker_, alpha_);
         }
 
-        void set_marker_alpha_local(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralphalocal__string__scalar__ret__nothing, value0_, value1_);
+        void set_marker_alpha_local(const std::string& marker_, float alpha_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkeralphalocal__string__scalar__ret__nothing, marker_, alpha_);
         }
 
-        void set_marker_dir(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdir__string__scalar__ret__nothing, value0_, value1_);
+        void set_marker_dir(const std::string& marker_, float dir_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdir__string__scalar__ret__nothing, marker_, dir_);
         }
 
-        void set_marker_dir_local(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdirlocal__string__scalar__ret__nothing, value0_, value1_);
+        void set_marker_dir_local(const std::string& marker_, float dir_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkerdirlocal__string__scalar__ret__nothing, marker_, dir_);
         }
 
         std::string get_marker_color(const std::string& value_) {

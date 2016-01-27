@@ -559,10 +559,12 @@ namespace intercept {
         std::string marker_text(const std::string& value_);
         std::string marker_type(const std::string& value_);
 
-        void set_marker_alpha(float value0_, const std::string& value1_);
-        void set_marker_alpha_local(float value0_, const std::string& value1_);
-        void set_marker_dir(float value0_, const std::string& value1_);
-        void set_marker_dir_local(float value0_, const std::string& value1_);
+		void set_marker_color(const std::string& marker_, const std::string& color_);
+		void set_marker_color_local(const std::string& marker_, const std::string& color_);
+		void set_marker_alpha(const std::string& marker_, float alpha_);
+		void set_marker_alpha_local(const std::string& marker_, float alpha_);
+		void set_marker_dir(const std::string& marker_, float dir_);
+        void set_marker_dir_local(const std::string& marker_, float dir_);
 
         std::string get_marker_color(const std::string& value_);
         std::string get_marker_type(const std::string& value_);

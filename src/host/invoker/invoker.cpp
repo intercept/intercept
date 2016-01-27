@@ -153,7 +153,7 @@ namespace intercept {
             return false;
         }
         auto module = modules[extension_name];
-
+        _invoker_unlock signal_lock(this);
         _signal_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_signal_var"), "STRING");
         if (module.functions.on_signal) {
             module.functions.on_signal(_signal_params);

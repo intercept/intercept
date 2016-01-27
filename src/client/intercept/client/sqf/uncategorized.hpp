@@ -561,6 +561,10 @@ namespace intercept {
 
         void set_marker_size(const std::string& marker_, const vector2& size_);
         void set_marker_size_local(const std::string& marker_, const vector2& size_);
+        void set_marker_type(const std::string& marker_, const std::string& type_);
+        void set_marker_type_local(const std::string& marker_, const std::string& type_);
+        void set_marker_text(const std::string& marker_, const std::string& text_);
+        void set_marker_text_local(const std::string& marker_, const std::string& text_);
         void set_marker_shape(const std::string& marker_, const std::string& shape_);
         void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
         void set_marker_pos(const std::string& marker_, const vector3& pos_);

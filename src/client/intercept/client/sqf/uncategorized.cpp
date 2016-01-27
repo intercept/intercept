@@ -2196,6 +2196,22 @@ namespace intercept {
             return __helpers::__string_unary_string(client::__sqf::unary__markertype__string__ret__string, value_);
         }
 
+        void set_marker_type(const std::string& marker_, const std::string& type_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkertype__string__string__ret__nothing, marker_, type_);
+        }
+
+        void set_marker_type_local(const std::string& marker_, const std::string& type_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkertypelocal__string__string__ret__nothing, marker_, type_);
+        }
+
+        void set_marker_text(const std::string& marker_, const std::string& text_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkertext__string__string__ret__nothing, marker_, text_);
+        }
+
+        void set_marker_text_local(const std::string& marker_, const std::string& text_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setmarkertextlocal__string__string__ret__nothing, marker_, text_);
+        }
+
         void set_marker_size(const std::string& marker_, const vector2& size_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkersize__string__array__ret__nothing, marker_, size_);
         }

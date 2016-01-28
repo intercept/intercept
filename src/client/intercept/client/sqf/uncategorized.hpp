@@ -68,6 +68,14 @@ namespace intercept {
 
         };
 
+		struct game_resolution
+		{
+			vector2 resolution;
+			vector2 viewport;
+			float aspect_ratio;
+			float ui_scale;
+		};
+
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
 

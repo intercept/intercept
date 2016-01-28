@@ -559,10 +559,26 @@ namespace intercept {
         std::string marker_text(const std::string& value_);
         std::string marker_type(const std::string& value_);
 
-        void set_marker_alpha(float value0_, const std::string& value1_);
-        void set_marker_alpha_local(float value0_, const std::string& value1_);
-        void set_marker_dir(float value0_, const std::string& value1_);
-        void set_marker_dir_local(float value0_, const std::string& value1_);
+        void set_marker_size(const std::string& marker_, const vector2& size_);
+        void set_marker_size_local(const std::string& marker_, const vector2& size_);
+        void set_marker_type(const std::string& marker_, const std::string& type_);
+        void set_marker_type_local(const std::string& marker_, const std::string& type_);
+        void set_marker_text(const std::string& marker_, const std::string& text_);
+        void set_marker_text_local(const std::string& marker_, const std::string& text_);
+        void set_marker_shape(const std::string& marker_, const std::string& shape_);
+        void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
+        void set_marker_pos(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos(const std::string& marker_, const vector2& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector2& pos_);
+        void set_marker_brush(const std::string& marker_, const std::string& brush_);
+        void set_marker_brush_local(const std::string& marker_, const std::string& brush_);
+        void set_marker_color(const std::string& marker_, const std::string& color_);
+        void set_marker_color_local(const std::string& marker_, const std::string& color_);
+        void set_marker_alpha(const std::string& marker_, float alpha_);
+        void set_marker_alpha_local(const std::string& marker_, float alpha_);
+        void set_marker_dir(const std::string& marker_, float dir_);
+        void set_marker_dir_local(const std::string& marker_, float dir_);
 
         std::string get_marker_color(const std::string& value_);
         std::string get_marker_type(const std::string& value_);

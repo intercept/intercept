@@ -6388,6 +6388,7 @@ namespace intercept {
         std::vector<float> mission_start() {
             return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array));
         }
+
         std::vector<object> vehicles() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
         }

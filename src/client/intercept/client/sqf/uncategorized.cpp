@@ -139,6 +139,7 @@ namespace intercept {
         // binary__vectordotproduct__array__array__ret__scalar
         // binary__vectorfromto__array__array__ret__array
         // binary__vectormultiply__array__scalar__ret__array
+        // binary__camsetdir__object__array__ret__nothing
 
         // nular__false__ret__bool
         // nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------

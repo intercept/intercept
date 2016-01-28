@@ -28,5 +28,7 @@ namespace intercept {
             float aspect_ratio;
             float ui_scale;
         };
+        
+        void failure(const std::string& hurray_);
     }
 }

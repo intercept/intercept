@@ -2076,5 +2076,12 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
+        std::vector<float> date();
+        std::vector<float> fog_params();
+        std::vector<float> get_object_view_distance();
+        std::vector<float> get_resolution();
+        std::vector<float> mission_start();
+        std::vector<object> vehicles();
+
     }
 }

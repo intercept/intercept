@@ -121,6 +121,7 @@ namespace intercept {
 		// binary__vectorfromto__array__array__ret__array
 		// binary__vectormultiply__array__scalar__ret__array
 		
+        // nular__allsites__ret__array (deprecated - source: BI Wiki)
 		// nular__false__ret__bool
 		// nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
 		// nular__nil__ret__any
@@ -6367,6 +6368,30 @@ namespace intercept {
         std::string speed_mode(const group &grp_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__speedmode__object_group__ret__string, grp_));
         }
+
+        std::vector<float> date() {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array));
+        }
+
+        std::vector<float> fog_params() {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array));
+        }
+
+        std::vector<float> get_object_view_distance() {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array));
+        }
+
+        std::vector<float> get_resolution() {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array));
+        }
+
+        std::vector<float> mission_start() {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array));
+        }
+        std::vector<object> vehicles() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
+        }
+
 
     }
 }

@@ -3154,32 +3154,32 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, value_));
         }
 
-        bool cam_committed(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, value_);
+        bool cam_committed(const object &camera_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, camera_);
         }
 
-        void cam_destroy(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__camdestroy__object__ret__nothing, value_);
+        void cam_destroy(const object &camera_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__camdestroy__object__ret__nothing, camera_);
         }
 
-        bool cam_preloaded(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__campreloaded__object__ret__bool, value_);
+        bool cam_preloaded(const object &camera_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__campreloaded__object__ret__bool, camera_);
         }
 
-        object cam_target(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__camtarget__object__ret__object, value_);
+        object cam_target(const object &camera_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__camtarget__object__ret__object, camera_);
         }
 
-        void cam_use_nvg(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__camusenvg__bool__ret__nothing, value_);
+        void cam_use_nvg(bool use_nvg_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__camusenvg__bool__ret__nothing, use_nvg_);
         }
 
-        void camera_effect_enable_hud(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__cameraeffectenablehud__bool__ret__nothing, value_);
+        void camera_effect_enable_hud(bool enable_hud_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__cameraeffectenablehud__bool__ret__nothing, enable_hud_);
         }
 
-        float camera_interest(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__camerainterest__object__ret__scalar, value_);
+        float camera_interest(const object &entity_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__camerainterest__object__ret__scalar, entity_);
         }
 
         void cam_constuction_set_params(const object &camera_, const vector3 & position_, float radius_, float max_above_land_) {

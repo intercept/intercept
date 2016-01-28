@@ -231,13 +231,13 @@ namespace intercept {
         void enable_saving(bool enable_, bool autosave_);
 
         /* potential namespace: camera */
-        bool cam_committed(const object &value_);
-        void cam_destroy(const object &value_);
-        bool cam_preloaded(const object &value_);
-        object cam_target(const object &value_);
-        void cam_use_nvg(bool value_);
-        void camera_effect_enable_hud(bool value_);
-        float camera_interest(const object &value_);
+        bool cam_committed(const object &camera_);
+        void cam_destroy(const object &camera_);
+        bool cam_preloaded(const object &camera_);
+        object cam_target(const object &camera_);
+        void cam_use_nvg(bool use_nvg_);
+        void camera_effect_enable_hud(bool enable_hud_);
+        float camera_interest(const object &entity_);
         void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius, float max_above_land_);
         object cam_create(const std::string &type_, const vector3 &position_);
         void camera_effect(const object &camera_, const std::string &name_, const std::string &position_);

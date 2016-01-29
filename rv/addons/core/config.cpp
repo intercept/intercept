@@ -569,7 +569,7 @@ EH_CLASS_DEF(epe_contact,epeContact);
 EH_CLASS_DEF(epe_contact_end,epeContactEnd);
 EH_CLASS_DEF(epe_contact_start,epeContactStart);
 EH_CLASS_DEF(explosion,explosion);
-EH_CLASS_DEF(fired,fired);
+EH_CLASS_DEF(fired,firedBIS);
 EH_CLASS_DEF(fired_near,firedNear);
 EH_CLASS_DEF(fuel,fuel);
 EH_CLASS_DEF(gear,gear);

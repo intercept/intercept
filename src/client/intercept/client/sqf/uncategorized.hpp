@@ -84,6 +84,17 @@ namespace intercept {
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value& default_value_);
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const object & obj_, const std::string & var_name_);
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const group & group_, const std::string & var_name_);
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const task & task_, const std::string & var_name_);
+        game_value get_variable(const location & loc_, const std::string & var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 

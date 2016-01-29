@@ -539,8 +539,7 @@ class CfgPatches {
             "a3_weapons_f_uniforms",
             "a3_weapons_f_vests",
             "a3data",
-            "map_vr",
-            "extended_eventhandlers"
+            "map_vr"
         };
         version = 0.1;
     };
@@ -548,7 +547,7 @@ class CfgPatches {
 
 #define QUOTE(var1) #var1
 #define ARR_2(ARG1,ARG2) ARG1, ARG2
-#define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { player sideChat QUOTE(QUOTE(x)) ; intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
+#define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
 
 class CfgVehicles {
 

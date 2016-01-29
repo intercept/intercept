@@ -214,7 +214,7 @@ namespace intercept {
                 var_name_,
                 default_value_
             });
-            return game_value(host::functions.invoke_raw_binary(client::binary__getvariable__display__string_array__ret__any, display_, args));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__display__string_array__ret__any, display_, args));
         }
 
         game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_)
@@ -223,7 +223,7 @@ namespace intercept {
                 var_name_,
                 default_value_
             });
-            return game_value(host::functions.invoke_raw_binary(client::binary__getvariable__display__string_array__ret__any, ctrl_, args));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__display__string_array__ret__any, ctrl_, args));
         }
 
         game_value get_variable(const object & obj_, const std::string & var_name_)

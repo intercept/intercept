@@ -540,7 +540,7 @@ class CfgPatches {
             "a3_weapons_f_vests",
             "a3data",
             "map_vr",
-            "extended_eventhandlers"
+            "extended_eventhandlers", "cba_ui", "cba_xeh", "cba_xeh_a3", "cba_jr"
         };
         version = 0.1;
     };
@@ -548,60 +548,61 @@ class CfgPatches {
 
 #define QUOTE(var1) #var1
 #define ARR_2(ARG1,ARG2) ARG1, ARG2
-#define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { player sideChat QUOTE(QUOTE(x)) ; intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
-
-class CfgVehicles {
-    class AllVehicles {
-        class EventHandlers {
-            class Intercept {
-                EH_CLASS_DEF(anim_changed,animChanged);
-                EH_CLASS_DEF(anim_done,animDone);
-                EH_CLASS_DEF(anim_state_changed,animStateChanged);
-                EH_CLASS_DEF(container_closed,containerClosed);
-                EH_CLASS_DEF(controls_shifted,controlsShifted);
-                EH_CLASS_DEF(dammaged,dammaged);
-                EH_CLASS_DEF(engine,engine);
-                EH_CLASS_DEF(epe_contact,epeContact);
-                EH_CLASS_DEF(epe_contact_end,epeContactEnd);
-                EH_CLASS_DEF(epe_contact_start,epeContactStart);
-                EH_CLASS_DEF(explosion,explosion);
-                EH_CLASS_DEF(fired,fired);
-                EH_CLASS_DEF(fired_near,firedNear);
-                EH_CLASS_DEF(fuel,fuel);
-                EH_CLASS_DEF(gear,gear);
-                EH_CLASS_DEF(get_in,getIn);
-                EH_CLASS_DEF(get_out,getOut);
-                EH_CLASS_DEF(handle_damage,handleDamage);
-                EH_CLASS_DEF(handle_heal,handleHeal);
-                EH_CLASS_DEF(handle_rating,handleRating);
-                EH_CLASS_DEF(handle_score,handleScore);
-                EH_CLASS_DEF(hit,hit);
-                EH_CLASS_DEF(hit_part,hitPart);
-                EH_CLASS_DEF(init,init);
-                EH_CLASS_DEF(incoming_missile,incomingMissile);
-                EH_CLASS_DEF(inventory_closed,inventoryClosed);
-                EH_CLASS_DEF(inventory_opened,inventoryOpened);
-                EH_CLASS_DEF(killed,killed);
-                EH_CLASS_DEF(landed_touch_down,landedTouchDown);
-                EH_CLASS_DEF(landed_stopped,landedStopped);
-                EH_CLASS_DEF(local,local);
-                EH_CLASS_DEF(post_reset,postReset);
-                EH_CLASS_DEF(put,put);
-                EH_CLASS_DEF(respawn,respawn);
-                EH_CLASS_DEF(rope_attach,ropeAttach);
-                EH_CLASS_DEF(rope_break,ropeBreak);
-                EH_CLASS_DEF(seat_switched,seatSwitched);
-                EH_CLASS_DEF(sound_played,soundPlayed);
-                EH_CLASS_DEF(take,take);
-                EH_CLASS_DEF(task_set_as_current,taskSetAsCurrent);
-                EH_CLASS_DEF(weapon_assembled,weaponAssembled);
-                EH_CLASS_DEF(weapon_disassembled,weaponDisassembled);
-                EH_CLASS_DEF(weapon_deployed,weaponDeployed);
-                EH_CLASS_DEF(weapon_rested,weaponRested);
-            };
-        };
-    };
+#define EH_CLASS_DEF(x,y) class Extended_##y##_EventHandlers { \
+    class All { \
+        class Intercept { \
+            y = QUOTE(with missionNamespace do { player sideChat QUOTE(QUOTE(x)) ; intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';); \
+        }; \
+    }; \
 };
+
+EH_CLASS_DEF(anim_changed,animChanged);
+EH_CLASS_DEF(anim_done,animDone);
+EH_CLASS_DEF(anim_state_changed,animStateChanged);
+EH_CLASS_DEF(container_closed,containerClosed);
+EH_CLASS_DEF(container_opened,containerOpened);
+EH_CLASS_DEF(controls_shifted,controlsShifted);
+EH_CLASS_DEF(dammaged,dammaged);
+EH_CLASS_DEF(engine,engine);
+EH_CLASS_DEF(epe_contact,epeContact);
+EH_CLASS_DEF(epe_contact_end,epeContactEnd);
+EH_CLASS_DEF(epe_contact_start,epeContactStart);
+EH_CLASS_DEF(explosion,explosion);
+EH_CLASS_DEF(fired,fired);
+EH_CLASS_DEF(fired_near,firedNear);
+EH_CLASS_DEF(fuel,fuel);
+EH_CLASS_DEF(gear,gear);
+EH_CLASS_DEF(get_in,getIn);
+EH_CLASS_DEF(get_out,getOut);
+EH_CLASS_DEF(handle_heal,handleHeal);
+EH_CLASS_DEF(hit,hit);
+EH_CLASS_DEF(hit_part,hitPart);
+EH_CLASS_DEF(init,init);
+EH_CLASS_DEF(incoming_missile,incomingMissile);
+EH_CLASS_DEF(inventory_closed,inventoryClosed);
+EH_CLASS_DEF(inventory_opened,inventoryOpened);
+EH_CLASS_DEF(killed,killed);
+EH_CLASS_DEF(landed_touch_down,landedTouchDown);
+EH_CLASS_DEF(landed_stopped,landedStopped);
+EH_CLASS_DEF(local,local);
+EH_CLASS_DEF(put,put);
+EH_CLASS_DEF(respawn,respawn);
+EH_CLASS_DEF(seat_switched,seatSwitched);
+EH_CLASS_DEF(sound_played,soundPlayed);
+EH_CLASS_DEF(take,take);
+EH_CLASS_DEF(weapon_assembled,weaponAssembled);
+EH_CLASS_DEF(weapon_disassembled,weaponDisassembled);
+
+// These events don't have XEH on CBA yet
+//EH_CLASS_DEF(handle_damage,handleDamage);
+//EH_CLASS_DEF(handle_rating,handleRating);
+//EH_CLASS_DEF(handle_score,handleScore);
+//EH_CLASS_DEF(post_reset,postReset);
+//EH_CLASS_DEF(rope_attach,ropeAttach);
+//EH_CLASS_DEF(rope_break,ropeBreak);
+//EH_CLASS_DEF(task_set_as_current,taskSetAsCurrent);
+//EH_CLASS_DEF(weapon_deployed,weaponDeployed);
+//EH_CLASS_DEF(weapon_rested,weaponRested);
 
 class CfgFunctions
 {

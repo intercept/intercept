@@ -551,7 +551,7 @@ class CfgPatches {
 #define EH_CLASS_DEF(x,y) class Extended_##y##_EventHandlers { \
     class All { \
         class Intercept { \
-            y = QUOTE(with missionNamespace do { player sideChat QUOTE(QUOTE(x)) ; intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';); \
+            y = QUOTE(with missionNamespace do { intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';); \
         }; \
     }; \
 };

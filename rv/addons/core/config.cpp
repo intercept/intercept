@@ -551,8 +551,13 @@ class CfgPatches {
 #define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { player sideChat QUOTE(QUOTE(x)) ; intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
 
 class CfgVehicles {
-    class AllVehicles {
-        class EventHandlers {
+
+    class All {
+        class EventHandlers;
+    };
+
+    class AllVehicles: All {
+        class EventHandlers: EventHandlers {
             class Intercept {
                 EH_CLASS_DEF(anim_changed,animChanged);
                 EH_CLASS_DEF(anim_done,animDone);

@@ -547,7 +547,8 @@ class CfgPatches {
 
 #define QUOTE(var1) #var1
 #define ARR_2(ARG1,ARG2) ARG1, ARG2
-#define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + ',' + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
+#define COMMA ,
+#define EH_CLASS_DEF(x,y) y = QUOTE(with missionNamespace do { intercept_params_var set[ARR_2(intercept_params_index,+_this)]; 'intercept' callExtension ('rv_event:' + QUOTE(QUOTE(x)) + QUOTE(QUOTE(COMMA)) + (str intercept_params_index)); intercept_params_index = intercept_params_index + 1;}; '';)
 
 class CfgVehicles {
 

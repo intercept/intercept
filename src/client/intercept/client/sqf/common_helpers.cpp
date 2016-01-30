@@ -60,7 +60,7 @@ namespace intercept {
             bool __retrieve_nular_bool(nular_function fnc_) {
                 return game_value(host::functions.invoke_raw_nular(fnc_));
             }
-            
+
             void __empty_unary_object(unary_function fnc_, const object &obj_)
             {
                 host::functions.invoke_raw_unary(fnc_, obj_);

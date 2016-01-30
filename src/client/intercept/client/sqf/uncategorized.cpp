@@ -149,8 +149,16 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
+        // nular__airdensitycurvertd__ret__array (undocumented)
+        // nular__getdlcassetsusage__ret__array (undocumented)
+        // nular__getmissiondlcs__ret__array (undocumented)
+        // nular__getmouseposition__ret__array (undocumented)
+        // nular__groupiconsvisible__ret__array (half-documented, appears to be [show markers on map true/false, show markers on hud true/false] - source: BI Wiki)
+        // nular__hudmovementlevels__ret__array (half-documented, last parameter unknown what target is - source: BI Wiki)
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
+        // nular__teams__ret__array (undocumented type - source: BI Wiki)
+        // nular__windrtd__ret__array (undocumented)
         // binary__lbsettextright__control__array__ret__nothing *Undocumented.
         // unary__lbselection__control__ret__array
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
@@ -2914,6 +2922,15 @@ namespace intercept {
         }
 
         // TODO std::vector<std::array<std::string, 2>> library_credits();
+        std::vector<rv_credit> library_credits() {
+            game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__librarycredits__ret__array);
+
+            std::vector<rv_credit> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                output.push_back(input[i]);
+            }
+            return output;
+        }
 
         std::vector<std::string> library_disclaimers() {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(client::__sqf::nular__librarydisclaimers__ret__array));
@@ -7017,6 +7034,22 @@ namespace intercept {
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, path));
+        }
+
+        vector3 eye_pos(const object &object_) {
+            return vector3(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyepos__object__ret__array, object_)));
+        }
+
+        rv_eden_mouse_over get_eden_mouse_over() {
+            return rv_eden_mouse_over(host::functions.invoke_raw_nular(client::__sqf::nular__get3denmouseover__ret__array));
+        }
+
+        rv_artillery_computer_settings get_artillery_computer_settings() {
+            return rv_artillery_computer_settings(host::functions.invoke_raw_nular(client::__sqf::nular__getartillerycomputersettings__ret__array));
+        }
+
+        rv_product_version product_version() {
+            return rv_product_version(host::functions.invoke_raw_nular(client::__sqf::nular__productversion__ret__array));
         }
     }
 }

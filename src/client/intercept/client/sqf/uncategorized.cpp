@@ -42,7 +42,7 @@ namespace intercept {
 		// unary__params__array__ret__bool
 		// unary__private__string_array__ret__nothing
 		// unary__random__array__ret__scalar_nan
-		// unary__reverse__array__ret__nothing 
+		// unary__reverse__array__ret__nothing
 		// unary__selectrandom__array__ret__any
 		// unary__str__any__ret__string
 		// unary__switch__any__ret__switch
@@ -56,7 +56,7 @@ namespace intercept {
 		// unary__waituntil__code__ret__nothing
 		// unary__while__code__ret__while
 		// unary__with__namespace__ret__with
-		
+
 		// binary__and__bool__bool__ret__bool
 		// binary__and__bool__code__ret__bool
 		// binary__append__array__array__ret__nothing
@@ -120,7 +120,7 @@ namespace intercept {
 		// binary__vectordotproduct__array__array__ret__scalar
 		// binary__vectorfromto__array__array__ret__array
 		// binary__vectormultiply__array__scalar__ret__array
-		
+
         // nular__allsites__ret__array (deprecated - source: BI Wiki)
 		// nular__false__ret__bool
 		// nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
@@ -6369,24 +6369,24 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__speedmode__object_group__ret__string, grp_));
         }
 
-        std::vector<float> date() {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array));
+        game_date date() {
+            return game_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }
 
-        std::vector<float> fog_params() {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array));
+        fog_parameters fog_params() {
+            return fog_parameters::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array)));
         }
 
-        std::vector<float> get_object_view_distance() {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array));
+        rendering_distances get_object_view_distance() {
+            return rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
         }
 
         std::vector<float> get_resolution() {
             return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array));
         }
 
-        std::vector<float> mission_start() {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array));
+        game_date mission_start() {
+            return game_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
         }
 
         std::vector<object> vehicles() {

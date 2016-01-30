@@ -1122,16 +1122,14 @@ namespace intercept {
 
         /* World */
 
-        struct game_date
-        {
+        struct game_date {
             float year;
             float month;
             float day;
             float hour;
             float minute;
 
-            game_date(float year_, float month_, float day_, float hour_, float minute_)
-            {
+            game_date(float year_, float month_, float day_, float hour_, float minute_) {
                 year = year_;
                 month = month_;
                 day = day_;
@@ -1139,13 +1137,11 @@ namespace intercept {
                 minute = minute_;
             }
 
-            static game_date from_vector(const std::vector<float> &date_vector_)
-            {
+            static game_date from_vector(const std::vector<float> &date_vector_) {
                 return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
-            std::vector<float> to_vector() const
-            {
+            std::vector<float> to_vector() const {
                 std::vector<float> ret_val{ year, month, day, hour, minute };
                 return ret_val;
             }
@@ -1229,7 +1225,6 @@ namespace intercept {
         // TODO vector2 get_mouse_position();
         // TODO std::array<float, 2> get_object_view_distance();
         bool get_remote_sensors_disabled();
-        // TODO game_resolution get_resolution();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
         float gusts();
@@ -2076,11 +2071,55 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
-        std::vector<float> date();
-        std::vector<float> fog_params();
-        std::vector<float> get_object_view_distance();
-        std::vector<float> get_resolution();
-        std::vector<float> mission_start();
+        struct fog_parameters {
+            float value;
+            float decay;
+            float base;
+
+            fog_parameters(float value_, float decay_, float base_) {
+                value = value_;
+                decay = decay_;
+                base = base_;
+            }
+
+            static fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
+                return fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ value, decay, base };
+                return ret_val;
+            }
+        };
+
+        fog_parameters fog_params();
+
+        struct rendering_distances {
+            float object_distance;
+            float shadow_distance;
+
+            rendering_distances(float object_distance_, float shadow_distance_) {
+                object_distance = object_distance_;
+                shadow_distance = shadow_distance_;
+            }
+
+            static rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
+                return rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ object_distance, shadow_distance };
+                return ret_val;
+            }
+        };
+
+        rendering_distances get_object_view_distance();
+
+        //game_resolution get_resolution();
+
+        game_date date();
+        game_date mission_start();
+
         std::vector<object> vehicles();
 
     }

@@ -149,16 +149,40 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
+        /* No documentation.*/
+        // nular__airdensitycurvertd__ret__array
+
+        /* No documentation.*/
+        // nular__getdlcassetsusage__ret__array
+
+        /* No documentation.*/
+        // nular__getmissiondlcs__ret__array
+
+        /* No documentation.*/
+        // nular__getmouseposition__ret__array
+
+        /* Appears to return [show markers on map true/false, show markers on HUD true/false] array that setGroupIconsVisible takes. Scarce documentation.*/
+        // nular__groupiconsvisible__ret__array
+
+        /* Last parameter can be position (x, y, z) or target, unknown what target is.*/
+        // nular__hudmovementlevels__ret__array
+
+        /* No documentation for type Team.*/
+        // nular__teams__ret__array
+
+        /* No documentation.*/
+        // nular__windrtd__ret__array
+
         /* These functions apparently send arbatary messages across the network. They are apparently inactive.*/
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
-        
+
         /* This function does _something_ to a listbox. No documentation.*/
         // binary__lbsettextright__control__array__ret__nothing
 
         /* This function is apparently depreciated but the functionality is different to the command which replaces it.*/
         // unary__lbselection__control__ret__array
-        
+
         /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
             corresponds to how visible a particular unit is from another unit. */
         // binary__checkvisibility__array__array__ret__scalar
@@ -2922,7 +2946,15 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__language__ret__string);
         }
 
-        // TODO std::vector<std::array<std::string, 2>> library_credits();
+        std::vector<rv_credit> library_credits() {
+            game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__librarycredits__ret__array);
+
+            std::vector<rv_credit> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                output.push_back(input[i]);
+            }
+            return output;
+        }
 
         std::vector<std::string> library_disclaimers() {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(client::__sqf::nular__librarydisclaimers__ret__array));
@@ -6773,7 +6805,7 @@ namespace intercept {
         {
             host::functions.invoke_raw_binary(__sqf::binary__moveto__object__array__ret__nothing, unit_, pos_);
         }
-        
+
         rv_date date() {
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }
@@ -7026,6 +7058,139 @@ namespace intercept {
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, path));
+        }
+
+        vector3 eye_pos(const object &object_) {
+            return vector3(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyepos__object__ret__array, object_)));
+        }
+
+        rv_eden_mouse_over get_eden_mouse_over() {
+            return rv_eden_mouse_over(host::functions.invoke_raw_nular(client::__sqf::nular__get3denmouseover__ret__array));
+        }
+
+        rv_artillery_computer_settings get_artillery_computer_settings() {
+            return rv_artillery_computer_settings(host::functions.invoke_raw_nular(client::__sqf::nular__getartillerycomputersettings__ret__array));
+        }
+
+        rv_product_version product_version() {
+            return rv_product_version(host::functions.invoke_raw_nular(client::__sqf::nular__productversion__ret__array));
+        }
+
+        void add_magazine(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazine__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_) {
+            game_value params({
+                classname_,
+                quantity_,
+                ammocount_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineammocargo__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargo__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargoglobal__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_magazines(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_) {
+            game_value params({
+                classname_,
+                turretpath_,
+                ammocount_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineturret__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_) {
+            game_value params({
+                classname_,
+                turretpath_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponturret__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargo__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_) {
+            game_value params({
+                classname_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargoglobal__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_) {
+            game_value params({
+                weapon_name_,
+                item_name_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_) {
+            game_value params({
+                weapon_name_,
+                game_value({
+                    item_name_,
+                    ammo_count_
+                })
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_) {
+            game_value params({
+                weapon_name_,
+                game_value({
+                    item_name_,
+                    ammo_count_,
+                    muzzle_name_
+                })
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
     }
 }

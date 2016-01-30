@@ -2140,5 +2140,8 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
+        game_value get_mission_config_value(const std::string& attribute_);
+        game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);
+
     }
 }

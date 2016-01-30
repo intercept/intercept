@@ -6639,8 +6639,8 @@ namespace intercept {
             return rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
         }
 
-        std::vector<float> get_resolution() {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array));
+        game_resolution get_resolution() {
+            return game_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
         }
 
         game_date mission_start() {

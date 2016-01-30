@@ -78,12 +78,29 @@ namespace intercept {
 
         };
 
-		struct game_resolution
-		{
+		struct game_resolution {
 			vector2 resolution;
 			vector2 viewport;
 			float aspect_ratio;
 			float ui_scale;
+
+            game_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
+                resolution = resolution_;
+                viewport = viewport_;
+                aspect_ratio = aspect_ratio_;
+                ui_scale = ui_scale_;
+            }
+
+            static game_resolution from_vector(const std::vector<float> &game_resolution_vector_) {
+                vector2 resolution = { game_resolution_vector_[0], game_resolution_vector_[1] };
+                vector2 viewport = { game_resolution_vector_[2], game_resolution_vector_[3] };
+                return game_resolution(resolution, viewport, game_resolution_vector_[4], game_resolution_vector_[5]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
+                return ret_val;
+            }
 		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
@@ -2200,7 +2217,7 @@ namespace intercept {
 
         rendering_distances get_object_view_distance();
 
-        //game_resolution get_resolution();
+        game_resolution get_resolution();
 
         game_date date();
         game_date mission_start();

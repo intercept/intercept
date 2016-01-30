@@ -78,13 +78,13 @@ namespace intercept {
 
         };
 
-		struct game_resolution
-		{
-			vector2 resolution;
-			vector2 viewport;
-			float aspect_ratio;
-			float ui_scale;
-		};
+        struct game_resolution
+        {
+            vector2 resolution;
+            vector2 viewport;
+            float aspect_ratio;
+            float ui_scale;
+        };
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
@@ -351,6 +351,9 @@ namespace intercept {
         void lb_set_picture_color_disabled(const control &control_, int index_, rv_color color_);
         void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
         void lb_set_picture_color_selected(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color_selected(const control &control_, int index_, rv_color color_);
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
@@ -363,6 +366,9 @@ namespace intercept {
         std::string lb_text_right(const control &control_, int index_);
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
+        void lb_set_select_color(int idc_, int index_, rv_color color_);
+        void lb_set_select_color_right(int idc_, int index_, rv_color color_);
+        
 
         // Tree View
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
@@ -2163,6 +2169,8 @@ namespace intercept {
 
         game_value get_mission_config_value(const std::string& attribute_);
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);
+
+
 
     }
 }

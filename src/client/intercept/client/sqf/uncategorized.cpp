@@ -110,6 +110,7 @@ namespace intercept {
         // binary__max__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__min__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__mod__scalar_nan__scalar_nan__ret__scalar_nan
+        // binary__lbsetselected__control__array__ret__nothing (Depreciated in favor of lbSetCurSel)
         // binary__or__bool__bool__ret__bool
         // binary__or__bool__code__ret__bool
         // binary__param__any__array__ret__any
@@ -148,6 +149,8 @@ namespace intercept {
         /// investigate
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
+        // binary__lbsettextright__control__array__ret__nothing *Undocumented.
+		// unary__lbselection__control__ret__array
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -1362,6 +1365,39 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolorselected__control__array__ret__nothing, control_, args);
         }
 
+        void lb_set_picture_right_color(const control &control_, int index_, rv_color color_)
+        {
+            game_value args({
+                (float)(index_),
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturerightcolor__control__array__ret__nothing, control_, args);
+        }
+
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, rv_color color_)
+        {
+            game_value args({
+                (float)(index_),
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturerightcolordisabled__control__array__ret__nothing, control_, args);
+        }
+
+
+        void lb_set_picture_right_color_selected(const control &control_, int index_, rv_color color_)
+        {
+            game_value args({
+                (float)(index_),
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturerightcolorselected__control__array__ret__nothing, control_, args);
+        }
+
+
+
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_)
         {
             game_value args({
@@ -1446,6 +1482,30 @@ namespace intercept {
         float lb_value(const control &control_, int index_)
         {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float)index_));
+        }
+
+        void lb_set_select_color(int idc_, int index_, rv_color& color_)
+        {
+            game_value params({
+                (float)idc_,
+                (float)index_,
+                (color_)
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__lbsetselectcolor__array__ret__nothing, params);
+            // Alt syntax binary__lbsetselectcolor__control__array__ret__nothing
+        }
+
+        void lb_set_select_color_right(int idc_, int index_, rv_color& color_)
+        {
+            game_value params({
+                (float)idc_,
+                (float)index_,
+                color_
+            });
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__lbsetselectcolorright__array__ret__nothing, params);
+            // Alt syntax binary__lbsetselectcolorright__control__array__ret__nothing
         }
 
         /*************************************************************** LISTBOX END *****************************************************************************/

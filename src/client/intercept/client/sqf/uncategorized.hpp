@@ -1281,7 +1281,17 @@ namespace intercept {
         object agent(const team_member &value_);
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
-        //std::vector<?> airdensity_curvertd(); // no entry on the biki
+
+        struct rv_credit {
+            std::string library_name;
+            std::string credits;
+
+            rv_credit(const game_value &rv_game_value_)
+                : library_name(rv_game_value_[0]),
+                credits(rv_game_value_[1])
+            {
+            }
+        };
 
         float armorypoints();
         float benchmark();
@@ -1330,13 +1340,8 @@ namespace intercept {
         void force_end();
         void force_weather_change();
         bool free_look();
-        // TODO array[] getartillerycomputersettings(); // ["Semi (medium)","HE Mortar Shells",0]
         std::string getclientstate();
-        // TODO not on biki getdlcassetsusage();
         float getelevationoffset();
-        // TODO not on biki std::vector<std::string> getmissiondlcs();
-        // TODO vector2 get_mouse_position();
-        // TODO std::array<float, 2> get_object_view_distance();
         bool get_remote_sensors_disabled();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
@@ -1344,7 +1349,6 @@ namespace intercept {
         void halt();
         bool has_interface();
         bool hc_shown_bar();
-        // TODO hud_movement_levels hudmovementlevels();
         float humidity();
         side independent();
         void init_ambient_life();
@@ -1357,7 +1361,7 @@ namespace intercept {
         bool is_stress_damage_enabled();
         bool is_tut_hints_enabled();
         std::string language();
-        // TODO std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
+        std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
         float lightnings();
         std::string line_break();
@@ -1387,7 +1391,6 @@ namespace intercept {
         object player();
         float player_respawn_time();
         side player_side();
-        // TODO implement product_version productversion();
         std::string profile_name();
         rv_namespace profile_namespace();
         std::string profile_namesteam();
@@ -2270,19 +2273,6 @@ namespace intercept {
         };
 
         rv_artillery_computer_settings get_artillery_computer_settings();
-
-        struct rv_credit {
-            std::string library_name;
-            std::string credits;
-
-            rv_credit(const game_value &rv_game_value_)
-                : library_name(rv_game_value_[0]),
-                credits(rv_game_value_[1])
-            {
-            }
-        };
-
-        std::vector<rv_credit> library_credits();
 
         struct rv_product_version {
             std::string name;

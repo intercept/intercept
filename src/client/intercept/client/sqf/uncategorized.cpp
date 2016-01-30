@@ -2946,7 +2946,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__language__ret__string);
         }
 
-        // TODO std::vector<std::array<std::string, 2>> library_credits();
         std::vector<rv_credit> library_credits() {
             game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__librarycredits__ret__array);
 

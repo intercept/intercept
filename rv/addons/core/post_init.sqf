@@ -14,9 +14,4 @@ if(intercept_invoker_ok) then {
         diag_log text format["ENDED!"];
         _res = "intercept" callExtension "rv_event:mission_ended";
     }];
-    
-    player addEventHandler ["fired", {
-        missionNamespace setVariable ["intercept_params_var", +_this];
-        _res = "intercept" callExtension "rv_event:fired,intercept_params_var";
-    }];
 };

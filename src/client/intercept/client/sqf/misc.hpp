@@ -21,12 +21,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        struct game_resolution
-        {
-            vector2 resolution;
-            vector2 viewport;
-            float aspect_ratio;
-            float ui_scale;
-        };
+
     }
 }

@@ -56,17 +56,35 @@ namespace intercept {
             float green;
             float alpha;
 
-            std::vector<game_value> __to_gv_vector() const
+            operator game_value()
             {
-                return std::vector<game_value> ({
+                return game_value(std::vector<game_value>({
                     red,
                     blue,
                     green,
                     alpha
-                });
+                }));
+            }
+
+            operator game_value() const
+            {
+                return game_value(std::vector<game_value>({
+                    red,
+                    blue,
+                    green,
+                    alpha
+                }));
             }
 
         };
+
+		struct game_resolution
+		{
+			vector2 resolution;
+			vector2 viewport;
+			float aspect_ratio;
+			float ui_scale;
+		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
@@ -76,6 +94,17 @@ namespace intercept {
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value& default_value_);
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const object & obj_, const std::string & var_name_);
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const group & group_, const std::string & var_name_);
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const task & task_, const std::string & var_name_);
+        game_value get_variable(const location & loc_, const std::string & var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -559,10 +588,26 @@ namespace intercept {
         std::string marker_text(const std::string& value_);
         std::string marker_type(const std::string& value_);
 
-        void set_marker_alpha(float value0_, const std::string& value1_);
-        void set_marker_alpha_local(float value0_, const std::string& value1_);
-        void set_marker_dir(float value0_, const std::string& value1_);
-        void set_marker_dir_local(float value0_, const std::string& value1_);
+        void set_marker_size(const std::string& marker_, const vector2& size_);
+        void set_marker_size_local(const std::string& marker_, const vector2& size_);
+        void set_marker_type(const std::string& marker_, const std::string& type_);
+        void set_marker_type_local(const std::string& marker_, const std::string& type_);
+        void set_marker_text(const std::string& marker_, const std::string& text_);
+        void set_marker_text_local(const std::string& marker_, const std::string& text_);
+        void set_marker_shape(const std::string& marker_, const std::string& shape_);
+        void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
+        void set_marker_pos(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos(const std::string& marker_, const vector2& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector2& pos_);
+        void set_marker_brush(const std::string& marker_, const std::string& brush_);
+        void set_marker_brush_local(const std::string& marker_, const std::string& brush_);
+        void set_marker_color(const std::string& marker_, const std::string& color_);
+        void set_marker_color_local(const std::string& marker_, const std::string& color_);
+        void set_marker_alpha(const std::string& marker_, float alpha_);
+        void set_marker_alpha_local(const std::string& marker_, float alpha_);
+        void set_marker_dir(const std::string& marker_, float dir_);
+        void set_marker_dir_local(const std::string& marker_, float dir_);
 
         std::string get_marker_color(const std::string& value_);
         std::string get_marker_type(const std::string& value_);

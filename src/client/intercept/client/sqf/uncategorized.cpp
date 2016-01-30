@@ -6699,6 +6699,72 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
         }
 
+        void move(const object& unit_, const vector3& pos_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__move__object_group__array__ret__nothing, unit_, pos_);
+        }
+
+        void move(const group& group_, const vector3& pos_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__move__object_group__array__ret__nothing, group_, pos_);
+        }
+
+        bool move_in_any(const object& unit_, const object& vehicle_)
+        {
+            return game_value(host::functions.invoke_raw_binary(__sqf::binary__moveinany__object__object__ret__bool, unit_, vehicle_));
+        }
+
+        void move_in_cargo(const object& unit_, const object& vehicle_, int cargo_index_)
+        {
+            if (cargo_index_ == -1)
+            {
+                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__object__ret__nothing, unit_, vehicle_);
+            }
+            else
+            {
+                game_value params(std::vector<game_value> {
+                    vehicle_,
+                    (float)cargo_index_
+                });
+
+                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__object__ret__nothing, unit_, params);
+            }
+        }
+
+        void move_in_commander(const object& unit_, const object& vehicle_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__moveincommander__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void move_in_driver(const object& unit_, const object& vehicle_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__moveindriver__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void move_in_gunner(const object &unit_, const object &vehicle_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__moveingunner__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void move_in_turret(const object& unit_, const object& vehicle_, const std::vector<int> turret_path_)
+        {
+            std::vector<game_value> path;
+            for (int item : turret_path_)
+                path.push_back(game_value((float)item));
+
+            game_value params(std::vector<game_value> {
+                vehicle_,
+                path
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
+        }
+
+        void move_to(const object& unit_, const vector3& pos_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__moveto__object__array__ret__nothing, unit_, pos_);
+        }
+
         rv_date date() {
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }

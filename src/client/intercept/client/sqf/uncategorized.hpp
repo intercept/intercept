@@ -2233,5 +2233,17 @@ namespace intercept {
 
 
 
+
+        void move(const object &unit_, const vector3 &pos_);
+        void move(const group &group_, const vector3 &pos_);
+        bool move_in_any(const object &unit_, const object &vehicle_);
+        void move_in_cargo(const object &unit_, const object &vehicle_, int cargo_index_ = -1);
+        void move_in_commander(const object &unit_, const object &vehicle_);
+        void move_in_driver(const object &unit_, const object &vehicle_);
+        void move_in_gunner(const object &unit_, const object &vehicle_);
+        void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
+        void move_to(const object &unit_, const vector3 &pos_);
+
+
     }
 }

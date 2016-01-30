@@ -2224,5 +2224,8 @@ namespace intercept {
 
         std::vector<object> vehicles();
 
+        game_value get_mission_config_value(const std::string& attribute_);
+        game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);
+
     }
 }

@@ -6627,6 +6627,18 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__speedmode__object_group__ret__string, grp_));
         }
 
+        game_value get_mission_config_value(const std::string& attribute_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, attribute_));
+        }
+
+        game_value get_mission_config_value(const std::string& attribute_, game_value default_value_) {
+            game_value args(std::vector<game_value>{
+                attribute_,
+                    default_value_
+            });
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
+        }
+
         game_date date() {
             return game_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }

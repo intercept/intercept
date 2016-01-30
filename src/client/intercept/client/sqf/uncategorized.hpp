@@ -1266,7 +1266,6 @@ namespace intercept {
         // TODO void set_waves(float lerp_time_, float val_); // TODO
 
         float time();
-        // TODO game_date date();
 
         float time_multiplier();
 
@@ -1322,7 +1321,6 @@ namespace intercept {
         void finish_mission_init();
         bool fog();
         float fog_forecast();
-        // TODO std::vector<float> fog_params();
         void force_end();
         void force_weather_change();
         bool free_look();

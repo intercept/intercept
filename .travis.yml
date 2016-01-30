@@ -8,11 +8,11 @@ compiler:
 - gcc
 - clang
 before_install:
-- sudo apt-get install software-properties-common
+- sudo apt-get install software-properties-common -y
 - sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
 - sudo apt-get update -q
 - sudo apt-get install cmake -y
-- sudo apt-get upgrade
+- sudo apt-get upgrade -y
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi

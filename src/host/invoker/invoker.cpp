@@ -124,6 +124,9 @@ namespace intercept {
     bool invoker::rv_event(const arguments & args_, std::string & result_)
     {
         std::string event_name = args_.as_string(0);
+        uint32_t var_index = 0;
+        if (args_.size() > 1)
+            var_index = args_.as_uint32(1);
         LOG(DEBUG) << "EH " << event_name << " START";
         auto handler = _eventhandlers.find(event_name);
         if (handler != _eventhandlers.end()) {
@@ -134,8 +137,8 @@ namespace intercept {
             if (event_name == "mission_stopped")
                 all = true;
             _invoker_unlock eh_lock(this, all);
-            _eh_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_params_var"), "STRING");
-            handler->second(event_name, _eh_params);
+            //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
+            handler->second(event_name, _eh_params[var_index]);
             LOG(DEBUG) << "EH " << event_name << " END";
             return true;
         }
@@ -144,11 +147,13 @@ namespace intercept {
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        _invoker_unlock init_lock(this);
         game_value delete_ptr_name = "INVOKER_DELETE_ARRAY";
+        _eh_params_name = "intercept_params_var";
+        _invoker_unlock init_lock(this);
         _mission_namespace = invoke_raw("missionnamespace");
-        invoker::get()._delete_array_ptr = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &delete_ptr_name, "STRING");
-        _eh_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_params_var"), "STRING");
+        loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
+        _delete_array_ptr = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &delete_ptr_name);
+        _eh_params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &_eh_params_name);
         _delete_size_zero = game_value(0.0f);
         _delete_size_max = game_value(1000.0f);
         return true;

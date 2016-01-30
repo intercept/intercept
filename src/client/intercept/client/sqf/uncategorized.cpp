@@ -140,7 +140,6 @@ namespace intercept {
         // binary__vectorfromto__array__array__ret__array
         // binary__vectormultiply__array__scalar__ret__array
         // binary__camsetdir__object__array__ret__nothing
-
         // nular__false__ret__bool
         // nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
         // nular__nil__ret__any
@@ -157,7 +156,7 @@ namespace intercept {
             game_value args({
                 pos1_,
                 pos2_,
-                color_.__to_gv_vector()
+                color_
             });
             host::functions.invoke_raw_unary(client::__sqf::unary__drawline3d__array__ret__nothing, args);
         }
@@ -166,7 +165,7 @@ namespace intercept {
         {
             game_value args({
                 texture_,
-                color_.__to_gv_vector(),
+                color_,
                 pos_agl_,
                 width_,
                 height_,
@@ -199,6 +198,86 @@ namespace intercept {
         {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_));
         }
+
+        game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__array__ret__any, namespace_, args));
+        }
+
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__display__string_array__ret__any, display_, args));
+        }
+
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__display__string_array__ret__any, ctrl_, args));
+        }
+
+        game_value get_variable(const object & obj_, const std::string & var_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__object__string__ret__any, obj_, var_name_));
+        }
+
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__object__array__ret__any, obj_, args));
+        }
+
+        game_value get_variable(const group & group_, const std::string & var_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__group__string__ret__any, group_, var_name_));
+        }
+
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__group__array__ret__any, group_, args));
+        }
+
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__team_member__string__ret__any, team_member_, var_name_));
+        }
+
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_)
+        {
+            game_value args(std::vector<game_value>{
+                var_name_,
+                default_value_
+            });
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__team_member__array__ret__any, team_member_, args));
+        }
+
+        game_value get_variable(const task & task_, const std::string & var_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__task__string__ret__any, task_, var_name_));
+        }
+
+        game_value get_variable(const location & loc_, const std::string & var_name_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_));
+        }
+
 
         vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_)
         {
@@ -285,7 +364,7 @@ namespace intercept {
                 a_,
                 b_,
                 angle_,
-                color_.__to_gv_vector(),
+                color_,
                 fill_texture_
             });
             host::functions.invoke_raw_binary(client::__sqf::binary__drawrectangle__control__array__ret__nothing, ctrl_, args);
@@ -295,7 +374,7 @@ namespace intercept {
         {
             game_value args({
                 texture_,
-                color_.__to_gv_vector(),
+                color_,
                 pos_,
                 width_,
                 height_,
@@ -313,7 +392,7 @@ namespace intercept {
         {
             game_value args({
                 texture_,
-                color_.__to_gv_vector(),
+                color_,
                 pos_,
                 width_,
                 height_,
@@ -1107,7 +1186,7 @@ namespace intercept {
             game_value args({
                 (float)(control_id_),
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolor__array__ret__nothing, args);
@@ -1117,7 +1196,7 @@ namespace intercept {
         {
             game_value args({
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcolor__control__array__ret__nothing, control_, args);
@@ -1128,7 +1207,7 @@ namespace intercept {
             game_value args({
                 (float)(control_id_),
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolorright__array__ret__nothing, args);
@@ -1138,7 +1217,7 @@ namespace intercept {
         {
             game_value args({
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcolorright__control__array__ret__nothing, control_, args);
@@ -1224,7 +1303,7 @@ namespace intercept {
             game_value args({
                 (float)(control_id_),
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolor__array__ret__nothing, args);
@@ -1235,7 +1314,7 @@ namespace intercept {
         {
             game_value args({
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolor__control__array__ret__nothing, control_, args);
@@ -1246,7 +1325,7 @@ namespace intercept {
             game_value args({
                 (float)(control_id_),
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolordisabled__array__ret__nothing, args);
@@ -1256,7 +1335,7 @@ namespace intercept {
         {
             game_value args({
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolordisabled__control__array__ret__nothing, control_, args);
@@ -1267,7 +1346,7 @@ namespace intercept {
             game_value args({
                 (float)(control_id_),
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolorselected__array__ret__nothing, args);
@@ -1277,7 +1356,7 @@ namespace intercept {
         {
             game_value args({
                 (float)(index_),
-                color_.__to_gv_vector()
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolorselected__control__array__ret__nothing, control_, args);

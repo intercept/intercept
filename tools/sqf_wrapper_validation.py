@@ -52,7 +52,7 @@ def parse():
     for impl in implementations:
         match = re.search("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", impl[2])
         if (match):
-            warnings_found.append("Found a default value ({}) in implementation parameters ({}, {} line {})".format(match.group(1), impl[1], impl[3][0], impl[3][1]))
+            errors_found.append("Found a default value ({}) in implementation parameters ({}, {} line {})".format(match.group(1), impl[1], impl[3][0], impl[3][1]))
             impl[2] = re.sub("(\s*=\s*[a-zA-Z0-9\"]+)(?=[,\)])", r"", impl[2]).lower()
 
         elements = impl[2].split(',')

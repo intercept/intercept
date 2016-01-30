@@ -7,27 +7,67 @@ language: cpp
 compiler:
 - gcc
 - clang
-before_install:
-# - sudo add-apt-repository ppa.launchpad.net/tobydox/mingw-x-precise -y
-# - sudo apt-get update -q
-# - sudo apt-get install mingw-x-gcc -y
-# - sudo apt-get install mingw-x-binutils -y
-# - sudo apt-get install mingw-x-runtime -y
+env:
+- BUILDMODE=custom
+- BUILDMODE=cmake
+- BUILDMODE=cmake-mingw32
+matrix:
+  exclude:
+    - compiler: clang
+      env: BUILDMODE=cmake-mingw32
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi
-- cd build
-- cmake ..
-- cd ..
-install:
-- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-std=c++11"; fi
+# - cd build
+# - cmake ..
+# - cd ..
+- sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+- sudo add-apt-repository --yes ppa:tobydox/mingw
+- sudo apt-get -qq update
+- sudo apt-get -qq install libsmbclient-dev libssh2-1-dev
+- sudo apt-get -qq install gcc-4.8 g++-4.8
+- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 20
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 20
+- sudo update-alternatives --config gcc
+- sudo update-alternatives --config g++
+- if [ "$BUILDMODE" = "cmake-mingw32" ]; then sudo apt-get -qq install mingw64-x-gcc; fi
 script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then python3 tools/deploy.py; fi
 - python3 tools/sqf_wrapper_validation.py
-- cd build
-- make
+# - cd build
+# - make
 - $CXX --version
+- if [ "$BUILDMODE" = "custom" ]; then
+  echo "===> Building with custom buildsystem..." &&
+  cd "$TRAVIS_BUILD_DIR" &&
+  make all -B;
+fi
+- if [ "$BUILDMODE" = "cmake" ]; then
+  echo "===> Building with cmake..." &&
+  cd "$TRAVIS_BUILD_DIR" &&
+  mkdir build &&
+  cd build &&
+  cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+  make &&
+  make install;
+fi
+- if [ "$BUILDMODE" = "cmake-mingw32" ]; then echo "===> Building with cmake+mingw32..." &&
+  cd "$TRAVIS_BUILD_DIR" &&
+  mkdir build &&
+  cd build &&
+  echo "SET(CMAKE_SYSTEM_NAME Windows)" > toolchain.cmake &&
+  echo "SET(CMAKE_C_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-gcc)" >> toolchain.cmake &&
+  echo "SET(CMAKE_CXX_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-g++)" >> toolchain.cmake &&
+  echo "SET(CMAKE_RC_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-windres)" >> toolchain.cmake &&
+  echo "SET(CMAKE_FIND_ROOT_PATH /opt/mingw64)" >> toolchain.cmake &&
+  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain.cmake &&
+  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain.cmake &&
+  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> toolchain.cmake &&
+  cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+  make &&
+  make install;
+fi
 # notifications:
 #   email:
 #     on_success: never

@@ -1,4 +1,5 @@
 sudo: required
+dist: trusty
 branches:
   only:
   - master
@@ -7,8 +8,8 @@ compiler:
 - gcc
 - clang
 before_install:
-- sudo add-apt-repository ppa:george-edison55/precise-backports -y
-- sudo apt-get update #-q
+- sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
+- sudo apt-get update -q
 - sudo apt-get install cmake -y
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"

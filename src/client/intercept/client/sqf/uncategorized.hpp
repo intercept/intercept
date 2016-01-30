@@ -78,23 +78,23 @@ namespace intercept {
 
         };
 
-		struct game_resolution {
+		struct rv_resolution {
 			vector2 resolution;
 			vector2 viewport;
 			float aspect_ratio;
 			float ui_scale;
 
-            game_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
+            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
                 resolution = resolution_;
                 viewport = viewport_;
                 aspect_ratio = aspect_ratio_;
                 ui_scale = ui_scale_;
             }
 
-            static game_resolution from_vector(const std::vector<float> &game_resolution_vector_) {
-                vector2 resolution = { game_resolution_vector_[0], game_resolution_vector_[1] };
-                vector2 viewport = { game_resolution_vector_[2], game_resolution_vector_[3] };
-                return game_resolution(resolution, viewport, game_resolution_vector_[4], game_resolution_vector_[5]);
+            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
+                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
+                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
+                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
             }
 
             std::vector<float> to_vector() const {
@@ -2171,19 +2171,19 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
-        struct fog_parameters {
+        struct rv_fog_parameters {
             float value;
             float decay;
             float base;
 
-            fog_parameters(float value_, float decay_, float base_) {
+            rv_fog_parameters(float value_, float decay_, float base_) {
                 value = value_;
                 decay = decay_;
                 base = base_;
             }
 
-            static fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
-                return fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
+            static rv_fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
+                return rv_fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
             }
 
             std::vector<float> to_vector() const {
@@ -2192,19 +2192,19 @@ namespace intercept {
             }
         };
 
-        fog_parameters fog_params();
+        rv_fog_parameters fog_params();
 
-        struct rendering_distances {
+        struct rv_rendering_distances {
             float object_distance;
             float shadow_distance;
 
-            rendering_distances(float object_distance_, float shadow_distance_) {
+            rv_rendering_distances(float object_distance_, float shadow_distance_) {
                 object_distance = object_distance_;
                 shadow_distance = shadow_distance_;
             }
 
-            static rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
-                return rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
+            static rv_rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
+                return rv_rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
             }
 
             std::vector<float> to_vector() const {
@@ -2213,9 +2213,9 @@ namespace intercept {
             }
         };
 
-        rendering_distances get_object_view_distance();
+        rv_rendering_distances get_object_view_distance();
 
-        game_resolution get_resolution();
+        rv_resolution get_resolution();
 
         game_date date();
         game_date mission_start();

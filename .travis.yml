@@ -8,9 +8,7 @@ compiler:
 - gcc
 - clang
 env:
-- FEATURE=1 CXXFLAGS=-m32
-- FEATURE=1 CXXFLAGS=-m64
-- FEATURE=2 CC=i586-mingw32msvc-gcc CXX=i586-mingw32msvc-g++ LD=i586-mingw32msvc-ld
+- CC=i586-mingw32msvc-gcc OPTIONS="-DBUILD_CLAR=OFF -DWIN32=ON -DMINGW=ON"
 before_install:
 - sudo apt-get update -qq -y
 - sudo apt-get install -qq -y g++-multilib mingw32

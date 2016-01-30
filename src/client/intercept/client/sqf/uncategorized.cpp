@@ -152,7 +152,7 @@ namespace intercept {
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
         // binary__lbsettextright__control__array__ret__nothing *Undocumented.
-		// unary__lbselection__control__ret__array
+        // unary__lbselection__control__ret__array
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 

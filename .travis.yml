@@ -7,10 +7,6 @@ language: cpp
 compiler:
 - gcc
 - clang
-env:
-- BUILDMODE=custom
-- BUILDMODE=cmake
-- BUILDMODE=cmake-mingw32
 matrix:
   exclude:
     - compiler: clang
@@ -78,4 +74,7 @@ script:
 #     on_success: change
 env:
   global:
+    - BUILDMODE=custom
+    - BUILDMODE=cmake
+    - BUILDMODE=cmake-mingw32
     secure: agYEwpL95+e0vVIJ6H/UXJwiY0ubCFoNM7SoGFikr+ZV609OeL7KPS7gG7TV57HUP7lPv05JIntFAn37NZjKptZYJTBnmTPT7mmS/fn3LfuFwldvD2m+PUclz5cO2WMM+utWi+JnvpYPficdlLoHOlW9NjigsgFT/Xd49MkDyxpxCZ2C3KiSzOy4EAV+UNMDiq5+iUKNNMfTINYz2ZTF4muBQb4oGzpriS/4sEUKt1mOjZNGf2tX+JpppjDCnic9Wo3BTixIhgB/Ja0LvYuAoaERSFPioxj50J4oQemyfuGdabCM3D2Xo0i4OpNsM+Au9iXQaL9bQRvTfVSSN1T6KARmuw134MjuPq9G4ppRIEHeKzirqUpMNw+ja/No7I5111Cq0fwm/Y+ZqaxPf1YRnt5jLweggngKrb9672IkrW7M10pvleUXV5RWYBXkfwWxyNatU7dt231gS7n1jTOOvGDltvyHjnZSuCR82IevE4waCxtfGAfgwqYj14vVyQoxLIbFcFpJJ3ANRdwpHYaIlcJ03GSG5luRQ/5prwIEmweS1XlGM400XVjWpW34pHIUdjzuFyiDuSWrEWukjv57XCk7etpDTfp2rtV5tghXwqfa76SpjsIT1ooJgjL/3nrNrR3sFKWDcaC6okeB1nBZ/Fdg1GpXztf54dcyQdikqNY=

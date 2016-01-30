@@ -13,6 +13,9 @@ def parse():
     implementations = []
     declarations = []
 
+    errors_found = []
+    warnings_found = []
+
     # Walk through our source files and figure out which ones are used in our code
     for file in os.listdir(projectpath_sqf):
         foundInFile = 0
@@ -23,7 +26,11 @@ def parse():
                 filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
                 filecontents = re.sub("(//.*?\n)", '', filecontents)
                 filecontents = re.sub("(public:\s+|private:\s+)", '', filecontents)
-                
+                for c in filecontents:
+                    if (c == '\n'): lineN += 1
+                    if (c == '\t'):
+                        errors_found.append("Tab found in file: {} at line {}".format(file, lineN))
+
                 #if file.endswith(".cpp"):
                 match_impls = re.findall("([a-zA-Z0-9:_<>]+,*?\s*[a-zA-Z0-9:_<>]+>|[a-zA-Z0-9:_<>]+)\s+([a-zA-Z0-9:_]+)(\(.*?\))(?=\s*\{)", filecontents)
                 for match_impl in match_impls:
@@ -44,8 +51,6 @@ def parse():
                         if (valid_match or match_impl[2] == "()"):
                             declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
 
-    errors_found = []
-    warnings_found = []
 
     parsed_impl = []
     # strip default values

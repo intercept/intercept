@@ -328,6 +328,9 @@ namespace intercept {
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
 
+        // Tree View
+        int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
         std::string current3denoperation();

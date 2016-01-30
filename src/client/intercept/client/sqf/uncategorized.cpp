@@ -56,7 +56,7 @@ namespace intercept {
         // unary__rad__scalar_nan__ret__scalar_nan
         // unary__random__array__ret__scalar_nan
         // unary__random__scalar_nan__ret__scalar_nan
-        // unary__reverse__array__ret__nothing 
+        // unary__reverse__array__ret__nothing
         // unary__round__scalar_nan__ret__scalar_nan
         // unary__selectrandom__array__ret__any
         // unary__sin__scalar_nan__ret__scalar_nan
@@ -6531,5 +6531,27 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__speedmode__object_group__ret__string, grp_));
         }
 
+        int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                text_
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvadd__control__array__ret__scalar, ctrl_, params));
+        }
+
+        void tv_collapse(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, path);
+        }
     }
 }

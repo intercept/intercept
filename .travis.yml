@@ -5,13 +5,22 @@ branches:
   - master
 language: cpp
 compiler:
-#- gcc
+- gcc
 - clang
+- FEATURE=1 CXXFLAGS=-m32
+- FEATURE=1 CXXFLAGS=-m64
+- FEATURE=2 CC=i586-mingw32msvc-gcc CXX=i586-mingw32msvc-g++ LD=i586-mingw32msvc-ld
 before_install:
-- sudo apt-get install software-properties-common -y
-- sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
-- sudo apt-get update -q
-- sudo apt-get install --only-upgrade cmake -y
+- sudo add-apt-repository -y ppa:apt-fast/stable
+- sudo apt-get update -qq -y
+- sudo apt-get install -qq -y apt-fast
+- sudo apt-fast update -qq -y
+- sudo apt-fast install -qq -y g++-multilib mingw32
+# - sudo add-apt-repository ppa.launchpad.net/tobydox/mingw-x-precise -y
+# - sudo apt-get update -q
+# - sudo apt-get install mingw-x-gcc -y
+# - sudo apt-get install mingw-x-binutils -y
+# - sudo apt-get install mingw-x-runtime -y
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi

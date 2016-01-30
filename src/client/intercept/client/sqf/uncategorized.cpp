@@ -6477,7 +6477,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__timemultiplier__ret__scalar);
         }
 
-        float date_to_number(game_date date_) {
+        float date_to_number(rv_date date_) {
             //game_value date_array({
             //    (date_.year),
             //    (date_.month),
@@ -6639,8 +6639,8 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
         }
 
-        game_date date() {
-            return game_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
+        rv_date date() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }
 
         rv_fog_parameters fog_params() {
@@ -6655,8 +6655,8 @@ namespace intercept {
             return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
         }
 
-        game_date mission_start() {
-            return game_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
+        rv_date mission_start() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
         }
 
         std::vector<object> vehicles() {

@@ -1231,14 +1231,14 @@ namespace intercept {
 
         /* World */
 
-        struct game_date {
+        struct rv_date {
             float year;
             float month;
             float day;
             float hour;
             float minute;
 
-            game_date(float year_, float month_, float day_, float hour_, float minute_) {
+            rv_date(float year_, float month_, float day_, float hour_, float minute_) {
                 year = year_;
                 month = month_;
                 day = day_;
@@ -1246,8 +1246,8 @@ namespace intercept {
                 minute = minute_;
             }
 
-            static game_date from_vector(const std::vector<float> &date_vector_) {
-                return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
+            static rv_date from_vector(const std::vector<float> &date_vector_) {
+                return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
             std::vector<float> to_vector() const {
@@ -1269,7 +1269,7 @@ namespace intercept {
 
         float time_multiplier();
 
-        float date_to_number(game_date date_);
+        float date_to_number(rv_date date_);
 
         float acc_time();
         object agent(const team_member &value_);
@@ -2217,8 +2217,8 @@ namespace intercept {
 
         rv_resolution get_resolution();
 
-        game_date date();
-        game_date mission_start();
+        rv_date date();
+        rv_date mission_start();
 
         std::vector<object> vehicles();
 

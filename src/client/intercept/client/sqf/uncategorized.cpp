@@ -1486,7 +1486,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float)index_));
         }
 
-        void lb_set_select_color(int idc_, int index_, rv_color& color_)
+        void lb_set_select_color(int idc_, int index_, rv_color &color_)
         {
             game_value params({
                 (float)idc_,
@@ -1498,7 +1498,7 @@ namespace intercept {
             // Alt syntax binary__lbsetselectcolor__control__array__ret__nothing
         }
 
-        void lb_set_select_color_right(int idc_, int index_, rv_color& color_)
+        void lb_set_select_color_right(int idc_, int index_, rv_color &color_)
         {
             game_value params({
                 (float)idc_,

@@ -383,8 +383,8 @@ namespace intercept {
         std::string lb_text_right(const control &control_, int index_);
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
-        void lb_set_select_color(int idc_, int index_, rv_color color_);
-        void lb_set_select_color_right(int idc_, int index_, rv_color color_);
+        void lb_set_select_color(int idc_, int index_, rv_color &color_);
+        void lb_set_select_color_right(int idc_, int index_, rv_color &color_);
         
 
         // Tree View

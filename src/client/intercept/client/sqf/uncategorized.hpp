@@ -78,11 +78,11 @@ namespace intercept {
 
         };
 
-		struct rv_resolution {
-			vector2 resolution;
-			vector2 viewport;
-			float aspect_ratio;
-			float ui_scale;
+        struct rv_resolution {
+            vector2 resolution;
+            vector2 viewport;
+            float aspect_ratio;
+            float ui_scale;
 
             rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
                 resolution = resolution_;
@@ -101,7 +101,7 @@ namespace intercept {
                 std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
                 return ret_val;
             }
-		};
+        };
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );

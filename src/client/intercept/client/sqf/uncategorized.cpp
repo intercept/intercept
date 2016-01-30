@@ -82,6 +82,7 @@ namespace intercept {
         // binary__arrayintersect__array__array__ret__array
         // binary__atan2__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__breakout__any__string__ret__any
+        // binary__camsetdir__object__array__ret__nothing
         // binary__catch__exception__code__ret__any
         // binary__count__code__array__ret__scalar
         // binary__deleteat__array__scalar__ret__any
@@ -140,7 +141,8 @@ namespace intercept {
         // binary__vectordotproduct__array__array__ret__scalar
         // binary__vectorfromto__array__array__ret__array
         // binary__vectormultiply__array__scalar__ret__array
-        // binary__camsetdir__object__array__ret__nothing
+
+        // nular__allsites__ret__array (deprecated - source: BI Wiki)
         // nular__false__ret__bool
         // nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
         // nular__nil__ret__any
@@ -6535,7 +6537,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__timemultiplier__ret__scalar);
         }
 
-        float date_to_number(game_date date_) {
+        float date_to_number(rv_date date_) {
             //game_value date_array({
             //    (date_.year),
             //    (date_.month),
@@ -6695,6 +6697,30 @@ namespace intercept {
                     default_value_
             });
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
+        }
+
+        rv_date date() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
+        }
+
+        rv_fog_parameters fog_params() {
+            return rv_fog_parameters::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array)));
+        }
+
+        rv_rendering_distances get_object_view_distance() {
+            return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
+        }
+
+        rv_resolution get_resolution() {
+            return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
+        }
+
+        rv_date mission_start() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
+        }
+
+        std::vector<object> vehicles() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
         }
 
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {

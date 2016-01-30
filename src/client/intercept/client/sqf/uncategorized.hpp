@@ -78,12 +78,29 @@ namespace intercept {
 
         };
 
-        struct game_resolution
-        {
+        struct rv_resolution {
             vector2 resolution;
             vector2 viewport;
             float aspect_ratio;
             float ui_scale;
+
+            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
+                resolution = resolution_;
+                viewport = viewport_;
+                aspect_ratio = aspect_ratio_;
+                ui_scale = ui_scale_;
+            }
+
+            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
+                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
+                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
+                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
+                return ret_val;
+            }
         };
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
@@ -1220,16 +1237,14 @@ namespace intercept {
 
         /* World */
 
-        struct game_date
-        {
+        struct rv_date {
             float year;
             float month;
             float day;
             float hour;
             float minute;
 
-            game_date(float year_, float month_, float day_, float hour_, float minute_)
-            {
+            rv_date(float year_, float month_, float day_, float hour_, float minute_) {
                 year = year_;
                 month = month_;
                 day = day_;
@@ -1237,13 +1252,11 @@ namespace intercept {
                 minute = minute_;
             }
 
-            static game_date from_vector(const std::vector<float> &date_vector_)
-            {
-                return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
+            static rv_date from_vector(const std::vector<float> &date_vector_) {
+                return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
-            std::vector<float> to_vector() const
-            {
+            std::vector<float> to_vector() const {
                 std::vector<float> ret_val{ year, month, day, hour, minute };
                 return ret_val;
             }
@@ -1259,11 +1272,10 @@ namespace intercept {
         // TODO void set_waves(float lerp_time_, float val_); // TODO
 
         float time();
-        // TODO game_date date();
 
         float time_multiplier();
 
-        float date_to_number(game_date date_);
+        float date_to_number(rv_date date_);
 
         float acc_time();
         object agent(const team_member &value_);
@@ -1315,7 +1327,6 @@ namespace intercept {
         void finish_mission_init();
         bool fog();
         float fog_forecast();
-        // TODO std::vector<float> fog_params();
         void force_end();
         void force_weather_change();
         bool free_look();
@@ -1327,7 +1338,6 @@ namespace intercept {
         // TODO vector2 get_mouse_position();
         // TODO std::array<float, 2> get_object_view_distance();
         bool get_remote_sensors_disabled();
-        // TODO game_resolution get_resolution();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
         float gusts();
@@ -2166,6 +2176,57 @@ namespace intercept {
 
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
+
+        struct rv_fog_parameters {
+            float value;
+            float decay;
+            float base;
+
+            rv_fog_parameters(float value_, float decay_, float base_) {
+                value = value_;
+                decay = decay_;
+                base = base_;
+            }
+
+            static rv_fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
+                return rv_fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ value, decay, base };
+                return ret_val;
+            }
+        };
+
+        rv_fog_parameters fog_params();
+
+        struct rv_rendering_distances {
+            float object_distance;
+            float shadow_distance;
+
+            rv_rendering_distances(float object_distance_, float shadow_distance_) {
+                object_distance = object_distance_;
+                shadow_distance = shadow_distance_;
+            }
+
+            static rv_rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
+                return rv_rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ object_distance, shadow_distance };
+                return ret_val;
+            }
+        };
+
+        rv_rendering_distances get_object_view_distance();
+
+        rv_resolution get_resolution();
+
+        rv_date date();
+        rv_date mission_start();
+
+        std::vector<object> vehicles();
 
         game_value get_mission_config_value(const std::string& attribute_);
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);

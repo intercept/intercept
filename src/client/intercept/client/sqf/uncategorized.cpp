@@ -6659,39 +6659,29 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpictureright__control__array__ret__nothing, ctrl_, params);
         }
 
-        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const std::vector<float>& color_) {
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
                 path.push_back(game_value((float)item));
             }
 
-            std::vector<game_value> color;
-            for (float item : color_) {
-                color.push_back(game_value((float)item));
-            }
-
             game_value params({
                 path,
-                color
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolor__control__array__ret__nothing, ctrl_, params);
         }
 
-        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const std::vector<float>& color_) {
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
                 path.push_back(game_value((float)item));
             }
 
-            std::vector<game_value> color;
-            for (float item : color_) {
-                color.push_back(game_value((float)item));
-            }
-
             game_value params({
                 path,
-                color
+                color_
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolorright__control__array__ret__nothing, ctrl_, params);

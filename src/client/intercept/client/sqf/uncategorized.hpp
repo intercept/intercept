@@ -339,8 +339,8 @@ namespace intercept {
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
-        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const std::vector<float>& color_);
-        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const std::vector<float>& color_);
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, const float& value_);
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, const bool& reversed_ = false);

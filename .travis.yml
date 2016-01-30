@@ -7,11 +7,7 @@ language: cpp
 compiler:
 - gcc
 - clang
-env:
-- CC=i586-mingw32msvc-gcc OPTIONS="-DBUILD_CLAR=OFF -DWIN32=ON -DMINGW=ON"
 before_install:
-- sudo apt-get update -qq -y
-- sudo apt-get install -qq -y g++-multilib mingw32
 # - sudo add-apt-repository ppa.launchpad.net/tobydox/mingw-x-precise -y
 # - sudo apt-get update -q
 # - sudo apt-get install mingw-x-gcc -y

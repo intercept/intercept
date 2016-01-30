@@ -6764,7 +6764,7 @@ namespace intercept {
         {
             host::functions.invoke_raw_binary(__sqf::binary__moveto__object__array__ret__nothing, unit_, pos_);
         }
-
+		
         rv_date date() {
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }

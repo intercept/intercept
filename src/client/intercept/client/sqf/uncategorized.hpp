@@ -56,14 +56,24 @@ namespace intercept {
             float green;
             float alpha;
 
-            std::vector<game_value> __to_gv_vector() const
+            operator game_value()
             {
-                return std::vector<game_value> ({
+                return game_value(std::vector<game_value>({
                     red,
                     blue,
                     green,
                     alpha
-                });
+                }));
+            }
+
+            operator game_value() const
+            {
+                return game_value(std::vector<game_value>({
+                    red,
+                    blue,
+                    green,
+                    alpha
+                }));
             }
 
         };

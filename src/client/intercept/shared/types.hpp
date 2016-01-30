@@ -18,6 +18,12 @@ namespace intercept {
 
         class rv_string {
         public:
+            rv_string();
+            rv_string(const rv_string &) = delete;
+            rv_string(rv_string &&) = delete;
+            rv_string & operator=(const rv_string &) = delete;
+            rv_string & operator=(rv_string &&) = delete;
+
             uint32_t ref_count_internal;
             uint32_t length;
             char char_string;
@@ -166,27 +172,27 @@ namespace intercept {
 
             game_value & operator = (float val_);
             game_value & operator = (bool val_);
-            game_value & operator = (const std::string val_);
+            game_value & operator = (const std::string &val_);
             game_value & operator = (const char *val_);
             game_value & operator = (const std::vector<game_value> &list_);
-            game_value & operator = (const vector3 vec_);
-            game_value & operator = (const vector2 vec_);
-            game_value & operator = (const internal_object internal_);
-            game_value & operator = (const rv_game_value internal_);
+            game_value & operator = (const vector3 &vec_);
+            game_value & operator = (const vector2 &vec_);
+            game_value & operator = (const internal_object &internal_);
+            game_value & operator = (const rv_game_value &internal_);
 
 
 
             operator float();
             operator bool();
             operator std::string();
-            operator rv_string();
+            operator rv_string &();
             operator rv_game_value *();
             operator vector3();
             operator vector2();
             operator float() const;
             operator bool() const;
             operator std::string() const;
-            operator rv_string() const;
+            operator rv_string &() const;
             operator vector3() const;
             operator vector2() const;
 

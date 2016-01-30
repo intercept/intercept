@@ -1,6 +1,6 @@
 //lib.sqf
 
-intercept_params_var = [1,2,3];
+
 intercept_invoker_ok = false;
 
 intercept_fnc_test = {
@@ -28,6 +28,7 @@ intercept_fnc__event = {
 
 intercept_fnc__onFrame = {
     // _start = diag_tickTime;
+    intercept_params_index = 2;
     "intercept" callExtension "do_invoke_period:";
     // _end = diag_tickTime;
     // diag_log text format["t: %1", (_end-_start)*1000];
@@ -35,6 +36,9 @@ intercept_fnc__onFrame = {
 
 INVOKER_DELETE_ARRAY = [];
 INVOKER_DELETE_ARRAY resize 1000;
+intercept_params_var = [1,2,3];
+intercept_params_var resize 1000;
+intercept_params_index = 2;
 str INVOKER_DELETE_ARRAY;
 
 diag_log text "Intercept Invoker SQF handler initializing...";

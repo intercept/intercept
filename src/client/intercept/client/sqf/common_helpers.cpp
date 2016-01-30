@@ -60,7 +60,7 @@ namespace intercept {
             bool __retrieve_nular_bool(nular_function fnc_) {
                 return game_value(host::functions.invoke_raw_nular(fnc_));
             }
-            
+
             void __empty_unary_object(unary_function fnc_, const object &obj_)
             {
                 host::functions.invoke_raw_unary(fnc_, obj_);
@@ -173,7 +173,7 @@ namespace intercept {
                 for (uint32_t i = 0; i < input__.length(); ++i) {
                     output.push_back(input__[i]);
                 }
-                host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
+
                 return output;
             }
 

@@ -56,16 +56,51 @@ namespace intercept {
             float green;
             float alpha;
 
-            std::vector<game_value> __to_gv_vector() const
+            operator game_value()
             {
-                return std::vector<game_value> ({
+                return game_value(std::vector<game_value>({
                     red,
                     blue,
                     green,
                     alpha
-                });
+                }));
             }
 
+            operator game_value() const
+            {
+                return game_value(std::vector<game_value>({
+                    red,
+                    blue,
+                    green,
+                    alpha
+                }));
+            }
+
+        };
+
+        struct rv_resolution {
+            vector2 resolution;
+            vector2 viewport;
+            float aspect_ratio;
+            float ui_scale;
+
+            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
+                resolution = resolution_;
+                viewport = viewport_;
+                aspect_ratio = aspect_ratio_;
+                ui_scale = ui_scale_;
+            }
+
+            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
+                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
+                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
+                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
+                return ret_val;
+            }
         };
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
@@ -76,6 +111,17 @@ namespace intercept {
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value& default_value_);
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const object & obj_, const std::string & var_name_);
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const group & group_, const std::string & var_name_);
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const task & task_, const std::string & var_name_);
+        game_value get_variable(const location & loc_, const std::string & var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -126,6 +172,18 @@ namespace intercept {
         void add_backpack_cargo_global(const object &vehicle_, const std::string &packClassName_, int count_);
         void add_item_cargo(const object &object_, const std::string &item_, int count_);
         void add_item_cargo_global(const object &object_, const std::string &item_, int count_);
+        void add_magazine(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_);
+        void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_);
+        void add_magazines(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_);
+        void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_);
+        void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_);
+        void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
 
         /* potential namespace: core, misc, world */
         void add_to_remains_collector(std::vector<object> objects_);
@@ -197,7 +255,7 @@ namespace intercept {
         /* potential namespace: misc */
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         void action(const object &unit_, const std::vector<game_value> &action_array_);
-        float add_event_handler(const object &object_, const std::string &type_, const game_data_code &command_);
+        float add_event_handler(const object &object_, const std::string &type_, const code &command_);
         float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 
         /* potential namespace: vehicle */
@@ -216,11 +274,37 @@ namespace intercept {
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         //TODO: arguments default value is nil
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
-        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
+        float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
 
         /* potential namespace: misc */
         void enable_saving(bool enable_);
         void enable_saving(bool enable_, bool autosave_);
+
+        /* potential namespace: camera */
+        bool cam_committed(const object &camera_);
+        void cam_destroy(const object &camera_);
+        bool cam_preloaded(const object &camera_);
+        object cam_target(const object &camera_);
+        void cam_use_nvg(bool use_nvg_);
+        void camera_effect_enable_hud(bool enable_hud_);
+        float camera_interest(const object &entity_);
+        void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius, float max_above_land_);
+        object cam_create(const std::string &type_, const vector3 &position_);
+        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_);
+        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_, const std::string &rtt_);
+        void cam_prepare_focus(const object &camera_, float distance_, float blur_);
+        void cam_prepare_fov_range(const object &camera_, float min_, float max_);
+        void cam_prepare_pos(const object &camera_, const vector3 &position_);
+        void cam_prepare_rel_pos(const object &camera_, const vector3 &relative_position_);
+        void cam_prepare_target(const object &camera_, const object &target_);
+        void cam_prepare_target(const object &camera_, const vector3 &target_);
+        // Broken command cam_set_dir
+        void cam_set_focus(const object &camera_, float distance_, float blur_);
+        void cam_set_fov_range(const object &camera_, float min_, float max_);
+        void cam_set_pos(const object &camera_, const vector3 &position_);
+        void cam_set_relative_pos(const object &camera_, const vector3 &relative_position_);
+        void cam_set_target(const object &camera_, const object &target_);
+        void cam_set_target(const object &camera_, const vector3 &target_);
 
         /* potential namespace: rtd, vehicles, afm */
         // TODO std::vector<bool> engines_is_on_rtd(const object &helicopter_);
@@ -296,6 +380,9 @@ namespace intercept {
         void lb_set_picture_color_disabled(const control &control_, int index_, rv_color color_);
         void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
         void lb_set_picture_color_selected(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_right_color_selected(const control &control_, int index_, rv_color color_);
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
@@ -308,7 +395,31 @@ namespace intercept {
         std::string lb_text_right(const control &control_, int index_);
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
+        void lb_set_select_color(int idc_, int index_, rv_color &color_);
+        void lb_set_select_color_right(int idc_, int index_, rv_color &color_);
 
+
+        // Tree View
+        int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        int tv_count(const control& ctrl_, const std::vector<int>& path_);
+        float tv_value(const control& ctrl_, const std::vector<int>& path_);
+        void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
+        void tv_delete(const control& ctrl_, const std::vector<int>& path_);
+        void tv_expand(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
+        void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
+        void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        std::string tv_data(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
         std::string current3denoperation();
@@ -559,10 +670,26 @@ namespace intercept {
         std::string marker_text(const std::string& value_);
         std::string marker_type(const std::string& value_);
 
-        void set_marker_alpha(float value0_, const std::string& value1_);
-        void set_marker_alpha_local(float value0_, const std::string& value1_);
-        void set_marker_dir(float value0_, const std::string& value1_);
-        void set_marker_dir_local(float value0_, const std::string& value1_);
+        void set_marker_size(const std::string& marker_, const vector2& size_);
+        void set_marker_size_local(const std::string& marker_, const vector2& size_);
+        void set_marker_type(const std::string& marker_, const std::string& type_);
+        void set_marker_type_local(const std::string& marker_, const std::string& type_);
+        void set_marker_text(const std::string& marker_, const std::string& text_);
+        void set_marker_text_local(const std::string& marker_, const std::string& text_);
+        void set_marker_shape(const std::string& marker_, const std::string& shape_);
+        void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
+        void set_marker_pos(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos(const std::string& marker_, const vector2& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector2& pos_);
+        void set_marker_brush(const std::string& marker_, const std::string& brush_);
+        void set_marker_brush_local(const std::string& marker_, const std::string& brush_);
+        void set_marker_color(const std::string& marker_, const std::string& color_);
+        void set_marker_color_local(const std::string& marker_, const std::string& color_);
+        void set_marker_alpha(const std::string& marker_, float alpha_);
+        void set_marker_alpha_local(const std::string& marker_, float alpha_);
+        void set_marker_dir(const std::string& marker_, float dir_);
+        void set_marker_dir_local(const std::string& marker_, float dir_);
 
         std::string get_marker_color(const std::string& value_);
         std::string get_marker_type(const std::string& value_);
@@ -1122,16 +1249,14 @@ namespace intercept {
 
         /* World */
 
-        struct game_date
-        {
+        struct rv_date {
             float year;
             float month;
             float day;
             float hour;
             float minute;
 
-            game_date(float year_, float month_, float day_, float hour_, float minute_)
-            {
+            rv_date(float year_, float month_, float day_, float hour_, float minute_) {
                 year = year_;
                 month = month_;
                 day = day_;
@@ -1139,13 +1264,11 @@ namespace intercept {
                 minute = minute_;
             }
 
-            static game_date from_vector(const std::vector<float> &date_vector_)
-            {
-                return game_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
+            static rv_date from_vector(const std::vector<float> &date_vector_) {
+                return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
-            std::vector<float> to_vector() const
-            {
+            std::vector<float> to_vector() const {
                 std::vector<float> ret_val{ year, month, day, hour, minute };
                 return ret_val;
             }
@@ -1161,17 +1284,26 @@ namespace intercept {
         // TODO void set_waves(float lerp_time_, float val_); // TODO
 
         float time();
-        // TODO game_date date();
 
         float time_multiplier();
 
-        float date_to_number(game_date date_);
+        float date_to_number(rv_date date_);
 
         float acc_time();
         object agent(const team_member &value_);
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
-        //std::vector<?> airdensity_curvertd(); // no entry on the biki
+
+        struct rv_credit {
+            std::string library_name;
+            std::string credits;
+
+            rv_credit(const game_value &rv_game_value_)
+                : library_name(rv_game_value_[0]),
+                credits(rv_game_value_[1])
+            {
+            }
+        };
 
         float armorypoints();
         float benchmark();
@@ -1217,26 +1349,18 @@ namespace intercept {
         void finish_mission_init();
         bool fog();
         float fog_forecast();
-        // TODO std::vector<float> fog_params();
         void force_end();
         void force_weather_change();
         bool free_look();
-        // TODO array[] getartillerycomputersettings(); // ["Semi (medium)","HE Mortar Shells",0]
         std::string getclientstate();
-        // TODO not on biki getdlcassetsusage();
         float getelevationoffset();
-        // TODO not on biki std::vector<std::string> getmissiondlcs();
-        // TODO vector2 get_mouse_position();
-        // TODO std::array<float, 2> get_object_view_distance();
         bool get_remote_sensors_disabled();
-        // TODO game_resolution get_resolution();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
         float gusts();
         void halt();
         bool has_interface();
         bool hc_shown_bar();
-        // TODO hud_movement_levels hudmovementlevels();
         float humidity();
         side independent();
         void init_ambient_life();
@@ -1249,7 +1373,7 @@ namespace intercept {
         bool is_stress_damage_enabled();
         bool is_tut_hints_enabled();
         std::string language();
-        // TODO std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
+        std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
         float lightnings();
         std::string line_break();
@@ -1279,7 +1403,6 @@ namespace intercept {
         object player();
         float player_respawn_time();
         side player_side();
-        // TODO implement product_version productversion();
         std::string profile_name();
         rv_namespace profile_namespace();
         std::string profile_namesteam();
@@ -1352,13 +1475,6 @@ namespace intercept {
         bool buldozer(const std::string &value_);
         std::string button_action(const control &value_);
         std::string button_action(float value_);
-        bool cam_committed(const object &value_);
-        void cam_destroy(const object &value_);
-        bool cam_preloaded(const object &value_);
-        object cam_target(const object &value_);
-        void cam_use_nvg(bool value_);
-        void camera_effect_enable_hud(bool value_);
-        float camera_interest(const object &value_);
         bool can_fire(const object &value_);
         bool can_move(const object &value_);
         bool can_stand(const object &value_);
@@ -2076,5 +2192,121 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
+        struct rv_fog_parameters {
+            float value;
+            float decay;
+            float base;
+
+            rv_fog_parameters(float value_, float decay_, float base_) {
+                value = value_;
+                decay = decay_;
+                base = base_;
+            }
+
+            static rv_fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
+                return rv_fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ value, decay, base };
+                return ret_val;
+            }
+        };
+
+        rv_fog_parameters fog_params();
+
+        struct rv_rendering_distances {
+            float object_distance;
+            float shadow_distance;
+
+            rv_rendering_distances(float object_distance_, float shadow_distance_) {
+                object_distance = object_distance_;
+                shadow_distance = shadow_distance_;
+            }
+
+            static rv_rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
+                return rv_rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ object_distance, shadow_distance };
+                return ret_val;
+            }
+        };
+
+        rv_rendering_distances get_object_view_distance();
+
+        rv_resolution get_resolution();
+
+        rv_date date();
+        rv_date mission_start();
+
+        std::vector<object> vehicles();
+
+        game_value get_mission_config_value(const std::string& attribute_);
+        game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);
+
+        void move(const object &unit_, const vector3 &pos_);
+        void move(const group &group_, const vector3 &pos_);
+        bool move_in_any(const object &unit_, const object &vehicle_);
+        void move_in_cargo(const object &unit_, const object &vehicle_, int cargo_index_ = -1);
+        void move_in_commander(const object &unit_, const object &vehicle_);
+        void move_in_driver(const object &unit_, const object &vehicle_);
+        void move_in_gunner(const object &unit_, const object &vehicle_);
+        void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
+        void move_to(const object &unit_, const vector3 &pos_);
+
+        vector3 eye_pos(const object &object_);
+
+        struct rv_eden_mouse_over {
+            std::string type;
+            game_value entity;
+
+            rv_eden_mouse_over(const game_value &rv_game_value_)
+                : type(rv_game_value_[0]),
+                entity(rv_game_value_[1])
+            {
+            }
+        };
+
+        rv_eden_mouse_over get_eden_mouse_over();
+
+        struct rv_artillery_computer_settings {
+            std::string name;
+            std::string ammo;
+            int mode; // TODO investigate what this actually is
+
+            rv_artillery_computer_settings(const game_value &rv_game_value_)
+                : name(rv_game_value_[0]),
+                ammo(rv_game_value_[1]),
+                mode(rv_game_value_[2])
+            {
+            }
+        };
+
+        rv_artillery_computer_settings get_artillery_computer_settings();
+
+        struct rv_product_version {
+            std::string name;
+            std::string name_short;
+            float version;
+            float build;
+            std::string branch;
+            bool mods;
+            std::string platform;
+
+            rv_product_version(const game_value &rv_game_value_)
+                : name(rv_game_value_[0]),
+                name_short(rv_game_value_[1]),
+                version(rv_game_value_[2]),
+                build(rv_game_value_[3]),
+                branch(rv_game_value_[4]),
+                mods(rv_game_value_[5]),
+                platform(rv_game_value_[6])
+            {
+            }
+        };
+
+        rv_product_version product_version();
     }
 }

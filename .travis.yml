@@ -1,5 +1,5 @@
 sudo: required
-# dist: trusty
+dist: trusty
 branches:
   only:
   - master
@@ -18,7 +18,7 @@ before_script:
 # - cmake ..
 # - cd ..
 - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-- sudo add-apt-repository --yes ppa:tobydox/mingw-x-precise
+- sudo add-apt-repository --yes ppa:tobydox/mingw-x-trusty
 - sudo apt-get -qq update
 - sudo apt-get -qq install libsmbclient-dev libssh2-1-dev
 - sudo apt-get -qq install gcc-4.8 g++-4.8
@@ -34,6 +34,7 @@ script:
 # - cd build
 # - make
 - $CXX --version
+- cmake version
 # - if [ "$BUILDMODE" = "custom" ]; then
 #     echo "===> Building with custom buildsystem..." &&
 #     cd "$TRAVIS_BUILD_DIR" &&

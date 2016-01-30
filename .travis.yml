@@ -1,3 +1,4 @@
+sudo: required
 branches:
   only:
   - master
@@ -5,6 +6,8 @@ language: cpp
 compiler:
 - gcc
 - clang
+before_install:
+- sudo apt-get install --only-upgrade cmake
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi

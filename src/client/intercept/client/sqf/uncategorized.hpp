@@ -397,7 +397,7 @@ namespace intercept {
         float lb_value(const control &control_, int index_);
         void lb_set_select_color(int idc_, int index_, rv_color &color_);
         void lb_set_select_color_right(int idc_, int index_, rv_color &color_);
-        
+
 
         // Tree View
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
@@ -1293,7 +1293,17 @@ namespace intercept {
         object agent(const team_member &value_);
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
-        //std::vector<?> airdensity_curvertd(); // no entry on the biki
+
+        struct rv_credit {
+            std::string library_name;
+            std::string credits;
+
+            rv_credit(const game_value &rv_game_value_)
+                : library_name(rv_game_value_[0]),
+                credits(rv_game_value_[1])
+            {
+            }
+        };
 
         float armorypoints();
         float benchmark();
@@ -1342,13 +1352,8 @@ namespace intercept {
         void force_end();
         void force_weather_change();
         bool free_look();
-        // TODO array[] getartillerycomputersettings(); // ["Semi (medium)","HE Mortar Shells",0]
         std::string getclientstate();
-        // TODO not on biki getdlcassetsusage();
         float getelevationoffset();
-        // TODO not on biki std::vector<std::string> getmissiondlcs();
-        // TODO vector2 get_mouse_position();
-        // TODO std::array<float, 2> get_object_view_distance();
         bool get_remote_sensors_disabled();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
@@ -1356,7 +1361,6 @@ namespace intercept {
         void halt();
         bool has_interface();
         bool hc_shown_bar();
-        // TODO hud_movement_levels hudmovementlevels();
         float humidity();
         side independent();
         void init_ambient_life();
@@ -1369,7 +1373,7 @@ namespace intercept {
         bool is_stress_damage_enabled();
         bool is_tut_hints_enabled();
         std::string language();
-        // TODO std::vector<std::array<std::string, 2>> library_credits(); //USE A PAIR FOR FUCK SAKE!
+        std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
         float lightnings();
         std::string line_break();
@@ -1399,7 +1403,6 @@ namespace intercept {
         object player();
         float player_respawn_time();
         side player_side();
-        // TODO implement product_version productversion();
         std::string profile_name();
         rv_namespace profile_namespace();
         std::string profile_namesteam();
@@ -2243,9 +2246,6 @@ namespace intercept {
         game_value get_mission_config_value(const std::string& attribute_);
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_);
 
-
-
-
         void move(const object &unit_, const vector3 &pos_);
         void move(const group &group_, const vector3 &pos_);
         bool move_in_any(const object &unit_, const object &vehicle_);
@@ -2256,6 +2256,57 @@ namespace intercept {
         void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
         void move_to(const object &unit_, const vector3 &pos_);
 
+        vector3 eye_pos(const object &object_);
 
+        struct rv_eden_mouse_over {
+            std::string type;
+            game_value entity;
+
+            rv_eden_mouse_over(const game_value &rv_game_value_)
+                : type(rv_game_value_[0]),
+                entity(rv_game_value_[1])
+            {
+            }
+        };
+
+        rv_eden_mouse_over get_eden_mouse_over();
+
+        struct rv_artillery_computer_settings {
+            std::string name;
+            std::string ammo;
+            int mode; // TODO investigate what this actually is
+
+            rv_artillery_computer_settings(const game_value &rv_game_value_)
+                : name(rv_game_value_[0]),
+                ammo(rv_game_value_[1]),
+                mode(rv_game_value_[2])
+            {
+            }
+        };
+
+        rv_artillery_computer_settings get_artillery_computer_settings();
+
+        struct rv_product_version {
+            std::string name;
+            std::string name_short;
+            float version;
+            float build;
+            std::string branch;
+            bool mods;
+            std::string platform;
+
+            rv_product_version(const game_value &rv_game_value_)
+                : name(rv_game_value_[0]),
+                name_short(rv_game_value_[1]),
+                version(rv_game_value_[2]),
+                build(rv_game_value_[3]),
+                branch(rv_game_value_[4]),
+                mods(rv_game_value_[5]),
+                platform(rv_game_value_[6])
+            {
+            }
+        };
+
+        rv_product_version product_version();
     }
 }

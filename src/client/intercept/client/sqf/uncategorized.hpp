@@ -251,6 +251,32 @@ namespace intercept {
         void enable_saving(bool enable_);
         void enable_saving(bool enable_, bool autosave_);
 
+        /* potential namespace: camera */
+        bool cam_committed(const object &camera_);
+        void cam_destroy(const object &camera_);
+        bool cam_preloaded(const object &camera_);
+        object cam_target(const object &camera_);
+        void cam_use_nvg(bool use_nvg_);
+        void camera_effect_enable_hud(bool enable_hud_);
+        float camera_interest(const object &entity_);
+        void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius, float max_above_land_);
+        object cam_create(const std::string &type_, const vector3 &position_);
+        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_);
+        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_, const std::string &rtt_);
+        void cam_prepare_focus(const object &camera_, float distance_, float blur_);
+        void cam_prepare_fov_range(const object &camera_, float min_, float max_);
+        void cam_prepare_pos(const object &camera_, const vector3 &position_);
+        void cam_prepare_rel_pos(const object &camera_, const vector3 &relative_position_);
+        void cam_prepare_target(const object &camera_, const object &target_);
+        void cam_prepare_target(const object &camera_, const vector3 &target_);
+        // Broken command cam_set_dir
+        void cam_set_focus(const object &camera_, float distance_, float blur_);
+        void cam_set_fov_range(const object &camera_, float min_, float max_);
+        void cam_set_pos(const object &camera_, const vector3 &position_);
+        void cam_set_relative_pos(const object &camera_, const vector3 &relative_position_);
+        void cam_set_target(const object &camera_, const object &target_);
+        void cam_set_target(const object &camera_, const vector3 &target_);
+
         /* potential namespace: rtd, vehicles, afm */
         // TODO std::vector<bool> engines_is_on_rtd(const object &helicopter_);
         // TODO std::vector<float> engines_torque_rtd(const object &helicopter_);
@@ -338,6 +364,27 @@ namespace intercept {
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
 
+        // Tree View
+        int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        int tv_count(const control& ctrl_, const std::vector<int>& path_);
+        float tv_value(const control& ctrl_, const std::vector<int>& path_);
+        void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
+        void tv_delete(const control& ctrl_, const std::vector<int>& path_);
+        void tv_expand(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
+        void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
+        void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        std::string tv_data(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
         std::string current3denoperation();
@@ -1392,13 +1439,6 @@ namespace intercept {
         bool buldozer(const std::string &value_);
         std::string button_action(const control &value_);
         std::string button_action(float value_);
-        bool cam_committed(const object &value_);
-        void cam_destroy(const object &value_);
-        bool cam_preloaded(const object &value_);
-        object cam_target(const object &value_);
-        void cam_use_nvg(bool value_);
-        void camera_effect_enable_hud(bool value_);
-        float camera_interest(const object &value_);
         bool can_fire(const object &value_);
         bool can_move(const object &value_);
         bool can_stand(const object &value_);

@@ -82,6 +82,7 @@ namespace intercept {
         // binary__arrayintersect__array__array__ret__array
         // binary__atan2__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__breakout__any__string__ret__any
+        // binary__camsetdir__object__array__ret__nothing
         // binary__catch__exception__code__ret__any
         // binary__count__code__array__ret__scalar
         // binary__deleteat__array__scalar__ret__any
@@ -3235,32 +3236,126 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, value_));
         }
 
-        bool cam_committed(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, value_);
+        bool cam_committed(const object &camera_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, camera_);
         }
 
-        void cam_destroy(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__camdestroy__object__ret__nothing, value_);
+        void cam_destroy(const object &camera_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__camdestroy__object__ret__nothing, camera_);
         }
 
-        bool cam_preloaded(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__campreloaded__object__ret__bool, value_);
+        bool cam_preloaded(const object &camera_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__campreloaded__object__ret__bool, camera_);
         }
 
-        object cam_target(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__camtarget__object__ret__object, value_);
+        object cam_target(const object &camera_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__camtarget__object__ret__object, camera_);
         }
 
-        void cam_use_nvg(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__camusenvg__bool__ret__nothing, value_);
+        void cam_use_nvg(bool use_nvg_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__camusenvg__bool__ret__nothing, use_nvg_);
         }
 
-        void camera_effect_enable_hud(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__cameraeffectenablehud__bool__ret__nothing, value_);
+        void camera_effect_enable_hud(bool enable_hud_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__cameraeffectenablehud__bool__ret__nothing, enable_hud_);
         }
 
-        float camera_interest(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__camerainterest__object__ret__scalar, value_);
+        float camera_interest(const object &entity_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__camerainterest__object__ret__scalar, entity_);
+        }
+
+        void cam_constuction_set_params(const object &camera_, const vector3 & position_, float radius_, float max_above_land_) {
+            std::vector<game_value> args{
+                position_,
+                radius_,
+                max_above_land_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
+        }
+
+        object cam_create(const std::string & type_, const vector3 & position_) {
+            return host::functions.invoke_raw_binary(client::__sqf::binary__camcreate__string__array__ret__object, type_, position_);
+        }
+
+        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_) {
+            std::vector<game_value> args{
+                name_,
+                position_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
+        }
+
+        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_, const std::string & rtt_) {
+            std::vector<game_value> args{
+                name_,
+                position_,
+                rtt_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
+        }
+
+        void cam_prepare_focus(const object & camera_, float distance_, float blur_) {
+            std::vector<game_value> args{
+                distance_,
+                blur_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparefocus__object__array__ret__nothing, camera_, args);
+        }
+
+        void cam_prepare_fov_range(const object & camera_, float min_, float max_) {
+            std::vector<game_value> args{
+                min_,
+                max_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparefovrange__object__array__ret__nothing, camera_, args);
+        }
+
+        void cam_prepare_pos(const object & camera_, const vector3 & position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparepos__object__array__ret__nothing, camera_, position_);
+        }
+
+        void cam_prepare_rel_pos(const object & camera_, const vector3 & relative_position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparerelpos__object__array__ret__nothing, camera_, relative_position_);
+        }
+
+        void cam_prepare_target(const object & camera_, const object & target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparetarget__object__object__ret__nothing, camera_, target_);
+        }
+
+        void cam_prepare_target(const object & camera_, const vector3 & target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__campreparetarget__object__array__ret__nothing, camera_, target_);
+        }
+
+        void cam_set_focus(const object & camera_, float distance_, float blur_) {
+            std::vector<game_value> args{
+                distance_,
+                blur_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsetfocus__object__array__ret__nothing, camera_, args);
+        }
+
+        void cam_set_fov_range(const object & camera_, float min_, float max_) {
+            std::vector<game_value> args{
+                min_,
+                max_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsetfovrange__object__array__ret__nothing, camera_, args);
+        }
+
+        void cam_set_pos(const object & camera_, const vector3 & position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsetpos__object__array__ret__nothing, camera_, position_);
+        }
+
+        void cam_set_relative_pos(const object & camera_, const vector3 & relative_position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsetrelpos__object__array__ret__nothing, camera_, relative_position_);
+        }
+
+        void cam_set_target(const object & camera_, const object & target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsettarget__object__object__ret__nothing, camera_, target_);
+        }
+
+        void cam_set_target(const object & camera_, const vector3 & target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
         }
 
         bool can_fire(const object &value_) {
@@ -6556,6 +6651,234 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
         }
 
+        int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
 
+            game_value params({
+                path,
+                text_
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvadd__control__array__ret__scalar, ctrl_, params));
+        }
+
+        void tv_collapse(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, path);
+        }
+
+        int tv_count(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvcount__control__array__ret__scalar, ctrl_, path));
+        }
+
+        std::string tv_data(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvdata__control__array__ret__string, ctrl_, path));
+        }
+
+        void tv_delete(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvdelete__control__array__ret__nothing, ctrl_, path);
+        }
+
+        void tv_expand(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvexpand__control__array__ret__nothing, ctrl_, path);
+        }
+
+        std::string tv_picture(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvpicture__control__array__ret__string, ctrl_, path));
+        }
+
+        std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvpictureright__control__array__ret__string, ctrl_, path));
+        }
+
+        void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetcursel__control__array__ret__nothing, ctrl_, path);
+        }
+
+        void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                data_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetdata__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                name_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicture__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                name_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpictureright__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolorright__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                text_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsettooltip__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                value_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetvalue__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                reversed_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsort__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                path,
+                reversed_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsortbyvalue__control__array__ret__nothing, ctrl_, params);
+        }
+
+        std::string tv_text(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtext__control__array__ret__string, ctrl_, path));
+        }
+
+        float tv_value(const control& ctrl_, const std::vector<int>& path_) {
+            std::vector<game_value> path;
+            for (int item : path_) {
+                path.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, path));
+        }
     }
 }

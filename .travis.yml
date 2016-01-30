@@ -39,35 +39,35 @@ script:
 # - make
 - $CXX --version
 - if [ "$BUILDMODE" = "custom" ]; then
-  echo "===> Building with custom buildsystem..." &&
-  cd "$TRAVIS_BUILD_DIR" &&
-  make all -B;
-fi
+    echo "===> Building with custom buildsystem..." &&
+    cd "$TRAVIS_BUILD_DIR" &&
+    make all -B;
+  fi
 - if [ "$BUILDMODE" = "cmake" ]; then
-  echo "===> Building with cmake..." &&
-  cd "$TRAVIS_BUILD_DIR" &&
-  mkdir build &&
-  cd build &&
-  cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
-  make &&
-  make install;
-fi
+    echo "===> Building with cmake..." &&
+    cd "$TRAVIS_BUILD_DIR" &&
+    mkdir build &&
+    cd build &&
+    cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+    make &&
+    make install;
+  fi
 - if [ "$BUILDMODE" = "cmake-mingw32" ]; then echo "===> Building with cmake+mingw32..." &&
-  cd "$TRAVIS_BUILD_DIR" &&
-  mkdir build &&
-  cd build &&
-  echo "SET(CMAKE_SYSTEM_NAME Windows)" > toolchain.cmake &&
-  echo "SET(CMAKE_C_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-gcc)" >> toolchain.cmake &&
-  echo "SET(CMAKE_CXX_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-g++)" >> toolchain.cmake &&
-  echo "SET(CMAKE_RC_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-windres)" >> toolchain.cmake &&
-  echo "SET(CMAKE_FIND_ROOT_PATH /opt/mingw64)" >> toolchain.cmake &&
-  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain.cmake &&
-  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain.cmake &&
-  echo "SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> toolchain.cmake &&
-  cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
-  make &&
-  make install;
-fi
+    cd "$TRAVIS_BUILD_DIR" &&
+    mkdir build &&
+    cd build &&
+    echo "SET(CMAKE_SYSTEM_NAME Windows)" > toolchain.cmake &&
+    echo "SET(CMAKE_C_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-gcc)" >> toolchain.cmake &&
+    echo "SET(CMAKE_CXX_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-g++)" >> toolchain.cmake &&
+    echo "SET(CMAKE_RC_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-windres)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH /opt/mingw64)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> toolchain.cmake &&
+    cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+    make &&
+    make install;
+  fi
 # notifications:
 #   email:
 #     on_success: never

@@ -12,11 +12,8 @@ env:
 - FEATURE=1 CXXFLAGS=-m64
 - FEATURE=2 CC=i586-mingw32msvc-gcc CXX=i586-mingw32msvc-g++ LD=i586-mingw32msvc-ld
 before_install:
-- sudo add-apt-repository -y ppa:apt-fast/stable
 - sudo apt-get update -qq -y
-- sudo apt-get install -qq -y apt-fast
-- sudo apt-fast update -qq -y
-- sudo apt-fast install -qq -y g++-multilib mingw32
+- sudo apt-get install -qq -y g++-multilib mingw32
 # - sudo add-apt-repository ppa.launchpad.net/tobydox/mingw-x-precise -y
 # - sudo apt-get update -q
 # - sudo apt-get install mingw-x-gcc -y

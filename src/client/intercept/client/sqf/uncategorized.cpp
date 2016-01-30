@@ -6727,7 +6727,7 @@ namespace intercept {
                     (float)cargo_index_
                 });
 
-                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__object__ret__nothing, unit_, params);
+                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__array__ret__nothing, unit_, params);
             }
         }
 

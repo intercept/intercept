@@ -56,17 +56,35 @@ namespace intercept {
             float green;
             float alpha;
 
-            std::vector<game_value> __to_gv_vector() const
+            operator game_value()
             {
-                return std::vector<game_value> ({
+                return game_value(std::vector<game_value>({
                     red,
                     blue,
                     green,
                     alpha
-                });
+                }));
+            }
+
+            operator game_value() const
+            {
+                return game_value(std::vector<game_value>({
+                    red,
+                    blue,
+                    green,
+                    alpha
+                }));
             }
 
         };
+
+		struct game_resolution
+		{
+			vector2 resolution;
+			vector2 viewport;
+			float aspect_ratio;
+			float ui_scale;
+		};
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
@@ -76,6 +94,17 @@ namespace intercept {
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value& default_value_);
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const object & obj_, const std::string & var_name_);
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const group & group_, const std::string & var_name_);
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const task & task_, const std::string & var_name_);
+        game_value get_variable(const location & loc_, const std::string & var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -197,7 +226,7 @@ namespace intercept {
         /* potential namespace: misc */
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         void action(const object &unit_, const std::vector<game_value> &action_array_);
-        float add_event_handler(const object &object_, const std::string &type_, const game_data_code &command_);
+        float add_event_handler(const object &object_, const std::string &type_, const code &command_);
         float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 
         /* potential namespace: vehicle */
@@ -216,7 +245,7 @@ namespace intercept {
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         //TODO: arguments default value is nil
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
-        float add_action(const object &object_, const std::string &title_, const game_data_code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
+        float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
 
         /* potential namespace: misc */
         void enable_saving(bool enable_);
@@ -340,7 +369,7 @@ namespace intercept {
         /* Config */
         std::vector<config> config_hierarchy(const config &config_entry_);
         std::string config_name(const config &config_entry_);
-        std::vector<config> config_properties(const config &config_entry,const std::string& condition_, bool inherit);
+        std::vector<config> config_properties(const config &config_entry,const std::string& condition_ = "true", bool inherit = true);
         std::string config_source_mod(const config &config_entry_);
         std::vector<std::string> config_source_mod_list(const config &config_entry_);
         float count(const config &config_entry_);
@@ -378,7 +407,7 @@ namespace intercept {
         std::vector<object> all_units_uav();
 
         object create_vehicle(const std::string &type_, const vector3 &pos_);
-        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_);
+        object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
         void delete_vehicle(const object &obj_);
 
         float server_time();
@@ -559,10 +588,26 @@ namespace intercept {
         std::string marker_text(const std::string& value_);
         std::string marker_type(const std::string& value_);
 
-        void set_marker_alpha(float value0_, const std::string& value1_);
-        void set_marker_alpha_local(float value0_, const std::string& value1_);
-        void set_marker_dir(float value0_, const std::string& value1_);
-        void set_marker_dir_local(float value0_, const std::string& value1_);
+        void set_marker_size(const std::string& marker_, const vector2& size_);
+        void set_marker_size_local(const std::string& marker_, const vector2& size_);
+        void set_marker_type(const std::string& marker_, const std::string& type_);
+        void set_marker_type_local(const std::string& marker_, const std::string& type_);
+        void set_marker_text(const std::string& marker_, const std::string& text_);
+        void set_marker_text_local(const std::string& marker_, const std::string& text_);
+        void set_marker_shape(const std::string& marker_, const std::string& shape_);
+        void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
+        void set_marker_pos(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector3& pos_);
+        void set_marker_pos(const std::string& marker_, const vector2& pos_);
+        void set_marker_pos_local(const std::string& marker_, const vector2& pos_);
+        void set_marker_brush(const std::string& marker_, const std::string& brush_);
+        void set_marker_brush_local(const std::string& marker_, const std::string& brush_);
+        void set_marker_color(const std::string& marker_, const std::string& color_);
+        void set_marker_color_local(const std::string& marker_, const std::string& color_);
+        void set_marker_alpha(const std::string& marker_, float alpha_);
+        void set_marker_alpha_local(const std::string& marker_, float alpha_);
+        void set_marker_dir(const std::string& marker_, float dir_);
+        void set_marker_dir_local(const std::string& marker_, float dir_);
 
         std::string get_marker_color(const std::string& value_);
         std::string get_marker_type(const std::string& value_);
@@ -1411,6 +1456,7 @@ namespace intercept {
         bool did_jipowner(const object &value_);
         bool difficulty_enabled(const std::string &value_);
         float direction(const object &value_);
+        float direction(const location &value_);
         void disable_remote_sensors(bool value_);
         void disable_user_input(bool value_);
         void dissolve_team(const std::string &value_);
@@ -1581,6 +1627,7 @@ namespace intercept {
         bool move_to_completed(const object &value_);
         bool move_to_failed(const object &value_);
         std::string name(const object &value_);
+        std::string name(const location &loc_);
         std::string name_sound(const object &value_);
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
@@ -1990,6 +2037,7 @@ namespace intercept {
         void show_legend(const control &value0_, bool value1_);
         float skill(const object &value0_, const std::string& value1_);
         float skill_final(const object &value0_, const std::string& value1_);
+        void slider_set_position(float value0_, float value1_);
         void slider_set_position(const control &value0_, float value1_);
         void stop(const object &value0_, bool value1_);
         void suppress_for(const object &value0_, float value1_);
@@ -2046,5 +2094,32 @@ namespace intercept {
         void hint(const std::string &text_);
         void hint_cadet(const std::string &text_);
         void hint_silent(const std::string &text_);
+
+        float importance(const location &loc_);
+        void set_importance(const location &loc_, const float &value_);
+
+        std::string map_grid_position(const object &obj_);
+        std::string map_grid_position(const vector2 &pos_);
+
+        std::vector<object> roads_connected_to(const object &obj_);
+        std::vector<object> rope_attached_objects(const object &obj_);
+        std::vector<object> ropes(const object &obj_);
+
+        vector3 screen_to_world(const vector2 &pos_);
+
+        vector2 size(const location &loc_);
+
+        vector2 slider_range(const float &value_);
+        vector2 slider_range(const control &ctrl_);
+        vector2 slider_speed(const float &value_);
+        vector2 slider_speed(const control &ctrl_);
+        void slider_set_range(float value0_, float value1_, float value2_);
+        void slider_set_range(const control &value0_, float value1_, float value2_);
+        void slider_set_speed(float value0_, float value1_, float value2_);
+        void slider_set_speed(const control &value0_, float value1_, float value2_);
+
+        std::string speed_mode(const object &obj_);
+        std::string speed_mode(const group &grp_);
+
     }
 }

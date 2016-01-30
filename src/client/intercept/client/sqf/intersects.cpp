@@ -59,7 +59,7 @@ namespace intercept {
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, const std::string &lod1_ = "VIEW", const std::string &lod2_ = "FIRE") {
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_, int max_results_, const std::string &lod1_, const std::string &lod2_) {
             game_value array_input = game_value({
                 begin_pos_asl_,
                 end_pos_asl_,
@@ -75,7 +75,7 @@ namespace intercept {
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = true) {
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_) {
             game_value array_input({
                 begin_pos_,
                 end_pos_,

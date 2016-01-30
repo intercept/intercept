@@ -13,6 +13,5 @@
 #include "group.hpp"
 #include "multiplayer.hpp"
 #include "config.hpp"
-#include "math.hpp"
 
 #include "uncategorized.hpp"

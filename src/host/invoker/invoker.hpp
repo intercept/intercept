@@ -295,6 +295,8 @@ namespace intercept {
         game_value _eh_params;
         game_value _signal_params;
 
+        game_value _eh_params_name;
+
         /*!
         @brief The index counter for the delete array.
         */
@@ -339,10 +341,11 @@ namespace intercept {
 
         bool _patched;
         bool _attached;
+        bool _mission_init;
 
         std::queue<game_data *> _to_delete;
 
-        
+        binary_function _get_variable_func;
 
         /*!
         @brief A RAII style mutex handler for access to the RV Engine

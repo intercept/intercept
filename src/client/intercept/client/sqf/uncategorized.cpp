@@ -149,10 +149,19 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
+        /* These functions apparently send arbatary messages across the network. They are apparently inactive.*/
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
-        // binary__lbsettextright__control__array__ret__nothing *Undocumented.
+        
+        /* This function does _something_ to a listbox. No documentation.*/
+        // binary__lbsettextright__control__array__ret__nothing
+
+        /* This function is apparently depreciated but the functionality is different to the command which replaces it.*/
         // unary__lbselection__control__ret__array
+        
+        /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
+            corresponds to how visible a particular unit is from another unit. */
+        // binary__checkvisibility__array__array__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -6764,7 +6773,7 @@ namespace intercept {
         {
             host::functions.invoke_raw_binary(__sqf::binary__moveto__object__array__ret__nothing, unit_, pos_);
         }
-		
+        
         rv_date date() {
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
         }

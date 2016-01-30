@@ -6245,7 +6245,7 @@ namespace intercept {
         }
 
         /* Waypoint */
-                object waypoint_attached_object(waypoint &wp_)
+        object waypoint_attached_object(waypoint &wp_)
         {
             return object(host::functions.invoke_raw_unary(client::__sqf::unary__waypointattachedobject__array__ret__object, wp_.__to_gv()));
         }

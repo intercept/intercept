@@ -173,7 +173,7 @@ namespace intercept {
                 for (uint32_t i = 0; i < input__.length(); ++i) {
                     output.push_back(input__[i]);
                 }
-                host::functions.free_value(&input__); // TODO do we also have to free all the strings in the array?
+
                 return output;
             }
 

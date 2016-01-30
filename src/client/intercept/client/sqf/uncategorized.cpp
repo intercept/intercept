@@ -149,18 +149,43 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
-        // nular__airdensitycurvertd__ret__array (undocumented)
-        // nular__getdlcassetsusage__ret__array (undocumented)
-        // nular__getmissiondlcs__ret__array (undocumented)
-        // nular__getmouseposition__ret__array (undocumented)
-        // nular__groupiconsvisible__ret__array (half-documented, appears to be [show markers on map true/false, show markers on hud true/false] - source: BI Wiki)
-        // nular__hudmovementlevels__ret__array (half-documented, last parameter unknown what target is - source: BI Wiki)
+        /* No documentation.*/
+        // nular__airdensitycurvertd__ret__array
+
+        /* No documentation.*/
+        // nular__getdlcassetsusage__ret__array
+
+        /* No documentation.*/
+        // nular__getmissiondlcs__ret__array
+
+        /* No documentation.*/
+        // nular__getmouseposition__ret__array
+
+        /* Appears to return [show markers on map true/false, show markers on HUD true/false] array that setGroupIconsVisible takes. Scarce documentation.*/
+        // nular__groupiconsvisible__ret__array
+
+        /* Last parameter can be position (x, y, z) or target, unknown what target is.*/
+        // nular__hudmovementlevels__ret__array
+
+        /* No documentation for type Team.*/
+        // nular__teams__ret__array
+
+        /* No documentation.*/
+        // nular__windrtd__ret__array
+
+        /* These functions apparently send arbatary messages across the network. They are apparently inactive.*/
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
-        // nular__teams__ret__array (undocumented type - source: BI Wiki)
-        // nular__windrtd__ret__array (undocumented)
-        // binary__lbsettextright__control__array__ret__nothing *Undocumented.
+
+        /* This function does _something_ to a listbox. No documentation.*/
+        // binary__lbsettextright__control__array__ret__nothing
+
+        /* This function is apparently depreciated but the functionality is different to the command which replaces it.*/
         // unary__lbselection__control__ret__array
+
+        /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
+            corresponds to how visible a particular unit is from another unit. */
+        // binary__checkvisibility__array__array__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -6744,7 +6769,7 @@ namespace intercept {
                     (float)cargo_index_
                 });
 
-                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__object__ret__nothing, unit_, params);
+                host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__array__ret__nothing, unit_, params);
             }
         }
 

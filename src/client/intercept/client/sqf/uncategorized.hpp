@@ -330,7 +330,25 @@ namespace intercept {
 
         // Tree View
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        int tv_count(const control& ctrl_, const std::vector<int>& path_);
+        float tv_value(const control& ctrl_, const std::vector<int>& path_);
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
+        void tv_delete(const control& ctrl_, const std::vector<int>& path_);
+        void tv_expand(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
+        void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const std::vector<int>& color_);
+        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const std::vector<int>& color_);
+        void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, const float& value_);
+        void tv_sort(const control& ctrl_, const std::vector<int>& path_, const bool& reversed_ = false);
+        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, const bool& reversed_ = false);
+        std::string tv_data(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
         std::string current3denoperation();

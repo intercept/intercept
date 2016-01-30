@@ -10,7 +10,7 @@ compiler:
 matrix:
   exclude:
   - compiler: clang
-  env: BUILDMODE=cmake-mingw32
+    env: BUILDMODE=cmake-mingw32
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi
@@ -42,7 +42,6 @@ script:
 - if [ "$BUILDMODE" = "cmake" ]; then
     echo "===> Building with cmake..." &&
     cd "$TRAVIS_BUILD_DIR" &&
-    #mkdir build &&
     cd build &&
     cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
     make &&
@@ -51,7 +50,6 @@ script:
 - if [ "$BUILDMODE" = "cmake-mingw32" ]; then
     echo "===> Building with cmake+mingw32..." &&
     cd "$TRAVIS_BUILD_DIR" &&
-    #mkdir build &&
     cd build &&
     echo "SET(CMAKE_SYSTEM_NAME Windows)" > toolchain.cmake &&
     echo "SET(CMAKE_C_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-gcc)" >> toolchain.cmake &&
@@ -75,7 +73,6 @@ script:
 #     on_success: change
 env:
   matrix:
-  # - BUILDMODE=custom
   - BUILDMODE=cmake
   - BUILDMODE=cmake-mingw32
   global:

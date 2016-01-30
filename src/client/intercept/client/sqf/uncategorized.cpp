@@ -6701,7 +6701,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsettooltip__control__array__ret__nothing, ctrl_, params);
         }
 
-        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, const float& value_) {
+        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_) {
             std::vector<game_value> path;
             for (int item : path_) {
                 path.push_back(game_value((float)item));
@@ -6715,7 +6715,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetvalue__control__array__ret__nothing, ctrl_, params);
         }
 
-        void tv_sort(const control& ctrl_, const std::vector<int>& path_, const bool& reversed_) {
+        void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
             std::vector<game_value> path;
             for (int item : path_) {
                 path.push_back(game_value((float)item));
@@ -6729,7 +6729,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsort__control__array__ret__nothing, ctrl_, params);
         }
 
-        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, const bool& reversed_) {
+        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
             std::vector<game_value> path;
             for (int item : path_) {
                 path.push_back(game_value((float)item));

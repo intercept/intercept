@@ -155,6 +155,18 @@ namespace intercept {
         void add_backpack_cargo_global(const object &vehicle_, const std::string &packClassName_, int count_);
         void add_item_cargo(const object &object_, const std::string &item_, int count_);
         void add_item_cargo_global(const object &object_, const std::string &item_, int count_);
+        void add_magazine(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_);
+        void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_);
+        void add_magazines(const object& obj_, const std::string& classname_, int count_);
+        void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_);
+        void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_);
+        void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_);
+        void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_);
+        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
 
         /* potential namespace: core, misc, world */
         void add_to_remains_collector(std::vector<object> objects_);

@@ -6,7 +6,7 @@ branches:
 language: cpp
 compiler:
 #- gcc
-- clang -std=c++11
+- clang
 before_install:
 - sudo apt-get install software-properties-common -y
 - sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
@@ -18,12 +18,15 @@ before_script:
 - cd build
 - cmake ..
 - cd ..
+install:
+- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-std=c++11"; fi
 script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then python3 tools/deploy.py; fi
 - python3 tools/sqf_wrapper_validation.py
 - cd build
 - make
+- $CXX --version
 #notifications:
 #  email:
 #    on_success: never

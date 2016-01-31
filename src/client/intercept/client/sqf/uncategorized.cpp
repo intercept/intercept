@@ -1583,8 +1583,8 @@ namespace intercept {
             __helpers::__empty_unary_string(client::__sqf::unary__removeall3deneventhandlers__string__ret__nothing, value_);
         }
 
-        float add_3den_layer(float value0_, const std::string& value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, value0_, value1_));
+        float add_3den_layer(int parent_layer_id_, const std::string& name_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float)parent_layer_id_, name_));
         }
 
         /* Chat */
@@ -2441,32 +2441,32 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_));
         }
 
-        bool set_group_owner(const group &value1_, float value0_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, value0_, value1_));
+        bool set_group_owner(const group & group_, int client_id_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, (float)client_id_, group_));
         }
 
         object leader(const group &value_) {
             return object(host::functions.invoke_raw_unary(client::__sqf::unary__leader__group__ret__object, value_));
         }
 
-        void group_radio(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, value0_, value1_);
+        void group_radio(const object & unit_, const std::string& radio_name_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__groupradio__object__string__ret__nothing, unit_, radio_name_);
         }
 
-        void remove_group_icon(const group &value1_, float value0_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, value0_, value1_);
+        void remove_group_icon(const group & group_, int icon_id_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, (float)icon_id_, group_);
         }
 
-        void select_leader(const object &value0_, const group &value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, value1_, value0_);
+        void select_leader(const group & group_, const object & unit_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__selectleader__group__object__ret__nothing, group_, unit_);
         }
 
-        float current_waypoint(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, value_));
+        float current_waypoint(const group & group_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, group_));
         }
 
-        void set_group_icons_selectable(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, value_);
+        void set_group_icons_selectable(bool val_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, val_);
         }
 
         /* Marker */

@@ -431,7 +431,7 @@ namespace intercept {
         bool is3denmultiplayer();
         float get_3den_action_state(const std::string &value_);
         void edit_3den_mission_attributes(const std::string &value_);
-        float add_3den_layer(float value0_, const std::string& value1_);
+        float add_3den_layer(int parent_layer_id_, const std::string& name_);
         bool remove_3den_layer(float value_);
         void remove_all_3den_eventhandlers(const std::string &value_);
 
@@ -649,14 +649,14 @@ namespace intercept {
         group group_from_net_id(const std::string &value_);
         std::string group_id(const group &value_);
         float group_owner(const group &value_);
-        bool set_group_owner(const group &value0_, float value1_);
+        bool set_group_owner(const group & group_, int client_id_);
 
         object leader(const group &value_);
-        void group_radio(const object &value0_, const std::string& value1_);
-        void remove_group_icon(const group &value0_, float value1_);
-        void select_leader(const object &value0_, const group &value1_);
-        float current_waypoint(const group &value_);
-        void set_group_icons_selectable(bool value_);
+        void group_radio(const object & unit_, const std::string& radio_name_);
+        void remove_group_icon(const group & group_, int icon_id_);
+        void select_leader(const group & group_, const object & unit_);
+        float current_waypoint(const group & group_);
+        void set_group_icons_selectable(bool val_);
 
         /* Marker */
         void delete_marker(const std::string& value_);

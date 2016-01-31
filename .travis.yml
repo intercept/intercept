@@ -1,24 +1,80 @@
+sudo: required
+dist: trusty
 branches:
   only:
   - master
-language: python
-python:
-- '3.4'
+language: cpp
+compiler:
+- gcc
+- clang
+matrix:
+  exclude:
+  - compiler: clang
+    env: BUILDMODE=cmake-mingw32
 before_script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then pip install pygithub; pip install pygithub3; fi
+# - cd build
+# - cmake ..
+# - cd ..
+- sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+- sudo add-apt-repository --yes ppa:tobydox/mingw-x-trusty
+- sudo apt-get -qq update
+- sudo apt-get -qq install libsmbclient-dev libssh2-1-dev
+- sudo apt-get -qq install gcc-4.8 g++-4.8
+- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 20
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 20
+- sudo update-alternatives --config gcc
+- sudo update-alternatives --config g++
+- if [ "$BUILDMODE" = "cmake-mingw32" ]; then sudo apt-get -qq install mingw64-x-gcc; fi
 script:
 - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
   == "false" ]; then python3 tools/deploy.py; fi
 - python3 tools/sqf_wrapper_validation.py
-notifications:
-  email:
-    on_success: never
-    on_failure: change
-  slack:
-    rooms:
-     - secure: 1lei46T8NR4kfB2H5mEwyZya2o3mj1K9fBWAVAww1laYs+Vwn/S8IGukxkhvCLboWgEn+tnqAyFVS13K0VSwSOHfBERadCxai2gsgz0aGlFANtxLnbMc4SBS8gXwEBfce2GN3mj4dIEi3oU/3fcvIY0mYGyM9MeEAMJMTouU3eV/J7ry5XZ1sNFnnfZkyMOYqsVa/Vz+qQzzqRNRBCiNL4N+n/gEJEqLOc54s3v4A5x+lcJK2Upv0U2mHfqjb4UrqrT55TLiKEDVC5WsHRZoowTb5QLGHvOJ2Y0tpUxFIOKoEC/qKHTpbojyUL6rdx1W6ac/yRuyBKR4Jw31hfts2JCesWUbSfls4vLzJOe/3wtt8fQMjQNlkEgnv1vYCEAzDUseRd+8zc+EohRO5K31JHosLSnyzG/pajUoXtrAiJwFds33ZiBHOJwzciMTJpRbtg898gNg0640c1ZqZHH0PIBBFPz+MRhHOoLEDVrK2S7aukVW4EtnDAenbkv83813djwWbm3zqzxXEMNttjaoI4XYUCraoEH4TsGaVN9Sm1k8Uta36wVsS/AAqQR+vdLDPTfLk5Cbdnrc/U1g47I72xGlaBnL4tONTq+XpvEot0EPs92TTk719LYG64nQ0D1auZpO8Tormk5mGS2aNtGp3GLgA9sXVTdFn9n4s17PIew=
-    on_success: change
+# - cd build
+# - make
+- $CXX --version
+- cmake version
+# - if [ "$BUILDMODE" = "custom" ]; then
+#     echo "===> Building with custom buildsystem..." &&
+#     cd "$TRAVIS_BUILD_DIR" &&
+#     make all -B;
+#   fi
+- if [ "$BUILDMODE" = "cmake" ]; then
+    echo "===> Building with cmake..." &&
+    cd "$TRAVIS_BUILD_DIR" &&
+    cd build &&
+    cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+    make &&
+    make install;
+  fi
+- if [ "$BUILDMODE" = "cmake-mingw32" ]; then
+    echo "===> Building with cmake+mingw32..." &&
+    cd "$TRAVIS_BUILD_DIR" &&
+    cd build &&
+    echo "SET(CMAKE_SYSTEM_NAME Windows)" > toolchain.cmake &&
+    echo "SET(CMAKE_C_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-gcc)" >> toolchain.cmake &&
+    echo "SET(CMAKE_CXX_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-g++)" >> toolchain.cmake &&
+    echo "SET(CMAKE_RC_COMPILER /opt/mingw64/bin/x86_64-w64-mingw32-windres)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH /opt/mingw64)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain.cmake &&
+    echo "SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> toolchain.cmake &&
+    cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake -DCMAKE_INSTALL_PREFIX=prefix .. &&
+    make &&
+    make install;
+  fi
+# notifications:
+#   email:
+#     on_success: never
+#     on_failure: change
+#   slack:
+#     rooms:
+#      - secure: 1lei46T8NR4kfB2H5mEwyZya2o3mj1K9fBWAVAww1laYs+Vwn/S8IGukxkhvCLboWgEn+tnqAyFVS13K0VSwSOHfBERadCxai2gsgz0aGlFANtxLnbMc4SBS8gXwEBfce2GN3mj4dIEi3oU/3fcvIY0mYGyM9MeEAMJMTouU3eV/J7ry5XZ1sNFnnfZkyMOYqsVa/Vz+qQzzqRNRBCiNL4N+n/gEJEqLOc54s3v4A5x+lcJK2Upv0U2mHfqjb4UrqrT55TLiKEDVC5WsHRZoowTb5QLGHvOJ2Y0tpUxFIOKoEC/qKHTpbojyUL6rdx1W6ac/yRuyBKR4Jw31hfts2JCesWUbSfls4vLzJOe/3wtt8fQMjQNlkEgnv1vYCEAzDUseRd+8zc+EohRO5K31JHosLSnyzG/pajUoXtrAiJwFds33ZiBHOJwzciMTJpRbtg898gNg0640c1ZqZHH0PIBBFPz+MRhHOoLEDVrK2S7aukVW4EtnDAenbkv83813djwWbm3zqzxXEMNttjaoI4XYUCraoEH4TsGaVN9Sm1k8Uta36wVsS/AAqQR+vdLDPTfLk5Cbdnrc/U1g47I72xGlaBnL4tONTq+XpvEot0EPs92TTk719LYG64nQ0D1auZpO8Tormk5mGS2aNtGp3GLgA9sXVTdFn9n4s17PIew=
+#     on_success: change
 env:
+  matrix:
+  - BUILDMODE=cmake
+  - BUILDMODE=cmake-mingw32
   global:
     secure: agYEwpL95+e0vVIJ6H/UXJwiY0ubCFoNM7SoGFikr+ZV609OeL7KPS7gG7TV57HUP7lPv05JIntFAn37NZjKptZYJTBnmTPT7mmS/fn3LfuFwldvD2m+PUclz5cO2WMM+utWi+JnvpYPficdlLoHOlW9NjigsgFT/Xd49MkDyxpxCZ2C3KiSzOy4EAV+UNMDiq5+iUKNNMfTINYz2ZTF4muBQb4oGzpriS/4sEUKt1mOjZNGf2tX+JpppjDCnic9Wo3BTixIhgB/Ja0LvYuAoaERSFPioxj50J4oQemyfuGdabCM3D2Xo0i4OpNsM+Au9iXQaL9bQRvTfVSSN1T6KARmuw134MjuPq9G4ppRIEHeKzirqUpMNw+ja/No7I5111Cq0fwm/Y+ZqaxPf1YRnt5jLweggngKrb9672IkrW7M10pvleUXV5RWYBXkfwWxyNatU7dt231gS7n1jTOOvGDltvyHjnZSuCR82IevE4waCxtfGAfgwqYj14vVyQoxLIbFcFpJJ3ANRdwpHYaIlcJ03GSG5luRQ/5prwIEmweS1XlGM400XVjWpW34pHIUdjzuFyiDuSWrEWukjv57XCk7etpDTfp2rtV5tghXwqfa76SpjsIT1ooJgjL/3nrNrR3sFKWDcaC6okeB1nBZ/Fdg1GpXztf54dcyQdikqNY=

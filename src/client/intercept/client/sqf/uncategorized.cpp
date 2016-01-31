@@ -7247,27 +7247,15 @@ namespace intercept {
         }
 
         void ctrl_set_active_color(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetactivecolor__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetactivecolor__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_background_color(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetbackgroundcolor__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetbackgroundcolor__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_foreground_color(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetforegroundcolor__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetforegroundcolor__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_model_dir_and_up(const control& ctrl_, const vector3& dir_, const vector3& up_) {
@@ -7280,35 +7268,19 @@ namespace intercept {
         }
 
         void ctrl_set_text_color(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettextcolor__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettextcolor__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_tooltip_color_box(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorbox__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorbox__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_tooltip_color_shade(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorshade__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorshade__control__array__ret__nothing, ctrl_, color_);
         }
 
         void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_) {
-            game_value params({
-                color_
-            });
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing, ctrl_, color_);
         }
     }
 }

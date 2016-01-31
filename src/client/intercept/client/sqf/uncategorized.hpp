@@ -2321,5 +2321,21 @@ namespace intercept {
         };
 
         rv_product_version product_version();
+
+        // originally "side", but is already a type
+        side get_side(const object &object_);
+        side get_side(const group &group_);
+        side get_side(const location &loc_);
+
+        void set_side(const location &loc_, const side &side_);
+
+        std::string wf_side_text(const object &object_);
+        std::string wf_side_text(const group &group_);
+        std::string wf_side_text(const side &side_);
+
+        float count_side(const side &side_, std::vector<object> &objects_);
+
+        float get_friend(const side &side1_, const side &side2_);
+        void set_friend(const side &side1_, const side &side2_, float value_);
     }
 }

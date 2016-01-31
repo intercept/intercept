@@ -7209,6 +7209,55 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
+        side get_side(const object &object_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__object__ret__side, object_));
+        }
+
+        side get_side(const group &group_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__group__ret__side, group_));
+        }
+
+        side get_side(const location &loc_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__location__ret__side, loc_));
+        }
+
+        void set_side(const location &loc_, const side &side_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setside__location__side__ret__nothing, loc_, side_);
+        }
+
+        std::string wf_side_text(const object &object_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__wfsidetext__object__ret__string, object_);
+        }
+
+        std::string wf_side_text(const group &group_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__wfsidetext__group__ret__string, group_));
+        }
+
+        std::string wf_side_text(const side &side_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__wfsidetext__side__ret__string, side_));
+        }
+
+        float count_side(const side &side_, std::vector<object> &objects_) {
+            std::vector<game_value> objects;
+            for (auto type : objects_)
+                objects.push_back(type);
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__countside__side__array__ret__scalar, side_, objects));
+        }
+
+        float get_friend(const side &side1_, const side &side2_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getfriend__side__side__ret__scalar, side1_, side2_));
+        }
+
+        void set_friend(const side &side1_, const side &side2_, float value_) {
+            game_value args(std::vector<game_value>{
+                side2_,
+                value_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__setfriend__side__array__ret__nothing, side1_, args);
+        };
+
         control ctrl_create(const display& display_, const std::string& class_, int idc_) {
             game_value params({
                 class_,

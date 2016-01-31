@@ -61,7 +61,7 @@ namespace intercept {
         new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
         new_module.functions.mission_end = (module::mission_end_func)GetProcAddress(dllHandle, "mission_end");
         new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
-        new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
+        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
         new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
         new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
         new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
@@ -167,7 +167,7 @@ namespace intercept {
         return false;
     }
 
-    const std::unordered_map<std::string, module::entry>& extensions::modules()
+    std::unordered_map<std::string, module::entry>& extensions::modules()
     {
         return _modules;
     }

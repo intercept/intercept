@@ -35,7 +35,7 @@ namespace intercept {
         typedef void(__cdecl *mission_end_func)();
         typedef void(__cdecl *mission_stopped_func)();
         typedef void(__cdecl *on_frame_func)();
-        typedef void(__cdecl *on_signal_func)(std::string &signal_name_, game_value& value1_);
+        typedef void(__cdecl *on_signal_func)(game_value &this_);
 
         //!@}
 
@@ -180,6 +180,11 @@ namespace intercept {
             eventhandlers eventhandlers;
 
             /*!
+            @brief A list of exported functions called by the signal ability.
+            */
+            std::unordered_map<std::string, on_signal_func> signal_funcs;
+
+            /*!
             @brief A handle to the plugin dynamic library.
             */
             HMODULE     handle;
@@ -228,7 +233,7 @@ namespace intercept {
         /*!
         @brief Returns the map of all loaded modules.
         */
-        const std::unordered_map<std::string, module::entry>& modules();
+        std::unordered_map<std::string, module::entry>& modules();
 
         /*!
         @brief The struct that contains the functions exported to client plugins.

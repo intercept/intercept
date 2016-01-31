@@ -152,16 +152,24 @@ namespace intercept {
         std::string signal_name = args_.as_string(1);
         LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " START";
 
-        auto modules = extensions::get().modules();
-        if (modules.find(extension_name) == modules.end()) {
+        auto signal_module = extensions::get().modules().find(extension_name);
+        if (signal_module == extensions::get().modules().end()) {
             return false;
         }
-        auto module = modules[extension_name];
-        _invoker_unlock signal_lock(this);
-        _signal_params = invoke_raw("getvariable", &_mission_namespace, "NAMESPACE", &game_value("intercept_signal_var"), "STRING");
-        if (module.functions.on_signal) {
-            module.functions.on_signal(signal_name, _signal_params);
+        auto signal_func_it = signal_module->second.signal_funcs.find(signal_name);
+        module::on_signal_func signal_func;
+        if (signal_func_it == signal_module->second.signal_funcs.end()) {
+            signal_func = (module::on_signal_func)GetProcAddress(signal_module->second.handle, signal_name.c_str());
+            if (!signal_func)
+                return false;
+            else
+                signal_module->second.signal_funcs[signal_name] =  signal_func;
         }
+        else {
+            signal_func = signal_func_it->second;
+        }
+        _invoker_unlock signal_lock(this);
+        signal_func(_signal_params[0]);
         LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " END";
         return true;
     }
@@ -175,6 +183,8 @@ namespace intercept {
         loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
         _delete_array_ptr = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &delete_ptr_name);
         _eh_params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &_eh_params_name);
+        game_value p_name = "intercept_signal_var";
+        _signal_params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &p_name);
         _delete_size_zero = game_value(0.0f);
         _delete_size_max = game_value(1000.0f);
         return true;

@@ -37,6 +37,15 @@ void __cdecl intercept::post_init() {
 
 }
 
+extern "C" {
+    DLLEXPORT void __cdecl signal_test(game_value &this_);
+}
+
+void __cdecl signal_test(game_value &this_) {
+    std::string test_str = (std::string)this_[0];
+    LOG(INFO) << "Test: " << test_str;
+}
+
 void __cdecl intercept::mission_stopped() {
 
 }
@@ -56,6 +65,7 @@ void __cdecl intercept::fired(
     float test_val = sqf::get_number(test);
     LOG(DEBUG) << "HIT: " << test_val;
     */
+    sqf::side_chat(sqf::player(), "Fired daetij342 893290 2390!!!");
     tracker.add_shot(projectile_, ammo_.string());
 }
 

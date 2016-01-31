@@ -39,6 +39,8 @@ INVOKER_DELETE_ARRAY resize 1000;
 intercept_params_var = [1,2,3];
 intercept_params_var resize 1000;
 intercept_params_index = 2;
+intercept_signal_var = [];
+intercept_signal_var resize 1000;
 str INVOKER_DELETE_ARRAY;
 
 diag_log text "Intercept Invoker SQF handler initializing...";

@@ -11,9 +11,8 @@ configuration:
 platform: x86
 
 before_build:
-- cmd: >-
-    cd vcproj
-    cmake .. -G "Visual Studio 14 2015"
+  - cd vcproj
+  - cmake .. -G "Visual Studio 14 2015"
 
 build:
   project: Intercept.sln

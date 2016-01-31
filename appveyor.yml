@@ -10,11 +10,10 @@ configuration:
 
 platform: x86
 
-before_build:
-  - cd vcproj
-  - cmake .. -G "Visual Studio 14 2015"
+build_script:
+- cmd: >-
+    cd vcproj
 
-build:
-  project: Intercept.sln
-  parallel: true
-  verbosity: minimal
+    cmake .. -G "Visual Studio 14 2015"
+
+    msbuild Intercept.sln

@@ -186,6 +186,12 @@ namespace intercept {
         /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
             corresponds to how visible a particular unit is from another unit. */
         // binary__checkvisibility__array__array__ret__scalar
+
+        /* No documentation.*/
+        // binary__ctrlsetangle__control__array__ret__nothing
+
+        /* No documentation.*/
+        // binary__ctrlsettextcolorsecondary__control__array__ret__nothing
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -7201,6 +7207,108 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
+        }
+
+        control ctrl_create(const display& display_, const std::string& class_, int idc_) {
+            game_value params({
+                class_,
+                game_value((float)idc_)
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
+        }
+
+        control ctrl_create(const display& display_, const std::string& class_, int idc_, const control& controls_group_) {
+            game_value params({
+                class_,
+                game_value((float)idc_),
+                controls_group_
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
+        }
+
+        void ctrl_map_cursor(const control& ctrl_, const std::string& default_cursor_, const std::string& new_cursor_) {
+            game_value params({
+                default_cursor_,
+                new_cursor_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapcursor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::vector<float>& position_) {
+            std::vector<game_value> pos;
+            for (float item : position_) {
+                pos.push_back(game_value((float)item));
+            }
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapworldtoscreen__control__array__ret__array, ctrl_, pos));
+        }
+
+        void ctrl_set_active_color(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetactivecolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_background_color(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetbackgroundcolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_foreground_color(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetforegroundcolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_model_dir_and_up(const control& ctrl_, const vector3& dir_, const vector3& up_) {
+            game_value params({
+                dir_,
+                up_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetmodeldirandup__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_text_color(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettextcolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_tooltip_color_box(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorbox__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_tooltip_color_shade(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolorshade__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_) {
+            game_value params({
+                color_
+            });
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing, ctrl_, params);
         }
     }
 }

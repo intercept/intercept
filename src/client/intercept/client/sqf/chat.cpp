@@ -3,5 +3,6 @@
 
 namespace intercept {
     namespace sqf {
+		/THIS WILL FAIL TO BUILD.
     }
 }

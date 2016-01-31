@@ -527,7 +527,7 @@ namespace intercept {
         std::vector<std::string> all_variables(const location &value_);
 
         /* Ctrl */
-                void ctrl_activate(const control &value_);
+        void ctrl_activate(const control &value_);
         float ctrl_auto_scroll_delay(const control &value_);
         bool ctrl_auto_scroll_rewind(const control &value_);
         float ctrl_auto_scroll_speed(const control &value_);
@@ -603,6 +603,19 @@ namespace intercept {
         void ctrl_set_tooltip(const control &value0_, const std::string& value1_);
         void ctrl_show(const control &value0_, bool value1_);
         void ctrl_show(int control_id_, bool show_);
+
+        control ctrl_create(const display& display_, const std::string& class_, int idc_);
+        control ctrl_create(const display& display_, const std::string& class_, int idc_, const control& controls_group_);
+        void ctrl_map_cursor(const control& ctrl_, const std::string& default_cursor_, const std::string& new_cursor_);
+        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::vector<float>& position_);
+        void ctrl_set_active_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_background_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_foreground_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_model_dir_and_up(const control& ctrl_, const vector3& dir_, const vector3& up_);
+        void ctrl_set_text_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_tooltip_color_box(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_tooltip_color_shade(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_);
 
         /* Curator */
         object curatorcamera();

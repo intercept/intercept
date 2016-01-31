@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: "{build}"
 
 branches:
   only:
@@ -8,12 +8,14 @@ configuration:
 - Debug
 - Release
 
-platform: x86
+platform: Win32
 
-build_script:
-- cmd: >-
-    cd vcproj
+before_build:
+  - cd vcproj
+  - cmake .. -G "Visual Studio 14 2015"
+  - cd ..
 
-    cmake .. -G "Visual Studio 14 2015"
-
-    MSBuild yourproject.sln /property:Configuration=Debug /property:Platform=x86
+build:
+  project: vcproj\Intercept.sln
+  parallel: true
+  verbosity: minimal

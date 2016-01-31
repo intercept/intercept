@@ -16,4 +16,4 @@ build_script:
 
     cmake .. -G "Visual Studio 14 2015"
 
-    MSBuild yourproject.sln /property:Configuration=Debug /property:Platform=x32
+    MSBuild yourproject.sln /property:Configuration=Debug /property:Platform=x86

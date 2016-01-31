@@ -181,7 +181,7 @@ namespace intercept {
             game_value & operator = (const rv_game_value &internal_);
 
 
-
+			operator int();
             operator float();
             operator bool();
             operator std::string();
@@ -189,6 +189,7 @@ namespace intercept {
             operator rv_game_value *();
             operator vector3();
             operator vector2();
+			operator int() const;
             operator float() const;
             operator bool() const;
             operator std::string() const;

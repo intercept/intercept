@@ -6,7 +6,6 @@ branches:
 
 configuration:
 - Debug
-- Release
 
 platform: Win32
 

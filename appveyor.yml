@@ -16,4 +16,4 @@ build_script:
 
     cmake .. -G "Visual Studio 14 2015"
 
-    msbuild Intercept.sln
+    MSBuild yourproject.sln /property:Configuration=Debug /property:Platform=x32

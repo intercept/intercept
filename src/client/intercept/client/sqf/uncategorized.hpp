@@ -1339,8 +1339,6 @@ namespace intercept {
         void clear_weapon_pool();
         float client_owner();
         std::string commanding_menu();
-        config config_file();
-        config config_null();
         control control_null();
         std::string copy_from_clipboard();
         float current_channel();

@@ -2759,14 +2759,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__commandingmenu__ret__string);
         }
 
-        config config_file() {
-            return __helpers::__retrieve_nular_config(client::__sqf::nular__configfile__ret__config);
-        }
-
-        config config_null() {
-            return __helpers::__retrieve_nular_config(client::__sqf::nular__confignull__ret__config);
-        }
-
         control control_null() {
             return __helpers::__retrieve_nular_control(client::__sqf::nular__controlnull__ret__control);
         }

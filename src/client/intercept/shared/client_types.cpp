@@ -55,6 +55,8 @@ namespace intercept {
 
         bool internal_object::is_null()
         {
+            if (!rv_data.data)
+                return true;
             uintptr_t data = (uintptr_t)(rv_data.data);
             uintptr_t data_1 = data + 12;
             uintptr_t data_2 = *(uintptr_t *)data_1;

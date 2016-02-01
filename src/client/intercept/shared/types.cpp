@@ -609,7 +609,7 @@ namespace intercept {
         {
             if (rv_data.data && rv_data.data->type == game_data_number::type_def)
                 return static_cast<int>(((game_data_number *)rv_data.data)->number);
-            return 0.0f;
+            return 0;
         }
 
         game_value::operator float()
@@ -661,7 +661,7 @@ namespace intercept {
         {
             if (rv_data.data && rv_data.data->type == game_data_number::type_def)
                 return static_cast<int>(((game_data_number *)rv_data.data)->number);
-            return 0.0f;
+            return 0;
         }
 
         game_value::operator float() const

@@ -584,7 +584,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__additemcargoglobal__object__array__ret__nothing, object_, args);
         }
 
-        void add_to_remains_collector(std::vector<object> objects_)
+        void add_to_remains_collector(const std::vector<object> & objects_)
         {
             std::vector<game_value> objects;
             for (auto &it : objects_)
@@ -765,7 +765,7 @@ namespace intercept {
             return __helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
         }
 
-        void command_get_out(std::vector<object> units_)
+        void command_get_out(const std::vector<object> & units_)
         {
             //std::vector<game_value> units;
             //for (auto it : units)
@@ -780,7 +780,7 @@ namespace intercept {
         {
             return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
         }
-        void command_stop(std::vector<object> units_)
+        void command_stop(const std::vector<object> & units_)
         {
             throw 713; // TODO Implement command_stop
             //return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
@@ -860,7 +860,7 @@ namespace intercept {
             return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
 
-        location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_)
+        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_)
         {
             game_value params({
                 classname_,
@@ -947,7 +947,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
 
-        std::vector<object> crew(object _veh)
+        std::vector<object> crew(const object & _veh)
         {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
         }
@@ -1053,12 +1053,12 @@ namespace intercept {
 
         void enable_saving(bool enable_, bool autosave_)
         {
-            //game_value args({
-            //    (enable_),
-            //    (autosave_)
-            //});
+            game_value args(std::vector<game_value> {
+                (enable_),
+                (autosave_)
+            });
 
-            //host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
+            host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
         }
 
         std::string formation(const object &leader_)
@@ -1239,7 +1239,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolor__array__ret__nothing, args);
         }
 
-        void lb_set_color(const control &control_, int index_, rv_color color_)
+        void lb_set_color(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1249,7 +1249,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcolor__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_color_right(int control_id_, int index_, rv_color color_)
+        void lb_set_color_right(int control_id_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(control_id_),
@@ -1260,7 +1260,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcolorright__array__ret__nothing, args);
         }
 
-        void lb_set_color_right(const control &control_, int index_, rv_color color_)
+        void lb_set_color_right(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1345,7 +1345,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpictureright__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_picture_color(int control_id_, int index_, rv_color color_)
+        void lb_set_picture_color(int control_id_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(control_id_),
@@ -1357,7 +1357,7 @@ namespace intercept {
         }
 
 
-        void lb_set_picture_color(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_color(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1367,7 +1367,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolor__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_)
+        void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(control_id_),
@@ -1378,7 +1378,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolordisabled__array__ret__nothing, args);
         }
 
-        void lb_set_picture_color_disabled(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1388,7 +1388,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolordisabled__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_)
+        void lb_set_picture_color_selected(int control_id_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(control_id_),
@@ -1399,7 +1399,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetpicturecolorselected__array__ret__nothing, args);
         }
 
-        void lb_set_picture_color_selected(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_color_selected(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1409,7 +1409,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturecolorselected__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_picture_right_color(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1419,7 +1419,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetpicturerightcolor__control__array__ret__nothing, control_, args);
         }
 
-        void lb_set_picture_right_color_disabled(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1430,7 +1430,7 @@ namespace intercept {
         }
 
 
-        void lb_set_picture_right_color_selected(const control &control_, int index_, rv_color color_)
+        void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_)
         {
             game_value args({
                 (float)(index_),
@@ -1528,7 +1528,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float)index_));
         }
 
-        void lb_set_select_color(int idc_, int index_, rv_color &color_)
+        void lb_set_select_color(int idc_, int index_, const rv_color & color_)
         {
             game_value params({
                 (float)idc_,
@@ -1540,7 +1540,7 @@ namespace intercept {
             // Alt syntax binary__lbsetselectcolor__control__array__ret__nothing
         }
 
-        void lb_set_select_color_right(int idc_, int index_, rv_color &color_)
+        void lb_set_select_color_right(int idc_, int index_, const rv_color & color_)
         {
             game_value params({
                 (float)idc_,
@@ -1556,26 +1556,26 @@ namespace intercept {
 #pragma endregion listbox
 
         /* 3den */
-        std::string current3denoperation() {
+        std::string current_eden_operation() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
         }
-        object get3dencamera() {
+        object get_eden_camera() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__get3dencamera__ret__object);
         }
 
-        bool get3deniconsvisible() {
+        bool get_eden_icons_visible() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3deniconsvisible__ret__bool);
         }
 
-        bool get3denlinesvisible() {
+        bool get_eden_lines_visible() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3denlinesvisible__ret__bool);
         }
 
-        bool is3den() {
+        bool is_eden() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3den__ret__bool);
         }
 
-        bool is3denmultiplayer() {
+        bool is_eden_multiplayer() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3denmultiplayer__ret__bool);
         }
         float get_3den_action_state(const std::string &value_) {
@@ -1706,16 +1706,16 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__istext__config__ret__bool, config_entry_));
         }
 
-        std::vector<std::string> config_classes(const std::string& value_, config a_config_) {
+        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_) {
             game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, value_, a_config_);
             return __helpers::__convert_to_strings_vector(output);
         }
 
-        void load_overlay(const control &a_control_, config a_config_) {
+        void load_overlay(const control &a_control_, const config & a_config_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__loadoverlay__control__config__ret__nothing, a_control_, a_config_);
         }
 
-        void new_overlay(const control &a_control_, config a_config_) {
+        void new_overlay(const control &a_control_, const config & a_config_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__newoverlay__control__config__ret__nothing, a_control_, a_config_);
         }
 
@@ -2259,19 +2259,19 @@ namespace intercept {
         }
 
         /* Curator */
-                object curatorcamera() {
+                object curator_camera() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__curatorcamera__ret__object);
         }
 
-        object curatormouseover() {
+        object curator_mouse_over() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__curatormouseover__ret__object);
         }
 
-        std::vector<object> curatorselected() {
+        std::vector<object> curator_selected() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__curatorselected__ret__array));
         }
 
-        void opencuratorinterface() {
+        void open_curator_interface() {
             __helpers::__empty_nular(client::__sqf::nular__opencuratorinterface__ret__nothing);
         }
 
@@ -2691,7 +2691,7 @@ namespace intercept {
             return __helpers::__convert_to_team_members_vector(host::functions.invoke_raw_nular(client::__sqf::nular__agents__ret__array));
         }
 
-        float armorypoints() {
+        float armory_points() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__armorypoints__ret__scalar);
         }
 
@@ -2703,27 +2703,27 @@ namespace intercept {
             return __helpers::__retrieve_nular_side(client::__sqf::nular__blufor__ret__side);
         }
 
-        std::string briefingname() {
+        std::string briefing_name() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__briefingname__ret__string);
         }
 
-        bool cadetmode() {
+        bool cadet_mode() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__cadetmode__ret__bool);
         }
 
-        object cameraon() {
+        object camera_on() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__cameraon__ret__object);
         }
 
-        std::string cameraview() {
+        std::string camera_view() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__cameraview__ret__string);
         }
 
-        config campaignconfigfile() {
+        config campaign_config_file() {
             return __helpers::__retrieve_nular_config(client::__sqf::nular__campaignconfigfile__ret__config);
         }
 
-        bool cheatsenabled() {
+        bool cheats_enabled() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__cheatsenabled__ret__bool);
         }
 
@@ -2731,59 +2731,59 @@ namespace intercept {
             return __helpers::__retrieve_nular_side(client::__sqf::nular__civilian__ret__side);
         }
 
-        void clearforcesrtd() {
+        void clear_forces_rtd() {
             __helpers::__empty_nular(client::__sqf::nular__clearforcesrtd__ret__nothing);
         }
 
-        void clearitempool() {
+        void clear_item_pool() {
             __helpers::__empty_nular(client::__sqf::nular__clearitempool__ret__nothing);
         }
 
-        void clearmagazinepool() {
+        void clear_magazine_pool() {
             __helpers::__empty_nular(client::__sqf::nular__clearmagazinepool__ret__nothing);
         }
 
-        void clearradio() {
+        void clear_radio() {
             __helpers::__empty_nular(client::__sqf::nular__clearradio__ret__nothing);
         }
 
-        void clearweaponpool() {
+        void clear_weapon_pool() {
             __helpers::__empty_nular(client::__sqf::nular__clearweaponpool__ret__nothing);
         }
 
-        float clientowner() {
+        float client_owner() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__clientowner__ret__scalar);
         }
 
-        std::string commandingmenu() {
+        std::string commanding_menu() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__commandingmenu__ret__string);
         }
 
-        config configfile() {
+        config config_file() {
             return __helpers::__retrieve_nular_config(client::__sqf::nular__configfile__ret__config);
         }
 
-        config confignull() {
+        config config_null() {
             return __helpers::__retrieve_nular_config(client::__sqf::nular__confignull__ret__config);
         }
 
-        control controlnull() {
+        control control_null() {
             return __helpers::__retrieve_nular_control(client::__sqf::nular__controlnull__ret__control);
         }
 
-        std::string copyfromclipboard() {
+        std::string copy_from_clipboard() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__copyfromclipboard__ret__string);
         }
 
-        float currentchannel() {
+        float current_channel() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__currentchannel__ret__scalar);
         }
 
-        rv_namespace currentnamespace() {
+        rv_namespace current_namespace() {
             return __helpers::__retrieve_nular_namespace(client::__sqf::nular__currentnamespace__ret__namespace);
         }
 
-        object cursortarget() {
+        object cursor_target() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__cursortarget__ret__object);
         }
 
@@ -6452,7 +6452,7 @@ namespace intercept {
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointcompletionradius__array__scalar__ret__nothing, wp_.__to_gv(), radius_);
         }
-        void set_waypoint_description(waypoint & wp_, std::string text_)
+        void set_waypoint_description(waypoint & wp_, std::string & text_)
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointdescription__array__string__ret__nothing, wp_.__to_gv(), text_);
         }
@@ -6472,7 +6472,7 @@ namespace intercept {
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointloitertype__array__string__ret__nothing, wp_.__to_gv(), waypoint::__get_enum_as_str(type_));
         }
-        void set_waypoint_name(waypoint & wp_, std::string name_)
+        void set_waypoint_name(waypoint & wp_, std::string & name_)
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointname__array__string__ret__nothing, wp_.__to_gv(), name_);
         }
@@ -6481,7 +6481,7 @@ namespace intercept {
             game_value args({ pos_, radius_});
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointposition__array__array__ret__nothing, wp_.__to_gv(), args);
         }
-        void set_waypoint_script(waypoint & wp_, std::string command_)
+        void set_waypoint_script(waypoint & wp_, std::string & command_)
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointscript__array__string__ret__nothing, wp_.__to_gv(), command_);
         }
@@ -6508,12 +6508,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointvisible__array__bool__ret__nothing, wp_.__to_gv(), visibility_);
         }
 
-        void show_waypoint(waypoint& wp_, std::string show_)
+        void show_waypoint(waypoint& wp_, std::string & show_)
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__showwaypoint__array__string__ret__nothing, wp_.__to_gv(), show_);
         }
 
-        void synchronize_waypoint(waypoint& wp_, std::vector<waypoint> others_)
+        void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_)
         {
             std::vector<game_value> waypoints;
             for (auto it : others_)
@@ -6521,7 +6521,7 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(client::__sqf::binary__synchronizewaypoint__array__array__ret__nothing, wp_.__to_gv(), waypoints);
         }
-        void synchronize_waypoint(object& trigger_, std::vector<waypoint> others_)
+        void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_)
         {
             std::vector<game_value> waypoints;
             for (auto it : others_)
@@ -6535,22 +6535,22 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), (float)obj_id_);
         }
 
-        void waypoint_attach_object(waypoint& wp_, object obj_)
+        void waypoint_attach_object(waypoint& wp_, object & obj_)
         {
             host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), obj_);
         }
 
 
-        float current_waypoint(group gp_) {
+        float current_waypoint(group & gp_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, gp_));
         }
 
-        bool waypoints_enabled_uav(object value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__waypointsenableduav__object__ret__bool, value_);
+        bool waypoints_enabled_uav(object & uav_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__waypointsenableduav__object__ret__bool, uav_);
         }
 
-        void enable_uavwaypoints(bool value0_, object value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
+        void enable_uav_waypoints(object & uav_, bool enable_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
         }
 
         /* World */

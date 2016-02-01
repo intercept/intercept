@@ -186,7 +186,7 @@ namespace intercept {
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
 
         /* potential namespace: core, misc, world */
-        void add_to_remains_collector(std::vector<object> objects_);
+        void add_to_remains_collector(const std::vector<object> & objects_);
 
         /* potential namespace: medical, misc, unit */
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
@@ -236,7 +236,7 @@ namespace intercept {
         /* potential namespace: locations */
         std::string class_name(const location &loc_);
         location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
-        location create_location(const std::string &classname_, vector2 pos_, float size_x_, float size_y_);
+        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_);
         location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
 
         /* potential namespace: ai, group, unit */
@@ -247,9 +247,9 @@ namespace intercept {
 
         /* potential namespace: ai */
         void command_get_out(const object &unit_);
-        void command_get_out(std::vector<object> units_);
+        void command_get_out(const std::vector<object> & units_);
         void command_stop(const object &unit_);
-        void command_stop(std::vector<object> units_);
+        void command_stop(const std::vector<object> & units_);
         void allow_fleeing(const object& object_, float cowardice_);
         void allow_fleeing(const group& group_, float cowardice_);
         void allow_get_in(const std::vector<object>& units_, bool allow_);
@@ -280,7 +280,7 @@ namespace intercept {
         float add_event_handler(const object &object_, const std::string &type_, const std::string &command_);
 
         /* potential namespace: vehicle */
-        std::vector<object> crew(object _veh);
+        std::vector<object> crew(const object & _veh);
         float aimed_at_target(const object& vehicle_, const object& target_);
         float aimed_at_target(const object& vehicle_, const object& target_, const std::string& weapon_);
         void animate(const object& obj_, const std::string& animation_name_, float phase_);
@@ -332,27 +332,6 @@ namespace intercept {
         void cam_set_target(const object &camera_, const object &target_);
         void cam_set_target(const object &camera_, const vector3 &target_);
 
-        /* potential namespace: rtd, vehicles, afm */
-        // TODO std::vector<bool> engines_is_on_rtd(const object &helicopter_);
-        // TODO std::vector<float> engines_torque_rtd(const object &helicopter_);
-        // TODO std::vector<float> engines_rpm_rtd(const object &helicopter_);
-
-        /* potential namespace: core */
-        // TODO std::vector<object> entities(const std::string &type_);
-
-        /* potential namespace: backpack, containers, inventory */
-        // TODO std::vector<object> every_backpack(const object &box_);
-
-        /* potential namespace: containers, inventory */
-        // TODO std::vector<rv_container> every_container(const object &box_);
-
-        /* potential namespace: ai */
-        // TODO rv_destination expected_destination(const object &unit_);
-
-        /* potential namespace: position */
-        // TODO vector3 eye_direction(const object &unit_);
-        // TODO vector3 eye_pos(const object &unit_);
-
         /* potential namespace: groups, ai */
         std::string formation(const object &leader_);
         std::string formation(const group &group_);
@@ -389,9 +368,9 @@ namespace intercept {
         std::string lb_picture_right(const control &control_, int index_);
         // TODO std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
         void lb_set_color(int control_id_, int index_, rv_color color_);
-        void lb_set_color(const control &control_, int index_, rv_color color_);
-        void lb_set_color_right(int control_id_, int index_, rv_color color_);
-        void lb_set_color_right(const control &control_, int index_, rv_color color_);
+        void lb_set_color(const control &control_, int index_, const rv_color & color_);
+        void lb_set_color_right(int control_id_, int index_, const rv_color & color_);
+        void lb_set_color_right(const control &control_, int index_, const rv_color & color_);
         void lb_set_cur_sel(int control_id_, int index_);
         void lb_set_cur_sel(const control &control_, int index_);
         void lb_set_data(int control_id_, int index_, const std::string &data_);
@@ -400,15 +379,15 @@ namespace intercept {
         void lb_set_picture(const control &control_, int index_, const std::string &name_);
         void lb_set_picture_right(int control_id_, int index_, const std::string &name_);
         void lb_set_picture_right(const control &control_, int index_, const std::string &name_);
-        void lb_set_picture_color(int control_id_, int index_, rv_color color_);
-        void lb_set_picture_color(const control &control_, int index_, rv_color color_);
-        void lb_set_picture_color_disabled(int control_id_, int index_, rv_color color_);
-        void lb_set_picture_color_disabled(const control &control_, int index_, rv_color color_);
-        void lb_set_picture_color_selected(int control_id_, int index_, rv_color color_);
-        void lb_set_picture_color_selected(const control &control_, int index_, rv_color color_);
-        void lb_set_picture_right_color(const control &control_, int index_, rv_color color_);
-        void lb_set_picture_right_color_disabled(const control &control_, int index_, rv_color color_);
-        void lb_set_picture_right_color_selected(const control &control_, int index_, rv_color color_);
+        void lb_set_picture_color(int control_id_, int index_, const rv_color & color_);
+        void lb_set_picture_color(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color & color_);
+        void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_color_selected(int control_id_, int index_, const rv_color & color_);
+        void lb_set_picture_color_selected(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_);
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
@@ -421,8 +400,8 @@ namespace intercept {
         std::string lb_text_right(const control &control_, int index_);
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
-        void lb_set_select_color(int idc_, int index_, rv_color &color_);
-        void lb_set_select_color_right(int idc_, int index_, rv_color &color_);
+        void lb_set_select_color(int idc_, int index_, const rv_color & color_);
+        void lb_set_select_color_right(int idc_, int index_, const rv_color & color_);
 
 
         // Tree View
@@ -448,13 +427,13 @@ namespace intercept {
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
-        std::string current3denoperation();
-        object get3dencamera();
-        bool get3deniconsvisible();
-        bool get3denlinesvisible();
+        std::string current_eden_operation();
+        object get_eden_camera();
+        bool get_eden_icons_visible();
+        bool get_eden_lines_visible();
         // TODO array[] get_3den_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
-        bool is3den();
-        bool is3denmultiplayer();
+        bool is_eden();
+        bool is_eden_multiplayer();
         float get_3den_action_state(const std::string &value_);
         void edit_3den_mission_attributes(const std::string &value_);
         float add_3den_layer(int parent_layer_id_, const std::string& name_);
@@ -463,8 +442,8 @@ namespace intercept {
 
         /* Chat */
         namespace __helpers {
-            void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
+			void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
+			vector3 get_pos_loc(unary_function fnc_, const location & loc_);
         }
         void side_chat(const object & obj_, const std::string &message_);
         void global_chat(const object & obj_, const std::string & message_);
@@ -491,9 +470,9 @@ namespace intercept {
         bool is_null(const config &config_entry_);
         bool is_number(const config &config_entry_);
         bool is_text(const config &config_entry_);
-        std::vector<std::string> config_classes(const std::string& value_, config a_config_);
-        void load_overlay(const control &a_control_, config a_config_);
-        void new_overlay(const control &a_control_, config a_config_);
+        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_);
+        void load_overlay(const control &a_control_, const config & a_config_);
+        void new_overlay(const control &a_control_, const config & a_config_);
         config select(const config &a_config_, float a_number_);
         config campaign_config_file();
         config config_file();
@@ -644,10 +623,10 @@ namespace intercept {
         void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_);
 
         /* Curator */
-        object curatorcamera();
-        object curatormouseover();
-        std::vector<object> curatorselected();
-        void opencuratorinterface();
+        object curator_camera();
+        object curator_mouse_over();
+        std::vector<object> curator_selected();
+        void open_curator_interface();
         bool shown_curatorcompass();
         float curator_camera_area_ceiling(const object &value_);
         bool curator_editing_area_type(const object &value_);
@@ -1260,31 +1239,31 @@ namespace intercept {
         void set_waypoint_behaviour(waypoint & wp_, waypoint::behaviour mode_);
         void set_waypoint_combat_mode(waypoint & wp_, waypoint::combat_mode mode_);
         void set_waypoint_completion_radius(waypoint & wp_, float radius_);
-        void set_waypoint_description(waypoint & wp_, std::string text_);
+        void set_waypoint_description(waypoint & wp_, std::string & text_);
         void set_waypoint_formation(waypoint & wp_, waypoint::formation formation_);
         void set_waypoint_house_position(waypoint & wp_, float house_pos_);
         void set_waypoint_loiter_radius(waypoint & wp_, float radius_);
         void set_waypoint_loiter_type(waypoint & wp_, waypoint::loiter_type type_);
-        void set_waypoint_name(waypoint & wp_, std::string name_);
+        void set_waypoint_name(waypoint & wp_, std::string & name_);
         void set_waypoint_position(waypoint & wp_, vector3 & pos_, float radius_);
-        void set_waypoint_script(waypoint & wp_, std::string command_);
+        void set_waypoint_script(waypoint & wp_, std::string & command_);
         void set_waypoint_speed(waypoint& wp_, waypoint::speed mode_);
         void set_waypoint_statements(waypoint& wp_, std::string condition_, std::string statement_);
         void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_);
         void set_waypoint_type(waypoint& wp_, waypoint::type type_);
         void set_waypoint_visible(waypoint& wp_, bool visibility_);
 
-        void show_waypoint(waypoint& wp_, std::string show_);
+        void show_waypoint(waypoint& wp_, std::string & show_);
 
-        void synchronize_waypoint(waypoint& wp_, std::vector<waypoint> others_);
-        void synchronize_waypoint(object& trigger_, std::vector<waypoint> others_);
+        void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_);
+        void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_);
 
         void waypoint_attach_object(waypoint& wp_, int obj_id_);
-        void waypoint_attach_object(waypoint& wp_, object obj_);
+        void waypoint_attach_object(waypoint& wp_, object & obj_);
 
-        float current_waypoint(group gp_);
-        bool waypoints_enabled_uav(object value_);
-        void enable_uavwaypoints(bool value0_, object value1_);
+        float current_waypoint(group & gp_);
+        bool waypoints_enabled_uav(object & uav_);
+        void enable_uav_waypoints(object & uav_, bool enable_);
 
         /* World */
 
@@ -1344,30 +1323,30 @@ namespace intercept {
             }
         };
 
-        float armorypoints();
+        float armory_points();
         float benchmark();
         side blufor();
-        std::string briefingname();
-        bool cadetmode();
-        object cameraon();
-        std::string cameraview();
-        config campaignconfigfile();
-        bool cheatsenabled();
+        std::string briefing_name();
+        bool cadet_mode();
+        object camera_on();
+        std::string camera_view();
+        config campaign_config_file();
+        bool cheats_enabled();
         side civilian();
-        void clearforcesrtd();
-        void clearitempool();
-        void clearmagazinepool();
-        void clearradio();
-        void clearweaponpool();
-        float clientowner();
-        std::string commandingmenu();
-        config configfile();
-        config confignull();
-        control controlnull();
-        std::string copyfromclipboard();
-        float currentchannel();
-        rv_namespace currentnamespace();
-        object cursortarget();
+        void clear_forces_rtd();
+        void clear_item_pool();
+        void clear_magazine_pool();
+        void clear_radio();
+        void clear_weapon_pool();
+        float client_owner();
+        std::string commanding_menu();
+        config config_file();
+        config config_null();
+        control control_null();
+        std::string copy_from_clipboard();
+        float current_channel();
+        rv_namespace current_namespace();
+        object cursor_target();
         float daytime();
         float diag_fps();
         float diag_fpsmin();

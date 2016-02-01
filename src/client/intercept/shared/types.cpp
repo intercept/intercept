@@ -463,7 +463,7 @@ namespace intercept {
         {
 
             rv_data = internal_.rv_data;
-            rv_data.__vptr = ((game_value)internal_).rv_data.__vptr;
+            rv_data.__vptr = internal_.rv_data.__vptr;
             if (rv_data.data)
                 rv_data.data->ref_count_internal += 1;
         }
@@ -593,8 +593,8 @@ namespace intercept {
         {
             if (rv_data.data)
                 _free();
-            rv_data.data = ((game_value)internal_).rv_data.data;
-            rv_data.__vptr = ((game_value)internal_).rv_data.__vptr;
+            rv_data.data = internal_.rv_data.data;
+            rv_data.__vptr = internal_.rv_data.__vptr;
             if(rv_data.data)
                 rv_data.data->ref_count_internal += 1;
             return *this;

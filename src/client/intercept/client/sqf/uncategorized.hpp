@@ -204,6 +204,7 @@ namespace intercept {
         object attached_to(const object &obj_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
+        void attach_object(const location& location_, const object& object_);
 
         /* potential namespace: ai */
         bool attack_enabled(const object &unit_);
@@ -233,6 +234,7 @@ namespace intercept {
         std::string combat_mode(const group &loc_);
         std::string combat_mode(const object &loc_);
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_);
+        void assign_curator(const object& player_, const object& curator_module_);
 
         /* potential namespace: ai */
         void command_get_out(const object &unit_);

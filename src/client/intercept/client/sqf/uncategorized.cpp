@@ -192,6 +192,9 @@ namespace intercept {
 
         /* No documentation.*/
         // binary__ctrlsettextcolorsecondary__control__array__ret__nothing
+
+        /* Poor documentation.*/
+        // binary__backpackspacefor__object__string__ret__array
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -7446,6 +7449,14 @@ namespace intercept {
             };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__assignascargoindex__object__array__ret__nothing, unit_, params);
+        }
+
+        void assign_curator(const object& player_, const object& curator_module_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
+        }
+
+        void attach_object(const location& location_, const object& object_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__attachobject__location__object__ret__nothing, location_, object_);
         }
     }
 }

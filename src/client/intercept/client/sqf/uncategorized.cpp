@@ -23,8 +23,12 @@ namespace intercept {
         // unary__asin__scalar_nan__ret__scalar_nan
         // unary__atan__scalar_nan__ret__scalar_nan
         // unary__atg__scalar_nan__ret__scalar_nan
+		// unary__breakout__string__ret__nothing
+		// unary__breakto__string__ret__nothing
         // unary__case__any__ret__switch
+		// unary__comment__string__ret__nothing
         // unary__count__array__ret__scalar
+		// unary__count__string__ret__scalar
         // unary__ceil__scalar_nan__ret__scalar_nan
         // unary__cos__scalar_nan__ret__scalar_nan
         // unary__debuglog__any__ret__nothing
@@ -3306,28 +3310,20 @@ namespace intercept {
             return __helpers::__object_unary_object(client::__sqf::unary__assignedvehicle__object__ret__object, unit_);
         }
 
-        std::string backpack(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__backpack__object__ret__string, value_);
+        std::string backpack(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__backpack__object__ret__string, unit_);
         }
 
-        object backpack_container(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__backpackcontainer__object__ret__object, value_);
+        object backpack_container(const object & unit_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__backpackcontainer__object__ret__object, unit_);
         }
 
-        std::string behaviour(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__behaviour__object__ret__string, value_);
+        std::string behaviour(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__behaviour__object__ret__string, unit_);
         }
 
-        std::string binocular(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__binocular__object__ret__string, value_);
-        }
-
-        void break_out(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__breakout__string__ret__nothing, value_);
-        }
-
-        void break_to(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__breakto__string__ret__nothing, value_);
+        std::string binocular(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__binocular__object__ret__string, unit_);
         }
 
         void buldozer(bool value_) {
@@ -3338,12 +3334,12 @@ namespace intercept {
             return __helpers::__bool_unary_string(client::__sqf::unary__buldozer_loadnewroads__string__ret__bool, value_);
         }
 
-        std::string button_action(const control &value_) {
-            return __helpers::__string_unary_control(client::__sqf::unary__buttonaction__control__ret__string, value_);
+        std::string button_action(const control & control_) {
+            return __helpers::__string_unary_control(client::__sqf::unary__buttonaction__control__ret__string, control_);
         }
 
-        std::string button_action(float value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, value_));
+        std::string button_action(int idc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, (float)idc_));
         }
 
         bool cam_committed(const object &camera_) {
@@ -3468,176 +3464,169 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
         }
 
-        bool can_fire(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__canfire__object__ret__bool, value_);
+        bool can_fire(const object & unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__canfire__object__ret__bool, unit_);
         }
 
-        bool can_move(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__canmove__object__ret__bool, value_);
+        bool can_move(const object & unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__canmove__object__ret__bool, unit_);
         }
 
-        bool can_stand(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__canstand__object__ret__bool, value_);
+        bool can_stand(const object & unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__canstand__object__ret__bool, unit_);
         }
 
-        bool can_unload_in_combat(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__canunloadincombat__object__ret__bool, value_);
+        bool can_unload_in_combat(const object & unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__canunloadincombat__object__ret__bool, unit_);
         }
 
-        bool captive(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__captive__object__ret__bool, value_);
+        bool captive(const object & unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__captive__object__ret__bool, unit_);
         }
 
-        float captive_num(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__captivenum__object__ret__scalar, value_);
+        float captive_num(const object & unit_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__captivenum__object__ret__scalar, unit_);
         }
 
-        bool cb_checked(const control &value_) {
-            return __helpers::__bool_unary_control(client::__sqf::unary__cbchecked__control__ret__bool, value_);
+        bool cb_checked(const control & control_) {
+            return __helpers::__bool_unary_control(client::__sqf::unary__cbchecked__control__ret__bool, control_);
         }
 
-        bool channel_enabled(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__channelenabled__scalar__ret__bool, value_);
+        bool channel_enabled(float channel_) {
+            return __helpers::__bool_unary_number(client::__sqf::unary__channelenabled__scalar__ret__bool, channel_);
         }
 
-        bool check_aifeature(const std::string &value_) {
-            return __helpers::__bool_unary_string(client::__sqf::unary__checkaifeature__string__ret__bool, value_);
+        bool check_aifeature(const std::string & feature_) {
+            return __helpers::__bool_unary_string(client::__sqf::unary__checkaifeature__string__ret__bool, feature_);
         }
 
-        void clear_all_items_from_backpack(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearallitemsfrombackpack__object__ret__nothing, value_);
+        void clear_all_items_from_backpack(const object & unit_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearallitemsfrombackpack__object__ret__nothing, unit_);
         }
 
-        void clear_backpack_cargo(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearbackpackcargo__object__ret__nothing, value_);
+        void clear_backpack_cargo(const object & box_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearbackpackcargo__object__ret__nothing, box_);
         }
 
-        void clear_backpack_cargo_global(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearbackpackcargoglobal__object__ret__nothing, value_);
+        void clear_backpack_cargo_global(const object & box_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearbackpackcargoglobal__object__ret__nothing, box_);
         }
 
-        void clear_item_cargo(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearitemcargo__object__ret__nothing, value_);
+        void clear_item_cargo(const object & box_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearitemcargo__object__ret__nothing, box_);
         }
 
-        void clear_item_cargo_global(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearitemcargoglobal__object__ret__nothing, value_);
+        void clear_item_cargo_global(const object & box_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearitemcargoglobal__object__ret__nothing, box_);
         }
 
-        void clear_magazine_cargo(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearmagazinecargo__object__ret__nothing, value_);
+        void clear_magazine_cargo(const object & veh_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearmagazinecargo__object__ret__nothing, veh_);
         }
 
-        void clear_magazine_cargo_global(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearmagazinecargoglobal__object__ret__nothing, value_);
+        void clear_magazine_cargo_global(const object & veh_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearmagazinecargoglobal__object__ret__nothing, veh_);
         }
 
-        void clear_overlay(const control &value_) {
-            __helpers::__empty_unary_control(client::__sqf::unary__clearoverlay__control__ret__nothing, value_);
+        void clear_overlay(const control & map_) {
+            __helpers::__empty_unary_control(client::__sqf::unary__clearoverlay__control__ret__nothing, map_);
         }
 
-        void clear_weapon_cargo(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearweaponcargo__object__ret__nothing, value_);
+        void clear_weapon_cargo(const object & veh_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearweaponcargo__object__ret__nothing, veh_);
         }
 
-        void clear_weapon_cargo_global(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__clearweaponcargoglobal__object__ret__nothing, value_);
+        void clear_weapon_cargo_global(const object & veh_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__clearweaponcargoglobal__object__ret__nothing, veh_);
         }
 
-        void close_dialog(float value_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__closedialog__scalar__ret__nothing, value_);
+        void close_dialog(float val_) {
+            __helpers::__empty_unary_number(client::__sqf::unary__closedialog__scalar__ret__nothing, val_);
         }
 
-        void close_overlay(const control &value_) {
-            __helpers::__empty_unary_control(client::__sqf::unary__closeoverlay__control__ret__nothing, value_);
+        void close_overlay(const control & map_) {
+            __helpers::__empty_unary_control(client::__sqf::unary__closeoverlay__control__ret__nothing, map_);
         }
 
         void collapse_object_tree(const control &value_) {
             __helpers::__empty_unary_control(client::__sqf::unary__collapseobjecttree__control__ret__nothing, value_);
         }
 
-        float collective_rtd(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__collectivertd__object__ret__scalar, value_);
+        float collective_rtd(const object & helicopter_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__collectivertd__object__ret__scalar, helicopter_);
         }
 
-        object commander(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__commander__object__ret__object, value_);
+        object commander(const object & veh_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__commander__object__ret__object, veh_);
         }
 
-        void comment(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__comment__string__ret__nothing, value_);
+        void commit_overlay(const control & map_) {
+            __helpers::__empty_unary_control(client::__sqf::unary__commitoverlay__control__ret__nothing, map_);
         }
 
-        void commit_overlay(const control &value_) {
-            __helpers::__empty_unary_control(client::__sqf::unary__commitoverlay__control__ret__nothing, value_);
+        bool completed_fsm(float handle_) {
+            return __helpers::__bool_unary_number(client::__sqf::unary__completedfsm__scalar__ret__bool, handle_);
         }
 
-        bool completed_fsm(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__completedfsm__scalar__ret__bool, value_);
+        void copy_to_clipboard(const std::string & text_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__copytoclipboard__string__ret__nothing, text_);
         }
 
-        void copy_to_clipboard(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__copytoclipboard__string__ret__nothing, value_);
+        bool create_dialog(const std::string & dialog_name_) {
+            return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, dialog_name_);
         }
 
-        float count(const std::string &value_) {
-            return __helpers::__number_unary_string(client::__sqf::unary__count__string__ret__scalar, value_);
+        void create_vehicle_crew(const object & veh_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__createvehiclecrew__object__ret__nothing, veh_);
         }
 
-        bool create_dialog(const std::string &value_) {
-            return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, value_);
+        std::string current_command(const object & veh_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__currentcommand__object__ret__string, veh_);
         }
 
-        void create_vehicle_crew(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__createvehiclecrew__object__ret__nothing, value_);
+        std::string current_magazine(const object & veh_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__currentmagazine__object__ret__string, veh_);
         }
 
-        std::string current_command(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__currentcommand__object__ret__string, value_);
+        std::string current_muzzle(const object & gunner_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__currentmuzzle__object__ret__string, gunner_);
         }
 
-        std::string current_magazine(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__currentmagazine__object__ret__string, value_);
+        int current_vision_mode(const object & unit_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentvisionmode__object__ret__scalar, unit_));
         }
 
-        std::string current_muzzle(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__currentmuzzle__object__ret__string, value_);
+        std::string current_weapon(const object & veh_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__currentweapon__object__ret__string, veh_);
         }
 
-        float current_vision_mode(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__currentvisionmode__object__ret__scalar, value_);
+        std::string current_weapon_mode(const object & gunner_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__currentweaponmode__object__ret__string, gunner_);
         }
 
-        std::string current_weapon(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__currentweapon__object__ret__string, value_);
+        float current_zeroing(const object & gunner_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__currentzeroing__object__ret__scalar, gunner_);
         }
 
-        std::string current_weapon_mode(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__currentweaponmode__object__ret__string, value_);
+        float damage(const object & object_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__damage__object__ret__scalar, object_);
         }
 
-        float current_zeroing(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__currentzeroing__object__ret__scalar, value_);
+        void de_activate_key(const std::string & key_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__deactivatekey__string__ret__nothing, key_);
         }
 
-        float damage(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__damage__object__ret__scalar, value_);
+        float debriefing_text(const std::string & debriefing_) {
+            return __helpers::__number_unary_string(client::__sqf::unary__debriefingtext__string__ret__scalar, debriefing_);
         }
 
-        void de_activate_key(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__deactivatekey__string__ret__nothing, value_);
+        void delete_collection(const object & collection_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__deletecollection__object__ret__nothing, collection_);
         }
 
-        float debriefing_text(const std::string &value_) {
-            return __helpers::__number_unary_string(client::__sqf::unary__debriefingtext__string__ret__scalar, value_);
-        }
-
-        void delete_collection(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__deletecollection__object__ret__nothing, value_);
-        }
-
-        bool delete_identity(const std::string &value_) {
-            return __helpers::__bool_unary_string(client::__sqf::unary__deleteidentity__string__ret__bool, value_);
+        bool delete_identity(const std::string & identity_) {
+            return __helpers::__bool_unary_string(client::__sqf::unary__deleteidentity__string__ret__bool, identity_);
         }
 
         void delete_site(const object &value_) {
@@ -5948,12 +5937,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__vehicleradio__object__string__ret__nothing, value0_, value1_);
         }
 
-        side create_center(const side &value_) {
-            return side(host::functions.invoke_raw_unary(client::__sqf::unary__createcenter__side__ret__side, value_));
+        side create_center(const side & side_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__createcenter__side__ret__side, side_));
         }
 
-        void delete_center(const side &value_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__deletecenter__side__ret__nothing, value_);
+        void delete_center(const side & side_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__deletecenter__side__ret__nothing, side_);
         }
 
         void delete_team(const team_member &value_) {

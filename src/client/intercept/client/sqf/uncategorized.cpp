@@ -7669,5 +7669,44 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandtarget__object_array__object__ret__nothing, units, target_);
         }
+
+        void command_watch(const object& unit_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_watch(const object& unit_, const vector2& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const vector3& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const vector2& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_watch(const object& unit_, const object& target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__object__ret__nothing, unit_, target_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__object__ret__nothing, units, target_);
+        }
     }
 }

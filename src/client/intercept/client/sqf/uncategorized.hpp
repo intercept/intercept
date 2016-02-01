@@ -229,6 +229,12 @@ namespace intercept {
         void command_radio(const std::vector<object>& units_, const std::string& radio_name_);
         void command_target(const object& unit_, const object& target_);
         void command_target(const std::vector<object>& units_, const object& target_);
+        void command_watch(const object& unit_, const vector3& pos_);
+        void command_watch(const object& unit_, const vector2& pos_);
+        void command_watch(const std::vector<object>& units_, const vector3& pos_);
+        void command_watch(const std::vector<object>& units_, const vector2& pos_);
+        void command_watch(const object& unit_, const object& target_);
+        void command_watch(const std::vector<object>& units_, const object& target_);
 
         /* potential namespace: cargo */
         std::vector<std::string> backpack_cargo(const object &box_);

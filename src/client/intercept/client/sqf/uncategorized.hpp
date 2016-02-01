@@ -204,6 +204,7 @@ namespace intercept {
         object attached_to(const object &obj_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
+        void attach_object(const location& location_, const object& object_);
 
         /* potential namespace: ai */
         bool attack_enabled(const object &unit_);
@@ -213,6 +214,15 @@ namespace intercept {
         std::vector<std::string> backpack_cargo(const object &box_);
         std::vector<std::string> backpack_items(const object &unit_);
         std::vector<std::string> backpack_magazines(const object &unit_);
+        bool can_add(const object& obj_, const std::string& classname_);
+        bool can_add(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_);
+        bool can_sling_load(const object& vehicle_, const object& cargo_);
 
         /* potential namespace: misc, model, position? */
         sqf::rv_bounding_box bounding_box(const object &model_);
@@ -232,12 +242,23 @@ namespace intercept {
         /* potential namespace: ai, group, unit */
         std::string combat_mode(const group &loc_);
         std::string combat_mode(const object &loc_);
+        float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_);
+        void assign_curator(const object& player_, const object& curator_module_);
 
         /* potential namespace: ai */
         void command_get_out(const object &unit_);
         void command_get_out(std::vector<object> units_);
         void command_stop(const object &unit_);
         void command_stop(std::vector<object> units_);
+        void allow_fleeing(const object& object_, float cowardice_);
+        void allow_fleeing(const group& group_, float cowardice_);
+        void allow_get_in(const std::vector<object>& units_, bool allow_);
+        void assign_as_commander(const object& unit_, const object& vehicle_);
+        void assign_as_driver(const object& unit_, const object& vehicle_);
+        void assign_as_gunner(const object& unit_, const object& vehicle_);
+        void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_);
+        void assign_as_cargo(const object& unit_, const object& vehicle_);
+        void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_);
 
         /* potential namespace: core, create */
         object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
@@ -260,6 +281,11 @@ namespace intercept {
 
         /* potential namespace: vehicle */
         std::vector<object> crew(object _veh);
+        float aimed_at_target(const object& vehicle_, const object& target_);
+        float aimed_at_target(const object& vehicle_, const object& target_, const std::string& weapon_);
+        void animate(const object& obj_, const std::string& animation_name_, float phase_);
+        void animate(const object& obj_, const std::string& animation_name_, float phase_, bool instant_);
+        void animate_door(const object& obj_, const std::string& door_name_, float phase_, bool now_);
 
         /* potential namespace: magazine, items, inventory */
         std::string current_magazine_detail(const object &veh_);

@@ -2723,10 +2723,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__cameraview__ret__string);
         }
 
-        config campaign_config_file() {
-            return __helpers::__retrieve_nular_config(client::__sqf::nular__campaignconfigfile__ret__config);
-        }
-
         bool cheats_enabled() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__cheatsenabled__ret__bool);
         }

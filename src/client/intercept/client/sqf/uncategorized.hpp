@@ -1330,7 +1330,6 @@ namespace intercept {
         bool cadet_mode();
         object camera_on();
         std::string camera_view();
-        config campaign_config_file();
         bool cheats_enabled();
         side civilian();
         void clear_forces_rtd();

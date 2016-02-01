@@ -214,6 +214,15 @@ namespace intercept {
         std::vector<std::string> backpack_cargo(const object &box_);
         std::vector<std::string> backpack_items(const object &unit_);
         std::vector<std::string> backpack_magazines(const object &unit_);
+        bool can_add(const object& obj_, const std::string& classname_);
+        bool can_add(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_);
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_);
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_);
+        bool can_sling_load(const object& vehicle_, const object& cargo_);
 
         /* potential namespace: misc, model, position? */
         sqf::rv_bounding_box bounding_box(const object &model_);

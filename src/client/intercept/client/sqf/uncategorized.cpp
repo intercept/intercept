@@ -7458,5 +7458,61 @@ namespace intercept {
         void attach_object(const location& location_, const object& object_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__attachobject__location__object__ret__nothing, location_, object_);
         }
+
+        bool can_add(const object& obj_, const std::string& classname_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, classname_));
+        }
+
+        bool can_add(const object& obj_, const std::string& classname_, int count_) {
+            std::vector<game_value> params{
+                classname_,
+                (float)count_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, params));
+        }
+
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, classname_));
+        }
+
+        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_) {
+            std::vector<game_value> params{
+                classname_,
+                (float)count_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, params));
+        }
+
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, classname_));
+        }
+
+        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_) {
+            std::vector<game_value> params{
+                classname_,
+                (float)count_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, params));
+        }
+
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, classname_));
+        }
+
+        bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_) {
+            std::vector<game_value> params{
+                classname_,
+                (float)count_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, params));
+        }
+
+        bool can_sling_load(const object& vehicle_, const object& cargo_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_));
+        }
     }
 }

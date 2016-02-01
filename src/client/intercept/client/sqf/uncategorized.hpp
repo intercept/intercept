@@ -1469,19 +1469,19 @@ namespace intercept {
         bool shown_warrant();
         bool shown_watch();
 
-        std::string action_name(const std::string &value_);
-        void activate_key(const std::string &value_);
-        void add_switchable_unit(const object &value_);
-        float air_density_rtd(float value_);
-        void airport_side(float value_);
-        bool alive(const object &value_);
-        std::string animation_state(const object &value_);
-        object assigned_commander(const object &value_);
-        object assigned_driver(const object &value_);
-        object assigned_gunner(const object &value_);
-        object assigned_target(const object &value_);
-        std::string assigned_team(const object &value_);
-        object assigned_vehicle(const object &value_);
+        std::string action_name(const std::string & action_);
+        void activate_key(const std::string & keyname_);
+        void add_switchable_unit(const object & unit_);
+        float air_density_rtd(float altitude_);
+        void airport_side(int id_);
+        bool alive(const object & obj_);
+        std::string animation_state(const object & unit_);
+        object assigned_commander(const object & veh_);
+        object assigned_driver(const object & veh_);
+        object assigned_gunner(const object & veh_);
+        object assigned_target(const object & veh_);
+        std::string assigned_team(const object & unit_);
+        object assigned_vehicle(const object & unit_);
 
         std::string backpack(const object &value_);
         object backpack_container(const object &value_);

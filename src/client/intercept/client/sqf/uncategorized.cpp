@@ -3254,56 +3254,56 @@ namespace intercept {
             __helpers::__empty_nular(client::__sqf::nular__saveprofilenamespace__ret__nothing);
         }
 
-        std::string action_name(const std::string &value_) {
-            return __helpers::__string_unary_string(client::__sqf::unary__actionname__string__ret__string, value_);
+        std::string action_name(const std::string & action_) {
+            return __helpers::__string_unary_string(client::__sqf::unary__actionname__string__ret__string, action_);
         }
 
-        void activate_key(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__activatekey__string__ret__nothing, value_);
+        void activate_key(const std::string & keyname_) {
+            __helpers::__empty_unary_string(client::__sqf::unary__activatekey__string__ret__nothing, keyname_);
         }
 
-        void add_switchable_unit(const object &value_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__addswitchableunit__object__ret__nothing, value_);
+        void add_switchable_unit(const object & unit_) {
+            __helpers::__empty_unary_object(client::__sqf::unary__addswitchableunit__object__ret__nothing, unit_);
         }
 
-        float air_density_rtd(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__airdensityrtd__scalar__ret__scalar, value_);
+        float air_density_rtd(float altitude_) {
+            return __helpers::__number_unary_number(client::__sqf::unary__airdensityrtd__scalar__ret__scalar, altitude_);
         }
 
-        void airport_side(float value_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__airportside__scalar__ret__nothing, value_);
+        void airport_side(int id_) {
+            __helpers::__empty_unary_number(client::__sqf::unary__airportside__scalar__ret__nothing, (float)id_);
         }
 
-        bool alive(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__alive__object__ret__bool, value_);
+        bool alive(const object & obj_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__alive__object__ret__bool, obj_);
         }
 
-        std::string animation_state(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__animationstate__object__ret__string, value_);
+        std::string animation_state(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__animationstate__object__ret__string, unit_);
         }
 
-        object assigned_commander(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__assignedcommander__object__ret__object, value_);
+        object assigned_commander(const object & veh_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__assignedcommander__object__ret__object, veh_);
         }
 
-        object assigned_driver(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__assigneddriver__object__ret__object, value_);
+        object assigned_driver(const object & veh_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__assigneddriver__object__ret__object, veh_);
         }
 
-        object assigned_gunner(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__assignedgunner__object__ret__object, value_);
+        object assigned_gunner(const object & veh_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__assignedgunner__object__ret__object, veh_);
         }
 
-        object assigned_target(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__assignedtarget__object__ret__object, value_);
+        object assigned_target(const object & veh_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__assignedtarget__object__ret__object, veh_);
         }
 
-        std::string assigned_team(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__assignedteam__object__ret__string, value_);
+        std::string assigned_team(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__assignedteam__object__ret__string, unit_);
         }
 
-        object assigned_vehicle(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__assignedvehicle__object__ret__object, value_);
+        object assigned_vehicle(const object & unit_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__assignedvehicle__object__ret__object, unit_);
         }
 
         std::string backpack(const object &value_) {

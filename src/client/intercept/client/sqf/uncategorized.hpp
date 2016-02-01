@@ -442,8 +442,8 @@ namespace intercept {
 
         /* Chat */
         namespace __helpers {
-			void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
-			vector3 get_pos_loc(unary_function fnc_, const location & loc_);
+            void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
+            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
         }
         void side_chat(const object & obj_, const std::string &message_);
         void global_chat(const object & obj_, const std::string & message_);

@@ -23,12 +23,12 @@ namespace intercept {
         // unary__asin__scalar_nan__ret__scalar_nan
         // unary__atan__scalar_nan__ret__scalar_nan
         // unary__atg__scalar_nan__ret__scalar_nan
-		// unary__breakout__string__ret__nothing
-		// unary__breakto__string__ret__nothing
+        // unary__breakout__string__ret__nothing
+        // unary__breakto__string__ret__nothing
         // unary__case__any__ret__switch
-		// unary__comment__string__ret__nothing
+        // unary__comment__string__ret__nothing
         // unary__count__array__ret__scalar
-		// unary__count__string__ret__scalar
+        // unary__count__string__ret__scalar
         // unary__ceil__scalar_nan__ret__scalar_nan
         // unary__cos__scalar_nan__ret__scalar_nan
         // unary__debuglog__any__ret__nothing

@@ -204,6 +204,8 @@ namespace intercept {
 
             size_t length() const;
 
+            bool is_null();
+
             bool client_owned() const;
             rv_game_value rv_data;
         protected:

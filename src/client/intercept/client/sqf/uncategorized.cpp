@@ -7331,5 +7331,121 @@ namespace intercept {
         void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing, ctrl_, color_);
         }
+
+        float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
+            std::vector<game_value> offset;
+            for (float item : offset_) {
+                offset.push_back(game_value((float)item));
+            }
+
+            game_value params({
+                icon_,
+                offset
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params));
+        }
+
+        float aimed_at_target(const object& vehicle_, const object& target_) {
+            game_value params({
+                target_
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__aimedattarget__object__array__ret__scalar, vehicle_, params));
+        }
+
+        float aimed_at_target(const object& vehicle_, const object& target_, const std::string& weapon_) {
+            game_value params({
+                target_,
+                weapon_
+            });
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__aimedattarget__object__array__ret__scalar, vehicle_, params));
+        }
+
+        void allow_fleeing(const object& object_, float cowardice_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__allowfleeing__object_group__scalar__ret__nothing, object_, cowardice_);
+        }
+
+        void allow_fleeing(const group& group_, float cowardice_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__allowfleeing__object_group__scalar__ret__nothing, group_, cowardice_);
+        }
+
+        void allow_get_in(const std::vector<object>& units_, bool allow_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value((object)item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__allowgetin__array__bool__ret__nothing, units, allow_);
+        }
+
+        void animate(const object& obj_, const std::string& animation_name_, float phase_) {
+            std::vector<game_value> params {
+                animation_name_,
+                phase_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__animate__object__array__ret__nothing, obj_, params);
+        }
+
+        void animate(const object& obj_, const std::string& animation_name_, float phase_, bool instant_) {
+            std::vector<game_value> params {
+                animation_name_,
+                phase_,
+                instant_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__animate__object__array__ret__nothing, obj_, params);
+        }
+
+        void animate_door(const object& obj_, const std::string& door_name_, float phase_, bool now_) {
+            std::vector<game_value> params {
+                door_name_,
+                phase_,
+                now_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__animatedoor__object__array__ret__nothing, obj_, params);
+        }
+
+        void assign_as_cargo(const object& unit_, const object& vehicle_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignascargo__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void assign_as_commander(const object& unit_, const object& vehicle_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignascommander__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void assign_as_driver(const object& unit_, const object& vehicle_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignasdriver__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void assign_as_gunner(const object& unit_, const object& vehicle_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_) {
+            std::vector<game_value> turret_path;
+            for (float item : turret_path_) {
+                turret_path.push_back(game_value(item));
+            }
+
+            std::vector<game_value> params {
+                vehicle_,
+                turret_path
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, params);
+        }
+
+        void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_) {
+            std::vector<game_value> params {
+                vehicle_,
+                (float)index_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__assignascargoindex__object__array__ret__nothing, unit_, params);
+        }
     }
 }

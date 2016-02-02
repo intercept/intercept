@@ -6199,6 +6199,11 @@ namespace intercept {
             return __helpers::get_pos_obj(__sqf::unary__position__object__ret__array, obj_);
         }
 
+        vector3 position_camera_to_world(const vector3 & pos_)
+        {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__positioncameratoworld__array__ret__array, pos_));
+        }
+
         vector3 get_pos_visual(const object & obj_)
         {
             return __helpers::get_pos_obj(__sqf::unary__getposvisual__object__ret__array, obj_);

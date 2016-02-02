@@ -742,6 +742,7 @@ namespace intercept {
         vector3 visible_position(const object & obj_);
         vector3 visible_position_asl(const object & obj_);
         vector3 position(const object & obj_);
+        vector3 position_camera_to_world(const vector3 & pos_);
         vector3 get_pos_visual(const object & obj_);
         vector3 get_pos_asl_visual(const object & obj_);
         vector3 get_pos_atl_visual(const object & obj_);

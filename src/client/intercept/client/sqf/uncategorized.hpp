@@ -1287,6 +1287,28 @@ namespace intercept {
                 return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
+			operator game_value()
+			{
+				return game_value(std::vector<game_value>({
+					year,
+					month,
+					day,
+					hour,
+					minute
+				}));
+			}
+
+			operator game_value() const
+			{
+				return game_value(std::vector<game_value>({
+					year,
+					month,
+					day,
+					hour,
+					minute
+				}));
+			}
+
             std::vector<float> to_vector() const {
                 std::vector<float> ret_val{ year, month, day, hour, minute };
                 return ret_val;
@@ -2336,5 +2358,50 @@ namespace intercept {
 
         float get_friend(const side &side1_, const side &side2_);
         void set_friend(const side &side1_, const side &side2_, float value_);
+
+		std::vector<object> entities(const std::string& type_);
+		vector3 eye_direction(const object& unit_);
+
+		struct rv_unit_description
+		{
+			std::string unit;
+			std::string uniform;
+			std::string vest;
+			std::string backpack;
+
+			rv_unit_description(const game_value& r_game_val)
+				: unit(r_game_val[0]),
+				uniform(r_game_val[1]),
+				vest(r_game_val[2]),
+				backpack(r_game_val[3])
+			{
+			}
+		};
+
+		rv_unit_description get_description(const object& unit_);
+
+		vector3 get_pos_world(const object& unit_);
+		float get_terrain_height_asl(const vector3 position_);
+
+		bool is_null(const location& loc_);
+		std::vector<std::string> items(const object& unit_);
+
+		location nearest_location(const vector3& pos_, const std::string& location_class_);
+		location nearest_location(const object& unit_, const std::string& location_class_);
+		std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_);
+		std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
+		std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_);
+		std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
+		std::vector<object> nearest_terrain_objects(const vector3& pos_, const std::vector<std::string> types_, float radius_);
+		std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_);
+
+		bool open_map(bool show_, bool forced_);
+		vector3 position(const location& loc_);
+		bool rectangular(const location& loc_);
+		void set_date(rv_date date_);
+		std::vector<object> units(const group& gp_);
+		std::vector<object> units(const object& unit_);
+
+		std::string call_extension(const std::string& extension_, const std::string& arguments_);
     }
 }

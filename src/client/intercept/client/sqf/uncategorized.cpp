@@ -7260,57 +7260,66 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__callextension__string__string__ret__string, extension_, arguments_));
         }
 
-	    vector3 get_pos(const object& obj_, float distance_, float heading_)
-		{
-			game_value args(std::vector<game_value> {
-				distance_,
-				heading_
-			});
+        vector3 get_pos(const object& obj_, float distance_, float heading_)
+        {
+            game_value args(std::vector<game_value> {
+                distance_,
+                heading_
+            });
 
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, obj_, args));
-	    }
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, obj_, args));
+        }
 
-	    vector3 get_pos(const vector3& pos_, float distance_, float heading_)
-	    {
-			game_value args(std::vector<game_value> {
-				distance_,
-				heading_
-			});
+        vector3 get_pos(const vector3& pos_, float distance_, float heading_)
+        {
+            game_value args(std::vector<game_value> {
+                distance_,
+                heading_
+            });
 
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, pos_, args));
-	    }
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, pos_, args));
+        }
 
-	    vector3 get_rel_pos(const object& obj_, float distance_, float heading_)
-	    {
-			game_value args(std::vector<game_value> {
-				distance_,
-				heading_
-			});
+        vector3 get_rel_pos(const object& obj_, float distance_, float heading_)
+        {
+            game_value args(std::vector<game_value> {
+                distance_,
+                heading_
+            });
 
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, obj_, args));
-	    }
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, obj_, args));
+        }
 
-	    vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_)
-	    {
-			game_value args(std::vector<game_value> {
-				distance_,
-					heading_
-			});
+        vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_)
+        {
+            game_value args(std::vector<game_value> {
+                distance_,
+                heading_
+            });
 
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, pos_, args));
-	    }
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, pos_, args));
+        }
 
-	    float get_rel_dir(const object& obj_, const object& pos_)
-	    {
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
-	    }
+        float get_rel_dir(const object& obj_, const object& pos_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
+        }
 
-	    float get_rel_dir(const object& obj_, const vector3& pos_)
-	    {
-			return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
-	    }
+        float get_rel_dir(const object& obj_, const vector3& pos_)
+        {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
+        }
 
-	    bool is_null(const location& loc_)
+        void hintc(const std::string& title_, std::vector<std::string> content_)
+        {
+            std::vector<game_value> ga_content;
+            for (std::string _str : content_)
+                ga_content.push_back(_str);
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__hintc__string__array__ret__nothing, title_, ga_content);
+        }
+
+        bool is_null(const location& loc_)
         {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__location__ret__bool, loc_));
         }

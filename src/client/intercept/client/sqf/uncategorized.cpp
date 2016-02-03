@@ -7708,5 +7708,33 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__object__ret__nothing, units, target_);
         }
+
+        float distance(const object& start_, const object& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const object& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const object& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const location& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__location__ret__scalar, start_, end_));
+        }
+
+        float distance(const location& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_));
+        }
     }
 }

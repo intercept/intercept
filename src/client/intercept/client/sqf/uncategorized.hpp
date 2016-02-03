@@ -376,6 +376,13 @@ namespace intercept {
 
         /* potential namespace: misc */
         std::vector<float> get_dlcs(float filter_);
+        float distance(const object& start_, const object& end_);
+        float distance(const vector3& start_, const object& end_);
+        float distance(const object& start_, const vector3& end_);
+        float distance(const vector3& start_, const vector3& end_);
+        float distance(const location& start_, const location& end_);
+        float distance(const location& start_, const vector3& end_);
+        float distance(const vector3& start_, const location& end_);
 
         /* potential namespace: dialogs, ui, listbox */
         float lb_add(int control_id_, const std::string &text_);

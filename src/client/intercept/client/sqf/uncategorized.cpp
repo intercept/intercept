@@ -194,7 +194,7 @@ namespace intercept {
         // unary__lbselection__control__ret__array
 
         /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
-            corresponds to how visible a particular unit is from another unit. */
+            corresponds to how visible a particular unit is from another unit. binary__knowsabout__object_group__object__ret__scalar*/
         // binary__checkvisibility__array__array__ret__scalar
 
         /* No documentation.*/
@@ -205,6 +205,57 @@ namespace intercept {
 
         /* Poor documentation.*/
         // binary__backpackspacefor__object__string__ret__array
+
+		/* No documentation for this entire family of commands.*/
+
+		//binary__menuaction__control__array__ret__string
+		//binary__menuadd__control__array__ret__scalar
+		//binary__menuchecked__control__array__ret__bool
+		//binary__menucollapse__control__array__ret__nothing
+		//binary__menudata__control__array__ret__string
+		//binary__menudelete__control__array__ret__nothing
+		//binary__menuenable__control__array__ret__nothing
+		//binary__menuenabled__control__array__ret__bool
+		//binary__menuexpand__control__array__ret__nothing
+		//binary__menupicture__control__array__ret__string
+		//binary__menusetaction__control__array__ret__nothing
+		//binary__menusetcheck__control__array__ret__nothing
+		//binary__menusetdata__control__array__ret__nothing
+		//binary__menusetpicture__control__array__ret__nothing
+		//binary__menusetvalue__control__array__ret__nothing
+		//binary__menushortcut__control__array__ret__scalar
+		//binary__menushortcuttext__control__array__ret__string
+		//binary__menusize__control__array__ret__scalar
+		//binary__menusort__control__array__ret__nothing
+		//binary__menutext__control__array__ret__string
+		//binary__menuurl__control__array__ret__string
+		//binary__menuvalue__control__array__ret__scalar
+		//unary__menuaction__array__ret__string
+		//unary__menuadd__array__ret__scalar
+		//unary__menuchecked__array__ret__bool
+		//unary__menuclear__control__ret__nothing
+		//unary__menuclear__scalar__ret__nothing
+		//unary__menucollapse__array__ret__nothing
+		//unary__menudata__array__ret__string
+		//unary__menudelete__array__ret__nothing
+		//unary__menuenable__array__ret__nothing
+		//unary__menuenabled__array__ret__bool
+		//unary__menuexpand__array__ret__nothing
+		//unary__menuhover__control__ret__array
+		//unary__menuhover__scalar__ret__array
+		//unary__menupicture__array__ret__string
+		//unary__menusetaction__array__ret__nothing
+		//unary__menusetcheck__array__ret__nothing
+		//unary__menusetdata__array__ret__nothing
+		//unary__menusetpicture__array__ret__nothing
+		//unary__menusetvalue__array__ret__nothing
+		//unary__menushortcut__array__ret__scalar
+		//unary__menushortcuttext__array__ret__string
+		//unary__menusize__array__ret__scalar
+		//unary__menusort__array__ret__nothing
+		//unary__menutext__array__ret__string
+		//unary__menuurl__array__ret__string
+		//unary__menuvalue__array__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 

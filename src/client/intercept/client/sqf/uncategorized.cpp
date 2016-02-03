@@ -7577,5 +7577,250 @@ namespace intercept {
         bool can_sling_load(const object& vehicle_, const object& cargo_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_));
         }
+
+        void command_artillery_fire(const object& unit_, const vector3& pos_, const std::string& type_, int rounds_) {
+            std::vector<game_value> params{
+                pos_,
+                type_,
+                (float)rounds_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
+        }
+
+        void command_artillery_fire(const object& unit_, const vector2& pos_, const std::string& type_, int rounds_) {
+            std::vector<game_value> params{
+                pos_,
+                type_,
+                (float)rounds_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
+        }
+
+        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            std::vector<game_value> params{
+                pos_,
+                type_,
+                (float)rounds_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
+        }
+
+        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            std::vector<game_value> params{
+                pos_,
+                type_,
+                (float)rounds_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
+        }
+
+        void command_fire(const object& unit_, const object& target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfire__object_array__object__ret__nothing, unit_, target_);
+        }
+
+        void command_fire(const std::vector<object>& units_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfire__object_array__object__ret__nothing, units, target_);
+        }
+
+        void command_follow(const object& unit_, const object& target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfollow__object_array__object__ret__nothing, unit_, target_);
+        }
+
+        void command_follow(const std::vector<object>& units_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfollow__object_array__object__ret__nothing, units, target_);
+        }
+
+        void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_) {
+            std::vector<game_value> params{
+                fsm_,
+                pos_,
+                target_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
+        }
+
+        void command_fsm(const object& unit_, const std::string& fsm_, const vector2& pos_, const object& target_) {
+            std::vector<game_value> params{
+                fsm_,
+                pos_,
+                target_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
+        }
+
+        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            std::vector<game_value> params{
+                fsm_,
+                pos_,
+                target_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfsm__object_array__array__ret__nothing, units, params);
+        }
+
+        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            std::vector<game_value> params{
+                fsm_,
+                pos_,
+                target_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandfsm__object_array__array__ret__nothing, units, params);
+        }
+
+        void command_move(const object& unit_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandmove__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_move(const object& unit_, const vector2& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandmove__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_move(const std::vector<object>& units_, const vector3& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandmove__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_move(const std::vector<object>& units_, const vector2& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandmove__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_radio(const object& unit_, const std::string& radio_name_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandradio__object_array__string__ret__nothing, unit_, radio_name_);
+        }
+
+        void command_radio(const std::vector<object>& units_, const std::string& radio_name_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandradio__object_array__string__ret__nothing, units, radio_name_);
+        }
+
+        void command_target(const object& unit_, const object& target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandtarget__object_array__object__ret__nothing, unit_, target_);
+        }
+
+        void command_target(const std::vector<object>& units_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandtarget__object_array__object__ret__nothing, units, target_);
+        }
+
+        void command_watch(const object& unit_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_watch(const object& unit_, const vector2& pos_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const vector3& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const vector2& pos_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+        }
+
+        void command_watch(const object& unit_, const object& target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__object__ret__nothing, unit_, target_);
+        }
+
+        void command_watch(const std::vector<object>& units_, const object& target_) {
+            std::vector<game_value> units;
+            for (object item : units_) {
+                units.push_back(game_value(item));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__commandwatch__object_array__object__ret__nothing, units, target_);
+        }
+
+        float distance(const object& start_, const object& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const object& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const object& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_));
+        }
+
+        float distance(const location& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__location__ret__scalar, start_, end_));
+        }
+
+        float distance(const location& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__array__ret__scalar, start_, end_));
+        }
+
+        float distance(const vector3& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_));
+        }
     }
 }

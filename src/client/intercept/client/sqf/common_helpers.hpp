@@ -65,6 +65,7 @@ namespace intercept {
             std::vector<object> __convert_to_objects_vector(game_value input__);
             std::vector<std::string> __convert_to_strings_vector(game_value input__);
             std::vector<float> __convert_to_numbers_vector(game_value input__);
+            std::vector<int> __convert_to_integers_vector(game_value input__);
             std::vector<team_member> __convert_to_team_members_vector(game_value input__);
             std::vector<group> __convert_to_groups_vector(game_value input__);
             std::vector<display> __convert_to_displays_vector(game_value input__);

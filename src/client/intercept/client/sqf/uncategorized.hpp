@@ -405,25 +405,45 @@ namespace intercept {
 
 
         // Tree View
+        int tv_add(int idc_, const std::vector<int>& path_, const std::string& text_);
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        std::vector<int> tv_cursel(int idc_);
+        std::vector<int> tv_cursel(const control& ctrl_);
+        int tv_count(int idc_, const std::vector<int>& path_);
         int tv_count(const control& ctrl_, const std::vector<int>& path_);
+        float tv_value(int idc_, const std::vector<int>& path_);
         float tv_value(const control& ctrl_, const std::vector<int>& path_);
+        void tv_collapse(int idc_, const std::vector<int>& path_);
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
+        void tv_delete(int idc_, const std::vector<int>& path_);
         void tv_delete(const control& ctrl_, const std::vector<int>& path_);
+        void tv_expand(int idc_, const std::vector<int>& path_);
         void tv_expand(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_cur_sel(int idc_, const std::vector<int>& path_);
         void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_data(int idc_, const std::vector<int>& path_, const std::string& data_);
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
+        void tv_set_picture(int idc_, const std::vector<int>& path_, const std::string& name_);
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_right(int idc_, const std::vector<int>& path_, const std::string& name_);
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_);
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
+        void tv_set_value(int idc_, const std::vector<int>& path_, float value_);
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        std::string tv_data(int idc_, const std::vector<int>& path_);
         std::string tv_data(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture(int idc_, const std::vector<int>& path_);
         std::string tv_picture(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture_right(int idc_, const std::vector<int>& path_);
         std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_text(int idc_, const std::vector<int>& path_);
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */

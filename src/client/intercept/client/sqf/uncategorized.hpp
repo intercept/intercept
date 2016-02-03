@@ -2403,5 +2403,14 @@ namespace intercept {
         std::vector<object> units(const object& unit_);
 
         std::string call_extension(const std::string& extension_, const std::string& arguments_);
+
+		vector3 get_pos(const object& obj_, float distance_, float heading_);
+		vector3 get_pos(const vector3& pos_, float distance_, float heading_);
+		vector3 get_rel_pos(const object& obj_, float distance_, float heading_);
+		vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_);
+		float get_rel_dir(const object& obj_, const object& pos_);
+		float get_rel_dir(const object& obj_, const vector3& pos_);
+
+		void hintc()
     }
 }

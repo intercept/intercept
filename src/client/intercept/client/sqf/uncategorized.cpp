@@ -730,21 +730,22 @@ namespace intercept {
         }
 
         void command_get_out(const std::vector<object> & units_) {
-            //std::vector<game_value> units;
-            //for (auto it : units)
-            //    units.push_back(it);
+            std::vector<game_value> units;
+            for (auto it : units)
+                units.push_back(it);
 
-            //__helpers::__empty_unary_object(client::__sqf::unary__commandgetout__object_array__ret__nothing, units);
-            //TODO Implement command_get_out
-            throw 713;
+            host::functions.invoke_raw_unary(client::__sqf::unary__commandgetout__object_array__ret__nothing, units);
         }
 
         void command_stop(const object &unit_) {
             return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
         }
         void command_stop(const std::vector<object> & units_) {
-            throw 713; // TODO Implement command_stop
-            //return __helpers::__empty_unary_object(client::__sqf::unary__commandstop__object_array__ret__nothing, unit_);
+            std::vector<game_value> units;
+            for (auto it : units)
+                units.push_back(it);
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__commandstop__object_array__ret__nothing, units);
         }
 
         object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/) {

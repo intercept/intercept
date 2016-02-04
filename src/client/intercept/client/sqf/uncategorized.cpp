@@ -681,45 +681,13 @@ namespace intercept {
         }
 
         sqf::rv_bounding_box bounding_box(const object &model_) {
-            //game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingbox__object__ret__array, model_);
-            //game_data_array* array_value = ((game_data_array *)input.data);
-
-            //sqf::rv_bounding_box bb;
-
-            //float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
-            //float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
-            //float z_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[2].data)->number;
-            //bb.min = vector3(x_min, y_min, z_min);
-
-            //float x_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[0].data)->number;
-            //float y_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[1].data)->number;
-            //float z_max  = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[2].data)->number;
-            //bb.min = vector3(x_max, y_max, z_max);
-
-            //host::functions.free_value(&input);
-            //return bb;
-            throw 713; // TODO
+            game_value rgv(host::functions.invoke_raw_unary(client::__sqf::unary__boundingbox__object__ret__array, model_));
+            return sqf::rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
         }
 
         sqf::rv_bounding_box bounding_box_real(const object &model_) {
-            //game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__boundingboxreal__object__ret__array, model_);
-            //game_data_array* array_value = ((game_data_array *)input.data);
-
-            //sqf::rv_bounding_box bb;
-
-            //float x_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[0].data)->number;
-            //float y_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[1].data)->number;
-            //float z_min = ((game_data_number *)((game_data_array *)array_value->data[0].data)->data[2].data)->number;
-            //bb.min = vector3(x_min, y_min, z_min);
-
-            //float x_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[0].data)->number;
-            //float y_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[1].data)->number;
-            //float z_max = ((game_data_number *)((game_data_array *)array_value->data[1].data)->data[2].data)->number;
-            //bb.min = vector3(x_max, y_max, z_max);
-
-            //host::functions.free_value(&input);
-            //return bb;
-            throw 713; // TODO
+            game_value rgv(host::functions.invoke_raw_unary(client::__sqf::unary__boundingboxreal__object__ret__array, model_));
+            return sqf::rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
         }
 
         vector3 bounding_center(const object &obj_) {

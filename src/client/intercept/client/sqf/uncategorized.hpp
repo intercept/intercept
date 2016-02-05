@@ -21,43 +21,45 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        struct rv_bounding_box
-        {
+        struct rv_bounding_box {
             vector3 min;
             vector3 max;
         };
 
-        struct rv_container
-        {
+        struct rv_container {
             std::string type;
             object container;
         };
 
-        struct rv_destination
-        {
+        struct rv_destination {
             vector3 pos;
             std::string planning_mode;
             bool force_replan;
         };
 
-        struct rv_crew_member
-        {
+        struct rv_crew_member {
             object unit;
             std::string role;
             float cargo_index;
-            // turret path; // TODO
+            std::vector<int> turret_path;
             bool person_turret;
+
+            rv_crew_member(const object &unit_, const std::string &role_, float cargo_index_, const std::vector<int> &turret_path_, bool person_turret_) {
+                unit = unit_;
+                role = role_;
+                cargo_index = cargo_index_;
+                turret_path = turret_path_;
+                person_turret = person_turret_;
+            }
         };
 
-        struct rv_color
-        {
+        struct rv_color {
             float red;
             float blue;
             float green;
             float alpha;
 
-            operator game_value()
-            {
+            operator game_value() {
                 return game_value(std::vector<game_value>({
                     red,
                     blue,
@@ -66,8 +68,7 @@ namespace intercept {
                 }));
             }
 
-            operator game_value() const
-            {
+            operator game_value() const {
                 return game_value(std::vector<game_value>({
                     red,
                     blue,
@@ -366,7 +367,7 @@ namespace intercept {
         vector3 formation_position(const object &unit_);
 
         /* Potential namespace: core */
-        // TODO std::vector<rv_crew_member> full_crew(const object &veh_);
+        std::vector<rv_crew_member> full_crew(const object &veh_);
         std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
 
         /* potential namespace: misc */

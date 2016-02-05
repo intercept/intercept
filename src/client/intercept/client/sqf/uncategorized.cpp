@@ -1029,6 +1029,29 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
         }
 
+        std::vector<rv_crew_member> full_crew(const object &veh_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__fullcrew__object__ret__array, veh_);
+
+            std::vector<game_value> crew_members_game;
+            for (uint32_t i = 0; i < ret.length(); ++i) {
+                crew_members_game.push_back(script(ret[i].rv_data));
+            }
+
+            std::vector<rv_crew_member> crew_members;
+            for (game_value crew_member_game : crew_members_game) {
+                object unit = ret[0];
+                std::string role = ret[1];
+                float cargo_index = ret[2];
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[3]);
+                bool person_turret = ret[4];
+
+                rv_crew_member crew_member = rv_crew_member(unit, role, cargo_index, turret_path, person_turret);
+                crew_members.push_back(crew_member);
+            }
+
+            return crew_members;
+        }
+
         std::vector<rv_crew_member> full_crew(const object &veh_, const std::string & filter_) {
             //game_value crew_list;
 
@@ -1635,7 +1658,7 @@ namespace intercept {
         }
 
         /* Core */
-                object player() {
+        object player() {
             return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
         }
 
@@ -6546,7 +6569,7 @@ namespace intercept {
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_) {
             game_value args(std::vector<game_value>{
                 attribute_,
-                    default_value_
+                default_value_
             });
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
         }

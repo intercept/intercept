@@ -368,7 +368,7 @@ namespace intercept {
 
         /* Potential namespace: core */
         std::vector<rv_crew_member> full_crew(const object &veh_);
-        std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
+        std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_, bool include_empty_ = false);
 
         /* potential namespace: misc */
         std::vector<std::string> get_artillery_ammo(const std::vector<object> &units_);

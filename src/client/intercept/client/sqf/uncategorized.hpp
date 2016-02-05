@@ -2466,5 +2466,20 @@ namespace intercept {
         float get_rel_dir(const object& obj_, const vector3& pos_);
 
         void hintc(const std::string& title_, std::vector<std::string> content_);
+
+        vector3 world_to_model(const object &object_, const vector3 &position_);
+        vector3 world_to_model_visual(const object &object_, const vector3 &position_);
+
+        void set_vector_up(const object &object_, const vector3 &vector_up_);
+        void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_);
+
+        void set_position(const location &location_, const vector3 &position_);
+        void set_pos_world(const object &object_, const vector3 &position_);
+
+        void remote_control(const object &controller_, const object &controlled_);
+
+        void set_hit(const object &object_, const std::string &part_, const float &damage_);
+        void set_hit_index(const object &object_, int part_index_, const float &damage_);
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_);
     }
 }

@@ -8069,5 +8069,65 @@ namespace intercept {
         float distance(const vector3& start_, const location& end_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_));
         }
+
+        vector3 world_to_model(const object &object_, const vector3 &position_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodel__object__array__ret__array, object_, position_));
+        }
+
+        vector3 world_to_model_visual(const object &object_, const vector3 &position_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodelvisual__object__array__ret__array, object_, position_));
+        }
+
+        void set_vector_up(const object &object_, const vector3 &vector_up_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setvectorup__object__array__ret__nothing, object_, vector_up_);
+        }
+
+        void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_) {
+            std::vector<game_value> vector{
+                vector_dir_,
+                vector_up_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__setvectordirandup__object__array__ret__nothing, object_, vector);
+        }
+
+        void set_position(const location &location_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setposition__location__array__ret__nothing, location_, position_);
+        }
+
+        void set_pos_world(const object &object_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setposworld__object__array__ret__nothing, object_, position_);
+        }
+
+        void remote_control(const object &controller_, const object &controlled_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
+        }
+
+        void set_hit(const object &object_, const std::string &part_, const float &damage_) {
+            std::vector<game_value> params{
+                part_,
+                damage_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__sethit__object__array__ret__nothing, object_, params);
+        }
+
+        void set_hit_index(const object &object_, int part_index_, const float &damage_) {
+            std::vector<game_value> params{
+                (float)part_index_,
+                damage_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__sethitindex__object__array__ret__nothing, object_, params);
+        }
+
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_) {
+            std::vector<game_value> params{
+                hitpoint_,
+                damage_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__sethitpointdamage__object__array__ret__nothing, object_, params);
+        }
     }
 }

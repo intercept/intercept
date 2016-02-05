@@ -5157,8 +5157,21 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__isirlaseron__object__string__ret__bool, value0_, value1_));
         }
 
-        bool is_kind_of(const object &value0_, const std::string& value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__iskindof__object__string__ret__bool, value0_, value1_));
+        bool is_kind_of(const object &obj_, const std::string &type_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__iskindof__object__string__ret__bool, obj_, type_));
+        }
+
+        bool is_kind_of(const std::string &type1_, const std::string &type2_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__iskindof__string__string__ret__bool, type1_, type2_));
+        }
+
+        bool is_kind_of(const std::string &type1_, const std::string &type2_, const config &target_config_) {
+            std::vector<game_value> params{
+                type2_,
+                target_config_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__iskindof__string__array__ret__bool, type1_, params));
         }
 
         bool is_uniform_allowed(const object &value0_, const std::string& value1_) {
@@ -5181,8 +5194,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__kbremovetopic__object__string__ret__nothing, value0_, value1_);
         }
 
-        float knows_about(const object &value0_, const side &value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__side__object__ret__scalar, value0_, value1_));
+        float knows_about(const object &source_, const object &target_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_));
+        }
+
+        float knows_about(const group &source_, const object &target_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_));
+        }
+
+        float knows_about(const side &side_, const object &target_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__knowsabout__side__object__ret__scalar, side_, target_));
         }
 
         void land(const object &value0_, const std::string& value1_) {
@@ -8103,7 +8124,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
         }
 
-        void set_hit(const object &object_, const std::string &part_, const float &damage_) {
+        void set_hit(const object &object_, const std::string &part_, float damage_) {
             std::vector<game_value> params{
                 part_,
                 damage_
@@ -8112,7 +8133,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__sethit__object__array__ret__nothing, object_, params);
         }
 
-        void set_hit_index(const object &object_, int part_index_, const float &damage_) {
+        void set_hit_index(const object &object_, int part_index_, float damage_) {
             std::vector<game_value> params{
                 (float)part_index_,
                 damage_
@@ -8121,13 +8142,98 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__sethitindex__object__array__ret__nothing, object_, params);
         }
 
-        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_) {
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, float damage_) {
             std::vector<game_value> params{
                 hitpoint_,
                 damage_
             };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__sethitpointdamage__object__array__ret__nothing, object_, params);
+        }
+
+        vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__posscreentoworld__control__array__ret__array, ctrl_, pos_));
+        }
+
+        vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__posworldtoscreen__control__array__ret__array, ctrl_, pos_));
+        }
+
+        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_) {
+            std::vector<game_value> turret_path;
+            for (int item : turret_path_) {
+                turret_path.push_back(game_value((float)item));
+            }
+
+            std::vector<game_value> params{
+                turret_path,
+                weapon_name_,
+                magazine_name_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__loadmagazine__object__array__ret__nothing, obj_, params);
+        }
+
+        void join(const std::vector<object> &units_, const group &group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, group_);
+        }
+
+        void join(const std::vector<object> &units_, const object &unit_group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, unit_group_);
+        }
+
+        void join_silent(const std::vector<object> &units_, const group &group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, group_);
+        }
+
+        void join_silent(const std::vector<object> &units_, const object &unit_group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, unit_group_);
+        }
+
+        void join_as(const object &unit_, const group &group_, int pos_id_) {
+            std::vector<game_value> params{
+                group_,
+                (float)pos_id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
+        }
+
+        void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
+            std::vector<game_value> params{
+                group_,
+                (float)pos_id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
+        }
+
+        bool in(const object &unit_, const object &vehicle_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__object__object__ret__bool, unit_, vehicle_));
+        }
+
+        bool in(const vector3 &pos_, const location &loc_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__array__location__ret__bool, pos_, loc_));
         }
     }
 }

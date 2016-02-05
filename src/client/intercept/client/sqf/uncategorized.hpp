@@ -2482,9 +2482,9 @@ namespace intercept {
 
         void remote_control(const object &controller_, const object &controlled_);
 
-        void set_hit(const object &object_, const std::string &part_, const float &damage_);
-        void set_hit_index(const object &object_, int part_index_, const float &damage_);
-        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_);
+        void set_hit(const object &object_, const std::string &part_, float damage_);
+        void set_hit_index(const object &object_, int part_index_, float damage_);
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, float damage_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);

@@ -8121,7 +8121,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__sethitindex__object__array__ret__nothing, object_, params);
         }
 
-        void set_hit_index(const object &object_, const std::string &hitpoint_, const float &damage_) {
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_) {
             std::vector<game_value> params{
                 hitpoint_,
                 damage_

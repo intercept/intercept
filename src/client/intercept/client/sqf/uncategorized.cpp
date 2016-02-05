@@ -1034,13 +1034,8 @@ namespace intercept {
 
             std::vector<rv_crew_member> crew_members;
             for (uint32_t i = 0; i < ret.length(); ++i) {
-                object unit = ret[0];
-                std::string role = ret[1];
-                float cargo_index = ret[2];
-                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[3]);
-                bool person_turret = ret[4];
-
-                crew_members.push_back(rv_crew_member(unit, role, cargo_index, turret_path, person_turret));
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
+                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
             }
 
             return crew_members;
@@ -1057,13 +1052,8 @@ namespace intercept {
 
             std::vector<rv_crew_member> crew_members;
             for (uint32_t i = 0; i < ret.length(); ++i) {
-                object unit = ret[0];
-                std::string role = ret[1];
-                float cargo_index = ret[2];
-                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[3]);
-                bool person_turret = ret[4];
-
-                crew_members.push_back(rv_crew_member(unit, role, cargo_index, turret_path, person_turret));
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
+                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
             }
 
             return crew_members;

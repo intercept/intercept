@@ -366,7 +366,7 @@ namespace intercept {
         vector3 formation_position(const object &unit_);
 
         /* Potential namespace: core */
-        std::vector<rv_crew_member> full_crew(const object &veh_);
+        // TODO std::vector<rv_crew_member> full_crew(const object &veh_);
         std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
 
         /* potential namespace: misc */

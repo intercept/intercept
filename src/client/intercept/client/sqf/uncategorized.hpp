@@ -2052,13 +2052,17 @@ namespace intercept {
         void inflame(const object &value0_, bool value1_);
         bool is_flashlight_on(const object &value0_, const std::string& value1_);
         bool is_irlaser_on(const object &value0_, const std::string& value1_);
-        bool is_kind_of(const object &value0_, const std::string& value1_);
+        bool is_kind_of(const object &obj_, const std::string &type_);
+        bool is_kind_of(const std::string &type1_, const std::string &type2_);
+        bool is_kind_of(const std::string &type1_, const std::string &type2_, const config &target_config_);
         bool is_uniform_allowed(const object &value0_, const std::string& value1_);
         bool kb_add_database(const object &value0_, const std::string& value1_);
         bool kb_add_database_targets(const object &value0_, const std::string& value1_);
         bool kb_has_topic(const object &value0_, const std::string& value1_);
         void kb_remove_topic(const object &value0_, const std::string& value1_);
-        float knows_about(const object &value0_, const side &value1_);
+        float knows_about(const object &source_, const object &target_);
+        float knows_about(const group &source_, const object &target_);
+        float knows_about(const side &side_, const object &target_);
         void land(const object &value0_, const std::string& value1_);
         void land_at(const object &value0_, float value1_);
         std::string lb_data(const control &value0_, float value1_);
@@ -2481,5 +2485,20 @@ namespace intercept {
         void set_hit(const object &object_, const std::string &part_, const float &damage_);
         void set_hit_index(const object &object_, int part_index_, const float &damage_);
         void set_hitpoint_index(const object &object_, const std::string &hitpoint_, const float &damage_);
+
+        vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
+        vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
+
+        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_);
+
+        void join(const std::vector<object> &units_, const group &group_);
+        void join(const std::vector<object> &units_, const object &unit_group_);
+        void join_silent(const std::vector<object> &units_, const group &group_);
+        void join_silent(const std::vector<object> &units_, const object &unit_group_);
+        void join_as(const object &unit_, const group &group_, int pos_id_);
+        void join_as_silent(const object &unit_, const group &group_, int pos_id_);
+
+        bool in(const object &unit_, const object &vehicle_);
+        bool in(const vector3 &pos_, const location &loc_);
     }
 }

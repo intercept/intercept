@@ -494,6 +494,8 @@ namespace intercept {
         float add_3den_layer(int parent_layer_id_, const std::string& name_);
         bool remove_3den_layer(float value_);
         void remove_all_3den_eventhandlers(const std::string &value_);
+        float add_eden_event_handler(const std::string &type_, const code &code_);
+
 
         /* Chat */
         namespace __helpers {
@@ -2421,8 +2423,7 @@ namespace intercept {
         std::vector<object> entities(const std::string& type_);
         vector3 eye_direction(const object& unit_);
 
-        struct rv_unit_description
-        {
+        struct rv_unit_description {
             std::string unit;
             std::string uniform;
             std::string vest;
@@ -2501,5 +2502,23 @@ namespace intercept {
 
         bool in(const object &unit_, const object &vehicle_);
         bool in(const vector3 &pos_, const location &loc_);
+
+        float add_mission_event_handler(const std::string &type_, const code &command_);
+        float add_mission_event_handler(const std::string &type_, const std::string &command_);
+        float add_music_event_handler(const std::string &type_, const code &command_);
+        float add_music_event_handler(const std::string &type_, const std::string &command_);
+
+        void add_weapon_pool(const std::string &weapon_name_, int count_);
+
+        struct rv_vehicle_role {
+            std::string role;
+            std::vector<int> turret_path;
+        };
+
+        rv_vehicle_role assigned_vehicle_role(const object &unit_);
+
+        void collect_eden_history(const code &code_);
+
+        std::string compose_text(const std::vector<std::string> &texts_);
     }
 }

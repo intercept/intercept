@@ -2519,5 +2519,29 @@ namespace intercept {
         void collect_eden_history(const code &code_);
 
         std::string compose_text(const std::vector<std::string> &texts_);
+
+        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_);
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_);
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
+
+        std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
+        std::vector<float> ctrl_position(const control &ctrl_);
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_);
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const code &command_);
+        void ctrl_remove_event_handler(const control &ctrl_, const std::string &name_, float &id_);
+        void ctrl_set_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_);
+
+        std::vector<object> curator_registered_objects(const object &curator_);
+
+        struct rv_throwable {
+            std::string magazine_class_name;
+            std::string muzzle_class_name;
+            std::vector<float> ids;
+        };
+
+        rv_throwable current_throwable(const object &unit_);
     }
 }

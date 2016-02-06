@@ -166,6 +166,14 @@ namespace intercept {
         // nular__airdensitycurvertd__ret__array
 
         /* No documentation.*/
+        // unary__ctrlangle__control__ret__array
+
+        /* No documentation for return array elements. */
+        // unary__ctrlmapmouseover__control__ret__array
+        // unary__curatorcameraarea__object__ret__array
+        // unary__curatoreditingarea__object__ret__array
+
+        /* No documentation.*/
         // nular__getdlcassetsusage__ret__array
 
         /* No documentation.*/
@@ -8312,6 +8320,170 @@ namespace intercept {
                 texts.push_back(game_value(text));
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__composetext__array__ret__text, texts));
+        }
+
+        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                object_,
+                text_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__creatediarylink__array__ret__string, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                text_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_) {
+            std::vector<game_value> params{
+                subject_,
+                text_,
+                task_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_) {
+            std::vector<game_value> params{
+                subject_,
+                text_,
+                task_,
+                state_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_
+                })
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_,
+                }),
+                task_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_
+                }),
+                task_,
+                state_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_) {
+            std::vector<game_value> params{
+                subject_,
+                name_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params));
+        }
+
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_) {
+            std::vector<game_value> params{
+                subject_,
+                name_,
+                picture_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params));
+        }
+
+        std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlmodeldirandup__control__ret__array, ctrl_);
+
+            vector3 vector_dir = __helpers::__convert_to_vector3(ret[0]);
+            vector3 vector_up = __helpers::__convert_to_vector3(ret[1]);
+
+            return{ vector_dir, vector_up };
+        }
+
+        std::vector<float> ctrl_position(const control &ctrl_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlposition__control__ret__array, ctrl_);
+
+            std::vector<float> position;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                position.push_back(float(ret[i]));
+
+            return position;
+        }
+
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params));
+        }
+
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const code &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params));
+        }
+
+        void ctrl_remove_event_handler(const control &ctrl_, const std::string &name_, float &id_) {
+            std::vector<game_value> params{
+                name_,
+                id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlremoveeventhandler__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlseteventhandler__control__array__ret__nothing, ctrl_, params);
+        }
+
+        std::vector<object> curator_registered_objects(const object &curator_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__curatorregisteredobjects__object__ret__array, curator_));
+        }
+
+        rv_throwable current_throwable(const object &unit_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__currentthrowable__object__ret__array, unit_);
+
+            std::vector<float> ids = __helpers::__convert_to_numbers_vector(ret[2]);
+            return rv_throwable({ret[0], ret[1], ids });
         }
     }
 }

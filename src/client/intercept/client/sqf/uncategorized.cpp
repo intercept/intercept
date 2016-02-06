@@ -1029,41 +1029,34 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
         }
 
-        std::vector<rv_crew_member> full_crew(const object &veh_, const std::string & filter_) {
-            //game_value crew_list;
+        std::vector<rv_crew_member> full_crew(const object &veh_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__fullcrew__object__ret__array, veh_);
 
-            //if (filter_ == "")
-            //{
-            //    crew_list = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__object__ret__array, veh_);
-            //}
-            //else
-            //{
-            //    game_value args({
-            //        veh_,
-            //        (filter_)
-            //    });
+            std::vector<rv_crew_member> crew_members;
+            for (uint32_t i = 0; i < ret.length(); ++i) {
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
+                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
+            }
 
-            //    crew_list = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__array__ret__array, args);
-            //}
+            return crew_members;
+        }
 
-            //game_data_array* gd_array = ((game_data_array *)crew_list.data);
-            //std::vector<rv_crew_member> output;
-            //for (uint32_t i = 0; i < gd_array->length; ++i) {
+        std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_, bool include_empty_) {
+            std::vector<game_value> params{
+                veh_,
+                filter_,
+                include_empty_
+            };
 
-            //    rv_crew_member crew_m;
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__fullcrew__array__ret__array, params);
 
-            //    crew_m.unit = object(((game_data_array *)gd_array->data[i].data)->data[0]);
-            //    crew_m.role = ((game_data_string *)((game_data_array *)gd_array->data[i].data)->data[1].data)->get_string();
-            //    crew_m.cargo_index = ((game_data_number *)((game_data_array *)gd_array->data[i].data)->data[2].data)->number;
-            //    // Turret path
-            //    crew_m.person_turret = ((game_data_bool *)((game_data_array *)gd_array->data[i].data)->data[4].data)->value;
-            //    output.push_back(crew_m);
-            //}
+            std::vector<rv_crew_member> crew_members;
+            for (uint32_t i = 0; i < ret.length(); ++i) {
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
+                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
+            }
 
-            //host::functions.free_value(&crew_list);
-            //return output;
-
-            throw 713; // TODO re-implement full_crew
+            return crew_members;
         }
 
         std::vector<std::string> get_artillery_ammo(const std::vector<object>& units_) {
@@ -1635,7 +1628,7 @@ namespace intercept {
         }
 
         /* Core */
-                object player() {
+        object player() {
             return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
         }
 
@@ -6546,7 +6539,7 @@ namespace intercept {
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_) {
             game_value args(std::vector<game_value>{
                 attribute_,
-                    default_value_
+                default_value_
             });
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
         }

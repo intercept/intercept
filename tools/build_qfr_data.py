@@ -52,10 +52,10 @@ for file in os.listdir(projectpath_sqf):
 					continue;
 					
 				sqfN = False
+				sqfNoDoc = True
 				for snake in wfk_arr:
 					if item["name"] == snake[1]:
-						print(item['name'])
-						print(snake[1])
+						sqfNoDoc = False
 						sqfN = snake[0]
 						break;
 					
@@ -73,6 +73,7 @@ for file in os.listdir(projectpath_sqf):
 					"sqf": sqfN if (sqfN != False) else item["name"].replace("_",""), 
 					"namespace": cgi.escape(item['namespace']), 
 					"description": "No description has been provided.", 
+					"nodoc": sqfNoDoc,
 					"include": cgi.escape(file), 
 					"signature": {
 						"return": {

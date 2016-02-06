@@ -366,7 +366,7 @@ namespace intercept {
         vector3 formation_position(const object &unit_);
 
         /* Potential namespace: core */
-        std::vector<rv_crew_member> full_crew(const object &veh_);
+        // TODO std::vector<rv_crew_member> full_crew(const object &veh_);
         std::vector<rv_crew_member> full_crew(const object &veh_, const std::string &filter_ = "");
 
         /* potential namespace: misc */
@@ -439,25 +439,45 @@ namespace intercept {
 
 
         // Tree View
+        int tv_add(int idc_, const std::vector<int>& path_, const std::string& text_);
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
+        std::vector<int> tv_cursel(int idc_);
+        std::vector<int> tv_cursel(const control& ctrl_);
+        int tv_count(int idc_, const std::vector<int>& path_);
         int tv_count(const control& ctrl_, const std::vector<int>& path_);
+        float tv_value(int idc_, const std::vector<int>& path_);
         float tv_value(const control& ctrl_, const std::vector<int>& path_);
+        void tv_collapse(int idc_, const std::vector<int>& path_);
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
+        void tv_delete(int idc_, const std::vector<int>& path_);
         void tv_delete(const control& ctrl_, const std::vector<int>& path_);
+        void tv_expand(int idc_, const std::vector<int>& path_);
         void tv_expand(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_cur_sel(int idc_, const std::vector<int>& path_);
         void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
+        void tv_set_data(int idc_, const std::vector<int>& path_, const std::string& data_);
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_);
+        void tv_set_picture(int idc_, const std::vector<int>& path_, const std::string& name_);
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_right(int idc_, const std::vector<int>& path_, const std::string& name_);
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_);
+        void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_);
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
+        void tv_set_value(int idc_, const std::vector<int>& path_, float value_);
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        std::string tv_data(int idc_, const std::vector<int>& path_);
         std::string tv_data(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture(int idc_, const std::vector<int>& path_);
         std::string tv_picture(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_picture_right(int idc_, const std::vector<int>& path_);
         std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
+        std::string tv_text(int idc_, const std::vector<int>& path_);
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
         /* 3den */
@@ -2032,13 +2052,17 @@ namespace intercept {
         void inflame(const object &value0_, bool value1_);
         bool is_flashlight_on(const object &value0_, const std::string& value1_);
         bool is_irlaser_on(const object &value0_, const std::string& value1_);
-        bool is_kind_of(const object &value0_, const std::string& value1_);
+        bool is_kind_of(const object &obj_, const std::string &type_);
+        bool is_kind_of(const std::string &type1_, const std::string &type2_);
+        bool is_kind_of(const std::string &type1_, const std::string &type2_, const config &target_config_);
         bool is_uniform_allowed(const object &value0_, const std::string& value1_);
         bool kb_add_database(const object &value0_, const std::string& value1_);
         bool kb_add_database_targets(const object &value0_, const std::string& value1_);
         bool kb_has_topic(const object &value0_, const std::string& value1_);
         void kb_remove_topic(const object &value0_, const std::string& value1_);
-        float knows_about(const object &value0_, const side &value1_);
+        float knows_about(const object &source_, const object &target_);
+        float knows_about(const group &source_, const object &target_);
+        float knows_about(const side &side_, const object &target_);
         void land(const object &value0_, const std::string& value1_);
         void land_at(const object &value0_, float value1_);
         std::string lb_data(const control &value0_, float value1_);
@@ -2446,5 +2470,35 @@ namespace intercept {
         float get_rel_dir(const object& obj_, const vector3& pos_);
 
         void hintc(const std::string& title_, std::vector<std::string> content_);
+
+        vector3 world_to_model(const object &object_, const vector3 &position_);
+        vector3 world_to_model_visual(const object &object_, const vector3 &position_);
+
+        void set_vector_up(const object &object_, const vector3 &vector_up_);
+        void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_);
+
+        void set_position(const location &location_, const vector3 &position_);
+        void set_pos_world(const object &object_, const vector3 &position_);
+
+        void remote_control(const object &controller_, const object &controlled_);
+
+        void set_hit(const object &object_, const std::string &part_, float damage_);
+        void set_hit_index(const object &object_, int part_index_, float damage_);
+        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, float damage_);
+
+        vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
+        vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
+
+        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_);
+
+        void join(const std::vector<object> &units_, const group &group_);
+        void join(const std::vector<object> &units_, const object &unit_group_);
+        void join_silent(const std::vector<object> &units_, const group &group_);
+        void join_silent(const std::vector<object> &units_, const object &unit_group_);
+        void join_as(const object &unit_, const group &group_, int pos_id_);
+        void join_as_silent(const object &unit_, const group &group_, int pos_id_);
+
+        bool in(const object &unit_, const object &vehicle_);
+        bool in(const vector3 &pos_, const location &loc_);
     }
 }

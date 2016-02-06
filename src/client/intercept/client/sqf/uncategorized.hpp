@@ -104,6 +104,22 @@ namespace intercept {
             }
         };
 
+        struct rv_magazine_ammo {
+            std::string name;
+            int count;
+            bool loaded;
+            int type;
+            std::string location;
+        };
+
+        struct rv_turret_magazine {
+            std::string name;
+            std::vector<int> turret_path;
+            int count;
+            int id;
+            object creator; // player
+        };
+
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
 
@@ -185,6 +201,16 @@ namespace intercept {
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_);
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_);
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
+        std::vector<std::string> magazine_cargo(const object& obj_);
+        std::vector<std::string> magazines(const object& obj_);
+        std::vector<rv_turret_magazine> magazines_all_turrets(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo_full(const object& obj_);
+        std::vector<std::string> magazines_detail(const object& obj_);
+        std::vector<std::string> magazines_detail_backpack(const object& obj_);
+        std::vector<std::string> magazines_detail_uniform(const object& obj_);
+        std::vector<std::string> magazines_detail_vest(const object& obj_);
 
         /* potential namespace: core, misc, world */
         void add_to_remains_collector(const std::vector<object> & objects_);

@@ -7266,6 +7266,75 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
+        std::vector<std::string> magazine_cargo(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazinecargo__object__ret__array, obj_));
+        }
+
+        std::vector<std::string> magazines(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazines__object__ret__array, obj_));
+        }
+
+        std::vector<rv_turret_magazine> magazines_all_turrets(const object& obj_) {
+            game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesallturrets__object__ret__array, obj_);
+
+            std::vector<rv_turret_magazine> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(input[i][1]);
+                output.push_back(rv_turret_magazine({ input[i][0], turret_path, input[i][2], input[i][3], input[i][4] }));
+            }
+
+            return output;
+        }
+
+        std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_) {
+            game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammo__object__ret__array, obj_);
+
+            std::vector<rv_magazine_ammo> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], false, -1, "" }));
+            }
+
+            return output;
+        }
+
+        std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_) {
+            game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammocargo__object__ret__array, obj_);
+
+            std::vector<rv_magazine_ammo> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], false, -1, "" }));
+            }
+
+            return output;
+        }
+
+        std::vector<rv_magazine_ammo> magazines_ammo_full(const object& obj_) {
+            game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammofull__object__ret__array, obj_);
+
+            std::vector<rv_magazine_ammo> output;
+            for (uint32_t i = 0; i < input.length(); ++i) {
+                output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], input[i][2], input[i][3], input[i][4] }));
+            }
+
+            return output;
+        }
+
+        std::vector<std::string> magazines_detail(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazinesdetail__object__ret__array, obj_));
+        }
+
+        std::vector<std::string> magazines_detail_backpack(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazinesdetailbackpack__object__ret__array, obj_));
+        }
+
+        std::vector<std::string> magazines_detail_uniform(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazinesdetailuniform__object__ret__array, obj_));
+        }
+
+        std::vector<std::string> magazines_detail_vest(const object& obj_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__magazinesdetailvest__object__ret__array, obj_));
+        }
+
         side get_side(const object &object_) {
             return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__object__ret__side, object_));
         }

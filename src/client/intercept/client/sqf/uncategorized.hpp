@@ -106,17 +106,12 @@ namespace intercept {
         struct rv_magazine_ammo {
             std::string name;
             int count;
-        };
-
-        struct rv_magazine_ammo_ex {
-            std::string name;
-            int count;
             bool loaded;
             int type;
             std::string location;
         };
 
-        struct rv_magazine_all_turrets_entry {
+        struct rv_turret_magazine {
             std::string name;
             std::vector<int> turret_path;
             int count;
@@ -207,10 +202,10 @@ namespace intercept {
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
         std::vector<std::string> magazine_cargo(const object& obj_);
         std::vector<std::string> magazines(const object& obj_);
-        std::vector<rv_magazine_all_turrets_entry> magazines_all_turrets(const object& obj_);
+        std::vector<rv_turret_magazine> magazines_all_turrets(const object& obj_);
         std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_);
         std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_);
-        std::vector<rv_magazine_ammo_ex> magazines_ammo_full(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo_full(const object& obj_);
         std::vector<std::string> magazines_detail(const object& obj_);
         std::vector<std::string> magazines_detail_backpack(const object& obj_);
         std::vector<std::string> magazines_detail_uniform(const object& obj_);

@@ -481,21 +481,20 @@ namespace intercept {
         std::string tv_text(int idc_, const std::vector<int>& path_);
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
-        /* 3den */
+        /* eden */
         std::string current_eden_operation();
         object get_eden_camera();
         bool get_eden_icons_visible();
         bool get_eden_lines_visible();
-        // TODO array[] get_3den_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
+        // TODO array[] get_eden_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
         bool is_eden();
         bool is_eden_multiplayer();
-        float get_3den_action_state(const std::string &value_);
-        void edit_3den_mission_attributes(const std::string &value_);
-        float add_3den_layer(int parent_layer_id_, const std::string& name_);
-        bool remove_3den_layer(float value_);
-        void remove_all_3den_eventhandlers(const std::string &value_);
+        float get_eden_action_state(const std::string &value_);
+        void edit_eden_mission_attributes(const std::string &value_);
+        float add_eden_layer(int parent_layer_id_, const std::string& name_);
+        bool remove_eden_layer(float value_);
+        void remove_all_eden_eventhandlers(const std::string &value_);
         float add_eden_event_handler(const std::string &type_, const code &code_);
-
 
         /* Chat */
         namespace __helpers {
@@ -537,7 +536,7 @@ namespace intercept {
         config mission_config_file();
 
         /* Core */
-        std::vector<object> all_3den_entities();
+        std::vector<object> all_eden_entities();
         std::vector<object> all_curators();
         std::vector<object> all_dead();
         std::vector<object> all_deadmen();
@@ -2221,10 +2220,10 @@ namespace intercept {
         void vehicle_radio(const object &value0_, const std::string& value1_);
 
         void delete_team(const team_member &value_);
-        void do3denaction(const std::string& value_);
+        void do_eden_action(const std::string& value_);
         std::string formation(const team_member &value_);
         bool from_editor(const team_member &value_);
-        void get3dengrid(const std::string& value_);
+        void get_eden_grid(const std::string& value_);
         bool is_agent(const team_member &value_);
         team_member leader(const team_member &value_);
         std::string team_name(const team_member &value_);

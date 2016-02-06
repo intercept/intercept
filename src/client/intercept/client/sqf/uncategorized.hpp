@@ -208,9 +208,9 @@ namespace intercept {
         std::vector<std::string> magazine_cargo(const object& obj_);
         std::vector<std::string> magazines(const object& obj_);
         std::vector<rv_magazine_all_turrets_entry> magazines_all_turrets(const object& obj_);
-        std::vector<sqf::rv_magazine_ammo> magazines_ammo(const object& obj_);
-        std::vector<sqf::rv_magazine_ammo> magazines_ammo_cargo(const object& obj_);
-        std::vector<sqf::rv_magazine_ammo_ex> magazines_ammo_full(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_);
+        std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_);
+        std::vector<rv_magazine_ammo_ex> magazines_ammo_full(const object& obj_);
         std::vector<std::string> magazines_detail(const object& obj_);
         std::vector<std::string> magazines_detail_backpack(const object& obj_);
         std::vector<std::string> magazines_detail_uniform(const object& obj_);

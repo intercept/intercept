@@ -7293,34 +7293,34 @@ namespace intercept {
             return output;
         }
 
-        std::vector<sqf::rv_magazine_ammo> magazines_ammo(const object& obj_) {
+        std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_) {
             game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammo__object__ret__array, obj_);
 
-            std::vector<sqf::rv_magazine_ammo> output;
+            std::vector<rv_magazine_ammo> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(sqf::rv_magazine_ammo({ input[i][0], input[i][1] }));
+                output.push_back(rv_magazine_ammo({ input[i][0], input[i][1] }));
             }
 
             return output;
         }
 
-        std::vector<sqf::rv_magazine_ammo> magazines_ammo_cargo(const object& obj_) {
+        std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_) {
             game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammocargo__object__ret__array, obj_);
 
-            std::vector<sqf::rv_magazine_ammo> output;
+            std::vector<rv_magazine_ammo> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(sqf::rv_magazine_ammo({ input[i][0], input[i][1] }));
+                output.push_back(rv_magazine_ammo({ input[i][0], input[i][1] }));
             }
 
             return output;
         }
 
-        std::vector<sqf::rv_magazine_ammo_ex> magazines_ammo_full(const object& obj_) {
+        std::vector<rv_magazine_ammo_ex> magazines_ammo_full(const object& obj_) {
             game_value input = host::functions.invoke_raw_unary(client::__sqf::unary__magazinesammofull__object__ret__array, obj_);
 
-            std::vector<sqf::rv_magazine_ammo_ex> output;
+            std::vector<rv_magazine_ammo_ex> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(sqf::rv_magazine_ammo_ex({ input[i][0], input[i][1], input[i][2], input[i][3], input[i][4] }));
+                output.push_back(rv_magazine_ammo_ex({ input[i][0], input[i][1], input[i][2], input[i][3], input[i][4] }));
             }
 
             return output;

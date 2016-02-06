@@ -159,8 +159,19 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
+        /* No documentation. */
+        // unary__addforcegeneratorrtd__array__ret__scalar
+
         /* No documentation.*/
         // nular__airdensitycurvertd__ret__array
+
+        /* No documentation.*/
+        // unary__ctrlangle__control__ret__array
+
+        /* No documentation for return array elements. */
+        // unary__ctrlmapmouseover__control__ret__array
+        // unary__curatorcameraarea__object__ret__array
+        // unary__curatoreditingarea__object__ret__array
 
         /* No documentation.*/
         // nular__getdlcassetsusage__ret__array
@@ -217,55 +228,54 @@ namespace intercept {
         // unary__tvtooltip__array__ret__string
 
         /* No documentation for this entire family of commands.*/
-
-        //binary__menuaction__control__array__ret__string
-        //binary__menuadd__control__array__ret__scalar
-        //binary__menuchecked__control__array__ret__bool
-        //binary__menucollapse__control__array__ret__nothing
-        //binary__menudata__control__array__ret__string
-        //binary__menudelete__control__array__ret__nothing
-        //binary__menuenable__control__array__ret__nothing
-        //binary__menuenabled__control__array__ret__bool
-        //binary__menuexpand__control__array__ret__nothing
-        //binary__menupicture__control__array__ret__string
-        //binary__menusetaction__control__array__ret__nothing
-        //binary__menusetcheck__control__array__ret__nothing
-        //binary__menusetdata__control__array__ret__nothing
-        //binary__menusetpicture__control__array__ret__nothing
-        //binary__menusetvalue__control__array__ret__nothing
-        //binary__menushortcut__control__array__ret__scalar
-        //binary__menushortcuttext__control__array__ret__string
-        //binary__menusize__control__array__ret__scalar
-        //binary__menusort__control__array__ret__nothing
-        //binary__menutext__control__array__ret__string
-        //binary__menuurl__control__array__ret__string
-        //binary__menuvalue__control__array__ret__scalar
-        //unary__menuaction__array__ret__string
-        //unary__menuadd__array__ret__scalar
-        //unary__menuchecked__array__ret__bool
-        //unary__menuclear__control__ret__nothing
-        //unary__menuclear__scalar__ret__nothing
-        //unary__menucollapse__array__ret__nothing
-        //unary__menudata__array__ret__string
-        //unary__menudelete__array__ret__nothing
-        //unary__menuenable__array__ret__nothing
-        //unary__menuenabled__array__ret__bool
-        //unary__menuexpand__array__ret__nothing
-        //unary__menuhover__control__ret__array
-        //unary__menuhover__scalar__ret__array
-        //unary__menupicture__array__ret__string
-        //unary__menusetaction__array__ret__nothing
-        //unary__menusetcheck__array__ret__nothing
-        //unary__menusetdata__array__ret__nothing
-        //unary__menusetpicture__array__ret__nothing
-        //unary__menusetvalue__array__ret__nothing
-        //unary__menushortcut__array__ret__scalar
-        //unary__menushortcuttext__array__ret__string
-        //unary__menusize__array__ret__scalar
-        //unary__menusort__array__ret__nothing
-        //unary__menutext__array__ret__string
-        //unary__menuurl__array__ret__string
-        //unary__menuvalue__array__ret__scalar
+        // binary__menuaction__control__array__ret__string
+        // binary__menuadd__control__array__ret__scalar
+        // binary__menuchecked__control__array__ret__bool
+        // binary__menucollapse__control__array__ret__nothing
+        // binary__menudata__control__array__ret__string
+        // binary__menudelete__control__array__ret__nothing
+        // binary__menuenable__control__array__ret__nothing
+        // binary__menuenabled__control__array__ret__bool
+        // binary__menuexpand__control__array__ret__nothing
+        // binary__menupicture__control__array__ret__string
+        // binary__menusetaction__control__array__ret__nothing
+        // binary__menusetcheck__control__array__ret__nothing
+        // binary__menusetdata__control__array__ret__nothing
+        // binary__menusetpicture__control__array__ret__nothing
+        // binary__menusetvalue__control__array__ret__nothing
+        // binary__menushortcut__control__array__ret__scalar
+        // binary__menushortcuttext__control__array__ret__string
+        // binary__menusize__control__array__ret__scalar
+        // binary__menusort__control__array__ret__nothing
+        // binary__menutext__control__array__ret__string
+        // binary__menuurl__control__array__ret__string
+        // binary__menuvalue__control__array__ret__scalar
+        // unary__menuaction__array__ret__string
+        // unary__menuadd__array__ret__scalar
+        // unary__menuchecked__array__ret__bool
+        // unary__menuclear__control__ret__nothing
+        // unary__menuclear__scalar__ret__nothing
+        // unary__menucollapse__array__ret__nothing
+        // unary__menudata__array__ret__string
+        // unary__menudelete__array__ret__nothing
+        // unary__menuenable__array__ret__nothing
+        // unary__menuenabled__array__ret__bool
+        // unary__menuexpand__array__ret__nothing
+        // unary__menuhover__control__ret__array
+        // unary__menuhover__scalar__ret__array
+        // unary__menupicture__array__ret__string
+        // unary__menusetaction__array__ret__nothing
+        // unary__menusetcheck__array__ret__nothing
+        // unary__menusetdata__array__ret__nothing
+        // unary__menusetpicture__array__ret__nothing
+        // unary__menusetvalue__array__ret__nothing
+        // unary__menushortcut__array__ret__scalar
+        // unary__menushortcuttext__array__ret__string
+        // unary__menusize__array__ret__scalar
+        // unary__menusort__array__ret__nothing
+        // unary__menutext__array__ret__string
+        // unary__menuurl__array__ret__string
+        // unary__menuvalue__array__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -1483,6 +1493,17 @@ namespace intercept {
         float add_eden_layer(int parent_layer_id_, const std::string& name_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float)parent_layer_id_, name_));
         }
+
+        float add_eden_event_handler(const std::string &type_, const code &code_) {
+            std::vector<game_value> params{
+                type_,
+                code_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3deneventhandler__array__ret__scalar, params));
+        }
+
+
 
         /* Chat */
         namespace __helpers {
@@ -8296,6 +8317,242 @@ namespace intercept {
 
         bool in(const vector3 &pos_, const location &loc_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__array__location__ret__bool, pos_, loc_));
+        }
+
+        float add_mission_event_handler(const std::string &type_, const code &command_) {
+            std::vector<game_value> params{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params));
+        }
+
+        float add_mission_event_handler(const std::string &type_, const std::string &command_) {
+            std::vector<game_value> params{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params));
+        }
+
+        float add_music_event_handler(const std::string &type_, const code &command_) {
+            std::vector<game_value> params{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__addmusiceventhandler__array__ret__scalar, params));
+        }
+
+        float add_music_event_handler(const std::string &type_, const std::string &command_) {
+            std::vector<game_value> params{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__addmusiceventhandler__array__ret__scalar, params));
+        }
+
+        void add_weapon_pool(const std::string &weapon_name_, int count_) {
+            std::vector<game_value> params{
+                weapon_name_,
+                (float)count_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__addweaponpool__array__ret__nothing, params);
+        }
+
+        rv_vehicle_role assigned_vehicle_role(const object &unit_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__assignedvehiclerole__object__ret__array, unit_);
+
+            if (ret.length() == 0) {
+                return rv_vehicle_role({});
+            }
+            else if (ret.length() == 1) {
+                return rv_vehicle_role({ ret[0] });
+            }
+            else {
+                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[1]);
+                return rv_vehicle_role({ ret[0], turret_path });
+            }
+        }
+
+        void collect_eden_history(const code &code_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__collect3denhistory__code__ret__nothing, code_);
+        }
+
+        std::string compose_text(const std::vector<std::string> &texts_) {
+            std::vector<game_value> texts;
+            for (auto text : texts_)
+                texts.push_back(game_value(text));
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__composetext__array__ret__text, texts));
+        }
+
+        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                object_,
+                text_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__creatediarylink__array__ret__string, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                text_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_) {
+            std::vector<game_value> params{
+                subject_,
+                text_,
+                task_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_) {
+            std::vector<game_value> params{
+                subject_,
+                text_,
+                task_,
+                state_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_
+                })
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_,
+                }),
+                task_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_) {
+            std::vector<game_value> params{
+                subject_,
+                game_value({
+                    title_,
+                    text_
+                }),
+                task_,
+                state_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params));
+        }
+
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_) {
+            std::vector<game_value> params{
+                subject_,
+                name_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params));
+        }
+
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_) {
+            std::vector<game_value> params{
+                subject_,
+                name_,
+                picture_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params));
+        }
+
+        std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlmodeldirandup__control__ret__array, ctrl_);
+
+            vector3 vector_dir = __helpers::__convert_to_vector3(ret[0]);
+            vector3 vector_up = __helpers::__convert_to_vector3(ret[1]);
+
+            return{ vector_dir, vector_up };
+        }
+
+        std::vector<float> ctrl_position(const control &ctrl_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ctrlposition__control__ret__array, ctrl_);
+
+            std::vector<float> position;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                position.push_back(float(ret[i]));
+
+            return position;
+        }
+
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params));
+        }
+
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const code &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params));
+        }
+
+        void ctrl_remove_event_handler(const control &ctrl_, const std::string &name_, float &id_) {
+            std::vector<game_value> params{
+                name_,
+                id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlremoveeventhandler__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void ctrl_set_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__ctrlseteventhandler__control__array__ret__nothing, ctrl_, params);
+        }
+
+        std::vector<object> curator_registered_objects(const object &curator_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__curatorregisteredobjects__object__ret__array, curator_));
+        }
+
+        rv_throwable current_throwable(const object &unit_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__currentthrowable__object__ret__array, unit_);
+
+            std::vector<float> ids = __helpers::__convert_to_numbers_vector(ret[2]);
+            return rv_throwable({ret[0], ret[1], ids });
         }
     }
 }

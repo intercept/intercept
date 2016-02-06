@@ -520,6 +520,7 @@ namespace intercept {
         float add_eden_layer(int parent_layer_id_, const std::string& name_);
         bool remove_eden_layer(float value_);
         void remove_all_eden_eventhandlers(const std::string &value_);
+        float add_eden_event_handler(const std::string &type_, const code &code_);
 
         /* Chat */
         namespace __helpers {
@@ -2447,8 +2448,7 @@ namespace intercept {
         std::vector<object> entities(const std::string& type_);
         vector3 eye_direction(const object& unit_);
 
-        struct rv_unit_description
-        {
+        struct rv_unit_description {
             std::string unit;
             std::string uniform;
             std::string vest;
@@ -2527,5 +2527,50 @@ namespace intercept {
 
         bool in(const object &unit_, const object &vehicle_);
         bool in(const vector3 &pos_, const location &loc_);
+
+        float add_mission_event_handler(const std::string &type_, const code &command_);
+        float add_mission_event_handler(const std::string &type_, const std::string &command_);
+        float add_music_event_handler(const std::string &type_, const code &command_);
+        float add_music_event_handler(const std::string &type_, const std::string &command_);
+
+        void add_weapon_pool(const std::string &weapon_name_, int count_);
+
+        struct rv_vehicle_role {
+            std::string role;
+            std::vector<int> turret_path;
+        };
+
+        rv_vehicle_role assigned_vehicle_role(const object &unit_);
+
+        void collect_eden_history(const code &code_);
+
+        std::string compose_text(const std::vector<std::string> &texts_);
+
+        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_);
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_);
+        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
+
+        std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
+        std::vector<float> ctrl_position(const control &ctrl_);
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_);
+        float ctrl_add_event_handler(const control &ctrl_, const std::string &name_, const code &command_);
+        void ctrl_remove_event_handler(const control &ctrl_, const std::string &name_, float &id_);
+        void ctrl_set_event_handler(const control &ctrl_, const std::string &name_, const std::string &command_);
+
+        std::vector<object> curator_registered_objects(const object &curator_);
+
+        struct rv_throwable {
+            std::string magazine_class_name;
+            std::string muzzle_class_name;
+            std::vector<float> ids;
+        };
+
+        rv_throwable current_throwable(const object &unit_);
     }
 }

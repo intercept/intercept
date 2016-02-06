@@ -1443,7 +1443,7 @@ namespace intercept {
         /*************************************************************** LISTBOX END *****************************************************************************/
 #pragma endregion listbox
 
-        /* 3den */
+        /* eden */
         std::string current_eden_operation() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
         }
@@ -1466,21 +1466,21 @@ namespace intercept {
         bool is_eden_multiplayer() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3denmultiplayer__ret__bool);
         }
-        float get_3den_action_state(const std::string &value_) {
+        float get_eden_action_state(const std::string &value_) {
             return __helpers::__number_unary_string(client::__sqf::unary__get3denactionstate__string__ret__scalar, value_);
         }
-        void edit_3den_mission_attributes(const std::string &value_) {
+        void edit_eden_mission_attributes(const std::string &value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__edit3denmissionattributes__string__ret__nothing, value_);
         }
-        bool remove_3den_layer(float value_) {
+        bool remove_eden_layer(float value_) {
             return __helpers::__bool_unary_number(client::__sqf::unary__remove3denlayer__scalar__ret__bool, value_);
         }
 
-        void remove_all_3den_eventhandlers(const std::string &value_) {
+        void remove_all_eden_eventhandlers(const std::string &value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__removeall3deneventhandlers__string__ret__nothing, value_);
         }
 
-        float add_3den_layer(int parent_layer_id_, const std::string& name_) {
+        float add_eden_layer(int parent_layer_id_, const std::string& name_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float)parent_layer_id_, name_));
         }
 
@@ -1656,7 +1656,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
         }
 
-        std::vector<object> all_3den_entities() {
+        std::vector<object> all_eden_entities() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
         }
 
@@ -5820,7 +5820,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__deleteteam__team_member__ret__nothing, value_);
         }
 
-        void do3denaction(const std::string& value_) {
+        void do_eden_action(const std::string& value_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__do3denaction__string__ret__nothing, value_);
         }
 
@@ -5840,7 +5840,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__fromeditor__team_member__ret__bool, value_));
         }
 
-        void get3dengrid(const std::string& value_) {
+        void get_eden_grid(const std::string& value_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__get3dengrid__string__ret__nothing, value_);
         }
 

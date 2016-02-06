@@ -2524,6 +2524,9 @@ namespace intercept {
         std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_);
         std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_);
         std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_);
+        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_);
         float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_);
         float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
 

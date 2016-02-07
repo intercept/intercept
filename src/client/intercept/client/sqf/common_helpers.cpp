@@ -186,6 +186,15 @@ namespace intercept {
                 return output;
             }
 
+            std::vector<bool> __convert_to_booleans_vector(game_value input__) {
+                std::vector<bool> output;
+                for (uint32_t i = 0; i < input__.length(); ++i) {
+                    output.push_back(input__[i]);
+                }
+
+                return output;
+            }
+
             std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
                 std::vector<team_member> output;
                 for (uint32_t i = 0; i < input__.length(); ++i) {

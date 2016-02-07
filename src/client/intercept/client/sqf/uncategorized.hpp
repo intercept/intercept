@@ -2510,7 +2510,7 @@ namespace intercept {
 
         void set_hit(const object &object_, const std::string &part_, float damage_);
         void set_hit_index(const object &object_, int part_index_, float damage_);
-        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, float damage_);
+        void set_hit_point_index(const object &object_, const std::string &hit_point_, float damage_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
@@ -2621,5 +2621,58 @@ namespace intercept {
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_);
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_);
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_);
+
+        std::vector<object> detected_mines(const side &side_);
+
+        void diag_log(const std::string &text_);
+
+        std::vector<bool> engines_is_on_rtd(const object &heli_);
+        std::vector<float> engines_rpm_rtd(const object &heli_);
+        std::vector<float> engines_torque_rtd(const object &heli_);
+
+        struct rv_hit_points_damage {
+            std::vector<std::string> hit_points;
+            std::vector<std::string> hit_selections;
+            std::vector<float> damages;
+        };
+
+        rv_hit_points_damage get_all_hit_points_damage(const object &veh_);
+
+        struct rv_forces_rtd {
+            float roll;
+            float pitch;
+            float collective;
+        };
+
+        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_);
+        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_);
+
+        std::vector<float> rotors_rpm_rtd(const object &heli_);
+
+        struct rv_weight_rtd {
+            float fuselage;
+            float crew;
+            float fuel;
+            float custom;
+            float weapons;
+
+            rv_weight_rtd(float fuselage_, float crew_, float fuel_, float custom_, float weapons_) {
+                fuselage = fuselage_;
+                crew = crew_;
+                fuel = fuel_;
+                custom = custom_;
+                weapons = weapons_;
+            }
+
+            static rv_weight_rtd from_vector(const std::vector<float> &weight_vector_) {
+                return rv_weight_rtd(weight_vector_[0], weight_vector_[1], weight_vector_[2], weight_vector_[3], weight_vector_[4]);
+            }
+        };
+
+        rv_weight_rtd weight_rtd(const object &heli_);
+
+        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
+        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
+        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
     }
 }

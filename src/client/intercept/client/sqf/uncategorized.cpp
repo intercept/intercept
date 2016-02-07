@@ -23,6 +23,7 @@ namespace intercept {
         // unary__asin__scalar_nan__ret__scalar_nan
         // unary__atan__scalar_nan__ret__scalar_nan
         // unary__atg__scalar_nan__ret__scalar_nan
+        // unary__assert__bool__ret__bool
         // unary__breakout__string__ret__nothing
         // unary__breakto__string__ret__nothing
         // unary__case__any__ret__switch
@@ -159,7 +160,7 @@ namespace intercept {
         // nular__true__ret__bool
 
         /// investigate
-        /* No documentation. */
+        /* No documentation.*/
         // unary__addforcegeneratorrtd__array__ret__scalar
 
         /* No documentation.*/
@@ -172,6 +173,9 @@ namespace intercept {
         // unary__ctrlmapmouseover__control__ret__array
         // unary__curatorcameraarea__object__ret__array
         // unary__curatoreditingarea__object__ret__array
+
+        /* No documentation.*/
+        // unary__enableaudiofeature__array__ret__bool
 
         /* No documentation.*/
         // nular__getdlcassetsusage__ret__array
@@ -224,7 +228,7 @@ namespace intercept {
         /* No documentation but implemented (?) */
         // binary__tvtooltip__control__scalar__ret__string
 
-        /* No documentation. */
+        /* No documentation.*/
         // unary__tvtooltip__array__ret__string
 
         /* No documentation for this entire family of commands.*/
@@ -276,6 +280,13 @@ namespace intercept {
         // unary__menutext__array__ret__string
         // unary__menuurl__array__ret__string
         // unary__menuvalue__array__ret__scalar
+
+        /* No documentation.*/
+        // unary__leaderboardgetrows__string__ret__array
+        // unary__leaderboardrequestrowsglobal__array__ret__bool
+        // unary__leaderboardrequestrowsglobalarounduser__array__ret__bool
+        // unary__leaderboardsrequestuploadscore__array__ret__bool
+        // unary__leaderboardsrequestuploadscorekeepbest__array__ret__bool
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -6403,13 +6414,21 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__timemultiplier__ret__scalar);
         }
 
-        float date_to_number(rv_date date_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_));
+        float date_to_number(int year_, int month_, int day_, int hour_, float minute_) {
+            std::vector<game_value> date{
+                (float)year_,
+                (float)month_,
+                (float)day_,
+                (float)hour_,
+                minute_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date));
         }
 
-        rv_date number_to_date(float year_, float time_) {
+        rv_date number_to_date(int year_, float time_) {
             std::vector<game_value> params{
-                year_,
+                (float)year_,
                 time_
             };
 
@@ -7592,8 +7611,16 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_));
         }
 
-        void set_date(rv_date date_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, date_);
+        void set_date(int year_, int month_, int day_, int hour_, float minute_) {
+            std::vector<game_value> date{
+                (float)year_,
+                (float)month_,
+                (float)day_,
+                (float)hour_,
+                minute_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, date);
         }
 
         std::vector<object> units(const group& gp_)
@@ -8553,6 +8580,357 @@ namespace intercept {
 
             std::vector<float> ids = __helpers::__convert_to_numbers_vector(ret[2]);
             return rv_throwable({ret[0], ret[1], ids });
+        }
+
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
+            std::vector<game_value> params{
+                min_,
+                max_,
+                value_,
+                new_min_,
+                new_max_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__linearconversion__array__ret__scalar, params));
+        }
+
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_) {
+            std::vector<game_value> params{
+                min_,
+                max_,
+                value_,
+                new_min_,
+                new_max_,
+                clamp_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__linearconversion__array__ret__scalar, params));
+        }
+
+        bool is_on_road(const object &object_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isonroad__object_array__ret__bool, object_));
+        }
+
+        bool is_on_road(const vector3 &position_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isonroad__object_array__ret__bool, position_));
+        }
+
+        void host_mission(const config &config_, const display &display_) {
+            std::vector<game_value> params{
+                config_,
+                display_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__hostmission__array__ret__nothing, params);
+        }
+
+        std::vector<group> hc_selected(const object &unit_) {
+            return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_unary(client::__sqf::unary__hcselected__object__ret__array, unit_));
+        }
+
+        std::vector<group> hc_all_groups(const object &unit_) {
+            return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_unary(client::__sqf::unary__hcallgroups__object__ret__array, unit_));
+        }
+
+        group get_group(const object &unit_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__group__object__ret__group, unit_));
+        }
+
+        std::vector<object> group_selected_units(const object &unit_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__group__object__ret__group, unit_));
+        }
+
+        vector3 get_wp_pos(const group &group_, int index_) {
+            std::vector<game_value> params{
+                group_,
+                (float)index_
+            };
+
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__getwppos__array__ret__array, params));
+        }
+
+        float get_eden_entity_id(const object &entity_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+        }
+
+        float get_eden_entity_id(const group &entity_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+        }
+
+        float get_eden_entity_id(const vector3 &entity_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+        }
+
+        float get_eden_entity_id(const marker &entity_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+        }
+
+        void do_stop(const object &unit_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__dostop__object_array__ret__nothing, unit_);
+        }
+
+        void do_stop(const std::vector<object> &units_) {
+            std::vector<game_value> units;
+            for (auto unit : units_)
+                units.push_back(game_value(unit));
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__dostop__object_array__ret__nothing, units);
+        }
+
+        void do_get_out(const object &unit_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__dogetout__object_array__ret__nothing, unit_);
+        }
+
+        void do_get_out(const std::vector<object> &units_) {
+            std::vector<game_value> units;
+            for (auto unit : units_)
+                units.push_back(game_value(unit));
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__dogetout__object_array__ret__nothing, units);
+        }
+
+        void delete_location(const location &loc_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__deletelocation__location__ret__nothing, loc_);
+        }
+
+        void delete_eden_entities(const object &entity_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
+        }
+
+        void delete_eden_entities(const group &entity_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
+        }
+
+        void delete_eden_entities(const vector3 &entity_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
+        }
+
+        void delete_eden_entities(const marker &entity_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+        }
+
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_) {
+            std::vector<game_value> from;
+            for (auto entity : from_)
+                from.push_back(game_value(entity));
+
+            std::vector<game_value> params{
+                type_,
+                from,
+                to_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
         }
     }
 }

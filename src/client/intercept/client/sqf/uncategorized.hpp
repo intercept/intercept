@@ -1408,8 +1408,8 @@ namespace intercept {
 
         float time_multiplier();
 
-        float date_to_number(rv_date date_);
-        rv_date number_to_date(float year_, float time_);
+        float date_to_number(int year_, int month_, int day_, int hour_, float minute_);
+        rv_date number_to_date(int year_, float time_);
 
         float acc_time();
         object agent(const team_member &value_);
@@ -2482,7 +2482,7 @@ namespace intercept {
         bool open_map(bool show_, bool forced_);
         vector3 position(const location& loc_);
         bool rectangular(const location& loc_);
-        void set_date(rv_date date_);
+        void set_date(int year_, int month_, int day_, int hour_, float minute_);
         std::vector<object> units(const group& gp_);
         std::vector<object> units(const object& unit_);
 
@@ -2571,5 +2571,55 @@ namespace intercept {
         };
 
         rv_throwable current_throwable(const object &unit_);
+
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
+
+        bool is_on_road(const object &object_);
+        bool is_on_road(const vector3 &position_);
+
+        void host_mission(const config &config_, const display &display_);
+
+        std::vector<group> hc_selected(const object &unit_);
+        std::vector<group> hc_all_groups(const object &unit_);
+
+        group get_group(const object &unit_); // originally "group", but is already a type
+        std::vector<object> group_selected_units(const object &unit_);
+
+        vector3 get_wp_pos(const group &group_, int index_);
+
+        float get_eden_entity_id(const object &entity_);
+        float get_eden_entity_id(const group &entity_);
+        float get_eden_entity_id(const vector3 &entity_);
+        float get_eden_entity_id(const marker &entity_);
+
+        void do_stop(const object &unit_);
+        void do_stop(const std::vector<object> &units_);
+        void do_get_out(const object &unit_);
+        void do_get_out(const std::vector<object> &units_);
+
+        void delete_location(const location &loc_);
+
+        void delete_eden_entities(const object &entity_);
+        void delete_eden_entities(const group &entity_);
+        void delete_eden_entities(const vector3 &entity_);
+        void delete_eden_entities(const marker &entity_);
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_);
     }
 }

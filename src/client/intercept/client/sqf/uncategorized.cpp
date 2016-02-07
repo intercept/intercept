@@ -6404,15 +6404,16 @@ namespace intercept {
         }
 
         float date_to_number(rv_date date_) {
-            //game_value date_array({
-            //    (date_.year),
-            //    (date_.month),
-            //    (date_.day),
-            //    (date_.hour),
-            //    (date_.minute)
-            //})
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date_));
+        }
 
-            throw 713; // TODO reimplement day_to_number
+        rv_date number_to_date(float year_, float time_) {
+            std::vector<game_value> params{
+                year_,
+                time_
+            };
+
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__numbertodate__array__ret__array, params)));
         }
 
         std::vector<object> near_objects(const vector3 &pos_, const float &radius_) {
@@ -7591,8 +7592,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_));
         }
 
-        void set_date(rv_date date_)
-        {
+        void set_date(rv_date date_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, date_);
         }
 

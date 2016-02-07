@@ -1369,8 +1369,7 @@ namespace intercept {
                 return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
             }
 
-            operator game_value()
-            {
+            operator game_value() {
                 return game_value(std::vector<game_value>({
                     year,
                     month,
@@ -1380,8 +1379,7 @@ namespace intercept {
                 }));
             }
 
-            operator game_value() const
-            {
+            operator game_value() const {
                 return game_value(std::vector<game_value>({
                     year,
                     month,
@@ -1411,6 +1409,7 @@ namespace intercept {
         float time_multiplier();
 
         float date_to_number(rv_date date_);
+        rv_date number_to_date(float year_, float time_);
 
         float acc_time();
         object agent(const team_member &value_);

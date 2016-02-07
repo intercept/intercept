@@ -1408,8 +1408,8 @@ namespace intercept {
 
         float time_multiplier();
 
-        float date_to_number(rv_date date_);
-        rv_date number_to_date(float year_, float time_);
+        float date_to_number(int year_, int month_, int day_, int hour_, float minute_);
+        rv_date number_to_date(int year_, float time_);
 
         float acc_time();
         object agent(const team_member &value_);
@@ -2482,7 +2482,7 @@ namespace intercept {
         bool open_map(bool show_, bool forced_);
         vector3 position(const location& loc_);
         bool rectangular(const location& loc_);
-        void set_date(rv_date date_);
+        void set_date(int year_, int month_, int day_, int hour_, float minute_);
         std::vector<object> units(const group& gp_);
         std::vector<object> units(const object& unit_);
 
@@ -2510,7 +2510,7 @@ namespace intercept {
 
         void set_hit(const object &object_, const std::string &part_, float damage_);
         void set_hit_index(const object &object_, int part_index_, float damage_);
-        void set_hitpoint_index(const object &object_, const std::string &hitpoint_, float damage_);
+        void set_hit_point_damage(const object &object_, const std::string &hit_point_, float damage_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
@@ -2571,5 +2571,108 @@ namespace intercept {
         };
 
         rv_throwable current_throwable(const object &unit_);
+
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
+        float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
+
+        bool is_on_road(const object &object_);
+        bool is_on_road(const vector3 &position_);
+
+        void host_mission(const config &config_, const display &display_);
+
+        std::vector<group> hc_selected(const object &unit_);
+        std::vector<group> hc_all_groups(const object &unit_);
+
+        group get_group(const object &unit_); // originally "group", but is already a type
+        std::vector<object> group_selected_units(const object &unit_);
+
+        vector3 get_wp_pos(const group &group_, int index_);
+
+        float get_eden_entity_id(const object &entity_);
+        float get_eden_entity_id(const group &entity_);
+        float get_eden_entity_id(const vector3 &entity_);
+        float get_eden_entity_id(const marker &entity_);
+
+        void do_stop(const object &unit_);
+        void do_stop(const std::vector<object> &units_);
+        void do_get_out(const object &unit_);
+        void do_get_out(const std::vector<object> &units_);
+
+        void delete_location(const location &loc_);
+
+        void delete_eden_entities(const object &entity_);
+        void delete_eden_entities(const group &entity_);
+        void delete_eden_entities(const vector3 &entity_);
+        void delete_eden_entities(const marker &entity_);
+
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_);
+        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_);
+
+        std::vector<object> detected_mines(const side &side_);
+
+        void diag_log(const std::string &text_);
+
+        std::vector<bool> engines_is_on_rtd(const object &heli_);
+        std::vector<float> engines_rpm_rtd(const object &heli_);
+        std::vector<float> engines_torque_rtd(const object &heli_);
+
+        struct rv_hit_points_damage {
+            std::vector<std::string> hit_points;
+            std::vector<std::string> hit_selections;
+            std::vector<float> damages;
+        };
+
+        rv_hit_points_damage get_all_hit_points_damage(const object &veh_);
+
+        struct rv_forces_rtd {
+            float roll;
+            float pitch;
+            float collective;
+        };
+
+        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_);
+        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_);
+
+        std::vector<float> rotors_rpm_rtd(const object &heli_);
+
+        struct rv_weight_rtd {
+            float fuselage;
+            float crew;
+            float fuel;
+            float custom;
+            float weapons;
+
+            rv_weight_rtd(float fuselage_, float crew_, float fuel_, float custom_, float weapons_) {
+                fuselage = fuselage_;
+                crew = crew_;
+                fuel = fuel_;
+                custom = custom_;
+                weapons = weapons_;
+            }
+
+            static rv_weight_rtd from_vector(const std::vector<float> &weight_vector_) {
+                return rv_weight_rtd(weight_vector_[0], weight_vector_[1], weight_vector_[2], weight_vector_[3], weight_vector_[4]);
+            }
+        };
+
+        rv_weight_rtd weight_rtd(const object &heli_);
+
+        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
+        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
+        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
     }
 }

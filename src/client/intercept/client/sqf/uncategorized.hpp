@@ -2510,7 +2510,7 @@ namespace intercept {
 
         void set_hit(const object &object_, const std::string &part_, float damage_);
         void set_hit_index(const object &object_, int part_index_, float damage_);
-        void set_hit_point_index(const object &object_, const std::string &hit_point_, float damage_);
+        void set_hit_point_damage(const object &object_, const std::string &hit_point_, float damage_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);

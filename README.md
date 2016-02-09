@@ -1,5 +1,5 @@
 # Intercept
-[![TravisCI Build Indicator](https://travis-ci.org/NouberNou/intercept.svg?branch=master)](https://travis-ci.org/NouberNou/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/e3s93drtpmtpk02x/branch/master?svg=true)](https://ci.appveyor.com/project/NouberNou/intercept/branch/master)
+[![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/e3s93drtpmtpk02x/branch/master?svg=true)](https://ci.appveyor.com/project/intercept/intercept/branch/master)
 
 ## Overview
 
@@ -11,13 +11,13 @@ Intercept works on a host/client based system, in which the host, Intercept itse
 
 The intercept library also provides raw C bindings to the C++ versions of SQF functions, so it is entirely possible to use Intercept as the basis for writing in additional scripting languages to the RV engine, such as Python or Lua.
 
-## [Progress](https://github.com/NouberNou/intercept/issues/13)
+## [Progress](https://github.com/intercept/intercept/issues/13)
 
-You can view the progress of wrapper completion [here](https://github.com/NouberNou/intercept/issues/13).
+You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13).
 
 ## Tutorial
 
-You can find a basic tutorial on [how to build and install Intercept on our wiki](https://github.com/NouberNou/intercept/wiki/Building-and-installing-Intercept-from-source).
+You can find a basic tutorial on [how to build and install Intercept on our wiki](https://github.com/intercept/intercept/wiki/Building-and-installing-Intercept-from-source).
 
 ## Terminology 
 

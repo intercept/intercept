@@ -1,4 +1,4 @@
-#include "client_types.hpp"
+#include "shared\client_types.hpp"
 #include "client\client.hpp"
 #include "shared\functions.hpp"
 

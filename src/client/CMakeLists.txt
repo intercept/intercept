@@ -25,26 +25,20 @@ else()
 	set(CMAKE_CXX_FLAGS_RELEASE       "/MT /O2 /Ob2 /D /EHsc NDEBUG")
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /Zi /O2 /Ob1 /D /EHsc NDEBUG")
 endif()
-include_directories("example_dll")
-include_directories("example_hud")
-include_directories("example_frag")
+include_directories("intercept")
 
 
 if(DEVEL)
     add_definitions(-DDEVEL)
 endif()
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_dll)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_hud)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/example_frag)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/intercept)
 
 
 set(GLOBAL_SOURCES ${GLOBAL_RC})
 
 
-add_subdirectory(example_dll)
-add_subdirectory(example_hud)
-add_subdirectory(example_frag)
+add_subdirectory(intercept)
 
 
 

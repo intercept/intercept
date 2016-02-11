@@ -1,6 +1,6 @@
-#include "types.hpp"
+#include "shared\types.hpp"
 #include "client\client.hpp"
-#include "client_types.hpp"
+#include "shared\client_types.hpp"
 #include <assert.h>
 
 #define INTERNAL_TAG 0x0000dede

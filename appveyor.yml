@@ -10,6 +10,8 @@ configuration:
 platform: Win32
 
 before_build:
+  - mkdir vcproj
+  - mkdir build
   - cd vcproj
   - cmake .. -G "Visual Studio 14 2015"
   - cd ..

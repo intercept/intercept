@@ -2674,5 +2674,44 @@ namespace intercept {
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
+
+        std::vector<object> every_backpack(const object &container_);
+
+        std::vector<rv_container> every_container(const object &container_);
+
+        struct rv_cargo {
+            std::vector<std::string> types;
+            std::vector<float> amounts;
+        };
+
+        std::vector<rv_cargo> get_backpack_cargo(const object &container_);
+        std::vector<rv_cargo> get_item_cargo(const object &container_);
+        std::vector<rv_cargo> get_magazine_cargo(const object &container_);
+        std::vector<rv_cargo> get_weapon_cargo(const object &container_);
+        std::vector<std::string> item_cargo(const object &container_);
+        std::vector<std::string> weapon_cargo(const object &container_);
+
+        int get_cargo_index(const object &vehicle_, const object &unit_);
+        std::vector<std::string> weapons(const object &unit_);
+
+        struct rv_weapon_state {
+            std::string weapon;
+            std::string muzzle;
+            std::string mode;
+            std::string magazine;
+            float ammo_count;
+
+            rv_weapon_state(const game_value &ret_game_value_):
+                weapon(ret_game_value_[0]),
+                muzzle(ret_game_value_[1]),
+                mode(ret_game_value_[2]),
+                magazine(ret_game_value_[3]),
+                ammo_count(ret_game_value_[4])
+            {
+            }
+        };
+
+        rv_weapon_state weapon_state(const object &unit_);
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
     }
 }

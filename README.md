@@ -1,5 +1,5 @@
-# Intercept
-[![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/e3s93drtpmtpk02x/branch/master?svg=true)](https://ci.appveyor.com/project/intercept/intercept/branch/master)
+# Intercept [![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/e3s93drtpmtpk02x/branch/master?svg=true)](https://ci.appveyor.com/project/intercept/intercept/branch/master)
+
 
 ## Overview
 

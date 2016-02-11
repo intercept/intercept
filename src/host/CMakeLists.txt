@@ -32,7 +32,7 @@ include_directories("controller")
 include_directories("loader")
 include_directories("invoker")
 include_directories("extensions")
-include_directories("../client/intercept")
+include_directories("../client/headers")
 include_directories("intercept_dll")
 
 

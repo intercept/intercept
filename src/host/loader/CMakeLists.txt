@@ -4,9 +4,9 @@ file(GLOB LOADER_SOURCES *.h *.hpp *.c *.cpp)
 
 SOURCE_GROUP("main" FILES ${LOADER_SOURCES})
 
-file(GLOB INTERCEPT_CLIENT_SOURCES  ../../client/intercept/*.h ../../client/intercept/*.hpp ../../client/intercept/*.c ../../client/intercept/*.cpp)
-file(GLOB INTERCEPT_CLIENT_MAIN_SOURCES  ../../client/intercept/client/*.h ../../client/intercept/client/*.hpp ../../client/intercept/client/*.c ../../client/intercept/client/*.cpp)
-file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../../client/intercept/shared/*.h ../../client/intercept/shared/*.hpp ../../client/intercept/shared/*.c ../../client/intercept/shared/*.cpp)
+file(GLOB INTERCEPT_CLIENT_SOURCES  ../../client/headers/*.h ../../client/headers/*.hpp ../../client/intercept/*.c ../../client/intercept/*.cpp)
+file(GLOB INTERCEPT_CLIENT_MAIN_SOURCES  ../../client/headers/client/*.h ../../client/headers/client/*.hpp ../../client/intercept/client/*.c ../../client/intercept/client/*.cpp)
+file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../../client/headers/shared/*.h ../../client/headers/shared/*.hpp ../../client/intercept/shared/*.c ../../client/intercept/shared/*.cpp)
 
 SOURCE_GROUP("intercept_includes\\shared" FILES ${INTERCEPT_CLIENT_SHARED_SOURCES})
 

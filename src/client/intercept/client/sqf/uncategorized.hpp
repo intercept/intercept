@@ -2776,5 +2776,37 @@ namespace intercept {
 
         std::vector<std::string> primary_weapon_items(const object &unit_);
         std::vector<std::string> primary_weapon_magazine(const object &unit_);
+
+        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
+        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
+
+        std::vector<std::string> registered_tasks(const team_member &member_);
+
+        void remove_eden_event_handler(const std::string &type_, float id_);
+
+        void remove_from_remains_collector(const std::vector<object> &remains_);
+
+        void remove_mission_event_handler(const std::string &type_, float index_);
+        void remove_music_event_handler(const std::string &type_, float id_);
+
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, float length_);
+
+        void rope_cut(const object &rope_, float distance_);
+
+        std::vector<vector3> rope_end_position(const object &rope_);
+
+        void rope_unwind(const object &rope_, float speed_, float length_);
+        void rope_unwind(const object &rope_, float speed_, float length_, bool relative_);
     }
 }

@@ -9,8 +9,8 @@ def parse():
     projectpath = os.path.dirname(os.path.dirname(scriptpath))
     projectpath = os.path.join(projectpath, "src/client/intercept/client")
     projectpath_sqf = os.path.join(projectpath, "sqf")
-
-    declarations_file = os.path.join(projectpath, "sqf_pointers_declaration.hpp")
+    
+    declarations_file = os.path.join(os.path.dirname(os.path.dirname(scriptpath)), "src/client/headers/client/sqf_pointers_declaration.hpp")
 
     unary_functions = []
     binary_functions = []

@@ -1837,8 +1837,10 @@ namespace intercept {
         std::string parse_text(const std::string &value_);
         void pick_weapon_pool(const object &value_);
         std::string pitch(const object &value_);
-        void play_music(const std::string &value_);
-        void play_sound(const std::string &value_);
+        void play_music(const std::string &class_);
+        void play_music(const std::string &class_, float start_);
+        void play_sound(const std::string &name_);
+        void play_sound(const std::string &name_, bool force_);
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
         bool pp_effect_committed(const std::string &value_);
@@ -2115,7 +2117,8 @@ namespace intercept {
         void lock_cargo(const object &value0_, bool value1_);
         void lock_driver(const object &value0_, bool value1_);
         bool locked_cargo(const object &value0_, float value1_);
-        void map_center_on_camera(const control &value0_, bool value1_);
+        void map_center_on_camera(const control &main_map, bool enable_);
+        vector3 map_center_on_camera(const control &mini_map_);
         bool mine_detected_by(const object &value0_, const side &value1_);
         void move_object_to_end(const control &value0_, const std::string& value1_);
         void play_action(const object &value0_, const std::string& value1_);
@@ -2584,7 +2587,6 @@ namespace intercept {
         std::vector<group> hc_all_groups(const object &unit_);
 
         group get_group(const object &unit_); // originally "group", but is already a type
-        std::vector<object> group_selected_units(const object &unit_);
 
         vector3 get_wp_pos(const group &group_, int index_);
 
@@ -2674,5 +2676,137 @@ namespace intercept {
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
+
+        std::vector<object> every_backpack(const object &container_);
+
+        std::vector<rv_container> every_container(const object &container_);
+
+        struct rv_cargo {
+            std::vector<std::string> types;
+            std::vector<float> amounts;
+        };
+
+        std::vector<rv_cargo> get_backpack_cargo(const object &container_);
+        std::vector<rv_cargo> get_item_cargo(const object &container_);
+        std::vector<rv_cargo> get_magazine_cargo(const object &container_);
+        std::vector<rv_cargo> get_weapon_cargo(const object &container_);
+        std::vector<std::string> item_cargo(const object &container_);
+        std::vector<std::string> weapon_cargo(const object &container_);
+
+        int get_cargo_index(const object &vehicle_, const object &unit_);
+        std::vector<std::string> weapons(const object &unit_);
+
+        struct rv_weapon_state {
+            std::string weapon;
+            std::string muzzle;
+            std::string mode;
+            std::string magazine;
+            float ammo_count;
+
+            rv_weapon_state(const game_value &ret_game_value_) :
+                weapon(ret_game_value_[0]),
+                muzzle(ret_game_value_[1]),
+                mode(ret_game_value_[2]),
+                magazine(ret_game_value_[3]),
+                ammo_count(ret_game_value_[4])
+            {
+            }
+        };
+
+        rv_weapon_state weapon_state(const object &unit_);
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
+
+        std::vector<std::string> get_object_materials(const object &object_);
+        std::vector<std::string> get_object_textures(const object &object_);
+
+        std::vector<object> group_selected_units(const object &unit_);
+
+        std::vector<std::string> items_with_magazines(const object &unit_);
+
+        vector2 location_position(const location &loc_);
+
+        void map_anim_add(float time_, float zoom_, const object &object_);
+        void map_anim_add(float time_, float zoom_, const vector3 &pos_);
+
+        std::vector<object> members(const team_member &team_);
+
+        void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
+
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
+        location nearest_location_with_dubbing(const vector3 &pos_);
+        location nearest_location_with_dubbing(const object &obj_);
+
+        object nearest_object(const vector3 &pos_);
+        object nearest_object(const vector3 &pos_, const std::string &type_);
+        object nearest_object(const object &obj_, const std::string &type_);
+        object nearest_object(const vector3 &pos_, float id_);
+        std::vector<object> nearest_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_objects(const object &obj_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const object &obj_, const std::vector<std::string> &types_, float radius_);
+
+        std::vector<object> object_curators(const object &obj_);
+
+        void on_command_mode_changed(const code &command_);
+        void on_command_mode_changed(const std::string &command_);
+
+        void play_mission(const std::string &campaign_, const std::string &mission_);
+        void play_mission(const std::string &campaign_, const std::string &mission_, bool skip_briefing_);
+        void play_mission(const std::string &campaign_, const config &mission_);
+        void play_mission(const std::string &campaign_, const config &mission_, bool skip_briefing_);
+
+        void play_scripted_mission(const std::string &world_, const code &command_);
+        void play_scripted_mission(const std::string &world_, const code &command_, const config &config_);
+        void play_scripted_mission(const std::string &world_, const code &command_, const config &config_, bool ignore_child_window_);
+
+        void play_sound_3d(const std::string &name_, const object &source_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_);
+
+        bool preload_camera(const vector3 &pos_);
+
+        bool preload_title_obj(const std::string &name_, const std::string &type_);
+        bool preload_title_obj(const std::string &name_, const std::string &type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
+        bool preload_title_rsc(const std::string &name_, const std::string &type_);
+        bool preload_title_rsc(const std::string &name_, const std::string &type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
+
+        std::vector<std::string> primary_weapon_items(const object &unit_);
+        std::vector<std::string> primary_weapon_magazine(const object &unit_);
+
+        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
+        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
+
+        std::vector<std::string> registered_tasks(const team_member &member_);
+
+        void remove_eden_event_handler(const std::string &type_, float id_);
+
+        void remove_from_remains_collector(const std::vector<object> &remains_);
+
+        void remove_mission_event_handler(const std::string &type_, float index_);
+        void remove_music_event_handler(const std::string &type_, float id_);
+
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, float length_);
+        object rope_create(const object &from_obj_, const std::string &from_point_);
+        object rope_create(const object &from_obj_, const std::string &from_point_, float length_);
+
+        void rope_cut(const object &rope_, float distance_);
+
+        std::vector<vector3> rope_end_position(const object &rope_);
+
+        void rope_unwind(const object &rope_, float speed_, float length_);
+        void rope_unwind(const object &rope_, float speed_, float length_, bool relative_);
     }
 }

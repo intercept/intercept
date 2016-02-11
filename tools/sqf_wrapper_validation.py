@@ -6,21 +6,29 @@ from xml.dom import minidom
 
 def parse():
     scriptpath = os.path.realpath(__file__)
-    projectpath = os.path.dirname(os.path.dirname(scriptpath))
-    projectpath = os.path.join(projectpath, "src/client/intercept/client")
+    projectpath_base = os.path.dirname(os.path.dirname(scriptpath))
+    projectpath = os.path.join(projectpath_base, "src/client/intercept/client")
     projectpath_sqf = os.path.join(projectpath, "sqf")
-
+    projectpath_headers = os.path.join(projectpath_base, "src/client/headers/client")
+    projectpath_sqf_headers = os.path.join(projectpath_headers, "sqf")
+	
     implementations = []
     declarations = []
-
+    project_files = []
     errors_found = []
     warnings_found = []
-
-    # Walk through our source files and figure out which ones are used in our code
+	
+	# Collect all the headers and the implementations.
     for file in os.listdir(projectpath_sqf):
+        project_files.append(os.path.join(projectpath_sqf, file))
+    for file in os.listdir(projectpath_sqf_headers):
+        project_files.append(os.path.join(projectpath_sqf_headers, file))
+		
+    # Walk through our source files and figure out which ones are used in our code
+    for file in project_files:
         foundInFile = 0
         if file.endswith(".cpp") or file.endswith(".hpp"):
-            source_file = os.path.join(projectpath_sqf, file)
+            source_file = file
             lineN = 0
             with open(source_file) as f:
                 filecontents = re.sub("(/\*[.\s\w\W]*?\*/)", '', f.read())
@@ -120,7 +128,7 @@ def parse():
 
         for decl in declarations:
             if (decl[1] == impl[1]): # same name
-                if (decl[3][0].split('.')[0] != file_name):
+                if (os.path.basename(decl[3][0].split('.')[0]) != os.path.basename(file_name)):
                     warnings_found.append("Found implemenation with filename mismatch ({} {}{}) ({} should be {})".format(impl[0], impl[1], impl[2], file_name, decl[3][0].split('.')[0]))
 
     for impl in declarations:

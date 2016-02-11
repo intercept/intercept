@@ -61,93 +61,75 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_nular(fnc_));
             }
 
-            void __empty_unary_object(unary_function fnc_, const object &obj_)
-            {
+            void __empty_unary_object(unary_function fnc_, const object &obj_) {
                 host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            void __empty_unary_vector(unary_function fnc_, const vector3 &vec_)
-            {
+            void __empty_unary_vector(unary_function fnc_, const vector3 &vec_) {
                 host::functions.invoke_raw_unary(fnc_, vec_);
             }
 
-            void __empty_unary_string(unary_function fnc_, const std::string &str_)
-            {
+            void __empty_unary_string(unary_function fnc_, const std::string &str_) {
                 host::functions.invoke_raw_unary(fnc_, str_);
             }
 
-            void __empty_unary_number(unary_function fnc_, float val_)
-            {
+            void __empty_unary_number(unary_function fnc_, float val_) {
                 host::functions.invoke_raw_unary(fnc_, val_);
             }
 
-            void __empty_unary_bool(unary_function fnc_, bool val_)
-            {
+            void __empty_unary_bool(unary_function fnc_, bool val_) {
                 host::functions.invoke_raw_unary(fnc_, val_);
             }
 
-            void __empty_unary_control(unary_function fnc_, const control &ctrl_)
-            {
+            void __empty_unary_control(unary_function fnc_, const control &ctrl_) {
                 host::functions.invoke_raw_unary(fnc_, ctrl_);
             }
 
-            bool __bool_unary_object(unary_function fnc_, const object &obj_)
-            {
+            bool __bool_unary_object(unary_function fnc_, const object &obj_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
-            bool __bool_unary_string(unary_function fnc_, const std::string &str_)
-            {
+            bool __bool_unary_string(unary_function fnc_, const std::string &str_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, str_));
             }
 
-            bool __bool_unary_number(unary_function fnc_, float val_)
-            {
+            bool __bool_unary_number(unary_function fnc_, float val_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, val_));
             }
 
-            bool __bool_unary_control(unary_function fnc_, const control &ctl_)
-            {
+            bool __bool_unary_control(unary_function fnc_, const control &ctl_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
             }
 
-            float __number_unary_number(unary_function fnc_, float val_)
-            {
+            float __number_unary_number(unary_function fnc_, float val_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, val_));
             }
 
-            float __number_unary_control(unary_function fnc_, const control &ctl_)
-            {
+            float __number_unary_control(unary_function fnc_, const control &ctl_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
             }
 
-            float __number_unary_string(unary_function fnc_, const std::string &str_)
-            {
+            float __number_unary_string(unary_function fnc_, const std::string &str_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, str_));
             }
 
-            float __number_unary_object(unary_function fnc_, const object &obj_)
-            {
+            float __number_unary_object(unary_function fnc_, const object &obj_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
-            std::string __string_unary_control(unary_function fnc_, const control &ctl_)
-            {
+            std::string __string_unary_control(unary_function fnc_, const control &ctl_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
             }
 
-            std::string __string_unary_object(unary_function fnc_, const object &obj_)
-            {
+            std::string __string_unary_object(unary_function fnc_, const object &obj_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
-            std::string __string_unary_string(unary_function fnc_, const std::string &str_)
-            {
+            std::string __string_unary_string(unary_function fnc_, const std::string &str_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, str_));
             }
 
-            object __object_unary_object(unary_function fnc_, const object &obj_)
-            {
+            object __object_unary_object(unary_function fnc_, const object &obj_) {
                 return object(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
@@ -235,8 +217,15 @@ namespace intercept {
                 return output;
             }
 
-            vector3 __convert_to_vector3(game_value input_)
-            {
+            std::vector<location> __convert_to_locations_vector(game_value input_) {
+                std::vector<location> output;
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(location(input_[i].rv_data));
+                }
+                return output;
+            }
+
+            vector3 __convert_to_vector3(game_value input_) {
                 return vector3(input_[0], input_[1], input_[2]);
             }
         }

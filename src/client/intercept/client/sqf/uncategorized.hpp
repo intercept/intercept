@@ -1837,8 +1837,10 @@ namespace intercept {
         std::string parse_text(const std::string &value_);
         void pick_weapon_pool(const object &value_);
         std::string pitch(const object &value_);
-        void play_music(const std::string &value_);
-        void play_sound(const std::string &value_);
+        void play_music(const std::string &class_);
+        void play_music(const std::string &class_, float start_);
+        void play_sound(const std::string &name_);
+        void play_sound(const std::string &name_, bool force_);
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
         bool pp_effect_committed(const std::string &value_);
@@ -2115,7 +2117,8 @@ namespace intercept {
         void lock_cargo(const object &value0_, bool value1_);
         void lock_driver(const object &value0_, bool value1_);
         bool locked_cargo(const object &value0_, float value1_);
-        void map_center_on_camera(const control &value0_, bool value1_);
+        void map_center_on_camera(const control &main_map, bool enable_);
+        vector3 map_center_on_camera(const control &mini_map_);
         bool mine_detected_by(const object &value0_, const side &value1_);
         void move_object_to_end(const control &value0_, const std::string& value1_);
         void play_action(const object &value0_, const std::string& value1_);
@@ -2724,5 +2727,54 @@ namespace intercept {
 
         void map_anim_add(float time_, float zoom_, const object &object_);
         void map_anim_add(float time_, float zoom_, const vector3 &pos_);
+
+        std::vector<object> members(const team_member &team_);
+
+        void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
+
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
+        location nearest_location_with_dubbing(const vector3 &pos_);
+        location nearest_location_with_dubbing(const object &obj_);
+
+        object nearest_object(const vector3 &pos_);
+        object nearest_object(const vector3 &pos_, const std::string &type_);
+        object nearest_object(const object &obj_, const std::string &type_);
+        object nearest_object(const vector3 &pos_, float id_);
+        std::vector<object> nearest_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_objects(const object &obj_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const object &obj_, const std::vector<std::string> &types_, float radius_);
+
+        std::vector<object> object_curators(const object &obj_);
+
+        void on_command_mode_changed(const code &command_);
+        void on_command_mode_changed(const std::string &command_);
+
+        void play_mission(const std::string &campaign_, const std::string &mission_);
+        void play_mission(const std::string &campaign_, const std::string &mission_, bool skip_briefing_);
+        void play_mission(const std::string &campaign_, const config &mission_);
+        void play_mission(const std::string &campaign_, const config &mission_, bool skip_briefing_);
+
+        void play_scripted_mission(const std::string &world_, const code &command_);
+        void play_scripted_mission(const std::string &world_, const code &command_, const config &config_);
+        void play_scripted_mission(const std::string &world_, const code &command_, const config &config_, bool ignore_child_window_);
+
+        void play_sound_3d(const std::string &name_, const object &source_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_);
+        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_);
+
+        bool preload_camera(const vector3 &pos_);
+
+        bool preload_title_obj(const std::string &name_, const std::string &type_);
+        bool preload_title_obj(const std::string &name_, const std::string &type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
+        bool preload_title_rsc(const std::string &name_, const std::string &type_);
+        bool preload_title_rsc(const std::string &name_, const std::string &type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
+
+        std::vector<std::string> primary_weapon_items(const object &unit_);
+        std::vector<std::string> primary_weapon_magazine(const object &unit_);
     }
 }

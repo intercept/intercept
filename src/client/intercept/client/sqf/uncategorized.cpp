@@ -189,6 +189,10 @@ namespace intercept {
         /* Appears to return [show markers on map true/false, show markers on HUD true/false] array that setGroupIconsVisible takes. Scarce documentation.*/
         // nular__groupiconsvisible__ret__array
 
+        /* No documentation.*/
+        // unary__getpersonuseddlcs__object__ret__array
+        // unary__getplayerscores__object__ret__array
+
         /* Last parameter can be position (x, y, z) or target, unknown what target is.*/
         // nular__hudmovementlevels__ret__array
 
@@ -8645,10 +8649,6 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__group__object__ret__group, unit_));
         }
 
-        std::vector<object> group_selected_units(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__group__object__ret__group, unit_));
-        }
-
         vector3 get_wp_pos(const group &group_, int index_) {
             std::vector<game_value> params{
                 group_,
@@ -9132,6 +9132,46 @@ namespace intercept {
             };
 
             return rv_weapon_state(host::functions.invoke_raw_unary(client::__sqf::unary__weaponstate__object_array__ret__array, params));
+        }
+
+        std::vector<std::string> get_object_materials(const object &object_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getobjectmaterials__object__ret__array, object_));
+        }
+
+        std::vector<std::string> get_object_textures(const object &object_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getobjecttextures__object__ret__array, object_));
+        }
+
+        std::vector<object> group_selected_units(const object &unit_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__groupselectedunits__object__ret__array, unit_));
+        }
+
+        std::vector<std::string> items_with_magazines(const object &unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__itemswithmagazines__object__ret__array, unit_));
+        }
+
+        vector2 location_position(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__locationposition__location__ret__array, loc_));
+        }
+
+        void map_anim_add(float time_, float zoom_, const object &object_) {
+            std::vector<game_value> params{
+                time_,
+                zoom_,
+                object_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__mapanimadd__array__ret__nothing, params);
+        }
+
+        void map_anim_add(float time_, float zoom_, const vector3 &pos_) {
+            std::vector<game_value> params{
+                time_,
+                zoom_,
+                pos_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__mapanimadd__array__ret__nothing, params);
         }
     }
 }

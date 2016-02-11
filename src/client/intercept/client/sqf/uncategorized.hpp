@@ -2584,7 +2584,6 @@ namespace intercept {
         std::vector<group> hc_all_groups(const object &unit_);
 
         group get_group(const object &unit_); // originally "group", but is already a type
-        std::vector<object> group_selected_units(const object &unit_);
 
         vector3 get_wp_pos(const group &group_, int index_);
 
@@ -2713,5 +2712,17 @@ namespace intercept {
 
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
+
+        std::vector<std::string> get_object_materials(const object &object_);
+        std::vector<std::string> get_object_textures(const object &object_);
+
+        std::vector<object> group_selected_units(const object &unit_);
+
+        std::vector<std::string> items_with_magazines(const object &unit_);
+
+        vector2 location_position(const location &loc_);
+
+        void map_anim_add(float time_, float zoom_, const object &object_);
+        void map_anim_add(float time_, float zoom_, const vector3 &pos_);
     }
 }

@@ -9242,7 +9242,7 @@ namespace intercept {
                 radius_
             };
 
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_) {
@@ -9257,7 +9257,7 @@ namespace intercept {
                 sort_pos_
             };
 
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_) {
@@ -9272,7 +9272,7 @@ namespace intercept {
                 sort_obj_
             };
 
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         location nearest_location_with_dubbing(const vector3 &pos_) {
@@ -10139,7 +10139,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__surfacetype__array__ret__string, pos_));
         }
 
-        std::vector<object> synchronized_objects(const object &obj_) {
+        std::vector<object> synchronized_objects(const object& obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
         }
     }

@@ -225,6 +225,14 @@ namespace intercept {
                 return output;
             }
 
+            std::vector<task> __convert_to_tasks_vector(game_value input_) {
+                std::vector<task> output;
+                for (uint32_t i = 0; i < input_.length(); ++i) {
+                    output.push_back(task(input_[i].rv_data));
+                }
+                return output;
+            }
+
             vector3 __convert_to_vector3(game_value input_) {
                 return vector3(input_[0], input_[1], input_[2]);
             }

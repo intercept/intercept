@@ -1912,7 +1912,8 @@ namespace intercept {
         bool set_current_channel(float value_);
 
         void set_horizon_parallax_coef(float value_);
-        void set_object_view_distance(float value_);
+        void set_object_view_distance(float distance_);
+        void set_object_view_distance(float object_distance_, float shadow_distance_);
         void set_playable(const object &value_);
         void set_player_respawn_time(float value_);
         void set_shadow_distance(float value_);
@@ -1928,7 +1929,8 @@ namespace intercept {
         void show_commanding_menu(const std::string &value_);
         void show_compass(bool value_);
         void show_gps(bool value_);
-        void show_hud(bool value_);
+        void show_hud(bool show_);
+        void show_hud(bool hud_, bool info_, bool radar_, bool compass_, bool direction_, bool menu_, bool group_, bool cursors_);
         void show_map(bool value_);
         void show_pad(bool value_);
         void show_radio(bool value_);
@@ -2808,5 +2810,54 @@ namespace intercept {
 
         void rope_unwind(const object &rope_, float speed_, float length_);
         void rope_unwind(const object &rope_, float speed_, float length_, bool relative_);
+
+        std::vector<std::string> secondary_weapon_items(const object &unit_);
+        std::vector<std::string> secondary_weapon_magazine(const object &unit_);
+
+        struct rv_best_place {
+            vector2 pos;
+            float result;
+        };
+
+        std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, const std::string &expression_, float precision_, float max_results_);
+        std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, const std::string &expression_, float precision_, float max_results_);
+
+        void set_eden_grid(const std::string &type_, float increment_);
+        void set_eden_icons_visible(bool map_, bool scene_);
+        void set_eden_lines_visible(bool map_, bool scene_);
+        bool set_eden_mission_attributes(const std::string &section_, const std::string &class_, const game_value &value_);
+
+        void set_aperture_new(float min_, float std_, float max_, float std_lum_);
+        void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_);
+        void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_);
+        void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
+        void set_default_camera(const vector3 &pos_, const vector3 &dir_);
+        void set_detail_map_blend_pars(float full_detail_, float no_detail_);
+        void set_group_icons_visible(bool map_, bool hud_);
+        std::vector<bool> group_icons_visible();
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3 &pos_);
+        void set_local_wind_params(float strength_, float diameter_);
+        void set_mouse_position(float x_, float y_);
+        float set_music_event_handler(const std::string &type_, const std::string &command_);
+        bool set_stat_value(const std::string &name_, float value_);
+        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void set_wind(float x_, float y_);
+        void set_wind(float x_, float y_, bool force_);
+        std::vector<task> simple_tasks(const object& unit_);
+        void simul_cloud_density(const vector3& pos_);
+        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_);
+        bool simul_in_clouds(const vector3& pos_);
+        std::vector<std::string> soldier_magazines(const object& unit_);
+        std::vector<std::string> squad_params(const object& unit_);
+        void start_loading_screen(const std::string& text_);
+        void start_loading_screen(const std::string& text_, const std::string& resource_);
+        std::vector<std::string> support_info(const std::string& mask_);
+        bool surface_is_water(const vector3& pos_);
+        vector3 surface_normal(const vector3& pos_);
+        std::string surface_type(const vector3& pos_);
+        std::vector<object> synchronized_objects(const object& obj_);
     }
 }

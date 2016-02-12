@@ -186,9 +186,6 @@ namespace intercept {
         /* No documentation.*/
         // nular__getmouseposition__ret__array
 
-        /* Appears to return [show markers on map true/false, show markers on HUD true/false] array that setGroupIconsVisible takes. Scarce documentation.*/
-        // nular__groupiconsvisible__ret__array
-
         /* No documentation.*/
         // unary__getpersonuseddlcs__object__ret__array
         // unary__getplayerscores__object__ret__array
@@ -303,6 +300,9 @@ namespace intercept {
         // unary__isautostartupenabledrtd__object__ret__array
         // binary__setforcegeneratorrtd__scalar__array__ret__nothing
         // binary__setwingforcescalertd__object__array__ret__nothing
+
+        /* No documentation.*/
+        // unary__setwinddir__array__ret__nothing
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -2350,8 +2350,6 @@ namespace intercept {
                 bool group_icon_selectable() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__groupiconselectable__ret__bool);
         }
-
-        // TODO std::array<bool, 2> group_icons_visible();
 
         group grp_null() {
             return __helpers::__retrieve_nular_group(client::__sqf::nular__grpnull__ret__group);
@@ -4557,8 +4555,17 @@ namespace intercept {
             __helpers::__empty_unary_number(client::__sqf::unary__sethorizonparallaxcoef__scalar__ret__nothing, value_);
         }
 
-        void set_object_view_distance(float value_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__setobjectviewdistance__scalar__ret__nothing, value_);
+        void set_object_view_distance(float distance_) {
+            __helpers::__empty_unary_number(client::__sqf::unary__setobjectviewdistance__scalar__ret__nothing, distance_);
+        }
+
+        void set_object_view_distance(float object_distance_, float shadow_distance_) {
+            std::vector<game_value> params{
+                object_distance_,
+                shadow_distance_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setobjectviewdistance__array__ret__nothing, params);
         }
 
         void set_playable(const object &value_) {
@@ -4621,8 +4628,23 @@ namespace intercept {
             __helpers::__empty_unary_bool(client::__sqf::unary__showgps__bool__ret__nothing, value_);
         }
 
-        void show_hud(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__showhud__bool__ret__nothing, value_);
+        void show_hud(bool show_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__showhud__bool__ret__nothing, show_);
+        }
+
+        void show_hud(bool hud_, bool info_, bool radar_, bool compass_, bool direction_, bool menu_, bool group_, bool cursors_) {
+            std::vector<game_value> params{
+                hud_,
+                info_,
+                radar_,
+                compass_,
+                direction_,
+                menu_,
+                group_,
+                cursors_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__showhud__array__ret__nothing, params);
         }
 
         void show_map(bool value_) {
@@ -7629,8 +7651,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
         }
 
-        bool open_map(bool show_, bool forced_)
-        {
+        bool open_map(bool show_, bool forced_) {
             game_value args(std::vector<game_value> {
                 show_,
                 forced_
@@ -7639,13 +7660,11 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__array__ret__bool, args));
         }
 
-        vector3 position(const location& loc_)
-        {
+        vector3 position(const location& loc_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__position__location__ret__array, loc_));
         }
 
-        bool rectangular(const location& loc_)
-        {
+        bool rectangular(const location& loc_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_));
         }
 
@@ -7658,7 +7677,7 @@ namespace intercept {
                 minute_
             };
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, date);
+            host::functions.invoke_raw_unary(client::__sqf::unary__setdate__array__ret__nothing, date);
         }
 
         std::vector<object> units(const group& gp_)
@@ -9778,6 +9797,350 @@ namespace intercept {
             };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__ropeunwind__array__ret__nothing, params);
+        }
+
+        std::vector<std::string> secondary_weapon_items(const object &unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__secondaryweaponitems__object__ret__array, unit_));
+        }
+
+        std::vector<std::string> secondary_weapon_magazine(const object &unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__secondaryweaponmagazine__object__ret__array, unit_));
+        }
+
+        std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, const std::string &expression_, float precision_, float max_results_) {
+            std::vector<game_value> params{
+                obj_,
+                radius_,
+                expression_,
+                precision_,
+                max_results_
+            };
+
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__selectbestplaces__array__ret__array, params);
+
+            std::vector<rv_best_place> best_places;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                best_places.push_back(rv_best_place({ ret[i] }));
+
+            return best_places;
+        }
+
+        std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, const std::string &expression_, float precision_, float max_results_) {
+            std::vector<game_value> params{
+                pos_,
+                radius_,
+                expression_,
+                precision_,
+                max_results_
+            };
+
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__selectbestplaces__array__ret__array, params);
+
+            std::vector<rv_best_place> best_places;
+            for (uint32_t i = 0; i < ret.length(); ++i)
+                best_places.push_back(rv_best_place({ ret[i] }));
+
+            return best_places;
+        }
+
+        void set_eden_grid(const std::string &type_, float increment_) {
+            std::vector<game_value> params{
+                type_,
+                increment_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__set3dengrid__array__ret__nothing, params);
+        }
+
+        void set_eden_icons_visible(bool map_, bool scene_) {
+            std::vector<game_value> params{
+                map_,
+                scene_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__set3deniconsvisible__array__ret__nothing, params);
+        }
+
+        void set_eden_lines_visible(bool map_, bool scene_) {
+            std::vector<game_value> params{
+                map_,
+                scene_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__set3denlinesvisible__array__ret__nothing, params);
+        }
+
+        bool set_eden_mission_attributes(const std::string &section_, const std::string &class_, const game_value &value_) {
+            std::vector<game_value> params{
+                section_,
+                class_,
+                value_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__set3denmissionattributes__array__ret__nothing, params));
+        }
+
+        void set_aperture_new(float min_, float std_, float max_, float std_lum_) {
+            std::vector<game_value> params{
+                min_,
+                std_,
+                max_,
+                std_lum_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setaperturenew__array__ret__nothing, params);
+        }
+
+        void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_) {
+            std::vector<game_value> params{
+                power_,
+                duration_,
+                freq_,
+                min_speed_,
+                min_mass_,
+                caliber_coef_hit_,
+                vehicle_coef_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakedefparams__array__ret__nothing, params);
+        }
+
+        void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_) {
+            std::vector<game_value> params{
+                pos_coef_,
+                vert_coef_,
+                horz_coef_,
+                bank_coef_,
+                interpolate_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakeparams__array__ret__nothing, params);
+        }
+
+        void set_compass_oscillation(float angle_, float freq_min_, float freq_max_) {
+            std::vector<game_value> params{
+                angle_,
+                freq_min_,
+                freq_max_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setcompassoscillation__array__ret__nothing, params);
+        }
+
+        void set_default_camera(const vector3& pos_, const vector3& dir_) {
+            std::vector<game_value> params{
+                pos_,
+                dir_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setdefaultcamera__array__ret__nothing, params);
+        }
+
+        void set_detail_map_blend_pars(float full_detail_, float no_detail_) {
+            std::vector<game_value> params{
+                full_detail_,
+                no_detail_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setdetailmapblendpars__array__ret__nothing, params);
+        }
+
+        void set_group_icons_visible(bool map_, bool hud_) {
+            std::vector<game_value> params{
+                map_,
+                hud_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setgroupiconsvisible__array__ret__nothing, params);
+        }
+
+        std::vector<bool> group_icons_visible() {
+            return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_nular(client::__sqf::nular__groupiconsvisible__ret__array));
+        }
+
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object & obj_) {
+            std::vector<game_value> params{
+                min_speed_,
+                max_speed_,
+                min_alt_,
+                max_alt_,
+                min_dir_,
+                max_dir_,
+                obj_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__sethudmovementlevels__array__ret__nothing, params);
+        }
+
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3& pos_) {
+            std::vector<game_value> params{
+                min_speed_,
+                max_speed_,
+                min_alt_,
+                max_alt_,
+                min_dir_,
+                max_dir_,
+                pos_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__sethudmovementlevels__array__ret__nothing, params);
+        }
+
+        void set_local_wind_params(float strength_, float diameter_) {
+            std::vector<game_value> params{
+                strength_,
+                diameter_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setlocalwindparams__array__ret__nothing, params);
+        }
+
+        void set_mouse_position(float x_, float y_) {
+            std::vector<game_value> params{
+                x_,
+                y_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setmouseposition__array__ret__nothing, params);
+        }
+
+        float set_music_event_handler(const std::string& type_, const std::string& command_) {
+            std::vector<game_value> params{
+                type_,
+                command_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__setmusiceventhandler__array__ret__nothing, params));
+        }
+
+        bool set_stat_value(const std::string& name_, float value_) {
+            std::vector<game_value> params{
+                name_,
+                value_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__setstatvalue__array__ret__bool, params));
+        }
+
+        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            std::vector<game_value> params{
+                density_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__settrafficdensity__array__ret__nothing, params);
+        }
+
+        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            std::vector<game_value> params{
+                gap_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__settrafficgap__array__ret__nothing, params);
+        }
+
+        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            std::vector<game_value> params{
+                speed_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__settrafficspeed__array__ret__nothing, params);
+        }
+
+        void set_wind(float x_, float y_) {
+            std::vector<game_value> params{
+                x_,
+                y_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setwind__array__ret__nothing, params);
+        }
+
+        void set_wind(float x_, float y_, bool force_) {
+            std::vector<game_value> params{
+                x_,
+                y_,
+                force_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setwind__array__ret__nothing, params);
+        }
+
+        std::vector<task> simple_tasks(const object& unit_) {
+            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(client::__sqf::unary__simpletasks__object__ret__array, unit_));
+        }
+
+        void simul_cloud_density(const vector3& pos_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__simulclouddensity__array__ret__scalar, pos_);
+        }
+
+        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_) {
+            std::vector<game_value> params{
+                pos1_,
+                pos2_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__simulcloudocclusion__array__ret__scalar, params);
+        }
+
+        bool simul_in_clouds(const vector3& pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__simulinclouds__array__ret__bool, pos_));
+        }
+
+        std::vector<std::string> soldier_magazines(const object &unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__soldiermagazines__object__ret__array, unit_));
+        }
+
+        std::vector<std::string> squad_params(const object &unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__squadparams__object__ret__array, unit_));
+        }
+
+        void start_loading_screen(const std::string& text_) {
+            std::vector<game_value> params{
+                text_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__startloadingscreen__array__ret__nothing, params);
+        }
+
+        void start_loading_screen(const std::string& text_, const std::string& resource_) {
+            std::vector<game_value> params{
+                text_,
+                resource_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__startloadingscreen__array__ret__nothing, params);
+        }
+
+        std::vector<std::string> support_info(const std::string& mask_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__supportinfo__string__ret__array, mask_));
+        }
+
+        bool surface_is_water(const vector3& pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__surfaceiswater__array__ret__bool, pos_));
+        }
+
+        vector3 surface_normal(const vector3& pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__surfacenormal__array__ret__array, pos_));
+        }
+
+        std::string surface_type(const vector3& pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__surfacetype__array__ret__string, pos_));
+        }
+
+        std::vector<object> synchronized_objects(const object& obj_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
         }
     }
 }

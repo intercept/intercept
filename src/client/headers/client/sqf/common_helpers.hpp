@@ -73,6 +73,7 @@ namespace intercept {
             std::vector<marker> __convert_to_markers_vector(game_value input__);
             std::vector<config> __convert_to_configs_vector(game_value input__);
             std::vector<location> __convert_to_locations_vector(game_value input__);
+            std::vector<task> __convert_to_tasks_vector(game_value input__);
             vector3 __convert_to_vector3(game_value input__);
         }
     }

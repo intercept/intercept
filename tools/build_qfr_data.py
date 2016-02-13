@@ -6,7 +6,7 @@ def to_snake(name):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 scriptpath = os.path.realpath(__file__)
-projectpath = os.path.join(os.path.dirname(os.path.dirname(scriptpath)), "src\\client\\intercept\\client")
+projectpath = os.path.join(os.path.dirname(os.path.dirname(scriptpath)), "src\\client\\headers\\client")
 projectpath_sqf = os.path.join(projectpath, "sqf")
 
 headers = [];

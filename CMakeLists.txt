@@ -24,9 +24,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_subdirectory(src/host)
 add_subdirectory(src/client)
 
-set(INTERCEPT_MAIN_SRC "Z:/intercept-examples")
-if(INTERCEPT_MAIN_SRC)
+#set(INTERCEPT_EXAMPLE_SRC "Z:/intercept-examples")
+if(INTERCEPT_EXAMPLE_SRC)
     set(INTERCEPT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/client/headers")
 
-    add_subdirectory("${INTERCEPT_MAIN_SRC}/src" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    add_subdirectory("${INTERCEPT_EXAMPLE_SRC}/src" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 endif()

@@ -6,7 +6,7 @@
 #define INTERNAL_TAG 0x0000dede
 
 namespace intercept {
-    namespace types {
+    namespace typess {
         uintptr_t game_data_string::type_def;
         uintptr_t game_data_string::data_type_def;
         thread_local game_data_pool<game_data_string> game_data_string::_data_pool;

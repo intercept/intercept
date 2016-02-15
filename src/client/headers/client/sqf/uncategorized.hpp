@@ -2861,6 +2861,6 @@ namespace intercept {
         std::vector<object> synchronized_objects(const object& obj_);
 
         object cursor_object();
-        float getClientStateNumber();
+        float get_client_state_number();
     }
 }

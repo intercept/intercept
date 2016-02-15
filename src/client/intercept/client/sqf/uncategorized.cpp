@@ -10150,7 +10150,7 @@ namespace intercept {
             return game_value(__helpers::__retrieve_nular_object(client::__sqf::nular__cursorobject__ret__object));
         }
 
-        float getClientStateNumber() {
+        float get_client_state_number() {
             return game_value(__helpers::__retrieve_nular_number(client::__sqf::nular__getclientstatenumber__ret__string));
         }
     }

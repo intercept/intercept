@@ -303,9 +303,12 @@ namespace intercept {
 
         /* No documentation.*/
         // unary__setwinddir__array__ret__nothing
+<<<<<<< HEAD
 
         /* No documentation.*/
         // nular__missionversion__ret__scalar
+=======
+>>>>>>> master
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 

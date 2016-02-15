@@ -2859,5 +2859,8 @@ namespace intercept {
         vector3 surface_normal(const vector3& pos_);
         std::string surface_type(const vector3& pos_);
         std::vector<object> synchronized_objects(const object& obj_);
+
+        object cursor_object();
+        float getClientStateNumber();
     }
 }

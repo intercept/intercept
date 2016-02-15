@@ -303,6 +303,9 @@ namespace intercept {
 
         /* No documentation.*/
         // unary__setwinddir__array__ret__nothing
+
+        /* No documentation.*/
+        // nular__missionversion__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -10141,6 +10144,14 @@ namespace intercept {
 
         std::vector<object> synchronized_objects(const object& obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
+        }
+
+        object cursor_object() {
+            return game_value(__helpers::__retrieve_nular_object(client::__sqf::nular__cursorobject__ret__object));
+        }
+
+        float getClientStateNumber() {
+            return game_value(__helpers::__retrieve_nular_number(client::__sqf::nular__getclientstatenumber__ret__string));
         }
     }
 }

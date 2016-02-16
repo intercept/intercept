@@ -36,7 +36,7 @@ namespace intercept {
     uintptr_t invoker::sqf_game_state = NULL;
     char * invoker::sqf_this = NULL;
 
-    invoker::invoker() : _attached(false), _patched(false), _delete_index(0)
+    invoker::invoker() : _attached(false), _patched(false), _delete_index(0), _thread_count(0)
     {
         
     }
@@ -94,9 +94,10 @@ namespace intercept {
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
         {
+            LOG(INFO) << "Threads waiting: " << _thread_count;
             _invoker_unlock period_lock(this, true);
             long timeout = clock() + 3;
-            while (clock() < timeout) continue;
+            while (_thread_count > 0 && clock() < timeout) continue;
         }
         {
             _invoker_unlock on_frame_lock(this);
@@ -502,15 +503,18 @@ namespace intercept {
     }
 
     void invoker::lock() {
+        _thread_count = _thread_count + 1;
         std::unique_lock<std::mutex> lock(_state_mutex);
         _invoke_condition.wait(lock, [] {return invoker_accessible_all;});
         _invoke_mutex.lock();
+        
         LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE";
     }
 
     void invoker::unlock() {
         _invoke_mutex.unlock();
         LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE";
+        _thread_count = _thread_count - 1;
     }
 
     invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _all(all_threads_), _instance(instance_), _unlocked(false) {

@@ -256,6 +256,9 @@ namespace intercept {
         static uintptr_t sqf_game_state;
         static char *sqf_this;
     protected:
+
+        std::atomic_uint32_t _thread_count;
+
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.
         */

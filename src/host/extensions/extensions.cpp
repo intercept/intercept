@@ -42,6 +42,7 @@ namespace intercept {
         HMODULE dllHandle;
 
         LOG(INFO) << "Load requested [" << args_.as_string(0) << "]";
+        std::string args = GetCommandLineA();
 
         if (_modules.find(args_.as_string(0)) != _modules.end()) {
             LOG(ERROR) << "Module already loaded [" << args_.as_string(0) << "]";

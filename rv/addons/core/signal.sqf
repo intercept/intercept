@@ -14,6 +14,7 @@
  * ["z\intercept\build\win32\example_frag\RelWithDebInfo\example_frag.dll", "enableFrag", myParameters] call intercept_fnc_signal
  *
  * Public: No
+ *
  */
 params ["_extensionName", "_signalName", "_parameters"];
 

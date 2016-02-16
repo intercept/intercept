@@ -80,6 +80,7 @@ namespace intercept {
         // unary__toarray__string__ret__array
         // unary__tostring__array__ret__string
         // unary__try__code__ret__exception
+        // unary__typename__any__ret__string
         // unary__vectormagnitude__array__ret__scalar
         // unary__vectormagnitudesqr__array__ret__scalar
         // unary__vectornormalized__array__ret__array
@@ -308,6 +309,7 @@ namespace intercept {
         // unary__animationselectionnames__object__ret__array
         // unary__call__code__ret__any
         // unary__clear3deninventory__array__ret__nothing
+        // unary__tvpictureright__array__ret__string
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -7692,7 +7694,7 @@ namespace intercept {
 
         std::vector<object> units(const object& unit_)
         {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__units__group__ret__array, unit_));
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__units__object__ret__array, unit_));
         }
 
         std::string call_extension(const std::string& extension_, const std::string& arguments_)
@@ -10148,7 +10150,6 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
         }
 
-
         std::vector<std::string> vest_magazines(const object& unit_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__vestmagazines__object__ret__array, unit_));
         }
@@ -10159,6 +10160,66 @@ namespace intercept {
 
         vector3 velocity_model_space(const object& obj_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__velocitymodelspace__object__ret__array, obj_));
+        }
+
+        vector3 vector_up_visual(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorupvisual__object__ret__array, obj_));
+        }
+
+        vector3 vector_up(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorup__object__ret__array, obj_));
+        }
+
+        bool unit_ready(const object& unit_) {
+            return __helpers::__bool_unary_object(client::__sqf::unary__unitready__object_array__ret__bool, unit_);
+        }
+
+        std::vector<std::string> unit_addons(const std::string& class_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__unitaddons__string__ret__array, class_));
+        }
+
+        std::vector<std::string> uniform_magazines(const object& unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__uniformmagazines__object__ret__array, unit_));
+        }
+
+        std::vector<std::string> uniform_items(const object& unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__uniformitems__object__ret__array, unit_));
+        }
+
+        rv_uav_control uav_control(const object& uav_) {
+            return rv_uav_control(host::functions.invoke_raw_unary(client::__sqf::unary__uavcontrol__object__ret__array, uav_));
+        }
+
+        std::string type(const location& loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__type__location__ret__string, loc_));
+        }
+
+        void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_) {
+            std::vector<game_value> path;
+            for (auto num : path_)
+                path.push_back(game_value(num));
+
+            std::vector<game_value> params{
+                idc_,
+                path,
+                text_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__tvsettext__array__ret__string, params);
+        }
+
+        void tv_set_text(const control& ctrl_, const std::vector<float>& path_, const std::string& text_) {
+            std::vector<game_value> path;
+            for (auto num : path_)
+                path.push_back(game_value(num));
+
+            std::vector<game_value> params{
+                ctrl_,
+                path,
+                text_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__tvsettext__array__ret__string, params);
         }
     }
 }

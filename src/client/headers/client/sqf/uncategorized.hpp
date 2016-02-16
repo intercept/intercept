@@ -2862,5 +2862,29 @@ namespace intercept {
         std::vector<std::string> vest_magazines(const object& unit_);
         std::vector<std::string> vest_items(const object& unit_);
         vector3 velocity_model_space(const object& obj_);
+        vector3 vector_up_visual(const object& obj_);
+        vector3 vector_up(const object& obj_);
+        bool unit_ready(const object& unit_);
+        std::vector<std::string> unit_addons(const std::string& class_);
+        std::vector<std::string> uniform_magazines(const object& unit_);
+        std::vector<std::string> uniform_items(const object& unit_);
+
+        struct rv_uav_control {
+            object unit;
+            std::string position;
+
+            rv_uav_control(const game_value &ret_game_value_) :
+                unit(ret_game_value_[0]),
+                position(ret_game_value_[1])
+            {
+            }
+        };
+
+        rv_uav_control uav_control(const object& uav_);
+
+        std::string type(const location& loc_);
+
+        void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_);
+        void tv_set_text(const control& ctrl_, const std::vector<float>& path_, const std::string& text_);
     }
 }

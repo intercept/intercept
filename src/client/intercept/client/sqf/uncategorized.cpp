@@ -303,6 +303,11 @@ namespace intercept {
 
         /* No documentation.*/
         // unary__setwinddir__array__ret__nothing
+        // unary__weaponinertia__object__ret__array
+        // unary__animationnames__object__ret__array
+        // unary__animationselectionnames__object__ret__array
+        // unary__call__code__ret__any
+        // unary__clear3deninventory__array__ret__nothing
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -9150,7 +9155,7 @@ namespace intercept {
         }
 
         std::vector<std::string> weapon_cargo(const object &container_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__itemcargo__object__ret__array, container_));
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__weaponcargo__object__ret__array, container_));
         }
 
         int get_cargo_index(const object &vehicle_, const object &unit_) {
@@ -10141,6 +10146,19 @@ namespace intercept {
 
         std::vector<object> synchronized_objects(const object& obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
+        }
+
+
+        std::vector<std::string> vest_magazines(const object& unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__vestmagazines__object__ret__array, unit_));
+        }
+
+        std::vector<std::string> vest_items(const object& unit_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__vestitems__object__ret__array, unit_));
+        }
+
+        vector3 velocity_model_space(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__velocitymodelspace__object__ret__array, obj_));
         }
     }
 }

@@ -3246,6 +3246,35 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, (float)idc_));
         }
 
+        void set_particle_params(const object & particle_source_, const rv_particle_array & particle_array_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setparticlecircle__object__array__ret__nothing, particle_source_, particle_array_);
+        }
+
+        void set_particle_random(const object & particle_source_, const rv_particle_random & particle_random_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setparticlerandom__object__array__ret__nothing, particle_source_, particle_random_);
+        }
+
+        void set_particle_circle(const object & particle_source_, float radius_, const vector3 & velocity_) {
+            std::vector<game_value> args{
+                radius_,
+                velocity_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__setparticlecircle__object__array__ret__nothing, particle_source_, args);
+        }
+
+        void set_particle_fire(const object & particle_source_, float core_intensity_, float core_distance_, float damage_time_) {
+            std::vector<game_value> args{
+                core_intensity_,
+                core_distance_,
+                damage_time_
+            };
+            host::functions.invoke_raw_binary(client::__sqf::binary__setparticlefire__object__array__ret__nothing, particle_source_, args);
+        }
+
+        void drop(const rv_particle_array & particle_array_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__drop__array__ret__nothing, particle_array_);
+        }
+
         bool cam_committed(const object &camera_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, camera_);
         }
@@ -5714,8 +5743,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setoxygenremaining__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_particle_class(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setparticleclass__object__string__ret__nothing, value0_, value1_);
+        void set_particle_class(const object &particle_source_, const std::string& particle_class_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setparticleclass__object__string__ret__nothing, particle_source_, particle_class_);
         }
 
         void set_pilot_light(const object &value0_, bool value1_) {

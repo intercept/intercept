@@ -304,6 +304,9 @@ namespace intercept {
 
         /* No documentation.*/
         // unary__setwinddir__array__ret__nothing
+
+        /* No documentation.*/
+        // nular__missionversion__ret__scalar
         // unary__weaponinertia__object__ret__array
         // unary__animationnames__object__ret__array
         // unary__animationselectionnames__object__ret__array
@@ -10177,6 +10180,14 @@ namespace intercept {
 
         std::vector<object> synchronized_objects(const object& obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedobjects__object__ret__array, obj_));
+        }
+
+        object cursor_object() {
+            return game_value(__helpers::__retrieve_nular_object(client::__sqf::nular__cursorobject__ret__object));
+        }
+
+        float get_client_state_number() {
+            return game_value(__helpers::__retrieve_nular_number(client::__sqf::nular__getclientstatenumber__ret__string));
         }
 
         std::vector<std::string> vest_magazines(const object& unit_) {

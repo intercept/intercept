@@ -3031,6 +3031,10 @@ namespace intercept {
         vector3 surface_normal(const vector3& pos_);
         std::string surface_type(const vector3& pos_);
         std::vector<object> synchronized_objects(const object& obj_);
+
+        object cursor_object();
+        float get_client_state_number();
+
         std::vector<std::string> vest_magazines(const object& unit_);
         std::vector<std::string> vest_items(const object& unit_);
         vector3 velocity_model_space(const object& obj_);

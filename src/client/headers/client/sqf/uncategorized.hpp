@@ -412,6 +412,179 @@ namespace intercept {
         float distance(const location& start_, const vector3& end_);
         float distance(const vector3& start_, const location& end_);
 
+        /* potential namespace: particles */
+        /* potential namespace: particles */
+        struct rv_particle_shape {
+            std::string file;
+            int ntieth = 16; //this param is a const internally
+            int row;
+            int column;
+            int loop;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    file,
+                    16.0f,
+                    (float)row,
+                    (float)column,
+                    (float)loop
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    file,
+                    16.0f,
+                    (float)row,
+                    (float)column,
+                    (float)loop
+                }));
+            }
+        };
+        struct rv_particle_array {
+            rv_particle_shape shape;
+            std::string animation_name;
+            std::string type;
+            float timer_period;
+            float lifetime;
+            vector3 position;
+            vector3 move_velocity;
+            float rotation_velocity;
+            float weight;
+            float volume;
+            float rubbing;
+            float size;
+            std::vector<rv_color> color;
+            float animation_phase;
+            float rand_dir_period;
+            float rand_dir_intensity;
+            std::string on_timer;
+            std::string before_destroy;
+            object follow;
+            float angle;
+            bool on_surface;
+            float bounce_on_surface;
+            std::vector<rv_color> emissive_color;
+
+            operator game_value() {
+                std::vector<game_value> color_gv, emissive_color_gv;
+                for (rv_color c : color) {
+                    color_gv.push_back(c);
+                }
+                for (rv_color ec : emissive_color) {
+                    emissive_color_gv.push_back(ec);
+                }
+                return game_value(std::vector<game_value>({
+                    shape,
+                    animation_name,
+                    type,
+                    timer_period,
+                    lifetime,
+                    position,
+                    move_velocity,
+                    rotation_velocity,
+                    weight,
+                    volume,
+                    rubbing,
+                    size,
+                    color_gv,
+                    animation_phase,
+                    rand_dir_period,
+                    rand_dir_intensity,
+                    on_timer,
+                    before_destroy,
+                    follow,
+                    angle,
+                    on_surface,
+                    bounce_on_surface,
+                    emissive_color_gv
+                }));
+            }
+
+            operator game_value() const {
+                std::vector<game_value> color_gv, emissive_color_gv;
+                for (rv_color c : color) {
+                    color_gv.push_back(c);
+                }
+                for (rv_color ec : emissive_color) {
+                    emissive_color_gv.push_back(ec);
+                }
+                return game_value(std::vector<game_value>({
+                    shape,
+                    animation_name,
+                    type,
+                    timer_period,
+                    lifetime,
+                    position,
+                    move_velocity,
+                    rotation_velocity,
+                    weight,
+                    volume,
+                    rubbing,
+                    size,
+                    color_gv,
+                    animation_phase,
+                    rand_dir_period,
+                    rand_dir_intensity,
+                    on_timer,
+                    before_destroy,
+                    follow,
+                    angle,
+                    on_surface,
+                    bounce_on_surface,
+                    emissive_color_gv
+                }));
+            }
+        };
+        struct rv_particle_random {
+            float lifetime;
+            vector3 position;
+            vector3 move_velocity;
+            float rotation_velocity;
+            float size;
+            rv_color color;
+            float random_direction_period;
+            float random_direction_intensity;
+            float angle;
+            float bounce_on_surface;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    lifetime,
+                    position,
+                    move_velocity,
+                    rotation_velocity,
+                    size,
+                    color,
+                    random_direction_period,
+                    random_direction_intensity,
+                    angle,
+                    bounce_on_surface
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    lifetime,
+                    position,
+                    move_velocity,
+                    rotation_velocity,
+                    size,
+                    color,
+                    random_direction_period,
+                    random_direction_intensity,
+                    angle,
+                    bounce_on_surface
+                }));
+            }
+        };
+        void set_particle_params(const object &particle_source_, const rv_particle_array &particle_array_);
+        void set_particle_random(const object &particle_source_, const rv_particle_random &particle_random_);
+        void set_particle_circle(const object &particle_source_, float radius_, const vector3 &velocity_);
+        void set_particle_fire(const object &particle_source_, float core_intensity_, float core_distance_, float damage_time_);
+        void set_particle_class(const object &particle_source_, const std::string& particle_class_);
+        void drop(const rv_particle_array &particle_array_);
+
         /* potential namespace: dialogs, ui, listbox */
         float lb_add(int control_id_, const std::string &text_);
         float lb_add(const control &control_, const std::string &text_);
@@ -2201,7 +2374,6 @@ namespace intercept {
         void set_name_sound(const object &value0_, const std::string& value1_);
         bool set_owner(const object &value0_, float value1_);
         void set_oxygen_remaining(const object &value0_, float value1_);
-        void set_particle_class(const object &value0_, const std::string& value1_);
         void set_pilot_light(const object &value0_, bool value1_);
         void set_pitch(const object &value0_, float value1_);
         void set_radio_msg(float value0_, const std::string& value1_);

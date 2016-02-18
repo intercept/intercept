@@ -28,7 +28,6 @@ intercept_fnc__event = {
 
 intercept_fnc__onFrame = {
     // _start = diag_tickTime;
-    intercept_params_index = 2;
     "intercept" callExtension "do_invoke_period:";
     // _end = diag_tickTime;
     // diag_log text format["t: %1", (_end-_start)*1000];

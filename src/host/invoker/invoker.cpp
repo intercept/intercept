@@ -94,7 +94,6 @@ namespace intercept {
     bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
     {
         {
-            LOG(INFO) << "Threads waiting: " << _thread_count;
             _invoker_unlock period_lock(this, true);
             long timeout = clock() + 3;
             while (_thread_count > 0 && clock() < timeout) continue;
@@ -126,9 +125,6 @@ namespace intercept {
     bool invoker::rv_event(const arguments & args_, std::string & result_)
     {
         std::string event_name = args_.as_string(0);
-        uint32_t var_index = 0;
-        if (args_.size() > 1)
-            var_index = args_.as_uint32(1);
         LOG(DEBUG) << "EH " << event_name << " START";
         auto handler = _eventhandlers.find(event_name);
         if (handler != _eventhandlers.end()) {
@@ -140,7 +136,7 @@ namespace intercept {
                 all = true;
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
-            handler->second(event_name, _eh_params[var_index]);
+            handler->second(event_name, _eh_params[0]);
             LOG(DEBUG) << "EH " << event_name << " END";
             return true;
         }

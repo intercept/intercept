@@ -48,5 +48,24 @@ _res = "intercept" callExtension format["init_patch:%1", (productVersion select 
     str parsingNamespace;
     "intercept" callExtension "invoker_end_register:";
 // };
-//"intercept" callExtension "load_extension:z\intercept\build\win32\example_frag\RelWithDebInfo\example_frag.dll";
+//"intercept" callExtension "load_extension:example_dll";
+
+_intercept_projects = configFile >> "Intercept";
+for "_i" from 0 to (count _intercept_projects)-1 do {
+    _project = _intercept_projects select _i;
+    if(isClass _project) then {
+        for "_x" from 0 to (count _project)-1 do {
+            _module = _project select _x;
+            if(isClass _module) then {
+                _plugin_name = getText(_module >> "pluginName");
+                if(_plugin_name != "") then {
+                    diag_log text format["Intercept Loading Plugin: %1", _plugin_name];
+                    "intercept" callExtension ("load_extension:" + _plugin_name);
+                };
+            };
+        };
+    };
+};
+
+
 //diag_log text format["_________________________________________Intercept Res: %1", _res];

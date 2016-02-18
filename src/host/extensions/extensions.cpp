@@ -70,7 +70,7 @@ namespace intercept {
 
         for (auto folder : _mod_folders) {
             std::string test_path = folder + "\\intercept\\" + path + ".dll";
-            LOG(INFO) << "Mod: " << test_path;
+            LOG(DEBUG) << "Mod: " << test_path;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 full_path = test_path;

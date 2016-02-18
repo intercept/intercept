@@ -57,6 +57,15 @@ namespace intercept {
             return true;
         }
 
+        std::string bad_chars = ".\\/:?\"<>|";
+        for (auto it = path.begin(); it < path.end(); ++it) {
+            bool found = bad_chars.find(*it) != std::string::npos;
+            if (found) {
+                LOG(ERROR) << "Client plugin: " << path << " contains illegal characters in its name.";
+                return false;
+            }
+        }
+
         std::string full_path = "";
 
         for (auto folder : _mod_folders) {

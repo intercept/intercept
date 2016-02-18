@@ -4,3 +4,4 @@ rv/*.dll
 rv/carma_dll.*
 build
 vcproj
+rv/intercept

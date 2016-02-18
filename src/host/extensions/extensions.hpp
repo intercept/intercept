@@ -16,6 +16,8 @@ https://github.com/NouberNou/intercept
 #include "shared\functions.hpp"
 #include "shared\client_types.hpp"
 
+#include "search.hpp"
+
 namespace intercept {
     /*!
     @namespace
@@ -244,5 +246,9 @@ namespace intercept {
         @brief The map of all loaded modules.
         */
         std::unordered_map<std::string, module::entry> _modules;
+
+        intercept::pbo::search _searcher;
+
+        std::list<std::string> _mod_folders;
     };
 };

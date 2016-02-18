@@ -10261,5 +10261,27 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(client::__sqf::unary__tvsettext__array__ret__string, params);
         }
+
+        void pp_effect_destroy(std::vector<float> effect_handles_) {
+            std::vector<game_value> effect_handles;
+            for (auto effect_handle : effect_handles_)
+                effect_handles.push_back(game_value(effect_handle));
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectdestroy__array__ret__nothing, effect_handles);
+        }
+
+        std::vector<std::string> task_description(const task& task_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__taskdescription__task__ret__array, task_));
+        }
+
+        void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_) {
+            std::vector<game_value> params{
+                text_,
+                color_,
+                icon_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__taskdescription__task__ret__array, params);
+        }
     }
 }

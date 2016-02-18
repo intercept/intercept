@@ -548,12 +548,11 @@ class CfgPatches {
 
 #define QUOTE(var1) #var1
 #define ARR_2(ARG1,ARG2) ARG1, ARG2
-#define EVENT_ARGS(x) rv_event##x
-#define COMMA ,
+#define EVENT_ARGS(x) rv_event:##x
 #define EH_CLASS_DEF(x,y) class Extended_##y##_EventHandlers { \
     class All { \
         class Intercept { \
-            y = QUOTE(intercept_params_var set[0,_this]; 'intercept' callExtension QUOTE(QUOTE(EVENT_ARGS(x)));); \
+            y = QUOTE(intercept_params_var set[ARR_2(0,_this)]; 'intercept' callExtension QUOTE(QUOTE(EVENT_ARGS(x)));); \
         }; \
     }; \
 };

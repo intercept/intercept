@@ -604,7 +604,15 @@ EH_CLASS_DEF(weapon_disassembled,weaponDisassembled);
 //EH_CLASS_DEF(task_set_as_current,taskSetAsCurrent);
 //EH_CLASS_DEF(weapon_deployed,weaponDeployed);
 //EH_CLASS_DEF(weapon_rested,weaponRested);
-
+/*
+class Intercept {
+    class example_dll_project {
+        class example_dll_module {
+            pluginName = "example_dll";
+        };
+    };
+};
+*/
 class CfgFunctions
 {
     class Intercept

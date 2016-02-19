@@ -2,6 +2,7 @@
 #include "controller.hpp"
 #include "export.hpp"
 
+
 namespace intercept {
 
     extensions::extensions() {
@@ -22,6 +23,14 @@ namespace intercept {
         functions.invoke_raw_unary_nolock = client_function_defs::invoke_raw_unary_nolock;
         functions.invoker_lock = client_function_defs::invoker_lock;
         functions.invoker_unlock = client_function_defs::invoker_unlock;
+        for (auto file : _searcher.active_pbo_list()) {
+            size_t last_index = file.find_last_of("\\/");
+            std::string path = file.substr(0, last_index);
+            last_index = path.find_last_of("\\/");
+            path = path.substr(0, last_index);
+            _mod_folders.push_back(path);
+        }
+        _mod_folders.unique();
     }
 
     extensions::~extensions() {
@@ -40,23 +49,49 @@ namespace intercept {
 
     bool extensions::load(const arguments & args_, std::string & result) {
         HMODULE dllHandle;
-
+        std::string path = args_.as_string(0);
         LOG(INFO) << "Load requested [" << args_.as_string(0) << "]";
-        std::string args = GetCommandLineA();
 
-        if (_modules.find(args_.as_string(0)) != _modules.end()) {
-            LOG(ERROR) << "Module already loaded [" << args_.as_string(0) << "]";
+        if (_modules.find(path) != _modules.end()) {
+            LOG(ERROR) << "Module already loaded [" << path << "]";
             return true;
         }
 
-        dllHandle = LoadLibrary(args_.as_string(0).c_str());
-        if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << args_.as_string(0) << "]";
+        std::string bad_chars = ".\\/:?\"<>|";
+        for (auto it = path.begin(); it < path.end(); ++it) {
+            bool found = bad_chars.find(*it) != std::string::npos;
+            if (found) {
+                LOG(ERROR) << "Client plugin: " << path << " contains illegal characters in its name.";
+                return false;
+            }
+        }
+
+        std::string full_path = "";
+
+        for (auto folder : _mod_folders) {
+            std::string test_path = folder + "\\intercept\\" + path + ".dll";
+            LOG(DEBUG) << "Mod: " << test_path;
+            std::ifstream check_file(test_path);
+            if (check_file.good()) {
+                full_path = test_path;
+                break;
+            }
+        }
+        if (full_path == "") {
+            LOG(ERROR) << "Client plugin: " << path << " was not found.";
             return false;
         }
 
 
-        auto new_module = module::entry(args_.as_string(0), dllHandle);
+
+        dllHandle = LoadLibrary(full_path.c_str());
+        if (!dllHandle) {
+            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
+            return false;
+        }
+
+
+        auto new_module = module::entry(full_path, dllHandle);
 
         new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
         new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
@@ -116,19 +151,19 @@ namespace intercept {
 
 
         if (!new_module.functions.api_version) {
-            LOG(ERROR) << "Module " << args_.as_string(0) << " failed to define the api_version function.";
+            LOG(ERROR) << "Module " << path << " failed to define the api_version function.";
             return false;
         }
 
         if (!new_module.functions.assign_functions) {
-            LOG(ERROR) << "Module " << args_.as_string(0) << " failed to define the assign_functions function.";
+            LOG(ERROR) << "Module " << path << " failed to define the assign_functions function.";
             return false;
         }
 
         new_module.functions.assign_functions(functions);
 
-        _modules[args_.as_string(0)] = new_module;
-        LOG(INFO) << "Load completed [" << args_.as_string(0) << "]";
+        _modules[path] = new_module;
+        LOG(INFO) << "Load completed [" << path << "]";
         return false;
     }
 

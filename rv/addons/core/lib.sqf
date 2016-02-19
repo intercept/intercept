@@ -35,11 +35,10 @@ intercept_fnc__onFrame = {
 
 INVOKER_DELETE_ARRAY = [];
 INVOKER_DELETE_ARRAY resize 1000;
-intercept_params_var = [1,2,3];
-intercept_params_var resize 1000;
-intercept_params_index = 2;
+intercept_params_var = [1];
+intercept_params_var resize 2;
 intercept_signal_var = [];
-intercept_signal_var resize 1000;
+intercept_signal_var resize 2;
 str INVOKER_DELETE_ARRAY;
 
 diag_log text "Intercept Invoker SQF handler initializing...";

@@ -3062,5 +3062,8 @@ namespace intercept {
 
         void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_);
         void tv_set_text(const control& ctrl_, const std::vector<float>& path_, const std::string& text_);
+        void pp_effect_destroy(std::vector<float> effect_handles_);
+        std::vector<std::string> task_description(const task& task_);
+        void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_);
     }
 }

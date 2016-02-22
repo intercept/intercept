@@ -68,6 +68,7 @@ namespace intercept {
     }
     void eventhandlers::pre_init(const std::string & name_, game_value & args_)
     {
+        extensions::get().reload_all();
         LOG(INFO) << "Pre-init";
         for (auto module : extensions::get().modules()) {
             if (module.second.functions.pre_init) {

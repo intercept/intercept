@@ -170,6 +170,11 @@ namespace intercept {
             std::string name;
 
             /*!
+            @brief The path of the loaded module
+            */
+            std::string path;
+
+            /*!
             @brief A intercept::module::functions struct containing pointers to
             plugin exported functions.
             */
@@ -219,12 +224,20 @@ namespace intercept {
         */
         bool load(const arguments & args_, std::string & result);
 
+        void reload_all();
+
+        bool do_load(const std::string & path_);
+
+
+
         /*!
         @brief Unloads a client plugin.
 
         Unloads and removes a client plugin.
         */
         bool unload(const arguments & args_, std::string & result);
+
+        bool do_unload(const std::string & path_);
 
         /*!
         @brief Returns a list of all loaded modules to SQF.
@@ -241,6 +254,8 @@ namespace intercept {
         @brief The struct that contains the functions exported to client plugins.
         */
         client_functions functions;
+
+        bool do_reload;
     protected:
         /*!
         @brief The map of all loaded modules.
@@ -251,4 +266,5 @@ namespace intercept {
 
         std::list<std::string> _mod_folders;
     };
+    
 };

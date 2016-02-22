@@ -31,6 +31,14 @@ namespace intercept {
             _mod_folders.push_back(path);
         }
         _mod_folders.unique();
+        std::string arg_line = GetCommandLineA();
+        std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
+        if (arg_line.find("-intreloadall") != std::string::npos) {
+            do_reload = true;
+        }
+        else {
+            do_reload = false;
+        }
     }
 
     extensions::~extensions() {
@@ -48,9 +56,24 @@ namespace intercept {
     }
 
     bool extensions::load(const arguments & args_, std::string & result) {
+        return do_load(args_.as_string(0));
+    }
+
+    void extensions::reload_all() {
+        if (!do_reload)
+            return;
+        LOG(INFO) << "Doing client DLL reload.";
+        auto current_modules = _modules;
+        for (auto module : current_modules) {
+            do_unload(module.first);
+            do_load(module.first);
+        }
+    }
+
+    bool extensions::do_load(const std::string &path_) {
         HMODULE dllHandle;
-        std::string path = args_.as_string(0);
-        LOG(INFO) << "Load requested [" << args_.as_string(0) << "]";
+        std::string path = path_;
+        LOG(INFO) << "Load requested [" << path_ << "]";
 
         if (_modules.find(path) != _modules.end()) {
             LOG(ERROR) << "Module already loaded [" << path << "]";
@@ -80,6 +103,33 @@ namespace intercept {
         if (full_path == "") {
             LOG(ERROR) << "Client plugin: " << path << " was not found.";
             return false;
+        }
+
+
+        
+        
+        if (do_reload) {
+            LOG(INFO) << "Loading plugin from temp file.";
+            char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
+
+            if (!GetTempPathA(MAX_PATH, tmpPath)) {
+                LOG(ERROR) << "GetTempPath() failed, e=" << GetLastError();
+                return false;
+            }
+            if (!GetTempFileNameA(tmpPath, "intercept_temp", 0, buffer)) {
+                LOG(ERROR) << "GetTempFileName() failed, e=" << GetLastError();
+                return false;
+            }
+            std::string temp_filename = buffer;
+            LOG(INFO) << "Temp file: " << temp_filename;
+            if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+                DeleteFile(temp_filename.c_str());
+                if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+                    LOG(ERROR) << "CopyFile() , e=" << GetLastError();
+                    return false;
+                }
+            }
+            full_path = temp_filename;
         }
 
 
@@ -161,29 +211,32 @@ namespace intercept {
         }
 
         new_module.functions.assign_functions(functions);
-
+        new_module.path = full_path;
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
         return false;
     }
 
     bool extensions::unload(const arguments & args_, std::string & result) {
+        return do_unload(args_.as_string(0));
+    }
 
-        LOG(INFO) << "Unload requested [" << args_.as_string(0) << "]";
+    bool extensions::do_unload(const std::string &path_) {
+        LOG(INFO) << "Unload requested [" << path_ << "]";
 
-        if (_modules.find(args_.as_string(0)) == _modules.end()) {
-            LOG(INFO) << "Unload failed, module not loaded [" << args_.as_string(0) << "]";
+        if (_modules.find(path_) == _modules.end()) {
+            LOG(INFO) << "Unload failed, module not loaded [" << path_ << "]";
             return true;
         }
 
-        if (!FreeLibrary(_modules[args_.as_string(0)].handle)) {
+        if (!FreeLibrary(_modules[path_].handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
             return false;
         }
 
-        _modules.erase(args_.as_string(0));
+        _modules.erase(path_);
 
-        LOG(INFO) << "Unload complete [" << args_.as_string(0) << "]";
+        LOG(INFO) << "Unload complete [" << path_ << "]";
 
         return true;
     }

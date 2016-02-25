@@ -3,7 +3,6 @@ rv/addons/*.bat
 rv/*.dll
 rv/carma_dll.*
 build
-vcproj
 rv/intercept
 rv/intercept.ilk
 rv/intercept.pdb

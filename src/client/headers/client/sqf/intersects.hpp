@@ -21,15 +21,15 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         struct intersect_surfaces {
-            vector3 intersectPosASL; // the actual position where line intersects 1st surface
-            std::string surfaceNormal; // a normal to the intersected surface
-            object intersectObject; // the object the surface belongs to(could be proxy object)
-            object parentObject; // the object proxy object belongs to(not always the same as intersect object)
+            vector3 intersect_pos_asl; // the actual position where line intersects 1st surface
+            vector3 surface_normal; // a normal to the intersected surface
+            object intersect_object; // the object the surface belongs to(could be proxy object)
+            object parent_object; // the object proxy object belongs to(not always the same as intersect object)
         };
-        typedef std::vector<std::shared_ptr<intersect_surfaces>> intersect_surfaces_list;
+        typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 
         namespace __helpers {
-            intersect_surfaces_list __line_intersects_surfaces(game_value& intersects_value_);
+            intersect_surfaces_list __line_intersects_surfaces(const game_value& intersects_value_);
         }
 
         /**

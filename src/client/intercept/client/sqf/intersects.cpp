@@ -5,28 +5,20 @@
 namespace intercept {
     namespace sqf {
         namespace __helpers {
-            intersect_surfaces_list __line_intersects_surfaces(game_value& intersects_value_) {
-                game_data_array* intersects = ((game_data_array *)intersects_value_.rv_data.data);
-
+            intersect_surfaces_list __line_intersects_surfaces(const game_value& intersects_value_) {
                 intersect_surfaces_list output;
-                for (uint32_t i = 0; i < intersects->length; ++i) {
-                    game_data_array* element = ((game_data_array *)intersects->data[i].rv_data.data); // our element array
-
+                for (uint32_t i = 0; i < intersects_value_.length(); ++i) {
+                    game_value element = intersects_value_[i];
                     intersect_surfaces surfaces; // Our intersecting surfaces
-                    game_data_array* position = ((game_data_array *)element->data[0].rv_data.data); // finding the position
-                    surfaces.intersectPosASL = vector3(); // the actual position where line intersects 1st surface
-                    surfaces.intersectPosASL.x = ((game_data_number *)position[0].data)->number;
-                    surfaces.intersectPosASL.y = ((game_data_number *)position[1].data)->number;
-                    surfaces.intersectPosASL.z = ((game_data_number *)position[2].data)->number;
+                    surfaces.intersect_pos_asl = element[0]; // the actual position where line intersects 1st surface
 
-                    // translating rv string to std string
-                    surfaces.surfaceNormal = element->data[1]; // a normal to the intersected surface
+                    surfaces.surface_normal = element[1]; // a normal to the intersected surface
 
                     // translating objects
-                    surfaces.intersectObject = object(element->data[2].rv_data); // the object the surface belongs to (could be proxy object)
-                    surfaces.parentObject = object(element->data[3].rv_data); // the object proxy object belongs to (not always the same as intersect object)
+                    surfaces.intersect_object = element[2]; // the object the surface belongs to (could be proxy object)
+                    surfaces.parent_object = element[3]; // the object proxy object belongs to (not always the same as intersect object)
 
-                    output.push_back(std::make_shared<intersect_surfaces>(surfaces)); // Store the surfaces for our return
+                    output.push_back(surfaces); // Store the surfaces for our return
                 }
                 return output;
             }
@@ -53,6 +45,7 @@ namespace intercept {
             game_value array_input({
                 begin_pos_asl_,
                 end_pos_asl_,
+                ignore_obj1_
             });
 
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);

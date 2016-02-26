@@ -512,6 +512,7 @@ namespace intercept {
                  of the object (the actual memory will be freed later by the game process).
                 */
                 if (rv_data.data) {
+                    //rv_data.data->ref_count_internal -= 1;
                     client::host::functions.free_value(this);
                     rv_data.data = nullptr;
                 }

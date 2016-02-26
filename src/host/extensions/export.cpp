@@ -19,6 +19,8 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            if (ret.data)
+                ret.data->ref_count_internal -= 1;
             return ret;
         }
 
@@ -37,6 +39,8 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            if (ret.data)
+                ret.data->ref_count_internal -= 1;
             return ret;
         }
 
@@ -55,6 +59,8 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+            if (ret.data)
+                ret.data->ref_count_internal -= 1;
             return ret;
         }
 

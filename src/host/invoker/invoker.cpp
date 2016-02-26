@@ -110,9 +110,17 @@ namespace intercept {
         {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
             if (_to_delete.size() > 100) {
-                for (uint32_t index = 0; index < 100; ++index) {
+                //for (uint32_t index = 0; index < 100; ++index) {
+                uint32_t index = 0;
+                while(_to_delete.size() > 0) {
                     ((rv_game_value *)_delete_array_ptr[index])->__vptr = rv_game_value::__vptr_def;
                     ((rv_game_value *)_delete_array_ptr[index])->data = _to_delete.front();
+                    index++;
+                    if (index >= 1000) {
+                        _invoker_unlock delete_invoke_lock(this);
+                        invoke_delete();
+                        index = 0;
+                    }
                     _to_delete.pop();
                 }
                 _invoker_unlock delete_invoke_lock(this);

@@ -109,7 +109,7 @@ namespace intercept {
         }
         {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            if (_to_delete.size() > 100) {
+            if (_to_delete.size() > 500) {
                 //for (uint32_t index = 0; index < 100; ++index) {
                 uint32_t index = 0;
                 while(_to_delete.size() > 0) {

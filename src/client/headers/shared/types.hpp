@@ -95,10 +95,20 @@ namespace intercept {
             nular_operator *op;
         };
 
+        typedef union ref_count {
+        public:
+            ref_count() { current_count = 0; is_intercept = false; initial_count = 0; }
+            struct {
+                uint16_t current_count;
+                bool is_intercept;
+                uint8_t initial_count;
+            };
+        } ref_count_type;
+
         class game_data {
         public:
             uintptr_t type;
-            uint32_t ref_count_internal;
+            ref_count ref_count_internal;
             uintptr_t data_type;
         };
 
@@ -217,9 +227,9 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_array();;
-            game_data_array(size_t size_);;
-            game_data_array(const std::vector<game_value> &init_);;
+            game_data_array();
+            game_data_array(size_t size_);
+            game_data_array(const std::vector<game_value> &init_);
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);
@@ -265,7 +275,9 @@ namespace intercept {
             game_data_group() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *group;
         };
@@ -277,7 +289,9 @@ namespace intercept {
             game_data_config() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *config;
         };
@@ -289,7 +303,9 @@ namespace intercept {
             game_data_control() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *control;
         };
@@ -301,7 +317,9 @@ namespace intercept {
             game_data_display() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *display;
         };
@@ -313,7 +331,9 @@ namespace intercept {
             game_data_location() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *location;
         };
@@ -325,7 +345,9 @@ namespace intercept {
             game_data_script() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *script;
         };
@@ -337,7 +359,9 @@ namespace intercept {
             game_data_side() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *side;
         };
@@ -349,7 +373,9 @@ namespace intercept {
             game_data_rv_text() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *rv_text;
         };
@@ -361,7 +387,9 @@ namespace intercept {
             game_data_team() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *team;
         };
@@ -373,7 +401,9 @@ namespace intercept {
             game_data_rv_namespace() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *rv_namespace;
         };
@@ -385,7 +415,9 @@ namespace intercept {
             game_data_code() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             rv_string *code_string;
             uintptr_t instruction_array;
@@ -401,7 +433,9 @@ namespace intercept {
             game_data_object() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
+                ref_count_internal.current_count = 1;
+                ref_count_internal.initial_count = 1;
+                ref_count_internal.is_intercept = true;
             };
             void *object;
         };

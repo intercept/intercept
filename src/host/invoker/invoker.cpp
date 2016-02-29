@@ -350,6 +350,7 @@ namespace intercept {
     bool invoker::release_value(game_value *value_, bool immediate_) {
         if (!value_->client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
+            value_->rv_data.data->ref_count_internal.rv_ref_count += 1;
             _to_delete.push(value_->rv_data.data);
             /*
             // We do not need a deep copy here, so we cast to the internal data type, and just copy the ptr.

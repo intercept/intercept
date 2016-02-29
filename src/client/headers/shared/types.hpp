@@ -97,12 +97,31 @@ namespace intercept {
 
         typedef union ref_count {
         public:
-            ref_count() { current_count = 0; is_intercept = false; initial_count = 0; }
+            ref_count() { current_count = 0; __initial_count = 0; }
+            int32_t rv_ref_count;
             struct {
+            public:
                 uint16_t current_count;
-                bool is_intercept;
-                uint8_t initial_count;
+                uint16_t __initial_count;
             };
+
+            void set_initial(uint16_t val_, bool is_intercept_) {
+                assert(val_ <= SHRT_MAX);
+                __initial_count = val_;
+                if (is_intercept_) {
+                    __initial_count |= 1 << 15;
+                }
+            }
+
+            uint16_t get_initial() {
+                if ((__initial_count >> 15) & 1)
+                    return __initial_count & ~(1 << 15);
+                return __initial_count;
+            }
+
+            bool is_intercept() {
+                return (__initial_count >> 15) & 1;
+            }
         } ref_count_type;
 
         class game_data {
@@ -276,8 +295,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *group;
         };
@@ -290,8 +308,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *config;
         };
@@ -304,8 +321,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *control;
         };
@@ -318,8 +334,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *display;
         };
@@ -332,8 +347,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *location;
         };
@@ -346,8 +360,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *script;
         };
@@ -360,8 +373,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *side;
         };
@@ -374,8 +386,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *rv_text;
         };
@@ -388,8 +399,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *team;
         };
@@ -402,8 +412,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *rv_namespace;
         };
@@ -416,8 +425,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             rv_string *code_string;
             uintptr_t instruction_array;
@@ -434,8 +442,7 @@ namespace intercept {
                 type = type_def;
                 data_type = data_type_def;
                 ref_count_internal.current_count = 1;
-                ref_count_internal.initial_count = 1;
-                ref_count_internal.is_intercept = true;
+                ref_count_internal.set_initial(1, true);
             };
             void *object;
         };

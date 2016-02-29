@@ -20,7 +20,7 @@ namespace intercept {
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
             if(ret.data)
-                ret.data->ref_count_internal.initial_count = (uint8_t)ret.data->ref_count_internal.current_count--;
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal.current_count--, false);
             return ret;
         }
 
@@ -39,8 +39,8 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-            if(ret.data)
-                ret.data->ref_count_internal.initial_count = (uint8_t)ret.data->ref_count_internal.current_count--;
+            if (ret.data)
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal.current_count--, false);
             return ret;
         }
 
@@ -60,7 +60,7 @@ namespace intercept {
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
             if (ret.data)
-                ret.data->ref_count_internal.initial_count = (uint8_t)ret.data->ref_count_internal.current_count--;
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal.current_count--, false);
             return ret;
         }
 

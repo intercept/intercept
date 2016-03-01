@@ -1,4 +1,6 @@
-# Intercept [![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/508laymfxfnhpbp1/branch/master?svg=true)](https://ci.appveyor.com/project/Verox-/intercept-1irnq/branch/master) [![Slack Status](http://slackin-intercept.idi-systems.com/badge.svg)](http://slackin-intercept.idi-systems.com)
+![Intercept](http://i.imgur.com/J0PC0G0.png)
+
+[![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/508laymfxfnhpbp1/branch/master?svg=true)](https://ci.appveyor.com/project/Verox-/intercept-1irnq/branch/master) [![Slack Status](http://slackin-intercept.idi-systems.com/badge.svg)](http://slackin-intercept.idi-systems.com)
 
 Intercept is a C/C++ binding interface to the Arma 3 engine (internally refered to as the Real Virtuality or RV engine). It's goal is to provide easy to use library for addon makers to develop addons in a native language, or to develope language extensions for the Arma 3 engine.
 

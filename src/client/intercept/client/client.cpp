@@ -11,11 +11,7 @@ namespace intercept {
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void __cdecl assign_functions(const struct intercept::client_functions funcs) {
             host::functions = funcs;
-#ifdef INTERCEPT_NO_THREAD_SAFETY
-            host::functions.invoke_raw_unary = host::functions.invoke_raw_unary_nolock;
-            host::functions.invoke_raw_binary = host::functions.invoke_raw_binary_nolock;
-            host::functions.invoke_raw_nular = host::functions.invoke_raw_nular_nolock;
-#endif
+
             __sqf::__initialize();
 
             uintptr_t type_def;

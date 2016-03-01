@@ -9,28 +9,9 @@ namespace intercept {
     /*!
     @brief Flag for when the invoker is able to access the RV Engine
     */
-    bool invoker_accessible = false;
-    bool invoker_accessible_all = false;
 
-    void threaded_invoke_demo() {
-        while (true) {
-            const types::object player = invoker::get().invoke_raw("player");
-            game_value tick_time = invoker::get().invoke_raw("diag_ticktime");
-
-            game_value oops(player);
-
-            std::vector<game_value> test = { player };
-            game_value args = game_value({
-                "Testers: %1 %2",
-                player,
-                tick_time
-            });
-            game_value message = invoker::get().invoke_raw("format", &args, "ARRAY");
-            invoker::get().invoke_raw("sidechat", &player, "OBJECT", &message, "STRING");
-
-            Sleep(10);
-        }
-    }
+    bool invoker::invoker_accessible = false;
+    bool invoker::invoker_accessible_all = false;
 
     unary_function invoker::_register_hook_trampoline = NULL;
     uintptr_t invoker::sqf_game_state = NULL;
@@ -52,7 +33,6 @@ namespace intercept {
             _attached = true;
             controller::get().add("init_invoker", std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("test_invoker", std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("invoker_demo", std::bind(&intercept::invoker::invoker_demo, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("do_invoke_period", std::bind(&intercept::invoker::do_invoke_period, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
@@ -186,10 +166,10 @@ namespace intercept {
         _invoker_unlock init_lock(this);
         _mission_namespace = invoke_raw("missionnamespace");
         loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
-        _delete_array_ptr = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &delete_ptr_name);
-        _eh_params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &_eh_params_name);
+        _delete_array_ptr = invoke_raw_nolock(_get_variable_func, _mission_namespace, delete_ptr_name);
+        _eh_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, _eh_params_name);
         game_value p_name = "intercept_signal_var";
-        _signal_params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &p_name);
+        _signal_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, p_name);
         _delete_size_zero = game_value(0.0f);
         _delete_size_max = game_value(1000.0f);
         return true;
@@ -204,44 +184,12 @@ namespace intercept {
         return true;
     }
 
-    /*
-    DO NOT EXECUTE THIS VIA A BLOCKING CALL EXTENSION!
-    */
-    bool invoker::invoker_demo(const arguments & args_, std::string & result_)
-    {
-        result_ = "1";
-        _demo_threads.push_back(std::thread(threaded_invoke_demo));
-        LOG(INFO) << "Started Demo Thread #" << _demo_threads.size();
-        return true;
-    }
-
-    rv_game_value invoker::invoke_raw(nular_function function_)
-    {
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessible;});
-        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
-    }
-
-    rv_game_value invoker::invoke_raw_nolock(nular_function function_)
-    {
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
-    }
-
     void invoker::invoke_delete()
     {
         binary_function function;
         if (loader::get().get_function("resize", function)) {
             std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessible;});
+            _invoke_condition.wait(lock, [this]() {return this->invoker_accessible;});
             std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
             LOG(DEBUG) << "FLUSHING MEMORY";
             function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_zero);
@@ -249,125 +197,107 @@ namespace intercept {
         }
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_)
+    rv_game_value invoker::invoke_raw_nolock(nular_function function_)
+    {
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state);
+        rv_game_value ret;
+        ret.__vptr = *(uintptr_t *)ret_ptr;
+        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        if (ret.data) {
+            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+        }
+        return ret;
+    }
+
+    rv_game_value invoker::invoke_raw(const std::string &function_name_)
     {
         nular_function function;
         if (loader::get().get_function(function_name_, function)) {
-            return invoke_raw(function);
+            return invoke_raw_nolock(function);
         }
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(unary_function function_, const game_value *right_)
+    rv_game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_)
     {
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessible;});
-        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&right_arg_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        if (ret.data) {
+            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+        }
         return ret;
     }
 
-    rv_game_value invoker::invoke_raw_nolock(unary_function function_, const game_value *right_)
-    {
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)right_);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
-    }
-
-    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function, right_type_)) {
-            return invoke_raw(function, right_);
+            return invoke_raw_nolock(function, right_);
         }
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value *right_)
+    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_)
     {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
-            return invoke_raw(function, right_);
+            return invoke_raw_nolock(function, right_);
         }
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(binary_function function_, const game_value *left_, const game_value *right_)
+
+    rv_game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_)
     {
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessible;});
-        std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&left_arg_, (uintptr_t)&right_arg_);
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
+        if (ret.data) {
+            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+        }
         return ret;
     }
 
-    rv_game_value invoker::invoke_raw_nolock(binary_function function_, const game_value *left_, const game_value *right_)
-    {
-        uintptr_t ret_ptr = function_(_sqf_this, _sqf_game_state, (uintptr_t)left_, (uintptr_t)right_);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
-    }
-
-    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value *left_, const game_value *right_)
+    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
-            return invoke_raw(function, left_, right_);
+            return invoke_raw_nolock(function, left_, right_);
         }
         return rv_game_value();
     }
 
-    rv_game_value invoker::invoke_raw(std::string function_name_, const game_value * left_, std::string left_type_, const game_value * right_, std::string right_type_)
+    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_)
     {
         binary_function function;
         if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
-            return invoke_raw(function, left_, right_);
+            return invoke_raw_nolock(function, left_, right_);
         }
         return rv_game_value();
     }
 
-    value_type invoker::get_type(const game_value *value_) const
+    value_type invoker::get_type(const game_value &value_) const
     {
-        return value_->type();
+        return value_.type();
     }
 
-    const std::string invoker::get_type_str(const game_value *value_) const
+    const std::string invoker::get_type_str(const game_value &value_) const
     {
-        auto type = value_->type();
+        auto type = value_.type();
         return type_map.at(type);
     }
 
-    bool invoker::release_value(game_value *value_, bool immediate_) {
-        if (!value_->client_owned()) {
+    bool invoker::release_value(game_value &value_, bool immediate_) {
+        if (!value_.client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            value_->rv_data.data->ref_count_internal++;
-            _to_delete.push(value_->rv_data.data);
-            /*
-            // We do not need a deep copy here, so we cast to the internal data type, and just copy the ptr.
-            // The game_value destructor should set this pointer to null after, so it is effectively deleted
-            // in the context of the passed objects lifespan, but the memory remains until we free it in the
-            // RV engine itself later.
-            //LOG(DEBUG) << "Adding delete...";
-            ((rv_game_value *)_delete_array_ptr[_delete_index])->data = ((rv_game_value *)value_)->data;
-            ((rv_game_value *)_delete_array_ptr[_delete_index])->__vptr = ((rv_game_value *)value_)->__vptr;
-            //LOG(DEBUG) << "Ptr: " << ((rv_game_value *)value_)->data->type << " <-> " << ((rv_game_value *)_delete_array_ptr[_delete_index])->data->type;
-            _delete_index++;
-            if (_delete_index >= 1000 || immediate_) {
-                //LOG(DEBUG) << "Flushing Memory...";
-                invoke_delete();
-                _delete_index = 0;
-            }
-            */
+            value_.rv_data.data->ref_count_internal++;
+            _to_delete.push(value_.rv_data.data);
             return true;
         }
         return false;

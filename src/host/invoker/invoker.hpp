@@ -65,9 +65,8 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw(nular_function function_);
-        rv_game_value invoke_raw_nolock(nular_function function_);
-        rv_game_value invoke_raw(std::string function_name_);
+        rv_game_value invoke_raw_nolock(const nular_function function_);
+        rv_game_value invoke_raw(const std::string &function_name_);
         //!@}
 
         /*!@{
@@ -81,10 +80,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw(unary_function function_, const game_value * right_);
-        rv_game_value invoke_raw_nolock(unary_function function_, const game_value * right_);
-        rv_game_value invoke_raw(std::string function_name_, const game_value *right_);
-        rv_game_value invoke_raw(std::string function_name_, const game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
+        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_);
+        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_);
         //!@}
 
         /*!@{
@@ -98,10 +96,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw(binary_function function_, const game_value * left_, const game_value * right_);
-        rv_game_value invoke_raw_nolock(binary_function function_, const game_value * left_, const game_value * right_);
-        rv_game_value invoke_raw(std::string function_name_, const game_value *left_, const game_value *right_);
-        rv_game_value invoke_raw(std::string function_name_, const game_value *left_, std::string left_type_, const game_value *right_, std::string right_type_);
+        rv_game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
+        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_);
+        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_);
         //!@}
         //!@}
 
@@ -113,13 +110,13 @@ namespace intercept {
         @brief Returns the numerical type id. This is the vtable ptr of the data
         type.
         */
-        uintptr_t get_type(const game_value *value_) const;
+        uintptr_t get_type(const game_value &value_) const;
 
         /*!
         @brief Returns the string representation of the data type. IE: "ARRAY",
         "STRING", "SCALAR", etc.
         */
-        const std::string get_type_str(const game_value *value_) const;
+        const std::string get_type_str(const game_value &value_) const;
         //!@}
 
         /*!
@@ -147,7 +144,7 @@ namespace intercept {
         if the value was not released (due to it not being properly owned by the
         RV Engine).
         */
-        bool release_value(game_value * value_, bool immediate_ = true);
+        bool release_value(game_value &value_, bool immediate_ = true);
 
         /*!
         @brief Actually resizes the collection array to 0 and back to its normal
@@ -218,11 +215,6 @@ namespace intercept {
         @brief Get signal from sqf code dispatch it.
         */
         bool signal(const arguments & args_, std::string & result_);
-        /*!
-        This is a general purpose function to test the invoker. It is not meant
-        for public use and is only there to serve as an easy test bed for development.
-        */
-        bool invoker_demo(const arguments & args_, std::string & result_);
         //!@}
 
         /*!
@@ -255,7 +247,12 @@ namespace intercept {
         static game_data_string_pool<> string_pool;
         static uintptr_t sqf_game_state;
         static char *sqf_this;
+
+        static bool invoker_accessible;
+        static bool invoker_accessible_all;
     protected:
+
+
 
         std::atomic_uint32_t _thread_count;
 

@@ -19,8 +19,10 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-            if(ret.data)
-                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal - 1, false);
+            if (ret.data) {
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+                ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+            }
             return ret;
         }
 
@@ -39,8 +41,10 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-            if (ret.data)
-                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal - 1, false);
+            if (ret.data) {
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+                ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+            }
             return ret;
         }
 
@@ -59,8 +63,10 @@ namespace intercept {
             rv_game_value ret;
             ret.__vptr = *(uintptr_t *)ret_ptr;
             ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-            if (ret.data)
-                ret.data->ref_count_internal.set_initial(ret.data->ref_count_internal - 1, false);
+            if (ret.data) {
+                ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
+                ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
+            }
             return ret;
         }
 

@@ -495,7 +495,7 @@ namespace intercept {
                 rv_data.data->ref_count_internal--;
                 if (rv_data.data->ref_count_internal < rv_data.data->ref_count_internal.get_initial()) {
                     if (rv_data.data->ref_count_internal.is_intercept()) {
-                        rv_data.data->ref_count_internal.set_initial(0, false); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
+                        rv_data.data->ref_count_internal.clear_initial(); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
                         if (rv_data.data && rv_data.data->type == game_data_number::type_def)
                             delete (game_data_number *)rv_data.data;
 

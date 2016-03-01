@@ -100,7 +100,7 @@ namespace intercept {
         game_data_number::game_data_number() {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             number = 0.0f;
         }
@@ -109,7 +109,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             number = val_;
         }
@@ -118,7 +118,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             number = copy_.number;
         }
@@ -135,7 +135,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             number = copy_.number;
             return *this;
@@ -163,7 +163,7 @@ namespace intercept {
         game_data_bool::game_data_bool() {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             val = false;
         }
@@ -172,7 +172,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             val = val_;
         }
@@ -181,7 +181,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             val = copy_.val;
         }
@@ -198,7 +198,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             val = copy_.val;
             return *this;
@@ -226,7 +226,7 @@ namespace intercept {
         game_data_string::game_data_string() {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             raw_string = allocate_string(128);
             raw_string->length = 128;
@@ -237,7 +237,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             raw_string = allocate_string(str_.length() + 1);
             memcpy(&raw_string->char_string, str_.c_str(), str_.length() + 1);
@@ -249,7 +249,7 @@ namespace intercept {
         {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             raw_string = allocate_string(copy_.raw_string->length);
             memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
@@ -313,7 +313,7 @@ namespace intercept {
         game_data_array::game_data_array() {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             length = 0;
             max_size = 0;
@@ -323,7 +323,7 @@ namespace intercept {
         game_data_array::game_data_array(size_t size_) {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             data = _array_pool.acquire(size_);
             length = size_;
@@ -333,7 +333,7 @@ namespace intercept {
         game_data_array::game_data_array(const std::vector<game_value> &init_) {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             data = _array_pool.acquire(init_.size());
             length = init_.size();
@@ -347,7 +347,7 @@ namespace intercept {
         game_data_array::game_data_array(const game_data_array & copy_) {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             length = copy_.length;
             max_size = copy_.max_size;
@@ -359,7 +359,7 @@ namespace intercept {
         game_data_array::game_data_array(game_data_array && move_) {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             if (data)
                 _array_pool.release(data);
@@ -372,7 +372,7 @@ namespace intercept {
         game_data_array & game_data_array::operator = (const game_data_array &copy_) {
             type = type_def;
             data_type = data_type_def;
-            ref_count_internal.current_count = 1;
+            ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
             length = copy_.length;
             data = _array_pool.acquire(length);
@@ -420,7 +420,7 @@ namespace intercept {
             rv_data.__vptr = copy_.rv_data.__vptr;
             if (copy_.rv_data.data) {
                 rv_data.data = copy_.rv_data.data;
-                rv_data.data->ref_count_internal.current_count += 1;
+                rv_data.data->ref_count_internal++;
             }
         }
 
@@ -439,7 +439,7 @@ namespace intercept {
             rv_data.__vptr = internal_.__vptr;
             rv_data.data = (game_data *)internal_.data;
             if(rv_data.data)
-                rv_data.data->ref_count_internal.current_count += 1;
+                rv_data.data->ref_count_internal++;
         }
 
         game_value::game_value(float val_)
@@ -482,7 +482,7 @@ namespace intercept {
             rv_data = internal_.rv_data;
             rv_data.__vptr = internal_.rv_data.__vptr;
             if (rv_data.data)
-                rv_data.data->ref_count_internal.current_count += 1;
+                rv_data.data->ref_count_internal++;
         }
         game_value::~game_value() {
             _free();
@@ -492,8 +492,8 @@ namespace intercept {
         {
             // Ghetto superstar...
             if (rv_data.data) {
-                rv_data.data->ref_count_internal.current_count -= 1;
-                if (rv_data.data->ref_count_internal.current_count < rv_data.data->ref_count_internal.get_initial()) {
+                rv_data.data->ref_count_internal--;
+                if (rv_data.data->ref_count_internal < rv_data.data->ref_count_internal.get_initial()) {
                     if (rv_data.data->ref_count_internal.is_intercept()) {
                         rv_data.data->ref_count_internal.set_initial(0, false); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
                         if (rv_data.data && rv_data.data->type == game_data_number::type_def)
@@ -512,7 +512,7 @@ namespace intercept {
                             delete rv_data.data;
                     }
                     else {
-                        rv_data.data->ref_count_internal.set_initial(0, false); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
+                        rv_data.data->ref_count_internal.clear_initial(); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
                         client::host::functions.free_value(this);
                         rv_data.data = nullptr;
                     }
@@ -598,7 +598,7 @@ namespace intercept {
             rv_data.data = internal_.rv_data.data;
             rv_data.__vptr = internal_.rv_data.__vptr;
             if(rv_data.data)
-                rv_data.data->ref_count_internal.current_count += 1;
+                rv_data.data->ref_count_internal++;
             return *this;
         }
 
@@ -609,7 +609,7 @@ namespace intercept {
             rv_data.data = internal_.data;
             rv_data.__vptr = internal_.__vptr;
             if (rv_data.data)
-                rv_data.data->ref_count_internal.current_count += 1;
+                rv_data.data->ref_count_internal++;
             return *this;
         }
 

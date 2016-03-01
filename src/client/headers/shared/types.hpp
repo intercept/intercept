@@ -94,7 +94,7 @@ namespace intercept {
             uintptr_t procedure_ptr_addr;
             nular_operator *op;
         };
-
+        /*
         typedef union ref_count {
         public:
             ref_count() { current_count = 0; __initial_count = 0; }
@@ -123,6 +123,69 @@ namespace intercept {
                 return (__initial_count >> 15) & 1;
             }
         } ref_count_type;
+        */
+
+        class ref_count {
+        public:
+            ref_count() { _count = 0; };
+
+            ref_count(int16_t initial_, int16_t actual_, bool is_intercept_) {
+                _count = (((int32_t)initial_) << 16) | ((int32_t)actual_);
+                if (is_intercept_)
+                    _count |= 1 << 31;
+            }
+
+            void operator = (int16_t val_) {
+                _count = (((int32_t)_initial()) << 16) | ((int32_t)val_);
+            }
+
+            uint16_t operator + (const int32_t val_) {
+                return _actual() + val_;
+            }
+
+            uint16_t operator - (const int32_t val_) {
+                return _actual() - val_;
+            }
+
+            void operator ++ (const int32_t val_) {
+                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() + 1);
+            }
+
+            void operator -- (const int32_t val_) {
+                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() - 1);
+            }
+
+            operator int16_t() {
+                return _actual();
+            }
+
+            void set_initial(int16_t val_, bool is_intercept_) {
+                _count = (((int32_t)val_) << 16) | (int32_t)_actual();
+                if (is_intercept_)
+                    _count |= 1 << 31;
+            }
+
+            int16_t get_initial() {
+                return ((int16_t)(_count >> 16)) & ~(1 << 15);
+            }
+
+            bool is_intercept() {
+                return (_count >> 31) & 1;
+            }
+
+            void clear_initial() {
+                _count = (((int32_t)0) << 16) | (int32_t)_actual();
+            }
+        protected:
+            inline int16_t _actual() {
+#undef max // fucking hell i hate these macros, need to turn them off...
+                return ((int32_t)((std::numeric_limits<int16_t>::max()) & _count));
+            }
+            inline int16_t _initial() {
+                return (int16_t)(_count >> 16);
+            }
+            int32_t _count;
+        };
 
         class game_data {
         public:
@@ -294,7 +357,7 @@ namespace intercept {
             game_data_group() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *group;
@@ -307,7 +370,7 @@ namespace intercept {
             game_data_config() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *config;
@@ -320,7 +383,7 @@ namespace intercept {
             game_data_control() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *control;
@@ -333,7 +396,7 @@ namespace intercept {
             game_data_display() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *display;
@@ -346,7 +409,7 @@ namespace intercept {
             game_data_location() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *location;
@@ -359,7 +422,7 @@ namespace intercept {
             game_data_script() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *script;
@@ -372,7 +435,7 @@ namespace intercept {
             game_data_side() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *side;
@@ -385,7 +448,7 @@ namespace intercept {
             game_data_rv_text() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *rv_text;
@@ -398,7 +461,7 @@ namespace intercept {
             game_data_team() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *team;
@@ -411,7 +474,7 @@ namespace intercept {
             game_data_rv_namespace() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *rv_namespace;
@@ -424,7 +487,7 @@ namespace intercept {
             game_data_code() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             rv_string *code_string;
@@ -441,7 +504,7 @@ namespace intercept {
             game_data_object() {
                 type = type_def;
                 data_type = data_type_def;
-                ref_count_internal.current_count = 1;
+                ref_count_internal = 1;
                 ref_count_internal.set_initial(1, true);
             };
             void *object;

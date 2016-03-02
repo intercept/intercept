@@ -52,7 +52,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_nular_nolock(nular_function function_);
+        rv_game_value invoke_raw_nular_nolock(const nular_function function_);
 
         /*!
         @brief Invokes a raw unary SQF function from a unary function pointer.
@@ -62,7 +62,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_unary_nolock(unary_function function_, const game_value &right_arg_);
+        rv_game_value invoke_raw_unary_nolock(const unary_function function_, const game_value &right_arg_);
 
         /*!
         @brief Invokes a raw binary SQF function from a binary function pointer.
@@ -73,7 +73,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_binary_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
+        rv_game_value invoke_raw_binary_nolock(const binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
 
         /*!
         @brief Returns type definitions for a given type string.
@@ -113,7 +113,7 @@ namespace intercept {
 
         @param value_ A pointer to the game_value to free.
         */
-        void free_value(game_value * value_);
+        void free_value(game_value *value_);
 
         /*!@{
         @brief Returns a function pointer of the type named based on the function name

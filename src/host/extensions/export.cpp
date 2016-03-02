@@ -5,17 +5,17 @@
 namespace intercept {
     namespace client_function_defs {
 
-        rv_game_value invoke_raw_nular_nolock(nular_function function_)
+        rv_game_value invoke_raw_nular_nolock(const nular_function function_)
         {
             return invoker::get().invoke_raw_nolock(function_);
         }
 
-        rv_game_value invoke_raw_unary_nolock(unary_function function_, const game_value & right_arg_)
+        rv_game_value invoke_raw_unary_nolock(const unary_function function_, const game_value & right_arg_)
         {
             return invoker::get().invoke_raw_nolock(function_, right_arg_);
         }
 
-        rv_game_value invoke_raw_binary_nolock(binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
+        rv_game_value invoke_raw_binary_nolock(const binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
         {
             return invoker::get().invoke_raw_nolock(function_, left_arg_, right_arg_);
         }

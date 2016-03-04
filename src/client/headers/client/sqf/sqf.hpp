@@ -15,3 +15,58 @@
 #include "config.hpp"
 
 #include "uncategorized.hpp"
+
+#define __XXXSQF_QUOTE(...) #__VA_ARGS__
+#define __XXXSQF_EXPAND_AND_QUOTE(str) __XXXSQF_QUOTE(str)
+#define __XXXSQF_L1(...) __SQF(##__VA_ARGS__##)__SQF
+#define __XXXSQF_L2(...) __XXXSQF_EXPAND_AND_QUOTE(__XXXSQF_L1(__VA_ARGS__))
+
+#define __XXXSQF_CAT(a,b) a##b
+#define __XXXSQF_EXPAND_AND_CAT(a,b) __XXXSQF_CAT(a,b)
+
+#define __XXXSQF_ARG(...) __XXXSQF_EXPAND_AND_CAT(R,__XXXSQF_L2(__VA_ARGS__))
+
+#define __SQF(...) __inline_sqf_helper_launcher::generate(__XXXSQF_ARG(__VA_ARGS__))
+
+class __inline_sqf_helper_launcher {
+protected:
+    class __inline_sqf_helper {
+    public:
+        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false) {
+            _capture_args = game_value();
+        }
+
+        ~__inline_sqf_helper() {
+            std::regex escape("\\\\(.)");
+            _sqf = std::regex_replace(_sqf, escape, "$1");
+            code sqf_fnc = intercept::sqf::compile(_sqf);
+            if (_do_return) {
+                *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
+            }
+            else
+            {
+                intercept::sqf::call(sqf_fnc, _capture_args);
+            }
+        }
+
+        void capture(game_value capture_args_) {
+            _capture_args = capture_args_;
+        }
+
+        void capture(game_value &capture_args_, game_value &capture_return_) {
+            _capture_args = capture_args_;
+            _capture_return = &capture_return_;
+            _do_return = true;
+        }
+
+    protected:
+        std::string _sqf;
+        bool _do_return;
+        game_value _capture_args;
+        game_value *_capture_return;
+    };
+public:
+    static __inline_sqf_helper generate(std::string sqf_) {
+        return __inline_sqf_helper(sqf_);
+    }
+};

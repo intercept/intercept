@@ -2,12 +2,21 @@
 #include "../shared.hpp"
 #include "shared\functions.hpp"
 #include <chrono>
+#include <regex>
 
 #define DLLEXPORT __declspec(dllexport)
+
+
+
 using namespace std::literals;
 
 namespace intercept {
     namespace client {
+
+
+
+
+
 
 
 

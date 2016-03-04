@@ -326,16 +326,20 @@ game_value call(const code & code_, game_value args_)
     the easiest way to stay on top of it is to send the code to call into a wrapper
     in SQF itself, so the context is achieved.
     */
-    return game_value(host::functions.invoke_raw_binary(
+    host::functions.invoke_raw_binary(
         client::__sqf::binary__call__any__code__ret__any, 
         args,
         sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_callWrapper")
-    ));
+    );
+
+    // And returns are not handled correctly because of assumingly the SQF stack
+    // implementation so, we just grab it from a gvar.
+    return sqf::get_variable(sqf::mission_namespace(), "INTERCEPT_CALL_RETURN");
 }
 
 game_value call(const code & code_)
 {
-    game_value args = std::vector<game_value>{ {}, code_ };
+    game_value args = std::vector<game_value>{game_value(), code_ };
     host::memory_watcher.add_watch(args);
     /*
     Why is this in a wrapper? Because code compiled in intercept apparently lacks
@@ -343,11 +347,15 @@ game_value call(const code & code_)
     the easiest way to stay on top of it is to send the code to call into a wrapper
     in SQF itself, so the context is achieved.
     */
-    return game_value(host::functions.invoke_raw_binary(
+    host::functions.invoke_raw_binary(
         client::__sqf::binary__call__any__code__ret__any,
         args,
         sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_callWrapper")
-        ));
+        );
+
+    // And returns are not handled correctly because of assumingly the SQF stack
+    // implementation so, we just grab it from a gvar.
+    return sqf::get_variable(sqf::mission_namespace(), "INTERCEPT_CALL_RETURN");
 }
 
 code compile(const std::string & sqf_)

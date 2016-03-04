@@ -53,11 +53,12 @@ protected:
             _capture_args = capture_args_;
         }
 
-        void capture(game_value &capture_args_, game_value &capture_return_) {
+        void capture(game_value capture_args_, game_value &capture_return_) {
             _capture_args = capture_args_;
             _capture_return = &capture_return_;
             _do_return = true;
         }
+
 
     protected:
         std::string _sqf;

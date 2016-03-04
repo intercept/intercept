@@ -32,6 +32,7 @@ namespace intercept {
         */
         typedef int(__cdecl *api_version_func)();
         typedef void(__cdecl *assign_functions_func)(const struct intercept::client_functions funcs);
+        typedef void(__cdecl *handle_unload_func)();
         typedef void(__cdecl *pre_init_func)();
         typedef void(__cdecl *post_init_func)();
         typedef void(__cdecl *mission_end_func)();
@@ -50,6 +51,7 @@ namespace intercept {
             */
             api_version_func api_version;
             assign_functions_func assign_functions;
+            handle_unload_func handle_unload;
             pre_init_func pre_init;
             post_init_func post_init;
             mission_end_func mission_end;

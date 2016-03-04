@@ -142,6 +142,7 @@ namespace intercept {
 
         new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
         new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
+        new_module.functions.handle_unload = (module::handle_unload_func)GetProcAddress(dllHandle, "handle_unload");
         new_module.functions.mission_end = (module::mission_end_func)GetProcAddress(dllHandle, "mission_end");
         new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
         //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
@@ -220,13 +221,17 @@ namespace intercept {
 
     bool extensions::do_unload(const std::string &path_) {
         LOG(INFO) << "Unload requested [" << path_ << "]";
-
-        if (_modules.find(path_) == _modules.end()) {
+        auto module = _modules.find(path_);
+        if (module == _modules.end()) {
             LOG(INFO) << "Unload failed, module not loaded [" << path_ << "]";
             return true;
         }
 
-        if (!FreeLibrary(_modules[path_].handle)) {
+        if (module->second.functions.handle_unload) {
+            module->second.functions.handle_unload();
+        }
+
+        if (!FreeLibrary(module->second.handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
             return false;
         }

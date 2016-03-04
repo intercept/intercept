@@ -316,7 +316,53 @@ namespace intercept {
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
-        void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_) {
+game_value call(const code & code_, game_value args_)
+{
+    game_value args = std::vector<game_value>{ args_, code_ };
+    host::memory_watcher.add_watch(args);
+    /*
+    Why is this in a wrapper? Because code compiled in intercept apparently lacks
+    the proper context in the SQF interpeter, so we need to be aware of that, and
+    the easiest way to stay on top of it is to send the code to call into a wrapper
+    in SQF itself, so the context is achieved.
+    */
+    return game_value(host::functions.invoke_raw_binary(
+        client::__sqf::binary__call__any__code__ret__any, 
+        args,
+        sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_callWrapper")
+    ));
+}
+
+game_value call(const code & code_)
+{
+    game_value args = std::vector<game_value>{ {}, code_ };
+    host::memory_watcher.add_watch(args);
+    /*
+    Why is this in a wrapper? Because code compiled in intercept apparently lacks
+    the proper context in the SQF interpeter, so we need to be aware of that, and
+    the easiest way to stay on top of it is to send the code to call into a wrapper
+    in SQF itself, so the context is achieved.
+    */
+    return game_value(host::functions.invoke_raw_binary(
+        client::__sqf::binary__call__any__code__ret__any,
+        args,
+        sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_callWrapper")
+        ));
+}
+
+code compile(const std::string & sqf_)
+{
+    return code(host::functions.invoke_raw_unary(client::__sqf::unary__compile__string__ret__code, sqf_));
+}
+
+void set_variable(const rv_namespace & namespace_, const std::string & var_name_, game_value value_)
+{
+    game_value args = std::vector<game_value>{ namespace_, std::vector<game_value>{ var_name_, value_ } };
+    host::memory_watcher.add_watch(args);
+    host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(namespace_, "intercept_fnc_setVariableNamespace"));
+}
+
+void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_) {
             game_value args({
                 pos1_,
                 pos2_,

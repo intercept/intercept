@@ -7,6 +7,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace client {
         client_functions host::functions;
+        host::mem_watcher host::memory_watcher;
 
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void __cdecl assign_functions(const struct intercept::client_functions funcs) {
@@ -87,6 +88,10 @@ namespace intercept {
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
             rv_game_value::__vptr_def = type_def;
+        }
+
+        void __cdecl handle_unload()
+        {
 
         }
 
@@ -109,5 +114,45 @@ namespace intercept {
                 _locked = true;
             }
         }
-    }
+
+        host::mem_watcher::mem_watcher() {
+        }
+
+        host::mem_watcher::~mem_watcher() {
+        }
+
+        void host::mem_watcher::clean() {
+            auto data = _watch_data.begin();
+            while (data != _watch_data.end()) {
+                if (data->rv_data.data->ref_count_internal <= 1) {
+                    data->rv_data.data->ref_count_internal = ref_count(1, 1, true);
+                    _watch_data.erase(data++);
+                }
+                else {
+                    data++;
+                }
+            }
+        }
+
+        void host::mem_watcher::add_watch(game_value & data_) {
+            _add(data_);
+            clean();
+        }
+
+        void host::mem_watcher::_add(game_value & data_)
+        {
+            if (data_.rv_data.data) {
+                if (data_.type() == game_data_array::type_def) {
+                    for (uint32_t i = 0; i < data_.length(); ++i) {
+                        _add(data_[i]);
+                    }
+                }
+
+                if (data_.rv_data.data->ref_count_internal.is_intercept()) {
+                    data_.rv_data.data->ref_count_internal.clear_initial();
+                    _watch_data.push_back(data_);
+                }
+            }
+        }
+}
 }

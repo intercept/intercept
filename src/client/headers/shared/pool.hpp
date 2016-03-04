@@ -20,7 +20,7 @@ namespace intercept {
         }
 
         inline void release(T *_ptr) {
-            memset((void *)_ptr, 0xcdf3cdf3, sizeof(T));
+            memset((void *)_ptr, 0xcdf3cdde, sizeof(T));
             _pool_queue.push(_ptr);
         }
         

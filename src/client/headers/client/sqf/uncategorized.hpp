@@ -120,6 +120,12 @@ namespace intercept {
             object creator; // player
         };
 
+        game_value call(const code &code_, game_value args_);
+        game_value call(const code & code_);
+        code compile(const std::string &sqf_);
+
+        void set_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value value_);
+
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
 

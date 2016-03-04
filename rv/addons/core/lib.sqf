@@ -20,7 +20,15 @@ intercept_fnc_exportOpList = {
     "intercept" callExtension ("export_ptr_list:" + _version);
 };
 
+intercept_fnc_setVariableNamespace = {
+    params ["_namespace", "_args"];
+    _namespace setVariable _args;
+};
 
+intercept_fnc_callWrapper = {
+    params ["_args", "_code"];
+    _args call _code;
+};
 
 intercept_fnc__event = {
     params ["_type", "_eventArgs"];
@@ -32,6 +40,8 @@ intercept_fnc__onFrame = {
     // _end = diag_tickTime;
     // diag_log text format["t: %1", (_end-_start)*1000];
 };
+
+INTERCEPT_OUT_TEST = 999;
 
 INVOKER_DELETE_ARRAY = [];
 INVOKER_DELETE_ARRAY resize 1000;

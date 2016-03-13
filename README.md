@@ -24,10 +24,10 @@ You can find a basic tutorial on [how to build and install Intercept on our wiki
 The underlying game engine of ArmA 3. This is the core of the game, which performs simulations and manages all objects and data within the game. 
 
 #### SQF Functions
-SQF Functions, in the specific case of Intercept, are C++ functions which are exposed within RVEngine via SQF functions. The SQF language itself is just a collection of 'functions' which map to C++ code, which then interact with the game engine itself. a SQF script is a collection of these function calls, which are parsed (lexed) to a series of C++ function calls. 
+SQF Functions, in the specific case of Intercept, are C++ functions which are exposed within RVEngine via SQF functions. The SQF language itself is just a collection of 'functions' which map to C++ code, which then interact with the game engine itself. A SQF script is a collection of these function calls, which are parsed (lexed) to a series of C++ function calls. 
 
 #### SQF Engine
-The SQF engine can be considered the underlying parser and manager of SQF function calls. The way the engine works is actually directly parsing strings (an SQF script) and then mapping these to control flows of C++ function calls. 
+The SQF engine can be considered the underlying parser and manager of SQF function calls. The way the engine works is actually directly parsing strings (an SQF script) and then mapping these to control flows of C++ function calls and executing them.
 
 #### Intercept Functions
 Functions within intercept directly call SQF functions 100% in native machine code. We have identified the functions which the engine exposes, and are directly calling these via a complex method of hooking and object manipulation. For the less technically inclined, we completely bypass the SQF engine entirely - this allows for the functions to basically exist as any other C++ library. 

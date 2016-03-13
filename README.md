@@ -56,16 +56,18 @@ int __cdecl intercept::api_version() {
 
 // This function is exported and is called by the host each frame.
 void __cdecl intercept::on_frame() {
-    // call the SQF time implementation
-    float time = intercept::sqf::time();
-    
+    // get the player object and store it
+    intercept::types::object player = intercept::sqf::player();
+
+    // get the post of the player
+    intercept::types::vector3 pos = intercept::sqf::get_pos(player);
+
     // build a string...
     std::stringstream side_chat_msg;
-    side_chat_msg << "Hello Arma World, here is the game time: " << time;
-    
-    // send it to the binary SQF sideChat command, using the nular function player as the
-    // first argument
-    intercept::sqf::side_chat(intercept::sqf::player(), side_chat_msg.str());
+    side_chat_msg << "Hello Arma World, here is the player pos: " << pos.x << "," << pos.y << "," << pos.z;
+
+    // send it to the binary SQF sideChat command
+    intercept::sqf::side_chat(player, side_chat_msg.str());
 }
 
 // Normal Windows DLL junk...

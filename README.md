@@ -56,12 +56,12 @@ int __cdecl intercept::api_version() {
 
 // This function is exported and is called by the host each frame.
 void __cdecl intercept::on_frame() {
-    // call the SQF random implementation
-    float rand_val = intercept::sqf::random(100.0f);
+    // call the SQF time implementation
+    float time = intercept::sqf::time();
     
     // build a string...
     std::stringstream side_chat_msg;
-    side_chat_msg << "Hello Arma World, here is some randomness: " << rand_val;
+    side_chat_msg << "Hello Arma World, here is some randomness: " << time;
     
     // send it to the binary SQF sideChat command, using the nular function player as the
     // first argument

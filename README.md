@@ -61,7 +61,7 @@ void __cdecl intercept::on_frame() {
     
     // build a string...
     std::stringstream side_chat_msg;
-    side_chat_msg << "Hello Arma World, here is some randomness: " << time;
+    side_chat_msg << "Hello Arma World, here is the game time: " << time;
     
     // send it to the binary SQF sideChat command, using the nular function player as the
     // first argument

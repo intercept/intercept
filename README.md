@@ -21,7 +21,7 @@ You can find a basic tutorial on [how to build and install Intercept on our wiki
 ## Terminology 
 
 #### RVEngine 
-The underlying game engine of ArmA 3. This is the core of the game, which performs simulations and manages all objects and data within the game. 
+The underlying game engine of Arma 3. This is the core of the game, which performs simulations and manages all objects and data within the game. 
 
 #### SQF Functions
 SQF Functions, in the specific case of Intercept, are C++ functions which are exposed within RVEngine via SQF functions. The SQF language itself is just a collection of 'functions' which map to C++ code, which then interact with the game engine itself. A SQF script is a collection of these function calls, which are parsed (lexed) to a series of C++ function calls. 
@@ -30,11 +30,11 @@ SQF Functions, in the specific case of Intercept, are C++ functions which are ex
 The SQF engine can be considered the underlying parser and manager of SQF function calls. The way the engine works is actually directly parsing strings (an SQF script) and then mapping these to control flows of C++ function calls and executing them.
 
 #### Intercept Functions
-Functions within intercept directly call SQF functions 100% in native machine code. We have identified the functions which the engine exposes, and are directly calling these via a complex method of hooking and object manipulation. For the less technically inclined, we completely bypass the SQF engine entirely - this allows for the functions to basically exist as any other C++ library. 
+Functions within Intercept directly call SQF functions 100% in native machine code. We have identified the functions which the engine exposes, and are directly calling these via a simple function reference. For the less technically inclined, we completely bypass the SQF engine - this allows for the functions to basically exist as any other C++ library. 
 
 ## Technical Details
 
-Intercept works by making direct calls to the SQF functions in the RV engine. These functions are themselves C++ functions which are then exposed to SQF for allowing interaction with the underlying game engine; Intercept completely bypasses SQF and allows C++ plugins to interact with the engine directly. To provide concurrency with the game engine, these calls wait until the RV engine is specifically unlocked to Intercept client code, allowing an access window where commands can execute and return results. The only time that these commands are blocked is right before execution, and they unblock very quickly after, providing extremely high throughput in terms of code execution. 
+Intercept works by making direct calls to the SQF functions in the RV engine. These functions are themselves C++ functions which are then exposed to SQF for allowing interaction with the underlying game engine; Intercept completely bypasses SQF and allows C++ plugins to interact with the engine directly. User created threads can even be created and by properly using the provided thread concurrency functionality it is possible to execute game functionality safely and concurrently.
 
 Intercept clients are able to invoke through the host these commands by provided wrapper functions that replicate and emulate the SQF command namespace (minus some unneeded functionality, like arrays or control structures). These wrapper functions take standard inputs, such as simple primitives like `float` or `bool`, and standard `std::string` arguments and convert them into the proper SQF command variables, providing a seamless layer to the clients.
 

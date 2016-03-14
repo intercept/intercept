@@ -2,7 +2,7 @@
 
 [![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/508laymfxfnhpbp1/branch/master?svg=true)](https://ci.appveyor.com/project/Verox-/intercept-1irnq/branch/master) [![Slack Status](http://slackin-intercept.idi-systems.com/badge.svg)](http://slackin-intercept.idi-systems.com)
 
-Intercept is a C/C++ binding interface to the Arma 3 engine (internally refered to as the Real Virtuality or RV engine). It's goal is to provide easy to use library for addon makers to develop addons in a native language, or to develop language extensions for the Arma 3 engine.
+Intercept is a C/C++ binding interface to the Arma 3 engine (internally referred to as the Real Virtuality or RV engine). It's goal is to provide easy to use library for addon makers to develop addons in a native language, or to develop language extensions for the Arma 3 engine.
 
 In a nutshell, Intercept provides a full C/C++ binding system for calling the base C++ functions which are declared in RVEngine for SQF functions. All SQF functions within the RVEngine are actually native code, which is called by SQF via the function names. Intercept bypasses SQF entirely, allowing native C++ plugins to seamlessly interact with the game engine. In essence, Intercept allows for expansions of the game engine, calling internal functionality of the engine which has been exposed via SQF functions. 
 

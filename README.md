@@ -10,11 +10,7 @@ Intercept works on a host/client based system, in which the host, Intercept itse
 
 The Intercept library also provides raw C bindings to the C++ versions of SQF functions, so it is entirely possible to use Intercept as the basis for writing in additional scripting languages to the RV engine, such as Python or Lua.
 
-## [Progress](https://github.com/intercept/intercept/issues/13)
-
-You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13).
-
-## Tutorial
+## Installation
 
 You can find a basic tutorial on [how to build and install Intercept on our wiki](https://github.com/intercept/intercept/wiki/Building-and-installing-Intercept-from-source).
 
@@ -77,7 +73,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 ## Completion Status
 
-As of now (3/13/16) Intercept is over 82% language feature complete. Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
+As of now (3/13/16) Intercept is over 82% language feature complete. You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13). Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
 
 ## Contributions
 

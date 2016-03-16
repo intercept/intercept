@@ -99,5 +99,5 @@ Feel free to contribute as much as you want to this project in terms of time and
 
 ## License
 
-Intercept is licensed under the MIT license. You can find the full license in the LICENSE file. Prior to commit  intercept/intercept@f9fe4d5 the project was licensed under the GNU/GPL v2 license and continues to be for any commit prior to that.
+Intercept is licensed under the MIT license. You can find the full license in the LICENSE file. Prior to commit  [f9fe4d5](https://github.com/intercept/intercept/commit/f9fe4d5afc65eb16ef074d9238ee8cd6e6a0ed41) the project was licensed under the GNU/GPL v2 license and continues to be for any commit prior to that.
 

@@ -119,7 +119,7 @@ def parse():
     for function in unary_functions_used: # Output any unary functions completed
         function_name = re.search('(?<=unary__)[a-zA-Z0-9]+', function).group(0)
         function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-        print("- [x] [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, unary_functions_found_at[index][0], unary_functions_found_at[index][1]))
+        print("- [x] {}".format(function_name, unary_functions_found_at[index][0], unary_functions_found_at[index][1]))
         index+=1
     print("\n----")
 
@@ -128,7 +128,7 @@ def parse():
     for function in binary_functions_used: # Output any binary functions completed
         function_name = re.search('(?<=binary__)[a-zA-Z0-9]+', function).group(0)
         function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-        print("- [x] [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
+        print("- [x] {}".format(function_name, binary_functions_found_at[index][0], binary_functions_found_at[index][1]))
         index+=1
     print("\n----")
 
@@ -137,47 +137,9 @@ def parse():
     for function in nular_functions_used: # Output any nular functions completed
         function_name = re.search('(?<=nular__)[a-zA-Z0-9]+', function).group(0)
         function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-        print("- [x] [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, nular_functions_found_at[index][0], nular_functions_found_at[index][1]))
+        print("- [x] {}".format(function_name, nular_functions_found_at[index][0], nular_functions_found_at[index][1]))
         index+=1
     print("\n----")
-
-    print("## DUPLICATE INVOKE WARNINGS:")
-    print("### Unary Functions")
-    index = 0
-    if (len(duplicate_unary_functions) != 0):
-        for function in duplicate_unary_functions: # Output any unary functions completed
-            function_name = re.search('(?<=unary__)[a-zA-Z0-9]+', function).group(0)
-            function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-            print("- [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, duplicate_unary_functions_loc[index][0], duplicate_unary_functions_loc[index][1]))
-            index+=1
-    else:
-        print("None :)\n")
-    print("\n----")
-
-    print("### Binary Functions")
-    index = 0
-    if (len(duplicate_binary_functions) != 0):
-        for function in duplicate_binary_functions: # Output any binary functions completed
-            function_name = re.search('(?<=binary__)[a-zA-Z0-9]+', function).group(0)
-            function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-            print("- [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, duplicate_binary_functions_loc[index][0], duplicate_binary_functions_loc[index][1]))
-            index+=1
-    else:
-        print("None :)\n")
-    print("\n----")
-
-    print("### Nular Functions")
-    index = 0
-    if (len(duplicate_nular_functions) != 0):
-        for function in duplicate_nular_functions: # Output any nular functions completed
-            function_name = re.search('(?<=nular__)[a-zA-Z0-9]+', function).group(0)
-            function_name = re.sub("([a-z])([A-Z])", r"\1_\2", function_name).lower()
-            print("- [{}](/noubernou/intercept/blob/master/{}#L{})".format(function_name, duplicate_nular_functions_loc[index][0], duplicate_nular_functions_loc[index][1]))
-            index+=1
-    else:
-        print("None :)\n")
-    print("\n----")
-
 
     return [unary_functions_used, binary_functions_used, nular_functions_used]
 

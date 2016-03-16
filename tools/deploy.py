@@ -44,7 +44,7 @@ def main():
     except:
         print("Failed to update coverage issue.")
         print(traceback.format_exc())
-        return 1
+        return 0
     else:
         print("done.")
 

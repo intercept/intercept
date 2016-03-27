@@ -77,6 +77,13 @@ namespace intercept {
                 }));
             }
 
+            rv_color(const game_value &ret_game_value_) :
+                red(ret_game_value_[0]),
+                blue(ret_game_value_[1]),
+                green(ret_game_value_[2]),
+                alpha(ret_game_value_[3])
+            {
+            }
         };
 
         struct rv_resolution {
@@ -3071,5 +3078,111 @@ namespace intercept {
         void pp_effect_destroy(std::vector<float> effect_handles_);
         std::vector<std::string> task_description(const task& task_);
         void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_);
+
+        struct rv_expected_destination {
+            vector3 position;
+            std::string planning_mode;
+            bool force;
+
+            rv_expected_destination(const game_value &ret_game_value_) :
+                position(ret_game_value_[0]),
+                planning_mode(ret_game_value_[1]),
+                force(ret_game_value_[2])
+            {
+            }
+        };
+
+        rv_expected_destination expected_destination(const object& unit_);
+
+        struct rv_group_icon_params {
+            rv_color color;
+            std::string text;
+            float scale;
+            bool visible;
+
+            rv_group_icon_params(const game_value &ret_game_value_) :
+                color(ret_game_value_[0]),
+                text(ret_game_value_[1]),
+                scale(ret_game_value_[2]),
+                visible(ret_game_value_[3])
+            {
+            }
+        };
+
+        rv_group_icon_params get_group_icon_params(const group& group_);
+
+        struct rv_model_info {
+            std::string name;
+            std::string path;
+            bool skeleton;
+
+            rv_model_info(const game_value &ret_game_value_) :
+                name(ret_game_value_[0]),
+                path(ret_game_value_[1]),
+                skeleton(ret_game_value_[2])
+            {
+            }
+        };
+
+        rv_model_info get_model_info(const object& object_);
+
+        struct rv_handgun_items {
+            std::string silencer;
+            std::string laser;
+            std::string optics;
+
+            rv_handgun_items(const game_value &ret_game_value_) :
+                silencer(ret_game_value_[0]),
+                laser(ret_game_value_[1]),
+                optics(ret_game_value_[2])
+            {
+            }
+        };
+
+        rv_handgun_items handgun_items(const object& unit_);
+
+        void in_game_ui_set_event_handler(const std::string& name_, const std::string& command_);
+        void log_network_terminate(const float& handle_);
+
+        void title_cut(const std::string& text_, const std::string& type_, const float& speed_ = 1);
+        void title_obj(const std::string& class_, const std::string& type_, const float& speed_ = 1, bool show_on_map_ = false);
+        void title_rsc(const std::string& text_, const std::string& type_, const float& speed_ = 1);
+        void title_text(const std::string& text_, const std::string& type_, const float& speed_ = 1);
+
+        struct rv_trigger_area {
+            float x;
+            float y;
+            float angle;
+            bool rectangle;
+            float z; // since Arma 3 v1.59.135137
+
+            rv_trigger_area(const game_value &ret_game_value_):
+                x(ret_game_value_[0]),
+                y(ret_game_value_[1]),
+                angle(ret_game_value_[2]),
+                rectangle(ret_game_value_[3]),
+                z(ret_game_value_[4])
+            {
+            }
+        };
+
+        rv_trigger_area trigger_area(const object& trigger_);
+
+        struct rv_trigger_timeout {
+            float time_min;
+            float time_mid;
+            float time_max;
+            bool interruptable;
+
+            rv_trigger_timeout(const game_value &ret_game_value_):
+                time_min(ret_game_value_[0]),
+                time_mid(ret_game_value_[1]),
+                time_max(ret_game_value_[2]),
+                interruptable(ret_game_value_[3])
+            {
+            }
+        };
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_);
     }
 }

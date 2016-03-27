@@ -160,7 +160,8 @@ namespace intercept {
         // nular__nil__ret__any
         // nular__true__ret__bool
 
-        /// investigate
+
+        /// INVESTIGATE
         /* No documentation.*/
         // unary__addforcegeneratorrtd__array__ret__scalar
 
@@ -313,6 +314,28 @@ namespace intercept {
         // unary__call__code__ret__any
         // unary__clear3deninventory__array__ret__nothing
         // unary__tvpictureright__array__ret__string
+        // unary__createobject__array__ret__object
+        // unary__getenginetargetrpmrtd__object__ret__array
+        // unary__getfieldmanualstartpage__display__ret__array
+        // unary__getunitloadout__object__ret__array
+        // unary__getunitloadout__string__ret__array
+        // unary__lbsettext__array__ret__string
+        // unary__registerremoteexecfunc__string__ret__bool
+        // unary__save3deninventory__array__ret__nothing
+        // unary__set3denmodelsvisible__array__ret__nothing
+
+        /* No documentation for return types. */
+        // unary__getgroupicons__group__ret__array
+        // unary__taskchildren__task__ret__array
+        // unary__taskresult__task__ret__array
+        // unary__triggeractivation__object__ret__array
+        // unary__triggerstatements__object__ret__array
+        // unary__waypointgetforcebehaviour__array__ret__string
+        // unary__waypointstatements__array__ret__array
+        // unary__waypointtimeout__array__ret__array
+
+        /* Wrong documentation - seems to take Array instead of String. */
+        // unary__lognetwork__array__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -327,7 +350,7 @@ game_value call(const code & code_, game_value args_)
     in SQF itself, so the context is achieved.
     */
     host::functions.invoke_raw_binary(
-        client::__sqf::binary__call__any__code__ret__any, 
+        client::__sqf::binary__call__any__code__ret__any,
         args,
         sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_callWrapper")
     );
@@ -10335,7 +10358,85 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 icon_
             };
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__taskdescription__task__ret__array, params);
+            host::functions.invoke_raw_unary(client::__sqf::unary__taskhint__array__ret__nothing, params);
+        }
+
+        rv_expected_destination expected_destination(const object& unit_) {
+            return rv_expected_destination(host::functions.invoke_raw_unary(client::__sqf::unary__expecteddestination__object__ret__array, unit_));
+        }
+
+        rv_group_icon_params get_group_icon_params(const group& group_) {
+            return rv_group_icon_params(host::functions.invoke_raw_unary(client::__sqf::unary__getgroupiconparams__group__ret__array, group_));
+        }
+
+        rv_model_info get_model_info(const object& object_) {
+            return rv_model_info(host::functions.invoke_raw_unary(client::__sqf::unary__getmodelinfo__object__ret__array, object_));
+        }
+
+        rv_handgun_items handgun_items(const object& unit_) {
+            return rv_handgun_items(host::functions.invoke_raw_unary(client::__sqf::unary__handgunitems__object__ret__array, unit_));
+        }
+
+        void in_game_ui_set_event_handler(const std::string& name_, const std::string& command_) {
+            std::vector<game_value> params{
+                name_,
+                command_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__ingameuiseteventhandler__array__ret__nothing, params);
+        }
+
+        void log_network_terminate(const float& handle_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__lognetworkterminate__scalar__ret__nothing, handle_);
+        }
+
+        void title_cut(const std::string& text_, const std::string& type_, const float& speed_) {
+            std::vector<game_value> params{
+                text_,
+                type_,
+                speed_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__titlecut__array__ret__nothing, params);
+        }
+
+        void title_obj(const std::string& class_, const std::string& type_, const float& speed_, bool show_on_map_) {
+            std::vector<game_value> params{
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__titleobj__array__ret__nothing, params);
+        }
+
+        void title_rsc(const std::string& text_, const std::string& type_, const float& speed_) {
+            std::vector<game_value> params{
+                text_,
+                type_,
+                speed_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__titlersc__array__ret__nothing, params);
+        }
+
+        void title_text(const std::string& text_, const std::string& type_, const float& speed_) {
+            std::vector<game_value> params{
+                text_,
+                type_,
+                speed_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__titletext__array__ret__nothing, params);
+        }
+
+        rv_trigger_area trigger_area(const object& trigger_) {
+            return rv_trigger_area(host::functions.invoke_raw_unary(client::__sqf::unary__triggerarea__object__ret__array, trigger_));
+        }
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_) {
+            return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
         }
     }
 }

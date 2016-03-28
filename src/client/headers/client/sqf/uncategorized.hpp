@@ -3189,35 +3189,41 @@ namespace intercept {
         struct rv_lnb_array {
             std::vector<std::string> texts;
             std::vector<float> values;
-            std::vector<game_value> datas; // Any type
+            std::vector<std::string> datas;
 
             operator game_value() {
-                std::vector<game_value> texts_gv, values_gv;
+                std::vector<game_value> texts_gv, values_gv, datas_gv;
                 for (auto item : texts) {
                     texts_gv.push_back(game_value(item));
                 }
                 for (auto item : values) {
                     values_gv.push_back(game_value(item));
                 }
+                for (auto item : datas) {
+                    datas_gv.push_back(game_value(item));
+                }
                 return game_value(std::vector<game_value>({
                     texts_gv,
                     values_gv,
-                    datas
+                    datas_gv
                 }));
             }
 
             operator game_value() const {
-                std::vector<game_value> texts_gv, values_gv;
+                std::vector<game_value> texts_gv, values_gv, datas_gv;
                 for (auto item : texts) {
                     texts_gv.push_back(game_value(item));
                 }
                 for (auto item : values) {
                     values_gv.push_back(game_value(item));
                 }
+                for (auto item : datas) {
+                    datas_gv.push_back(game_value(item));
+                }
                 return game_value(std::vector<game_value>({
                     texts_gv,
                     values_gv,
-                    datas
+                    datas_gv
                 }));
             }
         };

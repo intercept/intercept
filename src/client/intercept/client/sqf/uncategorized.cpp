@@ -10719,7 +10719,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__lnbsetcolumnspos__control__array__ret__nothing, ctrl_, positions);
         }
 
-        void lnb_set_data(float idc_, float row_, float column_, const game_value& data_) {
+        void lnb_set_data(float idc_, float row_, float column_, const std::string& data_) {
             std::vector<game_value> item{
                 row_,
                 column_
@@ -10734,7 +10734,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__lnbsetdata__array__ret__nothing, params);
         }
 
-        void lnb_set_data(const control& ctrl_, float row_, float column_, const game_value& data_) {
+        void lnb_set_data(const control& ctrl_, float row_, float column_, const std::string& data_) {
             std::vector<game_value> item{
                 row_,
                 column_

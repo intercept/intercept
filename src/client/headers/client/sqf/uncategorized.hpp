@@ -2295,9 +2295,10 @@ namespace intercept {
         void limit_speed(const object &value0_, float value1_);
         void link_item(const object &value0_, const std::string& value1_);
         float lnb_add_column(const control &value0_, float value1_);
-        void lnb_delete_column(const control &value0_, float value1_);
+        void lnb_delete_column(const control& ctrl_, float index_);
         void lnb_delete_row(const control &value0_, float value1_);
-        void lnb_set_cur_sel_row(const control &value0_, float value1_);
+        void lnb_set_cur_sel_row(float idc_, float index_);
+        void lnb_set_cur_sel_row(const control& ctrl_, float index_);
         bool load_identity(const object &value0_, const std::string& value1_);
         bool load_status(const object &value0_, const std::string& value1_);
         void lock(const object &value0_, bool value1_);
@@ -3184,5 +3185,76 @@ namespace intercept {
         };
 
         rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        struct rv_lnb_array {
+            std::vector<std::string> texts;
+            std::vector<float> values;
+            std::vector<game_value> datas; // Any type
+
+            operator game_value() {
+                std::vector<game_value> texts_gv, values_gv;
+                for (auto item : texts) {
+                    texts_gv.push_back(game_value(item));
+                }
+                for (auto item : values) {
+                    values_gv.push_back(game_value(item));
+                }
+                return game_value(std::vector<game_value>({
+                    texts_gv,
+                    values_gv,
+                    datas
+                }));
+            }
+
+            operator game_value() const {
+                std::vector<game_value> texts_gv, values_gv;
+                for (auto item : texts) {
+                    texts_gv.push_back(game_value(item));
+                }
+                for (auto item : values) {
+                    values_gv.push_back(game_value(item));
+                }
+                return game_value(std::vector<game_value>({
+                    texts_gv,
+                    values_gv,
+                    datas
+                }));
+            }
+        };
+
+        float lnb_add_array(float idc_, const std::vector<rv_lnb_array>& lnb_array_);
+        float lnb_add_array(const control& ctrl_, const std::vector<rv_lnb_array>& lnb_array_);
+        float lnb_add_row(float idc_, const std::vector<std::string>& strings_);
+        float lnb_add_row(const control& ctrl_, std::vector<std::string>& strings_);
+
+        rv_color lnb_color(float idc_, float row_, float column_);
+        rv_color lnb_color(const control& ctrl_, float row_, float column_);
+        std::string lnb_data(float idc_, float row_, float column_);
+        std::string lnb_data(const control& ctrl_, float row_, float column_);
+        void lnb_delete_column(float idc_, float index_);
+        void lnb_delete_row(float idc_, float index_);
+        std::vector<float> lnb_get_columns_position(float idc_);
+        std::vector<float> lnb_get_columns_position(const control& ctrl_);
+        std::string lnb_picture(float idc_, float row_, float column_);
+        std::string lnb_picture(const control& ctrl_, float row_, float column_);
+        std::vector<float> lnb_size(float idc_);
+        std::vector<float> lnb_size(const control& ctrl_);
+        std::string lnb_text(float idc_, float row_, float column_);
+        std::string lnb_text(const control& ctrl_, float row_, float column_);
+        float lnb_value(float idc_, float row_, float column_);
+        float lnb_value(const control& ctrl_, float row_, float column_);
+
+        void lnb_set_color(float idc_, float row_, float column_, const rv_color& color_);
+        void lnb_set_color(const control& ctrl_, float row_, float column_, const rv_color& color_);
+        void lnb_set_columns_pos(float idc_, std::vector<float> positions_);
+        void lnb_set_columns_pos(const control& ctrl_, std::vector<float> positions_);
+        void lnb_set_data(float idc_, float row_, float column_, const game_value& data_);
+        void lnb_set_data(const control& ctrl_, float row_, float column_, const game_value& data_);
+        void lnb_set_picture(float idc_, float row_, float column_, const std::string& name_);
+        void lnb_set_picture(const control& ctrl_, float row_, float column_, const std::string& name_);
+        void lnb_set_text(float idc_, float row_, float column_, const game_value& data_);
+        void lnb_set_text(const control& ctrl_, float row_, float column_, const game_value& data_);
+        void lnb_set_value(float idc_, float row_, float column_, float value_);
+        void lnb_set_value(const control& ctrl_, float row_, float column_, float value_);
     }
 }

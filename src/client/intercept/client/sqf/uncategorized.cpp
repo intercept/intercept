@@ -1083,17 +1083,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__cuttext__array__ret__nothing, args);
         }
 
-        /*void enable_debriefing_stats(float left_, float top_, float width_, float height_) {
-            game_value args({
-                (left_),
-                (top_),
-                (width_),
-                (height_)
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, args);
-        }*/
-
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
             std::vector<game_value> args{
                 title_,
@@ -6383,9 +6372,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 waypoint_position(waypoint & wp_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointposition__array__ret__array, wp_.__to_gv()));
         }
-        //std::vector<waypoint> waypoints(group & gp_) {
-        //    // TODO return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypoints__object_group__ret__array, gp_));
-        //}
+
         std::string waypoint_script(waypoint & wp_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointscript__array__ret__string, wp_.__to_gv()));
         }
@@ -6402,11 +6389,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointvisible__array__ret__scalar, wp_.__to_gv()));
         }
-
-        //bool waypoint_exists(waypoint & wp_) {
-        //    // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
-        //    if (game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointvisible__array__ret__scalar, wp_.__to_gv())).type == "number") return false;
-        //}
 
         waypoint add_waypoint(group& gp_, const vector3& center_, float radius_, int index_, const std::string& name_) {
             game_value args({

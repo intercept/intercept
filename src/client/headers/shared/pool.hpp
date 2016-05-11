@@ -23,7 +23,7 @@ namespace intercept {
             memset((void *)_ptr, 0xcdf3cdde, sizeof(T));
             _pool_queue.push(_ptr);
         }
-        
+
         ~game_data_pool() {
             for (auto entry : _pool)
                 free(entry);
@@ -55,7 +55,7 @@ namespace intercept {
 
         inline T * acquire(size_t alloc_count_) {
             if (_pool_queue.size() == 0 || alloc_count_ > Alloc_Count)
-                _buy_entry(alloc_count_);                
+                _buy_entry(alloc_count_);
             T * ret = _pool_queue.front();
             size_t *count = (size_t *)((char *)ret - sizeof(size_t));
             *count = alloc_count_;
@@ -91,7 +91,7 @@ namespace intercept {
             *(size_t *)entry_data = alloc_count_;
             T *entry_addr = (T *)(entry_data + sizeof(size_t));
             for (size_t i = 0; i < alloc_count_; ++i)
-                T *entry = new (entry_addr+i) T();
+                //T *entry = new (entry_addr+i) T();
             _pool_queue.push(entry_addr);
             _pool.push_back(entry_data);
         }

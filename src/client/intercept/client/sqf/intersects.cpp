@@ -24,7 +24,7 @@ namespace intercept {
             }
         }
 
-        bool intersect(const vector3 &begin_pos_, const vector3 &end_pos_, const object& obj_, const std::string &lodname_) {
+        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
             std::vector<game_value> params1{
                 obj_,
                 lodname_

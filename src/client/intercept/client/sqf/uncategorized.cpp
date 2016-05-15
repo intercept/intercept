@@ -9110,6 +9110,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
         }
 
+        void diag_log(const game_value &text_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
+        }
+
         std::vector<bool> engines_is_on_rtd(const object &heli_) {
             return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_unary(client::__sqf::unary__enginesisonrtd__object__ret__array, heli_));
         }
@@ -10437,6 +10441,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         rv_trigger_timeout trigger_timeout(const object& trigger_) {
             return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
+        }
+
+        rv_unit_loadout get_unit_loadout(const object& obj_) {
+            return rv_unit_loadout(host::functions.invoke_raw_unary(client::__sqf::unary__getunitloadout__object__ret__array, obj_));
         }
     }
 }

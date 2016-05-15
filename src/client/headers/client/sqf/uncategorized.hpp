@@ -2814,6 +2814,7 @@ namespace intercept {
         std::vector<object> detected_mines(const side &side_);
 
         void diag_log(const std::string &text_);
+        void diag_log(const game_value &text_);
 
         std::vector<bool> engines_is_on_rtd(const object &heli_);
         std::vector<float> engines_rpm_rtd(const object &heli_);
@@ -3137,6 +3138,22 @@ namespace intercept {
                 optics(ret_game_value_[2])
             {
             }
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    silencer,
+                    laser,
+                    optics
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    silencer,
+                    laser,
+                    optics
+                }));
+            }
         };
 
         rv_handgun_items handgun_items(const object& unit_);
@@ -3184,5 +3201,180 @@ namespace intercept {
         };
 
         rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        struct rv_magazine_info {
+            std::string magazine;
+            int ammo;
+            int count;
+
+            rv_magazine_info(const game_value &ret_game_value_) :
+                magazine(ret_game_value_[0]),
+                ammo(ret_game_value_[1]),
+                count(ret_game_value_[2])
+            {
+            }
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    magazine,
+                    (float)ammo,
+                    (float)count
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    magazine,
+                    (float)ammo,
+                    (float)count
+                }));
+            }
+        };
+
+        struct rv_weapon_info {
+            std::string weapon;
+            std::string silencer;
+            std::string laser;
+            std::string optics;
+            rv_magazine_info primary_muzzle_magazine;
+            rv_magazine_info secondary_muzzle_magazine;
+            std::string bipod;
+
+            rv_weapon_info(const game_value &ret_game_value_) :
+                weapon(ret_game_value_[0]),
+                silencer(ret_game_value_[1]),
+                laser(ret_game_value_[2]),
+                optics(ret_game_value_[3]),
+                primary_muzzle_magazine(ret_game_value_[4]),
+                secondary_muzzle_magazine(ret_game_value_[5]),
+                bipod(ret_game_value_[6])
+            {
+            }
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    weapon,
+                    silencer,
+                    laser,
+                    optics,
+                    primary_muzzle_magazine,
+                    secondary_muzzle_magazine,
+                    bipod
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    weapon,
+                    silencer,
+                    laser,
+                    optics,
+                    primary_muzzle_magazine,
+                    secondary_muzzle_magazine,
+                    bipod
+                }));
+            }
+        };
+
+
+        struct rv_container_info {
+            std::string container;
+            std::vector<rv_magazine_info> items;
+
+            rv_container_info(const game_value &ret_game_value_) :
+                container(ret_game_value_[0]),
+                items({ ret_game_value_[1] })
+            {
+            }
+
+            operator game_value() {
+                std::vector<game_value> items_gv;
+                for (rv_magazine_info mag_info : items) {
+                    items_gv.push_back(mag_info);
+                }
+                return game_value(std::vector<game_value>({
+                    container,
+                    items_gv
+                }));
+            }
+
+            operator game_value() const {
+                std::vector<game_value> items_gv;
+                for (rv_magazine_info mag_info : items) {
+                    items_gv.push_back(mag_info);
+                }
+                return game_value(std::vector<game_value>({
+                    container,
+                    items_gv
+                }));
+            }
+        };
+
+        struct rv_unit_loadout {
+            rv_weapon_info primary;
+            rv_weapon_info secondary;
+            rv_weapon_info handgun;
+            rv_container_info uniform;
+            rv_container_info vest;
+            rv_container_info backpack;
+            std::string headgear;
+            std::string facewear;
+            rv_weapon_info binocular;
+            std::vector<std::string> assigned_items;
+
+            rv_unit_loadout(const game_value &ret_game_value_) :
+                primary(ret_game_value_[0]),
+                secondary(ret_game_value_[1]),
+                handgun(ret_game_value_[2]),
+                uniform(ret_game_value_[3]),
+                vest(ret_game_value_[4]),
+                backpack(ret_game_value_[5]),
+                headgear(ret_game_value_[6]),
+                facewear(ret_game_value_[7]),
+                binocular(ret_game_value_[8]),
+                assigned_items({ ret_game_value_[9] })
+            {
+            }
+
+            operator game_value() {
+                std::vector<game_value> assigned_items_gv;
+                for (std::string item : assigned_items) {
+                    assigned_items_gv.push_back(item);
+                }
+                return game_value(std::vector<game_value>({
+                    primary,
+                    secondary,
+                    handgun,
+                    uniform,
+                    vest,
+                    backpack,
+                    headgear,
+                    facewear,
+                    binocular,
+                    assigned_items_gv
+                }));
+            }
+
+            operator game_value() const {
+                std::vector<game_value> assigned_items_gv;
+                for (std::string item : assigned_items) {
+                    assigned_items_gv.push_back(item);
+                }
+                return game_value(std::vector<game_value>({
+                    primary,
+                    secondary,
+                    handgun,
+                    uniform,
+                    vest,
+                    backpack,
+                    headgear,
+                    facewear,
+                    binocular,
+                    assigned_items_gv
+                }));
+            }
+        };
+
+        rv_unit_loadout get_unit_loadout(const object& obj_);
     }
 }

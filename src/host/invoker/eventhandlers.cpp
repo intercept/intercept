@@ -17,7 +17,7 @@ namespace intercept {
             invoker::get().add_eventhandler("post_init", std::bind(&eventhandlers::post_init, this, std::placeholders::_1, std::placeholders::_2));
             invoker::get().add_eventhandler("mission_stopped", std::bind(&eventhandlers::mission_stopped, this, std::placeholders::_1, std::placeholders::_2));
 
-#define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::##x, this, std::placeholders::_1, std::placeholders::_2));
+#define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::x, this, std::placeholders::_1, std::placeholders::_2));
 
             EH_EVENT_DEF(anim_changed);
             EH_EVENT_DEF(anim_done);
@@ -94,7 +94,7 @@ namespace intercept {
             }
         }
     }
-#define EH_START(x) void eventhandlers::##x##(const std::string & name_, game_value & args_) {\
+#define EH_START(x) void eventhandlers::x(const std::string & name_, game_value & args_) {\
         for (auto module : extensions::get().modules()) {\
             if (module.second.eventhandlers.x) {\
                 module.second.eventhandlers.x

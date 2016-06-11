@@ -254,7 +254,7 @@ namespace intercept {
 
 
 
-        std::atomic_uint32_t _thread_count;
+        std::atomic<uint32_t> _thread_count;
 
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.

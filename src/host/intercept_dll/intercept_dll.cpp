@@ -39,7 +39,7 @@ std::string get_command(const std::string & input) {
     return input.substr(0, cmd_end);
 }
 
-std::atomic_bool _threaded = false;
+std::atomic_bool _threaded(false);
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     ZERO_OUTPUT();

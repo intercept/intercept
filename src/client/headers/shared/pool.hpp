@@ -57,14 +57,14 @@ namespace intercept {
             if (_pool_queue.size() == 0 || alloc_count_ > Alloc_Count)
                 _buy_entry(alloc_count_);                
             T * ret = _pool_queue.front();
-			std::size_t *count = (std::size_t *)((char *)ret - sizeof(std::size_t));
+            std::size_t *count = (std::size_t *)((char *)ret - sizeof(std::size_t));
             *count = alloc_count_;
             _pool_queue.pop();
             return ret;
         }
 
         inline void release(T *_ptr) {
-			std::size_t *count = (std::size_t *)((char *)_ptr - sizeof(std::size_t));
+            std::size_t *count = (std::size_t *)((char *)_ptr - sizeof(std::size_t));
             for (std::size_t i = 0; i < *count; ++i)
                 _ptr[i].~T();
             *count = 0;

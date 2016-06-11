@@ -1023,11 +1023,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
-            game_value args({
+            std::vector<game_value> args = {
                 (type_),
                 pos_,
                 (make_global_)
-            });
+            };
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
@@ -2649,10 +2649,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string create_marker(const std::string &name_, const object &pos_) {
-            game_value params({
+            std::vector<game_value> params = {
                 name_,
                 pos_
-            });
+            };
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
         }
@@ -2676,10 +2676,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string create_marker_local(const std::string &name_, const object &pos_) {
-            game_value params({
+            std::vector<game_value> params = {
                 name_,
                 pos_,
-            });
+            };
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
         }
@@ -7357,47 +7357,47 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_magazine(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazine__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)quantity_),
                 game_value((float)ammocount_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineammocargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargoglobal__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazines(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
         }
@@ -7432,19 +7432,19 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargoglobal__object__array__ret__nothing, obj_, params);
         }
@@ -7459,26 +7459,26 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 weapon_name_,
-                game_value({
+                std::vector<game_value>({
                     item_name_,
                     game_value((float)ammo_count_)
                 })
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_) {
-            game_value params({
+            std::vector<game_value> params = {
                 weapon_name_,
                 game_value({
                     item_name_,
                     game_value((float)ammo_count_),
                     muzzle_name_
                 })
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
@@ -7876,20 +7876,20 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         control ctrl_create(const display& display_, const std::string& class_, int idc_) {
-            game_value params({
+            std::vector<game_value> params = {
                 class_,
                 game_value((float)idc_)
-            });
+            };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
         }
 
         control ctrl_create(const display& display_, const std::string& class_, int idc_, const control& controls_group_) {
-            game_value params({
+            std::vector<game_value> params = {
                 class_,
                 game_value((float)idc_),
                 controls_group_
-            });
+            };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
         }

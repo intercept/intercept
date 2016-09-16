@@ -10476,12 +10476,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
 		std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
-			auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
-			std::vector<game_value> output_;
-			for (uint32_t i = 0; i < connections_.length(); ++i) {
-				output_.push_back(connections_[i]);
-			}
-			return output_;
-		}
+            auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < connections_.length(); ++i) {
+        		output_.push_back(connections_[i]);
+            }
+            return output_;
+        }
     }
 }

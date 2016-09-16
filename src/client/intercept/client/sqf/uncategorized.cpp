@@ -10453,7 +10453,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return output_;
         }
 
-        game_value create3denentity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_) {  // TODO
+        game_value create3denentity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_) {  // TODO add Eden Entity type
             std::vector<game_value> parameters_;
             parameters_.push_back(game_value(mode_));
             parameters_.push_back(game_value(class_));
@@ -10463,5 +10463,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_));
         }
 
+        std::vector<game_value> create3denconnections(const game_value &entity_) {  // TODO array[] of array[string,Eden entity]
+            auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denconnections__any__ret__array, entity_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < connections_.length(); ++i) {
+				output_.push_back(connections_[i]);
+            }
+            return output_;
+        }
     }
 }

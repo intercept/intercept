@@ -1,6 +1,7 @@
 #include "uncategorized.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
+#include <config.hpp>
 
 
 using namespace intercept::types;
@@ -10438,5 +10439,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         rv_trigger_timeout trigger_timeout(const object& trigger_) {
             return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
         }
+
+        std::vector<game_value> create3dencomposition(const config_entry& configPath_, const vector3& position_) {
+            std::vector<game_value> parameters_;
+            parameters_.push_back(game_value((config&)(configPath_)));
+            parameters_.push_back(game_value(position_));
+            
+            auto eden_entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3dencomposition__array__ret__array, parameters_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < eden_entities_.length(); ++i) {
+				output_.push_back(eden_entities_[i]);
+            }
+            return output_;
+        }
+
+			
+
     }
 }

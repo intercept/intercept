@@ -10440,9 +10440,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
         }
 
-        std::vector<game_value> create3dencomposition(const config_entry& configPath_, const vector3& position_) {
+        std::vector<game_value> create3dencomposition(const config &configPath_, const vector3 &position_) {
             std::vector<game_value> parameters_;
-            parameters_.push_back(game_value((config&)(configPath_)));
+            parameters_.push_back(game_value(configPath_));
             parameters_.push_back(game_value(position_));
             
             auto eden_entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3dencomposition__array__ret__array, parameters_));
@@ -10453,7 +10453,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return output_;
         }
 
-			
+        game_value create3denentity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_) {  // TODO
+            std::vector<game_value> parameters_;
+            parameters_.push_back(game_value(mode_));
+            parameters_.push_back(game_value(class_));
+            parameters_.push_back(game_value(position_));
+            parameters_.push_back(game_value(is_empty_));
+            
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_));
+        }
 
     }
 }

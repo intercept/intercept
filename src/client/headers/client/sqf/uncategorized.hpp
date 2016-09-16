@@ -707,6 +707,8 @@ namespace intercept {
         bool remove_eden_layer(float value_);
         void remove_all_eden_eventhandlers(const std::string &value_);
         float add_eden_event_handler(const std::string &type_, const code &code_);
+		std::vector<game_value> create3dencomposition(const config &config_path_, const vector3 &position_);
+		game_value create3denentity(const std::string &mode_, const std::string &class_, const vector3 &position_);
 
         /* Chat */
         namespace __helpers {

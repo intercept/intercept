@@ -1,7 +1,6 @@
 #include "uncategorized.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
-#include <config.hpp>
 
 
 using namespace intercept::types;
@@ -10472,9 +10471,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return output_;
         }
 
-		game_value get_3den_entity(const float &entity_id_) {
-			number(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
-
-}
+        game_value get_3den_entity(const float &entity_id_) {
+			return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
+		}
     }
 }

@@ -711,7 +711,9 @@ namespace intercept {
         game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_,bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
         std::vector<game_value> create_3den_connections(const game_value &entity_);
         game_value get_3den_entity(const float &entity_id_);
-		std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
+        std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
+        std::vector<game_value> get_3den_selected(const std::string &type_);
+        bool set_3den_attributes(const std::vector<game_value> &entity_attributes_);
 
         /* Chat */
         namespace __helpers {

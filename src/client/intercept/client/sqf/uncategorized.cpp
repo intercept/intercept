@@ -10475,13 +10475,26 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
         }
 
-		std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
-            auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
+        std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
+            auto entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
             std::vector<game_value> output_;
-            for (uint32_t i = 0; i < connections_.length(); ++i) {
-        		output_.push_back(connections_[i]);
+            for (uint32_t i = 0; i < entities_.length(); ++i) {
+                output_.push_back(entities_[i]);
             }
             return output_;
+        }
+
+        std::vector<game_value> get_3den_selected(const std::string &type_) {
+            auto entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denselected__string__ret__array, type_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < entities_.length(); ++i) {
+                output_.push_back(entities_[i]);
+            }
+            return output_;
+        }
+
+        bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_));
         }
     }
 }

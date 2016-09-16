@@ -10447,7 +10447,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto eden_entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3dencomposition__array__ret__array, parameters_));
             std::vector<game_value> output_;
             for (uint32_t i = 0; i < eden_entities_.length(); ++i) {
-				output_.push_back(eden_entities_[i]);
+                output_.push_back(eden_entities_[i]);
             }
             return output_;
         }
@@ -10466,13 +10466,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denconnections__any__ret__array, entity_));
             std::vector<game_value> output_;
             for (uint32_t i = 0; i < connections_.length(); ++i) {
-				output_.push_back(connections_[i]);
+                output_.push_back(connections_[i]);
             }
             return output_;
         }
 
         game_value get_3den_entity(const float &entity_id_) {
-			return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
-		}
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
+        }
     }
 }

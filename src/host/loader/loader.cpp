@@ -160,6 +160,82 @@ namespace intercept {
         }
         return false;
     }
+
+    namespace internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+
+        struct gsFunction {	//#TODO shouldn't everything in here be const?
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            const rv_string* _name2;//0x20 this is (tolower name)
+            unary_operator * _operator;//0x24
+            uint32_t placeholder8;//0x28 RString to something
+            const rv_string* _description;//0x2C
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* placeholder9;
+            const rv_string* placeholder10;
+            const rv_string* _category; //0x40
+            uint32_t placeholder11;//0x44
+            uint32_t placeholder12;//0x48
+            uint32_t placeholder13;//0x4C
+        };
+        struct gsOperator {
+            const  rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            const rv_string* _name2;//0x20 this is (tolower name)
+			//#TODO
+            binary_operator * _operator;//0x24
+            uint32_t placeholder8;//0x28 RString to something
+            const rv_string* _description;//0x2C
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* placeholder9;
+            const rv_string* placeholder10;
+            const rv_string* _category; //0x40
+            uint32_t placeholder11;//0x44
+            uint32_t placeholder12;//0x48
+            uint32_t placeholder13;//0x4C
+        };
+		struct gsNular {
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            const rv_string* _name2;//0x20 this is (tolower name)
+            nular_operator * _operator;//0x24
+            uint32_t placeholder8;//0x28 RString to something
+            const rv_string* _description;//0x2C
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* placeholder9;
+            const rv_string* placeholder10;
+            const rv_string* _category; //0x40
+            uint32_t placeholder11;//0x44
+            uint32_t placeholder12;//0x48
+            uint32_t placeholder13;//0x4C
+        };
+
+
+
+    }
+
+
     
     void loader::do_function_walk(uintptr_t state_addr_) {
         uintptr_t unary_hash = state_addr_ + 16;
@@ -185,15 +261,16 @@ namespace intercept {
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
 
-                uint32_t op_count = *(uintptr_t *)(entry_start + (20 * entry_offset) + 4);
-                uintptr_t op_start = *(uintptr_t *)(entry_start + (20 * entry_offset));
+                uint32_t op_count = *(uintptr_t *)(entry_start + (0x2C * entry_offset) + 4);
+                uintptr_t op_start = *(uintptr_t *)(entry_start + (0x2C * entry_offset));
                 for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
-                    uintptr_t entry = (op_start + (44 * op_offset));
+                    uintptr_t entry = (op_start + (0x44 * op_offset));
+                    //internal::gsFunction& test = op_start[op_offset];
                     unary_entry new_entry;
-                    new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 12);
-                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 12)) + 8;
-                    uintptr_t name_entry = *(uintptr_t *)entry;
-                    new_entry.name = (char *)(name_entry + 8);
+                    new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 0x24);
+                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 0x24)) + 8;
+                    const rv_string* name_entry = *(const rv_string **)entry;
+                    new_entry.name = &(name_entry->char_string);
                     LOG(INFO) << "Found unary operator: " <<
                         new_entry.op->return_type.type_str() << " " <<
                         new_entry.name <<
@@ -221,13 +298,13 @@ namespace intercept {
             uintptr_t entry_start = *(uintptr_t *)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uint32_t op_count = *(uintptr_t *)(entry_start + (24 * entry_offset) + 4);
-                uintptr_t op_start = *(uintptr_t *)(entry_start + (24 * entry_offset));
+                uint32_t op_count = *(uintptr_t *)(entry_start + (0x30 * entry_offset) + 4);
+                uintptr_t op_start = *(uintptr_t *)(entry_start + (0x30 * entry_offset));
                 for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
-                    uintptr_t entry = (op_start + (52 * op_offset));
+                    uintptr_t entry = (op_start + (0x4C * op_offset));
                     binary_entry new_entry;
-                    new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 16);
-                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 16)) + 8;
+                    new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 0x28);
+                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 0x28)) + 8;
                     uintptr_t name_entry = *(uintptr_t *)entry;
                     new_entry.name = (char *)(name_entry + 8);
                     LOG(INFO) << "Found binary operator: " <<

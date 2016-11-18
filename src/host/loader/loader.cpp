@@ -161,7 +161,7 @@ namespace intercept {
         return false;
     }
 
-    namespace internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
 
         struct gsFunction {	//#TODO shouldn't everything in here be const?
             const rv_string* _name;
@@ -181,9 +181,6 @@ namespace intercept {
             const rv_string* placeholder9;
             const rv_string* placeholder10;
             const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-            uint32_t placeholder12;//0x48
-            uint32_t placeholder13;//0x4C
         };
         struct gsOperator {
             const  rv_string* _name;
@@ -195,18 +192,16 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             const rv_string* _name2;//0x20 this is (tolower name)
-			//#TODO
-            binary_operator * _operator;//0x24
-            uint32_t placeholder8;//0x28 RString to something
-            const rv_string* _description;//0x2C
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* placeholder9;
-            const rv_string* placeholder10;
-            const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-            uint32_t placeholder12;//0x48
-            uint32_t placeholder13;//0x4C
+            int32_t placeholder8; //0x24 Small int 0-5
+            binary_operator * _operator;//0x28
+            const rv_string* _leftType;//0x2C Description of left hand side parameter
+            const rv_string* _rightType;//0x30 Description of right hand side parameter
+            const rv_string* _description;//0x34
+            const rv_string* _example;//0x38
+            const rv_string* placeholder10;//0x3C
+            const rv_string* _version;//0x40 some version number
+            const rv_string* placeholder11;//0x44
+            const rv_string* _category; //0x48
         };
 		struct gsNular {
             const rv_string* _name;
@@ -216,19 +211,15 @@ namespace intercept {
             uint32_t placeholder4;//0x10
             uint32_t placeholder5;//0x14
             uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            const rv_string* _name2;//0x20 this is (tolower name)
-            nular_operator * _operator;//0x24
-            uint32_t placeholder8;//0x28 RString to something
-            const rv_string* _description;//0x2C
+            const rv_string* _name2;//0x1C this is (tolower name)
+            nular_operator * _operator;//0x20
+            const rv_string* _description;//0x24
             const rv_string* _example;
             const rv_string* _example2;
-            const rv_string* placeholder9;
+            const rv_string* _version;//0x30 some version number
             const rv_string* placeholder10;
-            const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-            uint32_t placeholder12;//0x48
-            uint32_t placeholder13;//0x4C
+            const rv_string* _category; //0x38
+            uint32_t placeholder11;//0x3C
         };
 
 
@@ -262,14 +253,15 @@ namespace intercept {
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
 
                 uint32_t op_count = *(uintptr_t *)(entry_start + (0x2C * entry_offset) + 4);
-                uintptr_t op_start = *(uintptr_t *)(entry_start + (0x2C * entry_offset));
+                __internal::gsFunction* op_start = *(__internal::gsFunction**)(entry_start + (0x2C * entry_offset));
                 for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
-                    uintptr_t entry = (op_start + (0x44 * op_offset));
-                    //internal::gsFunction& test = op_start[op_offset];
+                    uintptr_t entry2 = ((uintptr_t)op_start + (0x44 * op_offset));
+                    __internal::gsFunction& entry = op_start[op_offset];
                     unary_entry new_entry;
-                    new_entry.op = (unary_operator *)*(uintptr_t *)(entry + 0x24);
-                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 0x24)) + 8;
-                    const rv_string* name_entry = *(const rv_string **)entry;
+                    new_entry.op = entry._operator;
+                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry2 + 0x24)) + 8;
+                    new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+                    const rv_string* name_entry = entry._name;
                     new_entry.name = &(name_entry->char_string);
                     LOG(INFO) << "Found unary operator: " <<
                         new_entry.op->return_type.type_str() << " " <<
@@ -299,14 +291,14 @@ namespace intercept {
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
                 uint32_t op_count = *(uintptr_t *)(entry_start + (0x30 * entry_offset) + 4);
-                uintptr_t op_start = *(uintptr_t *)(entry_start + (0x30 * entry_offset));
+                __internal::gsOperator* op_start = *(__internal::gsOperator**)(entry_start + (0x30 * entry_offset));
                 for (uint32_t op_offset = 0; op_offset < op_count; ++op_offset) {
-                    uintptr_t entry = (op_start + (0x4C * op_offset));
+                    __internal::gsOperator& entry = op_start[op_offset];
+                   // uintptr_t entry = (op_start + (0x4C * op_offset));
                     binary_entry new_entry;
-                    new_entry.op = (binary_operator *)*(uintptr_t *)(entry + 0x28);
-                    new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 0x28)) + 8;
-                    uintptr_t name_entry = *(uintptr_t *)entry;
-                    new_entry.name = (char *)(name_entry + 8);
+                    new_entry.op = entry._operator;
+                    new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+                    new_entry.name = &entry._name->char_string;
                     LOG(INFO) << "Found binary operator: " <<
                         new_entry.op->return_type.type_str() << " " <<
                         "(" << new_entry.op->arg1_type.type_str() << ")" <<
@@ -332,15 +324,14 @@ namespace intercept {
             uintptr_t bucket = (bucket_start + (12 * bucket_offset));
             uint32_t bucket_length = *(uintptr_t *)(bucket + 4);
 
-            uintptr_t entry_start = *(uintptr_t *)bucket;
+            __internal::gsNular* entry_start = *(__internal::gsNular**)bucket;
 
             for (uint32_t entry_offset = 0; entry_offset < bucket_length; ++entry_offset) {
-                uintptr_t entry = (entry_start + (40 * entry_offset));
+                __internal::gsNular entry = entry_start[entry_offset];
                 nular_entry new_entry;
-                new_entry.op = (nular_operator *)*(uintptr_t *)(entry + 8);
-                new_entry.procedure_ptr_addr = (*(uintptr_t *)(entry + 8)) + 8;
-                uintptr_t name_entry = *(uintptr_t *)entry;
-                new_entry.name = (char *)(name_entry + 8);
+                new_entry.op = entry._operator;
+                new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+                new_entry.name = &entry._name->char_string;
                 LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " " 
                     << new_entry.name << " @ " << new_entry.op->procedure_addr;
                 std::string name = std::string(new_entry.name);

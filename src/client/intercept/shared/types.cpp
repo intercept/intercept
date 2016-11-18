@@ -90,12 +90,11 @@ namespace intercept {
             if (single_type != NULL) {
                 return single_type->type_name->string();
             }
-            else if (compound_type != NULL) {
+            else {
                 return
                     compound_type->types->first->type_name->string() + "_" +
                     compound_type->types->second->type_name->string();
             }
-            __debugbreak();//Invalid type
         }
 
         game_data_number::game_data_number() {

@@ -211,6 +211,12 @@ namespace intercept {
         const nular_map & nular() const;
         //!@}
 
+        /*!
+        @brief Returns the pointer to the engines allocator functions.
+        */
+        uintptr_t get_allocator() const;
+
+
     protected:
         /*!
         @name Function Maps
@@ -233,6 +239,11 @@ namespace intercept {
         @brief Stores the hooked functions.
         */
         std::unordered_set<uint32_t> _hooked_functions;
+
+        /*!
+        @brief Stores the pointer to the engines allocator functions.
+        */
+        uintptr_t _allocator;
 
         bool _attached;
         bool _patched;

@@ -109,6 +109,14 @@ namespace intercept {
             void(*invoker_lock)();
             void(*invoker_unlock)();
 
+            /*!
+            @brief Get's a pointer to Arma's memory allocator
+
+            This returns a pointer to Arma's internal memory allocator for use by rv_allocator
+
+            @param value_ A pointer to the allocator
+            */
+            uintptr_t(*get_engine_allocator)();
         };
     }
 }

@@ -16,6 +16,209 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
 
+
+
+
+        class refcount_base {
+        public:
+            refcount_base() { _refcount = 0; }
+
+            int add_ref() const {
+                return ++_refcount;
+            }
+            int dec_ref() const {
+                return --_refcount;
+            }
+            int ref_count() const {
+                return _refcount;
+            }
+            //Has to be implemented in any derived classes and handle cleanup
+            int release() const = delete;
+            mutable int _refcount;
+        };
+
+
+
+
+
+
+        template<class Type, class Allocator = std::allocator<char>> //Has to be allocator of type char
+        class compact_array : public refcount_base {
+            static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
+        public:
+
+            int size() const { return _size; }
+            Type *data() { return &_data; }
+            const Type *data() const { return &_data; }
+
+
+            //We delete ourselves! After release no one should have a pointer to us anymore!
+            int release() const {
+                int ret = dec_ref();
+                if (!ret) del();
+                return ret;
+            }
+
+            static compact_array* create(int number_of_elements_) {
+                size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+                compact_array* buffer = reinterpret_cast<compact_array*>(_alloc.allocate(size));
+                new (buffer) compact_array(number_of_elements_);
+                return buffer;
+            }
+
+            void del() const {
+                this->~compact_array();
+                const void* _thisptr = this;
+                void* _thisptr2 = const_cast<void*>(_thisptr);
+                _alloc.deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
+            }
+            //#TODO copy functions
+
+            size_t _size;
+            Type _data;
+        private:
+            explicit compact_array(size_t size_) {
+                _size = size_;
+            }
+
+            static Allocator _alloc;
+        };
+
+
+        template<class Type>
+        class ref {
+            static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
+            Type* _ref;
+        public:
+            ref() { _ref = nullptr; }
+            ~ref() { free(); }
+
+            //Construct from Pointer
+            ref(Type* other) {
+                if (other) other->add_ref();
+                _ref = other;
+            }
+            //Copy from pointer
+            const ref &operator = (Type *source) {
+                Type *old = _ref;
+                if (source) source->add_ref();
+                _ref = source;
+                if (old) old->release();//decrement reference and delete object if refcount == 0
+                return *this;
+            }
+
+            //Construct from reference
+            ref(const ref &sRef) {
+                Type *source = sRef._ref;
+                if (source) source->add_ref();
+                _ref = source;
+            }
+            //Copy from reference.
+            const ref &operator = (const ref &other) {
+                Type *source = other._ref;
+                Type *old = _ref;
+                if (source) source->add_ref();
+                _ref = source;
+                if (old) old->release();//decrement reference and delete object if refcount == 0
+                return *this;
+            }
+
+            bool isNull() const { return _ref == nullptr; }
+            void free() {
+                if (!_ref) return;
+                _ref->release();
+                _ref = nullptr;
+            }
+            Type *operator -> () const { return _ref; }
+            operator Type *() const { return _ref; }
+        };
+
+        class r_string {
+            r_string(const char* str, size_t len) {
+                if (str) _ref = create(str, len);
+                else _ref = create(len);
+            }
+            const char* data() const {
+                if (_ref) return _ref->data();
+                static char empty[]{ 0 };
+                return empty;
+            }
+            char* data_mutable() {
+                if (!_ref) return nullptr;
+                make_mutable();
+                return _ref->data();
+            }
+
+            operator const char *() const { return data(); }
+            //This calls strlen so O(N) 
+            int length() const {
+                if (!_ref) return 0;
+                return strlen(_ref->data());
+            }
+
+            //== is case insensitive just like scripting
+            bool operator == (const char *other) const {
+                return _strcmpi(*this, other) == 0;
+            }
+
+            //!= is case insensitive just like scripting
+            bool operator != (const char *other) const {
+                return _strcmpi(*this, other) != 0;
+            }
+
+            bool compare_case_sensitive(const char *other) {
+                _stricmp(*this, other);
+            }
+
+            size_t find(char ch,size_t start =0) const {
+                if (length() == 0) return -1;
+                const char *pos = strchr(_ref->data() + start, ch);
+                if (pos == nullptr) return -1;
+                return pos - _ref->data();
+            }
+
+            size_t find(const char *sub, int nStart = 0) const {
+                if (_ref == nullptr || length() == 0) return -1;
+                const char *pos = strstr(_ref->data() + nStart, sub);
+                if (pos == nullptr) return -1;
+                return pos - _ref->data();
+            }
+
+
+
+
+
+        private:
+            ref<compact_array<char>> _ref;
+
+            static compact_array<char> *create(const char *str, int len) {
+                if (len == 0 || *str == 0) return nullptr;
+                compact_array<char> *string = compact_array<char>::create(len + 1);
+                strncpy_s(string->data(),string->size(), str, len);
+                string->data()[len] = 0;
+                return string;
+            }
+
+            static compact_array<char> *create(int len) {
+                if (len == 0) return nullptr;
+                compact_array<char> *string = compact_array<char>::create(len + 1);
+                string->data()[0] = 0;
+                return string;
+            }
+
+            static compact_array<char> *create(const char *str) {
+                if (*str == 0) return nullptr;
+                return create(str, strlen(str));
+            }
+            void make_mutable() {
+                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
+                    _ref = create(_ref->data());
+                }
+            }
+        };
+
+
+
         class rv_string {
         public:
             rv_string();
@@ -130,13 +333,13 @@ namespace intercept {
             ref_count() { _count = 0; };
 
             ref_count(int16_t initial_, int16_t actual_, bool is_intercept_) {
-                _count = (((int32_t)initial_) << 16) | ((int32_t)actual_);
+                _count = (((int32_t) initial_) << 16) | ((int32_t) actual_);
                 if (is_intercept_)
                     _count |= 1 << 31;
             }
 
             void operator = (int16_t val_) {
-                _count = (((int32_t)_initial()) << 16) | ((int32_t)val_);
+                _count = (((int32_t) _initial()) << 16) | ((int32_t) val_);
             }
 
             uint16_t operator + (const int32_t val_) {
@@ -148,11 +351,11 @@ namespace intercept {
             }
 
             void operator ++ (const int32_t val_) {
-                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() + 1);
+                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() + 1);
             }
 
             void operator -- (const int32_t val_) {
-                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() - 1);
+                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() - 1);
             }
 
             operator int16_t() {
@@ -160,13 +363,13 @@ namespace intercept {
             }
 
             void set_initial(int16_t val_, bool is_intercept_) {
-                _count = (((int32_t)val_) << 16) | (int32_t)_actual();
+                _count = (((int32_t) val_) << 16) | (int32_t) _actual();
                 if (is_intercept_)
                     _count |= 1 << 31;
             }
 
             int16_t get_initial() {
-                return ((int16_t)(_count >> 16)) & ~(1 << 15);
+                return ((int16_t) (_count >> 16)) & ~(1 << 15);
             }
 
             bool is_intercept() {
@@ -174,15 +377,15 @@ namespace intercept {
             }
 
             void clear_initial() {
-                _count = (((int32_t)0) << 16) | (int32_t)_actual();
+                _count = (((int32_t) 0) << 16) | (int32_t) _actual();
             }
         protected:
             inline int16_t _actual() {
 #undef max // fucking hell i hate these macros, need to turn them off...
-                return ((int32_t)((std::numeric_limits<int16_t>::max()) & _count));
+                return ((int32_t) ((std::numeric_limits<int16_t>::max()) & _count));
             }
             inline int16_t _initial() {
-                return (int16_t)(_count >> 16);
+                return (int16_t) (_count >> 16);
             }
             int32_t _count;
         };
@@ -302,7 +505,7 @@ namespace intercept {
             rv_game_value rv_data;
         protected:
             void _free();
-            
+
         };
 
         class game_data_array : public game_data {
@@ -525,7 +728,7 @@ namespace intercept {
                 rv_string * ret = _pool_queue.front();
                 ret->ref_count_internal = 1;
                 ret->length = alloc_length_;
-                *((char *)&ret->char_string + alloc_length_) = 0x0;
+                *((char *) &ret->char_string + alloc_length_) = 0x0;
                 _pool_queue.pop();
                 return ret;
             }
@@ -537,8 +740,7 @@ namespace intercept {
                     _ptr->length = 0;
                     _ptr->char_string = 0x0;
                     _pool_queue.push(_ptr);
-                }
-                else {
+                } else {
                     if (!_running) {
                         _running = true;
                         _collection_thread = std::thread(&game_data_string_pool::_string_collector, this);
@@ -549,7 +751,7 @@ namespace intercept {
 
             ~game_data_string_pool() {
                 for (auto entry : _pool)
-                    delete[] (char *)entry;
+                    delete[](char *)entry;
                 _running = false;
                 _collection_thread.join();
             }
@@ -562,10 +764,10 @@ namespace intercept {
 
             inline void _buy_entry(size_t alloc_length_) {
                 char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + alloc_length_];
-                ((rv_string *)raw_data)->length = alloc_length_;
-                ((rv_string *)raw_data)->ref_count_internal = 1;
-                _pool_queue.push((rv_string *)raw_data);
-                _pool.push_back((rv_string *)raw_data);
+                ((rv_string *) raw_data)->length = alloc_length_;
+                ((rv_string *) raw_data)->ref_count_internal = 1;
+                _pool_queue.push((rv_string *) raw_data);
+                _pool.push_back((rv_string *) raw_data);
             }
 
             /*!
@@ -586,8 +788,7 @@ namespace intercept {
 
             @param str_ A pointer to the string to release.
             */
-            void _string_collector()
-            {
+            void _string_collector() {
                 while (_running) {
                     {
                         std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
@@ -599,8 +800,7 @@ namespace intercept {
                                 ptr->char_string = 0x0;
                                 _pool_queue.push(ptr);
                                 _string_collection.erase(it++);
-                            }
-                            else {
+                            } else {
                                 ++it;
                             }
                         }

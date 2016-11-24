@@ -65,6 +65,16 @@ namespace intercept {
         public:
             static void deallocate(Type* _Ptr, size_t);
             static Type* allocate(size_t _count);
+
+            //Allocates and Initializes one Object
+            template<class... _Types>
+            static Type* createSingle(_Types&&... _Args) {
+                auto ptr = allocate(1);
+                new (ptr) Type(std::forward<_Types>(_Args)...);
+                return ptr;
+            }
+
+            //#TODO implement game_data_pool and string pool here
         };
 
 
@@ -86,10 +96,17 @@ namespace intercept {
             mutable int _refcount;
         };
 
-
-
-
-
+        class refcount : public refcount_base {
+        public:
+            int release() const {
+                int rcount = dec_ref();
+                if (rcount == 0) {
+                    this->~refcount();
+                    rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
+                }
+                return rcount;
+            }
+        };
 
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
@@ -176,17 +193,42 @@ namespace intercept {
                 _ref->release();
                 _ref = nullptr;
             }
+            //This returns a pointer to the underlying object. Use with caution!
+            Type *getRef() const { return _ref; }
             Type *operator -> () const { return _ref; }
             operator Type *() const { return _ref; }
         };
 
         class r_string {
+        public:
+            r_string(){}
             r_string(const char* str, size_t len) {
                 if (str) _ref = create(str, len);
                 else _ref = create(len);
             }
             r_string(const char* str) {
                 if (str) _ref = create(str);
+            }
+
+            r_string(r_string&& _move) {
+                _ref = _move._ref;
+                _move._ref = nullptr;
+            }
+            r_string(const r_string& _copy) {
+                _ref = _copy._ref;
+            }
+
+
+            r_string& operator = (r_string&& _move) {
+                if (this == &_move)
+                    return *this;
+                _ref = _move._ref;
+                _move._ref = nullptr;
+                return *this;
+            }
+            r_string& operator = (const r_string& _copy) {
+                _ref = _copy._ref;
+                return *this;
             }
             const char* data() const {
                 if (_ref) return _ref->data();
@@ -440,10 +482,16 @@ namespace intercept {
             int32_t _count;
         };
 
-        class game_data {
+        /*
+        This is a placeholder so i can use refcount but still have an accessible vtable pointer
+        */
+        class __vtable {
         public:
-            uintptr_t type;
-            ref_count ref_count_internal;
+            uintptr_t _vtable{0};
+        };
+
+        class game_data : public __vtable, public refcount {
+        public:
             uintptr_t data_type;
         };
 
@@ -485,9 +533,9 @@ namespace intercept {
         public:
             static uintptr_t __vptr_def;
             rv_game_value() : __vptr(rv_game_value::__vptr_def), data(nullptr) {};
-            uintptr_t __vptr;
-            game_data *data;
-            const void deallocate();
+            uintptr_t __vptr; //#TODO inheritance
+            ref<game_data> data;
+            const void deallocate();//#TODO remove
         };
 
         class game_data_array;
@@ -530,7 +578,7 @@ namespace intercept {
             operator float();
             operator bool();
             operator std::string();
-            operator rv_string &();
+            operator r_string();
             operator rv_game_value *();
             operator vector3();
             operator vector2();
@@ -538,7 +586,7 @@ namespace intercept {
             operator float() const;
             operator bool() const;
             operator std::string() const;
-            operator rv_string &() const;
+            operator r_string() const;
             operator vector3() const;
             operator vector2() const;
 
@@ -571,7 +619,7 @@ namespace intercept {
             game_data_array & game_data_array::operator = (game_data_array &&move_);
             void free();
             ~game_data_array();
-            game_value *data;
+            game_value *data; //#TODO autoArray class
             uint32_t length;
             uint32_t max_size;
             static void* operator new(std::size_t sz_);

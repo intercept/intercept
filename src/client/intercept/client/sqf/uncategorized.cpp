@@ -390,7 +390,7 @@ void set_variable(const rv_namespace & namespace_, const std::string & var_name_
 {
     game_value args = std::vector<game_value>{ namespace_, std::vector<game_value>{ var_name_, value_ } };
     host::memory_watcher.add_watch(args);
-    host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(namespace_, "intercept_fnc_setVariableNamespace"));
+    host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_setVariableNamespace"));
 }
 
 void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_) {

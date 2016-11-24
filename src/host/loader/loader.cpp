@@ -373,9 +373,8 @@ namespace intercept {
 
         uintptr_t allocatorVtablePtr = (findInMemory((char*)&stringOffset, 4) -4) ;
         const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
-        runtime_assert(strcmp(test, "") == 0);
+        assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
         _allocator = allocatorVtablePtr;
-
     }
 
     const unary_map & loader::unary() const {

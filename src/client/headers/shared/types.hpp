@@ -19,6 +19,55 @@ namespace intercept {
 
 
 
+        
+        template<class Type>
+        class rv_allocator : std::allocator<Type> {
+            class MemTableFunctions {
+            public:
+                virtual void *New(size_t size) = 0;
+                virtual void *New(size_t size, const char *file, int line) = 0;
+                virtual void Delete(void *mem) = 0;
+                virtual void Delete(void *mem, const char *file, int line) = 0;
+                virtual void *Realloc(void *mem, size_t size) = 0;
+                virtual void *Realloc(void *mem, size_t size, const char *file, int line) = 0;
+                virtual void *Resize(void *mem, size_t size) = 0; //This actually doesn't do anything.
+
+                virtual void *NewPage(size_t size, size_t align) = 0;
+                virtual void DeletePage(void *page, size_t size) = 0;
+
+                virtual void *HeapAlloc(void *mem, size_t size) = 0;
+                virtual void *HeapAlloc(void *mem, size_t size, const char *file, int line) = 0;//HeapAlloc
+
+                virtual void *HeapDelete(void *mem, size_t size) = 0;
+                virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
+                 
+                virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
+
+                virtual size_t GetPageRecommendedSize() = 0;
+
+                virtual void *HeapBase() = 0;
+                virtual size_t HeapUsed() = 0;
+
+                virtual size_t HeapUsedByNew() = 0;
+                virtual size_t HeapCommited() = 0;
+                virtual int FreeBlocks() = 0;
+                virtual int MemoryAllocatedBlocks() = 0;
+                virtual void Report() = 0;//Does nothing on release build. Maybe on Profiling build
+                virtual bool CheckIntegrity() = 0;//Does nothing on release build. Maybe on Profiling build returns true.
+                virtual bool IsOutOfMemory() = 0;//If true we are so full we are already moving memory to disk.
+
+                virtual void CleanUp() = 0;//Does nothing? I guess.
+                                           //Synchronization for Multithreaded access
+                virtual void Lock() = 0;
+                virtual void Unlock() = 0;
+                char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
+            };
+        public:
+            static void deallocate(Type* _Ptr, size_t);
+            static Type* allocate(size_t _count);
+        };
+
+
         class refcount_base {
         public:
             refcount_base() { _refcount = 0; }
@@ -42,7 +91,7 @@ namespace intercept {
 
 
 
-        template<class Type, class Allocator = std::allocator<char>> //Has to be allocator of type char
+        template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
             static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
         public:
@@ -61,7 +110,7 @@ namespace intercept {
 
             static compact_array* create(int number_of_elements_) {
                 size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
-                compact_array* buffer = reinterpret_cast<compact_array*>(_alloc.allocate(size));
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
                 new (buffer) compact_array(number_of_elements_);
                 return buffer;
             }
@@ -70,7 +119,7 @@ namespace intercept {
                 this->~compact_array();
                 const void* _thisptr = this;
                 void* _thisptr2 = const_cast<void*>(_thisptr);
-                _alloc.deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
+                Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
             }
             //#TODO copy functions
 
@@ -80,8 +129,6 @@ namespace intercept {
             explicit compact_array(size_t size_) {
                 _size = size_;
             }
-
-            static Allocator _alloc;
         };
 
 
@@ -138,6 +185,9 @@ namespace intercept {
                 if (str) _ref = create(str, len);
                 else _ref = create(len);
             }
+            r_string(const char* str) {
+                if (str) _ref = create(str);
+            }
             const char* data() const {
                 if (_ref) return _ref->data();
                 static char empty[]{ 0 };
@@ -188,7 +238,7 @@ namespace intercept {
 
 
 
-        private:
+        public://#TODO make private after all rv_strings were replaced
             ref<compact_array<char>> _ref;
 
             static compact_array<char> *create(const char *str, int len) {

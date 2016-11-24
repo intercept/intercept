@@ -5,6 +5,13 @@
 
 #define INTERNAL_TAG 0x0000dede
 
+#if INTERCEPT_HOST_DLL
+#include "loader.hpp"
+#define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();
+#else
+#define GET_ENGINE_ALLOCATOR client::host::functions.get_engine_allocator()
+#endif
+
 namespace intercept {
     namespace types {
         uintptr_t game_data_string::type_def;
@@ -239,10 +246,17 @@ namespace intercept {
             data_type = data_type_def;
             ref_count_internal = 1;
             ref_count_internal.set_initial(1, true);
-            raw_string = allocate_string(str_.length() + 1);
+             //#TODO replace by correct implementation
+            auto str = r_string::create(str_.c_str(), str_.length() + 1);
+            raw_string = (rv_string *) str;
+           /* raw_string = allocate_string(str_.length() + 1);
             memcpy(&raw_string->char_string, str_.c_str(), str_.length() + 1);
             raw_string->length = str_.length() + 1;
+            
+
+            */
             raw_string->ref_count_internal = 1;
+
         }
 
         game_data_string::game_data_string(const game_data_string & copy_)
@@ -771,6 +785,23 @@ namespace intercept {
         {
             data = nullptr;
         }
+        template<class Type>
+        void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
+            // deallocate object at _Ptr
+            uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase;
+            alloc->Delete(_Ptr);
+        }
+
+        template<class Type>
+        Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
+            uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;
+            //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase;
+            return reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
+        }
+
+
 
 }
 }

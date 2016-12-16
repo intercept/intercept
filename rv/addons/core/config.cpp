@@ -555,7 +555,7 @@ class CfgPatches {
             y = QUOTE(intercept_params_var set[ARR_2(0,_this)]; 'intercept' callExtension QUOTE(QUOTE(EVENT_ARGS(x)));); \
         }; \
     }; \
-};
+}
 
 EH_CLASS_DEF(anim_changed,animChanged);
 EH_CLASS_DEF(anim_done,animDone);

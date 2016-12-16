@@ -96,6 +96,7 @@ namespace intercept {
             mutable int _refcount;
         };
 
+        //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
         class refcount : public refcount_base {
         public:
             int release() const {
@@ -107,6 +108,28 @@ namespace intercept {
                 return rcount;
             }
         };
+
+        /*
+        This is a placeholder so i can use refcount but still have an accessible vtable pointer
+        */
+        class __vtable {
+        public:
+            uintptr_t _vtable{ 0 };
+        };
+
+        //Use this if the inheriting class starts with a vtable
+        class refcount_vtable : public __vtable, public refcount {
+        public:
+            int release() const {
+                int rcount = dec_ref();
+                if (rcount == 0) {
+                    this->~refcount_vtable();
+                    //rv_allocator<refcount_vtable>::deallocate(const_cast<refcount_vtable *>(this), 0);
+                }
+                return rcount;
+            }
+        };
+
 
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
@@ -482,15 +505,7 @@ namespace intercept {
             int32_t _count;
         };
 
-        /*
-        This is a placeholder so i can use refcount but still have an accessible vtable pointer
-        */
-        class __vtable {
-        public:
-            uintptr_t _vtable{0};
-        };
-
-        class game_data : public __vtable, public refcount {
+        class game_data : public refcount_vtable {
         public:
             uintptr_t data_type;
         };

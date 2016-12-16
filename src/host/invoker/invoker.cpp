@@ -203,10 +203,6 @@ namespace intercept {
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        if (ret.data) {
-            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
-            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
-        }
         return ret;
     }
 
@@ -225,10 +221,6 @@ namespace intercept {
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        if (ret.data) {
-            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
-            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
-        }
         return ret;
     }
 
@@ -257,10 +249,6 @@ namespace intercept {
         rv_game_value ret;
         ret.__vptr = *(uintptr_t *)ret_ptr;
         ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        if (ret.data) {
-            ret.data->ref_count_internal.set_initial((uint16_t)ret.data->ref_count_internal, false);
-            ret.data->ref_count_internal = (uint16_t)ret.data->ref_count_internal - 1;
-        }
         return ret;
     }
 
@@ -296,7 +284,6 @@ namespace intercept {
     bool invoker::release_value(game_value &value_, bool immediate_) {
         if (!value_.client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            value_.rv_data.data->ref_count_internal++;
             _to_delete.push(value_.rv_data.data);
             return true;
         }

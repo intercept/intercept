@@ -7,26 +7,29 @@ namespace intercept {
     class game_data_pool {
     public:
         game_data_pool() {
-            for (std::size_t i = 0; i < Size; ++i)
-                _buy_entry();
+            //for (std::size_t i = 0; i < Size; ++i)
+            //    _buy_entry();
         }
 
         inline T * acquire() {
+            return nullptr;// rv_allocator<T>::allocate(1);
+            /*
             if (_pool_queue.size() == 0)
                 _buy_entry();
             T * ret = _pool_queue.front();
             _pool_queue.pop();
-            return ret;
+            return ret; */
         }
 
         inline void release(T *_ptr) {
-            memset((void *)_ptr, 0xcdf3cdde, sizeof(T));
-            _pool_queue.push(_ptr);
+            //rv_allocator<T>::deallocate(_ptr);
+            //memset((void *)_ptr, 0xcdf3cdde, sizeof(T));
+            //_pool_queue.push(_ptr);
         }
         
         ~game_data_pool() {
-            for (auto entry : _pool)
-                free(entry);
+            //for (auto entry : _pool)
+            //    free(entry);
         }
 
         game_data_pool(const game_data_pool &) = delete;
@@ -49,33 +52,41 @@ namespace intercept {
     class game_data_array_pool {
     public:
         game_data_array_pool() {
-            for (std::size_t i = 0; i < Size; ++i)
-                _buy_entry(Alloc_Count);
+            //for (std::size_t i = 0; i < Size; ++i)
+            //    _buy_entry(Alloc_Count);
         }
 
         inline T * acquire(std::size_t alloc_count_) {
+            return nullptr;// rv_allocator<T>::allocate(alloc_count_);
+
+             /*
             if (_pool_queue.size() == 0 || alloc_count_ > Alloc_Count)
                 _buy_entry(alloc_count_);                
             T * ret = _pool_queue.front();
             std::size_t *count = (std::size_t *)((char *)ret - sizeof(std::size_t));
             *count = alloc_count_;
             _pool_queue.pop();
-            return ret;
+            return ret; */
         }
 
         inline void release(T *_ptr) {
+           // return rv_allocator<T>::deallocate(_ptr);
+            /*
             std::size_t *count = (std::size_t *)((char *)_ptr - sizeof(std::size_t));
             for (std::size_t i = 0; i < *count; ++i)
                 _ptr[i].~T();
             *count = 0;
             _pool_queue.push(_ptr);
+            */
         }
 
         ~game_data_array_pool() {
+            /*
             for (auto entry : _pool) {
                 release((T *)(entry + sizeof(std::size_t)));
                 free((void *)entry);
             }
+            */
         }
 
         game_data_array_pool(const game_data_array_pool &) = delete;

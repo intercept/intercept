@@ -114,7 +114,7 @@ namespace intercept {
                 _locked = true;
             }
         }
-
+            
         host::mem_watcher::mem_watcher() {
         }
 
@@ -122,6 +122,7 @@ namespace intercept {
         }
 
         void host::mem_watcher::clean() {
+            /*
             auto data = _watch_data.begin();
             while (data != _watch_data.end()) {
                 if (data->rv_data.data->ref_count_internal <= 1) {
@@ -132,15 +133,19 @@ namespace intercept {
                     data++;
                 }
             }
+            */
         }
 
         void host::mem_watcher::add_watch(game_value & data_) {
+            /*
             _add(data_);
             clean();
+            */
         }
 
         void host::mem_watcher::_add(game_value & data_)
         {
+            /*
             if (data_.rv_data.data) {
                 if (data_.type() == game_data_array::type_def) {
                     for (uint32_t i = 0; i < data_.length(); ++i) {
@@ -153,6 +158,9 @@ namespace intercept {
                     _watch_data.push_back(data_);
                 }
             }
+            */
         }
+       
+
 }
 }

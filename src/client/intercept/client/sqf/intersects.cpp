@@ -78,7 +78,7 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data);
+            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
@@ -98,7 +98,7 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data);
+            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
@@ -118,7 +118,7 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data);
+            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
@@ -185,7 +185,7 @@ namespace intercept {
             });
 
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data);
+            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {

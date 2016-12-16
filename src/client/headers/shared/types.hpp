@@ -63,7 +63,7 @@ namespace intercept {
                 char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
             };
         public:
-            static void deallocate(Type* _Ptr, size_t);
+            static void deallocate(Type* _Ptr, size_t _unused = 0); //#TODO if its unused why not just remove it?!
             static Type* allocate(size_t _count);
 
             //Allocates and Initializes one Object
@@ -641,7 +641,7 @@ namespace intercept {
             game_data_string & game_data_string::operator = (game_data_string &&move_);
             void free();
             ~game_data_string();
-            rv_string *raw_string;
+            r_string raw_string;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         protected:
@@ -656,10 +656,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_group() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *group;
         };
@@ -669,10 +667,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_config() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *config;
         };
@@ -682,10 +678,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_control() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *control;
         };
@@ -695,10 +689,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_display() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *display;
         };
@@ -708,10 +700,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_location() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *location;
         };
@@ -721,10 +711,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_script() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *script;
         };
@@ -734,10 +722,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_side() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *side;
         };
@@ -747,10 +733,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_text() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *rv_text;
         };
@@ -760,10 +744,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_team() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *team;
         };
@@ -773,10 +755,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_namespace() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *rv_namespace;
         };
@@ -786,10 +766,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_code() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             rv_string *code_string;
             uintptr_t instruction_array;
@@ -803,10 +781,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_object() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *object;
         };

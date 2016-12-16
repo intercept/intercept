@@ -105,54 +105,46 @@ namespace intercept {
         }
 
         game_data_number::game_data_number() {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             number = 0.0f;
         }
 
         game_data_number::game_data_number(float val_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             number = val_;
         }
 
         game_data_number::game_data_number(const game_data_number & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             number = copy_.number;
         }
 
         game_data_number::game_data_number(game_data_number && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
+            _refcount = move_._refcount;
             number = move_.number;
         }
 
         game_data_number & game_data_number::operator=(const game_data_number & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             number = copy_.number;
             return *this;
         }
 
         game_data_number & game_data_number::operator=(game_data_number && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
+            _refcount = move_._refcount;
             number = move_.number;
             return *this;
         }
@@ -168,54 +160,46 @@ namespace intercept {
         }
 
         game_data_bool::game_data_bool() {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             val = false;
         }
 
         game_data_bool::game_data_bool(bool val_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             val = val_;
         }
 
         game_data_bool::game_data_bool(const game_data_bool & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             val = copy_.val;
         }
 
         game_data_bool::game_data_bool(game_data_bool && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
+            _refcount = move_._refcount;
             val = move_.val;
         }
 
         game_data_bool & game_data_bool::operator=(const game_data_bool & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             val = copy_.val;
             return *this;
         }
 
         game_data_bool & game_data_bool::operator=(game_data_bool && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
+            _refcount = move_._refcount;
             val = move_.val;
             return *this;
         }
@@ -231,82 +215,60 @@ namespace intercept {
         }
 
         game_data_string::game_data_string() {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
-            raw_string = allocate_string(128);
-            raw_string->length = 128;
-            raw_string->ref_count_internal = 1;
         }
 
         game_data_string::game_data_string(const std::string &str_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
-             //#TODO replace by correct implementation
-            auto str = r_string::create(str_.c_str(), str_.length() + 1);
-            raw_string = (rv_string *) str;
+            raw_string = r_string(str_.c_str(),str_.length());
            /* raw_string = allocate_string(str_.length() + 1);
             memcpy(&raw_string->char_string, str_.c_str(), str_.length() + 1);
             raw_string->length = str_.length() + 1;
             
 
             */
-            raw_string->ref_count_internal = 1;
 
         }
 
         game_data_string::game_data_string(const game_data_string & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
-            raw_string = allocate_string(copy_.raw_string->length);
-            memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
-            raw_string->length = copy_.raw_string->length;
-            raw_string->ref_count_internal = 1;
+            raw_string = copy_.raw_string;
         }
 
         game_data_string::game_data_string(game_data_string && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
-            free_string(raw_string);
+            _refcount = move_._refcount;
             raw_string = move_.raw_string;
             move_.raw_string = nullptr;
         }
 
         game_data_string & game_data_string::operator=(const game_data_string & copy_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal.set_initial(1, true);
-            raw_string = allocate_string(copy_.raw_string->length);
-            memcpy(&raw_string->char_string, &copy_.raw_string->char_string, copy_.raw_string->length);
-            raw_string->length = copy_.raw_string->length;
-            raw_string->ref_count_internal = 1;
+            raw_string = copy_.raw_string;
             return *this;
         }
 
         game_data_string & game_data_string::operator=(game_data_string && move_)
         {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = move_.ref_count_internal;
-            free_string(raw_string);
+            _refcount = move_._refcount;
             raw_string = move_.raw_string;
             move_.raw_string = nullptr;
             return *this;
         }
 
         void game_data_string::free() {
-            if (raw_string)
-                free_string(raw_string);
+            //#TODO dealloc?
         }
 
         game_data_string::~game_data_string()
@@ -325,30 +287,24 @@ namespace intercept {
         }
 
         game_data_array::game_data_array() {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             length = 0;
             max_size = 0;
             data = nullptr;
         }
 
         game_data_array::game_data_array(size_t size_) {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             data = _array_pool.acquire(size_);
             length = size_;
             max_size = size_;
         }
 
         game_data_array::game_data_array(const std::vector<game_value> &init_) {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             data = _array_pool.acquire(init_.size());
             length = init_.size();
             max_size = init_.size();
@@ -359,10 +315,8 @@ namespace intercept {
         }
 
         game_data_array::game_data_array(const game_data_array & copy_) {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             length = copy_.length;
             max_size = copy_.max_size;
             data = _array_pool.acquire(length);
@@ -371,10 +325,8 @@ namespace intercept {
         }
 
         game_data_array::game_data_array(game_data_array && move_) {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             if (data)
                 _array_pool.release(data);
             data = move_.data;
@@ -384,10 +336,8 @@ namespace intercept {
         }
 
         game_data_array & game_data_array::operator = (const game_data_array &copy_) {
-            type = type_def;
+            _vtable = type_def;
             data_type = data_type_def;
-            ref_count_internal = 1;
-            ref_count_internal.set_initial(1, true);
             length = copy_.length;
             data = _array_pool.acquire(length);
             for (size_t i = 0; i < length; ++i)
@@ -434,7 +384,6 @@ namespace intercept {
             rv_data.__vptr = copy_.rv_data.__vptr;
             if (copy_.rv_data.data) {
                 rv_data.data = copy_.rv_data.data;
-                rv_data.data->ref_count_internal++;
             }
         }
 
@@ -451,9 +400,7 @@ namespace intercept {
         game_value::game_value(const rv_game_value &internal_)
         {
             rv_data.__vptr = internal_.__vptr;
-            rv_data.data = (game_data *)internal_.data;
-            if(rv_data.data)
-                rv_data.data->ref_count_internal++;
+            rv_data.data = internal_.data;
         }
 
         game_value::game_value(float val_)
@@ -492,11 +439,8 @@ namespace intercept {
         }
         game_value::game_value(const internal_object &internal_)
         {
-
-            rv_data = internal_.rv_data;
             rv_data.__vptr = internal_.rv_data.__vptr;
-            if (rv_data.data)
-                rv_data.data->ref_count_internal++;
+            rv_data = internal_.rv_data;
         }
         game_value::~game_value() {
             _free();
@@ -504,22 +448,25 @@ namespace intercept {
 
         void game_value::_free()
         {
+              //#TODO handle deallocation?
+
+            /*
             // Ghetto superstar...
             if (rv_data.data) {
                 rv_data.data->ref_count_internal--;
                 if (rv_data.data->ref_count_internal < rv_data.data->ref_count_internal.get_initial()) {
                     if (rv_data.data->ref_count_internal.is_intercept()) {
                         rv_data.data->ref_count_internal.clear_initial(); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
-                        if (rv_data.data && rv_data.data->type == game_data_number::type_def)
+                        if (rv_data.data && rv_data.data->_vtable == game_data_number::type_def)
                             delete (game_data_number *)rv_data.data;
 
-                        else if (rv_data.data && rv_data.data->type == game_data_string::type_def)
+                        else if (rv_data.data && rv_data.data->_vtable == game_data_string::type_def)
                             delete (game_data_string *)rv_data.data;
 
-                        else if (rv_data.data && rv_data.data->type == game_data_array::type_def)
+                        else if (rv_data.data && rv_data.data->_vtable == game_data_array::type_def)
                             delete (game_data_array *)rv_data.data;
 
-                        else if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
+                        else if (rv_data.data && rv_data.data->_vtable == game_data_bool::type_def)
                             delete (game_data_bool *)rv_data.data;
 
                         else if (rv_data.data)
@@ -532,6 +479,10 @@ namespace intercept {
                     }
                 }
             }
+            */
+
+
+
         }
 
         game_value & game_value::operator = (const game_value &copy_) {
@@ -611,8 +562,6 @@ namespace intercept {
                 _free();
             rv_data.data = internal_.rv_data.data;
             rv_data.__vptr = internal_.rv_data.__vptr;
-            if(rv_data.data)
-                rv_data.data->ref_count_internal++;
             return *this;
         }
 
@@ -622,35 +571,33 @@ namespace intercept {
                 _free();
             rv_data.data = internal_.data;
             rv_data.__vptr = internal_.__vptr;
-            if (rv_data.data)
-                rv_data.data->ref_count_internal++;
             return *this;
         }
 
         game_value::operator int()
         {
-            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
-                return static_cast<int>(((game_data_number *)rv_data.data)->number);
+            if (rv_data.data && rv_data.data->_vtable == game_data_number::type_def)
+                return static_cast<int>(static_cast<game_data_number *>(rv_data.data.getRef())->number);
             return 0;
         }
 
         game_value::operator float()
         {
-            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
-                return ((game_data_number *)rv_data.data)->number;
+            if (rv_data.data && rv_data.data->_vtable == game_data_number::type_def)
+                return ((game_data_number *)rv_data.data.getRef())->number;
             return 0.0f;
         }
 
         game_value::operator bool()
         {
-            if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
-                return ((game_data_bool *)rv_data.data)->val;
+            if (rv_data.data && rv_data.data->_vtable == game_data_bool::type_def)
+                return ((game_data_bool *)rv_data.data.getRef())->val;
             return false;
         }
 
-        game_value::operator rv_string &()
+        game_value::operator r_string ()
         {
-            return *((game_data_string *)rv_data.data)->raw_string;
+            return ((game_data_string *)rv_data.data.getRef())->raw_string;
         }
 
         game_value::operator rv_game_value *()
@@ -660,101 +607,101 @@ namespace intercept {
 
         game_value::operator vector3()
         {
-            if (((game_data_array *)rv_data.data)->length == 3)
+            if (((game_data_array *)rv_data.data.getRef())->length == 3)
                 return vector3(
-                    ((game_data_array *)rv_data.data)->data[0],
-                    ((game_data_array *)rv_data.data)->data[1],
-                    ((game_data_array *)rv_data.data)->data[2]
+                    ((game_data_array *)rv_data.data.getRef())->data[0],
+                    ((game_data_array *)rv_data.data.getRef())->data[1],
+                    ((game_data_array *)rv_data.data.getRef())->data[2]
                     );
             return vector3();
         }
 
         game_value::operator vector2()
         {
-            if(((game_data_array *)rv_data.data)->length == 2)
+            if(((game_data_array *)rv_data.data.getRef())->length == 2)
                 return vector2(
-                    ((game_data_array *)rv_data.data)->data[0],
-                    ((game_data_array *)rv_data.data)->data[1]
+                    ((game_data_array *)rv_data.data.getRef())->data[0],
+                    ((game_data_array *)rv_data.data.getRef())->data[1]
                     );
             return vector2();
         }
 
         game_value::operator int() const
         {
-            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
-                return static_cast<int>(((game_data_number *)rv_data.data)->number);
+            if (rv_data.data && rv_data.data->_vtable == game_data_number::type_def)
+                return static_cast<int>(((game_data_number *)rv_data.data.getRef())->number);
             return 0;
         }
 
         game_value::operator float() const
         {
-            if (rv_data.data && rv_data.data->type == game_data_number::type_def)
-                return ((game_data_number *)rv_data.data)->number;
+            if (rv_data.data && rv_data.data->_vtable == game_data_number::type_def)
+                return ((game_data_number *)rv_data.data.getRef())->number;
             return 0.0f;
         }
 
         game_value::operator bool() const
         {
-            if (rv_data.data && rv_data.data->type == game_data_bool::type_def)
-                return ((game_data_bool *)rv_data.data)->val;
+            if (rv_data.data && rv_data.data->_vtable == game_data_bool::type_def)
+                return ((game_data_bool *)rv_data.data.getRef())->val;
             return false;
         }
 
-        game_value::operator rv_string &() const
+        game_value::operator r_string () const
         {
-            return *((game_data_string *)rv_data.data)->raw_string;
+            return ((game_data_string *)rv_data.data.getRef())->raw_string;
         }
 
         game_value::operator vector3() const
         {
             return vector3(
-                ((game_data_array *)rv_data.data)->data[0],
-                ((game_data_array *)rv_data.data)->data[1],
-                ((game_data_array *)rv_data.data)->data[2]
+                ((game_data_array *)rv_data.data.getRef())->data[0],
+                ((game_data_array *)rv_data.data.getRef())->data[1],
+                ((game_data_array *)rv_data.data.getRef())->data[2]
                 );
         }
 
         game_value::operator vector2() const
         {
             return vector2(
-                ((game_data_array *)rv_data.data)->data[0],
-                ((game_data_array *)rv_data.data)->data[1]
+                ((game_data_array *)rv_data.data.getRef())->data[0],
+                ((game_data_array *)rv_data.data.getRef())->data[1]
                 );
         }
 
         game_value::operator std::string() const
         {
-            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                return std::string(&((game_data_string *)rv_data.data)->raw_string->char_string);
+            if (rv_data.data && rv_data.data->_vtable == game_data_string::type_def)
+                return std::string(((game_data_string *)rv_data.data.getRef())->raw_string);
             return std::string();
         }
 
         game_value::operator std::string()
         {
-            if (rv_data.data && rv_data.data->type == game_data_string::type_def)
-                return std::string(&((game_data_string *)rv_data.data)->raw_string->char_string);
+            if (rv_data.data && rv_data.data->_vtable == game_data_string::type_def)
+                return std::string(((game_data_string *)rv_data.data.getRef())->raw_string);
             return std::string();
         }
 
         game_value & game_value::operator [](int i_) {
-            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data)->length);
-            return ((game_data_array *)rv_data.data)->data[i_];
+            assert(rv_data.data && rv_data.data->_vtable == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data.getRef())->length);
+            return ((game_data_array *)rv_data.data.getRef())->data[i_];
         }
 
         game_value game_value::operator [](int i_) const {
-            assert(rv_data.data && rv_data.data->type == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data)->length);
-            return ((game_data_array *)rv_data.data)->data[i_];
+            assert(rv_data.data && rv_data.data->_vtable == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)rv_data.data.getRef())->length);
+            return ((game_data_array *)rv_data.data.getRef())->data[i_];
         }
 
         uintptr_t game_value::type() const {
             if (rv_data.data)
-                return rv_data.data->type;
+                return rv_data.data->_vtable;
             return 0x0;
         }
 
         size_t game_value::length() const {
             if (type() == game_data_array::type_def)
-                return ((game_data_array *)rv_data.data)->length;
+                return ((game_data_array *)rv_data.data.getRef())->length;
             return 0;
         }
 
@@ -765,9 +712,9 @@ namespace intercept {
             return false;
         }
 
-        bool game_value::client_owned() const {
-            if (rv_data.data && rv_data.data->ref_count_internal.is_intercept())
-                return true;
+        bool game_value::client_owned() const {//#TODO what is this used for?
+            // if (rv_data.data && rv_data.data->ref_count_internal.is_intercept())
+            //     return true;
             return false;
         }
 

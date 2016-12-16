@@ -28,11 +28,11 @@ namespace intercept {
 
 #define RV_GENERIC_OBJECT_DEC(type) class type : public internal_object {\
             public:\
-                type##();\
-                type##(const rv_game_value &value_);\
-                type##(const game_value &value_);\
-                type##(const type &copy_);\
-                type##(type &&move_);\
+                type();\
+                type(const rv_game_value &value_);\
+                type(const game_value &value_);\
+                type(const type &copy_);\
+                type(type &&move_);\
                 type & operator = (type &&move_);\
                 type & operator = (const type &copy_);\
             }

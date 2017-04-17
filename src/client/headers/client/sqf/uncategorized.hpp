@@ -84,6 +84,14 @@ namespace intercept {
                 alpha(ret_game_value_[3])
             {
             }
+
+            rv_color(float red_, float blue_, float green_, float alpha_) :
+                red(red_),
+                blue(blue_),
+                green(green_),
+                alpha(alpha_)
+            {
+            }
         };
 
         struct rv_resolution {

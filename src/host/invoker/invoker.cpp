@@ -180,7 +180,7 @@ namespace intercept {
         _invoker_unlock test_lock(this);
         result_ = "-1";
         game_value res = invoke_raw("profilenamesteam");
-        result_ = res;
+        result_ = static_cast<std::string>(res);
         return true;
     }
 

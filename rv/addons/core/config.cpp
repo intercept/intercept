@@ -555,7 +555,7 @@ class CfgPatches {
             y = QUOTE(intercept_params_var set[ARR_2(0,_this)]; 'intercept' callExtension QUOTE(QUOTE(EVENT_ARGS(x)));); \
         }; \
     }; \
-};
+}
 
 EH_CLASS_DEF(anim_changed,animChanged);
 EH_CLASS_DEF(anim_done,animDone);
@@ -613,40 +613,33 @@ class Intercept {
     };
 };
 */
-class CfgFunctions
-{
-    class Intercept
-    {
-        class boot
-        {
-            class boot_loader
-            {
-                preStart = 1;
-                file = "z\intercept\rv\addons\core\boot.sqf";
-                headerType = -1;
-            };
-        };
 
-        class initialization
-        {
-            class lib_loader
-            {
-                preInit = 1;
-                file = "z\intercept\rv\addons\core\lib.sqf";
-                headerType = -1;
-            };
-            class post_init_handler
-            {
-                postInit = 1;
-                file = "z\intercept\rv\addons\core\post_init.sqf";
-                headerType = -1;
-            };
-        };
 
-        class api
-        {
-            class signal
-            {
+class Extended_PreStart_EventHandlers {
+    class Intercept_Core {
+        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\boot.sqf';";
+    };
+};
+
+class Extended_PreInit_EventHandlers {
+    class Intercept_Core {
+        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\lib.sqf';";
+    };
+};
+
+class Extended_PostInit_EventHandlers {
+    class Intercept_Core {
+        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\post_init.sqf';";
+    };
+};
+
+
+
+
+class CfgFunctions {
+    class Intercept {
+        class api {
+            class signal {
                 file = "z\intercept\rv\addons\core\signal.sqf";
                 headerType = -1;
             };

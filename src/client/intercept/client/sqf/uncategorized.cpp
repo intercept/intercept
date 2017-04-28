@@ -10444,7 +10444,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         rv_unit_loadout get_unit_loadout(const object& obj_) {
-            return rv_unit_loadout(host::functions.invoke_raw_unary(client::__sqf::unary__getunitloadout__object__ret__array, obj_));
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__getunitloadout__object__ret__array, obj_);
+            sqf::diag_log(ret);
+            //return rv_unit_loadout(host::functions.invoke_raw_unary(client::__sqf::unary__getunitloadout__object__ret__array, obj_));
+            return rv_unit_loadout(ret);
         }
     }
 }

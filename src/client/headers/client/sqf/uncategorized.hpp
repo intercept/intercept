@@ -117,6 +117,26 @@ namespace intercept {
             bool loaded;
             int type;
             std::string location;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    name,
+                    (float)count,
+                    loaded,
+                    (float)type,
+                    location
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    name,
+                    (float)count,
+                    loaded,
+                    (float)type,
+                    location
+                }));
+            }
         };
 
         struct rv_turret_magazine {
@@ -3123,6 +3143,22 @@ namespace intercept {
                 skeleton(ret_game_value_[2])
             {
             }
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    name,
+                    path,
+                    skeleton
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    name,
+                    path,
+                    skeleton
+                }));
+            }
         };
 
         rv_model_info get_model_info(const object& object_);
@@ -3131,11 +3167,13 @@ namespace intercept {
             std::string silencer;
             std::string laser;
             std::string optics;
+            std::string bipod; //???
 
             rv_handgun_items(const game_value &ret_game_value_) :
                 silencer(ret_game_value_[0]),
                 laser(ret_game_value_[1]),
-                optics(ret_game_value_[2])
+                optics(ret_game_value_[2]),
+                bipod(ret_game_value_[3])
             {
             }
 
@@ -3143,7 +3181,8 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     silencer,
                     laser,
-                    optics
+                    optics,
+                    bipod
                 }));
             }
 
@@ -3151,7 +3190,8 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     silencer,
                     laser,
-                    optics
+                    optics,
+                    bipod
                 }));
             }
         };
@@ -3233,11 +3273,12 @@ namespace intercept {
 
         struct rv_weapon_info {
             std::string weapon;
-            std::string silencer;
+            std::string silencer = "";
             std::string laser;
             std::string optics;
             rv_magazine_info primary_muzzle_magazine;
-            rv_magazine_info secondary_muzzle_magazine;
+            //rv_magazine_info secondary_muzzle_magazine;
+            std::vector<std::string> secondary_muzzle_magazine;
             std::string bipod;
 
             rv_weapon_info(const game_value &ret_game_value_) :
@@ -3246,31 +3287,39 @@ namespace intercept {
                 laser(ret_game_value_[2]),
                 optics(ret_game_value_[3]),
                 primary_muzzle_magazine(ret_game_value_[4]),
-                secondary_muzzle_magazine(ret_game_value_[5]),
+                secondary_muzzle_magazine({ ret_game_value_[5] }),
                 bipod(ret_game_value_[6])
             {
             }
 
             operator game_value() {
+                std::vector<game_value> secondary_muzzle_magazine_gv;
+                for (std::string item : secondary_muzzle_magazine) {
+                    secondary_muzzle_magazine_gv.push_back(item);
+                }
                 return game_value(std::vector<game_value>({
                     weapon,
                     silencer,
                     laser,
                     optics,
                     primary_muzzle_magazine,
-                    secondary_muzzle_magazine,
+                    secondary_muzzle_magazine_gv,
                     bipod
                 }));
             }
 
             operator game_value() const {
+                std::vector<game_value> secondary_muzzle_magazine_gv;
+                for (std::string item : secondary_muzzle_magazine) {
+                    secondary_muzzle_magazine_gv.push_back(item);
+                }
                 return game_value(std::vector<game_value>({
                     weapon,
                     silencer,
                     laser,
                     optics,
                     primary_muzzle_magazine,
-                    secondary_muzzle_magazine,
+                    secondary_muzzle_magazine_gv,
                     bipod
                 }));
             }
@@ -3312,64 +3361,78 @@ namespace intercept {
 
         struct rv_unit_loadout {
             rv_weapon_info primary;
-            rv_weapon_info secondary;
+            //rv_weapon_info secondary;
+            std::vector<std::string> secondary;
             rv_weapon_info handgun;
             rv_container_info uniform;
             rv_container_info vest;
             rv_container_info backpack;
             std::string headgear;
             std::string facewear;
-            rv_weapon_info binocular;
+            //rv_weapon_info binocular;
+            std::vector<std::string> binocular;
             std::vector<std::string> assigned_items;
 
             rv_unit_loadout(const game_value &ret_game_value_) :
                 primary(ret_game_value_[0]),
-                secondary(ret_game_value_[1]),
+                secondary({ ret_game_value_[1] }),
                 handgun(ret_game_value_[2]),
                 uniform(ret_game_value_[3]),
                 vest(ret_game_value_[4]),
                 backpack(ret_game_value_[5]),
                 headgear(ret_game_value_[6]),
                 facewear(ret_game_value_[7]),
-                binocular(ret_game_value_[8]),
+                binocular({ ret_game_value_[8] }),
                 assigned_items({ ret_game_value_[9] })
             {
             }
 
             operator game_value() {
-                std::vector<game_value> assigned_items_gv;
+                std::vector<game_value> assigned_items_gv, secondary_gv, binocular_gv;
                 for (std::string item : assigned_items) {
                     assigned_items_gv.push_back(item);
                 }
+                for (std::string item : secondary) {
+                    secondary_gv.push_back(item);
+                }
+                for (std::string item : binocular) {
+                    binocular_gv.push_back(item);
+                }
                 return game_value(std::vector<game_value>({
                     primary,
-                    secondary,
+                    secondary_gv,
                     handgun,
                     uniform,
                     vest,
                     backpack,
                     headgear,
                     facewear,
-                    binocular,
+                    binocular_gv,
                     assigned_items_gv
                 }));
             }
 
             operator game_value() const {
-                std::vector<game_value> assigned_items_gv;
+                std::vector<game_value> assigned_items_gv, secondary_gv, binocular_gv;
                 for (std::string item : assigned_items) {
                     assigned_items_gv.push_back(item);
                 }
+                for (std::string item : secondary) {
+                    secondary_gv.push_back(item);
+                }
+                for (std::string item : binocular) {
+                    binocular_gv.push_back(item);
+                }
                 return game_value(std::vector<game_value>({
                     primary,
-                    secondary,
+                    secondary_gv,
                     handgun,
                     uniform,
                     vest,
                     backpack,
                     headgear,
                     facewear,
-                    binocular,
+                    binocular_gv,
                     assigned_items_gv
                 }));
             }

@@ -3272,8 +3272,8 @@ namespace intercept {
         void lnb_set_color(const control& ctrl_, float row_, float column_, const rv_color& color_);
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_);
         void lnb_set_columns_pos(const control& ctrl_, std::vector<float> positions_);
-        void lnb_set_data(float idc_, float row_, float column_, const game_value& data_);
-        void lnb_set_data(const control& ctrl_, float row_, float column_, const game_value& data_);
+        void lnb_set_data(float idc_, float row_, float column_, const std::string& data_);
+        void lnb_set_data(const control& ctrl_, float row_, float column_, const std::string& data_);
         void lnb_set_picture(float idc_, float row_, float column_, const std::string& name_);
         void lnb_set_picture(const control& ctrl_, float row_, float column_, const std::string& name_);
         void lnb_set_text(float idc_, float row_, float column_, const game_value& data_);

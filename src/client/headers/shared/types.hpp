@@ -64,15 +64,30 @@ namespace intercept {
             };
         public:
             static void deallocate(Type* _Ptr, size_t _unused = 0); //#TODO if its unused why not just remove it?!
+            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called! 
+            //use the create* Methods instead
             static Type* allocate(size_t _count);
 
             //Allocates and Initializes one Object
             template<class... _Types>
             static Type* createSingle(_Types&&... _Args) {
                 auto ptr = allocate(1);
-                new (ptr) Type(std::forward<_Types>(_Args)...);
+                ::new (ptr) Type(std::forward<_Types>(_Args)...);
+                //Have to do a little more unfancy stuff for people that want to overload the new operator
                 return ptr;
             }
+
+            //Allocates and initializes array of Elements using the default constructor.
+            static Type* createArray(size_t _count) {
+                auto ptr = allocate(_count);
+
+                for (size_t i = 0; i < _count; ++i) {
+                    ::new (ptr + i) Type();
+                }
+                
+                return ptr;
+            }
+
 
             //#TODO implement game_data_pool and string pool here
         };
@@ -282,7 +297,7 @@ namespace intercept {
             }
 
             bool compare_case_sensitive(const char *other) {
-                _stricmp(*this, other);
+                return _stricmp(*this, other) == 0;
             }
 
             size_t find(char ch,size_t start =0) const {

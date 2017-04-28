@@ -17,19 +17,23 @@ namespace intercept {
     namespace types {
         uintptr_t game_data_string::type_def;
         uintptr_t game_data_string::data_type_def;
+        rv_pool_allocator* game_data_string::pool_alloc_base;
         thread_local game_data_pool<game_data_string> game_data_string::_data_pool;
 
         uintptr_t game_data_number::type_def;
         uintptr_t game_data_number::data_type_def;
+        rv_pool_allocator* game_data_number::pool_alloc_base;
         thread_local game_data_pool<game_data_number> game_data_number::_data_pool;
 
         uintptr_t game_data_array::type_def;
         uintptr_t game_data_array::data_type_def;
+        rv_pool_allocator* game_data_array::pool_alloc_base;
         thread_local game_data_pool<game_data_array> game_data_array::_data_pool;
         thread_local game_data_array_pool<game_value> game_data_array::_array_pool;
 
         uintptr_t game_data_bool::type_def;
         uintptr_t game_data_bool::data_type_def;
+        rv_pool_allocator* game_data_bool::pool_alloc_base;
         thread_local game_data_pool<game_data_bool> game_data_bool::_data_pool;
 
         uintptr_t game_data_code::type_def;
@@ -152,12 +156,12 @@ namespace intercept {
 
         inline void * game_data_number::operator new(std::size_t sz_)
         {
-            return rv_allocator<game_data_number>::allocate(1);//_data_pool.acquire();
+            return pool_alloc_base->allocate(1);
         }
 
         inline void game_data_number::operator delete(void * ptr_, std::size_t sz_)
         {
-            rv_allocator<game_data_number>::deallocate(static_cast<game_data_number*>(ptr_)); //_data_pool.release((game_data_number *)ptr_);
+            return pool_alloc_base->deallocate(ptr_);
         }
 
         game_data_bool::game_data_bool() {
@@ -207,12 +211,12 @@ namespace intercept {
 
         inline void * game_data_bool::operator new(std::size_t sz_)
         {
-            return rv_allocator<game_data_bool>::allocate(1);//  _data_pool.acquire();
+            return pool_alloc_base->allocate(1);
         }
 
         inline void game_data_bool::operator delete(void * ptr_, std::size_t sz_)
         {
-            rv_allocator<game_data_bool>::deallocate(static_cast<game_data_bool*>(ptr_)); //_data_pool.release((game_data_bool *)ptr_);
+            return pool_alloc_base->deallocate(ptr_);
         }
 
         game_data_string::game_data_string() {
@@ -279,12 +283,12 @@ namespace intercept {
 
         void * game_data_string::operator new(std::size_t sz_)
         {
-            return rv_allocator<game_data_string>::allocate(1); //_data_pool.acquire();
+            return pool_alloc_base->allocate(1);
         }
 
         void game_data_string::operator delete(void * ptr_, std::size_t sz_)
         {
-            rv_allocator<game_data_string>::deallocate(static_cast<game_data_string*>(ptr_)); //_data_pool.release((game_data_string *)ptr_);
+            return pool_alloc_base->deallocate(ptr_);
         }
 
         game_data_array::game_data_array() {
@@ -298,7 +302,7 @@ namespace intercept {
         game_data_array::game_data_array(size_t size_) {
             _vtable = type_def;
             data_type = data_type_def;
-            data = rv_allocator<game_value>::allocate(size_); //_array_pool.acquire(size_);
+            data = rv_allocator<game_value>::createArray(size_); //_array_pool.acquire(size_);
             length = size_;
             max_size = size_;
         }
@@ -306,7 +310,7 @@ namespace intercept {
         game_data_array::game_data_array(const std::vector<game_value> &init_) {
             _vtable = type_def;
             data_type = data_type_def;
-            data = rv_allocator<game_value>::allocate(init_.size()); //_array_pool.acquire(init_.size());
+            data = rv_allocator<game_value>::createArray(init_.size()); //_array_pool.acquire(init_.size());
             length = init_.size();
             max_size = init_.size();
             size_t i = 0;
@@ -320,7 +324,7 @@ namespace intercept {
             data_type = data_type_def;
             length = copy_.length;
             max_size = copy_.max_size;
-            data = rv_allocator<game_value>::allocate(length); //_array_pool.acquire(length);
+            data = rv_allocator<game_value>::createArray(length); //_array_pool.acquire(length);
             for (size_t i = 0; i < length; ++i)
                 data[i] = copy_.data[i];
         }
@@ -340,7 +344,7 @@ namespace intercept {
             _vtable = type_def;
             data_type = data_type_def;
             length = copy_.length;
-            data = rv_allocator<game_value>::allocate(length); //_array_pool.acquire(length);
+            data = rv_allocator<game_value>::createArray(length); //_array_pool.acquire(length);
             for (size_t i = 0; i < length; ++i)
                 data[i] = copy_.data[i];
             return *this;
@@ -369,12 +373,12 @@ namespace intercept {
 
         void * game_data_array::operator new(std::size_t sz_)
         {
-            return rv_allocator<game_data_array>::allocate(1);//_data_pool.acquire();
+            return pool_alloc_base->allocate(1);
         }
 
         void game_data_array::operator delete(void * ptr_, std::size_t sz_)
         {
-            rv_allocator<game_data_array>::deallocate(static_cast<game_data_array*>(ptr_)); //_data_pool.release((game_data_array *)ptr_);
+            return pool_alloc_base->deallocate(ptr_);
         }
 
         game_value::game_value() {
@@ -737,8 +741,8 @@ namespace intercept {
         void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
-            uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;
-            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase;
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
             std::stringstream stream;
             stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
             OutputDebugStringA(stream.str().c_str());
@@ -748,9 +752,9 @@ namespace intercept {
         template<class Type>
         Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
 
-            uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;
             //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
-            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase;
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
             Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
             std::stringstream stream;
             stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
@@ -758,8 +762,20 @@ namespace intercept {
             return newData;
         }
 
+        void* rv_pool_allocator::allocate(size_t count) {
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;
+            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t count);
+            allocFunc alloc = reinterpret_cast<allocFunc>(allocatorBase->poolFuncAlloc);
+            auto allocation = alloc(this, count);
+            return allocation;
+        }
 
-
+        void rv_pool_allocator::deallocate(void* data) {
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;
+            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* data);
+            deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
+            return dealloc(this,data);
+        }
 }
 }
 

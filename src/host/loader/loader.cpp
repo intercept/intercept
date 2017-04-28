@@ -228,14 +228,17 @@ namespace intercept {
             const rv_string* _category; //0x40
             uint32_t placeholder11;//0x44
         };
-
-
+        struct gsTypeInfo { //Donated from ArmaDebugEngine
+            const r_string _name;
+            void* _createFunction{ nullptr };
+        };
 
     }
 
 
     
     void loader::do_function_walk(uintptr_t state_addr_) {
+        uintptr_t types_array = state_addr_;  //#TODO AutoArray impl
         uintptr_t unary_hash = state_addr_ + 0xC;
         uintptr_t binary_hash = state_addr_ + 0x18;
         uintptr_t nulars_hash = state_addr_ + 0x24;
@@ -345,6 +348,60 @@ namespace intercept {
             }
         }
 
+
+
+        auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
+                if (name == "SCALAR") return types::__internal::GameDataType::SCALAR;
+                if (name == "BOOL") return types::__internal::GameDataType::BOOL;
+                if (name == "ARRAY") return types::__internal::GameDataType::ARRAY;
+                if (name == "STRING") return types::__internal::GameDataType::STRING;
+                if (name == "NOTHING") return types::__internal::GameDataType::NOTHING;
+                if (name == "ANY") return types::__internal::GameDataType::ANY;
+                if (name == "NAMESPACE") return types::__internal::GameDataType::NAMESPACE;
+                if (name == "NaN") return types::__internal::GameDataType::NaN;
+                if (name == "IF") return types::__internal::GameDataType::IF;
+                if (name == "WHILE") return types::__internal::GameDataType::WHILE;
+                if (name == "FOR") return types::__internal::GameDataType::FOR;
+                if (name == "SWITCH") return types::__internal::GameDataType::SWITCH;
+                if (name == "EXCEPTION") return types::__internal::GameDataType::EXCEPTION;
+                if (name == "WITH") return types::__internal::GameDataType::WITH;
+                if (name == "CODE") return types::__internal::GameDataType::CODE;
+                if (name == "OBJECT") return types::__internal::GameDataType::OBJECT;
+                if (name == "SIDE") return types::__internal::GameDataType::SIDE;
+                if (name == "GROUP") return types::__internal::GameDataType::GROUP;
+                if (name == "TEXT") return types::__internal::GameDataType::TEXT;
+                if (name == "SCRIPT") return types::__internal::GameDataType::SCRIPT;
+                if (name == "TARGET") return types::__internal::GameDataType::TARGET;
+                if (name == "JCLASS") return types::__internal::GameDataType::JCLASS;
+                if (name == "CONFIG") return types::__internal::GameDataType::CONFIG;
+                if (name == "DISPLAY") return types::__internal::GameDataType::DISPLAY;
+                if (name == "CONTROL") return types::__internal::GameDataType::CONTROL;
+                if (name == "NetObject") return types::__internal::GameDataType::NetObject;
+                if (name == "SUBGROUP") return types::__internal::GameDataType::SUBGROUP;
+                if (name == "TEAM_MEMBER") return types::__internal::GameDataType::TEAM_MEMBER;
+                if (name == "TASK") return types::__internal::GameDataType::TASK;
+                if (name == "DIARY_RECORD") return types::__internal::GameDataType::DIARY_RECORD;
+                if (name == "LOCATION") return types::__internal::GameDataType::LOCATION;
+                return types::__internal::GameDataType::end;
+        };
+
+        //Game Types
+        auto entry_start = *reinterpret_cast<__internal::gsTypeInfo ***>(types_array);
+        auto entry_count = *reinterpret_cast<uint32_t *>(types_array + 4);
+        for (uint32_t entry_offset = 0; entry_offset < entry_count; ++entry_offset) {
+            __internal::gsTypeInfo* entry = entry_start[entry_offset];
+            if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
+            auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
+            uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
+            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc;
+            OutputDebugStringA(entry->_name.data());
+            OutputDebugStringA("\n");
+
+            auto type = typeToEnum(entry->_name);
+            if (poolAlloc && type != types::__internal::GameDataType::end)
+                _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
+        }
+
         //Find the allocator base
         MODULEINFO modInfo = { 0 };
         HMODULE hModule = GetModuleHandleA(nullptr);
@@ -366,6 +423,25 @@ namespace intercept {
             return 0;
         };
 
+        auto findInMemoryPattern = [&modInfo](const char* pattern, const char* mask, uintptr_t offset = 0) {
+            uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+            uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
+
+            uintptr_t patternLength = (DWORD) strlen(mask);
+
+            for (uintptr_t i = 0; i < size - patternLength; i++) {
+                bool found = true;
+                for (uintptr_t j = 0; j < patternLength; j++) {
+                    found &= mask[j] == 0 || pattern[j] == *reinterpret_cast<char*>(base + i + j);
+                    if (!found)
+                        break;
+                }
+                if (found)
+                    return base + i + offset;
+            }
+            return 0x0u;
+        };
+
         auto getRTTIName = [](uintptr_t vtable) -> const char* {
             uintptr_t typeBase = *((uintptr_t*) (vtable - 4));
             uintptr_t type = *((uintptr_t*) (typeBase + 0xC));
@@ -376,10 +452,16 @@ namespace intercept {
 
         uintptr_t stringOffset = findInMemory("tbb4malloc_bi", 13);
 
-        uintptr_t allocatorVtablePtr = (findInMemory((char*)&stringOffset, 4) -4) ;
+        uintptr_t allocatorVtablePtr = (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) -4) ;
         const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
         assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
-        _allocator = allocatorVtablePtr;
+        _allocator.genericAllocBase = allocatorVtablePtr;
+        _allocator.poolFuncAlloc = findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        _allocator.poolFuncDealloc = findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx");
+        
+
+
+
     }
 
     const unary_map & loader::unary() const {
@@ -394,7 +476,7 @@ namespace intercept {
         return _nular_operators;
     }
 
-    uintptr_t loader::get_allocator() const {
-        return _allocator;
+    const types::__internal::allocatorInfo* loader::get_allocator() const {
+        return &_allocator;
     }
 }

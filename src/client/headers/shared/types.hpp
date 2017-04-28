@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <set>
+#include <array>
 #include <mutex>
 #include <thread>
 #include <atomic>
@@ -15,8 +16,50 @@ namespace intercept {
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
-
-
+        class rv_pool_allocator;
+        namespace __internal
+        {
+            enum class GameDataType {
+                SCALAR,
+                BOOL,
+                ARRAY,
+                STRING,
+                NOTHING,
+                ANY,
+                NAMESPACE,
+                NaN,
+                IF,
+                WHILE,
+                FOR,
+                SWITCH,
+                EXCEPTION,
+                WITH,
+                CODE,
+                OBJECT,
+                SIDE,
+                GROUP,
+                TEXT,
+                SCRIPT,
+                TARGET,
+                JCLASS,
+                CONFIG,
+                DISPLAY,
+                CONTROL,
+                NetObject,
+                SUBGROUP,
+                TEAM_MEMBER,
+                TASK,
+                DIARY_RECORD,
+                LOCATION,
+                end
+            };
+            struct allocatorInfo {
+                uintptr_t genericAllocBase;
+                uintptr_t poolFuncAlloc;
+                uintptr_t poolFuncDealloc;
+                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+            };
+        }
 
 
         
@@ -91,7 +134,6 @@ namespace intercept {
 
             //#TODO implement game_data_pool and string pool here
         };
-
 
         class refcount_base {
         public:
@@ -349,6 +391,17 @@ namespace intercept {
 
 
 
+        class rv_pool_allocator {
+            char pad_0x0000[0x24]; //0x0000
+        public:
+            const r_string _allocName;
+            void* allocate(size_t count);
+            void deallocate(void* data);
+
+        };
+
+
+
         class rv_string {
         public:
             rv_string();
@@ -529,6 +582,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_number();
             game_data_number(float val_);
             game_data_number(const game_data_number &copy_);
@@ -546,6 +600,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_bool();
             game_data_bool(bool val_);
             game_data_bool(const game_data_bool &copy_);
@@ -640,6 +695,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_array();
             game_data_array(size_t size_);
             game_data_array(const std::vector<game_value> &init_);
@@ -663,6 +719,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_string();
             game_data_string(const std::string &str_);
             game_data_string(const game_data_string &copy_);

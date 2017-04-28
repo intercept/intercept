@@ -214,7 +214,7 @@ namespace intercept {
         /*!
         @brief Returns the pointer to the engines allocator functions.
         */
-        uintptr_t get_allocator() const;
+        const types::__internal::allocatorInfo* get_allocator() const;
 
 
     protected:
@@ -241,9 +241,9 @@ namespace intercept {
         std::unordered_set<uint32_t> _hooked_functions;
 
         /*!
-        @brief Stores the pointer to the engines allocator functions.
+        @brief Stores the data about the engines allocators.
         */
-        uintptr_t _allocator;
+        types::__internal::allocatorInfo _allocator;
 
         bool _attached;
         bool _patched;

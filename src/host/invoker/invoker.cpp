@@ -316,6 +316,7 @@ namespace intercept {
             invoker::get().type_structures["ARRAY"] = structure;
             game_data_array::type_def = structure.first;
             game_data_array::data_type_def = structure.second;
+            game_data_array::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::ARRAY)];
             //invoker::get()._delete_array_ptr = game_value(right_arg_);
             
         }
@@ -324,18 +325,21 @@ namespace intercept {
             invoker::get().type_structures["SCALAR"] = structure;
             game_data_number::type_def = structure.first;
             game_data_number::data_type_def = structure.second;
+            game_data_number::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::SCALAR)];
         }
         else if (step == "bool_type") {
             invoker::get().type_map[structure.first] = "BOOL";
             invoker::get().type_structures["BOOL"] = structure;
             game_data_bool::type_def = structure.first;
             game_data_bool::data_type_def = structure.second;
+            game_data_bool::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::BOOL)];
         }
         else if (step == "string_type") {
             invoker::get().type_map[structure.first] = "STRING";
             invoker::get().type_structures["STRING"] = structure;
             game_data_string::type_def = structure.first;
             game_data_string::data_type_def = structure.second;
+            game_data_string::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::STRING)];
         }
         else if (step == "code_type") {
             invoker::get().type_map[structure.first] = "CODE";

@@ -114,6 +114,6 @@ namespace intercept {
 
         @param value_ A pointer to the allocator
         */
-        uintptr_t get_engine_allocator();
+        const types::__internal::allocatorInfo* get_engine_allocator();
     }
 }

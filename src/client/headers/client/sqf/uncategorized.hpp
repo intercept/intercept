@@ -55,15 +55,15 @@ namespace intercept {
 
         struct rv_color {
             float red;
-            float blue;
             float green;
+            float blue;
             float alpha;
 
             operator game_value() {
                 return game_value(std::vector<game_value>({
                     red,
-                    blue,
                     green,
+                    blue,
                     alpha
                 }));
             }
@@ -71,17 +71,25 @@ namespace intercept {
             operator game_value() const {
                 return game_value(std::vector<game_value>({
                     red,
-                    blue,
                     green,
+                    blue,
                     alpha
                 }));
             }
 
             rv_color(const game_value &ret_game_value_) :
                 red(ret_game_value_[0]),
-                blue(ret_game_value_[1]),
-                green(ret_game_value_[2]),
+                green(ret_game_value_[1]),
+                blue(ret_game_value_[2]),
                 alpha(ret_game_value_[3])
+            {
+            }
+
+            rv_color(float red_, float green_, float blue_, float alpha_) :
+                red(red_),
+                green(green_),
+                blue(blue_),
+                alpha(alpha_)
             {
             }
         };
@@ -771,7 +779,10 @@ namespace intercept {
         object create_vehicle(const std::string &type_, const vector3 &pos_);
         object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
         void delete_vehicle(const object &obj_);
-
+        
+        void create_unit(const std::string &type_, const vector3 &pos_, const group &group_, const std::string &init_ = "", float skill_ = 0.5f, const std::string &rank_ = "PRIVATE");
+        object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
+        
         float server_time();
         std::string server_name();
 

@@ -1791,6 +1791,34 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
         }
 
+        void create_unit(const std::string &type_, const vector3 &pos_, const group &group_, const std::string &init_, float skill_, const std::string &rank_) {
+            game_value args({
+                pos_,
+                group_,
+                init_,
+                skill_,
+                rank_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__createunit__string__array__ret__nothing, type_, args);
+        }
+
+        object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_) {
+            std::vector<game_value> markers;
+            for (auto it : markers_) {
+                markers.push_back(it);
+            }
+            game_value args({
+                type_,
+                pos_,
+                markers,
+                placement_,
+                special_
+            });
+
+            return object(host::functions.invoke_raw_binary(__sqf::binary__createunit__group__array__ret__object, group_, args));
+        }
+
         std::vector<object> all_eden_entities() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
         }

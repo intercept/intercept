@@ -186,7 +186,7 @@ namespace intercept {
             //const rv_string* placeholder13;
         };
         struct gsOperator {
-            const  rv_string* _name;
+            r_string _name;
             uint32_t placeholder1;//0x4
             uint32_t placeholder2;//0x8 actually a pointer to empty memory
             uint32_t placeholder3;//0xC
@@ -195,18 +195,18 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24
-            const rv_string* _name2;//0x28 this is (tolower name)
-            int32_t placeholder10; //0x2C Small int 0-5
+            uint32_t placeholder9;//0x24  JNI function
+            r_string _name2;//0x28 this is (tolower name)
+            int32_t placeholder10; //0x2C Small int 0-5  priority
             binary_operator * _operator;//0x30
-            const rv_string* _leftType;//0x34 Description of left hand side parameter
-            const rv_string* _rightType;//0x38 Description of right hand side parameter
-            const rv_string* _description;//0x3C
-            const rv_string* _example;//0x40
-            const rv_string* placeholder11;//0x44
-            const rv_string* _version;//0x48 some version number
-            const rv_string* placeholder12;//0x4C
-            const rv_string* _category; //0x50
+            r_string _leftType;//0x34 Description of left hand side parameter
+            r_string _rightType;//0x38 Description of right hand side parameter
+            r_string _description;//0x3C
+            r_string _example;//0x40
+            r_string placeholder11;//0x44
+            r_string _version;//0x48 some version number
+            r_string placeholder12;//0x4C
+            r_string _category; //0x50
         };
 		struct gsNular {
             const rv_string* _name;
@@ -306,7 +306,7 @@ namespace intercept {
                     binary_entry new_entry;
                     new_entry.op = entry._operator;
                     new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
-                    new_entry.name = &entry._name->char_string;
+                    new_entry.name = entry._name.data();
                     LOG(INFO) << "Found binary operator: " <<
                         new_entry.op->return_type.type_str() << " " <<
                         "(" << new_entry.op->arg1_type.type_str() << ")" <<
@@ -456,6 +456,7 @@ namespace intercept {
         const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
         assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
         _allocator.genericAllocBase = allocatorVtablePtr;
+        //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
         _allocator.poolFuncAlloc = findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         _allocator.poolFuncDealloc = findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx");
         

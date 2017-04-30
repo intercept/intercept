@@ -28,6 +28,13 @@ namespace intercept {
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
+    struct sqf_register_functions {
+        uintptr_t _gameState;
+        uintptr_t _operator_construct;
+        uintptr_t _operator_insert;
+        std::array<uintptr_t, (size_t)types::__internal::GameDataType::end> _types;
+    };
+
     /*!
     @brief The loader class, memory searcher and patching functionality to the RV engine.
 
@@ -216,6 +223,13 @@ namespace intercept {
         */
         const types::__internal::allocatorInfo* get_allocator() const;
 
+        /*!
+        @brief Returns function Pointers needed to register SQF Functions
+        */
+        const sqf_register_functions& get_register_sqf_info() const;
+
+
+
 
     protected:
         /*!
@@ -245,7 +259,87 @@ namespace intercept {
         */
         types::__internal::allocatorInfo _allocator;
 
+        /*!
+        @brief Stores the data about the Functions needed to register SQF Functions.
+        */
+        sqf_register_functions _sqf_register_funcs;
+
         bool _attached;
         bool _patched;
     };
+
+    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+
+        struct gsFunction {	//#TODO shouldn't everything in here be const?
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            uint32_t placeholder8;//0x20
+            uint32_t placeholder9;//0x24
+            const rv_string* _name2;//0x28 this is (tolower name)
+            unary_operator * _operator;//0x2C
+            uint32_t placeholder10;//0x30 RString to something
+            const rv_string* _description;//0x34
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* placeholder11;
+            const rv_string* placeholder12;
+            const rv_string* _category; //0x48
+                                        //const rv_string* placeholder13;
+        };
+        struct gsOperator {
+            r_string _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            uint32_t placeholder8;//0x20
+            uint32_t placeholder9;//0x24  JNI function
+            r_string _name2;//0x28 this is (tolower name)
+            int32_t placeholder10; //0x2C Small int 0-5  priority
+            binary_operator * _operator;//0x30
+            r_string _leftType;//0x34 Description of left hand side parameter
+            r_string _rightType;//0x38 Description of right hand side parameter
+            r_string _description;//0x3C
+            r_string _example;//0x40
+            r_string placeholder11;//0x44
+            r_string _version;//0x48 some version number
+            r_string placeholder12;//0x4C
+            r_string _category; //0x50
+        };
+        struct gsNular {
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C -- change
+            uint32_t placeholder8;//0x20
+            const rv_string* _name2;//0x24 this is (tolower name)
+            nular_operator * _operator;//0x28
+            const rv_string* _description;//0x2C
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* _version;//0x38 some version number
+            const rv_string* placeholder10;
+            const rv_string* _category; //0x40
+            uint32_t placeholder11;//0x44
+        };
+        struct gsTypeInfo { //Donated from ArmaDebugEngine
+            const r_string _name;
+            void* _createFunction{ nullptr };
+        };
+
+    }
+
 }

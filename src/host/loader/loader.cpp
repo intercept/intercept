@@ -161,81 +161,14 @@ namespace intercept {
         return false;
     }
 
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
-
-        struct gsFunction {	//#TODO shouldn't everything in here be const?
-            const rv_string* _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24
-            const rv_string* _name2;//0x28 this is (tolower name)
-            unary_operator * _operator;//0x2C
-            uint32_t placeholder10;//0x30 RString to something
-            const rv_string* _description;//0x34
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* placeholder11;
-            const rv_string* placeholder12;
-            const rv_string* _category; //0x48
-            //const rv_string* placeholder13;
-        };
-        struct gsOperator {
-            r_string _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24  JNI function
-            r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder10; //0x2C Small int 0-5  priority
-            binary_operator * _operator;//0x30
-            r_string _leftType;//0x34 Description of left hand side parameter
-            r_string _rightType;//0x38 Description of right hand side parameter
-            r_string _description;//0x3C
-            r_string _example;//0x40
-            r_string placeholder11;//0x44
-            r_string _version;//0x48 some version number
-            r_string placeholder12;//0x4C
-            r_string _category; //0x50
-        };
-		struct gsNular {
-            const rv_string* _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C -- change
-            uint32_t placeholder8;//0x20
-            const rv_string* _name2;//0x24 this is (tolower name)
-            nular_operator * _operator;//0x28
-            const rv_string* _description;//0x2C
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* _version;//0x38 some version number
-            const rv_string* placeholder10;
-            const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-        };
-        struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;
-            void* _createFunction{ nullptr };
-        };
-
+    uintptr_t _interceptEvent(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t left_arg_, uintptr_t right_arg_) {
+        game_value* l = (game_value*) left_arg_;
+        game_value* r = (game_value*) right_arg_;
+        auto left = l->operator[](0).operator std::string();
+        auto right = r->operator[](0).operator std::string();
+        ::new (sqf_this_) game_value("hellou you");
+        return (uintptr_t) sqf_this_;
     }
-
-
     
     void loader::do_function_walk(uintptr_t state_addr_) {
         uintptr_t types_array = state_addr_;  //#TODO AutoArray impl
@@ -460,8 +393,32 @@ namespace intercept {
         _allocator.poolFuncAlloc = findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         _allocator.poolFuncDealloc = findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx");
         
+        
+        _sqf_register_funcs._operator_construct = (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1DFB40);
+        _sqf_register_funcs._operator_insert = (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1067100);
+        _sqf_register_funcs._gameState = state_addr_;
+
+        typedef int(__thiscall *tFunction)(uintptr_t gameState, const __internal::gsOperator &f);
+        tFunction oFunction = (tFunction) (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1067100);
+        
+        typedef int(__thiscall *createBinary)(__internal::gsOperator* op, uintptr_t returnType, const char* name, int priority, binary_function f,uintptr_t lType, uintptr_t rType,
+            const char* lArgDesc, const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2,const char* def,
+            uintptr_t jFunc);
+        __internal::gsOperator op;
+
+        createBinary createFunc = (createBinary) (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1DFB40);
+
+        _sqf_register_funcs._types[(size_t) types::__internal::GameDataType::ARRAY] = (uintptr_t) &_binary_operators["arrayintersect"].front().op->arg1_type;
+        _sqf_register_funcs._types[(size_t) types::__internal::GameDataType::STRING] = (uintptr_t) &_binary_operators["doorphase"].front().op->arg2_type;
+
+        auto type = _binary_operators["arrayintersect"].front().op->arg1_type;
+        auto rettype = _binary_operators["setcuratorcoef"].front().op->return_type;
+        auto stringType = _binary_operators["doorphase"].front().op->arg2_type;
 
 
+
+        //createFunc(&op, (uintptr_t) &stringType, "interceptEvent", 4, _interceptEvent, (uintptr_t)&type, (uintptr_t) &type, "", "", "", "", "", "", "", "", 0);
+        //oFunction(state_addr_, op);
 
     }
 
@@ -480,4 +437,9 @@ namespace intercept {
     const types::__internal::allocatorInfo* loader::get_allocator() const {
         return &_allocator;
     }
+
+    const intercept::sqf_register_functions& loader::get_register_sqf_info() const {
+        return _sqf_register_funcs;
+    }
+
 }

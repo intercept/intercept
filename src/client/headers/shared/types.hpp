@@ -456,7 +456,7 @@ namespace intercept {
         struct binary_operator {
             uintptr_t        v_table;
             uint32_t         ref_count;
-            unary_function   *procedure_addr;
+            binary_function   *procedure_addr;
             op_value_entry   return_type;
             op_value_entry   arg1_type;
             op_value_entry   arg2_type;

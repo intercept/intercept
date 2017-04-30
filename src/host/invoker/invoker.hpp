@@ -17,6 +17,7 @@ https://github.com/NouberNou/intercept
 #include <condition_variable>
 #include <queue>
 #include "eventhandlers.hpp"
+#include "sqf_functions.hpp"
 
 
 using namespace intercept::types;
@@ -255,6 +256,12 @@ namespace intercept {
 
 
         std::atomic<uint32_t> _thread_count;
+
+        /*!
+        @brief The interceptEvent SQF Function that's used to get events with arguments
+        */
+        static game_value _interceptEvent(game_value left_arg_, game_value right_arg_);
+        registered_sqf_function _interceptEventFunction;
 
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.

@@ -1086,6 +1086,7 @@ static unary_function unary__while__code__ret__while;
 static unary_function unary__wingsforcesrtd__object__ret__array;
 static unary_function unary__with__namespace__ret__with;
 static unary_function unary__worldtoscreen__array__ret__array;
+static unary_function unary__getcameraviewdirection__object__ret__array;
 
 // Binary Functions
 static binary_function binary__action__object__array__ret__nothing;

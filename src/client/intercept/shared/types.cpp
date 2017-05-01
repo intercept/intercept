@@ -433,6 +433,10 @@ namespace intercept {
             rv_data.data = new game_data_array(list_);
         }
 
+        game_value::game_value(const std::initializer_list<game_value> &list_) {
+            rv_data.data = new game_data_array(list_);
+        }
+
         game_value::game_value(const vector3 & vec_)
         {
             rv_data.data = new game_data_array({ vec_.x, vec_.y, vec_.z });

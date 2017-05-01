@@ -1,5 +1,7 @@
 #include "loader.hpp"
 #include "controller.hpp"
+#include <thread>
+#include <future>
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 
@@ -365,7 +367,7 @@ namespace intercept {
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (uintptr_t j = 0; j < patternLength; j++) {
-                    found &= mask[j] == 0 || pattern[j] == *reinterpret_cast<char*>(base + i + j);
+                    found &= mask[j] == '?' || pattern[j] == *reinterpret_cast<char*>(base + i + j);
                     if (!found)
                         break;
                 }
@@ -382,44 +384,43 @@ namespace intercept {
         };
 
 
+        auto future_stringOffset = std::async([&](){return findInMemory("tbb4malloc_bi", 13); });
 
-        uintptr_t stringOffset = findInMemory("tbb4malloc_bi", 13);
+        auto future_operator_construct = std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x57\x83\xcf\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x5f\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcb\xf0\x0f\xc1\x08", "xxx?xxxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxx"); });
+        
+        //make sure insert patterns are long enough. they have to include the offset after the target of the first jmp instruction
+        auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
+        
+        //This is offset 12. operator is at 24. I guess this is unary.
+        //auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
 
-        uintptr_t allocatorVtablePtr = (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) -4) ;
-        const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
-        assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
-        _allocator.genericAllocBase = allocatorVtablePtr;
         //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
-        _allocator.poolFuncAlloc = findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        _allocator.poolFuncDealloc = findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx");
+        auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
+        auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
+
+        uintptr_t stringOffset = future_stringOffset.get();
+        auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - 4); });
         
-        
-        _sqf_register_funcs._operator_construct = (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1DFB40);
-        _sqf_register_funcs._operator_insert = (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1067100);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
+
+        _sqf_register_funcs._operator_construct = future_operator_construct.get();
+        _sqf_register_funcs._operator_insert = future_operator_insert.get();
         _sqf_register_funcs._gameState = state_addr_;
 
-        typedef int(__thiscall *tFunction)(uintptr_t gameState, const __internal::gsOperator &f);
-        tFunction oFunction = (tFunction) (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1067100);
-        
-        typedef int(__thiscall *createBinary)(__internal::gsOperator* op, uintptr_t returnType, const char* name, int priority, binary_function f,uintptr_t lType, uintptr_t rType,
-            const char* lArgDesc, const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2,const char* def,
-            uintptr_t jFunc);
-        __internal::gsOperator op;
-
-        createBinary createFunc = (createBinary) (reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll) + 0x1DFB40);
-
-        _sqf_register_funcs._types[(size_t) types::__internal::GameDataType::ARRAY] = (uintptr_t) &_binary_operators["arrayintersect"].front().op->arg1_type;
-        _sqf_register_funcs._types[(size_t) types::__internal::GameDataType::STRING] = (uintptr_t) &_binary_operators["doorphase"].front().op->arg2_type;
-
+       
         auto type = _binary_operators["arrayintersect"].front().op->arg1_type;
         auto rettype = _binary_operators["setcuratorcoef"].front().op->return_type;
         auto stringType = _binary_operators["doorphase"].front().op->arg2_type;
 
-
-
-        //createFunc(&op, (uintptr_t) &stringType, "interceptEvent", 4, _interceptEvent, (uintptr_t)&type, (uintptr_t) &type, "", "", "", "", "", "", "", "", 0);
-        //oFunction(state_addr_, op);
-
+        uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+        const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
+        assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
+        _allocator.genericAllocBase = allocatorVtablePtr;
+        _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
+        _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     }
 
     const unary_map & loader::unary() const {

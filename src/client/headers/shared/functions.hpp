@@ -18,6 +18,9 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
+    class registered_sqf_function;
+    using WrapperFunction = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+
     extern "C" {
         struct client_functions {
             /*!
@@ -117,6 +120,11 @@ namespace intercept {
             @param value_ A pointer to the allocator
             */
             const types::__internal::allocatorInfo*(*get_engine_allocator)();
+
+            /*!
+            @brief Registers SQF Function
+            */
+            types::registered_sqf_function(*register_sqf_function)(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
         };
     }
 }

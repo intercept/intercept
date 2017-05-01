@@ -80,10 +80,10 @@ registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_typ
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, gsOperator* func_) :
     _returnType(return_type_), _type(functionType::sqf_operator), _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_) {}
 
-registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
+intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
 
 }
-registered_sqf_function_impl::~registered_sqf_function_impl() {
+intercept::registered_sqf_function_impl::~registered_sqf_function_impl() {
     _func->setUnused();
 }
 
@@ -91,12 +91,14 @@ registered_sqf_function::registered_sqf_function(std::shared_ptr<registered_sqf_
 
 }
 
-sqf_functions::sqf_functions() {}
+intercept::sqf_functions::sqf_functions() {}
 
 
-sqf_functions::~sqf_functions() {}
+intercept::sqf_functions::~sqf_functions() {}
 
-intercept::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+    //#TODO max length of name is 22 chars... Somehow.. Need to investigate why
+    //#TODO check if name already exists. If we assigned that overwrite it except it has a Final flag (Add Final flag)
     typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     f_insert_binary insertBinary = (f_insert_binary) _registerFuncs._operator_insert;
 
@@ -113,7 +115,7 @@ intercept::registered_sqf_function intercept::sqf_functions::registerFunction(st
 
     constructBinary(&op, _registerFuncs._types[(size_t) return_arg_type], name.c_str(), 4, function_,
         _registerFuncs._types[(size_t) left_arg_type], _registerFuncs._types[(size_t) right_arg_type],
-        "", "", "", "", "", "", "", "", 0);
+        "", "", "", "", "", "", "", "Intercept", 0);
     insertBinary(_registerFuncs._gameState, op);
 
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, nullptr); //#TODO lookup inserted record and give that instead of nullptr

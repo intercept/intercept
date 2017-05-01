@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -43,8 +43,7 @@ namespace intercept {
     find and catalog the SQF function pointers and store them.
     */
     class loader
-        : public singleton<loader>
-    {
+        : public singleton<loader> {
     public:
         loader();
         ~loader();
@@ -57,15 +56,15 @@ namespace intercept {
         actual function and stores them.
         */
         void do_function_walk(uintptr_t state_addr_);
-        
+
         /*!
         @brief Returns a unary SQF function from the loaders library of found SQF functions.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        
+
         @return true if function is found, false if function is not found.
 
         @todo Throw exception if overloads are found so that unexpected results
@@ -79,16 +78,16 @@ namespace intercept {
         bool get_function(std::string function_name_, unary_function &function_);
 
         /*!
-        @brief Returns a unary SQF function from the loaders library of found 
+        @brief Returns a unary SQF function from the loaders library of found
         SQF functions with argument signature.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions
-        but also takes a argument type in case there are overloaded versions of 
+        but also takes a argument type in case there are overloaded versions of
         this SQF command available.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        @param [in] arg_signature_ The type of variable in SQF that the right 
+        @param [in] arg_signature_ The type of variable in SQF that the right
         argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -123,7 +122,7 @@ namespace intercept {
         bool get_function(std::string function_name_, binary_function &function_);
 
         /*!
-        @brief Returns a binary SQF function from the loaders library of found 
+        @brief Returns a binary SQF function from the loaders library of found
         SQF functions with argument signature.
 
         Returns a binary SQF function from the loaders library of found SQF functions
@@ -133,10 +132,10 @@ namespace intercept {
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the binary function.
         @param [in] arg1_signature_ The type of variable in SQF that the left
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
         @param [in] arg2_signature_ The type of variable in SQF that the right
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -176,12 +175,12 @@ namespace intercept {
         Hooks a function so that when it is executed in SQF the hooked function
         will execute in its place instead.
 
-        @warning Warning, this will only hook the first function (and in the future 
+        @warning Warning, this will only hook the first function (and in the future
         raise an exception if there is an overload of this function).
 
-        @param [in] function_name_ The name of the function to hook. 
+        @param [in] function_name_ The name of the function to hook.
         @param [in] hook_ A void pointer to the function to call instead.
-        @param [out] trampoline_ A reference to the trampoline that stores the 
+        @param [out] trampoline_ A reference to the trampoline that stores the
         original function call.
 
         @return `true` if the hook succeded, `false` if the hook failed.
@@ -190,11 +189,11 @@ namespace intercept {
         bool hook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
         bool hook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
         //!@}
-        
+
         /*!@{
         @brief Unhook a unary function.
 
-        Unhooks an already hooked functon. You must pass in the name, original 
+        Unhooks an already hooked functon. You must pass in the name, original
         hooked function (the `hook_` parameter that was passed in) and the trampoline
         that was assigned by the hook function.
 

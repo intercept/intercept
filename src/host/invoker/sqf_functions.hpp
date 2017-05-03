@@ -68,9 +68,11 @@ namespace intercept {
         sqf_functions();
         ~sqf_functions();
 
-        using WrapperFunction = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+        using WrapperFunctionBinary = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+        using WrapperFunctionUnary = uintptr_t(*)(char*, uintptr_t, uintptr_t);
         //[[nodiscard]]
-        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
 
         void initialize();
     private:

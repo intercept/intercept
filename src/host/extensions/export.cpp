@@ -96,7 +96,7 @@ namespace intercept {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }
 
-        intercept::types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+        intercept::types::registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type, right_arg_type);
         }
     }

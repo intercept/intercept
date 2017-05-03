@@ -409,7 +409,7 @@ namespace intercept {
 
 
 
-        class [[deprecated]] rv_string {
+        class rv_string {
         public:
             rv_string();
             rv_string(const rv_string &) = delete;

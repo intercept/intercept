@@ -793,9 +793,9 @@ namespace intercept {
             // deallocate object at _Ptr
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
             MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-            std::stringstream stream;
-            stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
-            OutputDebugStringA(stream.str().c_str());
+            //std::stringstream stream;
+            //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
+            //OutputDebugStringA(stream.str().c_str());
             alloc->Delete(_Ptr);
         }
 
@@ -806,9 +806,9 @@ namespace intercept {
             //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
             MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
             Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
-            std::stringstream stream;
-            stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
-            OutputDebugStringA(stream.str().c_str());
+            //std::stringstream stream;
+            //stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
+            //OutputDebugStringA(stream.str().c_str());
             return newData;
         }
 

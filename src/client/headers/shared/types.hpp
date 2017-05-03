@@ -5,6 +5,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <utility> //std::hash
 #include "vector.hpp"
 #include "pool.hpp"
 
@@ -408,7 +409,7 @@ namespace intercept {
 
 
 
-        class rv_string {
+        class [[deprecated]] rv_string {
         public:
             rv_string();
             rv_string(const rv_string &) = delete;
@@ -421,6 +422,173 @@ namespace intercept {
             char char_string; //#TODO add .natvis to display full string in Visual Studio dbg
             std::string string();
         };
+
+
+
+        //Contributed by ArmaDebugEngine
+        class rv_arraytype {};
+
+        template<class Type>
+        class rv_array : public rv_arraytype {
+        protected:
+            Type *_data;
+            int _n;
+        public:
+            rv_array() {};
+            Type &get(int i) {
+                return _data[i];
+            }
+            const Type &get(int i) const {
+                return _data[i];
+            }
+            Type &operator [] (int i) { return get(i); }
+            const Type &operator [] (int i) const { return get(i); }
+            Type *data() { return _data; }
+            int count() const { return _n; }
+
+            Type &front() { return get(0); }
+            Type &back() { return get(_n - 1); }
+
+            Type* begin() { return &get(0); }
+            Type* end() { return &get(_n); }
+
+            const Type* begin() const { return &get(0); }
+            const Type* end() const { return &get(_n); }
+
+            const Type &front() const { return get(0); }
+            const Type &back() const { return get(_n - 1); }
+
+            bool is_empty() const { return _n == 0; }
+
+            template <class Func>
+            void for_each(const Func &f) const {
+                for (int i = 0; i < count(); i++) {
+                    f(get(i));
+                }
+            }
+
+            template <class Func>
+            void for_each_backwards(const Func &f) const { //This returns if Func returns true
+                for (int i = count() - 1; i >= 0; i--) {
+                    if (f(get(i))) return;
+                }
+            }
+
+            template <class Func>
+            void for_each(const Func &f) {
+                for (int i = 0; i < count(); i++) {
+                    f(get(i));
+                }
+            }
+
+        };
+
+        template<class Type>
+        class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
+        protected:
+            int _maxItems;
+        public:
+            auto_array() : _maxItems(0), rv_array<Type>() {};
+        };
+
+
+        static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) {
+            while (*key) {
+                hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
+            }
+            return hashValue;
+        }
+        static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) {
+            while (*key) {
+                hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
+            }
+            return hashValue;
+        }
+
+        struct map_string_to_class_trait {
+            static unsigned int hash_key(const char * key) {
+                return rv_map_hash_string_case_sensitive(key);
+            }
+            static int compare_keys(const char * k1, const char * k2) {
+                return strcmp(k1, k2);
+            }
+        };
+
+        struct map_string_to_class_trait_caseinsensitive : public map_string_to_class_trait {
+            static unsigned int hash_key(const char * key) {
+                return rv_map_hash_string_case_insensitive(key);
+            }
+
+            static int compare_keys(const char * k1, const char * k2) {
+                return _strcmpi(k1, k2);
+            }
+        };
+
+        template <class Type, class Container, class Traits = map_string_to_class_trait>
+        class map_string_to_class {
+        protected:
+            Container* _table;
+            int _tableCount{ 0 };
+            int _count{ 0 };
+            static Type _null_entry;
+        public:
+            map_string_to_class() {}
+
+            template <class Func>
+            void for_each(Func func) const {
+                if (!_table || !_count) return;
+                for (int i = 0; i < _tableCount; i++) {
+                    const Container &container = _table[i];
+                    for (int j = 0; j < container.count(); j++) {
+                        func(container[j]);
+                    }
+                }
+            }
+
+            template <class Func>
+            void for_each_backwards(Func func) const {
+                if (!_table || !_count) return;
+                for (int i = _tableCount - 1; i >= 0; i--) {
+                    const Container &container = _table[i];
+                    for (int j = container.count() - 1; j >= 0; j--) {
+                        func(container[j]);
+                    }
+                }
+            }
+
+            const Type &get(const char* key) const {
+                if (!_table || !_count) return _null_entry;
+                int hashedKey = hash_key(key);
+                for (int i = 0; i < _table[hashedKey].count(); i++) {
+                    const Type &item = _table[hashedKey][i];
+                    if (Traits::compareKeys(item.get_map_key(), key) == 0)
+                        return item;
+                }
+                return _null_entry;
+            }
+
+            static bool is_null(const Type &value) { return &value == &_null_entry; }
+
+            bool has_key(const char* key) const {
+                return !is_null(get(key));
+            }
+
+        public:
+            int count() const { return _count; }
+        protected:
+            int hash_key(const char* key) const {
+                return Traits::hash_key(key) % _tableCount;
+            }
+        };
+
+        template<class Type, class Container, class Traits>
+        Type map_string_to_class<Type, Container, Traits>::_null_entry;
+
+
+
+
+
+
 
         struct value_entry {
             rv_string *type_name;

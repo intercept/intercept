@@ -63,7 +63,7 @@ namespace intercept {
         }
 
 
-        
+
         template<class Type>
         class rv_allocator : std::allocator<Type> {
             class MemTableFunctions {
@@ -84,7 +84,7 @@ namespace intercept {
 
                 virtual void *HeapDelete(void *mem, size_t size) = 0;
                 virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-                 
+
                 virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
 
                 virtual size_t GetPageRecommendedSize() = 0;
@@ -130,7 +130,7 @@ namespace intercept {
                 for (size_t i = 0; i < _count; ++i) {
                     ::new (ptr + i) Type();
                 }
-                
+
                 return ptr;
             }
 
@@ -633,7 +633,7 @@ namespace intercept {
             static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
-        class [[deprecated]] rv_game_value{
+        class[[deprecated]] rv_game_value{
         };
 
         class game_data_array;
@@ -657,6 +657,7 @@ namespace intercept {
             game_value(const std::string &val_);
             game_value(const char *);
             game_value(const std::vector<game_value> &list_);
+            game_value(const std::initializer_list<game_value> &list_);
             game_value(const vector3 &vec_);
             game_value(const vector2 &vec_);
             game_value(const internal_object &internal_);
@@ -702,7 +703,7 @@ namespace intercept {
 
             bool client_owned() const;
 
-            
+
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);

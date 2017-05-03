@@ -127,7 +127,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     f_insert_unary insertBinary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
 
-    typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, uintptr_t returnType, const char* name, int priority, unary_function f, uintptr_t rType,
+    typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, uintptr_t returnType, const char* name, unary_function f, uintptr_t rType,
         const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
         uintptr_t jFunc);
     __internal::gsFunction op;
@@ -137,7 +137,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
-    constructUnary(&op, _registerFuncs._types[static_cast<size_t>(return_arg_type)], name.c_str(), 4, function_,
+    constructUnary(&op, _registerFuncs._types[static_cast<size_t>(return_arg_type)], name.c_str(), function_,
         _registerFuncs._types[static_cast<size_t>(right_arg_type)],
         "", "", "", "", "", "", "Intercept", 0);
     insertBinary(_registerFuncs._gameState, op);

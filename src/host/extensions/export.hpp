@@ -18,7 +18,8 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
-    using WrapperFunction = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+    using WrapperFunctionBinary = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+    using WrapperFunctionUnary = uintptr_t(*)(char*, uintptr_t, uintptr_t);
 
     namespace client_function_defs {
         /*!
@@ -120,6 +121,7 @@ namespace intercept {
         /*!
         @brief Registers SQF Function
         */
-        types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
     }
 }

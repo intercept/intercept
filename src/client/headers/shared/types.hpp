@@ -1173,10 +1173,17 @@ namespace intercept {
 
         template <game_value(*T)(game_value, game_value)>
         static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = (game_value*) left_arg_;
-            game_value* r = (game_value*) right_arg_;
+            game_value* l = reinterpret_cast<game_value*>(left_arg_);
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*l, *r));
-            return (uintptr_t) sqf_this_;
+            return reinterpret_cast<uintptr_t>(sqf_this_);
+        }
+
+        template <game_value(*T)(game_value)>
+        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return reinterpret_cast<uintptr_t>(sqf_this_);
         }
     }
 }

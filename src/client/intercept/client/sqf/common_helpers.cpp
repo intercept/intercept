@@ -113,6 +113,10 @@ namespace intercept {
                 return game_value(host::functions.invoke_raw_unary(fnc_, str_));
             }
 
+            float __number_unary_location(unary_function fnc_, const location &obj_) {
+                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+            }
+
             float __number_unary_object(unary_function fnc_, const object &obj_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
             }
@@ -137,7 +141,7 @@ namespace intercept {
             std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(object(input_[i].rv_data));
+                    output.push_back(object(input_[i]));
                 }
                 return output;
             }
@@ -180,7 +184,7 @@ namespace intercept {
             std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
                 std::vector<team_member> output;
                 for (uint32_t i = 0; i < input__.length(); ++i) {
-                    output.push_back(team_member(input__[i].rv_data));
+                    output.push_back(team_member(input__[i]));
                 }
                 return output;
             }
@@ -188,7 +192,7 @@ namespace intercept {
             std::vector<group> __convert_to_groups_vector(game_value input_) {
                 std::vector<group> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(group(input_[i].rv_data));
+                    output.push_back(group(input_[i]));
                 }
                 return output;
             }
@@ -196,7 +200,7 @@ namespace intercept {
             std::vector<display> __convert_to_displays_vector(game_value input_) {
                 std::vector<display> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(display(input_[i].rv_data));
+                    output.push_back(display(input_[i]));
                 }
                 return output;
             }
@@ -212,7 +216,7 @@ namespace intercept {
             std::vector<config> __convert_to_configs_vector(game_value input_) {
                 std::vector<config> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(config(input_[i].rv_data));
+                    output.push_back(config(input_[i]));
                 }
                 return output;
             }
@@ -220,7 +224,7 @@ namespace intercept {
             std::vector<location> __convert_to_locations_vector(game_value input_) {
                 std::vector<location> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(location(input_[i].rv_data));
+                    output.push_back(location(input_[i]));
                 }
                 return output;
             }
@@ -228,7 +232,7 @@ namespace intercept {
             std::vector<task> __convert_to_tasks_vector(game_value input_) {
                 std::vector<task> output;
                 for (uint32_t i = 0; i < input_.length(); ++i) {
-                    output.push_back(task(input_[i].rv_data));
+                    output.push_back(task(input_[i]));
                 }
                 return output;
             }

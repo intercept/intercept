@@ -90,26 +90,27 @@ namespace intercept {
                 }
             }
         }
-        {
-            std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            if (_to_delete.size() > 500) {
-                //for (uint32_t index = 0; index < 100; ++index) {
-                uint32_t index = 0;
-                while(_to_delete.size() > 0) {
-                    ((rv_game_value *)_delete_array_ptr[index])->__vptr = rv_game_value::__vptr_def;
-                    ((rv_game_value *)_delete_array_ptr[index])->data = _to_delete.front();
-                    index++;
-                    if (index >= 1000) {
-                        _invoker_unlock delete_invoke_lock(this);
-                        invoke_delete();
-                        index = 0;
-                    }
-                    _to_delete.pop();
-                }
-                _invoker_unlock delete_invoke_lock(this);
-                invoke_delete();
-            }
-        }
+        //{       //#Deprecate 
+        //#TODO remove
+        //    std::lock_guard<std::mutex> delete_lock(_delete_mutex);
+        //    if (_to_delete.size() > 500) {
+        //        //for (uint32_t index = 0; index < 100; ++index) {
+        //        uint32_t index = 0;
+        //        while(_to_delete.size() > 0) {
+        //            //((game_value *)_delete_array_ptr[index])->set_vtable(game_value::__vptr_def);
+        //            //((game_value *)_delete_array_ptr[index])->data = _to_delete.front();
+        //            index++;
+        //            if (index >= 1000) {
+        //                _invoker_unlock delete_invoke_lock(this);
+        //                invoke_delete();
+        //                index = 0;
+        //            }
+        //            _to_delete.pop();
+        //        }
+        //        _invoker_unlock delete_invoke_lock(this);
+        //        invoke_delete();
+        //    }
+        //}
         return true;
     }
 
@@ -200,94 +201,78 @@ namespace intercept {
         }
     }
 
-    rv_game_value invoker::invoke_raw_nolock(nular_function function_)
+    game_value invoker::invoke_raw_nolock(nular_function function_)
     {
         uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
+        return game_value(std::move(*reinterpret_cast<game_value*>(ret_ptr)));
     }
 
-    rv_game_value invoker::invoke_raw(const std::string &function_name_)
-    {
+    game_value invoker::invoke_raw(const std::string &function_name_) const {
         nular_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function);
         }
-        return rv_game_value();
+        return game_value();
     }
 
-    rv_game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_)
-    {
-        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&right_arg_);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
+    game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
+        return game_value(std::move(*reinterpret_cast<game_value*>(ret_ptr)));
     }
 
-    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_)
-    {
+    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const {
         unary_function function;
         if (loader::get().get_function(function_name_, function, right_type_)) {
             return invoke_raw_nolock(function, right_);
         }
-        return rv_game_value();
+        return game_value();
     }
 
-    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_)
-    {
+    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_) const {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function, right_);
         }
-        return rv_game_value();
+        return game_value();
     }
 
 
-    rv_game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_)
+    game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_)
     {
-        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, (uintptr_t)&left_arg_, (uintptr_t)&right_arg_);
-        rv_game_value ret;
-        ret.__vptr = *(uintptr_t *)ret_ptr;
-        ret.data = (game_data *)*(uintptr_t *)(ret_ptr + 4);
-        return ret;
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&left_arg_), reinterpret_cast<uintptr_t>(&right_arg_));
+        return game_value(std::move(*reinterpret_cast<game_value*>(ret_ptr)));
     }
 
-    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_)
-    {
+    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function, left_, right_);
         }
-        return rv_game_value();
+        return game_value();
     }
 
-    rv_game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_)
-    {
+    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const {
         binary_function function;
         if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
             return invoke_raw_nolock(function, left_, right_);
         }
-        return rv_game_value();
+        return game_value();
     }
 
-    value_type invoker::get_type(const game_value &value_) const
-    {
+    value_type invoker::get_type(const game_value &value_) {
         return value_.type();
     }
 
-    const std::string invoker::get_type_str(const game_value &value_) const
+    const std::string& invoker::get_type_str(const game_value &value_) const
     {
         auto type = value_.type();
         return type_map.at(type);
     }
 
-    bool invoker::release_value(game_value &value_, bool immediate_) {
+    bool invoker::release_value(game_value &value_, bool immediate_) {      //#Deprecate
         if (!value_.client_owned()) {
             std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            _to_delete.push(value_.rv_data.data);
+            _to_delete.push(value_.data);
             return true;
         }
         return false;
@@ -303,6 +288,7 @@ namespace intercept {
 
     int invoker::_register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_)
     {
+        //#deprecate in favor of registerFunction
         LOG(INFO) << "Registration Hook Function Called: " << invoker::get()._registration_type;
         auto step = invoker::get()._registration_type;
         invoker::get()._sqf_game_state = sqf_game_state_;
@@ -312,9 +298,9 @@ namespace intercept {
 
         std::pair<value_type, value_type> gv_structure;
 
-        rv_game_value::__vptr_def = *(uintptr_t *)right_arg_;
-        gv_structure.first = rv_game_value::__vptr_def;
-        gv_structure.second = rv_game_value::__vptr_def;
+        game_value::__vptr_def = *(uintptr_t *)right_arg_;
+        gv_structure.first = game_value::__vptr_def;
+        gv_structure.second = game_value::__vptr_def;
         invoker::get().type_structures["GV"] = gv_structure;
 
         std::pair<value_type, value_type> structure;

@@ -9,13 +9,11 @@ namespace intercept {
         class internal_object : public game_value {
         public:
             internal_object();
-            internal_object(const rv_game_value &value_);
+            //internal_object(const rv_game_value &value_);  //deprecated
             internal_object(const game_value &value_);
             internal_object(const internal_object &copy_);
             internal_object(internal_object &&move_);
             internal_object & operator = (internal_object &&move_);
-            operator game_value *();
-            operator game_value *() const;
 
             internal_object & operator = (const internal_object &copy_);
 
@@ -26,12 +24,13 @@ namespace intercept {
 
         };
 
+            //type(const rv_game_value &value_);\ deprecated
 #define RV_GENERIC_OBJECT_DEC(type) class type : public internal_object {\
             public:\
                 type();\
-                type(const rv_game_value &value_);\
                 type(const game_value &value_);\
                 type(const type &copy_);\
+                type(const internal_object &copy_) = delete;/*prevents code(object()) You can't convert object to code!*/\
                 type(type &&move_);\
                 type & operator = (type &&move_);\
                 type & operator = (const type &copy_);\

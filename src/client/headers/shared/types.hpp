@@ -19,8 +19,7 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
-        namespace __internal
-        {
+        namespace __internal {
             enum class GameDataType {
                 SCALAR,
                 BOOL,
@@ -124,6 +123,8 @@ namespace intercept {
 
             //Allocates and initializes array of Elements using the default constructor.
             static Type* createArray(size_t _count) {
+                if (_count == 1) return createSingle();
+
                 auto ptr = allocate(_count);
 
                 for (size_t i = 0; i < _count; ++i) {
@@ -140,6 +141,8 @@ namespace intercept {
         class refcount_base {
         public:
             refcount_base() { _refcount = 0; }
+            refcount_base(const refcount_base &src) { _refcount = 0; }
+            void operator = (const refcount_base &src) const {}
 
             int add_ref() const {
                 return ++_refcount;
@@ -151,21 +154,27 @@ namespace intercept {
                 return _refcount;
             }
             //Has to be implemented in any derived classes and handle cleanup
-            int release() const = delete;
             mutable int _refcount;
         };
 
         //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
         class refcount : public refcount_base {
         public:
+            virtual ~refcount() {}
             int release() const {
                 int rcount = dec_ref();
                 if (rcount == 0) {
-                    this->~refcount();
-                    rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
+                    //this->~refcount();
+                    lastRefDeleted();
+                    //rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
                 }
                 return rcount;
             }
+            void destruct() const {
+                delete const_cast<refcount *>(this);
+            }
+            virtual void lastRefDeleted() const { destruct(); }
+            virtual int __dummy_refcount_func() const { return 0; }
         };
 
         /*
@@ -175,20 +184,6 @@ namespace intercept {
         public:
             uintptr_t _vtable{ 0 };
         };
-
-        //Use this if the inheriting class starts with a vtable
-        class refcount_vtable : public __vtable, public refcount {
-        public:
-            int release() const {
-                int rcount = dec_ref();
-                if (rcount == 0) {
-                    this->~refcount_vtable();
-                    //rv_allocator<refcount_vtable>::deallocate(const_cast<refcount_vtable *>(this), 0);
-                }
-                return rcount;
-            }
-        };
-
 
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
@@ -279,11 +274,12 @@ namespace intercept {
             Type *getRef() const { return _ref; }
             Type *operator -> () const { return _ref; }
             operator Type *() const { return _ref; }
+            bool operator != (const ref<Type>& other_) { return _ref != other_._ref; }
         };
 
         class r_string {
         public:
-            r_string(){}
+            r_string() {}
             r_string(const char* str, size_t len) {
                 if (str) _ref = create(str, len);
                 else _ref = create(len);
@@ -344,7 +340,7 @@ namespace intercept {
                 return _stricmp(*this, other) == 0;
             }
 
-            size_t find(char ch,size_t start =0) const {
+            size_t find(char ch, size_t start = 0) const {
                 if (length() == 0) return -1;
                 const char *pos = strchr(_ref->data() + start, ch);
                 if (pos == nullptr) return -1;
@@ -368,7 +364,7 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
-                strncpy_s(string->data(),string->size(), str, len);
+                strncpy_s(string->data(), string->size(), str, len);
                 string->data()[len] = 0;
                 return string;
             }
@@ -396,7 +392,15 @@ namespace intercept {
         class rv_pool_allocator {
             char pad_0x0000[0x24]; //0x0000
         public:
-            const r_string _allocName;
+            const char* _allocName;
+
+            int _1;
+            int _2;
+            int _3;
+            int _4;
+            int allocated_count;
+
+
             void* allocate(size_t count);
             void deallocate(void* data);
 
@@ -575,9 +579,22 @@ namespace intercept {
             int32_t _count;
         };
 
-        class game_data : public refcount_vtable {
+        class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
+        public:                //#TODO move this into __internal
+            I_debug_value() {}
+            virtual ~I_debug_value() {}
+            // IDebugValue
+            virtual int IAddRef() = 0;
+            virtual int IRelease() = 0;
+        };
+
+        class game_data : public refcount, public I_debug_value {
         public:
-            uintptr_t data_type;
+            virtual void _dummy() const {};
+            virtual ~game_data() {}
+
+            virtual int IAddRef() { return add_ref(); };
+            virtual int IRelease() { return release(); };
         };
 
         class game_data_number : public game_data {
@@ -616,26 +633,25 @@ namespace intercept {
             static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
-        class rv_game_value {
-        public:
-            static uintptr_t __vptr_def;
-            rv_game_value() : __vptr(rv_game_value::__vptr_def), data(nullptr) {};
-            uintptr_t __vptr; //#TODO inheritance
-            ref<game_data> data;
-            const void deallocate();//#TODO remove
+        class [[deprecated]] rv_game_value{
         };
 
         class game_data_array;
         class internal_object;
 
-        class game_value {
+        class __game_value_vtable_dummy {
         public:
+            virtual void __dummy_vtable(void) {};
+        };
+
+        class game_value : public __game_value_vtable_dummy {
+        public:
+            static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
             void copy(const game_value & copy_);
             game_value(const game_value &copy_);
             game_value(game_value &&move_);
 
-            game_value(const rv_game_value &internal_);
             game_value(float val_);
             game_value(bool val_);
             game_value(const std::string &val_);
@@ -658,7 +674,6 @@ namespace intercept {
             game_value & operator = (const vector3 &vec_);
             game_value & operator = (const vector2 &vec_);
             game_value & operator = (const internal_object &internal_);
-            game_value & operator = (const rv_game_value &internal_);
 
 
             operator int();
@@ -666,7 +681,6 @@ namespace intercept {
             operator bool();
             operator std::string();
             operator r_string();
-            operator rv_game_value *();
             operator vector3();
             operator vector2();
             operator int() const;
@@ -687,9 +701,15 @@ namespace intercept {
             bool is_null();
 
             bool client_owned() const;
-            rv_game_value rv_data;
+
+            
+            ref<game_data> data;
+            [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
+            static void operator delete(void* ptr_, std::size_t sz_);
         protected:
             void _free();
+            uintptr_t get_vtable() const;
+            void set_vtable(uintptr_t vt);
 
         };
 
@@ -745,8 +765,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_group() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *group;
         };
@@ -756,8 +776,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_config() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *config;
         };
@@ -767,8 +787,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_control() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *control;
         };
@@ -778,8 +798,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_display() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *display;
         };
@@ -789,8 +809,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_location() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *location;
         };
@@ -800,8 +820,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_script() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *script;
         };
@@ -811,8 +831,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_side() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *side;
         };
@@ -822,8 +842,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_text() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *rv_text;
         };
@@ -833,8 +853,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_team() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *team;
         };
@@ -844,8 +864,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_namespace() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *rv_namespace;
         };
@@ -855,8 +875,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_code() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             rv_string *code_string;
             uintptr_t instruction_array;
@@ -870,8 +890,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_object() {
-                _vtable = type_def;
-                data_type = data_type_def;
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             void *object;
         };

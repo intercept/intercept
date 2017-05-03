@@ -54,6 +54,7 @@ namespace intercept {
             float __number_unary_number(unary_function fnc_, float val_);
             float __number_unary_control(unary_function fnc_, const control &ctl_);
             float __number_unary_string(unary_function fnc_, const std::string &str_);
+            float __number_unary_location(unary_function fnc_, const location &str_);
             float __number_unary_object(unary_function fnc_, const object &obj_);
 
             std::string __string_unary_control(unary_function fnc_, const control &ctl_);

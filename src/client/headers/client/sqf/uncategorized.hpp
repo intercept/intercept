@@ -1058,9 +1058,9 @@ namespace intercept {
             {
             }
 
-            waypoint(const game_value& rv_game_value)
-                : wgroup(group(rv_game_value[0].rv_data)),
-                windex(rv_game_value[1])
+            waypoint(const game_value& from_)
+                : wgroup(group(from_[0])),
+                windex(from_[1])
             {
             }
 

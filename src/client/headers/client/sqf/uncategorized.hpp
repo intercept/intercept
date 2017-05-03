@@ -153,9 +153,9 @@ namespace intercept {
         game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
         game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
         game_value get_variable(const object & obj_, const std::string & var_name_);
-        game_value get_variable(const object & obj_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const object & obj_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const group & group_, const std::string & var_name_);
-        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value default_value_);//#TODO shouldn't pass game_values by reference. They are refcounted anyway and get copied into a vector anyway. Problem is this prevents automatic type conversion.
         game_value get_variable(const team_member & team_member_, const std::string & var_name_);
         game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
         game_value get_variable(const task & task_, const std::string & var_name_);
@@ -3202,5 +3202,8 @@ namespace intercept {
         };
 
         rv_trigger_timeout trigger_timeout(const object& trigger_);
+        bool is_equal_to(const object& l_, const object& r_);
+        vector3 get_camera_view_direction(const object & obj_);
+        std::string format(const std::vector<game_value> &params_);
     }
 }

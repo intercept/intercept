@@ -42,6 +42,10 @@ intercept_fnc_callWrapper = {
     INTERCEPT_DUMMY;
 };
 
+intercept_fnc_isNilWrapper = {
+	(missionNamespace getVariable "INTERCEPT_CALL_ARGS") call intercept_fnc_callWrapper;
+};
+
 intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };

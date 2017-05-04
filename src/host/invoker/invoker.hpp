@@ -210,7 +210,7 @@ namespace intercept {
         /*!
         @brief Consume an event from the RV Engine and dispatches it.
         */
-        bool rv_event(const arguments & args_, std::string & result_);
+        bool rv_event(const std::string& event_name_, game_value& params_);
         
         /*!
         @brief Get signal from sqf code dispatch it.

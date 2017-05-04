@@ -34,7 +34,7 @@ namespace intercept {
         uintptr_t _operator_insert;
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
-        std::array<uintptr_t, (size_t)types::__internal::GameDataType::end> _types;
+        std::array<uintptr_t, static_cast<size_t>(types::__internal::GameDataType::end)> _types {0};
     };
 
     /*!

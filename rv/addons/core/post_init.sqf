@@ -2,7 +2,7 @@
 
 if(intercept_invoker_ok) then {
     diag_log text format["Intercept Post-Init..."];
-    _res = "intercept" callExtension "rv_event:post_init";
+    "post_init" interceptEvent [];
     diag_log text format["Intercept Post-Init Finished..."];
     [] spawn {
         waitUntil {!isNull (findDisplay 46)};

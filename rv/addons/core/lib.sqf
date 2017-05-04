@@ -79,6 +79,6 @@ if(intercept_invoker_ok) then {
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Intercept Invoker initialized.";
     diag_log text format["Intercept Pre-Init..."];
-    _res = "intercept" callExtension "rv_event:pre_init";
+    ["pre_init",[]] call intercept_fnc_event;
     diag_log text format["Intercept Pre-Init Completed."];
 };

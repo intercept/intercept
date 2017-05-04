@@ -33,7 +33,9 @@ namespace intercept {
             _attached = true;
             controller::get().add("init_invoker", std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("test_invoker", std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("do_invoke_period", std::bind(&intercept::invoker::do_invoke_period, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("do_invoke_period", [](const arguments & args_, std::string & result_) {
+                return false; //#deprecate
+            });
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
@@ -72,17 +74,21 @@ namespace intercept {
             LOG(INFO) << "Registration function failed to unhook.";
         }
         sqf_functions::get().initialize();
-        _interceptEventFunction = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_interceptEvent>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
+        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
+        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptInvokePeriod", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
 
         return true;
     }
 
-    bool invoker::do_invoke_period(const arguments & args_, std::string & result_)
+    game_value invoker::_intercept_do_invoke_period(game_value right_arg_) {
+        return invoker::get().do_invoke_period();
+    }
+
+    bool invoker::do_invoke_period()
     {
         {
             _invoker_unlock period_lock(this, true);
-            long timeout = clock() + 3;
-            while (_thread_count > 0 && clock() < timeout) continue;
+            std::this_thread::sleep_for(std::chrono::milliseconds(3));
         }
         {
             _invoker_unlock on_frame_lock(this);
@@ -117,7 +123,7 @@ namespace intercept {
         return true;
     }
 
-    game_value invoker::_interceptEvent(game_value left_arg_, game_value right_arg_) {
+    game_value invoker::_intercept_event(game_value left_arg_, game_value right_arg_) {
         return invoker::get().rv_event(left_arg_, right_arg_);
     }
 

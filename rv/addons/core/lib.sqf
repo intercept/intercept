@@ -50,12 +50,13 @@ intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };
 
-intercept_fnc__onFrame = {
-    // _start = diag_tickTime;
-    "intercept" callExtension "do_invoke_period:";
-    // _end = diag_tickTime;
-    // diag_log text format["t: %1", (_end-_start)*1000];
-};
+intercept_fnc__onFrame = compileFinal "interceptInvokePeriod [];";
+//{
+//    // _start = diag_tickTime;
+//    "intercept" callExtension "do_invoke_period:";
+//    // _end = diag_tickTime;
+//    // diag_log text format["t: %1", (_end-_start)*1000];
+//};
 
 INTERCEPT_OUT_TEST = 999;
 

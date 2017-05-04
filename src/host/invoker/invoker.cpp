@@ -75,7 +75,7 @@ namespace intercept {
         }
         sqf_functions::get().initialize();
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
-        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptInvokePeriod", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
+        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
 
         return true;
     }

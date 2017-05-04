@@ -50,7 +50,7 @@ intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };
 
-intercept_fnc__onFrame = compileFinal "isNil {interceptInvokePeriod [];}";
+intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame [];}";
 //{
 //    // _start = diag_tickTime;
 //    "intercept" callExtension "do_invoke_period:";

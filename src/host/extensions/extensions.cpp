@@ -151,6 +151,7 @@ namespace intercept {
         //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
         new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
         new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
+        new_module.functions.pre_start = (module::pre_start_func)GetProcAddress(dllHandle, "pre_start");
         new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
 
 #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)

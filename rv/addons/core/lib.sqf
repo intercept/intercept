@@ -50,7 +50,7 @@ intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };
 
-intercept_fnc__onFrame = compileFinal "interceptInvokePeriod [];";
+intercept_fnc__onFrame = compileFinal "isNil {interceptInvokePeriod [];}";
 //{
 //    // _start = diag_tickTime;
 //    "intercept" callExtension "do_invoke_period:";
@@ -80,6 +80,6 @@ if(intercept_invoker_ok) then {
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Intercept Invoker initialized.";
     diag_log text format["Intercept Pre-Init..."];
-    ["pre_init",[]] call intercept_fnc_event;
+    ["pre_init",[]] call (uiNamespace getVariable "intercept_fnc_event");
     diag_log text format["Intercept Pre-Init Completed."];
 };

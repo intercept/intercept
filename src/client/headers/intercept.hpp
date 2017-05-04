@@ -10,6 +10,7 @@
 namespace intercept {
     extern "C" {
         DLLEXPORT int  __cdecl api_version();
+        DLLEXPORT void __cdecl pre_start();
         DLLEXPORT void __cdecl pre_init();
         DLLEXPORT void __cdecl post_init();
         DLLEXPORT void __cdecl mission_end();

@@ -84,11 +84,11 @@ namespace intercept {
         return invoker::get().do_invoke_period();
     }
 
-    bool invoker::do_invoke_period()
-    {
+    bool invoker::do_invoke_period() {
         {
             _invoker_unlock period_lock(this, true);
-            std::this_thread::sleep_for(std::chrono::milliseconds(3));
+            long timeout = clock() + 3;
+            while (_thread_count > 0 && clock() < timeout) std::this_thread::sleep_for(std::chrono::microseconds(20));
         }
         {
             _invoker_unlock on_frame_lock(this);

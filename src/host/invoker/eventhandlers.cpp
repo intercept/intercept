@@ -13,6 +13,7 @@ namespace intercept {
     void eventhandlers::initialize()
     {
         if (!_initialized) {
+            invoker::get().add_eventhandler("pre_start", std::bind(&eventhandlers::pre_start, this, std::placeholders::_1, std::placeholders::_2));
             invoker::get().add_eventhandler("pre_init", std::bind(&eventhandlers::pre_init, this, std::placeholders::_1, std::placeholders::_2));
             invoker::get().add_eventhandler("post_init", std::bind(&eventhandlers::post_init, this, std::placeholders::_1, std::placeholders::_2));
             invoker::get().add_eventhandler("mission_stopped", std::bind(&eventhandlers::mission_stopped, this, std::placeholders::_1, std::placeholders::_2));
@@ -64,6 +65,14 @@ namespace intercept {
             EH_EVENT_DEF(weapon_deployed);
             EH_EVENT_DEF(weapon_rested);
             _initialized = true;
+        }
+    }
+    void eventhandlers::pre_start(const std::string & name_, game_value & args_) {
+        LOG(INFO) << "Pre-start";
+        for (auto module : extensions::get().modules()) {
+            if (module.second.functions.pre_start) {
+                module.second.functions.pre_start();
+            }
         }
     }
     void eventhandlers::pre_init(const std::string & name_, game_value & args_)

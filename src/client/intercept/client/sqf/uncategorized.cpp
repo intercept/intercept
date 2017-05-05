@@ -1592,58 +1592,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         /*************************************************************** LISTBOX END *****************************************************************************/
 #pragma endregion listbox
 
-        /* eden */
-        std::string current_eden_operation() {
-            return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
-        }
-        object get_eden_camera() {
-            return __helpers::__retrieve_nular_object(client::__sqf::nular__get3dencamera__ret__object);
-        }
-
-        bool get_eden_icons_visible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3deniconsvisible__ret__bool);
-        }
-
-        bool get_eden_lines_visible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3denlinesvisible__ret__bool);
-        }
-
-        bool is_eden() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3den__ret__bool);
-        }
-
-        bool is_eden_multiplayer() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__is3denmultiplayer__ret__bool);
-        }
-        float get_eden_action_state(const std::string &value_) {
-            return __helpers::__number_unary_string(client::__sqf::unary__get3denactionstate__string__ret__scalar, value_);
-        }
-        void edit_eden_mission_attributes(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__edit3denmissionattributes__string__ret__nothing, value_);
-        }
-        bool remove_eden_layer(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__remove3denlayer__scalar__ret__bool, value_);
-        }
-
-        void remove_all_eden_eventhandlers(const std::string &value_) {
-            __helpers::__empty_unary_string(client::__sqf::unary__removeall3deneventhandlers__string__ret__nothing, value_);
-        }
-
-        float add_eden_layer(int parent_layer_id_, const std::string& name_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float)parent_layer_id_, name_));
-        }
-
-        float add_eden_event_handler(const std::string &type_, const code &code_) {
-            std::vector<game_value> params{
-                type_,
-                code_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3deneventhandler__array__ret__scalar, params));
-        }
-
-
-
         /* Chat */
         namespace __helpers {
             void chat_message(binary_function fnc_, const object & obj_, const std::string &message_) {
@@ -1842,10 +1790,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             return object(host::functions.invoke_raw_binary(__sqf::binary__createunit__group__array__ret__object, group_, args));
-        }
-
-        std::vector<object> all_eden_entities() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
         }
 
         std::vector<object> all_curators() {
@@ -6115,10 +6059,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__deleteteam__team_member__ret__nothing, value_);
         }
 
-        void do_eden_action(const std::string& value_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__do3denaction__string__ret__nothing, value_);
-        }
-
         display find_display(float value_) {
             return display(host::functions.invoke_raw_unary(client::__sqf::unary__finddisplay__scalar__ret__display, value_));
         }
@@ -6133,10 +6073,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         bool from_editor(const team_member &value_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__fromeditor__team_member__ret__bool, value_));
-        }
-
-        void get_eden_grid(const std::string& value_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__get3dengrid__string__ret__nothing, value_);
         }
 
         object get_editor_camera(const control &value_) {
@@ -7422,10 +7358,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return vector3(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyepos__object__ret__array, object_)));
         }
 
-        rv_eden_mouse_over get_eden_mouse_over() {
-            return rv_eden_mouse_over(host::functions.invoke_raw_nular(client::__sqf::nular__get3denmouseover__ret__array));
-        }
-
         rv_artillery_computer_settings get_artillery_computer_settings() {
             return rv_artillery_computer_settings(host::functions.invoke_raw_nular(client::__sqf::nular__getartillerycomputersettings__ret__array));
         }
@@ -8657,10 +8589,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             }
         }
 
-        void collect_eden_history(const code &code_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__collect3denhistory__code__ret__nothing, code_);
-        }
-
         std::string compose_text(const std::vector<std::string> &texts_) {
             std::vector<game_value> texts;
             for (auto text : texts_)
@@ -8896,22 +8824,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__getwppos__array__ret__array, params));
         }
 
-        float get_eden_entity_id(const object &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
-        }
-
-        float get_eden_entity_id(const group &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
-        }
-
-        float get_eden_entity_id(const vector3 &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
-        }
-
-        float get_eden_entity_id(const marker &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
-        }
-
         void do_stop(const object &unit_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__dostop__object_array__ret__nothing, unit_);
         }
@@ -8938,246 +8850,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void delete_location(const location &loc_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__deletelocation__location__ret__nothing, loc_);
-        }
-
-        void delete_eden_entities(const object &entity_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
-        }
-
-        void delete_eden_entities(const group &entity_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
-        }
-
-        void delete_eden_entities(const vector3 &entity_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
-        }
-
-        void delete_eden_entities(const marker &entity_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        }
-
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
-
-            std::vector<game_value> params{
-                type_,
-                from,
-                to_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
         }
 
         std::vector<object> detected_mines(const side &side_) {
@@ -9414,15 +9086,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::vector<object> members(const team_member &team_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__members__team_member__ret__array, team_));
-        }
-
-        void move_eden_camera(const vector3 &pos_, const vector3 &offset_) {
-            std::vector<game_value> params{
-                pos_,
-                offset_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__move3dencamera__array__ret__nothing, params);
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_) {
@@ -9782,15 +9445,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__registeredtasks__team_member__ret__array, member_));
         }
 
-        void remove_eden_event_handler(const std::string &type_, float id_) {
-            std::vector<game_value> params{
-                type_,
-                id_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__remove3deneventhandler__array__ret__nothing, params);
-        }
-
         void remove_from_remains_collector(const std::vector<object> &remains_) {
             std::vector<game_value> remains;
             for (auto remain : remains_)
@@ -10035,43 +9689,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 best_places.push_back(rv_best_place({ ret[i] }));
 
             return best_places;
-        }
-
-        void set_eden_grid(const std::string &type_, float increment_) {
-            std::vector<game_value> params{
-                type_,
-                increment_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__set3dengrid__array__ret__nothing, params);
-        }
-
-        void set_eden_icons_visible(bool map_, bool scene_) {
-            std::vector<game_value> params{
-                map_,
-                scene_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__set3deniconsvisible__array__ret__nothing, params);
-        }
-
-        void set_eden_lines_visible(bool map_, bool scene_) {
-            std::vector<game_value> params{
-                map_,
-                scene_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__set3denlinesvisible__array__ret__nothing, params);
-        }
-
-        bool set_eden_mission_attributes(const std::string &section_, const std::string &class_, const game_value &value_) {
-            std::vector<game_value> params{
-                section_,
-                class_,
-                value_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__set3denmissionattributes__array__ret__nothing, params));
         }
 
         void set_aperture_new(float min_, float std_, float max_, float std_lum_) {

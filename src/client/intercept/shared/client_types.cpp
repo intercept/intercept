@@ -72,14 +72,14 @@ namespace intercept {
 
 
 
-#define RV_GENERIC_OBJECT_DEF(type)         type##::##type##() {}\
-        type##::##type##(const rv_game_value &value_) : internal_object(value_) {}\
-        type##::##type##(const game_value & value_) : internal_object(value_.rv_data) {}\
-        type##::##type##(const type &copy_) {\
+#define RV_GENERIC_OBJECT_DEF(type)         type::type() {}\
+        type::type(const rv_game_value &value_) : internal_object(value_) {}\
+        type::type(const game_value & value_) : internal_object(value_.rv_data) {}\
+        type::type(const type &copy_) {\
             copy(copy_);\
         }\
-        type##::##type##(type && move_) : internal_object(std::move(move_)) {}\
-        type & type##::operator=(type && move_) {\
+        type::type(type && move_) : internal_object(std::move(move_)) {}\
+        type & type::operator=(type && move_) {\
             if (this == &move_)\
             return *this;\
             if (rv_data.data)\
@@ -89,7 +89,7 @@ namespace intercept {
             move_.rv_data.data = nullptr;\
             return *this;\
         }\
-        type & type##::operator=(const type & copy_)\
+        type & type::operator=(const type & copy_)\
         {\
             copy(copy_);\
             return *this;\

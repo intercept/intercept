@@ -73,6 +73,7 @@ namespace intercept {
         // unary__sqrt__scalar_nan__ret__scalar_nan
         // unary__switch__any__ret__switch
         // unary__tan__scalar_nan__ret__scalar_nan
+        // unary__text__string__ret__text
         // unary__textlog__any__ret__nothing
         // unary__textlogformat__array__ret__nothing
         // unary__tg__scalar_nan__ret__scalar_nan
@@ -315,6 +316,7 @@ namespace intercept {
         // unary__clear3deninventory__array__ret__nothing
         // unary__tvpictureright__array__ret__string
         // unary__createobject__array__ret__object
+        // unary__getdlcassetsusagebyname__string__ret__array
         // unary__getenginetargetrpmrtd__object__ret__array
         // unary__getfieldmanualstartpage__display__ret__array
         // unary__getunitloadout__object__ret__array
@@ -323,6 +325,7 @@ namespace intercept {
         // unary__registerremoteexecfunc__string__ret__bool
         // unary__save3deninventory__array__ret__nothing
         // unary__set3denmodelsvisible__array__ret__nothing
+        // unary__synchronizedtriggers__array__ret__array
 
         /* No documentation for return types. */
         // unary__getgroupicons__group__ret__array
@@ -336,6 +339,9 @@ namespace intercept {
 
         /* Wrong documentation - seems to take Array instead of String. */
         // unary__lognetwork__array__ret__scalar
+
+        /* Team Member things - apparently useless. */
+        // unary__teammember__object__ret__team_member
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -1023,11 +1029,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
-            game_value args({
+            std::vector<game_value> args = {
                 (type_),
                 pos_,
                 (make_global_)
-            });
+            };
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
@@ -1778,6 +1784,34 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void delete_vehicle(const object &obj_) {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
+        }
+
+        void create_unit(const std::string &type_, const vector3 &pos_, const group &group_, const std::string &init_, float skill_, const std::string &rank_) {
+            game_value args({
+                pos_,
+                group_,
+                init_,
+                skill_,
+                rank_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__createunit__string__array__ret__nothing, type_, args);
+        }
+
+        object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_) {
+            std::vector<game_value> markers;
+            for (auto it : markers_) {
+                markers.push_back(it);
+            }
+            game_value args({
+                type_,
+                pos_,
+                markers,
+                placement_,
+                special_
+            });
+
+            return object(host::functions.invoke_raw_binary(__sqf::binary__createunit__group__array__ret__object, group_, args));
         }
 
         std::vector<object> all_eden_entities() {
@@ -2638,10 +2672,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string create_marker(const std::string &name_, const object &pos_) {
-            game_value params({
+            std::vector<game_value> params = {
                 name_,
                 pos_
-            });
+            };
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
         }
@@ -2665,10 +2699,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string create_marker_local(const std::string &name_, const object &pos_) {
-            game_value params({
+            std::vector<game_value> params = {
                 name_,
                 pos_,
-            });
+            };
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
         }
@@ -4394,6 +4428,31 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__playsound__array__ret__nothing, params);
+        }
+
+        float pp_effect_create(const std::string& name_, const float& priority_) {
+            std::vector<game_value> params{
+                name_,
+                priority_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params));
+        }
+
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
+            std::vector<game_value> effects;
+            for (rv_pp_effect item : effects_) {
+                effects.push_back(game_value(item));
+            }
+
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, effects);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_numbers_vector(ret);
+            }
         }
 
         bool pp_effect_committed(const std::string &value_) {
@@ -7337,47 +7396,47 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_magazine(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazine__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)quantity_),
                 game_value((float)ammocount_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineammocargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargoglobal__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazines(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
         }
@@ -7412,19 +7471,19 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 classname_,
                 game_value((float)count_)
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargoglobal__object__array__ret__nothing, obj_, params);
         }
@@ -7439,26 +7498,26 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_) {
-            game_value params({
+            std::vector<game_value> params = {
                 weapon_name_,
-                game_value({
+                std::vector<game_value>({
                     item_name_,
                     game_value((float)ammo_count_)
                 })
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_) {
-            game_value params({
+            std::vector<game_value> params = {
                 weapon_name_,
                 game_value({
                     item_name_,
                     game_value((float)ammo_count_),
                     muzzle_name_
                 })
-            });
+            };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
@@ -7856,20 +7915,20 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         control ctrl_create(const display& display_, const std::string& class_, int idc_) {
-            game_value params({
+            std::vector<game_value> params = {
                 class_,
                 game_value((float)idc_)
-            });
+            };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
         }
 
         control ctrl_create(const display& display_, const std::string& class_, int idc_, const control& controls_group_) {
-            game_value params({
+            std::vector<game_value> params = {
                 class_,
                 game_value((float)idc_),
                 controls_group_
-            });
+            };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
         }
@@ -10417,6 +10476,114 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         rv_trigger_timeout trigger_timeout(const object& trigger_) {
             return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
+        }
+
+        std::vector<object> list(const object& trigger_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__list__object__ret__array, trigger_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_objects_vector(ret);
+            }
+        }
+
+        vector3 task_destination(const task& task_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__taskdestination__task__ret__array, task_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_vector3(ret);
+            }
+        }
+
+        std::vector<rv_weapon_items> weapons_items(const object& obj_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__weaponsitems__object__ret__array, obj_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                std::vector<rv_weapon_items> ret_weapon_items;
+                for (uint32_t i = 0; i < ret.length(); ++i)
+                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                return ret_weapon_items;
+            }
+        }
+
+        std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__weaponsitemscargo__object__ret__array, veh_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                std::vector<rv_weapon_items> ret_weapon_items;
+                for (uint32_t i = 0; i < ret.length(); ++i)
+                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                return ret_weapon_items;
+            }
+        }
+
+        std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
+            std::vector<game_value> parameters_;
+            parameters_.push_back(game_value(configPath_));
+            parameters_.push_back(game_value(position_));
+            
+            auto eden_entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3dencomposition__array__ret__array, parameters_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < eden_entities_.length(); ++i) {
+                output_.push_back(eden_entities_[i]);
+            }
+            return output_;
+        }
+
+        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_) {
+            std::vector<game_value> parameters_;
+            parameters_.push_back(game_value(mode_));
+            parameters_.push_back(game_value(class_));
+            parameters_.push_back(game_value(position_));
+            parameters_.push_back(game_value(is_empty_));
+            
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_));
+        }
+
+        std::vector<game_value> create_3den_connections(const game_value &entity_) {
+            auto connections_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denconnections__any__ret__array, entity_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < connections_.length(); ++i) {
+                output_.push_back(connections_[i]);
+            }
+            return output_;
+        }
+
+        game_value get_3den_entity(const float &entity_id_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
+        }
+
+        std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
+            auto entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < entities_.length(); ++i) {
+                output_.push_back(entities_[i]);
+            }
+            return output_;
+        }
+
+        std::vector<game_value> get_3den_selected(const std::string &type_) {
+            auto entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denselected__string__ret__array, type_));
+            std::vector<game_value> output_;
+            for (uint32_t i = 0; i < entities_.length(); ++i) {
+                output_.push_back(entities_[i]);
+            }
+            return output_;
+        }
+
+        bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_));
         }
     }
 }

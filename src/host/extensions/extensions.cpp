@@ -150,7 +150,7 @@ namespace intercept {
         new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
         new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
 
-#define EH_PROC_DEF(x) new_module.eventhandlers.##x = (module::##x##_func)GetProcAddress(dllHandle, #x)
+#define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
 
         EH_PROC_DEF(anim_changed);
         EH_PROC_DEF(anim_done);

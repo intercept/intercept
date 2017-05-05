@@ -55,15 +55,15 @@ namespace intercept {
 
         struct rv_color {
             float red;
-            float blue;
             float green;
+            float blue;
             float alpha;
 
             operator game_value() {
                 return game_value(std::vector<game_value>({
                     red,
-                    blue,
                     green,
+                    blue,
                     alpha
                 }));
             }
@@ -71,17 +71,25 @@ namespace intercept {
             operator game_value() const {
                 return game_value(std::vector<game_value>({
                     red,
-                    blue,
                     green,
+                    blue,
                     alpha
                 }));
             }
 
             rv_color(const game_value &ret_game_value_) :
                 red(ret_game_value_[0]),
-                blue(ret_game_value_[1]),
-                green(ret_game_value_[2]),
+                green(ret_game_value_[1]),
+                blue(ret_game_value_[2]),
                 alpha(ret_game_value_[3])
+            {
+            }
+
+            rv_color(float red_, float green_, float blue_, float alpha_) :
+                red(red_),
+                green(green_),
+                blue(blue_),
+                alpha(alpha_)
             {
             }
         };
@@ -706,6 +714,13 @@ namespace intercept {
         bool remove_eden_layer(float value_);
         void remove_all_eden_eventhandlers(const std::string &value_);
         float add_eden_event_handler(const std::string &type_, const code &code_);
+        std::vector<game_value> create_3den_composition(const config &config_path_, const vector3 &position_);// TODO add Eden Entity type
+        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_,bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
+        std::vector<game_value> create_3den_connections(const game_value &entity_);
+        game_value get_3den_entity(const float &entity_id_);
+        std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
+        std::vector<game_value> get_3den_selected(const std::string &type_);
+        bool set_3den_attributes(const std::vector<game_value> &entity_attributes_);
 
         /* Chat */
         namespace __helpers {
@@ -763,7 +778,10 @@ namespace intercept {
         object create_vehicle(const std::string &type_, const vector3 &pos_);
         object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
         void delete_vehicle(const object &obj_);
-
+        
+        void create_unit(const std::string &type_, const vector3 &pos_, const group &group_, const std::string &init_ = "", float skill_ = 0.5f, const std::string &rank_ = "PRIVATE");
+        object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
+        
         float server_time();
         std::string server_name();
 
@@ -2016,6 +2034,29 @@ namespace intercept {
         void play_sound(const std::string &name_, bool force_);
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
+
+        struct rv_pp_effect {
+            std::string name;
+            float priority;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    name,
+                    priority
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    name,
+                    priority
+                }));
+            }
+        };
+
+        float pp_effect_create(const std::string& name_, const float& priority_);
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_);
+
         bool pp_effect_committed(const std::string &value_);
         bool pp_effect_committed(float value_);
         void pp_effect_destroy(float value_);
@@ -3171,5 +3212,41 @@ namespace intercept {
         };
 
         rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        std::vector<object> list(const object& trigger_);
+        vector3 task_destination(const task& task_);
+
+        struct rv_magazine {
+            std::string name;
+            int ammo;
+
+            rv_magazine(const game_value &ret_game_value_):
+                name(ret_game_value_[0]),
+                ammo(ret_game_value_[1])
+            {
+            }
+        };
+
+        struct rv_weapon_items {
+            std::string weapon;
+            std::string muzzle;
+            std::string laser;
+            std::string optics;
+            rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
+            std::string bipod;
+
+            rv_weapon_items(const game_value &ret_game_value_):
+                weapon(ret_game_value_[0]),
+                muzzle(ret_game_value_[1]),
+                laser(ret_game_value_[2]),
+                optics(ret_game_value_[3]),
+                magazine(ret_game_value_[4]),
+                bipod(ret_game_value_[5])
+            {
+            }
+        };
+
+        std::vector<rv_weapon_items> weapons_items(const object& obj_);
+        std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_);
     }
 }

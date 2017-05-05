@@ -9,3 +9,4 @@ rv/intercept.pdb
 !.gitkeep
 vcproj/*
 !vcproj/.gitkeep
+.vs

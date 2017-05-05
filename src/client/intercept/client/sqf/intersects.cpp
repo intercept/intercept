@@ -24,11 +24,17 @@ namespace intercept {
             }
         }
 
-        bool intersect(const vector3 &begin_pos_, const vector3 &end_pos_, const object& obj_, const std::string &lodname_) {
-            return game_value(host::functions.invoke_raw_binary(
-                client::__sqf::binary__intersect__array__array__ret__array,
+        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
+            std::vector<game_value> params1{
+                obj_,
+                lodname_
+            };
+            std::vector<game_value> params2{
                 begin_pos_,
-                end_pos_));
+                end_pos_
+            };
+
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__intersect__array__array__ret__array, params1, params2));
         }
 
         intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_) {

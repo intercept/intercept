@@ -371,7 +371,6 @@ namespace intercept {
         void cut_obj(const std::string &name_, const std::string &type_, float speed_ = 1.0f);
         void cut_rsc(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
         void cut_text(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
-        void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         //TODO: arguments default value is nil
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
         float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
@@ -1451,17 +1450,6 @@ namespace intercept {
         vector3 waypoint_position(waypoint & wp_);
 
         /*!
-        @brief      Returns an array of waypoints for the specified unit/group
-
-        @param      gp_ Group to retrieve waypoints of.
-
-        @return The position of the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypoints
-        */
-        std::vector<waypoint> waypoints(group & gp_);
-
-        /*!
         @brief Gets the waypoint script.
 
         @param wp_ Waypoint to use
@@ -1517,7 +1505,6 @@ namespace intercept {
         @sa https://community.bistudio.com/wiki/waypointVisible
         */
         bool waypoint_visible(waypoint & wp_);
-        bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.
 
         std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
         std::vector<waypoint> synchronized_waypoints(object & obj_);

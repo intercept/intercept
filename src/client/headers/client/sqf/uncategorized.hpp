@@ -150,14 +150,14 @@ namespace intercept {
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value default_value_);
-        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
-        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value default_value_);
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const object & obj_, const std::string & var_name_);
         game_value get_variable(const object & obj_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const group & group_, const std::string & var_name_);
         game_value get_variable(const group & group_, const std::string & var_name_, game_value default_value_);//#TODO shouldn't pass game_values by reference. They are refcounted anyway and get copied into a vector anyway. Problem is this prevents automatic type conversion.
         game_value get_variable(const team_member & team_member_, const std::string & var_name_);
-        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_);
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const task & task_, const std::string & var_name_);
         game_value get_variable(const location & loc_, const std::string & var_name_);
 

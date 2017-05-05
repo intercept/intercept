@@ -56,7 +56,7 @@ namespace intercept {
           /*
         inline T * acquire(std::size_t alloc_count_) {
             if (_pool_queue.size() == 0 || alloc_count_ > Alloc_Count)
-                _buy_entry(alloc_count_);                
+                _buy_entry(alloc_count_);
             T * ret = _pool_queue.front();
             std::size_t *count = (std::size_t *)((char *)ret - sizeof(std::size_t));
             *count = alloc_count_;

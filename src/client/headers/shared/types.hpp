@@ -20,7 +20,8 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
-        namespace __internal {
+        namespace __internal
+        {
             enum class GameDataType {
                 SCALAR,
                 BOOL,
@@ -64,7 +65,7 @@ namespace intercept {
         }
 
 
-
+        
         template<class Type>
         class rv_allocator : std::allocator<Type> {
             class MemTableFunctions {
@@ -85,7 +86,7 @@ namespace intercept {
 
                 virtual void *HeapDelete(void *mem, size_t size) = 0;
                 virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-
+                 
                 virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
 
                 virtual size_t GetPageRecommendedSize() = 0;
@@ -131,7 +132,7 @@ namespace intercept {
                 for (size_t i = 0; i < _count; ++i) {
                     ::new (ptr + i) Type();
                 }
-
+                
                 return ptr;
             }
 
@@ -154,7 +155,6 @@ namespace intercept {
             int ref_count() const {
                 return _refcount;
             }
-            //Has to be implemented in any derived classes and handle cleanup
             mutable int _refcount;
         };
 
@@ -341,7 +341,7 @@ namespace intercept {
                 return _stricmp(*this, other) == 0;
             }
 
-            size_t find(char ch, size_t start = 0) const {
+            size_t find(char ch, size_t start =0) const {
                 if (length() == 0) return -1;
                 const char *pos = strchr(_ref->data() + start, ch);
                 if (pos == nullptr) return -1;
@@ -401,7 +401,6 @@ namespace intercept {
             int _4;
             int allocated_count;
 
-
             void* allocate(size_t count);
             void deallocate(void* data);
 
@@ -409,7 +408,7 @@ namespace intercept {
 
 
 
-        class rv_string {
+        class [[deprecated]] rv_string {
         public:
             rv_string();
             rv_string(const rv_string &) = delete;
@@ -700,11 +699,11 @@ namespace intercept {
             }
 
             uint16_t operator + (const int32_t val_) {
-                return _actual() + val_;
+                return _actual() + (uint16_t)val_;
             }
 
             uint16_t operator - (const int32_t val_) {
-                return _actual() - val_;
+                return _actual() - (uint16_t)val_;
             }
 
             void operator ++ (const int32_t val_) {

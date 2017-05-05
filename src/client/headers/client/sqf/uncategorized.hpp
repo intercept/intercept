@@ -3227,7 +3227,7 @@ namespace intercept {
             std::string muzzle;
             std::string laser;
             std::string optics;
-            rv_magazine magazine;
+            rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
             std::string bipod;
 
             rv_weapon_items(const game_value &ret_game_value_):

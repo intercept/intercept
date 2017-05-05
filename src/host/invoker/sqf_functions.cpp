@@ -80,10 +80,10 @@ registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_typ
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, gsOperator* func_) :
     _returnType(return_type_), _type(functionType::sqf_operator), _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_) {}
 
-registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
+intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
 
 }
-registered_sqf_function_impl::~registered_sqf_function_impl() {
+intercept::registered_sqf_function_impl::~registered_sqf_function_impl() {
     _func->setUnused();
 }
 
@@ -91,32 +91,58 @@ registered_sqf_function::registered_sqf_function(std::shared_ptr<registered_sqf_
 
 }
 
-sqf_functions::sqf_functions() {}
+intercept::sqf_functions::sqf_functions() {}
 
 
-sqf_functions::~sqf_functions() {}
+intercept::sqf_functions::~sqf_functions() {}
 
-intercept::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+    //#TODO max length of name is 22 chars... Somehow.. Need to investigate why
+    //#TODO check if name already exists. If we assigned that overwrite it except it has a Final flag (Add Final flag)
     typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
-    f_insert_binary insertBinary = (f_insert_binary) _registerFuncs._operator_insert;
+    f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
 
     typedef int(__thiscall *f_construct_binary)(__internal::gsOperator* op, uintptr_t returnType, const char* name, int priority, binary_function f, uintptr_t lType, uintptr_t rType,
         const char* lArgDesc, const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
         uintptr_t jFunc);
     __internal::gsOperator op;
 
-    f_construct_binary constructBinary = (f_construct_binary) _registerFuncs._operator_construct;
+    f_construct_binary constructBinary = reinterpret_cast<f_construct_binary>(_registerFuncs._operator_construct);
 
-    if (_registerFuncs._types[(size_t) return_arg_type] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
-    if (_registerFuncs._types[(size_t) left_arg_type] == 0) __debugbreak();   //and all supported types are implemented
-    if (_registerFuncs._types[(size_t) right_arg_type] == 0) __debugbreak();
+    if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
+    if (_registerFuncs._types[static_cast<size_t>(left_arg_type)] == 0) __debugbreak();   //and all supported types are implemented
+    if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
     constructBinary(&op, _registerFuncs._types[(size_t) return_arg_type], name.c_str(), 4, function_,
         _registerFuncs._types[(size_t) left_arg_type], _registerFuncs._types[(size_t) right_arg_type],
-        "", "", "", "", "", "", "", "", 0);
+        "", "", "", "", "", "", "", "Intercept", 0);
     insertBinary(_registerFuncs._gameState, op);
 
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, nullptr); //#TODO lookup inserted record and give that instead of nullptr
+
+    return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
+}
+
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+    typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
+    f_insert_unary insertBinary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
+
+    typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, uintptr_t returnType, const char* name, unary_function f, uintptr_t rType,
+        const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
+        uintptr_t jFunc);
+    __internal::gsFunction op;
+
+    f_construct_unary constructUnary = reinterpret_cast<f_construct_unary>(_registerFuncs._unary_construct);
+
+    if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
+    if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
+
+    constructUnary(&op, _registerFuncs._types[static_cast<size_t>(return_arg_type)], name.c_str(), function_,
+        _registerFuncs._types[static_cast<size_t>(right_arg_type)],
+        "", "", "", "", "", "", "Intercept", 0);
+    insertBinary(_registerFuncs._gameState, op);
+
+    auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, nullptr); //#TODO lookup inserted record and give that instead of nullptr
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }

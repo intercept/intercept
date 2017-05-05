@@ -716,9 +716,7 @@ namespace intercept {
 
         bool game_value::is_null()
         {
-            if (rv_data.data)
-                return true;
-            return false;
+            return !(rv_data.data);
         }
 
         bool game_value::client_owned() const {//#TODO what is this used for?

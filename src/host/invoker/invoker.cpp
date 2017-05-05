@@ -69,7 +69,7 @@ namespace intercept {
             LOG(INFO) << "Registration function failed to unhook.";
         }
         sqf_functions::get().initialize();
-        sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_interceptEvent>, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ARRAY);
+        _interceptEventFunction = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_interceptEvent>, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ARRAY);
 
         return true;
     }

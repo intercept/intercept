@@ -58,24 +58,6 @@ namespace intercept {
         std::shared_ptr<__internal::registered_sqf_func_wrapper> _func;
     };
 
-    class registered_sqf_function {
-        friend class sqf_functions;
-    public:
-        registered_sqf_function() {};
-        registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_);
-    private:
-        std::shared_ptr<registered_sqf_function_impl> _function;
-    };
-
-    template <game_value(*T)(game_value, game_value)>
-    static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
-        game_value* l = (game_value*) left_arg_;
-        game_value* r = (game_value*) right_arg_;
-        ::new (sqf_this_) game_value(T(*l, *r));
-        return (uintptr_t) sqf_this_;
-    }
-
-
     /*!
     @brief Takes care of Wrapper functions for registered SQF Functions
     */
@@ -86,9 +68,11 @@ namespace intercept {
         sqf_functions();
         ~sqf_functions();
 
-        using WrapperFunction = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+        using WrapperFunctionBinary = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
+        using WrapperFunctionUnary = uintptr_t(*)(char*, uintptr_t, uintptr_t);
         //[[nodiscard]]
-        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunction function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
 
         void initialize();
     private:

@@ -73,6 +73,7 @@ namespace intercept {
         // unary__sqrt__scalar_nan__ret__scalar_nan
         // unary__switch__any__ret__switch
         // unary__tan__scalar_nan__ret__scalar_nan
+        // unary__text__string__ret__text
         // unary__textlog__any__ret__nothing
         // unary__textlogformat__array__ret__nothing
         // unary__tg__scalar_nan__ret__scalar_nan
@@ -315,6 +316,7 @@ namespace intercept {
         // unary__clear3deninventory__array__ret__nothing
         // unary__tvpictureright__array__ret__string
         // unary__createobject__array__ret__object
+        // unary__getdlcassetsusagebyname__string__ret__array
         // unary__getenginetargetrpmrtd__object__ret__array
         // unary__getfieldmanualstartpage__display__ret__array
         // unary__getunitloadout__object__ret__array
@@ -323,6 +325,7 @@ namespace intercept {
         // unary__registerremoteexecfunc__string__ret__bool
         // unary__save3deninventory__array__ret__nothing
         // unary__set3denmodelsvisible__array__ret__nothing
+        // unary__synchronizedtriggers__array__ret__array
 
         /* No documentation for return types. */
         // unary__getgroupicons__group__ret__array
@@ -336,6 +339,9 @@ namespace intercept {
 
         /* Wrong documentation - seems to take Array instead of String. */
         // unary__lognetwork__array__ret__scalar
+
+        /* Team Member things - apparently useless. */
+        // unary__teammember__object__ret__team_member
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -4433,6 +4439,31 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__playsound__array__ret__nothing, params);
+        }
+
+        float pp_effect_create(const std::string& name_, const float& priority_) {
+            std::vector<game_value> params{
+                name_,
+                priority_
+            };
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params));
+        }
+
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
+            std::vector<game_value> effects;
+            for (rv_pp_effect item : effects_) {
+                effects.push_back(game_value(item));
+            }
+
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, effects);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_numbers_vector(ret);
+            }
         }
 
         bool pp_effect_committed(const std::string &value_) {
@@ -10465,6 +10496,56 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         rv_trigger_timeout trigger_timeout(const object& trigger_) {
             return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
+        }
+
+        std::vector<object> list(const object& trigger_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__list__object__ret__array, trigger_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_objects_vector(ret);
+            }
+        }
+
+        vector3 task_destination(const task& task_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__taskdestination__task__ret__array, task_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                return __helpers::__convert_to_vector3(ret);
+            }
+        }
+
+        std::vector<rv_weapon_items> weapons_items(const object& obj_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__weaponsitems__object__ret__array, obj_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                std::vector<rv_weapon_items> ret_weapon_items;
+                for (uint32_t i = 0; i < ret.length(); ++i)
+                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                return ret_weapon_items;
+            }
+        }
+
+        std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__weaponsitemscargo__object__ret__array, veh_);
+
+            if (ret.length() == 0) {
+                return {};
+            }
+            else {
+                std::vector<rv_weapon_items> ret_weapon_items;
+                for (uint32_t i = 0; i < ret.length(); ++i)
+                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                return ret_weapon_items;
+            }
         }
 
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {

@@ -526,19 +526,19 @@ namespace intercept {
             }
 
             uint16_t operator + (const int32_t val_) {
-                return _actual() + val_;
+                return _actual() + (uint16_t)val_;
             }
 
             uint16_t operator - (const int32_t val_) {
-                return _actual() - val_;
+                return _actual() - (uint16_t)val_;
             }
 
-            void operator ++ (const int32_t val_) {
-                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() + 1);
+            void operator ++ (const int32_t) {
+                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() + 1);
             }
 
-            void operator -- (const int32_t val_) {
-                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() - 1);
+            void operator -- (const int32_t) {
+                _count = (((int32_t)_initial()) << 16) | ((int32_t)_actual() - 1);
             }
 
             operator int16_t() {

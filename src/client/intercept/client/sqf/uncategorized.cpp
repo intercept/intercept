@@ -10546,6 +10546,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                     ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
                 return ret_weapon_items;
             }
+        }
 
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
             std::vector<game_value> parameters_;

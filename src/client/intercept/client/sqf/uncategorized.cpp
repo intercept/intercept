@@ -471,7 +471,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_));
         }
 
-        game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_, game_value& default_value_) {
+        game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_, game_value default_value_) {
             game_value args(std::vector<game_value>{
                 var_name_,
                 default_value_
@@ -511,7 +511,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__group__string__ret__any, group_, var_name_));
         }
 
-        game_value get_variable(const group & group_, const std::string & var_name_, game_value& default_value_) {
+        game_value get_variable(const group & group_, const std::string & var_name_, game_value default_value_) {
             game_value args(std::vector<game_value>{
                 var_name_,
                 default_value_

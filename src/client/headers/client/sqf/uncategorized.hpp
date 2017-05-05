@@ -149,7 +149,7 @@ namespace intercept {
         vector3 selection_positon(const object & obj_, const std::string & selection_name_);
 
         game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_);
-        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value& default_value_);
+        game_value get_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value default_value_);
         game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_);
         game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_);
         game_value get_variable(const object & obj_, const std::string & var_name_);

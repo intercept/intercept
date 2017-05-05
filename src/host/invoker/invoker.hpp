@@ -205,12 +205,12 @@ namespace intercept {
         function call that each client plugin can define for guaranteed per-frame
         execution.
         */
-        bool do_invoke_period(const arguments & args_, std::string & result_);
+        bool do_invoke_period();
 
         /*!
         @brief Consume an event from the RV Engine and dispatches it.
         */
-        bool rv_event(const arguments & args_, std::string & result_);
+        bool rv_event(const std::string& event_name_, game_value& params_);
         
         /*!
         @brief Get signal from sqf code dispatch it.
@@ -260,8 +260,10 @@ namespace intercept {
         /*!
         @brief The interceptEvent SQF Function that's used to get events with arguments
         */
-        static game_value _interceptEvent(game_value left_arg_, game_value right_arg_);
-        registered_sqf_function _interceptEventFunction;
+        static game_value _intercept_event(game_value left_arg_, game_value right_arg_);
+        registered_sqf_function _intercept_event_function;
+        static game_value _intercept_do_invoke_period(game_value right_arg_);
+        registered_sqf_function _intercept_do_invoke_period_function;
 
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.

@@ -472,23 +472,23 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value get_variable(const rv_namespace & namespace_, const std::string & var_name_, game_value default_value_) {
-            game_value args(std::vector<game_value>{
+            game_value args({
                 var_name_,
                 default_value_
             });
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__namespace__array__ret__any, namespace_, args));
         }
 
-        game_value get_variable(const display & display_, const std::string & var_name_, game_value& default_value_) {
-            game_value args(std::vector<game_value>{
+        game_value get_variable(const display & display_, const std::string & var_name_, game_value default_value_) {
+            game_value args({
                 var_name_,
                 default_value_
             });
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__display__string_array__ret__any, display_, args));
         }
 
-        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value& default_value_) {
-            game_value args(std::vector<game_value>{
+        game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value default_value_) {
+            game_value args({
                 var_name_,
                 default_value_
             });
@@ -500,7 +500,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value get_variable(const object & obj_, const std::string & var_name_, game_value default_value_) {
-            game_value args(std::vector<game_value>{
+            game_value args({
                 var_name_,
                 default_value_
             });
@@ -512,7 +512,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value get_variable(const group & group_, const std::string & var_name_, game_value default_value_) {
-            game_value args(std::vector<game_value>{
+            game_value args({
                 var_name_,
                 default_value_
             });
@@ -523,8 +523,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__team_member__string__ret__any, team_member_, var_name_));
         }
 
-        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value& default_value_) {
-            game_value args(std::vector<game_value>{
+        game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value default_value_) {
+            game_value args({
                 var_name_,
                 default_value_
             });

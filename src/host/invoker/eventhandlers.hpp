@@ -36,6 +36,7 @@ namespace intercept {
         void initialize();
 
         void pre_init(const std::string &name_, game_value &args_);
+        void pre_start(const std::string &name_, game_value &args_);
         void post_init(const std::string &name_, game_value &args_);
         void mission_stopped(const std::string &name_, game_value &args_);
 

@@ -359,6 +359,17 @@ namespace intercept {
             max_size = size_;
         }
 
+        game_data_array::game_data_array(const std::initializer_list<game_value> &init_) {
+            *reinterpret_cast<uintptr_t*>(this) = type_def;
+            *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
+            data = rv_allocator<game_value>::createArray(init_.size()); //_array_pool.acquire(init_.size());
+            length = init_.size();
+            max_size = init_.size();
+            size_t i = 0;
+            for (auto& it : init_)
+                data[i++] = it;
+        }
+
         game_data_array::game_data_array(const std::vector<game_value> &init_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
@@ -366,9 +377,8 @@ namespace intercept {
             length = init_.size();
             max_size = init_.size();
             size_t i = 0;
-            for (auto it = init_.begin(); it != init_.end(); ++it) {
-                data[i++] = *it;
-            }
+            for (auto& it : init_)
+                data[i++] = it;
         }
 
         game_data_array::game_data_array(const game_data_array & copy_) {

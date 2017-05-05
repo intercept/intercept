@@ -552,7 +552,7 @@ class CfgPatches {
 #define EH_CLASS_DEF(x,y) class Extended_##y##_EventHandlers { \
     class All { \
         class Intercept { \
-            y = QUOTE(intercept_params_var set[ARR_2(0,_this)]; 'intercept' callExtension QUOTE(QUOTE(EVENT_ARGS(x)));); \
+            y = QUOTE(isNil{[ARR_2(QUOTE(QUOTE(x)), _this)] call (uiNamespace getVariable 'intercept_fnc_event');};); \
         }; \
     }; \
 }

@@ -67,5 +67,7 @@ for "_i" from 0 to (count _intercept_projects)-1 do {
     };
 };
 
+uiNamespace setVariable ["intercept_fnc_event", compileFinal preprocessFileLineNumbers "\z\intercept\rv\addons\core\event.sqf"];
+["pre_start",[]] call (uiNamespace getVariable "intercept_fnc_event");
 
 //diag_log text format["_________________________________________Intercept Res: %1", _res];

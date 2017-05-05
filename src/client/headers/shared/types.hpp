@@ -889,6 +889,7 @@ namespace intercept {
             game_data_array();
             game_data_array(size_t size_);
             game_data_array(const std::vector<game_value> &init_);
+            game_data_array(const std::initializer_list<game_value> &init_);
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);

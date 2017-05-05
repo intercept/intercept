@@ -701,28 +701,6 @@ namespace intercept {
         std::string tv_text(int idc_, const std::vector<int>& path_);
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
-        /* eden */
-        std::string current_eden_operation();
-        object get_eden_camera();
-        bool get_eden_icons_visible();
-        bool get_eden_lines_visible();
-        // TODO array[] get_eden_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
-        bool is_eden();
-        bool is_eden_multiplayer();
-        float get_eden_action_state(const std::string &value_);
-        void edit_eden_mission_attributes(const std::string &value_);
-        float add_eden_layer(int parent_layer_id_, const std::string& name_);
-        bool remove_eden_layer(float value_);
-        void remove_all_eden_eventhandlers(const std::string &value_);
-        float add_eden_event_handler(const std::string &type_, const code &code_);
-        std::vector<game_value> create_3den_composition(const config &config_path_, const vector3 &position_);// TODO add Eden Entity type
-        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_,bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
-        std::vector<game_value> create_3den_connections(const game_value &entity_);
-        game_value get_3den_entity(const float &entity_id_);
-        std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
-        std::vector<game_value> get_3den_selected(const std::string &type_);
-        bool set_3den_attributes(const std::vector<game_value> &entity_attributes_);
-
         /* Chat */
         namespace __helpers {
             void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
@@ -763,7 +741,6 @@ namespace intercept {
         config mission_config_file();
 
         /* Core */
-        std::vector<object> all_eden_entities();
         std::vector<object> all_curators();
         std::vector<object> all_dead();
         std::vector<object> all_deadmen();
@@ -2453,10 +2430,8 @@ namespace intercept {
         void vehicle_radio(const object &value0_, const std::string& value1_);
 
         void delete_team(const team_member &value_);
-        void do_eden_action(const std::string& value_);
         std::string formation(const team_member &value_);
         bool from_editor(const team_member &value_);
-        void get_eden_grid(const std::string& value_);
         bool is_agent(const team_member &value_);
         team_member leader(const team_member &value_);
         std::string team_name(const team_member &value_);
@@ -2584,19 +2559,6 @@ namespace intercept {
         void move_to(const object &unit_, const vector3 &pos_);
 
         vector3 eye_pos(const object &object_);
-
-        struct rv_eden_mouse_over {
-            std::string type;
-            game_value entity;
-
-            rv_eden_mouse_over(const game_value &rv_game_value_)
-                : type(rv_game_value_[0]),
-                entity(rv_game_value_[1])
-            {
-            }
-        };
-
-        rv_eden_mouse_over get_eden_mouse_over();
 
         struct rv_artillery_computer_settings {
             std::string name;
@@ -2749,7 +2711,6 @@ namespace intercept {
 
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
 
-        void collect_eden_history(const code &code_);
 
         std::string compose_text(const std::vector<std::string> &texts_);
 
@@ -2795,40 +2756,12 @@ namespace intercept {
 
         vector3 get_wp_pos(const group &group_, int index_);
 
-        float get_eden_entity_id(const object &entity_);
-        float get_eden_entity_id(const group &entity_);
-        float get_eden_entity_id(const vector3 &entity_);
-        float get_eden_entity_id(const marker &entity_);
-
         void do_stop(const object &unit_);
         void do_stop(const std::vector<object> &units_);
         void do_get_out(const object &unit_);
         void do_get_out(const std::vector<object> &units_);
 
         void delete_location(const location &loc_);
-
-        void delete_eden_entities(const object &entity_);
-        void delete_eden_entities(const group &entity_);
-        void delete_eden_entities(const vector3 &entity_);
-        void delete_eden_entities(const marker &entity_);
-
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_);
-
         std::vector<object> detected_mines(const side &side_);
 
         void diag_log(const std::string &text_);
@@ -2935,8 +2868,6 @@ namespace intercept {
 
         std::vector<object> members(const team_member &team_);
 
-        void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
-
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
@@ -2987,8 +2918,6 @@ namespace intercept {
 
         std::vector<std::string> registered_tasks(const team_member &member_);
 
-        void remove_eden_event_handler(const std::string &type_, float id_);
-
         void remove_from_remains_collector(const std::vector<object> &remains_);
 
         void remove_mission_event_handler(const std::string &type_, float index_);
@@ -3024,11 +2953,6 @@ namespace intercept {
 
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, const std::string &expression_, float precision_, float max_results_);
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, const std::string &expression_, float precision_, float max_results_);
-
-        void set_eden_grid(const std::string &type_, float increment_);
-        void set_eden_icons_visible(bool map_, bool scene_);
-        void set_eden_lines_visible(bool map_, bool scene_);
-        bool set_eden_mission_attributes(const std::string &section_, const std::string &class_, const game_value &value_);
 
         void set_aperture_new(float min_, float std_, float max_, float std_lum_);
         void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_);

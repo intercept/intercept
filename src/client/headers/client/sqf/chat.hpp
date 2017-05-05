@@ -22,7 +22,6 @@ namespace intercept {
     namespace sqf {
         namespace __helpers {
             void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
         }
         void side_chat(const object & obj_, const std::string &message_);
         void global_chat(const object & obj_, const std::string & message_);
@@ -39,8 +38,8 @@ namespace intercept {
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
         float current_channel();                       
-    	bool channel_enabled(float channel_);
-    	float get_player_channel(const object &value_);
-    	bool set_current_channel(float value_);
+        bool channel_enabled(float channel_);
+        float get_player_channel(const object &value_);
+        bool set_current_channel(float value_);
     }
 }

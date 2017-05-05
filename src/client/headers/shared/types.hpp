@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <stdio.h>
 #include <set>
 #include <array>
@@ -20,8 +20,7 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
-        namespace __internal
-        {
+        namespace __internal {
             enum class GameDataType {
                 SCALAR,
                 BOOL,
@@ -65,7 +64,7 @@ namespace intercept {
         }
 
 
-        
+
         template<class Type>
         class rv_allocator : std::allocator<Type> {
             class MemTableFunctions {
@@ -86,7 +85,7 @@ namespace intercept {
 
                 virtual void *HeapDelete(void *mem, size_t size) = 0;
                 virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-                 
+
                 virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
 
                 virtual size_t GetPageRecommendedSize() = 0;
@@ -132,7 +131,7 @@ namespace intercept {
                 for (size_t i = 0; i < _count; ++i) {
                     ::new (ptr + i) Type();
                 }
-                
+
                 return ptr;
             }
 
@@ -341,7 +340,7 @@ namespace intercept {
                 return _stricmp(*this, other) == 0;
             }
 
-            size_t find(char ch, size_t start =0) const {
+            size_t find(char ch, size_t start = 0) const {
                 if (length() == 0) return -1;
                 const char *pos = strchr(_ref->data() + start, ch);
                 if (pos == nullptr) return -1;
@@ -408,7 +407,7 @@ namespace intercept {
 
 
 
-        class [[deprecated]] rv_string {
+        class[[deprecated]] rv_string{
         public:
             rv_string();
             rv_string(const rv_string &) = delete;
@@ -531,6 +530,72 @@ namespace intercept {
             int _count{ 0 };
             static Type _null_entry;
         public:
+
+            class iterator {
+                int _table;
+                int _item;
+                const map_string_to_class<Type, Container, Traits> *_map;
+                uint32_t number_of_tables() {
+                    return _map->_table ? _map->_tableCount : 0;
+                }
+                void get_next() {
+                    while (_table < number_of_tables() && _item >= _map->_table[_table].count()) {
+                        _table++;
+                        _item = 0;
+                    }
+                }
+            public:
+                iterator(const map_string_to_class<Type, Container, Traits> &base) {
+                    _table = 0; _item = 0; _map = &base;
+                    get_next();
+                }
+                iterator(const map_string_to_class<Type, Container, Traits> &base, bool) { //Creates end Iterator
+                    _item = 0; _map = &base;
+                    _table = number_of_tables(); 
+                }
+                iterator& operator++ () {
+                    if (_table >= number_of_tables()) return *this;
+                    ++_item;
+                    get_next();
+                    return *this;
+                }
+                iterator operator++(int) {
+                    iterator _tmp = *this;
+                    ++*this;
+                    return (_tmp);
+                }
+                bool operator==(const iterator& _other) {
+                    return _table == _other._table && _item == _other._item;
+                }
+                bool operator!=(const iterator& _other) {
+                    return _table != _other._table || _item != _other._item;
+                }
+                const Type &operator * () const {
+                    return _map->_table[_table][_item];
+                }
+                const Type *operator-> () const {
+                    return &_map->_table[_table][_item];
+                }
+                Type &operator * () {
+                    return _map->_table[_table][_item];
+                }
+                Type *operator-> () {
+                    return &_map->_table[_table][_item];
+                }
+            };
+            iterator begin() {
+                return iterator(*this);
+            }
+            iterator end() {
+                return iterator(*this, true);
+            }
+            const iterator begin() const {
+                return iterator(*this);
+            }
+            const iterator end() const {
+                return iterator(*this, true);
+            }
+
             map_string_to_class() {}
 
             template <class Func>
@@ -699,11 +764,11 @@ namespace intercept {
             }
 
             uint16_t operator + (const int32_t val_) {
-                return _actual() + (uint16_t)val_;
+                return _actual() + (uint16_t) val_;
             }
 
             uint16_t operator - (const int32_t val_) {
-                return _actual() - (uint16_t)val_;
+                return _actual() - (uint16_t) val_;
             }
 
             void operator ++ (const int32_t val_) {
@@ -737,7 +802,7 @@ namespace intercept {
             }
         protected:
             inline int16_t _actual() {
-#undef max // fucking hell i hate these macros, need to turn them off...
+            #undef max // fucking hell i hate these macros, need to turn them off...
                 return ((int32_t) ((std::numeric_limits<int16_t>::max()) & _count));
             }
             inline int16_t _initial() {

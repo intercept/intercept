@@ -270,9 +270,10 @@ namespace intercept {
     };
 
     namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
-
-        struct gsFunction {	//#TODO shouldn't everything in here be const?
-            const rv_string* _name;
+        class gsFuncBase {
+        public:
+            const r_string _name;
+        private:
             uint32_t placeholder1;//0x4
             uint32_t placeholder2;//0x8 actually a pointer to empty memory
             uint32_t placeholder3;//0xC
@@ -281,8 +282,11 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
+        };
+        class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
             uint32_t placeholder9;//0x24
-            const rv_string* _name2;//0x28 this is (tolower name)
+        public:
+            const r_string _name2;//0x28 this is (tolower name)
             unary_operator * _operator;//0x2C
             uint32_t placeholder10;//0x30 RString to something
             const rv_string* _description;//0x34
@@ -293,17 +297,9 @@ namespace intercept {
             const rv_string* _category; //0x48
                                         //const rv_string* placeholder13;
         };
-        struct gsOperator {
-            r_string _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
+        class gsOperator : public gsFuncBase {
             uint32_t placeholder9;//0x24  JNI function
+        public:
             r_string _name2;//0x28 this is (tolower name)
             int32_t placeholder10; //0x2C Small int 0-5  priority
             binary_operator * _operator;//0x30
@@ -316,17 +312,9 @@ namespace intercept {
             r_string placeholder12;//0x4C
             r_string _category; //0x50
         };
-        struct gsNular {
-            const rv_string* _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C -- change
-            uint32_t placeholder8;//0x20
-            const rv_string* _name2;//0x24 this is (tolower name)
+        class gsNular : public gsFuncBase {
+        public:
+            const r_string _name2;//0x24 this is (tolower name)
             nular_operator * _operator;//0x28
             const rv_string* _description;//0x2C
             const rv_string* _example;
@@ -340,7 +328,27 @@ namespace intercept {
             const r_string _name;
             void* _createFunction{ nullptr };
         };
+        struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
+        public:
+            r_string _name;
+            game_functions() {}
+            const char *getMapKey() const { return _name; }
+        };
 
+        struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
+        public:
+            r_string _name;
+            int32_t placeholder10; //0x2C Small int 0-5  priority
+            game_operators() {}
+            const char *getMapKey() const { return _name; }
+        };
+        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
+        public:
+            auto_array<const gsTypeInfo *> _scriptTypes;
+            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
+            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
+            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
+        };
     }
 
 }

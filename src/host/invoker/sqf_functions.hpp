@@ -76,6 +76,7 @@ namespace intercept {
 
         void initialize();
     private:
+        __internal::gsFunction* findUnary(std::string name);
         sqf_register_functions _registerFuncs;
     };
 

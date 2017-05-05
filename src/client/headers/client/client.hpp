@@ -8,8 +8,6 @@
 
 
 
-using namespace std::literals;
-
 namespace intercept {
     namespace client {
 

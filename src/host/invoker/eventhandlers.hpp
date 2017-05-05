@@ -40,7 +40,7 @@ namespace intercept {
         void mission_stopped(const std::string &name_, game_value &args_);
 
         
-#define EH_CLASS_DEF(x) void x##(const std::string &name_, game_value &args_)
+#define EH_CLASS_DEF(x) void x(const std::string &name_, game_value &args_)
 
         EH_CLASS_DEF(anim_changed);
         EH_CLASS_DEF(anim_done);

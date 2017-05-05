@@ -26,7 +26,7 @@ namespace intercept {
 
             uint32_t ref_count_internal;
             uint32_t length;
-            char char_string;
+            char char_string; //#TODO add .natvis to display full string in Visual Studio dbg
             std::string string();
         };
 
@@ -62,7 +62,7 @@ namespace intercept {
         };
 
         struct unary_entry {
-            char *name;
+            const char *name;
             uintptr_t procedure_ptr_addr;
             unary_operator *op;
         };
@@ -77,7 +77,7 @@ namespace intercept {
         };
 
         struct binary_entry {
-            char *name;
+            const char *name;
             uintptr_t procedure_ptr_addr;
             binary_operator *op;
         };
@@ -90,7 +90,7 @@ namespace intercept {
         };
 
         struct nular_entry {
-            char *name;
+            const char *name;
             uintptr_t procedure_ptr_addr;
             nular_operator *op;
         };

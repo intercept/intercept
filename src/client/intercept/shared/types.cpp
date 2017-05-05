@@ -154,12 +154,12 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_number::operator new(std::size_t sz_)
+        inline void * game_data_number::operator new(std::size_t)
         {
             return pool_alloc_base->allocate(1);
         }
 
-        inline void game_data_number::operator delete(void * ptr_, std::size_t sz_)
+        inline void game_data_number::operator delete(void * ptr_, std::size_t)
         {
             return pool_alloc_base->deallocate(ptr_);
         }
@@ -209,12 +209,12 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_bool::operator new(std::size_t sz_)
+        inline void * game_data_bool::operator new(std::size_t)
         {
             return pool_alloc_base->allocate(1);
         }
 
-        inline void game_data_bool::operator delete(void * ptr_, std::size_t sz_)
+        inline void game_data_bool::operator delete(void * ptr_, std::size_t)
         {
             return pool_alloc_base->deallocate(ptr_);
         }
@@ -281,12 +281,12 @@ namespace intercept {
             free();
         }
 
-        void * game_data_string::operator new(std::size_t sz_)
+        void * game_data_string::operator new(std::size_t)
         {
             return pool_alloc_base->allocate(1);
         }
 
-        void game_data_string::operator delete(void * ptr_, std::size_t sz_)
+        void game_data_string::operator delete(void * ptr_, std::size_t)
         {
             return pool_alloc_base->deallocate(ptr_);
         }
@@ -361,7 +361,7 @@ namespace intercept {
             move_.data = nullptr;
             return *this;
         }
-        
+
         void game_data_array::free() {
             if (data)
                 rv_allocator<game_value>::deallocate(data); // _array_pool.release(data);
@@ -371,12 +371,12 @@ namespace intercept {
             free();
         }
 
-        void * game_data_array::operator new(std::size_t sz_)
+        void * game_data_array::operator new(std::size_t)
         {
             return pool_alloc_base->allocate(1);
         }
 
-        void game_data_array::operator delete(void * ptr_, std::size_t sz_)
+        void game_data_array::operator delete(void * ptr_, std::size_t)
         {
             return pool_alloc_base->deallocate(ptr_);
         }

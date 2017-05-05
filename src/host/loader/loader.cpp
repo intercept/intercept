@@ -1,5 +1,7 @@
 #include "loader.hpp"
 #include "controller.hpp"
+#include <thread>
+#include <future>
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 
@@ -161,81 +163,14 @@ namespace intercept {
         return false;
     }
 
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
-
-        struct gsFunction {	//#TODO shouldn't everything in here be const?
-            const rv_string* _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24
-            const rv_string* _name2;//0x28 this is (tolower name)
-            unary_operator * _operator;//0x2C
-            uint32_t placeholder10;//0x30 RString to something
-            const rv_string* _description;//0x34
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* placeholder11;
-            const rv_string* placeholder12;
-            const rv_string* _category; //0x48
-            //const rv_string* placeholder13;
-        };
-        struct gsOperator {
-            r_string _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24  JNI function
-            r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder10; //0x2C Small int 0-5  priority
-            binary_operator * _operator;//0x30
-            r_string _leftType;//0x34 Description of left hand side parameter
-            r_string _rightType;//0x38 Description of right hand side parameter
-            r_string _description;//0x3C
-            r_string _example;//0x40
-            r_string placeholder11;//0x44
-            r_string _version;//0x48 some version number
-            r_string placeholder12;//0x4C
-            r_string _category; //0x50
-        };
-		struct gsNular {
-            const rv_string* _name;
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C -- change
-            uint32_t placeholder8;//0x20
-            const rv_string* _name2;//0x24 this is (tolower name)
-            nular_operator * _operator;//0x28
-            const rv_string* _description;//0x2C
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* _version;//0x38 some version number
-            const rv_string* placeholder10;
-            const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-        };
-        struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;
-            void* _createFunction{ nullptr };
-        };
-
+    uintptr_t _interceptEvent(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t left_arg_, uintptr_t right_arg_) {
+        game_value* l = (game_value*) left_arg_;
+        game_value* r = (game_value*) right_arg_;
+        auto left = l->operator[](0).operator std::string();
+        auto right = r->operator[](0).operator std::string();
+        ::new (sqf_this_) game_value("hellou you");
+        return (uintptr_t) sqf_this_;
     }
-
-
     
     void loader::do_function_walk(uintptr_t state_addr_) {
         uintptr_t types_array = state_addr_;  //#TODO AutoArray impl
@@ -432,7 +367,7 @@ namespace intercept {
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (uintptr_t j = 0; j < patternLength; j++) {
-                    found &= mask[j] == 0 || pattern[j] == *reinterpret_cast<char*>(base + i + j);
+                    found &= mask[j] == '?' || pattern[j] == *reinterpret_cast<char*>(base + i + j);
                     if (!found)
                         break;
                 }
@@ -449,20 +384,44 @@ namespace intercept {
         };
 
 
+        auto future_stringOffset = std::async([&](){return findInMemory("tbb4malloc_bi", 13); });
 
-        uintptr_t stringOffset = findInMemory("tbb4malloc_bi", 13);
+        auto future_operator_construct = std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x57\x83\xcf\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x5f\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcb\xf0\x0f\xc1\x08", "xxx?xxxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxx"); });
+        auto future_unary_construct =  std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x83\xcb\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x6b\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcd\xf0\x0f\xc1\x08\x89\x06\x85\xd2\x74\x00\x8b\xc3\xf0\x0f\xc1\x02\x48\x75", "xxx?xxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxxxxxxx?xxxxxxxx"); });
+        
+        //make sure insert patterns are long enough. they have to include the offset after the target of the first jmp instruction
+        auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
+        auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
 
-        uintptr_t allocatorVtablePtr = (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) -4) ;
+        //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
+        auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
+        auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
+
+        uintptr_t stringOffset = future_stringOffset.get();
+        auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - 4); });
+        
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
+
+        _sqf_register_funcs._operator_construct = future_operator_construct.get();
+        _sqf_register_funcs._operator_insert = future_operator_insert.get();
+        _sqf_register_funcs._unary_construct = future_unary_construct.get();
+        _sqf_register_funcs._unary_insert = future_unary_insert.get();
+        _sqf_register_funcs._gameState = state_addr_;
+
+       
+        auto type = _binary_operators["arrayintersect"].front().op->arg1_type;
+        auto rettype = _binary_operators["setcuratorcoef"].front().op->return_type;
+        auto stringType = _binary_operators["doorphase"].front().op->arg2_type;
+
+        uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
         const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
         assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
         _allocator.genericAllocBase = allocatorVtablePtr;
-        //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
-        _allocator.poolFuncAlloc = findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        _allocator.poolFuncDealloc = findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx");
-        
-
-
-
+        _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
+        _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     }
 
     const unary_map & loader::unary() const {
@@ -480,4 +439,9 @@ namespace intercept {
     const types::__internal::allocatorInfo* loader::get_allocator() const {
         return &_allocator;
     }
+
+    const intercept::sqf_register_functions& loader::get_register_sqf_info() const {
+        return _sqf_register_funcs;
+    }
+
 }

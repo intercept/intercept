@@ -10,6 +10,8 @@
 #include "pool.hpp"
 
 namespace intercept {
+    class sqf_functions;
+    class registered_sqf_function_impl;
     namespace types {
         typedef uintptr_t(__cdecl *nular_function)(char *, uintptr_t);
         typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
@@ -624,7 +626,7 @@ namespace intercept {
         struct binary_operator {
             uintptr_t        v_table;
             uint32_t         ref_count;
-            unary_function   *procedure_addr;
+            binary_function   *procedure_addr;
             op_value_entry   return_type;
             op_value_entry   arg1_type;
             op_value_entry   arg2_type;
@@ -1138,5 +1140,29 @@ namespace intercept {
                 }
             }
         };
+
+        class registered_sqf_function {
+            friend class sqf_functions;
+        public:
+            registered_sqf_function() {};
+            registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_);
+        private:
+            std::shared_ptr<registered_sqf_function_impl> _function;
+        };
+
+        template <game_value(*T)(game_value, game_value)>
+        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
+            game_value* l = reinterpret_cast<game_value*>(left_arg_);
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*l, *r));
+            return reinterpret_cast<uintptr_t>(sqf_this_);
+        }
+
+        template <game_value(*T)(game_value)>
+        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return reinterpret_cast<uintptr_t>(sqf_this_);
+        }
     }
 }

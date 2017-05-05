@@ -21,6 +21,8 @@ namespace intercept {
         functions.invoker_lock = client_function_defs::invoker_lock;
         functions.invoker_unlock = client_function_defs::invoker_unlock;
         functions.get_engine_allocator = client_function_defs::get_engine_allocator;
+        functions.register_sqf_function = client_function_defs::register_sqf_function;
+        functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         for (auto file : _searcher.active_pbo_list()) {
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);

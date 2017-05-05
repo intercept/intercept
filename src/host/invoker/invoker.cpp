@@ -68,6 +68,9 @@ namespace intercept {
         else {
             LOG(INFO) << "Registration function failed to unhook.";
         }
+        sqf_functions::get().initialize();
+        _interceptEventFunction = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_interceptEvent>, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ARRAY);
+
         return true;
     }
 
@@ -290,6 +293,13 @@ namespace intercept {
         return false;
     }
 
+
+
+    game_value invoker::_interceptEvent(game_value left_arg_, game_value right_arg_) {
+        
+
+        return false;
+    }
 
     int invoker::_register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_)
     {

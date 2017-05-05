@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -28,6 +28,15 @@ namespace intercept {
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
+    struct sqf_register_functions {
+        uintptr_t _gameState;
+        uintptr_t _operator_construct;
+        uintptr_t _operator_insert;
+        uintptr_t _unary_construct;
+        uintptr_t _unary_insert;
+        std::array<uintptr_t, (size_t)types::__internal::GameDataType::end> _types;
+    };
+
     /*!
     @brief The loader class, memory searcher and patching functionality to the RV engine.
 
@@ -36,8 +45,7 @@ namespace intercept {
     find and catalog the SQF function pointers and store them.
     */
     class loader
-        : public singleton<loader>
-    {
+        : public singleton<loader> {
     public:
         loader();
         ~loader();
@@ -50,15 +58,15 @@ namespace intercept {
         actual function and stores them.
         */
         void do_function_walk(uintptr_t state_addr_);
-        
+
         /*!
         @brief Returns a unary SQF function from the loaders library of found SQF functions.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        
+
         @return true if function is found, false if function is not found.
 
         @todo Throw exception if overloads are found so that unexpected results
@@ -72,16 +80,16 @@ namespace intercept {
         bool get_function(std::string function_name_, unary_function &function_);
 
         /*!
-        @brief Returns a unary SQF function from the loaders library of found 
+        @brief Returns a unary SQF function from the loaders library of found
         SQF functions with argument signature.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions
-        but also takes a argument type in case there are overloaded versions of 
+        but also takes a argument type in case there are overloaded versions of
         this SQF command available.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        @param [in] arg_signature_ The type of variable in SQF that the right 
+        @param [in] arg_signature_ The type of variable in SQF that the right
         argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -116,7 +124,7 @@ namespace intercept {
         bool get_function(std::string function_name_, binary_function &function_);
 
         /*!
-        @brief Returns a binary SQF function from the loaders library of found 
+        @brief Returns a binary SQF function from the loaders library of found
         SQF functions with argument signature.
 
         Returns a binary SQF function from the loaders library of found SQF functions
@@ -126,10 +134,10 @@ namespace intercept {
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the binary function.
         @param [in] arg1_signature_ The type of variable in SQF that the left
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
         @param [in] arg2_signature_ The type of variable in SQF that the right
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -169,12 +177,12 @@ namespace intercept {
         Hooks a function so that when it is executed in SQF the hooked function
         will execute in its place instead.
 
-        @warning Warning, this will only hook the first function (and in the future 
+        @warning Warning, this will only hook the first function (and in the future
         raise an exception if there is an overload of this function).
 
-        @param [in] function_name_ The name of the function to hook. 
+        @param [in] function_name_ The name of the function to hook.
         @param [in] hook_ A void pointer to the function to call instead.
-        @param [out] trampoline_ A reference to the trampoline that stores the 
+        @param [out] trampoline_ A reference to the trampoline that stores the
         original function call.
 
         @return `true` if the hook succeded, `false` if the hook failed.
@@ -183,11 +191,11 @@ namespace intercept {
         bool hook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
         bool hook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
         //!@}
-        
+
         /*!@{
         @brief Unhook a unary function.
 
-        Unhooks an already hooked functon. You must pass in the name, original 
+        Unhooks an already hooked functon. You must pass in the name, original
         hooked function (the `hook_` parameter that was passed in) and the trampoline
         that was assigned by the hook function.
 
@@ -215,6 +223,13 @@ namespace intercept {
         @brief Returns the pointer to the engines allocator functions.
         */
         const types::__internal::allocatorInfo* get_allocator() const;
+
+        /*!
+        @brief Returns function Pointers needed to register SQF Functions
+        */
+        const sqf_register_functions& get_register_sqf_info() const;
+
+
 
 
     protected:
@@ -245,7 +260,87 @@ namespace intercept {
         */
         types::__internal::allocatorInfo _allocator;
 
+        /*!
+        @brief Stores the data about the Functions needed to register SQF Functions.
+        */
+        sqf_register_functions _sqf_register_funcs;
+
         bool _attached;
         bool _patched;
     };
+
+    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+
+        struct gsFunction {	//#TODO shouldn't everything in here be const?
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            uint32_t placeholder8;//0x20
+            uint32_t placeholder9;//0x24
+            const rv_string* _name2;//0x28 this is (tolower name)
+            unary_operator * _operator;//0x2C
+            uint32_t placeholder10;//0x30 RString to something
+            const rv_string* _description;//0x34
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* placeholder11;
+            const rv_string* placeholder12;
+            const rv_string* _category; //0x48
+                                        //const rv_string* placeholder13;
+        };
+        struct gsOperator {
+            r_string _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C
+            uint32_t placeholder8;//0x20
+            uint32_t placeholder9;//0x24  JNI function
+            r_string _name2;//0x28 this is (tolower name)
+            int32_t placeholder10; //0x2C Small int 0-5  priority
+            binary_operator * _operator;//0x30
+            r_string _leftType;//0x34 Description of left hand side parameter
+            r_string _rightType;//0x38 Description of right hand side parameter
+            r_string _description;//0x3C
+            r_string _example;//0x40
+            r_string placeholder11;//0x44
+            r_string _version;//0x48 some version number
+            r_string placeholder12;//0x4C
+            r_string _category; //0x50
+        };
+        struct gsNular {
+            const rv_string* _name;
+            uint32_t placeholder1;//0x4
+            uint32_t placeholder2;//0x8 actually a pointer to empty memory
+            uint32_t placeholder3;//0xC
+            uint32_t placeholder4;//0x10
+            uint32_t placeholder5;//0x14
+            uint32_t placeholder6;//0x18
+            uint32_t placeholder7;//0x1C -- change
+            uint32_t placeholder8;//0x20
+            const rv_string* _name2;//0x24 this is (tolower name)
+            nular_operator * _operator;//0x28
+            const rv_string* _description;//0x2C
+            const rv_string* _example;
+            const rv_string* _example2;
+            const rv_string* _version;//0x38 some version number
+            const rv_string* placeholder10;
+            const rv_string* _category; //0x40
+            uint32_t placeholder11;//0x44
+        };
+        struct gsTypeInfo { //Donated from ArmaDebugEngine
+            const r_string _name;
+            void* _createFunction{ nullptr };
+        };
+
+    }
+
 }

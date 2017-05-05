@@ -85,11 +85,11 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
+            game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
-                output.push_back(object(intersects->data[i].rv_data));
+                output.push_back(object(intersects->data[i]));
             }
 
             return output;
@@ -105,11 +105,11 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
+            game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
-                output.push_back(object(intersects->data[i].rv_data));
+                output.push_back(object(intersects->data[i]));
             }
 
             return output;
@@ -125,11 +125,11 @@ namespace intercept {
             });
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
+            game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
-                output.push_back(object(intersects->data[i].rv_data));
+                output.push_back(object(intersects->data[i]));
             }
 
             return output;
@@ -192,11 +192,11 @@ namespace intercept {
             });
 
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
-            game_data_array* intersects = ((game_data_array *)intersects_value.rv_data.data.getRef());
+            game_data_array* intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
 
             std::vector<object> output;
             for (uint32_t i = 0; i < intersects->length; ++i) {
-                output.push_back(object(intersects->data[i].rv_data));
+                output.push_back(object(intersects->data[i]));
             }
             return output;
         }

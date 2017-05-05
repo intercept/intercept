@@ -92,7 +92,7 @@ namespace intercept {
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
-            rv_game_value::__vptr_def = type_def;
+            game_value::__vptr_def = type_def;
         }
 
         void __cdecl handle_unload()

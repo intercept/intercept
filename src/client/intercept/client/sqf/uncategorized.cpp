@@ -549,7 +549,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
-            rv_game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
+            game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
             if (((game_data_array *)result.data.getRef())->length == 2)
                 in_screen_ = true;
             else
@@ -592,7 +592,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args);
             std::vector<object> ret_objects;
             for (uint32_t i = 0; i < ret.length(); ++i)
-                ret_objects.push_back(object(ret[i].rv_data));
+                ret_objects.push_back(object(ret[i]));
             return ret_objects;
         }
 
@@ -1081,7 +1081,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             std::vector<task> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(task(input[i].rv_data));
+                output.push_back(task(input[i]));
             }
 
             return output;
@@ -1936,7 +1936,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
             std::vector<script> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i].rv_data));
+                output.push_back(script(input[i]));
             }
             return output;
         }
@@ -1945,7 +1945,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
             std::vector<script> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i].rv_data));
+                output.push_back(script(input[i]));
             }
             return output;
         }
@@ -1954,7 +1954,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
             std::vector<script> output;
             for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i].rv_data));
+                output.push_back(script(input[i]));
             }
             return output;
         }
@@ -1967,7 +1967,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input__ = host::functions.invoke_raw_unary(client::__sqf::unary__allcontrols__display__ret__array, display_);
             std::vector<control> output;
             for (uint32_t i = 0; i < input__.length(); ++i) {
-                output.push_back(control(input__[i].rv_data));
+                output.push_back(control(input__[i]));
             }
             return output;
         }
@@ -3719,7 +3719,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         float direction(const location &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__direction__location__ret__scalar, value_);
+            return __helpers::__number_unary_location(client::__sqf::unary__direction__location__ret__scalar, value_);
         }
 
         void disable_remote_sensors(bool value_) {
@@ -9215,7 +9215,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             std::vector<rv_forces_rtd> rotors_forces;
             for (uint32_t i = 0; i < ret.length(); ++i) {
-                rotors_forces.push_back(rv_forces_rtd({ ret[i][0], ret[i][1], ret[i][2] }));
+                rotors_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
             }
 
             return rotors_forces;
@@ -10912,7 +10912,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             else {
                 std::vector<rv_weapon_items> ret_weapon_items;
                 for (uint32_t i = 0; i < ret.length(); ++i)
-                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                    ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }
         }
@@ -10926,7 +10926,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             else {
                 std::vector<rv_weapon_items> ret_weapon_items;
                 for (uint32_t i = 0; i < ret.length(); ++i)
-                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                    ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }
         }

@@ -66,8 +66,8 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const nular_function function_);
-        rv_game_value invoke_raw(const std::string &function_name_);
+        static game_value invoke_raw_nolock(const nular_function function_);
+        game_value invoke_raw(const std::string &function_name_) const;
         //!@}
 
         /*!@{
@@ -81,9 +81,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_);
+        static game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
+        game_value invoke_raw(const std::string &function_name_, const game_value &right_) const;
+        game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const;
         //!@}
 
         /*!@{
@@ -97,9 +97,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_);
+        static game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
+        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const;
+        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const;
         //!@}
         //!@}
 
@@ -111,13 +111,13 @@ namespace intercept {
         @brief Returns the numerical type id. This is the vtable ptr of the data
         type.
         */
-        uintptr_t get_type(const game_value &value_) const;
+        static uintptr_t get_type(const game_value &value_);
 
         /*!
         @brief Returns the string representation of the data type. IE: "ARRAY",
         "STRING", "SCALAR", etc.
         */
-        const std::string get_type_str(const game_value &value_) const;
+        const std::string& get_type_str(const game_value &value_) const;
         //!@}
 
         /*!

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -66,36 +66,6 @@ namespace intercept {
             type address.
             */
             void(*get_type_structure)(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_);
-
-            /*!
-            @brief Allocate a RV internal string.
-
-            Allocates an RV internal string type of the given size.
-
-            @param size_ The size/length of the string.
-
-            @return rv_string A pointer to the allocated string.
-            */
-            rv_string *(*allocate_string)(size_t size_);
-
-            /*!
-            @brief Frees an allocated string.
-
-            This frees an allocated string from allocate_string.
-
-            @param value_ A pointer to the string data to free.
-            */
-            void(*free_string)(rv_string *str_);
-
-            /*!
-            @brief Frees an engine allocated value.
-
-            This frees an allocated game_value that came from inside the RV Engine
-            and as such needs to be released inside the RV Engine.
-
-            @param value_ A pointer to the game_value to free.
-            */
-            void(*free_value)(game_value * value_);
 
             /*!@{
             @brief Returns a function pointer of the type named based on the function name

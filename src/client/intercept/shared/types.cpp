@@ -1,4 +1,4 @@
-#include "shared\types.hpp"
+﻿#include "shared\types.hpp"
 #include "client\client.hpp"
 #include "shared\client_types.hpp"
 #include <assert.h>
@@ -16,11 +16,11 @@
 
 namespace intercept {
     namespace __internal {
-        
+
         class mem_leak_watcher {
         public:
             mem_leak_watcher() {
-                static auto fut = std::async(std::launch::async,[&]() {
+                static auto fut = std::async(std::launch::async, [&]() {
                     while (game_data_number::pool_alloc_base == nullptr) std::this_thread::sleep_for(std::chrono::seconds(5));
                     while (true) {
                         _mut.lock();
@@ -33,22 +33,22 @@ namespace intercept {
                                 it = _allocs.begin();
                                 if (it == _allocs.end()) break;
                             }
-                             ++it;
+                            ++it;
                         };
 
 
-                         if (it != _allocs.end()) {
-                             std::stringstream stream;
-                             stream << "memLeak " << "SCALAR " << std::hex << it->first << "\n";
-                             OutputDebugStringA(stream.str().c_str());
-                             _allocs.erase(it);
-                         }
+                        if (it != _allocs.end()) {
+                            std::stringstream stream;
+                            stream << "memLeak " << "SCALAR " << std::hex << it->first << "\n";
+                            OutputDebugStringA(stream.str().c_str());
+                            _allocs.erase(it);
+                        }
                         _mut.unlock();
                         std::this_thread::sleep_for(std::chrono::milliseconds(5));
                         std::stringstream stream;
                         stream << "ScalarPool " << game_data_number::pool_alloc_base->allocated_count << "\n";
                         OutputDebugStringA(stream.str().c_str());
-                        
+
                     }
                 });
             }
@@ -130,34 +130,30 @@ namespace intercept {
 
 
 
-        rv_string::rv_string() : length(0), ref_count_internal(0)
-        {
-        }
+        rv_string::rv_string() : length(0), ref_count_internal(0) {}
 
         std::string rv_string::string() {
-            return std::string((char *)&char_string);
+            return std::string((char *) &char_string);
         }
 
         value_types op_value_entry::type() {
             if (single_type != NULL) {
-                return{ single_type->type_name->string() };
-            }
-            else {
+                return{ static_cast<std::string>(single_type->type_name) };
+            } else {
                 return{
-                    compound_type->types->first->type_name->string(),
-                    compound_type->types->second->type_name->string()
+                    static_cast<std::string>(compound_type->types->first->type_name),
+                    static_cast<std::string>(compound_type->types->second->type_name)
                 };
             }
         }
 
         std::string op_value_entry::type_str() {
             if (single_type != NULL) {
-                return single_type->type_name->string();
-            }
-            else {
+                return static_cast<std::string>(single_type->type_name);
+            } else {
                 return
-                    compound_type->types->first->type_name->string() + "_" +
-                    compound_type->types->second->type_name->string();
+                    static_cast<std::string>(compound_type->types->first->type_name) + "_" +
+                    static_cast<std::string>(compound_type->types->second->type_name);
             }
         }
 
@@ -167,38 +163,33 @@ namespace intercept {
             number = 0.0f;
         }
 
-        game_data_number::game_data_number(float val_)
-        {
+        game_data_number::game_data_number(float val_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             number = val_;
         }
 
-        game_data_number::game_data_number(const game_data_number & copy_)
-        {
+        game_data_number::game_data_number(const game_data_number & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             number = copy_.number;
         }
 
-        game_data_number::game_data_number(game_data_number && move_)
-        {
+        game_data_number::game_data_number(game_data_number && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
             number = move_.number;
         }
 
-        game_data_number & game_data_number::operator=(const game_data_number & copy_)
-        {
+        game_data_number & game_data_number::operator=(const game_data_number & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             number = copy_.number;
             return *this;
         }
 
-        game_data_number & game_data_number::operator=(game_data_number && move_)
-        {
+        game_data_number & game_data_number::operator=(game_data_number && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -206,13 +197,11 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_number::operator new(std::size_t)
-        {
+        inline void * game_data_number::operator new(std::size_t) {
             return pool_alloc_base->allocate(1);
         }
 
-        inline void game_data_number::operator delete(void * ptr_, std::size_t)
-        {
+        inline void game_data_number::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 
@@ -222,38 +211,33 @@ namespace intercept {
             val = false;
         }
 
-        game_data_bool::game_data_bool(bool val_)
-        {
+        game_data_bool::game_data_bool(bool val_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             val = val_;
         }
 
-        game_data_bool::game_data_bool(const game_data_bool & copy_)
-        {
+        game_data_bool::game_data_bool(const game_data_bool & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             val = copy_.val;
         }
 
-        game_data_bool::game_data_bool(game_data_bool && move_)
-        {
+        game_data_bool::game_data_bool(game_data_bool && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
             val = move_.val;
         }
 
-        game_data_bool & game_data_bool::operator=(const game_data_bool & copy_)
-        {
+        game_data_bool & game_data_bool::operator=(const game_data_bool & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             val = copy_.val;
             return *this;
         }
 
-        game_data_bool & game_data_bool::operator=(game_data_bool && move_)
-        {
+        game_data_bool & game_data_bool::operator=(game_data_bool && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -261,13 +245,11 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_bool::operator new(std::size_t)
-        {
+        inline void * game_data_bool::operator new(std::size_t) {
             return pool_alloc_base->allocate(1);
         }
 
-        inline void game_data_bool::operator delete(void * ptr_, std::size_t)
-        {
+        inline void game_data_bool::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 
@@ -276,29 +258,19 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
-        game_data_string::game_data_string(const std::string &str_)
-        {
+        game_data_string::game_data_string(const std::string &str_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            raw_string = r_string(str_.c_str(),str_.length());
-           /* raw_string = allocate_string(str_.length() + 1);
-            memcpy(&raw_string->char_string, str_.c_str(), str_.length() + 1);
-            raw_string->length = str_.length() + 1;
-            
-
-            */
-
+            raw_string = r_string(str_.c_str(), str_.length());
         }
 
-        game_data_string::game_data_string(const game_data_string & copy_)
-        {
+        game_data_string::game_data_string(const game_data_string & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             raw_string = copy_.raw_string;
         }
 
-        game_data_string::game_data_string(game_data_string && move_)
-        {
+        game_data_string::game_data_string(game_data_string && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -306,16 +278,14 @@ namespace intercept {
             move_.raw_string = nullptr;
         }
 
-        game_data_string & game_data_string::operator=(const game_data_string & copy_)
-        {
+        game_data_string & game_data_string::operator=(const game_data_string & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             raw_string = copy_.raw_string;
             return *this;
         }
 
-        game_data_string & game_data_string::operator=(game_data_string && move_)
-        {
+        game_data_string & game_data_string::operator=(game_data_string && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -328,18 +298,15 @@ namespace intercept {
             //#TODO dealloc?
         }
 
-        game_data_string::~game_data_string()
-        {
+        game_data_string::~game_data_string() {
             free();
         }
 
-        void * game_data_string::operator new(std::size_t)
-        {
+        void * game_data_string::operator new(std::size_t) {
             return pool_alloc_base->allocate(1);
         }
 
-        void game_data_string::operator delete(void * ptr_, std::size_t)
-        {
+        void game_data_string::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 
@@ -433,20 +400,18 @@ namespace intercept {
                 rv_allocator<game_value>::deallocate(data); // _array_pool.release(data);
                 data = nullptr;
             }
-                
+
         }
 
         game_data_array::~game_data_array() {
             free();
         }
 
-        void * game_data_array::operator new(std::size_t)
-        {
+        void * game_data_array::operator new(std::size_t) {
             return pool_alloc_base->allocate(1);
         }
 
-        void game_data_array::operator delete(void * ptr_, std::size_t)
-        {
+        void game_data_array::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 
@@ -523,46 +488,6 @@ namespace intercept {
         }
         game_value::~game_value() {
             data = nullptr;
-            _free();
-        }
-
-        void game_value::_free()
-        {
-              //#TODO handle deallocation?
-
-            /*
-            // Ghetto superstar...
-            if (data) {
-                data->ref_count_internal--;
-                if (data->ref_count_internal < data->ref_count_internal.get_initial()) {
-                    if (data->ref_count_internal.is_intercept()) {
-                        data->ref_count_internal.clear_initial(); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
-                        if (data && data->_vtable == game_data_number::type_def)
-                            delete (game_data_number *)data;
-
-                        else if (data && data->_vtable == game_data_string::type_def)
-                            delete (game_data_string *)data;
-
-                        else if (data && data->_vtable == game_data_array::type_def)
-                            delete (game_data_array *)data;
-
-                        else if (data && data->_vtable == game_data_bool::type_def)
-                            delete (game_data_bool *)data;
-
-                        else if (data)
-                            delete data;
-                    }
-                    else {
-                        data->ref_count_internal.clear_initial(); // make sure we clear out the initial value, so it goes back to a pure 32 bit int.
-                        client::host::functions.free_value(this);
-                        data = nullptr;
-                    }
-                }
-            }
-            */
-
-
-
         }
 
         uintptr_t game_value::get_vtable() const {
@@ -586,50 +511,42 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(const float val_)
-        {
+        game_value & game_value::operator=(const float val_) {
             data = new game_data_number(val_);
             return *this;
         }
 
-        game_value & game_value::operator=(bool val_)
-        {
+        game_value & game_value::operator=(bool val_) {
             data = new game_data_bool(val_);
             return *this;
         }
 
-        game_value & game_value::operator=(const std::string &val_)
-        {
+        game_value & game_value::operator=(const std::string &val_) {
             data = new game_data_string(val_);
             return *this;
         }
 
-        game_value & game_value::operator=(const char * val_)
-        {
+        game_value & game_value::operator=(const char * val_) {
             data = new game_data_string(val_);
             return *this;
         }
 
-        game_value & game_value::operator=(const std::vector<game_value> &list_)
-        {
+        game_value & game_value::operator=(const std::vector<game_value> &list_) {
             data = new game_data_array(list_);
             return *this;
         }
 
-        game_value & game_value::operator=(const vector3 &vec_)
-        {
+        game_value & game_value::operator=(const vector3 &vec_) {
             data = new game_data_array({ vec_.x, vec_.y, vec_.z });
             return *this;
         }
 
-        game_value & game_value::operator=(const vector2 &vec_)
-        {
+        game_value & game_value::operator=(const vector2 &vec_) {
             data = new game_data_array({ vec_.x, vec_.y });
             return *this;
         }
 
-        game_value & game_value::operator=(const internal_object &internal_)
-        {
+        game_value & game_value::operator=(const internal_object &internal_) {
             data = internal_.data;
             set_vtable(internal_.get_vtable());
             return *this;
@@ -644,118 +561,98 @@ namespace intercept {
         //    return *this;
         //}
 
-        game_value::operator int()
-        {
+        game_value::operator int() {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_number::type_def)
                 return static_cast<int>(static_cast<game_data_number *>(data.getRef())->number);
             return 0;
         }
 
-        game_value::operator float()
-        {
+        game_value::operator float() {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_number::type_def)
-                return ((game_data_number *)data.getRef())->number;
+                return ((game_data_number *) data.getRef())->number;
             return 0.0f;
         }
 
-        game_value::operator bool()
-        {
+        game_value::operator bool() {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_bool::type_def)
-                return ((game_data_bool *)data.getRef())->val;
+                return ((game_data_bool *) data.getRef())->val;
             return false;
         }
 
-        game_value::operator r_string ()
-        {
-            return ((game_data_string *)data.getRef())->raw_string;
+        game_value::operator r_string () {
+            return ((game_data_string *) data.getRef())->raw_string;
         }
 
-        game_value::operator vector3()
-        {
-            if (((game_data_array *)data.getRef())->length == 3)
-                return vector3(
-                    ((game_data_array *)data.getRef())->data[0],
-                    ((game_data_array *)data.getRef())->data[1],
-                    ((game_data_array *)data.getRef())->data[2]
-                    );
+        game_value::operator vector3() {
+            auto array = (game_data_array *) data.getRef();
+            if (array->length == 3)
+                return vector3{ array->data[0], array->data[1], array->data[2] };
             return vector3();
         }
 
-        game_value::operator vector2()
-        {
-            if(((game_data_array *)data.getRef())->length == 2)
-                return vector2(
-                    ((game_data_array *)data.getRef())->data[0],
-                    ((game_data_array *)data.getRef())->data[1]
-                    );
+        game_value::operator vector2() {
+            auto array = (game_data_array *) data.getRef();
+            if (array->length == 2)
+                return vector2{ array->data[0], array->data[1] };
             return vector2();
         }
 
-        game_value::operator int() const
-        {
+        game_value::operator int() const {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_number::type_def)
-                return static_cast<int>(((game_data_number *)data.getRef())->number);
+                return static_cast<int>(((game_data_number *) data.getRef())->number);
             return 0;
         }
 
-        game_value::operator float() const
-        {
+        game_value::operator float() const {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_number::type_def)
-                return ((game_data_number *)data.getRef())->number;
+                return ((game_data_number *) data.getRef())->number;
             return 0.0f;
         }
 
-        game_value::operator bool() const
-        {
+        game_value::operator bool() const {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_bool::type_def)
-                return ((game_data_bool *)data.getRef())->val;
+                return ((game_data_bool *) data.getRef())->val;
             return false;
         }
 
-        game_value::operator r_string () const
-        {
-            return ((game_data_string *)data.getRef())->raw_string;
+        game_value::operator r_string () const {
+            return ((game_data_string *) data.getRef())->raw_string;
         }
 
-        game_value::operator vector3() const
-        {
-            return vector3(
-                ((game_data_array *)data.getRef())->data[0],
-                ((game_data_array *)data.getRef())->data[1],
-                ((game_data_array *)data.getRef())->data[2]
-                );
+        game_value::operator vector3() const {
+            auto array = (game_data_array *) data.getRef();
+            if (array->length == 3)
+                return vector3{ array->data[0], array->data[1], array->data[2] };
+            return vector3();
         }
 
-        game_value::operator vector2() const
-        {
-            return vector2(
-                ((game_data_array *)data.getRef())->data[0],
-                ((game_data_array *)data.getRef())->data[1]
-                );
+        game_value::operator vector2() const {
+            auto array = (game_data_array *) data.getRef();
+            if (array->length == 2)
+                return vector2{ array->data[0], array->data[1] };
+            return vector2();
         }
 
-        game_value::operator std::string() const
-        {
+        game_value::operator std::string() const {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_string::type_def)
-                return std::string(((game_data_string *)data.getRef())->raw_string);
+                return std::string(((game_data_string *) data.getRef())->raw_string);
             return std::string();
         }
 
-        game_value::operator std::string()
-        {
+        game_value::operator std::string() {
             if (data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_string::type_def)//#TODO use GetType virtual func instead
-                return std::string(((game_data_string *)data.getRef())->raw_string);
+                return std::string(((game_data_string *) data.getRef())->raw_string);
             return std::string();
         }
 
         game_value & game_value::operator [](int i_) {
-            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)data.getRef())->length);
-            return ((game_data_array *)data.getRef())->data[i_];
+            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length);
+            return ((game_data_array *) data.getRef())->data[i_];
         }
 
         game_value game_value::operator [](int i_) const {
-            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t)i_ < ((game_data_array *)data.getRef())->length);
-            return ((game_data_array *)data.getRef())->data[i_];
+            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length);
+            return ((game_data_array *) data.getRef())->data[i_];
         }
 
         uintptr_t game_value::type() const {
@@ -766,12 +663,11 @@ namespace intercept {
 
         size_t game_value::length() const {
             if (type() == game_data_array::type_def)
-                return ((game_data_array *)data.getRef())->length;
+                return ((game_data_array *) data.getRef())->length;
             return 0;
         }
 
-        bool game_value::is_null()
-        {
+        bool game_value::is_null() {
             return !(data);
         }
 
@@ -787,14 +683,6 @@ namespace intercept {
 
         void game_value::operator delete(void* ptr_, std::size_t) {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
-        }
-
-        rv_string * allocate_string(size_t size_) {
-            return client::host::functions.allocate_string(size_);
-        }
-
-        void free_string(rv_string * str_) {
-            client::host::functions.free_string(str_);
         }
 
         template<class Type>
@@ -834,9 +722,9 @@ namespace intercept {
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
             typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* data);
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
-            return dealloc(this,data);
+            return dealloc(this, data);
         }
-}
+    }
 }
 
 

@@ -53,7 +53,7 @@ namespace intercept {
         typedef std::string marker;
 
         template<typename T>
-        class rv_list {
+        class rv_list { //#TODO is this supposed to be AutoArray?
         public:
             rv_list() : _length(0), _data(nullptr) {};
             rv_list(size_t _init_length) : _length(_init_length) {
@@ -129,12 +129,12 @@ namespace intercept {
             vector3 position;
             vector3 velocity;
             std::vector<std::string> selections;
-            rv_string ammo_type;
+            r_string ammo_type;
             hit_part_ammo ammo_data;
             hit_part_impulse impulse_data;
             vector3 direction;
             float radius;
-            rv_string surface;
+            r_string surface;
             bool direct;
         };
 

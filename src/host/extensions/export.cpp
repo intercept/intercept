@@ -1,4 +1,4 @@
-#include "export.hpp"
+﻿#include "export.hpp"
 #include "invoker.hpp"
 
 
@@ -24,18 +24,6 @@ namespace intercept {
             auto structure = invoker::get().type_structures[std::string(type_name_)];
             type_def_ = structure.first;
             data_type_def_ = structure.second;
-        }
-
-        rv_string * allocate_string(size_t size_) {
-            return invoker::string_pool.acquire(size_); //#Deprecate
-        }
-
-        void free_string(rv_string *value_) {
-            invoker::string_pool.release(value_);//#Deprecate
-        }
-
-        void free_value(game_value *value_) {
-            intercept::invoker::get().release_value(*value_); //#Deprecate
         }
 
         nular_function get_nular_function(const char *function_name_) {

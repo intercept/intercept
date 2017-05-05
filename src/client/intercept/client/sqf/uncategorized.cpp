@@ -367,7 +367,7 @@ namespace intercept {
 game_value call(const code & code_, game_value args_)
 {
     game_value args = std::vector<game_value>{ args_, code_ };
-    host::memory_watcher.add_watch(args);
+ 
     sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS", args);
     //#TODO these notes refer to old way call method.
     /*
@@ -389,7 +389,7 @@ game_value call(const code & code_, game_value args_)
 game_value call(const code & code_)
 {
     game_value args = std::vector<game_value>{game_value(), code_ };
-    host::memory_watcher.add_watch(args);
+
     sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS", args);
     //#TODO these notes refer to old way call method.
     /*
@@ -417,7 +417,6 @@ void set_variable(const rv_namespace & namespace_, const std::string & var_name_
 {
     //game_value args = std::vector<game_value>{ namespace_, std::vector<game_value>{ var_name_, value_ } };
     game_value args = std::vector<game_value>{ var_name_, value_ };
-    host::memory_watcher.add_watch(args);
     
     host::functions.invoke_raw_binary(client::__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, args);
     //host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_setVariableNamespace"));
@@ -582,7 +581,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, user_action_);
             std::vector<std::string> r_arr = __helpers::__convert_to_strings_vector(act_keys);
 
-            host::functions.free_value(&act_keys);
             return r_arr;
         }
 

@@ -51,6 +51,9 @@ intercept_fnc__event = {
 };
 
 intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame [];}";
+
+intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
+
 //{
 //    // _start = diag_tickTime;
 //    "intercept" callExtension "do_invoke_period:";

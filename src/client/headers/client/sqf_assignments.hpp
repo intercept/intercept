@@ -1086,6 +1086,7 @@ __sqf::unary__while__code__ret__while = (unary_function)host::functions.get_unar
 __sqf::unary__wingsforcesrtd__object__ret__array = (unary_function)host::functions.get_unary_function_typed("wingsforcesrtd", "OBJECT");
 __sqf::unary__with__namespace__ret__with = (unary_function)host::functions.get_unary_function_typed("with", "NAMESPACE");
 __sqf::unary__worldtoscreen__array__ret__array = (unary_function)host::functions.get_unary_function_typed("worldtoscreen", "ARRAY");
+__sqf::unary__getcameraviewdirection__object__ret__array = (unary_function) host::functions.get_unary_function_typed("getcameraviewdirection", "OBJECT");
 
 // Binary Functions
 __sqf::binary__action__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("action", "OBJECT", "ARRAY");

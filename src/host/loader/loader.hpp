@@ -32,6 +32,8 @@ namespace intercept {
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;
+        uintptr_t _unary_construct;
+        uintptr_t _unary_insert;
         std::array<uintptr_t, (size_t)types::__internal::GameDataType::end> _types;
     };
 

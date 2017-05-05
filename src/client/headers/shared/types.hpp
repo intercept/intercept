@@ -5,6 +5,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <utility> //std::hash
 #include "vector.hpp"
 #include "pool.hpp"
 
@@ -19,7 +20,8 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
-        namespace __internal {
+        namespace __internal
+        {
             enum class GameDataType {
                 SCALAR,
                 BOOL,
@@ -63,7 +65,7 @@ namespace intercept {
         }
 
 
-
+        
         template<class Type>
         class rv_allocator : std::allocator<Type> {
             class MemTableFunctions {
@@ -84,7 +86,7 @@ namespace intercept {
 
                 virtual void *HeapDelete(void *mem, size_t size) = 0;
                 virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-
+                 
                 virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
 
                 virtual size_t GetPageRecommendedSize() = 0;
@@ -123,14 +125,12 @@ namespace intercept {
 
             //Allocates and initializes array of Elements using the default constructor.
             static Type* createArray(size_t _count) {
-                if (_count == 1) return createSingle();
-
                 auto ptr = allocate(_count);
 
                 for (size_t i = 0; i < _count; ++i) {
                     ::new (ptr + i) Type();
                 }
-
+                
                 return ptr;
             }
 
@@ -141,8 +141,6 @@ namespace intercept {
         class refcount_base {
         public:
             refcount_base() { _refcount = 0; }
-            refcount_base(const refcount_base &src) { _refcount = 0; }
-            void operator = (const refcount_base &src) const {}
 
             int add_ref() const {
                 return ++_refcount;
@@ -154,27 +152,21 @@ namespace intercept {
                 return _refcount;
             }
             //Has to be implemented in any derived classes and handle cleanup
+            int release() const = delete;
             mutable int _refcount;
         };
 
         //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
         class refcount : public refcount_base {
         public:
-            virtual ~refcount() {}
             int release() const {
                 int rcount = dec_ref();
                 if (rcount == 0) {
-                    //this->~refcount();
-                    lastRefDeleted();
-                    //rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
+                    this->~refcount();
+                    rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
                 }
                 return rcount;
             }
-            void destruct() const {
-                delete const_cast<refcount *>(this);
-            }
-            virtual void lastRefDeleted() const { destruct(); }
-            virtual int __dummy_refcount_func() const { return 0; }
         };
 
         /*
@@ -184,6 +176,20 @@ namespace intercept {
         public:
             uintptr_t _vtable{ 0 };
         };
+
+        //Use this if the inheriting class starts with a vtable
+        class refcount_vtable : public __vtable, public refcount {
+        public:
+            int release() const {
+                int rcount = dec_ref();
+                if (rcount == 0) {
+                    this->~refcount_vtable();
+                    //rv_allocator<refcount_vtable>::deallocate(const_cast<refcount_vtable *>(this), 0);
+                }
+                return rcount;
+            }
+        };
+
 
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
@@ -274,12 +280,11 @@ namespace intercept {
             Type *getRef() const { return _ref; }
             Type *operator -> () const { return _ref; }
             operator Type *() const { return _ref; }
-            bool operator != (const ref<Type>& other_) { return _ref != other_._ref; }
         };
 
         class r_string {
         public:
-            r_string() {}
+            r_string(){}
             r_string(const char* str, size_t len) {
                 if (str) _ref = create(str, len);
                 else _ref = create(len);
@@ -340,7 +345,7 @@ namespace intercept {
                 return _stricmp(*this, other) == 0;
             }
 
-            size_t find(char ch, size_t start = 0) const {
+            size_t find(char ch,size_t start =0) const {
                 if (length() == 0) return -1;
                 const char *pos = strchr(_ref->data() + start, ch);
                 if (pos == nullptr) return -1;
@@ -364,7 +369,7 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
-                strncpy_s(string->data(), string->size(), str, len);
+                strncpy_s(string->data(),string->size(), str, len);
                 string->data()[len] = 0;
                 return string;
             }
@@ -392,15 +397,7 @@ namespace intercept {
         class rv_pool_allocator {
             char pad_0x0000[0x24]; //0x0000
         public:
-            const char* _allocName;
-
-            int _1;
-            int _2;
-            int _3;
-            int _4;
-            int allocated_count;
-
-
+            const r_string _allocName;
             void* allocate(size_t count);
             void deallocate(void* data);
 
@@ -408,7 +405,7 @@ namespace intercept {
 
 
 
-        class rv_string {
+        class [[deprecated]] rv_string {
         public:
             rv_string();
             rv_string(const rv_string &) = delete;
@@ -421,6 +418,173 @@ namespace intercept {
             char char_string; //#TODO add .natvis to display full string in Visual Studio dbg
             std::string string();
         };
+
+
+
+        //Contributed by ArmaDebugEngine
+        class rv_arraytype {};
+
+        template<class Type>
+        class rv_array : public rv_arraytype {
+        protected:
+            Type *_data;
+            int _n;
+        public:
+            rv_array() {};
+            Type &get(int i) {
+                return _data[i];
+            }
+            const Type &get(int i) const {
+                return _data[i];
+            }
+            Type &operator [] (int i) { return get(i); }
+            const Type &operator [] (int i) const { return get(i); }
+            Type *data() { return _data; }
+            int count() const { return _n; }
+
+            Type &front() { return get(0); }
+            Type &back() { return get(_n - 1); }
+
+            Type* begin() { return &get(0); }
+            Type* end() { return &get(_n); }
+
+            const Type* begin() const { return &get(0); }
+            const Type* end() const { return &get(_n); }
+
+            const Type &front() const { return get(0); }
+            const Type &back() const { return get(_n - 1); }
+
+            bool is_empty() const { return _n == 0; }
+
+            template <class Func>
+            void for_each(const Func &f) const {
+                for (int i = 0; i < count(); i++) {
+                    f(get(i));
+                }
+            }
+
+            template <class Func>
+            void for_each_backwards(const Func &f) const { //This returns if Func returns true
+                for (int i = count() - 1; i >= 0; i--) {
+                    if (f(get(i))) return;
+                }
+            }
+
+            template <class Func>
+            void for_each(const Func &f) {
+                for (int i = 0; i < count(); i++) {
+                    f(get(i));
+                }
+            }
+
+        };
+
+        template<class Type>
+        class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
+        protected:
+            int _maxItems;
+        public:
+            auto_array() : _maxItems(0), rv_array<Type>() {};
+        };
+
+
+        static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) {
+            while (*key) {
+                hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
+            }
+            return hashValue;
+        }
+        static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) {
+            while (*key) {
+                hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
+            }
+            return hashValue;
+        }
+
+        struct map_string_to_class_trait {
+            static unsigned int hash_key(const char * key) {
+                return rv_map_hash_string_case_sensitive(key);
+            }
+            static int compare_keys(const char * k1, const char * k2) {
+                return strcmp(k1, k2);
+            }
+        };
+
+        struct map_string_to_class_trait_caseinsensitive : public map_string_to_class_trait {
+            static unsigned int hash_key(const char * key) {
+                return rv_map_hash_string_case_insensitive(key);
+            }
+
+            static int compare_keys(const char * k1, const char * k2) {
+                return _strcmpi(k1, k2);
+            }
+        };
+
+        template <class Type, class Container, class Traits = map_string_to_class_trait>
+        class map_string_to_class {
+        protected:
+            Container* _table;
+            int _tableCount{ 0 };
+            int _count{ 0 };
+            static Type _null_entry;
+        public:
+            map_string_to_class() {}
+
+            template <class Func>
+            void for_each(Func func) const {
+                if (!_table || !_count) return;
+                for (int i = 0; i < _tableCount; i++) {
+                    const Container &container = _table[i];
+                    for (int j = 0; j < container.count(); j++) {
+                        func(container[j]);
+                    }
+                }
+            }
+
+            template <class Func>
+            void for_each_backwards(Func func) const {
+                if (!_table || !_count) return;
+                for (int i = _tableCount - 1; i >= 0; i--) {
+                    const Container &container = _table[i];
+                    for (int j = container.count() - 1; j >= 0; j--) {
+                        func(container[j]);
+                    }
+                }
+            }
+
+            const Type &get(const char* key) const {
+                if (!_table || !_count) return _null_entry;
+                int hashedKey = hash_key(key);
+                for (int i = 0; i < _table[hashedKey].count(); i++) {
+                    const Type &item = _table[hashedKey][i];
+                    if (Traits::compareKeys(item.get_map_key(), key) == 0)
+                        return item;
+                }
+                return _null_entry;
+            }
+
+            static bool is_null(const Type &value) { return &value == &_null_entry; }
+
+            bool has_key(const char* key) const {
+                return !is_null(get(key));
+            }
+
+        public:
+            int count() const { return _count; }
+        protected:
+            int hash_key(const char* key) const {
+                return Traits::hash_key(key) % _tableCount;
+            }
+        };
+
+        template<class Type, class Container, class Traits>
+        Type map_string_to_class<Type, Container, Traits>::_null_entry;
+
+
+
+
+
+
 
         struct value_entry {
             rv_string *type_name;
@@ -532,11 +696,11 @@ namespace intercept {
             }
 
             uint16_t operator + (const int32_t val_) {
-                return _actual() + val_;
+                return _actual() + (uint16_t)val_;
             }
 
             uint16_t operator - (const int32_t val_) {
-                return _actual() - val_;
+                return _actual() - (uint16_t)val_;
             }
 
             void operator ++ (const int32_t val_) {
@@ -1005,10 +1169,17 @@ namespace intercept {
 
         template <game_value(*T)(game_value, game_value)>
         static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = (game_value*) left_arg_;
-            game_value* r = (game_value*) right_arg_;
+            game_value* l = reinterpret_cast<game_value*>(left_arg_);
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*l, *r));
-            return (uintptr_t) sqf_this_;
+            return reinterpret_cast<uintptr_t>(sqf_this_);
+        }
+
+        template <game_value(*T)(game_value)>
+        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return reinterpret_cast<uintptr_t>(sqf_this_);
         }
     }
 }

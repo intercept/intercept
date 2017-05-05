@@ -291,12 +291,6 @@ namespace intercept {
             if (name == "ANY") return types::__internal::GameDataType::ANY;
             if (name == "NAMESPACE") return types::__internal::GameDataType::NAMESPACE;
             if (name == "NaN") return types::__internal::GameDataType::NaN;
-            if (name == "IF") return types::__internal::GameDataType::IF;
-            if (name == "WHILE") return types::__internal::GameDataType::WHILE;
-            if (name == "FOR") return types::__internal::GameDataType::FOR;
-            if (name == "SWITCH") return types::__internal::GameDataType::SWITCH;
-            if (name == "EXCEPTION") return types::__internal::GameDataType::EXCEPTION;
-            if (name == "WITH") return types::__internal::GameDataType::WITH;
             if (name == "CODE") return types::__internal::GameDataType::CODE;
             if (name == "OBJECT") return types::__internal::GameDataType::OBJECT;
             if (name == "SIDE") return types::__internal::GameDataType::SIDE;
@@ -304,7 +298,6 @@ namespace intercept {
             if (name == "TEXT") return types::__internal::GameDataType::TEXT;
             if (name == "SCRIPT") return types::__internal::GameDataType::SCRIPT;
             if (name == "TARGET") return types::__internal::GameDataType::TARGET;
-            if (name == "JCLASS") return types::__internal::GameDataType::JCLASS;
             if (name == "CONFIG") return types::__internal::GameDataType::CONFIG;
             if (name == "DISPLAY") return types::__internal::GameDataType::DISPLAY;
             if (name == "CONTROL") return types::__internal::GameDataType::CONTROL;

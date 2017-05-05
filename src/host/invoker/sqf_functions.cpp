@@ -118,7 +118,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         "", "", "", "", "", "", "", "Intercept", 0);
     insertBinary(_registerFuncs._gameState, op);
 
-    auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, nullptr); //#TODO lookup inserted record and give that instead of nullptr
+    auto inserted = findBinary(name, left_arg_type, right_arg_type);
+
+    auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted); //#TODO lookup inserted record and give that instead of nullptr
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
@@ -142,7 +144,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         "", "", "", "", "", "", "Intercept", 0);
     insertBinary(_registerFuncs._gameState, op);
 
-    auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, nullptr); //#TODO lookup inserted record and give that instead of nullptr
+    auto inserted = findUnary(name, right_arg_type);
+
+    auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, inserted); //#TODO lookup inserted record and give that instead of nullptr
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
@@ -152,8 +156,37 @@ void intercept::sqf_functions::initialize() {
     _registerFuncs = loader::get().get_register_sqf_info();
 }
 
-intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name) {
+intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) {
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    auto found = gs->_scriptFunctions.get(name.c_str());
+    if (gs->_scriptFunctions.is_null(found)) return nullptr;
+    std::string argTypeString = to_string(argument_type);
+    for (auto& it : found) {
+        auto types = it._operator->arg_type.type();
+        if (types.find(argTypeString) != types.end()) {
+            return &it;
+        }
+    }
+    return nullptr;
+}
+
+intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) {
+    auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    auto found = gs->_scriptOperators.get(name.c_str());
+    if (gs->_scriptOperators.is_null(found)) return nullptr;
+    std::string left_argTypeString = to_string(left_argument_type);
+    std::string right_argTypeString = to_string(right_argument_type);
+    for (auto& it : found) {
+        auto left_types = it._operator->arg1_type.type();
+        if (left_types.find(left_argTypeString) != left_types.end()) {
+            auto right_types = it._operator->arg1_type.type();
+            if (right_types.find(left_argTypeString) != right_types.end()) {
+                return &it;
+            }
+        }
+    }
     return nullptr;
 }
 

@@ -20,50 +20,6 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
-        namespace __internal {
-            enum class GameDataType {
-                SCALAR,
-                BOOL,
-                ARRAY,
-                STRING,
-                NOTHING,
-                ANY,
-                NAMESPACE,
-                NaN,
-                IF,
-                WHILE,
-                FOR,
-                SWITCH,
-                EXCEPTION,
-                WITH,
-                CODE,
-                OBJECT,
-                SIDE,
-                GROUP,
-                TEXT,
-                SCRIPT,
-                TARGET,
-                JCLASS,
-                CONFIG,
-                DISPLAY,
-                CONTROL,
-                NetObject,
-                SUBGROUP,
-                TEAM_MEMBER,
-                TASK,
-                DIARY_RECORD,
-                LOCATION,
-                end
-            };
-            struct allocatorInfo {
-                uintptr_t genericAllocBase;
-                uintptr_t poolFuncAlloc;
-                uintptr_t poolFuncDealloc;
-                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
-            };
-        }
-
-
 
         template<class Type>
         class rv_allocator : std::allocator<Type> {
@@ -625,7 +581,7 @@ namespace intercept {
                 int hashedKey = hash_key(key);
                 for (int i = 0; i < _table[hashedKey].count(); i++) {
                     const Type &item = _table[hashedKey][i];
-                    if (Traits::compareKeys(item.get_map_key(), key) == 0)
+                    if (Traits::compare_keys(item.get_map_key(), key) == 0)
                         return item;
                 }
                 return _null_entry;
@@ -965,9 +921,6 @@ namespace intercept {
             uint32_t max_size;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
-        protected:
-            static thread_local game_data_pool<game_data_array> _data_pool;
-            static thread_local game_data_array_pool<game_value> _array_pool;
         };
 
         class game_data_string : public game_data {
@@ -1219,6 +1172,46 @@ namespace intercept {
                 */
             }
         };
+
+
+        namespace __internal {
+            enum class GameDataType {
+                SCALAR,
+                BOOL,
+                ARRAY,
+                STRING,
+                NOTHING,
+                ANY,
+                NAMESPACE,
+                NaN,
+                CODE,
+                OBJECT,
+                SIDE,
+                GROUP,
+                TEXT,
+                SCRIPT,
+                TARGET,
+                CONFIG,
+                DISPLAY,
+                CONTROL,
+                NetObject,
+                SUBGROUP,
+                TEAM_MEMBER,
+                TASK,
+                DIARY_RECORD,
+                LOCATION,
+                end
+            };
+            GameDataType game_datatype_from_string(const r_string& name);
+            std::string to_string(GameDataType type);
+
+            struct allocatorInfo {
+                uintptr_t genericAllocBase;
+                uintptr_t poolFuncAlloc;
+                uintptr_t poolFuncDealloc;
+                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+            };
+        }
 
         class registered_sqf_function {
             friend class sqf_functions;

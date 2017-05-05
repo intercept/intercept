@@ -700,19 +700,6 @@ namespace intercept {
         std::string tv_text(int idc_, const std::vector<int>& path_);
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_);
 
-        /* Chat */
-        namespace __helpers {
-            void chat_message(binary_function fnc_, const object &obj_, const std::string &message_);
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
-        }
-        void side_chat(const object & obj_, const std::string &message_);
-        void global_chat(const object & obj_, const std::string & message_);
-        void group_chat(const object & obj_, const std::string & message_);
-        void vehicle_chat(const object & obj_, const std::string & message_);
-        void command_chat(const object & obj_, const std::string & message_);
-        void system_chat(const std::string &message_);
-        void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_);
-
         /* Config */
         std::vector<config> config_hierarchy(const config &config_entry_);
         std::string config_name(const config &config_entry_);
@@ -1567,7 +1554,6 @@ namespace intercept {
         std::string commanding_menu();
         control control_null();
         std::string copy_from_clipboard();
-        float current_channel();
         rv_namespace current_namespace();
         object cursor_target();
         float daytime();
@@ -1681,7 +1667,6 @@ namespace intercept {
         float safe_zone_w_abs();
 
         bool shown_artillerycomputer();
-        bool shown_chat();
         bool shown_compass();
         bool shown_gps();
         bool shown_hud();
@@ -1721,7 +1706,6 @@ namespace intercept {
         bool captive(const object & unit_);
         float captive_num(const object & unit_);
         bool cb_checked(const control & control_);
-        bool channel_enabled(float channel_);
         bool check_aifeature(const std::string & feature_);
         void clear_all_items_from_backpack(const object & unit_);
         void clear_backpack_cargo(const object & box_);
@@ -1830,7 +1814,6 @@ namespace intercept {
         float get_object_dlc(const object &value_);
         float get_object_type(const object &value_);
         float get_oxygen_remaining(const object &value_);
-        float get_player_channel(const object &value_);
         std::string get_player_uid(const object &value_);
         float get_repair_cargo(const object &value_);
         float get_rotor_brake_rtd(const object &value_);
@@ -2054,7 +2037,6 @@ namespace intercept {
         void set_acc_time(float value_);
         void set_aperture(float value_);
         void set_armory_points(float value_);
-        bool set_current_channel(float value_);
 
         void set_horizon_parallax_coef(float value_);
         void set_object_view_distance(float distance_);
@@ -2069,7 +2051,6 @@ namespace intercept {
         void set_time_multiplier(float value_);
         void set_traffic_distance(float value_);
         void set_view_distance(float value_);
-        void show_chat(bool value_);
         void show_cinema_border(bool value_);
         void show_commanding_menu(const std::string &value_);
         void show_compass(bool value_);
@@ -2196,7 +2177,6 @@ namespace intercept {
         void enable_aim_precision(const object &value0_, bool value1_);
         void enable_auto_start_up_rtd(const object &value0_, bool value1_);
         bool enable_auto_trim_rtd(const object &value0_, bool value1_);
-        void enable_channel(float value0_, bool value1_);
         void enable_copilot(const object &value0_, bool value1_);
         void enable_fatigue(const object &value0_, bool value1_);
         void enable_mimics(const object &value0_, bool value1_);
@@ -2280,8 +2260,6 @@ namespace intercept {
         void pp_effect_force_in_nvg(float value0_, bool value1_);
         void progress_set_position(const control &value0_, float value1_);
         void public_variable_client(float value0_, const std::string& value1_);
-        void radio_channel_set_call_sign(float value0_, const std::string& value1_);
-        void radio_channel_set_label(float value0_, const std::string& value1_);
         bool register_task(const team_member &value0_, const std::string& value1_);
         void remove_action(const object &value0_, float value1_);
         void remove_all_event_handlers(const object &value0_, const std::string& value1_);
@@ -2877,9 +2855,6 @@ namespace intercept {
 
         std::vector<std::string> primary_weapon_items(const object &unit_);
         std::vector<std::string> primary_weapon_magazine(const object &unit_);
-
-        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
-        float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
 
         std::vector<std::string> registered_tasks(const team_member &member_);
 

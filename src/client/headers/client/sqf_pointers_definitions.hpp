@@ -1084,6 +1084,7 @@ unary_function __sqf::unary__while__code__ret__while;
 unary_function __sqf::unary__wingsforcesrtd__object__ret__array;
 unary_function __sqf::unary__with__namespace__ret__with;
 unary_function __sqf::unary__worldtoscreen__array__ret__array;
+unary_function __sqf::unary__getcameraviewdirection__object__ret__array;
 
 // Binary Functions
 binary_function __sqf::binary__action__object__array__ret__nothing;

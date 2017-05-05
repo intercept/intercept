@@ -371,7 +371,6 @@ namespace intercept {
         void cut_obj(const std::string &name_, const std::string &type_, float speed_ = 1.0f);
         void cut_rsc(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
         void cut_text(const std::string &name_, const std::string &type_, float speed_ = 1.0f, bool show_on_map_ = false);
-        void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         //TODO: arguments default value is nil
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
         float add_action(const object &object_, const std::string &title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, const std::string &shortcut_ = "", const std::string &condition_ = "true");
@@ -1451,17 +1450,6 @@ namespace intercept {
         vector3 waypoint_position(waypoint & wp_);
 
         /*!
-        @brief      Returns an array of waypoints for the specified unit/group
-
-        @param      gp_ Group to retrieve waypoints of.
-
-        @return The position of the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypoints
-        */
-        std::vector<waypoint> waypoints(group & gp_);
-
-        /*!
         @brief Gets the waypoint script.
 
         @param wp_ Waypoint to use
@@ -1517,7 +1505,6 @@ namespace intercept {
         @sa https://community.bistudio.com/wiki/waypointVisible
         */
         bool waypoint_visible(waypoint & wp_);
-        bool waypoint_exists(waypoint & wp_); // NOTE Not SQF command.
 
         std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
         std::vector<waypoint> synchronized_waypoints(object & obj_);
@@ -2047,6 +2034,29 @@ namespace intercept {
         void play_sound(const std::string &name_, bool force_);
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
+
+        struct rv_pp_effect {
+            std::string name;
+            float priority;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    name,
+                    priority
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    name,
+                    priority
+                }));
+            }
+        };
+
+        float pp_effect_create(const std::string& name_, const float& priority_);
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_);
+
         bool pp_effect_committed(const std::string &value_);
         bool pp_effect_committed(float value_);
         void pp_effect_destroy(float value_);
@@ -3280,5 +3290,41 @@ namespace intercept {
         void lnb_set_text(const control& ctrl_, float row_, float column_, const game_value& data_);
         void lnb_set_value(float idc_, float row_, float column_, float value_);
         void lnb_set_value(const control& ctrl_, float row_, float column_, float value_);
+
+        std::vector<object> list(const object& trigger_);
+        vector3 task_destination(const task& task_);
+
+        struct rv_magazine {
+            std::string name;
+            int ammo;
+
+            rv_magazine(const game_value &ret_game_value_):
+                name(ret_game_value_[0]),
+                ammo(ret_game_value_[1])
+            {
+            }
+        };
+
+        struct rv_weapon_items {
+            std::string weapon;
+            std::string muzzle;
+            std::string laser;
+            std::string optics;
+            rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
+            std::string bipod;
+
+            rv_weapon_items(const game_value &ret_game_value_):
+                weapon(ret_game_value_[0]),
+                muzzle(ret_game_value_[1]),
+                laser(ret_game_value_[2]),
+                optics(ret_game_value_[3]),
+                magazine(ret_game_value_[4]),
+                bipod(ret_game_value_[5])
+            {
+            }
+        };
+
+        std::vector<rv_weapon_items> weapons_items(const object& obj_);
+        std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_);
     }
 }

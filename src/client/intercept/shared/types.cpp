@@ -150,12 +150,12 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_number::operator new(std::size_t sz_)
+        inline void * game_data_number::operator new(std::size_t)
         {
             return _data_pool.acquire();
         }
 
-        inline void game_data_number::operator delete(void * ptr_, std::size_t sz_)
+        inline void game_data_number::operator delete(void * ptr_, std::size_t)
         {
             _data_pool.release((game_data_number *)ptr_);
         }
@@ -213,12 +213,12 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_bool::operator new(std::size_t sz_)
+        inline void * game_data_bool::operator new(std::size_t)
         {
             return _data_pool.acquire();
         }
 
-        inline void game_data_bool::operator delete(void * ptr_, std::size_t sz_)
+        inline void game_data_bool::operator delete(void * ptr_, std::size_t)
         {
             _data_pool.release((game_data_bool *)ptr_);
         }
@@ -300,12 +300,12 @@ namespace intercept {
             free();
         }
 
-        void * game_data_string::operator new(std::size_t sz_)
+        void * game_data_string::operator new(std::size_t)
         {
             return _data_pool.acquire();
         }
 
-        void game_data_string::operator delete(void * ptr_, std::size_t sz_)
+        void game_data_string::operator delete(void * ptr_, std::size_t)
         {
             _data_pool.release((game_data_string *)ptr_);
         }
@@ -392,7 +392,7 @@ namespace intercept {
             move_.data = nullptr;
             return *this;
         }
-        
+
         void game_data_array::free() {
             if (data)
                 _array_pool.release(data);
@@ -402,12 +402,12 @@ namespace intercept {
             free();
         }
 
-        void * game_data_array::operator new(std::size_t sz_)
+        void * game_data_array::operator new(std::size_t)
         {
             return _data_pool.acquire();
         }
 
-        void game_data_array::operator delete(void * ptr_, std::size_t sz_)
+        void game_data_array::operator delete(void * ptr_, std::size_t)
         {
             _data_pool.release((game_data_array *)ptr_);
         }

@@ -70,23 +70,18 @@ namespace intercept {
         uintptr_t game_data_string::type_def;
         uintptr_t game_data_string::data_type_def;
         rv_pool_allocator* game_data_string::pool_alloc_base;
-        thread_local game_data_pool<game_data_string> game_data_string::_data_pool;
 
         uintptr_t game_data_number::type_def;
         uintptr_t game_data_number::data_type_def;
         rv_pool_allocator* game_data_number::pool_alloc_base;
-        thread_local game_data_pool<game_data_number> game_data_number::_data_pool;
 
         uintptr_t game_data_array::type_def;
         uintptr_t game_data_array::data_type_def;
         rv_pool_allocator* game_data_array::pool_alloc_base;
-        thread_local game_data_pool<game_data_array> game_data_array::_data_pool;
-        thread_local game_data_array_pool<game_value> game_data_array::_array_pool;
 
         uintptr_t game_data_bool::type_def;
         uintptr_t game_data_bool::data_type_def;
         rv_pool_allocator* game_data_bool::pool_alloc_base;
-        thread_local game_data_pool<game_data_bool> game_data_bool::_data_pool;
 
         uintptr_t game_data_code::type_def;
         uintptr_t game_data_code::data_type_def;
@@ -724,6 +719,65 @@ namespace intercept {
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
             return dealloc(this, data);
         }
+
+        types::__internal::GameDataType __internal::game_datatype_from_string(const r_string& name) {
+            //I know this is ugly. Feel free to make it better
+            if (name == "SCALAR") return types::__internal::GameDataType::SCALAR;
+            if (name == "BOOL") return types::__internal::GameDataType::BOOL;
+            if (name == "ARRAY") return types::__internal::GameDataType::ARRAY;
+            if (name == "STRING") return types::__internal::GameDataType::STRING;
+            if (name == "NOTHING") return types::__internal::GameDataType::NOTHING;
+            if (name == "ANY") return types::__internal::GameDataType::ANY;
+            if (name == "NAMESPACE") return types::__internal::GameDataType::NAMESPACE;
+            if (name == "NaN") return types::__internal::GameDataType::NaN;
+            if (name == "CODE") return types::__internal::GameDataType::CODE;
+            if (name == "OBJECT") return types::__internal::GameDataType::OBJECT;
+            if (name == "SIDE") return types::__internal::GameDataType::SIDE;
+            if (name == "GROUP") return types::__internal::GameDataType::GROUP;
+            if (name == "TEXT") return types::__internal::GameDataType::TEXT;
+            if (name == "SCRIPT") return types::__internal::GameDataType::SCRIPT;
+            if (name == "TARGET") return types::__internal::GameDataType::TARGET;
+            if (name == "CONFIG") return types::__internal::GameDataType::CONFIG;
+            if (name == "DISPLAY") return types::__internal::GameDataType::DISPLAY;
+            if (name == "CONTROL") return types::__internal::GameDataType::CONTROL;
+            if (name == "NetObject") return types::__internal::GameDataType::NetObject;
+            if (name == "SUBGROUP") return types::__internal::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER") return types::__internal::GameDataType::TEAM_MEMBER;
+            if (name == "TASK") return types::__internal::GameDataType::TASK;
+            if (name == "DIARY_RECORD") return types::__internal::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION") return types::__internal::GameDataType::LOCATION;
+            return types::__internal::GameDataType::end;
+        }
+
+        std::string __internal::to_string(GameDataType type) {
+            switch (type) {
+                case GameDataType::SCALAR: return "SCALAR";
+                case GameDataType::BOOL: return "BOOL";
+                case GameDataType::ARRAY: return "ARRAY";
+                case GameDataType::STRING: return "STRING";
+                case GameDataType::NOTHING: return "NOTHING";
+                case GameDataType::ANY: return "ANY";
+                case GameDataType::NAMESPACE: return "NAMESPACE";
+                case GameDataType::NaN: return "NaN";
+                case GameDataType::CODE: return "CODE";
+                case GameDataType::OBJECT: return "OBJECT";
+                case GameDataType::SIDE: return "SIDE";
+                case GameDataType::GROUP: return "GROUP";
+                case GameDataType::TEXT: return "TEXT";
+                case GameDataType::SCRIPT: return "SCRIPT";
+                case GameDataType::TARGET: return "TARGET";
+                case GameDataType::CONFIG: return "CONFIG";
+                case GameDataType::DISPLAY: return "DISPLAY";
+                case GameDataType::CONTROL: return "CONTROL";
+                case GameDataType::SUBGROUP:  return "SUBGROUP";
+                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
+                case GameDataType::TASK: return "TASK";
+                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
+                case GameDataType::LOCATION: return "LOCATION";
+            }
+            return "";
+        }
+
     }
 }
 

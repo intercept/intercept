@@ -76,7 +76,8 @@ namespace intercept {
 
         void initialize();
     private:
-        __internal::gsFunction* findUnary(std::string name);
+        __internal::gsFunction* findUnary(std::string name, types::__internal::GameDataType argument_type);
+        __internal::gsOperator* findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type);
         sqf_register_functions _registerFuncs;
     };
 

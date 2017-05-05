@@ -1,4 +1,4 @@
-#include "client.hpp"
+﻿#include "client.hpp"
 #include "shared\client_types.hpp"
 #include "shared\vector.hpp"
 #include "pointers.hpp"
@@ -7,7 +7,6 @@ using namespace intercept::types;
 namespace intercept {
     namespace client {
         client_functions host::functions;
-        host::mem_watcher host::memory_watcher;
 
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void __cdecl assign_functions(const struct intercept::client_functions funcs) {
@@ -44,7 +43,7 @@ namespace intercept {
             game_data_bool::data_type_def = data_type_def;
             game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::BOOL)];
 
-            
+
             host::functions.get_type_structure("CODE", type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
@@ -88,84 +87,33 @@ namespace intercept {
             host::functions.get_type_structure("NAMESPACE", type_def, data_type_def);
             game_data_rv_namespace::type_def = type_def;
             game_data_rv_namespace::data_type_def = data_type_def;
-            
+
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
             game_value::__vptr_def = type_def;
         }
 
-        void __cdecl handle_unload()
-        {
+        void __cdecl handle_unload() {
 
         }
 
-        invoker_lock::invoker_lock(bool delayed_) : _locked(false)
-        {
+        invoker_lock::invoker_lock(bool delayed_) : _locked(false) {
             if (!delayed_)
                 lock();
         }
 
-        invoker_lock::~invoker_lock()
-        {
+        invoker_lock::~invoker_lock() {
             if (_locked)
                 host::functions.invoker_unlock();
         }
 
-        inline void invoker_lock::lock()
-        {
+        inline void invoker_lock::lock() {
             if (!_locked) {
                 host::functions.invoker_lock();
                 _locked = true;
             }
         }
-            
-        host::mem_watcher::mem_watcher() {
-        }
 
-        host::mem_watcher::~mem_watcher() {
-        }
-
-        void host::mem_watcher::clean() {
-            /*
-            auto data = _watch_data.begin();
-            while (data != _watch_data.end()) {
-                if (data->rv_data.data->ref_count_internal <= 1) {
-                    data->rv_data.data->ref_count_internal = ref_count(1, 1, true);
-                    _watch_data.erase(data++);
-                }
-                else {
-                    data++;
-                }
-            }
-            */
-        }
-
-        void host::mem_watcher::add_watch(game_value & data_) {
-            /*
-            _add(data_);
-            clean();
-            */
-        }
-
-        void host::mem_watcher::_add(game_value & data_)
-        {
-            /*
-            if (data_.rv_data.data) {
-                if (data_.type() == game_data_array::type_def) {
-                    for (uint32_t i = 0; i < data_.length(); ++i) {
-                        _add(data_[i]);
-                    }
-                }
-
-                if (data_.rv_data.data->ref_count_internal.is_intercept()) {
-                    data_.rv_data.data->ref_count_internal.clear_initial();
-                    _watch_data.push_back(data_);
-                }
-            }
-            */
-        }
-       
-
-}
+    }
 }

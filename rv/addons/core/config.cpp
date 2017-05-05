@@ -635,14 +635,14 @@ class Extended_PostInit_EventHandlers {
 
 
 
-
-class CfgFunctions {
-    class Intercept {
-        class api {
-            class signal {
-                file = "z\intercept\rv\addons\core\signal.sqf";
-                headerType = -1;
-            };
-        };
-    };
-};
+//Signal has to be defined past preStart because it's using Intercept defined script commands
+//class CfgFunctions {
+//    class Intercept {
+//        class api {
+//            class signal {
+//                file = "z\intercept\rv\addons\core\signal.sqf";
+//                headerType = -1;
+//            };
+//        };
+//    };
+//};

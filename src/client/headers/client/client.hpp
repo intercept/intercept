@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../shared.hpp"
 #include "shared\functions.hpp"
 #include <chrono>
@@ -21,21 +21,6 @@ namespace intercept {
         class host {
         public:
             static client_functions functions;
-        protected:
-            class mem_watcher {
-            public:
-                mem_watcher();
-                ~mem_watcher();
-                void clean();
-                void add_watch(game_value &data_);
-            protected:
-                void _add(game_value &data_);
-                std::list<game_value> _watch_data;
-            };
-
-
-        public:
-            static mem_watcher memory_watcher;
         };
 
 

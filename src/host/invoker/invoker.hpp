@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -121,45 +121,6 @@ namespace intercept {
         //!@}
 
         /*!
-        @name Memory Functions
-        */
-        //!@{
-        /*!
-        @brief Releases a value that was obtained from the RV Engine.
-
-        This function releases the data of a value obtained from inside the RV
-        Engine. Data obtained in the RV Engine must be released in the RV Engine
-        and as such we need to have a method of doing this.
-
-        The way that Intercept handles this is by defining a global array in SQF
-        and populating tha array with values that need to be freed. When the array
-        reaches a certain size, it is resized to 0 and this invokes SQF to release
-        the variable memory (depending on the internal ref-count, which can be
-        manipulated both in Intercept and inside the RV Engine itself via SQF.
-
-        @param value_ A pointer to the value that is to be freed.
-        @param immediate_ If this value should be released immediately. If set 
-        to true, this will also free any other variables waiting to be freed.
-
-        @return `true` if the value was added to the collection array, `false`
-        if the value was not released (due to it not being properly owned by the
-        RV Engine).
-        */
-        bool release_value(game_value &value_, bool immediate_ = true);
-
-        /*!
-        @brief Actually resizes the collection array to 0 and back to its normal
-        size of 100.
-
-        This function is separate from the release_value function for organizational
-        reasons. It invokes an atomic lock that ensures that the array is resized
-        to 0 and back to its normal size in one step and that no other variables
-        might accidently race and be added to a 0 size array.
-        */
-        void invoke_delete();
-        //!@}
-
-        /*!
         @name Controller Functions
         */
         //!@{
@@ -212,10 +173,12 @@ namespace intercept {
         */
         bool rv_event(const std::string& event_name_, game_value& params_);
         
+
+        static game_value _intercept_signal(game_value left_arg_, game_value right_arg_);
         /*!
         @brief Get signal from sqf code dispatch it.
         */
-        bool signal(const arguments & args_, std::string & result_);
+        bool signal(const std::string& extension_name, const std::string& signal_name, game_value args);
         //!@}
 
         /*!
@@ -245,7 +208,7 @@ namespace intercept {
 
         void unlock();
 
-        static game_data_string_pool<> string_pool;
+        //static game_data_string_pool<> string_pool;
         static uintptr_t sqf_game_state;
         static char *sqf_this;
 
@@ -264,6 +227,7 @@ namespace intercept {
         registered_sqf_function _intercept_event_function;
         static game_value _intercept_do_invoke_period(game_value right_arg_);
         registered_sqf_function _intercept_do_invoke_period_function;
+        registered_sqf_function _intercept_signal_function;
 
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.
@@ -283,33 +247,12 @@ namespace intercept {
         /*!
         @brief The mission namespace, used for getting variables.
         */
-        game_value _mission_namespace;
+        //game_value _mission_namespace;
 
-        /*!
-        @brief The delete array for collecting values.
-        */
-        game_value _delete_array_ptr;
+        //game_value _eh_params;
+        //game_value _signal_params;
 
-        /*!
-        @brief The scalar game_value for resizing the delete array to 0.
-        */
-        game_value _delete_size_zero;
-
-        /*!
-        @brief The scalar game_value for resizing the delete array back to its 
-        max size.
-        */
-        game_value _delete_size_max;
-
-        game_value _eh_params;
-        game_value _signal_params;
-
-        game_value _eh_params_name;
-
-        /*!
-        @brief The index counter for the delete array.
-        */
-        uint32_t _delete_index;
+        //game_value _eh_params_name;
 
         /*!
         @brief This is actually null. Really it should just be exchanged with a
@@ -333,7 +276,6 @@ namespace intercept {
         */
         std::recursive_mutex _invoke_mutex;
         std::mutex _state_mutex;
-        std::mutex _delete_mutex;
         std::condition_variable _invoke_condition;
         //!@}
 

@@ -535,7 +535,7 @@ namespace intercept {
                 int _table;
                 int _item;
                 const map_string_to_class<Type, Container, Traits> *_map;
-                uint32_t number_of_tables() {
+                int number_of_tables() {
                     return _map->_table ? _map->_tableCount : 0;
                 }
                 void get_next() {
@@ -655,7 +655,7 @@ namespace intercept {
 
 
         struct value_entry {
-            rv_string *type_name;
+            r_string type_name;
         };
 
         struct compound_value_pair {
@@ -940,7 +940,6 @@ namespace intercept {
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
         protected:
-            void _free();
             uintptr_t get_vtable() const;
             void set_vtable(uintptr_t vt);
 
@@ -990,9 +989,6 @@ namespace intercept {
         protected:
             static thread_local game_data_pool<game_data_string> _data_pool;
         };
-
-        rv_string *allocate_string(size_t size_);
-        void free_string(rv_string *str_);
 
         class game_data_group : public game_data {
         public:
@@ -1112,7 +1108,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            rv_string *code_string;
+            r_string code_string;
             uintptr_t instruction_array;
             uint32_t instruction_array_size;
             uint32_t instruction_array_max_size;
@@ -1138,19 +1134,17 @@ namespace intercept {
                     _buy_entry(Alloc_Length);
             }
 
-            inline rv_string * acquire(size_t alloc_length_) {
+            inline r_string acquire(size_t alloc_length_) {
                 std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
                 if (_pool_queue.size() == 0 || alloc_length_ > Alloc_Length)
                     _buy_entry(alloc_length_);
-                rv_string * ret = _pool_queue.front();
-                ret->ref_count_internal = 1;
-                ret->length = alloc_length_;
-                *((char *) &ret->char_string + alloc_length_) = 0x0;
+                r_string ret = _pool_queue.front();
                 _pool_queue.pop();
                 return ret;
             }
 
-            inline void release(rv_string *_ptr) {
+            inline void release(r_string _ptr) {
+                /*
                 std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
                 if (_ptr->ref_count_internal <= 1) {
                     _ptr->ref_count_internal = 0;
@@ -1164,33 +1158,30 @@ namespace intercept {
                     }
                     _string_collection.push_back(_ptr);
                 }
+                */
             }
 
             ~game_data_string_pool() {
-                for (auto entry : _pool)
-                    delete[](char *)entry;
                 _running = false;
                 _collection_thread.join();
             }
         protected:
-            std::queue<rv_string *> _pool_queue;
-            std::vector<rv_string *> _pool;
+            std::queue<r_string> _pool_queue;
+            std::vector<r_string> _pool;
             std::mutex _string_collection_mutex;
             std::thread _collection_thread;
             std::atomic<bool> _running;
 
             inline void _buy_entry(size_t alloc_length_) {
-                char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + alloc_length_];
-                ((rv_string *) raw_data)->length = alloc_length_;
-                ((rv_string *) raw_data)->ref_count_internal = 1;
-                _pool_queue.push((rv_string *) raw_data);
-                _pool.push_back((rv_string *) raw_data);
+                r_string str;
+                _pool_queue.push(str);
+                _pool.push_back(str);
             }
 
             /*!
             @brief A list of strings to monitor for deletion, used by the string collector.
             */
-            std::list<rv_string *> _string_collection;
+            std::list<r_string> _string_collection;
 
             /*!
             @brief Collects a string and adds it to a queue that waits for its internal
@@ -1206,6 +1197,7 @@ namespace intercept {
             @param str_ A pointer to the string to release.
             */
             void _string_collector() {
+                /*
                 while (_running) {
                     {
                         std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
@@ -1224,6 +1216,7 @@ namespace intercept {
                     }
                     sleep(250);
                 }
+                */
             }
         };
 

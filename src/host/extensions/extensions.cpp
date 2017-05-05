@@ -1,4 +1,4 @@
-#include "extensions.hpp"
+﻿#include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
 
@@ -7,9 +7,6 @@ namespace intercept {
 
     extensions::extensions() {
         functions.get_type_structure = client_function_defs::get_type_structure;
-        functions.free_value = client_function_defs::free_value;
-        functions.allocate_string = client_function_defs::allocate_string;
-        functions.free_string = client_function_defs::free_string;
         functions.get_binary_function = client_function_defs::get_binary_function;
         functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;
         functions.get_nular_function = client_function_defs::get_nular_function;

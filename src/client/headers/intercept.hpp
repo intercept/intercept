@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "shared.hpp"
 #include "client\client.hpp"
 #include "shared\functions.hpp"
@@ -35,8 +35,8 @@ namespace intercept {
         EH(fired_near)(object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_);
         EH(fuel)(object &vehicle_, bool fuel_state_);
         EH(gear)(object &vehicle_, bool gear_state_);
-        EH(get_in)(object &vehicle_, rv_string position_, object &unit_, rv_list<int> &turret_path);
-        EH(get_out)(object &vehicle_, rv_string position_, object &unit_, rv_list<int> &turret_path);
+        EH(get_in)(object &vehicle_, r_string position_, object &unit_, rv_list<int> &turret_path);
+        EH(get_out)(object &vehicle_, r_string position_, object &unit_, rv_list<int> &turret_path);
         EH(handle_damage)(object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_);
         EH(handle_heal)(object &unit_, object &healder_, bool healer_can_heal_);
         EH(handle_rating)(object &unit_, float rating_);
@@ -52,7 +52,7 @@ namespace intercept {
         EH(landed_stopped)(object &plane_, int airport_id_);
         EH(local)(object &object_, bool local_);
         EH(post_reset)();
-        EH(put)(object &unit_, object &container_, rv_string item_);
+        EH(put)(object &unit_, object &container_, r_string item_);
         EH(respawn)(object &unit_, object &corpse_);
         EH(rope_attach)(object &object1, object &rope_, object &object2_);
         EH(rope_break)(object &object1, object &rope_, object &object2_);

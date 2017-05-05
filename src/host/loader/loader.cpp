@@ -338,7 +338,8 @@ namespace intercept {
         _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
         _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
         _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
-
+        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
+        
         _sqf_register_funcs._operator_construct = future_operator_construct.get();
         _sqf_register_funcs._operator_insert = future_operator_insert.get();
         _sqf_register_funcs._unary_construct = future_unary_construct.get();

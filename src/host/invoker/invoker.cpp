@@ -1,10 +1,10 @@
-#include "invoker.hpp"
+﻿#include "invoker.hpp"
 #include "controller.hpp"
 #include "extensions.hpp"
 #include "shared\client_types.hpp"
 
 namespace intercept {
-    game_data_string_pool<> invoker::string_pool;
+    //game_data_string_pool<> invoker::string_pool;
 
     /*!
     @brief Flag for when the invoker is able to access the RV Engine
@@ -17,7 +17,7 @@ namespace intercept {
     uintptr_t invoker::sqf_game_state = NULL;
     char * invoker::sqf_this = NULL;
 
-    invoker::invoker() : _attached(false), _patched(false), _delete_index(0), _thread_count(0)
+    invoker::invoker() : _attached(false), _patched(false), _thread_count(0)
     {
         
     }
@@ -39,11 +39,12 @@ namespace intercept {
             controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("rv_event", [](const arguments & args_, std::string & result_)
-            {
+            controller::get().add("rv_event", [](const arguments & args_, std::string & result_) {
                 return false; //#deprecate
             });
-            controller::get().add("signal", std::bind(&intercept::invoker::signal, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("signal", [](const arguments & args_, std::string & result_) {
+                return false; //#deprecate
+            });
             eventhandlers::get().initialize();
         }
     }
@@ -76,6 +77,7 @@ namespace intercept {
         sqf_functions::get().initialize();
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
+        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal", "", userFunctionWrapper<_intercept_signal>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ANY);
 
         return true;
     }
@@ -99,27 +101,6 @@ namespace intercept {
                 }
             }
         }
-        //{       //#Deprecate 
-        //#TODO remove
-        //    std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-        //    if (_to_delete.size() > 500) {
-        //        //for (uint32_t index = 0; index < 100; ++index) {
-        //        uint32_t index = 0;
-        //        while(_to_delete.size() > 0) {
-        //            //((game_value *)_delete_array_ptr[index])->set_vtable(game_value::__vptr_def);
-        //            //((game_value *)_delete_array_ptr[index])->data = _to_delete.front();
-        //            index++;
-        //            if (index >= 1000) {
-        //                _invoker_unlock delete_invoke_lock(this);
-        //                invoke_delete();
-        //                index = 0;
-        //            }
-        //            _to_delete.pop();
-        //        }
-        //        _invoker_unlock delete_invoke_lock(this);
-        //        invoke_delete();
-        //    }
-        //}
         return true;
     }
 
@@ -146,10 +127,12 @@ namespace intercept {
         return false;
     }
 
-    bool invoker::signal(const arguments & args_, std::string & result_)
+    game_value invoker::_intercept_signal(game_value left_arg_, game_value right_arg_) {
+        return invoker::get().signal(left_arg_[0], left_arg_[1], right_arg_);
+    }
+
+    bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value args)
     {
-        std::string extension_name = args_.as_string(0);
-        std::string signal_name = args_.as_string(1);
         LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " START";
 
         auto signal_module = extensions::get().modules().find(extension_name);
@@ -169,24 +152,20 @@ namespace intercept {
             signal_func = signal_func_it->second;
         }
         _invoker_unlock signal_lock(this);
-        signal_func(_signal_params[0]);
+        signal_func(args);
         LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " END";
         return true;
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_)
     {
-        game_value delete_ptr_name = "INVOKER_DELETE_ARRAY";
-        _eh_params_name = "intercept_params_var";
+        //_eh_params_name = "intercept_params_var";
         _invoker_unlock init_lock(this);
-        _mission_namespace = invoke_raw("missionnamespace");
-        loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
-        _delete_array_ptr = invoke_raw_nolock(_get_variable_func, _mission_namespace, delete_ptr_name);
-        _eh_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, _eh_params_name);
-        game_value p_name = "intercept_signal_var";
-        _signal_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, p_name);
-        _delete_size_zero = game_value(0.0f);
-        _delete_size_max = game_value(1000.0f);
+        //_mission_namespace = invoke_raw("missionnamespace");
+        //loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
+        //_eh_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, _eh_params_name);
+        //game_value p_name = "intercept_signal_var";
+        //_signal_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, p_name);
         return true;
     }
 
@@ -197,19 +176,6 @@ namespace intercept {
         game_value res = invoke_raw("profilenamesteam");
         result_ = static_cast<std::string>(res);
         return true;
-    }
-
-    void invoker::invoke_delete()
-    {
-        binary_function function;
-        if (loader::get().get_function("resize", function)) {
-            std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [this]() {return this->invoker_accessible;});
-            std::lock_guard<std::recursive_mutex> invoke_lock(_invoke_mutex);
-            LOG(DEBUG) << "FLUSHING MEMORY";
-            function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_zero);
-            function(_sqf_this, _sqf_game_state, (uintptr_t)&_delete_array_ptr, (uintptr_t)&_delete_size_max);
-        }
     }
 
     game_value invoker::invoke_raw_nolock(nular_function function_)
@@ -278,15 +244,6 @@ namespace intercept {
     {
         auto type = value_.type();
         return type_map.at(type);
-    }
-
-    bool invoker::release_value(game_value &value_, bool immediate_) {      //#Deprecate
-        if (!value_.client_owned()) {
-            std::lock_guard<std::mutex> delete_lock(_delete_mutex);
-            _to_delete.push(value_.data);
-            return true;
-        }
-        return false;
     }
 
     int invoker::_register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_)

@@ -152,4 +152,8 @@ void intercept::sqf_functions::initialize() {
     _registerFuncs = loader::get().get_register_sqf_info();
 }
 
+intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name) {
+    auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    return nullptr;
+}
 

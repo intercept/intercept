@@ -125,6 +125,8 @@ namespace intercept {
 
             //Allocates and initializes array of Elements using the default constructor.
             static Type* createArray(size_t _count) {
+                if (_count == 1) return createSingle();
+
                 auto ptr = allocate(_count);
 
                 for (size_t i = 0; i < _count; ++i) {
@@ -141,6 +143,8 @@ namespace intercept {
         class refcount_base {
         public:
             refcount_base() { _refcount = 0; }
+            refcount_base(const refcount_base &src) { _refcount = 0; }
+            void operator = (const refcount_base &src) const {}
 
             int add_ref() const {
                 return ++_refcount;
@@ -151,22 +155,27 @@ namespace intercept {
             int ref_count() const {
                 return _refcount;
             }
-            //Has to be implemented in any derived classes and handle cleanup
-            int release() const = delete;
             mutable int _refcount;
         };
 
         //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
         class refcount : public refcount_base {
         public:
+            virtual ~refcount() {}
             int release() const {
                 int rcount = dec_ref();
                 if (rcount == 0) {
-                    this->~refcount();
-                    rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
+                    //this->~refcount();
+                    lastRefDeleted();
+                    //rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
                 }
                 return rcount;
             }
+            void destruct() const {
+                delete const_cast<refcount *>(this);
+            }
+            virtual void lastRefDeleted() const { destruct(); }
+            virtual int __dummy_refcount_func() const { return 0; }
         };
 
         /*
@@ -176,20 +185,6 @@ namespace intercept {
         public:
             uintptr_t _vtable{ 0 };
         };
-
-        //Use this if the inheriting class starts with a vtable
-        class refcount_vtable : public __vtable, public refcount {
-        public:
-            int release() const {
-                int rcount = dec_ref();
-                if (rcount == 0) {
-                    this->~refcount_vtable();
-                    //rv_allocator<refcount_vtable>::deallocate(const_cast<refcount_vtable *>(this), 0);
-                }
-                return rcount;
-            }
-        };
-
 
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
@@ -280,11 +275,12 @@ namespace intercept {
             Type *getRef() const { return _ref; }
             Type *operator -> () const { return _ref; }
             operator Type *() const { return _ref; }
+            bool operator != (const ref<Type>& other_) { return _ref != other_._ref; }
         };
 
         class r_string {
         public:
-            r_string(){}
+            r_string() {}
             r_string(const char* str, size_t len) {
                 if (str) _ref = create(str, len);
                 else _ref = create(len);
@@ -345,7 +341,7 @@ namespace intercept {
                 return _stricmp(*this, other) == 0;
             }
 
-            size_t find(char ch,size_t start =0) const {
+            size_t find(char ch, size_t start =0) const {
                 if (length() == 0) return -1;
                 const char *pos = strchr(_ref->data() + start, ch);
                 if (pos == nullptr) return -1;
@@ -369,7 +365,7 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
-                strncpy_s(string->data(),string->size(), str, len);
+                strncpy_s(string->data(), string->size(), str, len);
                 string->data()[len] = 0;
                 return string;
             }
@@ -397,7 +393,14 @@ namespace intercept {
         class rv_pool_allocator {
             char pad_0x0000[0x24]; //0x0000
         public:
-            const r_string _allocName;
+            const char* _allocName;
+
+            int _1;
+            int _2;
+            int _3;
+            int _4;
+            int allocated_count;
+
             void* allocate(size_t count);
             void deallocate(void* data);
 

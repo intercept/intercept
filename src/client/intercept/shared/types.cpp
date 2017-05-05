@@ -793,17 +793,6 @@ namespace intercept {
             // deallocate object at _Ptr
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
             MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-            std::stringstream stream;
-            stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
-            OutputDebugStringA(stream.str().c_str());
-            alloc->Delete(_Ptr);
-        }
-        template<class Type>
-        void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
-            //#TODO assert when _ptr is not 32/64bit aligned
-            // deallocate object at _Ptr
-            auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
             //std::stringstream stream;
             //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
             //OutputDebugStringA(stream.str().c_str());

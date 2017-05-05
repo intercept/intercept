@@ -10912,7 +10912,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             else {
                 std::vector<rv_weapon_items> ret_weapon_items;
                 for (uint32_t i = 0; i < ret.length(); ++i)
-                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                    ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }
         }
@@ -10926,7 +10926,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             else {
                 std::vector<rv_weapon_items> ret_weapon_items;
                 for (uint32_t i = 0; i < ret.length(); ++i)
-                    ret_weapon_items.push_back(rv_weapon_items(ret[i].rv_data));
+                    ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }
         }

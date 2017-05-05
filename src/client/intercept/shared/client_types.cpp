@@ -46,18 +46,19 @@ namespace intercept {
         }
 
         bool internal_object::operator<(const internal_object& compare_) const {
-            return ((game_data_object *)rv_data.data)->object < ((game_data_object *)compare_.rv_data.data)->object;
+            return ((game_data_object *)rv_data.data.getRef())->object < ((game_data_object *)compare_.rv_data.data.getRef())->object;
         }
 
         bool internal_object::operator>(const internal_object& compare_) const {
-            return ((game_data_object *)rv_data.data)->object > ((game_data_object *)compare_.rv_data.data)->object;
+            return ((game_data_object *)rv_data.data.getRef())->object > ((game_data_object *)compare_.rv_data.data.getRef())->object;
         }
 
         bool internal_object::is_null()
         {
+            //#TODO pointer games are not allowed anymore!
             if (!rv_data.data)
                 return true;
-            uintptr_t data = (uintptr_t)(rv_data.data);
+            uintptr_t data = (uintptr_t)(rv_data.data.getRef());
             uintptr_t data_1 = data + 12;
             uintptr_t data_2 = *(uintptr_t *)data_1;
             if (data_2) {

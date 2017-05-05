@@ -421,7 +421,7 @@ void set_variable(const rv_namespace & namespace_, const std::string & var_name_
 {
     game_value args = std::vector<game_value>{ namespace_, std::vector<game_value>{ var_name_, value_ } };
     host::memory_watcher.add_watch(args);
-    host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(namespace_, "intercept_fnc_setVariableNamespace"));
+    host::functions.invoke_raw_binary(client::__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_setVariableNamespace"));
 }
 
 void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_) {
@@ -545,7 +545,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
             rv_game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (((game_data_array *)result.data)->length == 2)
+            if (((game_data_array *)result.data.getRef())->length == 2)
                 in_screen_ = true;
             else
                 in_screen_ = false;
@@ -9221,7 +9221,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             std::vector<rv_forces_rtd> wings_forces;
             for (uint32_t i = 0; i < ret.length(); ++i) {
-                wings_forces.push_back(rv_forces_rtd({ ret[i][0], ret[i][1], ret[i][2] }));
+                wings_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
             }
 
             return wings_forces;

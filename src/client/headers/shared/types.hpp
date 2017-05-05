@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <set>
+#include <array>
 #include <mutex>
 #include <thread>
 #include <atomic>
@@ -15,6 +16,391 @@ namespace intercept {
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
+        class rv_pool_allocator;
+        namespace __internal
+        {
+            enum class GameDataType {
+                SCALAR,
+                BOOL,
+                ARRAY,
+                STRING,
+                NOTHING,
+                ANY,
+                NAMESPACE,
+                NaN,
+                IF,
+                WHILE,
+                FOR,
+                SWITCH,
+                EXCEPTION,
+                WITH,
+                CODE,
+                OBJECT,
+                SIDE,
+                GROUP,
+                TEXT,
+                SCRIPT,
+                TARGET,
+                JCLASS,
+                CONFIG,
+                DISPLAY,
+                CONTROL,
+                NetObject,
+                SUBGROUP,
+                TEAM_MEMBER,
+                TASK,
+                DIARY_RECORD,
+                LOCATION,
+                end
+            };
+            struct allocatorInfo {
+                uintptr_t genericAllocBase;
+                uintptr_t poolFuncAlloc;
+                uintptr_t poolFuncDealloc;
+                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+            };
+        }
+
+
+        
+        template<class Type>
+        class rv_allocator : std::allocator<Type> {
+            class MemTableFunctions {
+            public:
+                virtual void *New(size_t size) = 0;
+                virtual void *New(size_t size, const char *file, int line) = 0;
+                virtual void Delete(void *mem) = 0;
+                virtual void Delete(void *mem, const char *file, int line) = 0;
+                virtual void *Realloc(void *mem, size_t size) = 0;
+                virtual void *Realloc(void *mem, size_t size, const char *file, int line) = 0;
+                virtual void *Resize(void *mem, size_t size) = 0; //This actually doesn't do anything.
+
+                virtual void *NewPage(size_t size, size_t align) = 0;
+                virtual void DeletePage(void *page, size_t size) = 0;
+
+                virtual void *HeapAlloc(void *mem, size_t size) = 0;
+                virtual void *HeapAlloc(void *mem, size_t size, const char *file, int line) = 0;//HeapAlloc
+
+                virtual void *HeapDelete(void *mem, size_t size) = 0;
+                virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
+                 
+                virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
+
+                virtual size_t GetPageRecommendedSize() = 0;
+
+                virtual void *HeapBase() = 0;
+                virtual size_t HeapUsed() = 0;
+
+                virtual size_t HeapUsedByNew() = 0;
+                virtual size_t HeapCommited() = 0;
+                virtual int FreeBlocks() = 0;
+                virtual int MemoryAllocatedBlocks() = 0;
+                virtual void Report() = 0;//Does nothing on release build. Maybe on Profiling build
+                virtual bool CheckIntegrity() = 0;//Does nothing on release build. Maybe on Profiling build returns true.
+                virtual bool IsOutOfMemory() = 0;//If true we are so full we are already moving memory to disk.
+
+                virtual void CleanUp() = 0;//Does nothing? I guess.
+                                           //Synchronization for Multithreaded access
+                virtual void Lock() = 0;
+                virtual void Unlock() = 0;
+                char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
+            };
+        public:
+            static void deallocate(Type* _Ptr, size_t _unused = 0); //#TODO if its unused why not just remove it?!
+            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called! 
+            //use the create* Methods instead
+            static Type* allocate(size_t _count);
+
+            //Allocates and Initializes one Object
+            template<class... _Types>
+            static Type* createSingle(_Types&&... _Args) {
+                auto ptr = allocate(1);
+                ::new (ptr) Type(std::forward<_Types>(_Args)...);
+                //Have to do a little more unfancy stuff for people that want to overload the new operator
+                return ptr;
+            }
+
+            //Allocates and initializes array of Elements using the default constructor.
+            static Type* createArray(size_t _count) {
+                auto ptr = allocate(_count);
+
+                for (size_t i = 0; i < _count; ++i) {
+                    ::new (ptr + i) Type();
+                }
+                
+                return ptr;
+            }
+
+
+            //#TODO implement game_data_pool and string pool here
+        };
+
+        class refcount_base {
+        public:
+            refcount_base() { _refcount = 0; }
+
+            int add_ref() const {
+                return ++_refcount;
+            }
+            int dec_ref() const {
+                return --_refcount;
+            }
+            int ref_count() const {
+                return _refcount;
+            }
+            //Has to be implemented in any derived classes and handle cleanup
+            int release() const = delete;
+            mutable int _refcount;
+        };
+
+        //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
+        class refcount : public refcount_base {
+        public:
+            int release() const {
+                int rcount = dec_ref();
+                if (rcount == 0) {
+                    this->~refcount();
+                    rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
+                }
+                return rcount;
+            }
+        };
+
+        /*
+        This is a placeholder so i can use refcount but still have an accessible vtable pointer
+        */
+        class __vtable {
+        public:
+            uintptr_t _vtable{ 0 };
+        };
+
+        //Use this if the inheriting class starts with a vtable
+        class refcount_vtable : public __vtable, public refcount {
+        public:
+            int release() const {
+                int rcount = dec_ref();
+                if (rcount == 0) {
+                    this->~refcount_vtable();
+                    //rv_allocator<refcount_vtable>::deallocate(const_cast<refcount_vtable *>(this), 0);
+                }
+                return rcount;
+            }
+        };
+
+
+        template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
+        class compact_array : public refcount_base {
+            static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
+        public:
+
+            int size() const { return _size; }
+            Type *data() { return &_data; }
+            const Type *data() const { return &_data; }
+
+
+            //We delete ourselves! After release no one should have a pointer to us anymore!
+            int release() const {
+                int ret = dec_ref();
+                if (!ret) del();
+                return ret;
+            }
+
+            static compact_array* create(int number_of_elements_) {
+                size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+                new (buffer) compact_array(number_of_elements_);
+                return buffer;
+            }
+
+            void del() const {
+                this->~compact_array();
+                const void* _thisptr = this;
+                void* _thisptr2 = const_cast<void*>(_thisptr);
+                Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
+            }
+            //#TODO copy functions
+
+            size_t _size;
+            Type _data;
+        private:
+            explicit compact_array(size_t size_) {
+                _size = size_;
+            }
+        };
+
+
+        template<class Type>
+        class ref {
+            static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
+            Type* _ref;
+        public:
+            ref() { _ref = nullptr; }
+            ~ref() { free(); }
+
+            //Construct from Pointer
+            ref(Type* other) {
+                if (other) other->add_ref();
+                _ref = other;
+            }
+            //Copy from pointer
+            const ref &operator = (Type *source) {
+                Type *old = _ref;
+                if (source) source->add_ref();
+                _ref = source;
+                if (old) old->release();//decrement reference and delete object if refcount == 0
+                return *this;
+            }
+
+            //Construct from reference
+            ref(const ref &sRef) {
+                Type *source = sRef._ref;
+                if (source) source->add_ref();
+                _ref = source;
+            }
+            //Copy from reference.
+            const ref &operator = (const ref &other) {
+                Type *source = other._ref;
+                Type *old = _ref;
+                if (source) source->add_ref();
+                _ref = source;
+                if (old) old->release();//decrement reference and delete object if refcount == 0
+                return *this;
+            }
+
+            bool isNull() const { return _ref == nullptr; }
+            void free() {
+                if (!_ref) return;
+                _ref->release();
+                _ref = nullptr;
+            }
+            //This returns a pointer to the underlying object. Use with caution!
+            Type *getRef() const { return _ref; }
+            Type *operator -> () const { return _ref; }
+            operator Type *() const { return _ref; }
+        };
+
+        class r_string {
+        public:
+            r_string(){}
+            r_string(const char* str, size_t len) {
+                if (str) _ref = create(str, len);
+                else _ref = create(len);
+            }
+            r_string(const char* str) {
+                if (str) _ref = create(str);
+            }
+
+            r_string(r_string&& _move) {
+                _ref = _move._ref;
+                _move._ref = nullptr;
+            }
+            r_string(const r_string& _copy) {
+                _ref = _copy._ref;
+            }
+
+
+            r_string& operator = (r_string&& _move) {
+                if (this == &_move)
+                    return *this;
+                _ref = _move._ref;
+                _move._ref = nullptr;
+                return *this;
+            }
+            r_string& operator = (const r_string& _copy) {
+                _ref = _copy._ref;
+                return *this;
+            }
+            const char* data() const {
+                if (_ref) return _ref->data();
+                static char empty[]{ 0 };
+                return empty;
+            }
+            char* data_mutable() {
+                if (!_ref) return nullptr;
+                make_mutable();
+                return _ref->data();
+            }
+
+            operator const char *() const { return data(); }
+            //This calls strlen so O(N) 
+            int length() const {
+                if (!_ref) return 0;
+                return strlen(_ref->data());
+            }
+
+            //== is case insensitive just like scripting
+            bool operator == (const char *other) const {
+                return _strcmpi(*this, other) == 0;
+            }
+
+            //!= is case insensitive just like scripting
+            bool operator != (const char *other) const {
+                return _strcmpi(*this, other) != 0;
+            }
+
+            bool compare_case_sensitive(const char *other) {
+                return _stricmp(*this, other) == 0;
+            }
+
+            size_t find(char ch,size_t start =0) const {
+                if (length() == 0) return -1;
+                const char *pos = strchr(_ref->data() + start, ch);
+                if (pos == nullptr) return -1;
+                return pos - _ref->data();
+            }
+
+            size_t find(const char *sub, int nStart = 0) const {
+                if (_ref == nullptr || length() == 0) return -1;
+                const char *pos = strstr(_ref->data() + nStart, sub);
+                if (pos == nullptr) return -1;
+                return pos - _ref->data();
+            }
+
+
+
+
+
+        public://#TODO make private after all rv_strings were replaced
+            ref<compact_array<char>> _ref;
+
+            static compact_array<char> *create(const char *str, int len) {
+                if (len == 0 || *str == 0) return nullptr;
+                compact_array<char> *string = compact_array<char>::create(len + 1);
+                strncpy_s(string->data(),string->size(), str, len);
+                string->data()[len] = 0;
+                return string;
+            }
+
+            static compact_array<char> *create(int len) {
+                if (len == 0) return nullptr;
+                compact_array<char> *string = compact_array<char>::create(len + 1);
+                string->data()[0] = 0;
+                return string;
+            }
+
+            static compact_array<char> *create(const char *str) {
+                if (*str == 0) return nullptr;
+                return create(str, strlen(str));
+            }
+            void make_mutable() {
+                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
+                    _ref = create(_ref->data());
+                }
+            }
+        };
+
+
+
+        class rv_pool_allocator {
+            char pad_0x0000[0x24]; //0x0000
+        public:
+            const r_string _allocName;
+            void* allocate(size_t count);
+            void deallocate(void* data);
+
+        };
+
+
 
         class rv_string {
         public:
@@ -130,13 +516,13 @@ namespace intercept {
             ref_count() { _count = 0; };
 
             ref_count(int16_t initial_, int16_t actual_, bool is_intercept_) {
-                _count = (((int32_t)initial_) << 16) | ((int32_t)actual_);
+                _count = (((int32_t) initial_) << 16) | ((int32_t) actual_);
                 if (is_intercept_)
                     _count |= 1 << 31;
             }
 
             void operator = (int16_t val_) {
-                _count = (((int32_t)_initial()) << 16) | ((int32_t)val_);
+                _count = (((int32_t) _initial()) << 16) | ((int32_t) val_);
             }
 
             uint16_t operator + (const int32_t val_) {
@@ -160,13 +546,13 @@ namespace intercept {
             }
 
             void set_initial(int16_t val_, bool is_intercept_) {
-                _count = (((int32_t)val_) << 16) | (int32_t)_actual();
+                _count = (((int32_t) val_) << 16) | (int32_t) _actual();
                 if (is_intercept_)
                     _count |= 1 << 31;
             }
 
             int16_t get_initial() {
-                return ((int16_t)(_count >> 16)) & ~(1 << 15);
+                return ((int16_t) (_count >> 16)) & ~(1 << 15);
             }
 
             bool is_intercept() {
@@ -174,23 +560,21 @@ namespace intercept {
             }
 
             void clear_initial() {
-                _count = (((int32_t)0) << 16) | (int32_t)_actual();
+                _count = (((int32_t) 0) << 16) | (int32_t) _actual();
             }
         protected:
             inline int16_t _actual() {
 #undef max // fucking hell i hate these macros, need to turn them off...
-                return ((int32_t)((std::numeric_limits<int16_t>::max()) & _count));
+                return ((int32_t) ((std::numeric_limits<int16_t>::max()) & _count));
             }
             inline int16_t _initial() {
-                return (int16_t)(_count >> 16);
+                return (int16_t) (_count >> 16);
             }
             int32_t _count;
         };
 
-        class game_data {
+        class game_data : public refcount_vtable {
         public:
-            uintptr_t type;
-            ref_count ref_count_internal;
             uintptr_t data_type;
         };
 
@@ -198,6 +582,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_number();
             game_data_number(float val_);
             game_data_number(const game_data_number &copy_);
@@ -215,6 +600,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_bool();
             game_data_bool(bool val_);
             game_data_bool(const game_data_bool &copy_);
@@ -232,9 +618,9 @@ namespace intercept {
         public:
             static uintptr_t __vptr_def;
             rv_game_value() : __vptr(rv_game_value::__vptr_def), data(nullptr) {};
-            uintptr_t __vptr;
-            game_data *data;
-            const void deallocate();
+            uintptr_t __vptr; //#TODO inheritance
+            ref<game_data> data;
+            const void deallocate();//#TODO remove
         };
 
         class game_data_array;
@@ -277,7 +663,7 @@ namespace intercept {
             operator float();
             operator bool();
             operator std::string();
-            operator rv_string &();
+            operator r_string();
             operator rv_game_value *();
             operator vector3();
             operator vector2();
@@ -285,7 +671,7 @@ namespace intercept {
             operator float() const;
             operator bool() const;
             operator std::string() const;
-            operator rv_string &() const;
+            operator r_string() const;
             operator vector3() const;
             operator vector2() const;
 
@@ -309,6 +695,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_array();
             game_data_array(size_t size_);
             game_data_array(const std::vector<game_value> &init_);
@@ -318,7 +705,7 @@ namespace intercept {
             game_data_array & game_data_array::operator = (game_data_array &&move_);
             void free();
             ~game_data_array();
-            game_value *data;
+            game_value *data; //#TODO autoArray class
             uint32_t length;
             uint32_t max_size;
             static void* operator new(std::size_t sz_);
@@ -332,6 +719,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_string();
             game_data_string(const std::string &str_);
             game_data_string(const game_data_string &copy_);
@@ -340,7 +728,7 @@ namespace intercept {
             game_data_string & game_data_string::operator = (game_data_string &&move_);
             void free();
             ~game_data_string();
-            rv_string *raw_string;
+            r_string raw_string;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         protected:
@@ -355,10 +743,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_group() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *group;
         };
@@ -368,10 +754,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_config() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *config;
         };
@@ -381,10 +765,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_control() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *control;
         };
@@ -394,10 +776,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_display() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *display;
         };
@@ -407,10 +787,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_location() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *location;
         };
@@ -420,10 +798,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_script() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *script;
         };
@@ -433,10 +809,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_side() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *side;
         };
@@ -446,10 +820,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_text() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *rv_text;
         };
@@ -459,10 +831,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_team() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *team;
         };
@@ -472,10 +842,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_rv_namespace() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *rv_namespace;
         };
@@ -485,10 +853,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_code() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             rv_string *code_string;
             uintptr_t instruction_array;
@@ -502,10 +868,8 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             game_data_object() {
-                type = type_def;
+                _vtable = type_def;
                 data_type = data_type_def;
-                ref_count_internal = 1;
-                ref_count_internal.set_initial(1, true);
             };
             void *object;
         };
@@ -525,7 +889,7 @@ namespace intercept {
                 rv_string * ret = _pool_queue.front();
                 ret->ref_count_internal = 1;
                 ret->length = alloc_length_;
-                *((char *)&ret->char_string + alloc_length_) = 0x0;
+                *((char *) &ret->char_string + alloc_length_) = 0x0;
                 _pool_queue.pop();
                 return ret;
             }
@@ -537,8 +901,7 @@ namespace intercept {
                     _ptr->length = 0;
                     _ptr->char_string = 0x0;
                     _pool_queue.push(_ptr);
-                }
-                else {
+                } else {
                     if (!_running) {
                         _running = true;
                         _collection_thread = std::thread(&game_data_string_pool::_string_collector, this);
@@ -549,7 +912,7 @@ namespace intercept {
 
             ~game_data_string_pool() {
                 for (auto entry : _pool)
-                    delete[] (char *)entry;
+                    delete[](char *)entry;
                 _running = false;
                 _collection_thread.join();
             }
@@ -562,10 +925,10 @@ namespace intercept {
 
             inline void _buy_entry(size_t alloc_length_) {
                 char *raw_data = new char[sizeof(uint32_t) + sizeof(uint32_t) + alloc_length_];
-                ((rv_string *)raw_data)->length = alloc_length_;
-                ((rv_string *)raw_data)->ref_count_internal = 1;
-                _pool_queue.push((rv_string *)raw_data);
-                _pool.push_back((rv_string *)raw_data);
+                ((rv_string *) raw_data)->length = alloc_length_;
+                ((rv_string *) raw_data)->ref_count_internal = 1;
+                _pool_queue.push((rv_string *) raw_data);
+                _pool.push_back((rv_string *) raw_data);
             }
 
             /*!
@@ -586,8 +949,7 @@ namespace intercept {
 
             @param str_ A pointer to the string to release.
             */
-            void _string_collector()
-            {
+            void _string_collector() {
                 while (_running) {
                     {
                         std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
@@ -599,8 +961,7 @@ namespace intercept {
                                 ptr->char_string = 0x0;
                                 _pool_queue.push(ptr);
                                 _string_collection.erase(it++);
-                            }
-                            else {
+                            } else {
                                 ++it;
                             }
                         }

@@ -19,17 +19,21 @@ namespace intercept {
             uintptr_t data_type_def;
 
             host::functions.get_type_structure("ARRAY", type_def, data_type_def);
+            auto allocator_info = host::functions.get_engine_allocator();
             game_data_array::type_def = type_def;
             game_data_array::data_type_def = data_type_def;
+            game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::ARRAY)];
 
 
             host::functions.get_type_structure("SCALAR", type_def, data_type_def);
             game_data_number::type_def = type_def;
             game_data_number::data_type_def = data_type_def;
+            game_data_number::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::SCALAR)];
 
             host::functions.get_type_structure("STRING", type_def, data_type_def);
             game_data_string::type_def = type_def;
             game_data_string::data_type_def = data_type_def;
+            game_data_string::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::STRING)];
 
             host::functions.get_type_structure("OBJECT", type_def, data_type_def);
             game_data_object::type_def = type_def;
@@ -38,6 +42,7 @@ namespace intercept {
             host::functions.get_type_structure("BOOL", type_def, data_type_def);
             game_data_bool::type_def = type_def;
             game_data_bool::data_type_def = data_type_def;
+            game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::BOOL)];
 
             
             host::functions.get_type_structure("CODE", type_def, data_type_def);
@@ -114,7 +119,7 @@ namespace intercept {
                 _locked = true;
             }
         }
-
+            
         host::mem_watcher::mem_watcher() {
         }
 
@@ -122,6 +127,7 @@ namespace intercept {
         }
 
         void host::mem_watcher::clean() {
+            /*
             auto data = _watch_data.begin();
             while (data != _watch_data.end()) {
                 if (data->rv_data.data->ref_count_internal <= 1) {
@@ -132,15 +138,19 @@ namespace intercept {
                     data++;
                 }
             }
+            */
         }
 
         void host::mem_watcher::add_watch(game_value & data_) {
+            /*
             _add(data_);
             clean();
+            */
         }
 
         void host::mem_watcher::_add(game_value & data_)
         {
+            /*
             if (data_.rv_data.data) {
                 if (data_.type() == game_data_array::type_def) {
                     for (uint32_t i = 0; i < data_.length(); ++i) {
@@ -153,6 +163,9 @@ namespace intercept {
                     _watch_data.push_back(data_);
                 }
             }
+            */
         }
+       
+
 }
 }

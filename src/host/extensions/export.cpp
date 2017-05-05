@@ -87,5 +87,10 @@ namespace intercept {
         {
             invoker::get().unlock();
         }
+
+        const types::__internal::allocatorInfo* get_engine_allocator() {
+            return loader::get().get_allocator();
+        }
+
     }
 }

@@ -2473,9 +2473,6 @@ namespace intercept {
         float safe_zone_w_abs() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonewabs__ret__scalar);
         }
-        bool shown_curatorcompass() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncuratorcompass__ret__bool);
-        }
 
         bool create_dialog(const std::string & dialog_name_) {
             return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, dialog_name_);
@@ -2483,10 +2480,6 @@ namespace intercept {
 
         void hc_show_bar(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__hcshowbar__bool__ret__nothing, value_);
-        }
-
-        void show_curator_compass(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__showcuratorcompass__bool__ret__nothing, value_);
         }
 
         bool hc_shown_bar() {

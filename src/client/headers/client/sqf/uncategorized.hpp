@@ -597,38 +597,6 @@ namespace intercept {
         std::vector<std::string> all_variables(const location &value_);
         std::vector<std::string> all_variables(const control &value_);
 
-        /* Curator */
-        object curator_camera();
-        object curator_mouse_over();
-        std::vector<object> curator_selected();
-        void open_curator_interface();
-        float curator_camera_area_ceiling(const object &value_);
-        bool curator_editing_area_type(const object &value_);
-        float curator_points(const object &value_);
-        float curator_waypoint_cost(const object &value_);
-        object get_assigned_curator_logic(const object &value_);
-        object get_assigned_curator_unit(const object &value_);
-        void remove_all_curator_addons(const object &value_);
-        void remove_all_curator_camera_areas(const object &value_);
-        void remove_all_curator_editing_areas(const object &value_);
-        void unassign_curator(const object &value_);
-        void add_curator_points(const object &value0_, float value1_);
-        void allow_curator_logic_ignore_areas(const object &value0_, bool value1_);
-        float curator_coef(const object &value0_, const std::string &value1_);
-        void remove_curator_camera_area(const object &value0_, float value1_);
-        void remove_curator_editing_area(const object &value0_, float value1_);
-        void set_curator_camera_area_ceiling(const object &value0_, float value1_);
-        void set_curator_editing_area_type(const object &value0_, bool value1_);
-        void set_curator_waypoint_cost(const object &value0_, float value1_);
-        void add_curator_addons(const object &curator_object_, const std::vector<std::string> &addons_);
-        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
-        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
-        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
-        void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
-
-        std::vector<std::string> curator_addons(const object &curator_module_);
-        std::vector<object> curator_editable_objects(const object &curator_module_);
-
         /* Group */
         bool group_icon_selectable();
         // TODO std::array<bool, 2> group_icons_visible();
@@ -2278,7 +2246,6 @@ namespace intercept {
         float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_);
         float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
 
-        std::vector<object> curator_registered_objects(const object &curator_);
 
         struct rv_throwable {
             std::string magazine_class_name;
@@ -2427,7 +2394,6 @@ namespace intercept {
         std::vector<object> nearest_terrain_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_);
         std::vector<object> nearest_terrain_objects(const object &obj_, const std::vector<std::string> &types_, float radius_);
 
-        std::vector<object> object_curators(const object &obj_);
 
         void on_command_mode_changed(const code &command_);
         void on_command_mode_changed(const std::string &command_);

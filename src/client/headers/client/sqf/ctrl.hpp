@@ -393,10 +393,6 @@ namespace intercept {
         void show_watch(bool value_);
         bool hc_shown_bar();
         void hc_show_bar(bool value_);
-        void show_curator_compass(bool value_);
-        bool shown_curatorcompass();
-
-
 
         //Somewhat unsorted stuff //#sort
 

@@ -24,10 +24,10 @@ namespace intercept {
         }
 
         std::string create_marker(const std::string &name_, const object &pos_) {
-            std::vector<game_value> params = {
+            game_value params({
                 name_,
                 pos_
-            };
+            });
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
         }
@@ -51,10 +51,10 @@ namespace intercept {
         }
 
         std::string create_marker_local(const std::string &name_, const object &pos_) {
-            std::vector<game_value> params = {
+            game_value params({
                 name_,
                 pos_,
-            };
+            });
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
         }

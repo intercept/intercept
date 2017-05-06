@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -37,7 +37,7 @@ namespace intercept {
         void radio_channel_set_label(float value0_, const std::string& value1_);
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
-        float current_channel();                       
+        float current_channel();
         bool channel_enabled(float channel_);
         float get_player_channel(const object &value_);
         bool set_current_channel(float value_);

@@ -357,6 +357,7 @@ namespace intercept {
         bool visible_gps();
         bool visible_compass();
         bool cb_checked(const control & control_);
+        void cb_set_checked(const control &value0_, bool value1_);
         bool create_dialog(const std::string & dialog_name_);
 
         bool is_real_time(const control &value_);
@@ -396,6 +397,11 @@ namespace intercept {
         bool shown_curatorcompass();
 
 
+
+        //Somewhat unsorted stuff //#sort
+
+
+
         bool preload_title_obj(const std::string &name_, const std::string &type_);
         bool preload_title_obj(const std::string &name_, const std::string &type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
         bool preload_title_rsc(const std::string &name_, const std::string &type_);
@@ -410,8 +416,7 @@ namespace intercept {
         void title_text(const std::string& text_, const std::string& type_, const float& speed_ = 1);
         void map_anim_add(float time_, float zoom_, const object &object_);
         void map_anim_add(float time_, float zoom_, const vector3 &pos_);
-        
-        void cb_set_checked(const control &value0_, bool value1_);
+
         void close_dialog(float val_);
         void close_display(float value0_, const display &value1_);
 

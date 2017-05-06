@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -36,14 +36,14 @@ namespace intercept {
         void remove_all_eden_eventhandlers(const std::string &value_);
         float add_eden_event_handler(const std::string &type_, const code &code_);
         std::vector<game_value> create_3den_composition(const config &config_path_, const vector3 &position_);// TODO add Eden Entity type
-        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_,bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
+        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
         std::vector<game_value> create_3den_connections(const game_value &entity_);
         game_value get_3den_entity(const float &entity_id_);
         std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
         std::vector<game_value> get_3den_selected(const std::string &type_);
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_);
         std::vector<object> all_eden_entities();
-        void do_eden_action(const std::string& value_); 
+        void do_eden_action(const std::string& value_);
         void get_eden_grid(const std::string& value_);
         struct rv_eden_mouse_over {
             std::string type;
@@ -51,11 +51,9 @@ namespace intercept {
 
             rv_eden_mouse_over(const game_value &rv_game_value_)
                 : type(rv_game_value_[0]),
-                entity(rv_game_value_[1])
-            {
-            }
+                entity(rv_game_value_[1]) {}
         };
-        rv_eden_mouse_over get_eden_mouse_over();        
+        rv_eden_mouse_over get_eden_mouse_over();
         void collect_eden_history(const code &code_);
         float get_eden_entity_id(const object &entity_);
         float get_eden_entity_id(const group &entity_);

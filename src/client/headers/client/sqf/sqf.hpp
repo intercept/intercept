@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "chat.hpp"
 #include "core.hpp"
@@ -42,9 +42,7 @@ protected:
             code sqf_fnc = intercept::sqf::compile(_sqf);
             if (_do_return) {
                 *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
-            }
-            else
-            {
+            } else {
                 intercept::sqf::call(sqf_fnc, _capture_args);
             }
         }

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -63,6 +63,42 @@ namespace intercept {
         vector3 get_marker_pos(const std::string& value_);
         vector2 get_marker_size(const std::string& value_);
 
-        std::vector<marker> all_map_markers();             
+        std::vector<marker> all_map_markers();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Locations
+        location nearest_location(const vector3& pos_, const std::string& location_class_);
+        location nearest_location(const object& unit_, const std::string& location_class_);
+        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
+        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_);
+        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

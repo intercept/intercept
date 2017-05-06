@@ -26,11 +26,6 @@ namespace intercept {
             vector3 max;
         };
 
-        struct rv_container {
-            std::string type;
-            object container;
-        };
-
         struct rv_destination {
             vector3 pos;
             std::string planning_mode;
@@ -78,21 +73,6 @@ namespace intercept {
             }
         };
 
-        struct rv_magazine_ammo {
-            std::string name;
-            int count;
-            bool loaded;
-            int type;
-            std::string location;
-        };
-
-        struct rv_turret_magazine {
-            std::string name;
-            std::vector<int> turret_path;
-            int count;
-            int id;
-            object creator; // player
-        };
 
         game_value call(const code &code_, game_value args_);
         game_value call(const code & code_);
@@ -151,36 +131,6 @@ namespace intercept {
         /* potential namespace: camera */
         void add_cam_shake(float power_, float duration_, float frequency_);
 
-        /* potential namespace: items, inventory, campaign */
-        void add_item_pool(const std::string &item_name_, int item_count_);
-        void add_magazine_pool(const std::string &mag_name_, int mag_count_);
-        void add_backpack_cargo(const object &vehicle_, const std::string &packClassName_, int count_);
-        void add_backpack_cargo_global(const object &vehicle_, const std::string &packClassName_, int count_);
-        void add_item_cargo(const object &object_, const std::string &item_, int count_);
-        void add_item_cargo_global(const object &object_, const std::string &item_, int count_);
-        void add_magazine(const object& obj_, const std::string& classname_, int count_);
-        void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_);
-        void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_);
-        void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_);
-        void add_magazines(const object& obj_, const std::string& classname_, int count_);
-        void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_);
-        void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_);
-        void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_);
-        void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_);
-        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_);
-        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_);
-        void add_weapon_item(const object& obj_, const std::string& weapon_name_, const std::string& item_name_, int ammo_count_, const std::string& muzzle_name_);
-        std::vector<std::string> magazine_cargo(const object& obj_);
-        std::vector<std::string> magazines(const object& obj_);
-        std::vector<rv_turret_magazine> magazines_all_turrets(const object& obj_);
-        std::vector<rv_magazine_ammo> magazines_ammo(const object& obj_);
-        std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object& obj_);
-        std::vector<rv_magazine_ammo> magazines_ammo_full(const object& obj_);
-        std::vector<std::string> magazines_detail(const object& obj_);
-        std::vector<std::string> magazines_detail_backpack(const object& obj_);
-        std::vector<std::string> magazines_detail_uniform(const object& obj_);
-        std::vector<std::string> magazines_detail_vest(const object& obj_);
-
         /* potential namespace: core, misc, world */
         void add_to_remains_collector(const std::vector<object> & objects_);
 
@@ -192,7 +142,7 @@ namespace intercept {
 
         /* potential namespace: vehicle, core, cargo */
         std::vector<object> assigned_cargo(const object &veh_);
-        std::vector<std::string> assigned_items(const object &unit_);
+
 
         /* potential namespace: misc, attach */
         object attached_object(const location &loc_);
@@ -233,17 +183,6 @@ namespace intercept {
         void command_watch(const std::vector<object>& units_, const object& target_);
 
         /* potential namespace: cargo */
-        std::vector<std::string> backpack_cargo(const object &box_);
-        std::vector<std::string> backpack_items(const object &unit_);
-        std::vector<std::string> backpack_magazines(const object &unit_);
-        bool can_add(const object& obj_, const std::string& classname_);
-        bool can_add(const object& obj_, const std::string& classname_, int count_);
-        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_);
-        bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_);
-        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_);
-        bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_);
-        bool can_add_item_to_vest(const object& obj_, const std::string& classname_);
-        bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_);
         bool can_sling_load(const object& vehicle_, const object& cargo_);
 
         /* potential namespace: misc, model, position? */
@@ -258,9 +197,8 @@ namespace intercept {
         location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
 
         /* potential namespace: ai, group, unit */
-        std::string combat_mode(const group &loc_);
         std::string combat_mode(const object &loc_);
-        float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_);
+
         void assign_curator(const object& player_, const object& curator_module_);
 
         /* potential namespace: ai */
@@ -304,9 +242,6 @@ namespace intercept {
         void animate(const object& obj_, const std::string& animation_name_, float phase_);
         void animate(const object& obj_, const std::string& animation_name_, float phase_, bool instant_);
         void animate_door(const object& obj_, const std::string& door_name_, float phase_, bool now_);
-
-        /* potential namespace: magazine, items, inventory */
-        std::string current_magazine_detail(const object &veh_);
 
         /* potential namespace: teams */
         std::vector<task> current_tasks(const team_member &team_member_);
@@ -597,25 +532,7 @@ namespace intercept {
         std::vector<std::string> all_variables(const location &value_);
         std::vector<std::string> all_variables(const control &value_);
 
-        /* Group */
-        bool group_icon_selectable();
-        // TODO std::array<bool, 2> group_icons_visible();
-        group grp_null();
-        void clear_group_icons(const group &value_);
-        group create_group(const side &value_);
-        void delete_group(const group &value_);
 
-        group group_from_net_id(const std::string &value_);
-        std::string group_id(const group &value_);
-        float group_owner(const group &value_);
-        bool set_group_owner(const group & group_, int client_id_);
-
-        object leader(const group &value_);
-        void group_radio(const object & unit_, const std::string& radio_name_);
-        void remove_group_icon(const group & group_, int icon_id_);
-        void select_leader(const group & group_, const object & unit_);
-        float current_waypoint(const group & group_);
-        void set_group_icons_selectable(bool val_);
 
         /* Multiplayer */
         bool local(const object &value_);
@@ -624,595 +541,6 @@ namespace intercept {
         bool is_multiplayer();
         bool is_dedicated();
         bool did_jip();
-
-        /* Position */
-        namespace __helpers {
-            vector3 get_pos_obj(unary_function fnc_, const object & obj_);
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
-        }
-
-        vector3 get_pos(const object & obj_);
-        vector3 get_pos(const location & loc_);
-        vector3 get_pos_asl(const object & obj_);
-        vector3 get_pos_atl(const object & obj_);
-        vector3 get_pos_aslw(const object & obj_);
-        vector3 visible_position(const object & obj_);
-        vector3 visible_position_asl(const object & obj_);
-        vector3 position(const object & obj_);
-        vector3 position_camera_to_world(const vector3 & pos_);
-        vector3 get_pos_visual(const object & obj_);
-        vector3 get_pos_asl_visual(const object & obj_);
-        vector3 get_pos_atl_visual(const object & obj_);
-        vector3 aim_pos(const object & obj_);
-
-        void set_pos(const object & obj_, const vector3 &pos_);
-        void set_pos_asl(const object & obj_, const vector3 & pos_);
-        void set_pos_asl2(const object & obj_, const vector3 & pos_);
-        void set_pos_aslw(const object & obj_, const vector3 & pos_);
-        void set_pos_atl(const object & obj_, const vector3 & pos_);
-
-        /////////////////////////////////////* Coordinate converters */
-        vector3 agl_to_asl(const vector3 & agl_);
-        vector3 asl_to_agl(const vector3 & asl_);
-        vector3 atl_to_asl(const vector3 & atl_);
-        vector3 asl_to_atl(const vector3 & asl_);
-
-        /* Waypoint */
-        struct waypoint
-        {
-            group wgroup;
-            float windex;
-
-            waypoint(const group& rv_game_value, uint32_t windex)
-                : wgroup(rv_game_value),
-                windex((float)windex)
-            {
-            }
-
-            waypoint(const game_value& from_)
-                : wgroup(group(from_[0])),
-                windex(from_[1])
-            {
-            }
-
-            std::vector<game_value> __to_gv_vec()
-            {
-                return std::vector<game_value>{wgroup, game_value(windex)};
-            }
-
-            game_value __to_gv()
-            {
-                return game_value(std::vector<game_value>{ wgroup, windex });
-            }
-
-            static const std::string __speed_lookup[4];
-            enum class speed
-            {
-                UNCHANGED = 0,
-                LIMITED = 1,
-                NORMAL = 2,
-                FULL = 3
-            };
-            static const std::string __show_lookup[4];
-            enum class show
-            {
-                NEVER,
-                EASY,
-                ALWAYS,
-                WAYPOINT_ERROR
-            };
-            static const std::string __type_lookup[22];
-            enum class type
-            {
-                MOVE,
-                DESTROY,
-                GETIN,
-                SAD,
-                JOIN,
-                LEADER,
-                GETOUT,
-                CYCLE,
-                LOAD,
-                UNLOAD,
-                TR_UNLOAD,
-                HOLD,
-                SENTRY,
-                GUARD,
-                TALK,
-                SCRIPTED,
-                SUPPORT,
-                GETIN_NEAREST,
-                DISMISS,
-                LOITER,
-                AND,
-                OR
-            };
-            static const std::string __behaviour_lookup[6];
-            enum class behaviour
-            {
-                UNCHANGED,
-                CARELESS,
-                SAFE,
-                AWARE,
-                COMBAT,
-                STEALTH
-            };
-            static const std::string __combat_mode_lookup[6];
-            enum class combat_mode
-            {
-                NO_CHANGE,
-                BLUE,
-                GREEN,
-                WHITE,
-                YELLOW,
-                RED
-
-            };
-            static const std::string __formation_lookup[10];
-            enum class formation
-            {
-                NO_CHANGE,
-                COLUMN,
-                STAG_COLUMN,
-                WEDGE,
-                ECH_LEFT,
-                ECH_RIGHT,
-                VEE,
-                LINE,
-                FILE,
-                DIAMOND
-            };
-            static const std::string __loiter_lookup[2];
-            enum class loiter_type
-            {
-                CIRCLE,
-                CIRCLE_L
-            };
-
-
-            static speed __parse_speed(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __speed_lookup->length(); i++)
-                {
-                    if (subject_ == __speed_lookup[i])
-                    {
-                        return static_cast<speed>(i);
-                    }
-                }
-                throw 712;
-            }
-            static show __parse_show(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __show_lookup->length(); i++)
-                {
-                    if (subject_ == __show_lookup[i])
-                    {
-                        return static_cast<show>(i);
-                    }
-                }
-                throw 712;
-            }
-            static type __parse_type(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __type_lookup->length(); i++)
-                {
-                    if (subject_ == __type_lookup[i])
-                    {
-                        return static_cast<type>(i);
-                    }
-                }
-                throw 712;
-            }
-            static behaviour __parse_behaviour(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __behaviour_lookup->length(); i++)
-                {
-                    if (subject_ == __behaviour_lookup[i])
-                    {
-                        return static_cast<behaviour>(i);
-                    }
-                }
-                throw 712;
-            }
-            static combat_mode __parse_combat_mode(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __combat_mode_lookup->length(); i++)
-                {
-                    if (subject_ == __combat_mode_lookup[i])
-                    {
-                        return static_cast<combat_mode>(i);
-                    }
-                }
-                throw 712;
-            }
-            static formation __parse_formation(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __formation_lookup->length(); i++)
-                {
-                    if (subject_ == __formation_lookup[i])
-                    {
-                        return static_cast<formation>(i);
-                    }
-                }
-                throw 712;
-            }
-            static loiter_type __parse_loiter_type(const std::string& subject_)
-            {
-                for (size_t i = 0; i < __loiter_lookup->length(); i++)
-                {
-                    if (subject_ == __loiter_lookup[i])
-                    {
-                        return static_cast<loiter_type>(i);
-                    }
-                }
-                throw 712;
-            }
-
-            static std::string __get_enum_as_str(speed subject_)
-            {
-                return __speed_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(show subject_)
-            {
-                return __show_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(type subject_)
-            {
-                return __type_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(behaviour subject_)
-            {
-                return __behaviour_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(combat_mode subject_)
-            {
-                return __combat_mode_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(formation subject_)
-            {
-                return __formation_lookup[(int)subject_];
-            }
-            static std::string __get_enum_as_str(loiter_type subject_)
-            {
-                return __loiter_lookup[(int)subject_];
-            }
-
-        };
-        // It's ficking replaced at compile time anyway, why is this nessecary.................
-        /*
-
-        */
-        /*!
-        @brief Adds (or inserts when index is given) a new waypoint to a group.
-
-        The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
-
-        @param gp_ The group to add the waypoint to.
-        @param center_ The poition of the center of the waypoint placement radius.
-        @param radius_ The radius of the waypoint placement area.
-        @param index_ [OPTIONAL] The index of the waypoint to insert this waypoint after.
-        @param name_ [OPTIONAL] The waypoint name
-
-        @return Returns the placed waypoint.
-
-        @sa https://community.bistudio.com/wiki/addWaypoint
-        */
-        waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-
-        /*!
-        @brief Adds (or inserts when index is given) a new waypoint to a group.
-
-        The waypoint is placed randomly within a circle with the given center and radius. The function returns the placed waypoint.
-
-        @param gp_ The group to add the waypoint to.
-        @param center_ An object to be the center of the waypoint placement radius.
-        @param radius_ The radius of the waypoint placement area.
-        @param index_ [OPTIONAL] The index of the waypoint to insert this waypoint after.
-        @param name_ [OPTIONAL] The waypoint name
-
-        @return Returns the placed waypoint.
-
-        @sa         https://community.bistudio.com/wiki/addWaypoint
-        */
-        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
-
-        /*!
-        @brief  Removes the specified waypoint.
-
-        @param  wp_ Waypoint to delete
-
-        @sa https://community.bistudio.com/wiki/deleteWaypoint
-        */
-        void delete_waypoint(waypoint & wp_);
-
-
-        void copy_waypoints(group & to_, group & from_);
-
-        /************************************************  GETTERS   ************************************************/
-
-        /*!
-        @brief Gets the object attached to the waypoint.
-
-        @param wp_ Waypoint to use
-
-        @return Object attached to the waypoint, if any.
-        */
-        object waypoint_attached_object(waypoint& wp_);
-
-        /*!
-        @brief Gets the vehicle attached to the waypoint.
-
-        @param wp_ Waypoint to use
-
-        @return Vehicle attached to the waypoint, if any.
-
-        @sa https://community.bistudio.com/wiki/waypointAttachedVehicle
-        */
-        object waypoint_attached_vehicle(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint behavior.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the behaviour of the waypoint.
-
-        @sa waypoint::behaviour
-        */
-        waypoint::behaviour waypoint_behaviour(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint combat mode.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the combat mode of the waypoint.
-
-        @sa waypoint::combat_mode
-        @sa https://community.bistudio.com/wiki/2D_Editor:_Waypoints#Combat_Mode
-        */
-        waypoint::combat_mode waypoint_combat_mode(waypoint & wp_);
-
-        /*!
-        @brief Gets the radius around the waypoint where the waypoint is completed.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the completeion radius of the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypointCompletionRadius
-        */
-        float waypoint_completeion_radius(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint description.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the waypoint description
-
-        @sa https://community.bistudio.com/wiki/waypointDescription
-        */
-        std::string waypoint_description(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint description.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the waypoint formation, enumeratred.
-
-        @sa https://community.bistudio.com/wiki/waypointFormation
-        */
-        waypoint::formation waypoint_formation(waypoint & wp_);
-
-        /*!
-        @brief Gets the house position assigned to the waypoint.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the house position.
-
-        @sa https://community.bistudio.com/wiki/waypointHousePosition
-        */
-        float waypoint_house_position(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint loiter radius.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the loiter radius.
-
-        @sa https://community.bistudio.com/wiki/waypointLoiterRadius
-        */
-        float waypoint_loiter_radius(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint loiter type.
-
-        @param wp_ Waypoint to use
-
-        @return Returns the loiter type, enumerated.
-
-        @sa https://community.bistudio.com/wiki/waypointLoiterType
-        */
-        waypoint::loiter_type waypoint_loiter_type(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint name.
-
-        @param wp_ Waypoint to use
-
-        @return The name assigned to the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypointName
-        */
-        std::string waypoint_name(waypoint & wp_);
-
-        /*!
-        @brief Get Waypoint's Position.
-
-        @param wp_ Waypoint to use
-
-        @return The position of the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypointPosition
-        */
-        vector3 waypoint_position(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint script.
-
-        @param wp_ Waypoint to use
-
-        @return The position of the waypoint.
-
-        @sa https://community.bistudio.com/wiki/waypointScript
-        */
-        std::string waypoint_script(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint show/hide status.
-
-        @param wp_ Waypoint to use
-
-        @return Gets the showhide status, enumerated.
-
-        @sa https://community.bistudio.com/wiki/waypointShow
-        */
-        waypoint::show waypoint_show(waypoint & wp_);
-
-        /*!
-        @brief Gets the waypoint movement speed.
-
-        @param wp_ Waypoint to use
-
-        @return Gets the waypoint speed, enumerated.
-
-        @sa https://community.bistudio.com/wiki/waypointSpeed
-        */
-        waypoint::speed waypoint_speed(waypoint & wp_);
-        // TODO waypoint_statements needs struct for return value
-        // TODO waypoint_timeout needs struct for return value
-
-        /*!
-        @brief Gets the waypoint type.
-
-        @param wp_ Waypoint to use
-
-        @return The waypoint type, enumerated.
-
-        @sa https://community.bistudio.com/wiki/waypointType
-        */
-        waypoint::type waypoint_type(waypoint & wp_);
-
-        /*!
-        @brief Returns the visibility of the waypoint.
-
-        @param wp_ Waypoint to use
-
-        @return The waypoint visibility.
-
-        @sa https://community.bistudio.com/wiki/waypointVisible
-        */
-        bool waypoint_visible(waypoint & wp_);
-
-        std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
-        std::vector<waypoint> synchronized_waypoints(object & obj_);
-
-        void set_current_waypoint(group & gp_, waypoint & wp_);
-        void set_waypoint_behaviour(waypoint & wp_, waypoint::behaviour mode_);
-        void set_waypoint_combat_mode(waypoint & wp_, waypoint::combat_mode mode_);
-        void set_waypoint_completion_radius(waypoint & wp_, float radius_);
-        void set_waypoint_description(waypoint & wp_, std::string & text_);
-        void set_waypoint_formation(waypoint & wp_, waypoint::formation formation_);
-        void set_waypoint_house_position(waypoint & wp_, float house_pos_);
-        void set_waypoint_loiter_radius(waypoint & wp_, float radius_);
-        void set_waypoint_loiter_type(waypoint & wp_, waypoint::loiter_type type_);
-        void set_waypoint_name(waypoint & wp_, std::string & name_);
-        void set_waypoint_position(waypoint & wp_, vector3 & pos_, float radius_);
-        void set_waypoint_script(waypoint & wp_, std::string & command_);
-        void set_waypoint_speed(waypoint& wp_, waypoint::speed mode_);
-        void set_waypoint_statements(waypoint& wp_, std::string condition_, std::string statement_);
-        void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_);
-        void set_waypoint_type(waypoint& wp_, waypoint::type type_);
-        void set_waypoint_visible(waypoint& wp_, bool visibility_);
-
-        void show_waypoint(waypoint& wp_, std::string & show_);
-
-        void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_);
-        void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_);
-
-        void waypoint_attach_object(waypoint& wp_, int obj_id_);
-        void waypoint_attach_object(waypoint& wp_, object & obj_);
-
-        float current_waypoint(group & gp_);
-        bool waypoints_enabled_uav(object & uav_);
-        void enable_uav_waypoints(object & uav_, bool enable_);
-
-        /* World */
-
-        struct rv_date {
-            float year;
-            float month;
-            float day;
-            float hour;
-            float minute;
-
-            rv_date(float year_, float month_, float day_, float hour_, float minute_) {
-                year = year_;
-                month = month_;
-                day = day_;
-                hour = hour_;
-                minute = minute_;
-            }
-
-            static rv_date from_vector(const std::vector<float> &date_vector_) {
-                return rv_date(date_vector_[0], date_vector_[1], date_vector_[2], date_vector_[3], date_vector_[4]);
-            }
-
-            operator game_value() {
-                return game_value(std::vector<game_value>({
-                    year,
-                    month,
-                    day,
-                    hour,
-                    minute
-                }));
-            }
-
-            operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    year,
-                    month,
-                    day,
-                    hour,
-                    minute
-                }));
-            }
-
-            std::vector<float> to_vector() const {
-                std::vector<float> ret_val{ year, month, day, hour, minute };
-                return ret_val;
-            }
-        };
-
-        float world_size();
-        std::string world_name();
-        float wind_str();
-        float wind_dir();
-
-        vector3 wind();
-        float waves();
-        // TODO void set_waves(float lerp_time_, float val_); // TODO
-
-        float time();
-
-        float time_multiplier();
-
-        float date_to_number(int year_, int month_, int day_, int hour_, float minute_);
-        rv_date number_to_date(int year_, float time_);
 
         float acc_time();
         object agent(const team_member &value_);
@@ -1250,10 +578,7 @@ namespace intercept {
         rv_namespace current_namespace();
         object cursor_target();
         float daytime();
-        float diag_fps();
-        float diag_fpsmin();
-        float diag_frameno();
-        float diag_ticktime();
+
         bool dialog();
         float difficulty();
         bool difficulty_enabled_rtd();
@@ -1267,8 +592,7 @@ namespace intercept {
         float estimated_end_server_time();
         void exit();
         void finish_mission_init();
-        bool fog();
-        float fog_forecast();
+
         void force_end();
         void force_weather_change();
         bool free_look();
@@ -1277,10 +601,10 @@ namespace intercept {
         bool get_remote_sensors_disabled();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
-        float gusts();
+        
         void halt();
         bool has_interface();
-        float humidity();
+
         side independent();
         void init_ambient_life();
         bool is_autotest();
@@ -1294,7 +618,7 @@ namespace intercept {
         std::string language();
         std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
-        float lightnings();
+ 
         std::string line_break();
         void load_game();
         location location_null();
@@ -1303,13 +627,10 @@ namespace intercept {
         float mission_difficulty();
         std::string mission_name();
         rv_namespace mission_namespace();
-        float moon_intensity();
+
         float music_volume();
-        float next_weather_change();
         object obj_null();
         side opfor();
-        float overcast();
-        float overcast_forecast();
         rv_namespace parsing_namespace();
         float particles_quality();
         float pi();
@@ -1322,8 +643,6 @@ namespace intercept {
         std::string profile_name();
         rv_namespace profile_namespace();
         std::string profile_namesteam();
-        float rain();
-        float rainbow();
         void reset_cam_shake();
         side resistance();
         bool reversed_mouse_y();
@@ -1333,7 +652,7 @@ namespace intercept {
         void team_switch();
 
         float system_of_units();
-        float sun_or_moon(); // BUT WHICH ONE IS IT!?!?!??!!?
+
         float sound_volume();
         void simul_weather_sync();
         void select_no_player();
@@ -1369,15 +688,7 @@ namespace intercept {
         bool captive(const object & unit_);
         float captive_num(const object & unit_);
         bool check_aifeature(const std::string & feature_);
-        void clear_all_items_from_backpack(const object & unit_);
-        void clear_backpack_cargo(const object & box_);
-        void clear_backpack_cargo_global(const object & box_);
-        void clear_item_cargo(const object & box_);
-        void clear_item_cargo_global(const object & box_);
-        void clear_magazine_cargo(const object & veh_);
-        void clear_magazine_cargo_global(const object & veh_);
-        void clear_weapon_cargo(const object & veh_);
-        void clear_weapon_cargo_global(const object & veh_);
+        
         float collective_rtd(const object & helicopter_);
         object commander(const object & veh_);
         bool completed_fsm(float handle_);
@@ -1385,11 +696,8 @@ namespace intercept {
         side create_center(const side & side_);
         void create_vehicle_crew(const object & veh_);
         std::string current_command(const object & veh_);
-        std::string current_magazine(const object & veh_);
-        std::string current_muzzle(const object & gunner_);
+
         int current_vision_mode(const object & unit_);
-        std::string current_weapon(const object & veh_);
-        std::string current_weapon_mode(const object & gunner_);
         float current_zeroing(const object & gunner_);
         float damage(const object & object_);
         void de_activate_key(const std::string & key_);
@@ -1478,8 +786,6 @@ namespace intercept {
         std::string goggles(const object &value_);
 
         object gunner(const object &value_);
-        std::string handgun_magazine(const object &value_);
-        std::string handgun_weapon(const object &value_);
         float hands_hit(const object &value_);
         object hc_leader(const group &value_);
         void hc_remove_all_groups(const object &value_);
@@ -1627,22 +933,12 @@ namespace intercept {
         void reload(const object &value_);
         bool reload_enabled(const object &value_);
         void remove_all_actions(const object &value_);
-        void remove_all_assigned_items(const object &value_);
-        void remove_all_containers(const object &value_);
-        void remove_all_handgun_items(const object &value_);
-        void remove_all_items(const object &value_);
-        void remove_all_items_with_magazines(const object &value_);
+
+        
         void remove_all_mission_event_handlers(const std::string &value_);
         void remove_all_music_event_handlers(const std::string &value_);
-        void remove_all_primary_weapon_items(const object &value_);
-        void remove_all_weapons(const object &value_);
-        void remove_backpack(const object &value_);
-        void remove_backpack_global(const object &value_);
-        void remove_goggles(const object &value_);
-        void remove_headgear(const object &value_);
+        
         void remove_switchable_unit(const object &value_);
-        void remove_uniform(const object &value_);
-        void remove_vest(const object &value_);
         bool required_version(const std::string &value_);
         void reset_subgroup_direction(const object &value_);
         std::string role_description(const object &value_);
@@ -1706,44 +1002,23 @@ namespace intercept {
         void unassign_team(const object &value_);
         void unassign_vehicle(const object &value_);
         bool underwater(const object &value_);
-        std::string uniform(const object &value_);
-        object uniform_container(const object &value_);
-        object unit_backpack(const object &value_);
-        std::string unit_pos(const object &value_);
+
+        std::string unit_pos(const object &value_);//#sort
         float unit_recoil_coefficient(const object &value_);
         bool unlock_achievement(const std::string &value_);
 
         object vehicle(const object &value_);
         std::string vehicle_var_name(const object &value_);
         bool verify_signature(const std::string &value_);
-        std::string vest(const object &value_);
-        object vest_container(const object &value_);
         float waypoint_timeout_current(const group &value_);
         bool waypoints_enabled_uav(const object &value_);
         bool weapon_lowered(const object &value_);
 
-        void add_backpack(const object &value0_, const std::string& value1_);
-        void add_backpack_global(const object &value0_, const std::string& value1_);
-        void add_goggles(const object &value0_, const std::string& value1_);
-        void add_handgun_item(const object &value0_, const std::string& value1_);
-        void add_headgear(const object &value0_, const std::string& value1_);
-        void add_item(const object &value0_, const std::string& value1_);
-        void add_item_to_backpack(const object &value0_, const std::string& value1_);
-        void add_item_to_uniform(const object &value0_, const std::string& value1_);
-        void add_item_to_vest(const object &value0_, const std::string& value1_);
         void add_live_stats(const object &value0_, float value1_);
-        void add_magazine(const object &value0_, const std::string& value1_);
-        void add_magazine_global(const object &value0_, const std::string& value1_);
-        void add_primary_weapon_item(const object &value0_, const std::string& value1_);
         void add_rating(const object &value0_, float value1_);
         void add_score(const object &value0_, float value1_);
         void add_score_side(const side &value0_, float value1_);
-        void add_secondary_weapon_item(const object &value0_, const std::string& value1_);
-        void add_uniform(const object &value0_, const std::string& value1_);
         void add_vehicle(const group &value0_, const object &value1_);
-        void add_vest(const object &value0_, const std::string& value1_);
-        void add_weapon(const object &value0_, const std::string& value1_);
-        void add_weapon_global(const object &value0_, const std::string& value1_);
 
         void allow_crew_in_immobile(const object &value0_, bool value1_);
         void allow_damage(const object &value0_, bool value1_);
@@ -1752,7 +1027,6 @@ namespace intercept {
         void allow_sprint(const object &value0_, bool value1_);
         float ammo(const object &value0_, const std::string& value1_);
         float animation_phase(const object &value0_, const std::string& value1_);
-        void assign_item(const object &value0_, const std::string& value1_);
         void assign_team(const object &value0_, const std::string& value1_);
         void assign_to_airport(const object &value0_, float value1_);
         void cam_command(const object &value0_, const std::string& value1_);
@@ -1806,7 +1080,7 @@ namespace intercept {
 
         float get_speed(const object &value0_, const std::string& value1_);
         void global_radio(const object &value0_, const std::string& value1_);
-        bool has_weapon(const object &value0_, const std::string& value1_);
+
         void hc_remove_group(const object &value0_, const group &value1_);
         void hide_object(const object &value0_, bool value1_);
         void hide_object_global(const object &value0_, bool value1_);
@@ -1818,7 +1092,7 @@ namespace intercept {
         bool is_kind_of(const object &obj_, const std::string &type_);
         bool is_kind_of(const std::string &type1_, const std::string &type2_);
         bool is_kind_of(const std::string &type1_, const std::string &type2_, const config &target_config_);
-        bool is_uniform_allowed(const object &value0_, const std::string& value1_);
+
         bool kb_add_database(const object &value0_, const std::string& value1_);
         bool kb_add_database_targets(const object &value0_, const std::string& value1_);
         bool kb_has_topic(const object &value0_, const std::string& value1_);
@@ -1834,7 +1108,7 @@ namespace intercept {
 
         void leave_vehicle(const object &value0_, const group &value1_);
         void limit_speed(const object &value0_, float value1_);
-        void link_item(const object &value0_, const std::string& value1_);
+
         bool load_identity(const object &value0_, const std::string& value1_);
         bool load_status(const object &value0_, const std::string& value1_);
         void lock(const object &value0_, bool value1_);
@@ -1861,24 +1135,11 @@ namespace intercept {
         void remove_action(const object &value0_, float value1_);
         void remove_all_event_handlers(const object &value0_, const std::string& value1_);
         void remove_all_mpevent_handlers(const object &value0_, const std::string& value1_);
-        void remove_handgun_item(const object &value0_, const std::string& value1_);
-        void remove_item(const object &value0_, const std::string& value1_);
-        void remove_item_from_backpack(const object &value0_, const std::string& value1_);
-        void remove_item_from_uniform(const object &value0_, const std::string& value1_);
-        void remove_item_from_vest(const object &value0_, const std::string& value1_);
-        void remove_items(const object &value0_, const std::string& value1_);
-        void remove_magazine_global(const object &value0_, const std::string& value1_);
-        void remove_magazines(const object &value0_, const std::string& value1_);
-
-        void remove_primary_weapon_item(const object &value0_, const std::string& value1_);
-        void remove_secondary_weapon_item(const object &value0_, const std::string& value1_);
-        void remove_weapon(const object &value0_, const std::string& value1_);
-        void remove_weapon_global(const object &value0_, const std::string& value1_);
+        
         void reveal_mine(const object &value0_, const side &value1_);
         bool save_identity(const object &value0_, const std::string& value1_);
         bool save_status(const object &value0_, const std::string& value1_);
         void select_diary_subject(const object &value0_, const std::string& value1_);
-        void select_weapon(const object &value0_, const std::string& value1_);
         void send_simple_command(const object &value0_, const std::string& value1_);
         void set_actual_collective_rtd(const object &value0_, float value1_);
         void set_airport_side(float value0_, const side &value1_);
@@ -1961,8 +1222,7 @@ namespace intercept {
         void switch_move(const object &value0_, const std::string& value1_);
         void trigger_attach_object(const object &value0_, float value1_);
 
-        void unassign_item(const object &value0_, const std::string& value1_);
-        void unlink_item(const object &value0_, const std::string& value1_);
+
         bool unregister_task(const team_member &value0_, const std::string& value1_);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
         void vehicle_radio(const object &value0_, const std::string& value1_);
@@ -2066,9 +1326,6 @@ namespace intercept {
 
         rv_resolution get_resolution();
 
-        rv_date date();
-        rv_date mission_start();
-
         std::vector<object> vehicles();
 
         game_value get_mission_config_value(const std::string& attribute_);
@@ -2164,14 +1421,7 @@ namespace intercept {
         float get_terrain_height_asl(const vector3 position_);
 
         bool is_null(const location& loc_);
-        std::vector<std::string> items(const object& unit_);
 
-        location nearest_location(const vector3& pos_, const std::string& location_class_);
-        location nearest_location(const object& unit_, const std::string& location_class_);
-        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_);
-        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
-        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_);
-        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
         std::vector<object> nearest_terrain_objects(const vector3& pos_, const std::vector<std::string> types_, float radius_);
         std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_);
 
@@ -2183,23 +1433,13 @@ namespace intercept {
 
         std::string call_extension(const std::string& extension_, const std::string& arguments_);
 
-        vector3 get_pos(const object& obj_, float distance_, float heading_);
-        vector3 get_pos(const vector3& pos_, float distance_, float heading_);
-        vector3 get_rel_pos(const object& obj_, float distance_, float heading_);
-        vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_);
-        float get_rel_dir(const object& obj_, const object& pos_);
-        float get_rel_dir(const object& obj_, const vector3& pos_);
 
         void hintc(const std::string& title_, std::vector<std::string> content_);
 
         vector3 world_to_model(const object &object_, const vector3 &position_);
         vector3 world_to_model_visual(const object &object_, const vector3 &position_);
 
-        void set_vector_up(const object &object_, const vector3 &vector_up_);
-        void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_);
-
-        void set_position(const location &location_, const vector3 &position_);
-        void set_pos_world(const object &object_, const vector3 &position_);
+        
 
         void remote_control(const object &controller_, const object &controlled_);
 
@@ -2207,7 +1447,7 @@ namespace intercept {
         void set_hit_index(const object &object_, int part_index_, float damage_);
         void set_hit_point_damage(const object &object_, const std::string &hit_point_, float damage_);
 
-        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_);
+
 
         void join(const std::vector<object> &units_, const group &group_);
         void join(const std::vector<object> &units_, const object &unit_group_);
@@ -2247,13 +1487,7 @@ namespace intercept {
         float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
 
 
-        struct rv_throwable {
-            std::string magazine_class_name;
-            std::string muzzle_class_name;
-            std::vector<float> ids;
-        };
 
-        rv_throwable current_throwable(const object &unit_);
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
@@ -2329,51 +1563,18 @@ namespace intercept {
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
 
-        std::vector<object> every_backpack(const object &container_);
-
-        std::vector<rv_container> every_container(const object &container_);
-
-        struct rv_cargo {
-            std::vector<std::string> types;
-            std::vector<float> amounts;
-        };
-
-        std::vector<rv_cargo> get_backpack_cargo(const object &container_);
-        std::vector<rv_cargo> get_item_cargo(const object &container_);
-        std::vector<rv_cargo> get_magazine_cargo(const object &container_);
-        std::vector<rv_cargo> get_weapon_cargo(const object &container_);
-        std::vector<std::string> item_cargo(const object &container_);
-        std::vector<std::string> weapon_cargo(const object &container_);
 
         int get_cargo_index(const object &vehicle_, const object &unit_);
-        std::vector<std::string> weapons(const object &unit_);
 
-        struct rv_weapon_state {
-            std::string weapon;
-            std::string muzzle;
-            std::string mode;
-            std::string magazine;
-            float ammo_count;
 
-            rv_weapon_state(const game_value &ret_game_value_) :
-                weapon(ret_game_value_[0]),
-                muzzle(ret_game_value_[1]),
-                mode(ret_game_value_[2]),
-                magazine(ret_game_value_[3]),
-                ammo_count(ret_game_value_[4])
-            {
-            }
-        };
 
-        rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
 
         std::vector<std::string> get_object_materials(const object &object_);
         std::vector<std::string> get_object_textures(const object &object_);
 
         std::vector<object> group_selected_units(const object &unit_);
 
-        std::vector<std::string> items_with_magazines(const object &unit_);
+
 
         vector2 location_position(const location &loc_);
 
@@ -2415,8 +1616,7 @@ namespace intercept {
 
         bool preload_camera(const vector3 &pos_);
 
-        std::vector<std::string> primary_weapon_items(const object &unit_);
-        std::vector<std::string> primary_weapon_magazine(const object &unit_);
+
 
         std::vector<std::string> registered_tasks(const team_member &member_);
 
@@ -2445,8 +1645,7 @@ namespace intercept {
         void rope_unwind(const object &rope_, float speed_, float length_);
         void rope_unwind(const object &rope_, float speed_, float length_, bool relative_);
 
-        std::vector<std::string> secondary_weapon_items(const object &unit_);
-        std::vector<std::string> secondary_weapon_magazine(const object &unit_);
+
 
         struct rv_best_place {
             vector2 pos;
@@ -2473,13 +1672,12 @@ namespace intercept {
         void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
         void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
         void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void set_wind(float x_, float y_);
-        void set_wind(float x_, float y_, bool force_);
+
         std::vector<task> simple_tasks(const object& unit_);
         void simul_cloud_density(const vector3& pos_);
         void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_);
         bool simul_in_clouds(const vector3& pos_);
-        std::vector<std::string> soldier_magazines(const object& unit_);
+
         std::vector<std::string> squad_params(const object& unit_);
         void start_loading_screen(const std::string& text_);
         void start_loading_screen(const std::string& text_, const std::string& resource_);
@@ -2492,15 +1690,13 @@ namespace intercept {
         object cursor_object();
         float get_client_state_number();
 
-        std::vector<std::string> vest_magazines(const object& unit_);
-        std::vector<std::string> vest_items(const object& unit_);
+
         vector3 velocity_model_space(const object& obj_);
         vector3 vector_up_visual(const object& obj_);
         vector3 vector_up(const object& obj_);
         bool unit_ready(const object& unit_);
         std::vector<std::string> unit_addons(const std::string& class_);
-        std::vector<std::string> uniform_magazines(const object& unit_);
-        std::vector<std::string> uniform_items(const object& unit_);
+
 
         struct rv_uav_control {
             object unit;
@@ -2568,20 +1764,7 @@ namespace intercept {
 
         rv_model_info get_model_info(const object& object_);
 
-        struct rv_handgun_items {
-            std::string silencer;
-            std::string laser;
-            std::string optics;
 
-            rv_handgun_items(const game_value &ret_game_value_) :
-                silencer(ret_game_value_[0]),
-                laser(ret_game_value_[1]),
-                optics(ret_game_value_[2])
-            {
-            }
-        };
-
-        rv_handgun_items handgun_items(const object& unit_);
 
         void log_network_terminate(const float& handle_);
 
@@ -2624,38 +1807,7 @@ namespace intercept {
         std::vector<object> list(const object& trigger_);
         vector3 task_destination(const task& task_);
 
-        struct rv_magazine {
-            std::string name;
-            int ammo;
-
-            rv_magazine(const game_value &ret_game_value_):
-                name(ret_game_value_[0]),
-                ammo(ret_game_value_[1])
-            {
-            }
-        };
-
-        struct rv_weapon_items {
-            std::string weapon;
-            std::string muzzle;
-            std::string laser;
-            std::string optics;
-            rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
-            std::string bipod;
-
-            rv_weapon_items(const game_value &ret_game_value_):
-                weapon(ret_game_value_[0]),
-                muzzle(ret_game_value_[1]),
-                laser(ret_game_value_[2]),
-                optics(ret_game_value_[3]),
-                magazine(ret_game_value_[4]),
-                bipod(ret_game_value_[5])
-            {
-            }
-        };
-
-        std::vector<rv_weapon_items> weapons_items(const object& obj_);
-        std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_);
+      
         bool is_equal_to(const object& l_, const object& r_);
         vector3 get_camera_view_direction(const object & obj_);
         std::string format(const std::vector<game_value> &params_);

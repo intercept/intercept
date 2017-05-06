@@ -193,5 +193,167 @@ namespace intercept {
         std::vector<marker> all_map_markers() {
             return __helpers::__convert_to_markers_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmapmarkers__ret__array));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Locations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        location nearest_location(const vector3& pos_, const std::string& location_class_) {
+            game_value args({
+                pos_,
+                location_class_
+            });
+
+            return location(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+        }
+
+        location nearest_location(const object& unit_, const std::string& location_class_) {
+            game_value args({
+                unit_,
+                location_class_
+            });
+
+            return location(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+        }
+
+        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_) {
+            std::vector<game_value> loctypes;
+            for (std::string l_ : location_types_)
+                loctypes.push_back(l_);
+
+            game_value args({
+                pos_,
+                loctypes,
+                radius_
+            });
+
+            game_value rval(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+
+            std::vector<location> output;
+            for (uint32_t i = 0; i < rval.length(); ++i) {
+                output.push_back(location(rval[i]));
+            }
+            return output;
+        }
+
+        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
+            std::vector<game_value> loctypes;
+            for (std::string l_ : location_types_)
+                loctypes.push_back(l_);
+
+            game_value args({
+                pos_,
+                loctypes,
+                radius_,
+                sort_position_
+            });
+
+            game_value rval(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+
+            std::vector<location> output;
+            for (uint32_t i = 0; i < rval.length(); ++i) {
+                output.push_back(location(rval[i]));
+            }
+            return output;
+        }
+
+        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_) {
+            std::vector<game_value> loctypes;
+            for (std::string l_ : location_types_)
+                loctypes.push_back(l_);
+
+            game_value args({
+                unit_,
+                loctypes,
+                radius_
+            });
+
+            game_value rval(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+
+            std::vector<location> output;
+            for (uint32_t i = 0; i < rval.length(); ++i) {
+                output.push_back(location(rval[i]));
+            }
+            return output;
+        }
+
+        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
+            std::vector<game_value> loctypes;
+            for (std::string l_ : location_types_)
+                loctypes.push_back(l_);
+
+            game_value args({
+                unit_,
+                loctypes,
+                radius_,
+                sort_position_
+            });
+
+            game_value rval(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
+
+            std::vector<location> output;
+            for (uint32_t i = 0; i < rval.length(); ++i) {
+                output.push_back(location(rval[i]));
+            }
+            return output;
+        }
     }
 }

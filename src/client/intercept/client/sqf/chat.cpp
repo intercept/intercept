@@ -1,5 +1,6 @@
-#include "chat.hpp"
+﻿#include "chat.hpp"
 #include "client\pointers.hpp"
+#include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
@@ -34,7 +35,7 @@ namespace intercept {
         }
 
         void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_) {
-            game_value args = game_value({ ((float)channel_id_), message_ });
+            game_value args = game_value({ ((float) channel_id_), message_ });
             host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
         }
 
@@ -103,6 +104,6 @@ namespace intercept {
 
         bool set_current_channel(float value_) {
             return __helpers::__bool_unary_number(client::__sqf::unary__setcurrentchannel__scalar__ret__bool, value_);
-        }                    	
+        }
     }
 }

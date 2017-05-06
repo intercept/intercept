@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -50,47 +50,6 @@ namespace intercept {
                 cargo_index = cargo_index_;
                 turret_path = turret_path_;
                 person_turret = person_turret_;
-            }
-        };
-
-        struct rv_color {
-            float red;
-            float green;
-            float blue;
-            float alpha;
-
-            operator game_value() {
-                return game_value(std::vector<game_value>({
-                    red,
-                    green,
-                    blue,
-                    alpha
-                }));
-            }
-
-            operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    red,
-                    green,
-                    blue,
-                    alpha
-                }));
-            }
-
-            rv_color(const game_value &ret_game_value_) :
-                red(ret_game_value_[0]),
-                green(ret_game_value_[1]),
-                blue(ret_game_value_[2]),
-                alpha(ret_game_value_[3])
-            {
-            }
-
-            rv_color(float red_, float green_, float blue_, float alpha_) :
-                red(red_),
-                green(green_),
-                blue(blue_),
-                alpha(alpha_)
-            {
             }
         };
 
@@ -587,30 +546,6 @@ namespace intercept {
         void set_particle_class(const object &particle_source_, const std::string& particle_class_);
         void drop(const rv_particle_array &particle_array_);
 
-        /* Config */
-        std::vector<config> config_hierarchy(const config &config_entry_);
-        std::string config_name(const config &config_entry_);
-        std::vector<config> config_properties(const config &config_entry,const std::string& condition_ = "true", bool inherit = true);
-        std::string config_source_mod(const config &config_entry_);
-        std::vector<std::string> config_source_mod_list(const config &config_entry_);
-        float count(const config &config_entry_);
-        //std::vector<game_value> get_array(const config &config_entry_);
-        config get_mission_config(const std::string& value_);
-        float get_number(const config &config_entry_);
-        std::string get_text(const config &config_entry_);
-        config inherits_from(const config &config_entry_);
-        bool is_array(const config &config_entry_);
-        bool is_class(const config &config_entry_);
-        bool is_null(const config &config_entry_);
-        bool is_number(const config &config_entry_);
-        bool is_text(const config &config_entry_);
-        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_);
-        config select(const config &a_config_, float a_number_);
-        config campaign_config_file();
-        config config_file();
-        config config_null();
-        config mission_config_file();
-
         /* Core */
         std::vector<object> all_curators();
         std::vector<object> all_dead();
@@ -660,6 +595,7 @@ namespace intercept {
         std::vector<std::string> all_variables(const group &value_);
         std::vector<std::string> all_variables(const task &value_);
         std::vector<std::string> all_variables(const location &value_);
+        std::vector<std::string> all_variables(const control &value_);
 
         /* Curator */
         object curator_camera();
@@ -2758,4 +2694,12 @@ namespace intercept {
         vector3 get_camera_view_direction(const object & obj_);
         std::string format(const std::vector<game_value> &params_);
     }
+
+    bool open_dlc_page(float value_);
+    bool open_map(bool value_);
+    bool open_youtube_video(const std::string &value_);
+    bool show_subtitles(bool value_);
+    bool open_map(bool show_, bool forced_);
+    bool sling_load_assistant_shown();
+   
 }

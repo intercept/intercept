@@ -1,4 +1,4 @@
-#include "uncategorized.hpp"
+﻿#include "uncategorized.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -1097,111 +1097,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__getdlcs__scalar__ret__array, filter_));
         }
 
-#pragma region listbox
-        /****************************************************************************** LISTBOX ***************************************************************************/
-
-        /*************************************************************** LISTBOX END *****************************************************************************/
-#pragma endregion listbox
-
-        /* Config */
-
-        std::vector<config> config_hierarchy(const config &config_entry_) {
-            game_value output = host::functions.invoke_raw_unary(client::__sqf::unary__confighierarchy__config__ret__array, config_entry_);
-            return __helpers::__convert_to_configs_vector(output);
-        }
-
-        std::string config_name(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__configname__config__ret__string, config_entry_));
-        }
-
-        std::vector<config> config_properties(const config &config_entry, const std::string& condition_, bool inherit) {
-            game_value array_entry({
-                config_entry,
-                condition_,
-                inherit
-            });
-            game_value output = host::functions.invoke_raw_unary(client::__sqf::unary__configproperties__array__ret__array, array_entry);
-            return __helpers::__convert_to_configs_vector(output);
-        }
-
-        std::string config_source_mod(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__configsourcemod__config__ret__string, config_entry_));
-        }
-
-        std::vector<std::string> config_source_mod_list(const config &config_entry_) {
-            game_value output = host::functions.invoke_raw_unary(client::__sqf::unary__configsourcemodlist__config__ret__array, config_entry_);
-            return __helpers::__convert_to_strings_vector(output);
-        }
-
-        float count(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__count__config__ret__scalar, config_entry_));
-        }
-
-        //std::vector<game_value> get_array(const config &config_entry_) {
-        // TODO implement get_array
-        //}
-
-            config get_mission_config(const std::string& value_) {
-            return config(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfig__string__ret__config, value_));
-        }
-
-        float get_number(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getnumber__config__ret__scalar, config_entry_));
-        }
-
-        std::string get_text(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__gettext__config__ret__string, config_entry_));
-        }
-
-        config inherits_from(const config &config_entry_) {
-            return config(host::functions.invoke_raw_unary(client::__sqf::unary__inheritsfrom__config__ret__config, config_entry_));
-        }
-
-        bool is_array(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isarray__config__ret__bool, config_entry_));
-        }
-
-        bool is_class(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isclass__config__ret__bool, config_entry_));
-        }
-
-        bool is_null(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__config__ret__bool, config_entry_));
-        }
-
-        bool is_number(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnumber__config__ret__bool, config_entry_));
-        }
-
-        bool is_text(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__istext__config__ret__bool, config_entry_));
-        }
-
-        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_) {
-            game_value output = host::functions.invoke_raw_binary(client::__sqf::binary__configclasses__string__config__ret__array, value_, a_config_);
-            return __helpers::__convert_to_strings_vector(output);
-        }
-
-        config select(const config &a_config_, float a_number_) {
-            return config(host::functions.invoke_raw_binary(client::__sqf::binary__select__config__scalar__ret__config, a_config_, a_number_));
-        }
-
-        config campaign_config_file() {
-            return config(host::functions.invoke_raw_nular(client::__sqf::nular__campaignconfigfile__ret__config));
-        }
-
-        config config_file() {
-            return config(host::functions.invoke_raw_nular(client::__sqf::nular__configfile__ret__config));
-        }
-
-        config config_null() {
-            return config(host::functions.invoke_raw_nular(client::__sqf::nular__confignull__ret__config));
-        }
-
-        config mission_config_file() {
-            return config(host::functions.invoke_raw_nular(client::__sqf::nular__missionconfigfile__ret__config));
-        }
-
         /* Core */
         object player() {
             return object(host::functions.invoke_raw_nular(client::__sqf::nular__player__ret__object));
@@ -1410,6 +1305,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 client::__sqf::unary__allvariables__location__ret__array, value_));
         }
 
+        std::vector<std::string> all_variables(const control &value_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                client::__sqf::unary__allvariables__control__ret__array, value_));
+        }
+
         /* Curator */
                 object curator_camera() {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__curatorcamera__ret__object);
@@ -1425,10 +1325,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void open_curator_interface() {
             __helpers::__empty_nular(client::__sqf::nular__opencuratorinterface__ret__nothing);
-        }
-
-        bool shown_curatorcompass() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncuratorcompass__ret__bool);
         }
 
         float curator_camera_area_ceiling(const object &value_) {
@@ -1465,10 +1361,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void remove_all_curator_editing_areas(const object &value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__removeallcuratoreditingareas__object__ret__nothing, value_);
-        }
-
-        void show_curator_compass(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__showcuratorcompass__bool__ret__nothing, value_);
         }
 
         void unassign_curator(const object &value_) {
@@ -1835,10 +1727,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__hasinterface__ret__bool);
         }
 
-        bool hc_shown_bar() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__hcshownbar__ret__bool);
-        }
-
         float humidity() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__humidity__ret__scalar);
         }
@@ -2032,25 +1920,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void run_init_script() {
             __helpers::__empty_nular(client::__sqf::nular__runinitscript__ret__nothing);
-        }
-
-        float safe_zone_x() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonex__ret__scalar);
-        }
-        float safe_zone_y() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoney__ret__scalar);
-        }
-        float safe_zone_h() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoneh__ret__scalar);
-        }
-        float safe_zone_w() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonew__ret__scalar);
-        }
-        float safe_zone_x_abs() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonexabs__ret__scalar);
-        }
-        float safe_zone_w_abs() {
-            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonewabs__ret__scalar);
         }
 
         float diag_fps() {
@@ -2417,10 +2286,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void copy_to_clipboard(const std::string & text_) {
             __helpers::__empty_unary_string(client::__sqf::unary__copytoclipboard__string__ret__nothing, text_);
-        }
-
-        bool create_dialog(const std::string & dialog_name_) {
-            return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, dialog_name_);
         }
 
         void create_vehicle_crew(const object & veh_) {
@@ -2791,9 +2656,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_object(client::__sqf::unary__hcremoveallgroups__object__ret__nothing, value_);
         }
 
-        void hc_show_bar(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__hcshowbar__bool__ret__nothing, value_);
-        }
 
         std::string headgear(const object &value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__headgear__object__ret__string, value_);
@@ -3503,11 +3365,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void sleep(float value_) {
             __helpers::__empty_unary_number(client::__sqf::unary__sleep__scalar__ret__nothing, value_);
-        }
-
-
-        float slider_position(float value_) {
-            return __helpers::__number_unary_number(client::__sqf::unary__sliderposition__scalar__ret__scalar, value_);
         }
 
         bool some_ammo(const object &value_) {
@@ -7804,5 +7661,31 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::string format(const std::vector<game_value> &params_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__format__array__ret__string, params_));         
         }
+
+        std::vector<object> list(const object& trigger_) {
+            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__list__object__ret__array, trigger_);
+
+            if (ret.length() == 0) {
+                return {};
+            } else {
+                return __helpers::__convert_to_objects_vector(ret);
+            }
+        }
+
+        bool open_map(bool value_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__bool__ret__bool, value_));
+        }
+
+        bool open_map(bool show_, bool forced_) {
+            game_value args(std::vector<game_value> {
+                show_,
+                    forced_
+            });
+
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__array__ret__bool, args));
+        }
+
+
+
     }
 }

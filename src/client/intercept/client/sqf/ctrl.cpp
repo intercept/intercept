@@ -1,4 +1,4 @@
-#include "ctrl.hpp"
+﻿#include "ctrl.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -7,11 +7,11 @@ namespace intercept {
         int tv_add(int idc_, const std::vector<int>& path_, const std::string& text_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 text_
             });
@@ -22,7 +22,7 @@ namespace intercept {
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -34,7 +34,7 @@ namespace intercept {
         }
 
         std::vector<int> tv_cursel(int idc_) {
-            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__tvcursel__scalar__ret__array, (float)idc_));
+            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__tvcursel__scalar__ret__array, (float) idc_));
         }
 
         std::vector<int> tv_cursel(const control& ctrl_) {
@@ -44,11 +44,11 @@ namespace intercept {
         void tv_collapse(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -58,7 +58,7 @@ namespace intercept {
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, path);
@@ -67,11 +67,11 @@ namespace intercept {
         int tv_count(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -81,7 +81,7 @@ namespace intercept {
         int tv_count(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvcount__control__array__ret__scalar, ctrl_, path));
@@ -90,11 +90,11 @@ namespace intercept {
         std::string tv_data(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -104,7 +104,7 @@ namespace intercept {
         std::string tv_data(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvdata__control__array__ret__string, ctrl_, path));
@@ -113,11 +113,11 @@ namespace intercept {
         void tv_delete(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -127,7 +127,7 @@ namespace intercept {
         void tv_delete(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvdelete__control__array__ret__nothing, ctrl_, path);
@@ -136,11 +136,11 @@ namespace intercept {
         void tv_expand(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -150,7 +150,7 @@ namespace intercept {
         void tv_expand(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvexpand__control__array__ret__nothing, ctrl_, path);
@@ -159,11 +159,11 @@ namespace intercept {
         std::string tv_picture(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -173,7 +173,7 @@ namespace intercept {
         std::string tv_picture(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvpicture__control__array__ret__string, ctrl_, path));
@@ -182,11 +182,11 @@ namespace intercept {
         std::string tv_picture_right(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -196,7 +196,7 @@ namespace intercept {
         std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvpictureright__control__array__ret__string, ctrl_, path));
@@ -205,11 +205,11 @@ namespace intercept {
         void tv_set_cur_sel(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -219,7 +219,7 @@ namespace intercept {
         void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetcursel__control__array__ret__nothing, ctrl_, path);
@@ -228,11 +228,11 @@ namespace intercept {
         void tv_set_data(int idc_, const std::vector<int>& path_, const std::string& data_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 data_
             });
@@ -243,7 +243,7 @@ namespace intercept {
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -257,11 +257,11 @@ namespace intercept {
         void tv_set_picture(int idc_, const std::vector<int>& path_, const std::string& name_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 name_
             });
@@ -272,7 +272,7 @@ namespace intercept {
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -286,11 +286,11 @@ namespace intercept {
         void tv_set_picture_right(int idc_, const std::vector<int>& path_, const std::string& name_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 name_
             });
@@ -301,7 +301,7 @@ namespace intercept {
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -315,11 +315,11 @@ namespace intercept {
         void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 color_
             });
@@ -330,7 +330,7 @@ namespace intercept {
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -344,11 +344,11 @@ namespace intercept {
         void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 color_
             });
@@ -359,7 +359,7 @@ namespace intercept {
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -373,11 +373,11 @@ namespace intercept {
         void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 text_
             });
@@ -388,7 +388,7 @@ namespace intercept {
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -402,11 +402,11 @@ namespace intercept {
         void tv_set_value(int idc_, const std::vector<int>& path_, float value_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path,
                 value_
             });
@@ -417,7 +417,7 @@ namespace intercept {
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -431,7 +431,7 @@ namespace intercept {
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -445,7 +445,7 @@ namespace intercept {
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
@@ -459,11 +459,11 @@ namespace intercept {
         std::string tv_text(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -473,7 +473,7 @@ namespace intercept {
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtext__control__array__ret__string, ctrl_, path));
@@ -482,11 +482,11 @@ namespace intercept {
         float tv_value(int idc_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             game_value params({
-                (float)idc_,
+                (float) idc_,
                 path
             });
 
@@ -496,13 +496,13 @@ namespace intercept {
         float tv_value(const control& ctrl_, const std::vector<int>& path_) {
             std::vector<game_value> path;
             for (int item : path_) {
-                path.push_back(game_value((float)item));
+                path.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, path));
         }
 
-                void ctrl_activate(const control &value_) {
+        void ctrl_activate(const control &value_) {
             __helpers::__empty_unary_control(client::__sqf::unary__ctrlactivate__control__ret__nothing, value_);
         }
 
@@ -636,7 +636,7 @@ namespace intercept {
 
         void ctrl_enable(int control_id_, bool enable_) {
             game_value params(std::vector<game_value>{
-                (float)control_id_,
+                (float) control_id_,
                     enable_
             });
 
@@ -789,7 +789,7 @@ namespace intercept {
 
         void ctrl_set_text(int control_id_, const std::string &text_) {
             game_value params({
-                (float)control_id_,
+                (float) control_id_,
                 text_
             });
 
@@ -810,12 +810,12 @@ namespace intercept {
 
         void ctrl_show(int control_id_, bool show_) {
             game_value params(std::vector<game_value>{
-                (float)control_id_,
-                show_
+                (float) control_id_,
+                    show_
             });
             host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
-        }     
-        
+        }
+
         void lnb_clear(const control &value_) {
             __helpers::__empty_unary_control(client::__sqf::unary__lnbclear__control__ret__nothing, value_);
         }
@@ -1220,18 +1220,6 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lnbsetvalue__control__array__ret__nothing, ctrl_, params);
         }
-        
-        std::vector<object> list(const object& trigger_) {
-            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__list__object__ret__array, trigger_);
-
-            if (ret.length() == 0) {
-                return {};
-            }
-            else {
-                return __helpers::__convert_to_objects_vector(ret);
-            }
-        }
-
 
         void tv_clear(float value_) {
             __helpers::__empty_unary_number(client::__sqf::unary__tvclear__scalar__ret__nothing, value_);
@@ -1285,9 +1273,9 @@ namespace intercept {
         void ctrl_set_position(const control & ctrl_, float x_, float y_, float width_, float height_) {
             game_value args(std::vector<game_value>{
                 x_,
-                y_,
-                width_,
-                height_
+                    y_,
+                    width_,
+                    height_
             });
             host::functions.invoke_raw_binary(client::__sqf::binary__ctrlsetposition__control__array__ret__nothing, ctrl_, args);
         }
@@ -1303,7 +1291,7 @@ namespace intercept {
 
         vector2 ctrl_map_screen_to_world(const control & ctrl_, const vector2 & screen_pos_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapscreentoworld__control__array__ret__array, ctrl_, screen_pos_));
-        }              
+        }
 
 
         void draw_rectangle(const control & ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color & color_, const std::string & fill_texture_) {
@@ -1327,7 +1315,7 @@ namespace intercept {
                 height_,
                 angle_,
                 text_,
-                (float)shadow_,
+                (float) shadow_,
                 text_size_,
                 font_,
                 align_
@@ -1344,14 +1332,14 @@ namespace intercept {
                 height_,
                 angle_,
                 text_,
-                (float)shadow_,
+                (float) shadow_,
                 text_size_,
                 font_,
                 align_
             });
             host::functions.invoke_raw_binary(client::__sqf::binary__drawicon__control__array__ret__nothing, ctrl_, args);
-        }  
-        
+        }
+
 
         void cb_set_checked(const control &value0_, bool value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__cbsetchecked__control__bool__ret__nothing, value0_, value1_);
@@ -1392,8 +1380,8 @@ namespace intercept {
         void slider_set_range(float value0_, float value1_, float value2_) {
             game_value args(std::vector<game_value>{
                 value0_,
-                value1_,
-                value2_
+                    value1_,
+                    value2_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__slidersetrange__array__ret__nothing, args);
@@ -1402,8 +1390,8 @@ namespace intercept {
         void slider_set_range(const control &value0_, float value1_, float value2_) {
             game_value args(std::vector<game_value>{
                 value0_,
-                value1_,
-                value2_
+                    value1_,
+                    value2_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__slidersetrange__array__ret__nothing, args);
@@ -1420,8 +1408,8 @@ namespace intercept {
         void slider_set_speed(float value0_, float value1_, float value2_) {
             game_value args(std::vector<game_value>{
                 value0_,
-                value1_,
-                value2_
+                    value1_,
+                    value2_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__slidersetspeed__array__ret__nothing, args);
@@ -1430,8 +1418,8 @@ namespace intercept {
         void slider_set_speed(const control &value0_, float value1_, float value2_) {
             game_value args(std::vector<game_value>{
                 value0_,
-                value1_,
-                value2_
+                    value1_,
+                    value2_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__slidersetspeed__array__ret__nothing, args);
@@ -1439,7 +1427,7 @@ namespace intercept {
         control ctrl_create(const display& display_, const std::string& class_, int idc_) {
             std::vector<game_value> params = {
                 class_,
-                game_value((float)idc_)
+                game_value((float) idc_)
             };
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlcreate__display__array__ret__control, display_, params));
@@ -1448,7 +1436,7 @@ namespace intercept {
         control ctrl_create(const display& display_, const std::string& class_, int idc_, const control& controls_group_) {
             std::vector<game_value> params = {
                 class_,
-                game_value((float)idc_),
+                game_value((float) idc_),
                 controls_group_
             };
 
@@ -1467,7 +1455,7 @@ namespace intercept {
         vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::vector<float>& position_) {
             std::vector<game_value> pos;
             for (float item : position_) {
-                pos.push_back(game_value((float)item));
+                pos.push_back(game_value((float) item));
             }
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__ctrlmapworldtoscreen__control__array__ret__array, ctrl_, pos));
@@ -1576,7 +1564,7 @@ namespace intercept {
 
         void button_set_action(int control_id_, const std::string &code_) {
             game_value params({
-                (float)control_id_,
+                (float) control_id_,
                 code_
             });
 
@@ -1593,7 +1581,7 @@ namespace intercept {
         }
         float lb_add(int control_id_, const std::string &text_) {
             game_value args({
-                (float)(control_id_),
+                (float) (control_id_),
                 (text_)
             });
 
@@ -1605,70 +1593,70 @@ namespace intercept {
         }
 
         float lb_color(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbcolor__array__ret__array, args));
         }
 
         float lb_color(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, (float) index_));
         }
 
         float lb_color_right(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbcolorright__array__ret__array, args));
         }
 
         float lb_color_right(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, (float) index_));
         }
 
         std::string lb_data(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbdata__array__ret__string, args));
         }
 
         std::string lb_data(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, (float) index_));
         }
 
         void lb_delete(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbdelete__array__ret__nothing, args);
         }
 
         void lb_delete(const control &control_, int index_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, (float)index_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, (float) index_);
         }
 
         std::string lb_picture(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbpicture__array__ret__string, args));
         }
 
         std::string lb_picture(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, (float) index_));
         }
 
         std::string lb_picture_right(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbpictureright__array__ret__string, args));
         }
 
         std::string lb_picture_right(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, (float) index_));
         }
 
         // TODO std::vector<float> lb_selection(const control &control_) { ... }; // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 
         void lb_set_color(int control_id_, int index_, rv_color color_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 color_
             });
 
@@ -1677,7 +1665,7 @@ namespace intercept {
 
         void lb_set_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1686,8 +1674,8 @@ namespace intercept {
 
         void lb_set_color_right(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 color_
             });
 
@@ -1696,7 +1684,7 @@ namespace intercept {
 
         void lb_set_color_right(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1704,18 +1692,18 @@ namespace intercept {
         }
 
         void lb_set_cur_sel(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetcursel__array__ret__nothing, args);
         }
 
         void lb_set_cur_sel(const control &control_, int index_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, (float)index_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, (float) index_);
         }
 
         void lb_set_data(int control_id_, int index_, const std::string &data_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 data_
             });
 
@@ -1725,7 +1713,7 @@ namespace intercept {
 
         void lb_set_data(const control &control_, int index_, const std::string &data_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 (data_)
             });
 
@@ -1734,8 +1722,8 @@ namespace intercept {
 
         void lb_set_picture(int control_id_, int index_, const std::string &name_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 name_
             });
 
@@ -1744,7 +1732,7 @@ namespace intercept {
 
         void lb_set_picture(const control &control_, int index_, const std::string &name_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 (name_)
             });
 
@@ -1753,8 +1741,8 @@ namespace intercept {
 
         void lb_set_picture_right(int control_id_, int index_, const std::string &name_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 name_
             });
 
@@ -1763,7 +1751,7 @@ namespace intercept {
 
         void lb_set_picture_right(const control &control_, int index_, const std::string &name_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 (name_)
             });
 
@@ -1772,8 +1760,8 @@ namespace intercept {
 
         void lb_set_picture_color(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 color_
             });
 
@@ -1783,7 +1771,7 @@ namespace intercept {
 
         void lb_set_picture_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1792,8 +1780,8 @@ namespace intercept {
 
         void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 color_
             });
 
@@ -1802,7 +1790,7 @@ namespace intercept {
 
         void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1811,8 +1799,8 @@ namespace intercept {
 
         void lb_set_picture_color_selected(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 color_
             });
 
@@ -1821,7 +1809,7 @@ namespace intercept {
 
         void lb_set_picture_color_selected(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1830,7 +1818,7 @@ namespace intercept {
 
         void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1839,7 +1827,7 @@ namespace intercept {
 
         void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1849,7 +1837,7 @@ namespace intercept {
 
         void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 color_
             });
 
@@ -1860,8 +1848,8 @@ namespace intercept {
 
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_) {
             game_value args({
-                (float)(control_id_),
-                (float)(index_),
+                (float) (control_id_),
+                (float) (index_),
                 tooltip_
             });
 
@@ -1870,7 +1858,7 @@ namespace intercept {
 
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_) {
             game_value args({
-                (float)(index_),
+                (float) (index_),
                 (tooltip_)
             });
 
@@ -1878,13 +1866,13 @@ namespace intercept {
         }
 
         void lb_set_value(int control_id_, int index_, float val_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_), val_ };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_), val_ };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__lbsetvalue__array__ret__nothing, args);
         }
 
         void lb_set_value(const control &control_, int index_, float val_) {
-            std::vector<game_value> args{game_value((float)index_), val_ };
+            std::vector<game_value> args{ game_value((float) index_), val_ };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__lbsetvalue__control__array__ret__nothing, control_, args);
         }
@@ -1903,39 +1891,39 @@ namespace intercept {
         }
 
         std::string lb_text(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbtext__array__ret__string, args));
         }
 
         std::string lb_text(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, (float) index_));
         }
 
         std::string lb_text_right(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbtextright__array__ret__string, args));
         }
 
         std::string lb_text_right(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, (float) index_));
         }
 
         float lb_value(int control_id_, int index_) {
-            std::vector<game_value> args{ game_value((float)control_id_), game_value((float)index_) };
+            std::vector<game_value> args{ game_value((float) control_id_), game_value((float) index_) };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__lbvalue__array__ret__scalar, args));
         }
 
         float lb_value(const control &control_, int index_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float)index_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float) index_));
         }
 
         void lb_set_select_color(int idc_, int index_, const rv_color & color_) {
             game_value params({
-                (float)idc_,
-                (float)index_,
+                (float) idc_,
+                (float) index_,
                 (color_)
             });
 
@@ -1945,8 +1933,8 @@ namespace intercept {
 
         void lb_set_select_color_right(int idc_, int index_, const rv_color & color_) {
             game_value params({
-                (float)idc_,
-                (float)index_,
+                (float) idc_,
+                (float) index_,
                 color_
             });
 
@@ -1970,21 +1958,17 @@ namespace intercept {
             }
             return output;
         }
-        std::vector<std::string> all_variables(const control &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
-                client::__sqf::unary__allvariables__control__ret__array, value_));
-        }
 
         control control_null() {
             return __helpers::__retrieve_nular_control(client::__sqf::nular__controlnull__ret__control);
-        }                                                       
+        }
 
         std::string button_action(const control & control_) {
             return __helpers::__string_unary_control(client::__sqf::unary__buttonaction__control__ret__string, control_);
         }
 
         std::string button_action(int idc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, (float)idc_));
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, (float) idc_));
         }
 
         bool cb_checked(const control & control_) {
@@ -2083,6 +2067,10 @@ namespace intercept {
 
         float slider_position(const control &value_) {
             return __helpers::__number_unary_control(client::__sqf::unary__sliderposition__control__ret__scalar, value_);
+        }
+
+        float slider_position(float value_) {
+            return __helpers::__number_unary_number(client::__sqf::unary__sliderposition__scalar__ret__scalar, value_);
         }
 
         void update_object_tree(const control &value_) {
@@ -2184,7 +2172,7 @@ namespace intercept {
         void slider_set_position(float value0_, float value1_) {
             game_value args(std::vector<game_value>{
                 value0_,
-                value1_
+                    value1_
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__slidersetposition__array__ret__nothing, args);
@@ -2349,9 +2337,6 @@ namespace intercept {
         void show_watch(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__showwatch__bool__ret__nothing, value_);
         }
-        bool open_map(bool value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__bool__ret__bool, value_));
-        }
 
         std::string map_grid_position(const object &obj_) {
             return __helpers::__string_unary_object(client::__sqf::unary__mapgridposition__object_array__ret__string, obj_);
@@ -2360,14 +2345,7 @@ namespace intercept {
         std::string map_grid_position(const vector2 &pos_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__mapgridposition__object_array__ret__string, pos_));
         }
-        bool open_map(bool show_, bool forced_) {
-            game_value args(std::vector<game_value> {
-                show_,
-                forced_
-            });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__array__ret__bool, args));
-        }
 
         void map_anim_add(float time_, float zoom_, const object &object_) {
             std::vector<game_value> params{
@@ -2387,7 +2365,7 @@ namespace intercept {
             };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__mapanimadd__array__ret__nothing, params);
-        } 
+        }
 
         bool preload_title_obj(const std::string &name_, const std::string &type_) {
             std::vector<game_value> params{
@@ -2427,7 +2405,7 @@ namespace intercept {
             };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__preloadtitlersc__array__ret__bool, params));
-        }    
+        }
         void in_game_ui_set_event_handler(const std::string& name_, const std::string& command_) {
             std::vector<game_value> params{
                 name_,
@@ -2475,6 +2453,44 @@ namespace intercept {
             };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__titletext__array__ret__nothing, params);
-        }                                                                                                                                                                                                           	
+        }
+
+        float safe_zone_x() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonex__ret__scalar);
+        }
+        float safe_zone_y() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoney__ret__scalar);
+        }
+        float safe_zone_h() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezoneh__ret__scalar);
+        }
+        float safe_zone_w() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonew__ret__scalar);
+        }
+        float safe_zone_x_abs() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonexabs__ret__scalar);
+        }
+        float safe_zone_w_abs() {
+            return __helpers::__retrieve_nular_number(client::__sqf::nular__safezonewabs__ret__scalar);
+        }
+        bool shown_curatorcompass() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__showncuratorcompass__ret__bool);
+        }
+
+        bool create_dialog(const std::string & dialog_name_) {
+            return __helpers::__bool_unary_string(client::__sqf::unary__createdialog__string__ret__bool, dialog_name_);
+        }
+
+        void hc_show_bar(bool value_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__hcshowbar__bool__ret__nothing, value_);
+        }
+
+        void show_curator_compass(bool value_) {
+            __helpers::__empty_unary_bool(client::__sqf::unary__showcuratorcompass__bool__ret__nothing, value_);
+        }
+
+        bool hc_shown_bar() {
+            return __helpers::__retrieve_nular_bool(client::__sqf::nular__hcshownbar__ret__bool);
+        }
     }
 }

@@ -1,10 +1,10 @@
-#include "eden.hpp"
+﻿#include "eden.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
-       /* eden */
+        /* eden */
         std::string current_eden_operation() {
             return __helpers::__retrieve_nular_string(client::__sqf::nular__current3denoperation__ret__string);
         }
@@ -42,7 +42,7 @@ namespace intercept {
         }
 
         float add_eden_layer(int parent_layer_id_, const std::string& name_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float)parent_layer_id_, name_));
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float) parent_layer_id_, name_));
         }
 
         float add_eden_event_handler(const std::string &type_, const code &code_) {
@@ -320,7 +320,7 @@ namespace intercept {
             };
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
-        } 
+        }
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_) {
             std::vector<game_value> params{
                 pos_,
@@ -377,7 +377,7 @@ namespace intercept {
             std::vector<game_value> parameters_;
             parameters_.push_back(game_value(configPath_));
             parameters_.push_back(game_value(position_));
-            
+
             auto eden_entities_ = game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3dencomposition__array__ret__array, parameters_));
             std::vector<game_value> output_;
             for (uint32_t i = 0; i < eden_entities_.length(); ++i) {
@@ -392,7 +392,7 @@ namespace intercept {
             parameters_.push_back(game_value(class_));
             parameters_.push_back(game_value(position_));
             parameters_.push_back(game_value(is_empty_));
-            
+
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_));
         }
 
@@ -429,6 +429,6 @@ namespace intercept {
 
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_));
-        }                                                                	
+        }
     }
 }

@@ -1,4 +1,4 @@
-#include "marker.hpp"
+﻿#include "marker.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -57,7 +57,7 @@ namespace intercept {
             };
 
             return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
-        } 
+        }
 
         void delete_marker(const std::string& value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__deletemarker__string__ret__nothing, value_);
@@ -67,7 +67,7 @@ namespace intercept {
             __helpers::__empty_unary_string(client::__sqf::unary__deletemarkerlocal__string__ret__nothing, value_);
         }
 
- 		void set_marker_type(const std::string& marker_, const std::string& type_) {
+        void set_marker_type(const std::string& marker_, const std::string& type_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setmarkertype__string__string__ret__nothing, marker_, type_);
         }
 
@@ -188,10 +188,10 @@ namespace intercept {
             game_value function_return_array = host::functions.invoke_raw_unary(__sqf::unary__getmarkersize__string__ret__array, value_);
             return vector2(function_return_array[0], function_return_array[1]);
             // Identical: unary__markersize__string__ret__array
-        }  
+        }
 
         std::vector<marker> all_map_markers() {
             return __helpers::__convert_to_markers_vector(host::functions.invoke_raw_nular(client::__sqf::nular__allmapmarkers__ret__array));
-        }     
+        }
     }
 }

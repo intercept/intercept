@@ -705,6 +705,15 @@ namespace intercept {
             return newData;
         }
 
+
+        template<class Type>
+        Type* rv_allocator<Type>::reallocate(Type* _Ptr, size_t _count) {
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;   
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
+            Type* newData = reinterpret_cast<Type*>(alloc->Realloc(_Ptr,sizeof(Type)*_count));
+            return newData;
+        }
+
         void* rv_pool_allocator::allocate(size_t count) {
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
             typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t count);
@@ -719,6 +728,7 @@ namespace intercept {
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
             return dealloc(this, data);
         }
+
 
         types::__internal::GameDataType __internal::game_datatype_from_string(const r_string& name) {
             //I know this is ugly. Feel free to make it better

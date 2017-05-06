@@ -91,6 +91,15 @@ namespace intercept {
                 return ptr;
             }
 
+            static Type* createUninitializedArray(size_t _count) {
+                if (_count == 1) return createSingle();
+
+                auto ptr = allocate(_count);
+
+                return ptr;
+            }
+
+            static Type* reallocate(Type* _Ptr, size_t _count);
 
             //#TODO implement game_data_pool and string pool here
         };
@@ -441,8 +450,82 @@ namespace intercept {
         class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
         protected:
             int _maxItems;
+            Type *try_realloc(Type *old, int oldN, int &n) {
+                Type *ret = rv_allocator<Type>::reallocate(old, n);
+                return ret;
+            }
+            void reallocate(int size) {
+
+                if (_maxItems == size) return;
+
+                if (_n > size) {
+                    resize(size);
+                }
+
+                if (_data && size > 0 && try_realloc(_data, _maxItems, size)) {
+                    _maxItems = size;
+                    return;
+                }
+                Type *newData = rv_allocator<Type>::createUninitializedArray(size);
+                if (_data) {
+                    memmove_s(newData, size * sizeof(Type), _data, _n * sizeof(Type));
+                    rv_allocator<Type>::deallocate(_data);
+                }
+                _data = newData;
+                _maxItems = size;
+
+            }
+
         public:
+
             auto_array() : _maxItems(0), rv_array<Type>() {};
+            ~auto_array() {
+                resize(0);
+            }
+            void resize(size_t n) {
+                if (n < _n) {
+                    for (size_t i = n; i < _n; i++) {
+                        (*this)[i].~Type();
+                    }
+                    _n = n;
+                }
+                if (n == 0 && _data) {
+                    rv_allocator<Type>::deallocate(_data);
+                    _data = nullptr;
+                }
+                if (n > _maxItems) {
+                #undef max
+                    reallocate(n - 1 + std::max(_maxItems >> 1, 32));
+                } else if (n < _maxItems) {
+                    reallocate(n);
+                }
+            }
+
+            template<class... _Valty>
+            Type& emplace_back(_Valty&&... _Val) {
+                if (_maxItems < _n + 1) {
+                    resize(_maxItems + 1);
+                }
+                auto item = (*this)[_n];
+                ::new (&item) Type(std::forward<_Valty>(_Val)...);
+                return item;
+            }
+            Type& push_back(const Type& _Val) {
+                return emplace_back(_Val);
+                std::vector::emplace_back()
+            }
+            Type& push_back(Type&& _Val) {
+                return emplace_back(std::move(_Val));
+            }
+
+            void erase(int index) {
+                if (index > _n) return;
+                auto item = (*this)[index];
+                item.~Type();
+                memmove_s(&(*this)[index], (_n - index) * sizeof(Type), &(*this)[index + 1], (_n - index - 1) * sizeof(Type));
+            }
+            //#TODO Implement find, operator==, Copy/Move Contructor/Operator.
+
         };
 
 
@@ -507,7 +590,7 @@ namespace intercept {
                 }
                 iterator(const map_string_to_class<Type, Container, Traits> &base, bool) { //Creates end Iterator
                     _item = 0; _map = &base;
-                    _table = number_of_tables(); 
+                    _table = number_of_tables();
                 }
                 iterator& operator++ () {
                     if (_table >= number_of_tables()) return *this;

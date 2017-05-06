@@ -349,6 +349,9 @@ namespace intercept {
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
         };
+        template class rv_allocator<gsFunction>;
+        template class rv_allocator<gsOperator>;
+        template class rv_allocator<gsNular>;
     }
 
 }

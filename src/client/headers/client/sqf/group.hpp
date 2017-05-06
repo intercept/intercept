@@ -44,7 +44,7 @@ namespace intercept {
         float current_waypoint(const group & group_);
         void set_group_icons_selectable(bool val_);
 
-
+        void set_current_waypoint(group & gp_, waypoint & wp_);
 
 
 

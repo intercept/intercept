@@ -127,9 +127,7 @@ namespace intercept {
             return waypoints;
         }
 
-        void set_current_waypoint(group & gp_, waypoint & wp_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_.__to_gv());
-        }
+
 
         void set_waypoint_behaviour(waypoint & wp_, waypoint::behaviour mode_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointbehaviour__array__string__ret__nothing, wp_.__to_gv(), waypoint::__get_enum_as_str(mode_));
@@ -211,16 +209,7 @@ namespace intercept {
         }
 
 
-        float current_waypoint(group & gp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, gp_));
-        }
 
-        bool waypoints_enabled_uav(object & uav_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__waypointsenableduav__object__ret__bool, uav_);
-        }
 
-        void enable_uav_waypoints(object & uav_, bool enable_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
-        }
     }
 }

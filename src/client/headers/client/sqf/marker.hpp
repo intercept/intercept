@@ -88,7 +88,11 @@ namespace intercept {
 
 
 
-
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
+        location nearest_location_with_dubbing(const vector3 &pos_);
+        location nearest_location_with_dubbing(const object &obj_);
 
 
 

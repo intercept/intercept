@@ -355,5 +355,56 @@ namespace intercept {
             }
             return output;
         }
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_) {
+            std::vector<game_value> loc_types;
+            for (auto loc_type : loc_types_)
+                loc_types.push_back(game_value(loc_type));
+
+            std::vector<game_value> params{
+                pos_,
+                loc_types,
+                radius_
+            };
+
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+        }
+
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_) {
+            std::vector<game_value> loc_types;
+            for (auto loc_type : loc_types_)
+                loc_types.push_back(game_value(loc_type));
+
+            std::vector<game_value> params{
+                pos_,
+                loc_types,
+                radius_,
+                sort_pos_
+            };
+
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+        }
+
+        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_) {
+            std::vector<game_value> loc_types;
+            for (auto loc_type : loc_types_)
+                loc_types.push_back(game_value(loc_type));
+
+            std::vector<game_value> params{
+                pos_,
+                loc_types,
+                radius_,
+                sort_obj_
+            };
+
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
+        }
+
+        location nearest_location_with_dubbing(const vector3 &pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, pos_));
+        }
+
+        location nearest_location_with_dubbing(const object &obj_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, obj_));
+        }
     }
 }

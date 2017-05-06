@@ -1012,6 +1012,7 @@ namespace intercept {
         bool verify_signature(const std::string &value_);
         float waypoint_timeout_current(const group &value_);
         bool waypoints_enabled_uav(const object &value_);
+        void enable_uav_waypoints(object & uav_, bool enable_);
         bool weapon_lowered(const object &value_);
 
         void add_live_stats(const object &value0_, float value1_);
@@ -1580,11 +1581,7 @@ namespace intercept {
 
         std::vector<object> members(const team_member &team_);
 
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
-        location nearest_location_with_dubbing(const vector3 &pos_);
-        location nearest_location_with_dubbing(const object &obj_);
+
 
         object nearest_object(const vector3 &pos_);
         object nearest_object(const vector3 &pos_, const std::string &type_);

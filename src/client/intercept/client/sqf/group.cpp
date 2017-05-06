@@ -1,7 +1,7 @@
 ﻿#include "group.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
-
+#include "waypoint.hpp"
 namespace intercept {
     namespace sqf {
         std::string combat_mode(const group &grp_) {
@@ -81,5 +81,10 @@ namespace intercept {
         void set_group_icons_selectable(bool val_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__setgroupiconsselectable__bool__ret__nothing, val_);
         }
+        void set_current_waypoint(group & gp_, waypoint & wp_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_.__to_gv());
+        }
+
+
     }
 }

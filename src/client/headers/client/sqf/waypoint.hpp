@@ -442,7 +442,6 @@ namespace intercept {
         std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
         std::vector<waypoint> synchronized_waypoints(object & obj_);
 
-        void set_current_waypoint(group & gp_, waypoint & wp_);
         void set_waypoint_behaviour(waypoint & wp_, waypoint::behaviour mode_);
         void set_waypoint_combat_mode(waypoint & wp_, waypoint::combat_mode mode_);
         void set_waypoint_completion_radius(waypoint & wp_, float radius_);
@@ -468,8 +467,5 @@ namespace intercept {
         void waypoint_attach_object(waypoint& wp_, int obj_id_);
         void waypoint_attach_object(waypoint& wp_, object & obj_);
 
-        float current_waypoint(group & gp_);
-        bool waypoints_enabled_uav(object & uav_);
-        void enable_uav_waypoints(object & uav_, bool enable_);
     }
 }

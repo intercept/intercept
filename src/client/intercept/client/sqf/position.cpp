@@ -9,18 +9,13 @@ namespace intercept {
             vector3 get_pos_obj(unary_function fnc_, const object & obj_) {
                 return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
             }
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, loc_));
-            }
         }
 
         vector3 get_pos(const object & obj_) {
             return __helpers::get_pos_obj(__sqf::unary__getpos__object__ret__array, obj_);
         }
 
-        vector3 get_pos(const location & loc_) {
-            return __helpers::get_pos_loc(__sqf::unary__getpos__location__ret__array, loc_);
-        }
+
 
         vector3 get_pos_asl(const object & obj_) {
             return __helpers::get_pos_obj(__sqf::unary__getposasl__object__ret__array, obj_);
@@ -152,10 +147,6 @@ namespace intercept {
             };
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setvectordirandup__object__array__ret__nothing, object_, vector);
-        }
-
-        void set_position(const location &location_, const vector3 &position_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setposition__location__array__ret__nothing, location_, position_);
         }
 
         void set_pos_world(const object &object_, const vector3 &position_) {

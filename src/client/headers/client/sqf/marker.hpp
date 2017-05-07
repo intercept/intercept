@@ -19,6 +19,8 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        /* - Markers - */
+
         std::string create_marker(const std::string &name_, const vector3 &pos_);
         std::string create_marker(const std::string &name_, const vector2 &pos_);
         std::string create_marker(const std::string &name_, const object &pos_);
@@ -75,32 +77,49 @@ namespace intercept {
 
 
 
-
-
-
-        //Locations
+        /* - Locations - */
+        namespace __helpers {
+            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
+        }
+        void set_importance(const location &loc_, const float &value_);
+        void set_side(const location &loc_, const side &side_);
+        void set_position(const location &location_, const vector3 &position_);
+        void delete_location(const location &loc_);
+        void attach_object(const location& location_, const object& object_);
+        bool is_null(const location& loc_);
+        bool rectangular(const location& loc_);
+        bool in(const vector3 &pos_, const location &loc_);
+        float direction(const location &value_);
+        float importance(const location &loc_);
+        float distance(const location& start_, const location& end_);
+        float distance(const location& start_, const vector3& end_);
+        float distance(const vector3& start_, const location& end_);
         location nearest_location(const vector3& pos_, const std::string& location_class_);
         location nearest_location(const object& unit_, const std::string& location_class_);
+        location nearest_location_with_dubbing(const vector3 &pos_);
+        location nearest_location_with_dubbing(const object &obj_);
+        object attached_object(const location &loc_);
+        side get_side(const location &loc_);
+        vector3 position(const location& loc_);
+        vector2 size(const location &loc_);
+        vector3 get_pos(const location & loc_);
+        vector2 location_position(const location &loc_);
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_);
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_);
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
-
-
-
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
-        location nearest_location_with_dubbing(const vector3 &pos_);
-        location nearest_location_with_dubbing(const object &obj_);
-
-
-
-
-
-
-
-
+        std::vector<std::string> all_variables(const location &value_);
+        std::string name(const location &loc_);
+        std::string type(const location& loc_);
+        game_value get_variable(const location & loc_, const std::string & var_name_);
+        std::string class_name(const location &loc_);
+        location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
+        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_);
+        location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
+        location location_null();
 
 
 

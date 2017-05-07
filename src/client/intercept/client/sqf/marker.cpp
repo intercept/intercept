@@ -244,18 +244,58 @@ namespace intercept {
 
 
 
+        namespace __helpers {
+            vector3 get_pos_loc(unary_function fnc_, const location & loc_) {
+                return game_value(host::functions.invoke_raw_unary(fnc_, loc_));
+            }
+        }
 
 
 
 
 
 
+        void set_importance(const location &loc_, const float &value_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setimportance__location__scalar__ret__nothing, loc_, value_);
+        }
+        void set_side(const location &loc_, const side &side_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setside__location__side__ret__nothing, loc_, side_);
+        }
+        void set_position(const location &location_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setposition__location__array__ret__nothing, location_, position_);
+        }
+        void delete_location(const location &loc_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__deletelocation__location__ret__nothing, loc_);
+        }
+        void attach_object(const location& location_, const object& object_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__attachobject__location__object__ret__nothing, location_, object_);
+        }
+        bool is_null(const location& loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__location__ret__bool, loc_));
+        }
+        bool rectangular(const location& loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_));
+        }
+        bool in(const vector3 &pos_, const location &loc_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__array__location__ret__bool, pos_, loc_));
+        }
+        float direction(const location &value_) {
+            return __helpers::__number_unary_location(client::__sqf::unary__direction__location__ret__scalar, value_);
+        }
+        float importance(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__importance__location__ret__scalar, loc_));
+        }
+        float distance(const location& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__location__ret__scalar, start_, end_));
+        }
 
+        float distance(const location& start_, const vector3& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__array__ret__scalar, start_, end_));
+        }
 
-
-
-
-
+        float distance(const vector3& start_, const location& end_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_));
+        }
         location nearest_location(const vector3& pos_, const std::string& location_class_) {
             game_value args({
                 pos_,
@@ -273,7 +313,31 @@ namespace intercept {
 
             return location(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
         }
+        location nearest_location_with_dubbing(const vector3 &pos_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, pos_));
+        }
 
+        location nearest_location_with_dubbing(const object &obj_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, obj_));
+        }
+        object attached_object(const location &loc_) {
+            return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobject__location__ret__object, loc_));
+        }
+        side get_side(const location &loc_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__location__ret__side, loc_));
+        }
+        vector3 position(const location& loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__position__location__ret__array, loc_));
+        }
+        vector2 size(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__size__location__ret__array, loc_));
+        }
+        vector3 get_pos(const location & loc_) {
+            return __helpers::get_pos_loc(__sqf::unary__getpos__location__ret__array, loc_);
+        }
+        vector2 location_position(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__locationposition__location__ret__array, loc_));
+        }
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_) {
             std::vector<game_value> loctypes;
             for (std::string l_ : location_types_)
@@ -398,13 +462,64 @@ namespace intercept {
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
+        std::vector<std::string> all_variables(const location &value_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                client::__sqf::unary__allvariables__location__ret__array, value_));
+        }
+        std::string name(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__name__location__ret__string, loc_));
+        }
+        std::string type(const location& loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__type__location__ret__string, loc_));
+        }
+        game_value get_variable(const location & loc_, const std::string & var_name_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_));
+        }
+        // What a confusing command name.
+        std::string class_name(const location &loc_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_));
+        }
+        location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_) {
+            game_value params({
+                classname_,
+                pos_,
+                size_x_,
+                size_y_
+            });
 
-        location nearest_location_with_dubbing(const vector3 &pos_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, pos_));
+            return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
 
-        location nearest_location_with_dubbing(const object &obj_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, obj_));
+        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_) {
+            game_value params({
+                classname_,
+                pos_,
+                size_x_,
+                size_y_
+            });
+
+            return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
+        location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_) {
+            game_value params({
+                classname_,
+                obj_,
+                size_x_,
+                size_y_
+            });
+
+            return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
+        }
+        location location_null() {
+            return __helpers::__retrieve_nular_location(client::__sqf::nular__locationnull__ret__location);
+        }
+
+
+
+        
+
+        
+
+
     }
 }

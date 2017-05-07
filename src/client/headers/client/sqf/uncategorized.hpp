@@ -97,7 +97,6 @@ namespace intercept {
         game_value get_variable(const team_member & team_member_, const std::string & var_name_);
         game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const task & task_, const std::string & var_name_);
-        game_value get_variable(const location & loc_, const std::string & var_name_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -145,12 +144,10 @@ namespace intercept {
 
 
         /* potential namespace: misc, attach */
-        object attached_object(const location &loc_);
         std::vector<object> attached_objects(const object &obj_);
         object attached_to(const object &obj_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
-        void attach_object(const location& location_, const object& object_);
 
         /* potential namespace: ai */
         bool attack_enabled(const object &unit_);
@@ -189,12 +186,6 @@ namespace intercept {
         sqf::rv_bounding_box bounding_box(const object &model_);
         sqf::rv_bounding_box bounding_box_real(const object &model_);
         vector3 bounding_center(const object &obj_);
-
-        /* potential namespace: locations */
-        std::string class_name(const location &loc_);
-        location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
-        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_);
-        location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
 
         /* potential namespace: ai, group, unit */
         std::string combat_mode(const object &loc_);
@@ -304,9 +295,6 @@ namespace intercept {
         float distance(const vector3& start_, const object& end_);
         float distance(const object& start_, const vector3& end_);
         float distance(const vector3& start_, const vector3& end_);
-        float distance(const location& start_, const location& end_);
-        float distance(const location& start_, const vector3& end_);
-        float distance(const vector3& start_, const location& end_);
 
         /* potential namespace: particles */
         /* potential namespace: particles */
@@ -529,7 +517,6 @@ namespace intercept {
         std::vector<std::string> all_variables(rv_namespace value_);
         std::vector<std::string> all_variables(const group &value_);
         std::vector<std::string> all_variables(const task &value_);
-        std::vector<std::string> all_variables(const location &value_);
         std::vector<std::string> all_variables(const control &value_);
 
 
@@ -621,7 +608,6 @@ namespace intercept {
  
         std::string line_break();
         void load_game();
-        location location_null();
         void log_entities();
         bool mark_as_finished_on_steam();
         float mission_difficulty();
@@ -712,7 +698,6 @@ namespace intercept {
         bool did_jipowner(const object &value_);
         bool difficulty_enabled(const std::string &value_);
         float direction(const object &value_);
-        float direction(const location &value_);
         void disable_remote_sensors(bool value_);
         void disable_user_input(bool value_);
         void dissolve_team(const std::string &value_);
@@ -860,7 +845,6 @@ namespace intercept {
         bool move_to_completed(const object &value_);
         bool move_to_failed(const object &value_);
         std::string name(const object &value_);
-        std::string name(const location &loc_);
         std::string name_sound(const object &value_);
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
@@ -1267,8 +1251,6 @@ namespace intercept {
         void hint_cadet(const std::string &text_);
         void hint_silent(const std::string &text_);
 
-        float importance(const location &loc_);
-        void set_importance(const location &loc_, const float &value_);
 
         std::vector<object> roads_connected_to(const object &obj_);
         std::vector<object> rope_attached_objects(const object &obj_);
@@ -1276,7 +1258,6 @@ namespace intercept {
 
         vector3 screen_to_world(const vector2 &pos_);
 
-        vector2 size(const location &loc_);
 
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
@@ -1385,9 +1366,6 @@ namespace intercept {
         // originally "side", but is already a type
         side get_side(const object &object_);
         side get_side(const group &group_);
-        side get_side(const location &loc_);
-
-        void set_side(const location &loc_, const side &side_);
 
         std::string wf_side_text(const object &object_);
         std::string wf_side_text(const group &group_);
@@ -1421,13 +1399,10 @@ namespace intercept {
         vector3 get_pos_world(const object& unit_);
         float get_terrain_height_asl(const vector3 position_);
 
-        bool is_null(const location& loc_);
 
         std::vector<object> nearest_terrain_objects(const vector3& pos_, const std::vector<std::string> types_, float radius_);
         std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_);
 
-        vector3 position(const location& loc_);
-        bool rectangular(const location& loc_);
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
         std::vector<object> units(const group& gp_);
         std::vector<object> units(const object& unit_);
@@ -1458,7 +1433,6 @@ namespace intercept {
         void join_as_silent(const object &unit_, const group &group_, int pos_id_);
 
         bool in(const object &unit_, const object &vehicle_);
-        bool in(const vector3 &pos_, const location &loc_);
 
         float add_mission_event_handler(const std::string &type_, const code &command_);
         float add_mission_event_handler(const std::string &type_, const std::string &command_);
@@ -1510,7 +1484,6 @@ namespace intercept {
         void do_get_out(const object &unit_);
         void do_get_out(const std::vector<object> &units_);
 
-        void delete_location(const location &loc_);
         std::vector<object> detected_mines(const side &side_);
 
         void diag_log(const std::string &text_);
@@ -1575,9 +1548,6 @@ namespace intercept {
 
         std::vector<object> group_selected_units(const object &unit_);
 
-
-
-        vector2 location_position(const location &loc_);
 
         std::vector<object> members(const team_member &team_);
 
@@ -1708,7 +1678,6 @@ namespace intercept {
 
         rv_uav_control uav_control(const object& uav_);
 
-        std::string type(const location& loc_);
 
         void pp_effect_destroy(std::vector<float> effect_handles_);
         std::vector<std::string> task_description(const task& task_);

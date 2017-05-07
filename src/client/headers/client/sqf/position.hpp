@@ -23,11 +23,9 @@ namespace intercept {
         /* Position */
         namespace __helpers {
             vector3 get_pos_obj(unary_function fnc_, const object & obj_);
-            vector3 get_pos_loc(unary_function fnc_, const location & loc_);
         }
 
         vector3 get_pos(const object & obj_);
-        vector3 get_pos(const location & loc_);
         vector3 get_pos_asl(const object & obj_);
         vector3 get_pos_atl(const object & obj_);
         vector3 get_pos_aslw(const object & obj_);
@@ -70,7 +68,6 @@ namespace intercept {
         void set_vector_up(const object &object_, const vector3 &vector_up_);
         void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_);
 
-        void set_position(const location &location_, const vector3 &position_);
         void set_pos_world(const object &object_, const vector3 &position_);
     }
 }

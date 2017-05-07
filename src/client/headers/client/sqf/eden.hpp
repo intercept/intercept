@@ -24,8 +24,10 @@ namespace intercept {
         /* eden */
         std::string current_eden_operation();
         object get_eden_camera();
-        bool get_eden_icons_visible();
-        bool get_eden_lines_visible();
+        // [showScene,showMap]
+        std::pair<bool, bool> get_eden_icons_visible();
+        // [showScene,showMap]
+        std::pair<bool, bool> get_eden_lines_visible();
         // TODO array[] get_eden_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
         bool is_eden();
         bool is_eden_multiplayer();

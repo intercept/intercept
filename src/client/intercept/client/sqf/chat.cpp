@@ -94,8 +94,9 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__currentchannel__ret__scalar);
         }
 
-        bool channel_enabled(float channel_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__channelenabled__scalar__ret__bool, channel_);
+        std::pair<bool, bool> channel_enabled(float channel_) {
+            auto ret = host::functions.invoke_raw_unary(client::__sqf::unary__channelenabled__scalar__ret__array, channel_);
+            return { ret[0],ret[1] };
         }
 
         float get_player_channel(const object &value_) {

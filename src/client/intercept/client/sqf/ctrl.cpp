@@ -340,7 +340,7 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolor__control__array__ret__nothing, ctrl_, params);
         }
-
+        //#TODO rename https://community.bistudio.com/wiki/tvSetPictureRightColor color and right swapped
         void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_) {
             std::vector<game_value> path;
             for (int item : path_) {
@@ -353,7 +353,7 @@ namespace intercept {
                 color_
             });
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__tvsetpicturecolorright__array__ret__nothing, params);
+            host::functions.invoke_raw_unary(client::__sqf::unary__tvsetpicturerightcolor__array__ret__nothing, params);
         }
 
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
@@ -367,7 +367,7 @@ namespace intercept {
                 color_
             });
 
-            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturecolorright__control__array__ret__nothing, ctrl_, params);
+            host::functions.invoke_raw_binary(client::__sqf::binary__tvsetpicturerightcolor__control__array__ret__nothing, ctrl_, params);
         }
 
         void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_) {
@@ -1229,10 +1229,10 @@ namespace intercept {
             __helpers::__empty_unary_control(client::__sqf::unary__tvclear__control__ret__nothing, value_);
         }
 
-
-        std::string tv_tooltip(const control &value0_, float value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, value0_, value1_));
-        }
+        //#TODO w00t https://community.bistudio.com/wiki/tvTooltip
+        //std::string tv_tooltip(const control &value0_, float value1_) {
+        //    return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__tvtooltip__control__scalar__ret__string, value0_, value1_));
+        //}
 
         void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_) {
             std::vector<game_value> path;

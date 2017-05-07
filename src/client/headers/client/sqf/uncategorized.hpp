@@ -652,6 +652,7 @@ namespace intercept {
         void add_switchable_unit(const object & unit_);
         float air_density_rtd(float altitude_);
         void airport_side(int id_);
+        void airport_side(const object & target_);
         bool alive(const object & obj_);
         std::string animation_state(const object & unit_);
         object assigned_commander(const object & veh_);
@@ -709,7 +710,7 @@ namespace intercept {
         void enable_caustics(bool value_);
         void enable_diag_legend(bool value_);
         void enable_engine_artillery(bool value_);
-        void enable_environment(bool value_);
+        void enable_environment(bool ambient_life_, bool ambient_sound_ = true);
         void enable_radio(bool value_);
         void enable_sat_normal_on_detail(bool value_);
         void enable_sentences(bool value_);
@@ -1014,6 +1015,7 @@ namespace intercept {
         float animation_phase(const object &value0_, const std::string& value1_);
         void assign_team(const object &value0_, const std::string& value1_);
         void assign_to_airport(const object &value0_, float value1_);
+        void assign_to_airport(const object &value0_, const object &target_);
         void cam_command(const object &value0_, const std::string& value1_);
         void cam_commit(const object &value0_, float value1_);
         void cam_commit_prepared(const object &value0_, float value1_);
@@ -1087,6 +1089,7 @@ namespace intercept {
         float knows_about(const side &side_, const object &target_);
         void land(const object &value0_, const std::string& value1_);
         void land_at(const object &value0_, float value1_);
+        void land_at(const object &value0_, const object & helipad_);
 
 
 
@@ -1128,6 +1131,7 @@ namespace intercept {
         void send_simple_command(const object &value0_, const std::string& value1_);
         void set_actual_collective_rtd(const object &value0_, float value1_);
         void set_airport_side(float value0_, const side &value1_);
+        void set_airport_side(const object & target_, const side &value1_);
         void set_ammo_cargo(const object &value0_, float value1_);
         void set_anim_speed_coef(const object &value0_, float value1_);
         void set_autonomous(const object &value0_, bool value1_);
@@ -1138,7 +1142,7 @@ namespace intercept {
         void set_combat_mode(const team_member &value0_, const std::string& value1_);
         void set_custom_aim_coef(const object &value0_, float value1_);
         void set_custom_weight_rtd(const object &value0_, float value1_);
-        void set_damage(const object &value0_, float value1_);
+        void set_damage(const object &value0_, float value1_, bool use_effects_ = true);
         void set_dammage(const object &value0_, float value1_);
         void set_dir(const object &value0_, float value1_);
         void set_drop_interval(const object &value0_, float value1_);

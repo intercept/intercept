@@ -19,6 +19,8 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        class waypoint;
+
         std::string combat_mode(const group &loc_);
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_);
 
@@ -29,7 +31,7 @@ namespace intercept {
         // TODO std::array<bool, 2> group_icons_visible();
         group grp_null();
         void clear_group_icons(const group &value_);
-        group create_group(const side &value_);
+        group create_group(const side &value_, bool delete_when_empty_ = false);
         void delete_group(const group &value_);
 
         group group_from_net_id(const std::string &value_);

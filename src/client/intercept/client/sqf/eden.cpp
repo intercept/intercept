@@ -12,12 +12,15 @@ namespace intercept {
             return __helpers::__retrieve_nular_object(client::__sqf::nular__get3dencamera__ret__object);
         }
 
-        bool get_eden_icons_visible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3deniconsvisible__ret__bool);
+        std::pair<bool, bool> get_eden_icons_visible() {
+            //#TODO build a wrapper for these bool array returns
+            auto ret = host::functions.invoke_raw_nular(client::__sqf::nular__get3deniconsvisible__ret__array);
+            return { ret[0],ret[1] };
         }
 
-        bool get_eden_lines_visible() {
-            return __helpers::__retrieve_nular_bool(client::__sqf::nular__get3denlinesvisible__ret__bool);
+        std::pair<bool, bool> get_eden_lines_visible() {
+            auto ret = host::functions.invoke_raw_nular(client::__sqf::nular__get3denlinesvisible__ret__array);
+            return { ret[0],ret[1] };
         }
 
         bool is_eden() {

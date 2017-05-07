@@ -34,8 +34,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__cleargroupicons__group__ret__nothing, value_);
         }
 
-        group create_group(const side &value_) {
-            return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side__ret__group, value_));
+        group create_group(const side &value_, bool delete_when_empty_) {
+            if (delete_when_empty_)
+                return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side_array__ret__group, { value_ ,delete_when_empty_ }));
+            return group(host::functions.invoke_raw_unary(client::__sqf::unary__creategroup__side_array__ret__group, value_));
         }
 
         void delete_group(const group &value_) {

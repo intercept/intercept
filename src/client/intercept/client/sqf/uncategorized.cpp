@@ -1,7 +1,7 @@
 ﻿#include "uncategorized.hpp"
 #include "client\pointers.hpp"
 #include "common_helpers.hpp"
-
+#include "position.hpp" //for uses of get_pos_obj. Should be removed once they are sorted
 
 using namespace intercept::types;
 
@@ -1623,7 +1623,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void airport_side(int id_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__airportside__scalar__ret__nothing, (float)id_);
+            __helpers::__empty_unary_number(client::__sqf::unary__airportside__object_scalar__ret__nothing, (float)id_);
+        }
+        void airport_side(const object & target_) {
+            __helpers::__empty_unary_number(client::__sqf::unary__airportside__object_scalar__ret__nothing, target_);
         }
 
         bool alive(const object & obj_) {
@@ -1981,8 +1984,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_bool(client::__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
         }
 
-        void enable_environment(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__enableenvironment__bool__ret__nothing, value_);
+        void enable_environment(bool ambient_life_, bool ambient_sound_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__enableenvironment__bool_array__ret__nothing, { ambient_life_, ambient_sound_ });
         }
 
         void enable_radio(bool value_) {
@@ -3054,7 +3057,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void assign_to_airport(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__scalar__ret__nothing, value0_, value1_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__object_scalar__ret__nothing, value0_, value1_);
+        }
+
+        void assign_to_airport(const object &value0_, const object &target_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__object_scalar__ret__nothing, value0_, target_);
         }
 
         void cam_command(const object &value0_, const std::string& value1_) {
@@ -3323,9 +3330,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void land_at(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__scalar__ret__nothing, value0_, value1_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, value1_);
         }
 
+        void land_at(const object &value0_, const object & helipad_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, helipad_);
+        }
 
         void leave_vehicle(const object &value0_, const group &value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__leavevehicle__group__object__ret__nothing, value0_, value1_);
@@ -3453,9 +3463,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_airport_side(float value0_, const side &value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__scalar__side__ret__nothing, value0_, value1_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__object_scalar__side__ret__nothing, value0_, value1_);
         }
 
+        void set_airport_side(const object & target_, const side &value1_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setairportside__object_scalar__side__ret__nothing, target_, value1_);
+        }
         void set_ammo_cargo(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setammocargo__object__scalar__ret__nothing, value0_, value1_);
         }
@@ -3496,8 +3509,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__setcustomweightrtd__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_damage(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setdamage__object__scalar__ret__nothing, value0_, value1_);
+        void set_damage(const object &value0_, float value1_, bool use_effects_) {
+            if (use_effects_)
+                host::functions.invoke_raw_binary(client::__sqf::binary__setdamage__object__scalar_array__ret__nothing, value0_, value1_);
+            else
+                host::functions.invoke_raw_binary(client::__sqf::binary__setdamage__object__scalar_array__ret__nothing, value0_, {value1_,use_effects_});
         }
 
         void set_dammage(const object &value0_, float value1_) {
@@ -4041,15 +4057,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value get_mission_config_value(const std::string& attribute_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, attribute_));
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, attribute_));
         }
 
         game_value get_mission_config_value(const std::string& attribute_, game_value default_value_) {
-            game_value args(std::vector<game_value>{
-                attribute_,
-                default_value_
-            });
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__any__ret__any, args));
+            return game_value(
+                host::functions.invoke_raw_unary(client::__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, {attribute_,default_value_})
+            );
         }
 
         void move(const object& unit_, const vector3& pos_) {

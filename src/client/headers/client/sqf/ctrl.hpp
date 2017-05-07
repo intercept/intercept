@@ -322,7 +322,7 @@ namespace intercept {
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_);
         int tv_count(int idc_, const std::vector<int>& path_);
         int tv_count(const control& ctrl_, const std::vector<int>& path_);
-        std::string tv_tooltip(const control &value0_, float value1_);
+        //std::string tv_tooltip(const control &value0_, float value1_);
         std::vector<int> tv_cursel(int idc_);
         std::vector<int> tv_cursel(const control& ctrl_);
 

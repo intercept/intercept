@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)

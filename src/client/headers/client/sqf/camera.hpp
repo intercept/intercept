@@ -64,6 +64,7 @@ namespace intercept {
 
         void set_cam_use_ti(float value0_, bool value1_); //#TODO enum for different TI modes
 
+        void set_aperture(float value_);
         void set_aperture_new(float min_, float std_, float max_, float std_lum_);
         void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_);
         void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_);

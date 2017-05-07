@@ -1646,13 +1646,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__object_unary_object(client::__sqf::unary__assignedvehicle__object__ret__object, unit_);
         }
 
-        std::string backpack(const object & unit_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__backpack__object__ret__string, unit_);
-        }
 
-        object backpack_container(const object & unit_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__backpackcontainer__object__ret__object, unit_);
-        }
 
         std::string behaviour(const object & unit_) {
             return __helpers::__string_unary_object(client::__sqf::unary__behaviour__object__ret__string, unit_);

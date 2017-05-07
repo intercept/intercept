@@ -421,6 +421,14 @@ namespace intercept {
         object vest_container(const object &value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__vestcontainer__object__ret__object, value_);
         }
+        std::string backpack(const object & unit_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__backpack__object__ret__string, unit_);
+        }
+
+        object backpack_container(const object & unit_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__backpackcontainer__object__ret__object, unit_);
+        }
+
         void add_backpack(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpack__object__string__ret__nothing, value0_, value1_);
         }

@@ -120,7 +120,8 @@ namespace intercept {
         object unit_backpack(const object &value_);
         std::string vest(const object &value_);
         object vest_container(const object &value_); //#TODO return rv_container class.. I think.
-
+        std::string backpack(const object & unit_);
+        object backpack_container(const object & unit_);
 
         void add_backpack(const object &value0_, const std::string& value1_);
         void add_backpack_global(const object &value0_, const std::string& value1_);

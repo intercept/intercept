@@ -634,8 +634,6 @@ namespace intercept {
         std::string assigned_team(const object & unit_);
         object assigned_vehicle(const object & unit_);
 
-        std::string backpack(const object & unit_);
-        object backpack_container(const object & unit_);
         std::string behaviour(const object & unit_);
         std::string binocular(const object & unit_);
         void buldozer(bool value_);

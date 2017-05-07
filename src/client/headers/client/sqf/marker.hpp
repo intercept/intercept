@@ -123,5 +123,62 @@ namespace intercept {
 
 
 
+
+
+
+
+
+
+
+
+
+
+        //Triggers
+
+        struct rv_trigger_area {
+            float x;
+            float y;
+            float angle;
+            bool rectangle;
+            float z; // since Arma 3 v1.59.135137
+
+            rv_trigger_area(const game_value &ret_game_value_) :
+                x(ret_game_value_[0]),
+                y(ret_game_value_[1]),
+                angle(ret_game_value_[2]),
+                rectangle(ret_game_value_[3]),
+                z(ret_game_value_[4]) {}
+        };
+
+        rv_trigger_area trigger_area(const object& trigger_);
+
+        struct rv_trigger_timeout {
+            float time_min;
+            float time_mid;
+            float time_max;
+            bool interruptable;
+
+            rv_trigger_timeout(const game_value &ret_game_value_) :
+                time_min(ret_game_value_[0]),
+                time_mid(ret_game_value_[1]),
+                time_max(ret_game_value_[2]),
+                interruptable(ret_game_value_[3]) {}
+        };
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        std::vector<object> list(const object& trigger_);
+        void trigger_attach_object(const object &value0_, float value1_);
+        void set_trigger_text(const object &value0_, const std::string& value1_);
+        void set_trigger_type(const object &value0_, const std::string& value1_);
+        bool trigger_activated(const object &value_);
+        object trigger_attached_vehicle(const object &value_);
+        std::string trigger_text(const object &value_);
+        float trigger_timeout_current(const object &value_);
+        std::string trigger_type(const object &value_);
+        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
+        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
+
+
     }
 }

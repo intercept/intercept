@@ -842,25 +842,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
         }
 
-        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_/* = true*/) {
-            game_value args({
-                (type_),
-                (pos_),
-                (make_global_)
-            });
-
-            return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
-        }
-
-        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
-            std::vector<game_value> args = {
-                (type_),
-                pos_,
-                (make_global_)
-            };
-
-            return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
-        }
+        
 
         std::vector<object> crew(const object & _veh) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
@@ -2741,25 +2723,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__string_unary_string(client::__sqf::unary__toupper__string__ret__string, value_);
         }
 
-        bool trigger_activated(const object &value_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__triggeractivated__object__ret__bool, value_);
-        }
-
-        object trigger_attached_vehicle(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__triggerattachedvehicle__object__ret__object, value_);
-        }
-
-        std::string trigger_text(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__triggertext__object__ret__string, value_);
-        }
-
-        float trigger_timeout_current(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__triggertimeoutcurrent__object__ret__scalar, value_);
-        }
-
-        std::string trigger_type(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__triggertype__object__ret__string, value_);
-        }
+       
 
         std::string type_of(const object &value_) {
             return __helpers::__string_unary_object(client::__sqf::unary__typeof__object__ret__string, value_);
@@ -3427,13 +3391,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__settargetage__object__string__ret__nothing, value0_, value1_);
         }
 
-        void set_trigger_text(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__settriggertext__object__string__ret__nothing, value0_, value1_);
-        }
 
-        void set_trigger_type(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__settriggertype__object__string__ret__nothing, value0_, value1_);
-        }
 
         void set_unconscious(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setunconscious__object__bool__ret__nothing, value0_, value1_);
@@ -3520,9 +3478,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__switchmove__object__string__ret__nothing, value0_, value1_);
         }
 
-        void trigger_attach_object(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);
-        }
+
 
         
 
@@ -5570,13 +5526,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
 
-        rv_trigger_area trigger_area(const object& trigger_) {
-            return rv_trigger_area(host::functions.invoke_raw_unary(client::__sqf::unary__triggerarea__object__ret__array, trigger_));
-        }
 
-        rv_trigger_timeout trigger_timeout(const object& trigger_) {
-            return rv_trigger_timeout(host::functions.invoke_raw_unary(client::__sqf::unary__triggertimeout__object__ret__array, trigger_));
-        }
       
         vector3 task_destination(const task& task_) {
             game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__taskdestination__task__ret__array, task_);
@@ -5599,15 +5549,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__format__array__ret__string, params_));         
         }
 
-        std::vector<object> list(const object& trigger_) {
-            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__list__object__ret__array, trigger_);
 
-            if (ret.length() == 0) {
-                return {};
-            } else {
-                return __helpers::__convert_to_objects_vector(ret);
-            }
-        }
 
         bool open_map(bool value_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__openmap__bool__ret__bool, value_));

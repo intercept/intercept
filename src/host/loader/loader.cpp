@@ -5,6 +5,11 @@
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 
+template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
+template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
+template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
+template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
+template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
 
 namespace intercept {
     unary_function loader::_initial_trampoline;
@@ -262,7 +267,7 @@ namespace intercept {
                 _binary_operators[name].push_back(new_entry);
             }
         }
-       
+
         //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
         uintptr_t stringOffset = future_stringOffset.get();
         auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - 4); });
@@ -320,19 +325,21 @@ namespace intercept {
             OutputDebugStringA("\n");
 
             auto type = typeToEnum(entry->_name);
-            if (poolAlloc && type != types::__internal::GameDataType::end)
+            if (poolAlloc && type != types::__internal::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
+                _sqf_register_funcs._types[static_cast<size_t>(type)] = reinterpret_cast<uintptr_t>(entry);
+            }
         }
 
 
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.v_table;
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
 
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
-        _sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
-        
         _sqf_register_funcs._operator_construct = future_operator_construct.get();
         _sqf_register_funcs._operator_insert = future_operator_insert.get();
         _sqf_register_funcs._unary_construct = future_unary_construct.get();

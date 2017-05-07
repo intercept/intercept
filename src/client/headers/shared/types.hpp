@@ -461,12 +461,14 @@ namespace intercept {
                 if (_n > size) {
                     resize(size);
                 }
-
-                if (_data && size > 0 && try_realloc(_data, _maxItems, size)) {
+                Type *newData = nullptr;
+                if (_data && size > 0 && (newData = try_realloc(_data, _maxItems, size))) {
                     _maxItems = size;
+                    rv_allocator<Type>::deallocate(_data);
+                    _data = newData;
                     return;
                 }
-                Type *newData = rv_allocator<Type>::createUninitializedArray(size);
+                newData = rv_allocator<Type>::createUninitializedArray(size);
                 if (_data) {
                     memmove_s(newData, size * sizeof(Type), _data, _n * sizeof(Type));
                     rv_allocator<Type>::deallocate(_data);
@@ -513,7 +515,6 @@ namespace intercept {
             }
             Type& push_back(const Type& _Val) {
                 return emplace_back(_Val);
-                std::vector::emplace_back()
             }
             Type& push_back(Type&& _Val) {
                 return emplace_back(std::move(_Val));
@@ -669,6 +670,12 @@ namespace intercept {
                         return item;
                 }
                 return _null_entry;
+            }
+
+            Container* get_table_for_key(const char* key) {
+                if (!_table || !_count) return nullptr;
+                int hashedKey = hash_key(key);
+                return &_table[hashedKey];
             }
 
             Type &get(const char* key) {

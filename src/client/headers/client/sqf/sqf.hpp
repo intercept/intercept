@@ -13,6 +13,8 @@
 #include "group.hpp"
 #include "multiplayer.hpp"
 #include "config.hpp"
+#include "camera.hpp"
+#include "inventory.hpp"
 
 #include "uncategorized.hpp"
 

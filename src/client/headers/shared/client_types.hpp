@@ -137,5 +137,43 @@ namespace intercept {
             r_string surface;
             bool direct;
         };
+
+        struct rv_color {
+            float red;
+            float green;
+            float blue;
+            float alpha;
+
+            operator game_value() {
+                return game_value(std::vector<game_value>({
+                    red,
+                    green,
+                    blue,
+                    alpha
+                }));
+            }
+
+            operator game_value() const {
+                return game_value(std::vector<game_value>({
+                    red,
+                    green,
+                    blue,
+                    alpha
+                }));
+            }
+
+            rv_color(const game_value &ret_game_value_) :
+                red(ret_game_value_[0]),
+                green(ret_game_value_[1]),
+                blue(ret_game_value_[2]),
+                alpha(ret_game_value_[3]) {}
+
+            rv_color(float red_, float green_, float blue_, float alpha_) :
+                red(red_),
+                green(green_),
+                blue(blue_),
+                alpha(alpha_) {}
+        };
+
     }
 }

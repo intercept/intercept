@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -21,6 +21,14 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        float diag_fps();
+        float diag_fpsmin();
+        float diag_frameno();
+        float diag_ticktime();
+
+        std::vector<script> diag_active_mission_fsms();
+        std::vector<script> diag_active_sqf_scripts();
+        std::vector<script> diag_active_sqs_scripts();
 
     }
 }

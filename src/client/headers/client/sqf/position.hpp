@@ -93,6 +93,5 @@ namespace intercept {
         void set_velocity(const object &obj_, const vector3 &vel_);
         vector3 velocity(const object &obj_);
         float direction(const object &value_);
-
     }
 }

@@ -102,7 +102,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
 
-    typedef int(__thiscall *f_construct_binary)(__internal::gsOperator* op, uintptr_t returnType, const char* name, int priority, binary_function f, uintptr_t lType, uintptr_t rType,
+    typedef int(__thiscall *f_construct_binary)(__internal::gsOperator* op, const op_value_entry& returnType, const char* name, int priority, binary_function f, const op_value_entry& lType, const op_value_entry& rType,
         const char* lArgDesc, const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
         uintptr_t jFunc);
     __internal::gsOperator op;
@@ -112,14 +112,30 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
     if (_registerFuncs._types[static_cast<size_t>(left_arg_type)] == 0) __debugbreak();   //and all supported types are implemented
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
+    
+    op_value_entry retType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    op_value_entry leftType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
+    op_value_entry rightype{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
-    constructBinary(&op, _registerFuncs._types[(size_t) return_arg_type], name.c_str(), 4, function_,
-        _registerFuncs._types[(size_t) left_arg_type], _registerFuncs._types[(size_t) right_arg_type],
+
+
+    constructBinary(&op, retType, name.c_str(), 4, function_,
+        leftType, rightype,
         "", "", "", "", "", "", "", "Intercept", 0);
-    insertBinary(_registerFuncs._gameState, op);
 
-    auto inserted = findBinary(name, left_arg_type, right_arg_type);
+    //auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    //std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    //gs->_scriptOperators.get_table_for_key(name.c_str())->push_back(game_operators(name)).push_back(op);
 
+    //#TODO Too crashy
+    //insertBinary(_registerFuncs._gameState, op);
+
+    auto inserted = nullptr;// findBinary(name, left_arg_type, right_arg_type);
+    //std::stringstream stream;
+    //stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
+    //    << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
+    //    << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+    //OutputDebugStringA(stream.str().c_str());
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted); //#TODO lookup inserted record and give that instead of nullptr
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -127,9 +143,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
     typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
-    f_insert_unary insertBinary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
+    f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
 
-    typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, uintptr_t returnType, const char* name, unary_function f, uintptr_t rType,
+    typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, const op_value_entry& returnType, const char* name, unary_function f, const op_value_entry& rType,
         const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
         uintptr_t jFunc);
     __internal::gsFunction op;
@@ -139,13 +155,25 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
-    constructUnary(&op, _registerFuncs._types[static_cast<size_t>(return_arg_type)], name.c_str(), function_,
-        _registerFuncs._types[static_cast<size_t>(right_arg_type)],
+    op_value_entry retType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    op_value_entry rightype{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
+    //#TODO confirm types by calling toString and comparing with expected string
+    constructUnary(&op, retType, name.c_str(), function_,
+        rightype,
         "", "", "", "", "", "", "Intercept", 0);
-    insertBinary(_registerFuncs._gameState, op);
+
+    //auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    //std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    //gs->_scriptFunctions.get_table_for_key(name.c_str())->push_back(game_functions(name)).push_back(op);
+
+    insertUnary(_registerFuncs._gameState, op);
 
     auto inserted = findUnary(name, right_arg_type);
-
+    std::stringstream stream;
+    stream << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type) 
+        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
+        << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+    OutputDebugStringA(stream.str().c_str());
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, inserted); //#TODO lookup inserted record and give that instead of nullptr
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -159,6 +187,12 @@ void intercept::sqf_functions::initialize() {
 intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) {
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    gs->_scriptFunctions.get_table_for_key(name.c_str())->for_each([](const game_functions& it) {
+        OutputDebugStringA(it._name);
+        OutputDebugStringA("\n");
+    });
+
+
     auto& found = gs->_scriptFunctions.get(name.c_str());
     if (gs->_scriptFunctions.is_null(found)) return nullptr;
     std::string argTypeString = to_string(argument_type);
@@ -175,6 +209,10 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     auto& found = gs->_scriptOperators.get(name.c_str());
+    gs->_scriptOperators.get_table_for_key(name.c_str())->for_each([](const game_operators& it) {
+        OutputDebugStringA(it._name);
+        OutputDebugStringA("\n");
+    });
     if (gs->_scriptOperators.is_null(found)) return nullptr;
     std::string left_argTypeString = to_string(left_argument_type);
     std::string right_argTypeString = to_string(right_argument_type);

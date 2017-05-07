@@ -34,7 +34,8 @@ namespace intercept {
         uintptr_t _operator_insert;
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
-        std::array<uintptr_t, static_cast<size_t>(types::__internal::GameDataType::end)> _types {0};
+        uintptr_t _type_vtable;
+        std::array<uintptr_t, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {0};
     };
 
     /*!
@@ -330,6 +331,7 @@ namespace intercept {
         };
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
+            game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
             game_functions() {}
             const char *get_map_key() const { return _name; }
@@ -337,8 +339,9 @@ namespace intercept {
 
         struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
         public:
+            game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
-            int32_t placeholder10; //0x2C Small int 0-5  priority
+            int32_t placeholder10{4}; //0x2C Small int 0-5  priority
             game_operators() {}
             const char *get_map_key() const { return _name; }
         };
@@ -352,6 +355,8 @@ namespace intercept {
         template class rv_allocator<gsFunction>;
         template class rv_allocator<gsOperator>;
         template class rv_allocator<gsNular>;
+        template class rv_allocator<game_functions>;
+        template class rv_allocator<game_operators>;
     }
 
 }

@@ -492,6 +492,7 @@ namespace intercept {
                 if (n == 0 && _data) {
                     rv_allocator<Type>::deallocate(_data);
                     _data = nullptr;
+                    return;
                 }
                 if (n > _maxItems) {
                 #undef max
@@ -664,6 +665,17 @@ namespace intercept {
                 int hashedKey = hash_key(key);
                 for (int i = 0; i < _table[hashedKey].count(); i++) {
                     const Type &item = _table[hashedKey][i];
+                    if (Traits::compare_keys(item.get_map_key(), key) == 0)
+                        return item;
+                }
+                return _null_entry;
+            }
+
+            Type &get(const char* key) {
+                if (!_table || !_count) return _null_entry;
+                int hashedKey = hash_key(key);
+                for (int i = 0; i < _table[hashedKey].count(); i++) {
+                    Type &item = _table[hashedKey][i];
                     if (Traits::compare_keys(item.get_map_key(), key) == 0)
                         return item;
                 }

@@ -186,6 +186,9 @@ namespace intercept {
         void set_cam_use_ti(float value0_, bool value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcamuseti__bool__scalar__ret__nothing, value0_, value1_);
         }
+        void set_aperture(float value_) {
+            __helpers::__empty_unary_number(client::__sqf::unary__setaperture__scalar__ret__nothing, value_);
+        }
         void set_aperture_new(float min_, float std_, float max_, float std_lum_) {
             std::vector<game_value> params{
                 min_,

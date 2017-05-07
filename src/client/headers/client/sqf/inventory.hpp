@@ -122,6 +122,7 @@ namespace intercept {
         object vest_container(const object &value_); //#TODO return rv_container class.. I think.
         std::string backpack(const object & unit_);
         object backpack_container(const object & unit_);
+        object first_backpack(const object &value_);
 
         void add_backpack(const object &value0_, const std::string& value1_);
         void add_backpack_global(const object &value0_, const std::string& value1_);
@@ -272,5 +273,29 @@ namespace intercept {
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
 
+        struct rv_unit_description {
+            std::string unit;
+            std::string uniform;
+            std::string vest;
+            std::string backpack;
+
+            rv_unit_description(const game_value& r_game_val)
+                : unit(r_game_val[0]),
+                uniform(r_game_val[1]),
+                vest(r_game_val[2]),
+                backpack(r_game_val[3]) {}
+        };
+
+        rv_unit_description get_description(const object& unit_);
+
+        float load(const object &value_);
+        float load_abs(const object &value_);
+        float load_backpack(const object &value_);
+        float load_uniform(const object &value_);
+        float load_vest(const object &value_);
+
+
+        std::string secondary_weapon(const object &value_);
+        std::string primary_weapon(const object &value_);
     }
 }

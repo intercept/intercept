@@ -26,5 +26,9 @@ namespace intercept {
         float diag_frameno();
         float diag_ticktime();
 
+        std::vector<script> diag_active_mission_fsms();
+        std::vector<script> diag_active_sqf_scripts();
+        std::vector<script> diag_active_sqs_scripts();
+
     }
 }

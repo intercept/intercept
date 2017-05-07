@@ -429,6 +429,10 @@ namespace intercept {
             return __helpers::__object_unary_object(client::__sqf::unary__backpackcontainer__object__ret__object, unit_);
         }
 
+        object first_backpack(const object &value_) {
+            return __helpers::__object_unary_object(client::__sqf::unary__firstbackpack__object__ret__object, value_);
+        }
+
         void add_backpack(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpack__object__string__ret__nothing, value0_, value1_);
         }
@@ -768,6 +772,33 @@ namespace intercept {
             };
 
             return rv_weapon_state(host::functions.invoke_raw_unary(client::__sqf::unary__weaponstate__object_array__ret__array, params));
+        }
+        rv_unit_description get_description(const object& unit_) {
+            return rv_unit_description(host::functions.invoke_raw_unary(client::__sqf::unary__getdescription__object__ret__array, unit_));
+        }
+        float load(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__load__object__ret__scalar, value_);
+        }
+
+        float load_abs(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__loadabs__object__ret__scalar, value_);
+        }
+
+        float load_backpack(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__loadbackpack__object__ret__scalar, value_);
+        }
+        float load_uniform(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__loaduniform__object__ret__scalar, value_);
+        }
+
+        float load_vest(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__loadvest__object__ret__scalar, value_);
+        }
+        std::string secondary_weapon(const object &value_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__secondaryweapon__object__ret__string, value_);
+        }
+        std::string primary_weapon(const object &value_) {
+            return __helpers::__string_unary_object(client::__sqf::unary__primaryweapon__object__ret__string, value_);
         }
     }
 }

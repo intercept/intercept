@@ -81,7 +81,7 @@ namespace intercept {
         void set_variable(const rv_namespace &namespace_, const std::string &var_name_, game_value value_);
 
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
-        void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB" );
+        void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB");
 
         vector3 vector_dir(const object & obj_);
         vector3 vector_dir_visual(const object & obj_);
@@ -98,19 +98,14 @@ namespace intercept {
         game_value get_variable(const team_member & team_member_, const std::string & var_name_, game_value default_value_);
         game_value get_variable(const task & task_, const std::string & var_name_);
 
-        vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
-        vector2 world_to_screen(const vector3 &pos_agl_);
-        vector2 world_to_screen(const vector3 &pos_agl_, bool &in_screen_);
 
         std::vector<object> near_entities(const vector3 &pos_agl_, const std::vector<std::string> &types_, float range_);
 
-        void set_vector_dir(const object &obj_, const vector3 &vec_);
-        void set_velocity(const object &obj_, const vector3 &vel_);
 
         object create_vehicle_local(const std::string &type_, const vector3 &pos_atl_);
 
-        vector3 velocity(const object &obj_);
+
 
         /* potential namespace: */
         std::vector<std::string> action_keys(const std::string &user_action_);
@@ -282,9 +277,9 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     file,
                     16.0f,
-                    (float)row,
-                    (float)column,
-                    (float)loop
+                    (float) row,
+                    (float) column,
+                    (float) loop
                 }));
             }
 
@@ -292,9 +287,9 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     file,
                     16.0f,
-                    (float)row,
-                    (float)column,
-                    (float)loop
+                    (float) row,
+                    (float) column,
+                    (float) loop
                 }));
             }
         };
@@ -457,10 +452,10 @@ namespace intercept {
         object create_vehicle(const std::string &type_, const vector3 &pos_);
         object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
         void delete_vehicle(const object &obj_);
-        
+
         void create_unit(const std::string &type_, const vector3 &pos_, const group &group_, const std::string &init_ = "", float skill_ = 0.5f, const std::string &rank_ = "PRIVATE");
         object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
-        
+
         float server_time();
         std::string server_name();
 
@@ -473,10 +468,6 @@ namespace intercept {
         script script_null();
         task task_null();
         rv_namespace ui_namespace();
-
-        std::vector<script> diag_active_mission_fsms();
-        std::vector<script> diag_active_sqf_scripts();
-        std::vector<script> diag_active_sqs_scripts();
 
         bool __sqfassert(bool test_);
 
@@ -511,9 +502,7 @@ namespace intercept {
 
             rv_credit(const game_value &rv_game_value_)
                 : library_name(rv_game_value_[0]),
-                credits(rv_game_value_[1])
-            {
-            }
+                credits(rv_game_value_[1]) {}
         };
 
         float armory_points();
@@ -559,7 +548,7 @@ namespace intercept {
         bool get_remote_sensors_disabled();
         float get_shadow_distance();
         float get_total_dlc_usage_time();
-        
+
         void halt();
         bool has_interface();
 
@@ -576,7 +565,7 @@ namespace intercept {
         std::string language();
         std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
- 
+
         std::string line_break();
         void load_game();
         void log_entities();
@@ -644,7 +633,7 @@ namespace intercept {
         bool captive(const object & unit_);
         float captive_num(const object & unit_);
         bool check_aifeature(const std::string & feature_);
-        
+
         float collective_rtd(const object & helicopter_);
         object commander(const object & veh_);
         bool completed_fsm(float handle_);
@@ -667,7 +656,7 @@ namespace intercept {
         void detach(const object &value_);
         bool did_jipowner(const object &value_);
         bool difficulty_enabled(const std::string &value_);
-        float direction(const object &value_);
+
         void disable_remote_sensors(bool value_);
         void disable_user_input(bool value_);
         void dissolve_team(const std::string &value_);
@@ -696,7 +685,7 @@ namespace intercept {
         void fill_weapons_from_pool(const object &value_);
         display find_display(float value_);
         bool finite(float value_);
-        object first_backpack(const object &value_);
+
         object flag(const object &value_);
         object flag_owner(const object &value_);
         side flag_side(const object &value_);
@@ -798,12 +787,9 @@ namespace intercept {
         std::string life_state(const object &value_);
         void light_detach_object(const object &value_);
         std::string light_is_on(const object &value_);
-        float load(const object &value_);
-        float load_abs(const object &value_);
-        float load_backpack(const object &value_);
+
         std::string load_file(const std::string &value_);
-        float load_uniform(const object &value_);
-        float load_vest(const object &value_);
+
         std::string localize(const std::string &value_);
         bool lock_identity(const object &value_);
         float locked(const object &value_);
@@ -846,7 +832,7 @@ namespace intercept {
         bool preload_sound(const std::string &value_);
         std::string preprocess_file(const std::string &value_);
         std::string preprocess_file_line_numbers(const std::string &value_);
-        std::string primary_weapon(const object &value_);
+
         void process_diary_link(const std::string &value_);
         void progress_loading_screen(float value_);
         void public_variable(const std::string &value_);
@@ -863,10 +849,10 @@ namespace intercept {
         bool reload_enabled(const object &value_);
         void remove_all_actions(const object &value_);
 
-        
+
         void remove_all_mission_event_handlers(const std::string &value_);
         void remove_all_music_event_handlers(const std::string &value_);
-        
+
         void remove_switchable_unit(const object &value_);
         bool required_version(const std::string &value_);
         void reset_subgroup_direction(const object &value_);
@@ -882,13 +868,13 @@ namespace intercept {
         float score_side(const side &value_);
         void script_name(const std::string &value_);
         float scud_state(const object &value_);
-        std::string secondary_weapon(const object &value_);
+
         void select_player(const object &value_);
         bool server_command(const std::string &value_);
         bool server_command_available(const std::string &value_);
         bool server_command_executable(const std::string &value_);
         void set_acc_time(float value_);
-        void set_aperture(float value_);
+
         void set_armory_points(float value_);
 
         void set_horizon_parallax_coef(float value_);
@@ -1050,7 +1036,7 @@ namespace intercept {
         void remove_action(const object &value0_, float value1_);
         void remove_all_event_handlers(const object &value0_, const std::string& value1_);
         void remove_all_mpevent_handlers(const object &value0_, const std::string& value1_);
-        
+
         void reveal_mine(const object &value0_, const side &value1_);
         bool save_identity(const object &value0_, const std::string& value1_);
         bool save_status(const object &value0_, const std::string& value1_);
@@ -1191,50 +1177,6 @@ namespace intercept {
         std::string speed_mode(const object &obj_);
         std::string speed_mode(const group &grp_);
 
-        struct rv_fog_parameters {
-            float value;
-            float decay;
-            float base;
-
-            rv_fog_parameters(float value_, float decay_, float base_) {
-                value = value_;
-                decay = decay_;
-                base = base_;
-            }
-
-            static rv_fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
-                return rv_fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
-            }
-
-            std::vector<float> to_vector() const {
-                std::vector<float> ret_val{ value, decay, base };
-                return ret_val;
-            }
-        };
-
-        rv_fog_parameters fog_params();
-
-        struct rv_rendering_distances {
-            float object_distance;
-            float shadow_distance;
-
-            rv_rendering_distances(float object_distance_, float shadow_distance_) {
-                object_distance = object_distance_;
-                shadow_distance = shadow_distance_;
-            }
-
-            static rv_rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
-                return rv_rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
-            }
-
-            std::vector<float> to_vector() const {
-                std::vector<float> ret_val{ object_distance, shadow_distance };
-                return ret_val;
-            }
-        };
-
-        rv_rendering_distances get_object_view_distance();
-
         rv_resolution get_resolution();
 
         std::vector<object> vehicles();
@@ -1252,7 +1194,6 @@ namespace intercept {
         void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
         void move_to(const object &unit_, const vector3 &pos_);
 
-        vector3 eye_pos(const object &object_);
 
         struct rv_artillery_computer_settings {
             std::string name;
@@ -1262,9 +1203,7 @@ namespace intercept {
             rv_artillery_computer_settings(const game_value &rv_game_value_)
                 : name(rv_game_value_[0]),
                 ammo(rv_game_value_[1]),
-                mode(rv_game_value_[2])
-            {
-            }
+                mode(rv_game_value_[2]) {}
         };
 
         rv_artillery_computer_settings get_artillery_computer_settings();
@@ -1285,9 +1224,7 @@ namespace intercept {
                 build(rv_game_value_[3]),
                 branch(rv_game_value_[4]),
                 mods(rv_game_value_[5]),
-                platform(rv_game_value_[6])
-            {
-            }
+                platform(rv_game_value_[6]) {}
         };
 
         rv_product_version product_version();
@@ -1306,33 +1243,12 @@ namespace intercept {
         void set_friend(const side &side1_, const side &side2_, float value_);
 
         std::vector<object> entities(const std::string& type_);
-        vector3 eye_direction(const object& unit_);
-
-        struct rv_unit_description {
-            std::string unit;
-            std::string uniform;
-            std::string vest;
-            std::string backpack;
-
-            rv_unit_description(const game_value& r_game_val)
-                : unit(r_game_val[0]),
-                uniform(r_game_val[1]),
-                vest(r_game_val[2]),
-                backpack(r_game_val[3])
-            {
-            }
-        };
-
-        rv_unit_description get_description(const object& unit_);
-
-        vector3 get_pos_world(const object& unit_);
-        float get_terrain_height_asl(const vector3 position_);
 
 
         std::vector<object> nearest_terrain_objects(const vector3& pos_, const std::vector<std::string> types_, float radius_);
         std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_);
 
-        void set_date(int year_, int month_, int day_, int hour_, float minute_);
+
 
         std::vector<object> units(const object& unit_);
 
@@ -1341,10 +1257,8 @@ namespace intercept {
 
         void hintc(const std::string& title_, std::vector<std::string> content_);
 
-        vector3 world_to_model(const object &object_, const vector3 &position_);
-        vector3 world_to_model_visual(const object &object_, const vector3 &position_);
 
-        
+
 
         void remote_control(const object &controller_, const object &controlled_);
 
@@ -1580,9 +1494,7 @@ namespace intercept {
         float get_client_state_number();
 
 
-        vector3 velocity_model_space(const object& obj_);
-        vector3 vector_up_visual(const object& obj_);
-        vector3 vector_up(const object& obj_);
+
         bool unit_ready(const object& unit_);
         std::vector<std::string> unit_addons(const std::string& class_);
 
@@ -1593,9 +1505,7 @@ namespace intercept {
 
             rv_uav_control(const game_value &ret_game_value_) :
                 unit(ret_game_value_[0]),
-                position(ret_game_value_[1])
-            {
-            }
+                position(ret_game_value_[1]) {}
         };
 
         rv_uav_control uav_control(const object& uav_);
@@ -1613,9 +1523,7 @@ namespace intercept {
             rv_expected_destination(const game_value &ret_game_value_) :
                 position(ret_game_value_[0]),
                 planning_mode(ret_game_value_[1]),
-                force(ret_game_value_[2])
-            {
-            }
+                force(ret_game_value_[2]) {}
         };
 
         rv_expected_destination expected_destination(const object& unit_);
@@ -1630,9 +1538,7 @@ namespace intercept {
             rv_model_info(const game_value &ret_game_value_) :
                 name(ret_game_value_[0]),
                 path(ret_game_value_[1]),
-                skeleton(ret_game_value_[2])
-            {
-            }
+                skeleton(ret_game_value_[2]) {}
         };
 
         rv_model_info get_model_info(const object& object_);
@@ -1646,7 +1552,7 @@ namespace intercept {
 
         vector3 task_destination(const task& task_);
 
-      
+
         bool is_equal_to(const object& l_, const object& r_);
         std::string format(const std::vector<game_value> &params_);
         bool open_dlc_page(float value_);
@@ -1656,5 +1562,5 @@ namespace intercept {
         bool open_map(bool show_, bool forced_);
         bool sling_load_assistant_shown();
     }
-   
+
 }

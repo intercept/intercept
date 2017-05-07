@@ -128,5 +128,24 @@ namespace intercept {
         rv_date mission_start() {
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
         }
+
+        rv_fog_parameters fog_params() {
+            return rv_fog_parameters::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array)));
+        }
+
+        rv_rendering_distances get_object_view_distance() {
+            return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
+        }
+        void set_date(int year_, int month_, int day_, int hour_, float minute_) {
+            std::vector<game_value> date{
+                (float) year_,
+                (float) month_,
+                (float) day_,
+                (float) hour_,
+                minute_
+            };
+
+            host::functions.invoke_raw_unary(client::__sqf::unary__setdate__array__ret__nothing, date);
+        }
     }
 }

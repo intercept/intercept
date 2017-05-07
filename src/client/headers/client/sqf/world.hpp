@@ -97,5 +97,52 @@ namespace intercept {
         rv_date number_to_date(int year_, float time_);
         rv_date date();
         rv_date mission_start();
+
+
+        struct rv_fog_parameters {
+            float value;
+            float decay;
+            float base;
+
+            rv_fog_parameters(float value_, float decay_, float base_) {
+                value = value_;
+                decay = decay_;
+                base = base_;
+            }
+
+            static rv_fog_parameters from_vector(const std::vector<float> &fog_params_vector_) {
+                return rv_fog_parameters(fog_params_vector_[0], fog_params_vector_[1], fog_params_vector_[2]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ value, decay, base };
+                return ret_val;
+            }
+        };
+
+        rv_fog_parameters fog_params();
+
+        struct rv_rendering_distances {
+            float object_distance;
+            float shadow_distance;
+
+            rv_rendering_distances(float object_distance_, float shadow_distance_) {
+                object_distance = object_distance_;
+                shadow_distance = shadow_distance_;
+            }
+
+            static rv_rendering_distances from_vector(const std::vector<float> &rendering_distances_vector_) {
+                return rv_rendering_distances(rendering_distances_vector_[0], rendering_distances_vector_[1]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ object_distance, shadow_distance };
+                return ret_val;
+            }
+        };
+
+        rv_rendering_distances get_object_view_distance();
+
+        void set_date(int year_, int month_, int day_, int hour_, float minute_);
     }
 }

@@ -524,22 +524,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_));
-        }
-
-        vector2 world_to_screen(const vector3 & pos_agl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_));
-        }
-
-        vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
-            game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (((game_data_array *)result.data.getRef())->length == 2)
-                in_screen_ = true;
-            else
-                in_screen_ = false;
-            return game_value(result);
-        }
+        
 
         std::vector<object> near_entities(const vector3 & pos_agl_, const std::vector<std::string>& types_, float range_) {
             std::vector<game_value> types;
@@ -557,21 +542,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return ret_objects;
         }
 
-        void set_vector_dir(const object & obj_, const vector3 & vec_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);
-        }
 
-        void set_velocity(const object & obj_, const vector3 & vel_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvelocity__object__array__ret__nothing, obj_, vel_);
-        }
 
         object create_vehicle_local(const std::string & type_, const vector3 & pos_atl_) {
             return object(host::functions.invoke_raw_binary(__sqf::binary__createvehiclelocal__string__array__ret__object, type_, pos_atl_));
         }
 
-        vector3 velocity(const object & obj_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__velocity__object__ret__array, obj_));
-        }
+
 
         std::vector<std::string> action_keys(const std::string &user_action_) {
             game_value act_keys = host::functions.invoke_raw_unary(client::__sqf::unary__actionkeys__string__ret__array, user_action_);
@@ -1099,32 +1076,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return rv_namespace(host::functions.invoke_raw_nular(client::__sqf::nular__uinamespace__ret__namespace));
         }
 
-        std::vector<script> diag_active_mission_fsms() {
-            game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activemissionfsms__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
-
-        std::vector<script> diag_active_sqf_scripts() {
-            game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqfscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
-
-        std::vector<script> diag_active_sqs_scripts() {
-            game_value input = host::functions.invoke_raw_nular(client::__sqf::nular__diag_activesqsscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
+        
 
         bool __sqfassert(bool test_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__script__ret__bool, test_));
@@ -1779,9 +1731,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__bool_unary_string(client::__sqf::unary__difficultyenabled__string__ret__bool, value_);
         }
 
-        float direction(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__direction__object__ret__scalar, value_);
-        }
 
 
 
@@ -1887,9 +1836,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__bool_unary_number(client::__sqf::unary__finite__scalar_nan__ret__bool, value_);
         }
 
-        object first_backpack(const object &value_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__firstbackpack__object__ret__object, value_);
-        }
 
         object flag(const object &value_) {
             return __helpers::__object_unary_object(client::__sqf::unary__flag__object__ret__object, value_);
@@ -2264,29 +2210,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__string_unary_object(client::__sqf::unary__lightison__object__ret__string, value_);
         }
 
-        float load(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__load__object__ret__scalar, value_);
-        }
-
-        float load_abs(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__loadabs__object__ret__scalar, value_);
-        }
-
-        float load_backpack(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__loadbackpack__object__ret__scalar, value_);
-        }
+        
 
         std::string load_file(const std::string &value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__loadfile__string__ret__string, value_);
         }
 
-        float load_uniform(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__loaduniform__object__ret__scalar, value_);
-        }
 
-        float load_vest(const object &value_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__loadvest__object__ret__scalar, value_);
-        }
 
         std::string localize(const std::string &value_) {
             return __helpers::__string_unary_string(client::__sqf::unary__localize__string__ret__string, value_);
@@ -2445,9 +2375,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__string_unary_string(client::__sqf::unary__preprocessfilelinenumbers__string__ret__string, value_);
         }
 
-        std::string primary_weapon(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__primaryweapon__object__ret__string, value_);
-        }
+
 
         void process_diary_link(const std::string &value_) {
             __helpers::__empty_unary_string(client::__sqf::unary__processdiarylink__string__ret__nothing, value_);
@@ -2573,9 +2501,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__number_unary_object(client::__sqf::unary__scudstate__object__ret__scalar, value_);
         }
 
-        std::string secondary_weapon(const object &value_) {
-            return __helpers::__string_unary_object(client::__sqf::unary__secondaryweapon__object__ret__string, value_);
-        }
+
 
         void select_player(const object &value_) {
             __helpers::__empty_unary_object(client::__sqf::unary__selectplayer__object__ret__nothing, value_);
@@ -2598,9 +2524,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_number(client::__sqf::unary__setacctime__scalar__ret__nothing, value_);
         }
 
-        void set_aperture(float value_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__setaperture__scalar__ret__nothing, value_);
-        }
+
 
         void set_armory_points(float value_) {
             __helpers::__empty_unary_number(client::__sqf::unary__setarmorypoints__scalar__ret__nothing, value_);
@@ -3837,13 +3761,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        rv_fog_parameters fog_params() {
-            return rv_fog_parameters::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array)));
-        }
 
-        rv_rendering_distances get_object_view_distance() {
-            return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
-        }
 
         rv_resolution get_resolution() {
             return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
@@ -3855,9 +3773,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
         }
 
-        vector3 eye_pos(const object &object_) {
-            return vector3(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyepos__object__ret__array, object_)));
-        }
+
 
         rv_artillery_computer_settings get_artillery_computer_settings() {
             return rv_artillery_computer_settings(host::functions.invoke_raw_nular(client::__sqf::nular__getartillerycomputersettings__ret__array));
@@ -3915,25 +3831,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_objects_vector(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__entities__string__ret__array, type_)));
         }
 
-        vector3 eye_direction(const object& unit_)
-        {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyedirection__object__ret__array, unit_));
-        }
 
-        rv_unit_description get_description(const object& unit_)
-        {
-            return rv_unit_description(host::functions.invoke_raw_unary(client::__sqf::unary__getdescription__object__ret__array, unit_));
-        }
 
-        vector3 get_pos_world(const object& unit_)
-        {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getposworld__object__ret__array, unit_));
-        }
 
-        float get_terrain_height_asl(const vector3 position_)
-        {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getterrainheightasl__array__ret__scalar, position_));
-        }
+
 
 
 
@@ -3974,17 +3875,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        void set_date(int year_, int month_, int day_, int hour_, float minute_) {
-            std::vector<game_value> date{
-                (float)year_,
-                (float)month_,
-                (float)day_,
-                (float)hour_,
-                minute_
-            };
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__setdate__array__ret__nothing, date);
-        }
 
 
 
@@ -4362,13 +4253,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        vector3 world_to_model(const object &object_, const vector3 &position_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodel__object__array__ret__array, object_, position_));
-        }
-
-        vector3 world_to_model_visual(const object &object_, const vector3 &position_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodelvisual__object__array__ret__array, object_, position_));
-        }
 
         
 
@@ -5464,17 +5348,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        vector3 velocity_model_space(const object& obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__velocitymodelspace__object__ret__array, obj_));
-        }
 
-        vector3 vector_up_visual(const object& obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorupvisual__object__ret__array, obj_));
-        }
-
-        vector3 vector_up(const object& obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorup__object__ret__array, obj_));
-        }
 
         bool unit_ready(const object& unit_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__unitready__object_array__ret__bool, unit_);

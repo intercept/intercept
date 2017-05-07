@@ -1,6 +1,7 @@
 ﻿#include "chat.hpp"
 #include "client\pointers.hpp"
 #include "position.hpp"
+#include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
@@ -58,6 +59,14 @@ namespace intercept {
 
         vector3 aim_pos(const object & obj_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, obj_));
+        }
+
+        vector3 eye_pos(const object &object_) {
+            return vector3(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyepos__object__ret__array, object_)));
+        }
+
+        vector3 eye_direction(const object& unit_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyedirection__object__ret__array, unit_));
         }
 
         void set_pos(const object & obj_, const vector3 & pos_) {
@@ -151,6 +160,62 @@ namespace intercept {
 
         void set_pos_world(const object &object_, const vector3 &position_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setposworld__object__array__ret__nothing, object_, position_);
+        }
+        vector3 get_pos_world(const object& unit_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getposworld__object__ret__array, unit_));
+        }
+
+        float get_terrain_height_asl(const vector3 position_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getterrainheightasl__array__ret__scalar, position_));
+        }
+        vector3 world_to_model(const object &object_, const vector3 &position_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodel__object__array__ret__array, object_, position_));
+        }
+
+        vector3 world_to_model_visual(const object &object_, const vector3 &position_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodelvisual__object__array__ret__array, object_, position_));
+        }
+
+        vector3 velocity_model_space(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__velocitymodelspace__object__ret__array, obj_));
+        }
+
+        vector3 vector_up_visual(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorupvisual__object__ret__array, obj_));
+        }
+
+        vector3 vector_up(const object& obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorup__object__ret__array, obj_));
+        }
+        vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_) {
+            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_));
+        }
+
+        vector2 world_to_screen(const vector3 & pos_agl_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_));
+        }
+
+        vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
+            game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
+            if (((game_data_array *) result.data.getRef())->length == 2)
+                in_screen_ = true;
+            else
+                in_screen_ = false;
+            return game_value(result);
+        }
+        void set_vector_dir(const object & obj_, const vector3 & vec_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);
+        }
+
+        void set_velocity(const object & obj_, const vector3 & vel_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvelocity__object__array__ret__nothing, obj_, vel_);
+        }
+        vector3 velocity(const object & obj_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__velocity__object__ret__array, obj_));
+        }
+
+        float direction(const object &value_) {
+            return __helpers::__number_unary_object(client::__sqf::unary__direction__object__ret__scalar, value_);
         }
     }
 }

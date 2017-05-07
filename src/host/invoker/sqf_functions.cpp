@@ -159,7 +159,7 @@ void intercept::sqf_functions::initialize() {
 intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) {
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-    auto found = gs->_scriptFunctions.get(name.c_str());
+    auto& found = gs->_scriptFunctions.get(name.c_str());
     if (gs->_scriptFunctions.is_null(found)) return nullptr;
     std::string argTypeString = to_string(argument_type);
     for (auto& it : found) {
@@ -174,7 +174,7 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
 intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) {
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-    auto found = gs->_scriptOperators.get(name.c_str());
+    auto& found = gs->_scriptOperators.get(name.c_str());
     if (gs->_scriptOperators.is_null(found)) return nullptr;
     std::string left_argTypeString = to_string(left_argument_type);
     std::string right_argTypeString = to_string(right_argument_type);

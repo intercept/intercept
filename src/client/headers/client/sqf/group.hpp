@@ -48,8 +48,31 @@ namespace intercept {
 
         void set_current_waypoint(group & gp_, waypoint & wp_);
 
+        struct rv_group_icon_params {
+            rv_color color;
+            std::string text;
+            float scale;
+            bool visible;
 
+            rv_group_icon_params(const game_value &ret_game_value_) :
+                color(ret_game_value_[0]),
+                text(ret_game_value_[1]),
+                scale(ret_game_value_[2]),
+                visible(ret_game_value_[3]) {}
+        };
 
+        rv_group_icon_params get_group_icon_params(const group& group_);
 
+        void join(const std::vector<object> &units_, const group &group_);
+        void join(const std::vector<object> &units_, const object &unit_group_);
+        void join_silent(const std::vector<object> &units_, const group &group_);
+        void join_silent(const std::vector<object> &units_, const object &unit_group_);
+        void join_as(const object &unit_, const group &group_, int pos_id_);
+        void join_as_silent(const object &unit_, const group &group_, int pos_id_);
+
+        std::vector<object> units(const group& gp_);
+        side get_side(const group &group_);
+        std::vector<std::string> all_variables(const group &value_);
+        bool is_null(const group &value_);
     }
 }

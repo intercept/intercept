@@ -632,12 +632,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__activateaddons__array__ret__nothing, addons);
         }
 
-        /* potential namespace: camera */
-        void add_cam_shake(float power_, float duration_, float frequency_) {
-            std::vector<game_value> params{ power_, duration_, frequency_ };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__addcamshake__array__ret__nothing, params);
-        }
 
         
 
@@ -1093,9 +1087,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__object__ret__bool, value_));
         }
 
-        bool is_null(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
-        }
+
 
         bool is_null(const control &value_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__control__ret__bool, value_));
@@ -1183,10 +1175,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 client::__sqf::unary__allvariables__namespace__ret__array, value_));
         }
-        std::vector<std::string> all_variables(const group &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
-                client::__sqf::unary__allvariables__group__ret__array, value_));
-        }
+
         std::vector<std::string> all_variables(const task &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 client::__sqf::unary__allvariables__task__ret__array, value_));
@@ -1241,9 +1230,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__retrieve_nular_object(client::__sqf::nular__cameraon__ret__object);
         }
 
-        std::string camera_view() {
-            return __helpers::__retrieve_nular_string(client::__sqf::nular__cameraview__ret__string);
-        }
+
 
         bool cheats_enabled() {
             return __helpers::__retrieve_nular_bool(client::__sqf::nular__cheatsenabled__ret__bool);
@@ -1544,9 +1531,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__retrieve_nular_string(client::__sqf::nular__profilenamesteam__ret__string);
         }
 
-        void reset_cam_shake() {
-            __helpers::__empty_nular(client::__sqf::nular__resetcamshake__ret__nothing);
-        }
+
 
         side resistance() {
             return __helpers::__retrieve_nular_side(client::__sqf::nular__resistance__ret__side);
@@ -1714,127 +1699,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__drop__array__ret__nothing, particle_array_);
         }
 
-        bool cam_committed(const object &camera_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__camcommitted__object__ret__bool, camera_);
-        }
-
-        void cam_destroy(const object &camera_) {
-            __helpers::__empty_unary_object(client::__sqf::unary__camdestroy__object__ret__nothing, camera_);
-        }
-
-        bool cam_preloaded(const object &camera_) {
-            return __helpers::__bool_unary_object(client::__sqf::unary__campreloaded__object__ret__bool, camera_);
-        }
-
-        object cam_target(const object &camera_) {
-            return __helpers::__object_unary_object(client::__sqf::unary__camtarget__object__ret__object, camera_);
-        }
-
-        void cam_use_nvg(bool use_nvg_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__camusenvg__bool__ret__nothing, use_nvg_);
-        }
-
-        void camera_effect_enable_hud(bool enable_hud_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__cameraeffectenablehud__bool__ret__nothing, enable_hud_);
-        }
-
-        float camera_interest(const object &entity_) {
-            return __helpers::__number_unary_object(client::__sqf::unary__camerainterest__object__ret__scalar, entity_);
-        }
-
-        void cam_constuction_set_params(const object &camera_, const vector3 & position_, float radius_, float max_above_land_) {
-            std::vector<game_value> args{
-                position_,
-                radius_,
-                max_above_land_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
-        }
-
-        object cam_create(const std::string & type_, const vector3 & position_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__camcreate__string__array__ret__object, type_, position_);
-        }
-
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_) {
-            std::vector<game_value> args{
-                name_,
-                position_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
-        }
-
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_, const std::string & rtt_) {
-            std::vector<game_value> args{
-                name_,
-                position_,
-                rtt_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
-        }
-
-        void cam_prepare_focus(const object & camera_, float distance_, float blur_) {
-            std::vector<game_value> args{
-                distance_,
-                blur_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparefocus__object__array__ret__nothing, camera_, args);
-        }
-
-        void cam_prepare_fov_range(const object & camera_, float min_, float max_) {
-            std::vector<game_value> args{
-                min_,
-                max_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparefovrange__object__array__ret__nothing, camera_, args);
-        }
-
-        void cam_prepare_pos(const object & camera_, const vector3 & position_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparepos__object__array__ret__nothing, camera_, position_);
-        }
-
-        void cam_prepare_rel_pos(const object & camera_, const vector3 & relative_position_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparerelpos__object__array__ret__nothing, camera_, relative_position_);
-        }
-
-        void cam_prepare_target(const object & camera_, const object & target_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparetarget__object__object__ret__nothing, camera_, target_);
-        }
-
-        void cam_prepare_target(const object & camera_, const vector3 & target_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparetarget__object__array__ret__nothing, camera_, target_);
-        }
-
-        void cam_set_focus(const object & camera_, float distance_, float blur_) {
-            std::vector<game_value> args{
-                distance_,
-                blur_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetfocus__object__array__ret__nothing, camera_, args);
-        }
-
-        void cam_set_fov_range(const object & camera_, float min_, float max_) {
-            std::vector<game_value> args{
-                min_,
-                max_
-            };
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetfovrange__object__array__ret__nothing, camera_, args);
-        }
-
-        void cam_set_pos(const object & camera_, const vector3 & position_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetpos__object__array__ret__nothing, camera_, position_);
-        }
-
-        void cam_set_relative_pos(const object & camera_, const vector3 & relative_position_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetrelpos__object__array__ret__nothing, camera_, relative_position_);
-        }
-
-        void cam_set_target(const object & camera_, const object & target_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsettarget__object__object__ret__nothing, camera_, target_);
-        }
-
-        void cam_set_target(const object & camera_, const vector3 & target_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
-        }
+        
 
         bool can_fire(const object & unit_) {
             return __helpers::__bool_unary_object(client::__sqf::unary__canfire__object__ret__bool, unit_);
@@ -1968,9 +1833,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__object_unary_object(client::__sqf::unary__effectivecommander__object__ret__object, value_);
         }
 
-        void enable_cam_shake(bool value_) {
-            __helpers::__empty_unary_bool(client::__sqf::unary__enablecamshake__bool__ret__nothing, value_);
-        }
+
 
         void enable_caustics(bool value_) {
             __helpers::__empty_unary_bool(client::__sqf::unary__enablecaustics__bool__ret__nothing, value_);
@@ -2588,46 +2451,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__playsound__array__ret__nothing, params);
         }
 
-        float pp_effect_create(const std::string& name_, const float& priority_) {
-            std::vector<game_value> params{
-                name_,
-                priority_
-            };
-
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params));
-        }
-
-        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
-            std::vector<game_value> effects;
-            for (rv_pp_effect item : effects_) {
-                effects.push_back(game_value(item));
-            }
-
-            game_value ret = host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, effects);
-
-            if (ret.length() == 0) {
-                return {};
-            }
-            else {
-                return __helpers::__convert_to_numbers_vector(ret);
-            }
-        }
-
-        bool pp_effect_committed(const std::string &value_) {
-            return __helpers::__bool_unary_string(client::__sqf::unary__ppeffectcommitted__string__ret__bool, value_);
-        }
-
-        bool pp_effect_committed(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__ppeffectcommitted__scalar__ret__bool, value_);
-        }
-
-        void pp_effect_destroy(float value_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__ppeffectdestroy__scalar__ret__nothing, value_);
-        }
-
-        bool pp_effect_enabled(float value_) {
-            return __helpers::__bool_unary_number(client::__sqf::unary__ppeffectenabled__scalar__ret__bool, value_);
-        }
+        
 
         float precision(const object &value_) {
             return __helpers::__number_unary_object(client::__sqf::unary__precision__object__ret__scalar, value_);
@@ -3064,49 +2888,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__assigntoairport__object__object_scalar__ret__nothing, value0_, target_);
         }
 
-        void cam_command(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camcommand__object__string__ret__nothing, value0_, value1_);
-        }
-
-        void cam_commit(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camcommit__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_commit_prepared(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camcommitprepared__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_preload(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreload__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_prepare_bank(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparebank__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_prepare_dir(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparedir__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_prepare_dive(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparedive__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_prepare_fov(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__campreparefov__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_set_bank(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetbank__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_set_dive(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetdive__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void cam_set_fov(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__camsetfov__object__scalar__ret__nothing, value0_, value1_);
-        }
+        
 
         void debug_fsm(float value0_, bool value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__debugfsm__scalar__bool__ret__nothing, value0_, value1_);
@@ -3399,21 +3181,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__playmovenow__object__string__ret__nothing, value0_, value1_);
         }
 
-        void pp_effect_commit(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectcommit__string__scalar__ret__nothing, value0_, value1_);
-        }
 
-        void pp_effect_enable(bool value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectenable__string__bool__ret__nothing, value0_, value1_);
-        }
-
-        void pp_effect_enable(float value0_, bool value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectenable__scalar__bool__ret__nothing, value0_, value1_);
-        }
-
-        void pp_effect_force_in_nvg(float value0_, bool value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectforceinnvg__scalar__bool__ret__nothing, value0_, value1_);
-        }
 
 
         void public_variable_client(float value0_, const std::string& value1_) {
@@ -3485,13 +3253,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__setbleedingremaining__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_cam_use_ti(float value0_, bool value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcamuseti__bool__scalar__ret__nothing, value0_, value1_);
-        }
 
-        void set_camera_interest(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__setcamerainterest__object__scalar__ret__nothing, value0_, value1_);
-        }
+
+
 
         void set_collision_light(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcollisionlight__object__bool__ret__nothing, value0_, value1_);
@@ -3748,9 +3512,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(client::__sqf::binary__switchaction__object__string__ret__nothing, value0_, value1_);
         }
 
-        void switch_camera(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__switchcamera__object__string__ret__nothing, value0_, value1_);
-        }
+
 
         void switch_gesture(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__switchgesture__object__string__ret__nothing, value0_, value1_);
@@ -4159,9 +3921,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__object__ret__side, object_));
         }
 
-        side get_side(const group &group_) {
-            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__group__ret__side, group_));
-        }
+
 
 
 
@@ -4276,10 +4036,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__setdate__array__ret__nothing, date);
         }
 
-        std::vector<object> units(const group& gp_)
-        {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__units__group__ret__array, gp_));
-        }
+
 
         std::vector<object> units(const object& unit_)
         {
@@ -4698,59 +4455,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        void join(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
-            for (object unit : units_) {
-                units.push_back(game_value(unit));
-            }
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, group_);
-        }
-
-        void join(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
-            for (object unit : units_) {
-                units.push_back(game_value(unit));
-            }
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, unit_group_);
-        }
-
-        void join_silent(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
-            for (object unit : units_) {
-                units.push_back(game_value(unit));
-            }
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, group_);
-        }
-
-        void join_silent(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
-            for (object unit : units_) {
-                units.push_back(game_value(unit));
-            }
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, unit_group_);
-        }
-
-        void join_as(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
-                group_,
-                (float)pos_id_
-            };
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
-        }
-
-        void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
-                group_,
-                (float)pos_id_
-            };
-
-            host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
-        }
+        
 
         bool in(const object &unit_, const object &vehicle_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__object__object__ret__bool, unit_, vehicle_));
@@ -5349,9 +5054,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
-        bool preload_camera(const vector3 &pos_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__preloadcamera__array__ret__bool, pos_));
-        }
+
 
 
 
@@ -5599,42 +5302,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return best_places;
         }
 
-        void set_aperture_new(float min_, float std_, float max_, float std_lum_) {
-            std::vector<game_value> params{
-                min_,
-                std_,
-                max_,
-                std_lum_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__setaperturenew__array__ret__nothing, params);
-        }
-
-        void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_) {
-            std::vector<game_value> params{
-                power_,
-                duration_,
-                freq_,
-                min_speed_,
-                min_mass_,
-                caliber_coef_hit_,
-                vehicle_coef_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakedefparams__array__ret__nothing, params);
-        }
-
-        void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_) {
-            std::vector<game_value> params{
-                pos_coef_,
-                vert_coef_,
-                horz_coef_,
-                bank_coef_,
-                interpolate_
-            };
-
-            host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakeparams__array__ret__nothing, params);
-        }
+        
 
         void set_compass_oscillation(float angle_, float freq_min_, float freq_max_) {
             std::vector<game_value> params{
@@ -5646,14 +5314,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(client::__sqf::unary__setcompassoscillation__array__ret__nothing, params);
         }
 
-        void set_default_camera(const vector3& pos_, const vector3& dir_) {
-            std::vector<game_value> params{
-                pos_,
-                dir_
-            };
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__setdefaultcamera__array__ret__nothing, params);
-        }
 
         void set_detail_map_blend_pars(float full_detail_, float no_detail_) {
             std::vector<game_value> params{
@@ -5881,13 +5542,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        void pp_effect_destroy(std::vector<float> effect_handles_) {
-            std::vector<game_value> effect_handles;
-            for (auto effect_handle : effect_handles_)
-                effect_handles.push_back(game_value(effect_handle));
 
-            host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectdestroy__array__ret__nothing, effect_handles);
-        }
 
         std::vector<std::string> task_description(const task& task_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__taskdescription__task__ret__array, task_));
@@ -5907,9 +5562,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return rv_expected_destination(host::functions.invoke_raw_unary(client::__sqf::unary__expecteddestination__object__ret__array, unit_));
         }
 
-        rv_group_icon_params get_group_icon_params(const group& group_) {
-            return rv_group_icon_params(host::functions.invoke_raw_unary(client::__sqf::unary__getgroupiconparams__group__ret__array, group_));
-        }
+
 
         rv_model_info get_model_info(const object& object_) {
             return rv_model_info(host::functions.invoke_raw_unary(client::__sqf::unary__getmodelinfo__object__ret__array, object_));
@@ -5947,9 +5600,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool is_equal_to(const object& l_, const object& r_) {
             return game_value(host::functions.invoke_raw_binary(client::__sqf::__sqf::binary__isequalto__any__any__ret__bool, l_,r_));
         }
-        vector3 get_camera_view_direction(const object & obj_) {
-            return __helpers::get_pos_obj(__sqf::unary__getcameraviewdirection__object__ret__array, obj_);
-        }
+
         std::string format(const std::vector<game_value> &params_) {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__format__array__ret__string, params_));         
         }

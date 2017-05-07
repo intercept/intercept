@@ -86,7 +86,75 @@ namespace intercept {
         void set_current_waypoint(group & gp_, waypoint & wp_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_.__to_gv());
         }
+        rv_group_icon_params get_group_icon_params(const group& group_) {
+            return rv_group_icon_params(host::functions.invoke_raw_unary(client::__sqf::unary__getgroupiconparams__group__ret__array, group_));
+        }
+        void join(const std::vector<object> &units_, const group &group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
 
+            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, group_);
+        }
+
+        void join(const std::vector<object> &units_, const object &unit_group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__join__array__object_group__ret__nothing, units, unit_group_);
+        }
+
+        void join_silent(const std::vector<object> &units_, const group &group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, group_);
+        }
+
+        void join_silent(const std::vector<object> &units_, const object &unit_group_) {
+            std::vector<game_value> units;
+            for (object unit : units_) {
+                units.push_back(game_value(unit));
+            }
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinsilent__array__object_group__ret__nothing, units, unit_group_);
+        }
+
+        void join_as(const object &unit_, const group &group_, int pos_id_) {
+            std::vector<game_value> params{
+                group_,
+                (float) pos_id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
+        }
+
+        void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
+            std::vector<game_value> params{
+                group_,
+                (float) pos_id_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
+        }
+        std::vector<object> units(const group& gp_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(client::__sqf::unary__units__group__ret__array, gp_));
+        }
+        side get_side(const group &group_) {
+            return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__group__ret__side, group_));
+        }
+        std::vector<std::string> all_variables(const group &value_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+                client::__sqf::unary__allvariables__group__ret__array, value_));
+        }
+        bool is_null(const group &value_) {
+            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
+        }
 
     }
 }

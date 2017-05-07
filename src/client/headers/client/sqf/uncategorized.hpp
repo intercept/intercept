@@ -127,8 +127,6 @@ namespace intercept {
         /* potential namespace: misc, missions */
         void activate_addons(std::vector<std::string> &addons_);
 
-        /* potential namespace: camera */
-        void add_cam_shake(float power_, float duration_, float frequency_);
 
         /* potential namespace: core, misc, world */
         void add_to_remains_collector(const std::vector<object> & objects_);
@@ -246,31 +244,7 @@ namespace intercept {
         void enable_saving(bool enable_);
         void enable_saving(bool enable_, bool autosave_);
 
-        /* potential namespace: camera */
-        bool cam_committed(const object &camera_);
-        void cam_destroy(const object &camera_);
-        bool cam_preloaded(const object &camera_);
-        object cam_target(const object &camera_);
-        void cam_use_nvg(bool use_nvg_);
-        void camera_effect_enable_hud(bool enable_hud_);
-        float camera_interest(const object &entity_);
-        void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius, float max_above_land_);
-        object cam_create(const std::string &type_, const vector3 &position_);
-        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_);
-        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_, const std::string &rtt_);
-        void cam_prepare_focus(const object &camera_, float distance_, float blur_);
-        void cam_prepare_fov_range(const object &camera_, float min_, float max_);
-        void cam_prepare_pos(const object &camera_, const vector3 &position_);
-        void cam_prepare_rel_pos(const object &camera_, const vector3 &relative_position_);
-        void cam_prepare_target(const object &camera_, const object &target_);
-        void cam_prepare_target(const object &camera_, const vector3 &target_);
-        // Broken command cam_set_dir
-        void cam_set_focus(const object &camera_, float distance_, float blur_);
-        void cam_set_fov_range(const object &camera_, float min_, float max_);
-        void cam_set_pos(const object &camera_, const vector3 &position_);
-        void cam_set_relative_pos(const object &camera_, const vector3 &relative_position_);
-        void cam_set_target(const object &camera_, const object &target_);
-        void cam_set_target(const object &camera_, const vector3 &target_);
+
 
         /* potential namespace: groups, ai */
         std::string formation(const object &leader_);
@@ -492,7 +466,6 @@ namespace intercept {
         std::string server_name();
 
         bool is_null(const object &value_);
-        bool is_null(const group &value_);
         bool is_null(const control &value_);
         bool is_null(const display &value_);
         bool is_null(const script &value_);
@@ -515,7 +488,6 @@ namespace intercept {
         std::vector<std::string> all_variables(const object &value_);
         std::vector<std::string> all_variables(const team_member &value_);
         std::vector<std::string> all_variables(rv_namespace value_);
-        std::vector<std::string> all_variables(const group &value_);
         std::vector<std::string> all_variables(const task &value_);
         std::vector<std::string> all_variables(const control &value_);
 
@@ -551,7 +523,7 @@ namespace intercept {
         std::string briefing_name();
         bool cadet_mode();
         object camera_on();
-        std::string camera_view();
+
         bool cheats_enabled();
         side civilian();
         void clear_forces_rtd();
@@ -629,7 +601,7 @@ namespace intercept {
         std::string profile_name();
         rv_namespace profile_namespace();
         std::string profile_namesteam();
-        void reset_cam_shake();
+
         side resistance();
         bool reversed_mouse_y();
         void run_init_script();
@@ -706,7 +678,7 @@ namespace intercept {
         void echo(const std::string &value_);
         // TODO void edit(const std::string &value_); // Are we sure this is a valid sqf script command?
         object effective_commander(const object &value_);
-        void enable_cam_shake(bool value_);
+
         void enable_caustics(bool value_);
         void enable_diag_legend(bool value_);
         void enable_engine_artillery(bool value_);
@@ -872,32 +844,7 @@ namespace intercept {
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
 
-        struct rv_pp_effect {
-            std::string name;
-            float priority;
 
-            operator game_value() {
-                return game_value(std::vector<game_value>({
-                    name,
-                    priority
-                }));
-            }
-
-            operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    name,
-                    priority
-                }));
-            }
-        };
-
-        float pp_effect_create(const std::string& name_, const float& priority_);
-        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_);
-
-        bool pp_effect_committed(const std::string &value_);
-        bool pp_effect_committed(float value_);
-        void pp_effect_destroy(float value_);
-        bool pp_effect_enabled(float value_);
         float precision(const object &value_);
         bool preload_sound(const std::string &value_);
         std::string preprocess_file(const std::string &value_);
@@ -1016,17 +963,7 @@ namespace intercept {
         void assign_team(const object &value0_, const std::string& value1_);
         void assign_to_airport(const object &value0_, float value1_);
         void assign_to_airport(const object &value0_, const object &target_);
-        void cam_command(const object &value0_, const std::string& value1_);
-        void cam_commit(const object &value0_, float value1_);
-        void cam_commit_prepared(const object &value0_, float value1_);
-        void cam_preload(const object &value0_, float value1_);
-        void cam_prepare_bank(const object &value0_, float value1_);
-        void cam_prepare_dir(const object &value0_, float value1_);
-        void cam_prepare_dive(const object &value0_, float value1_);
-        void cam_prepare_fov(const object &value0_, float value1_);
-        void cam_set_bank(const object &value0_, float value1_);
-        void cam_set_dive(const object &value0_, float value1_);
-        void cam_set_fov(const object &value0_, float value1_);
+
 
 
 
@@ -1113,10 +1050,7 @@ namespace intercept {
         void play_gesture(const object &value0_, const std::string& value1_);
         void play_move(const object &value0_, const std::string& value1_);
         void play_move_now(const object &value0_, const std::string& value1_);
-        void pp_effect_commit(float value0_, const std::string& value1_);
-        void pp_effect_enable(bool value0_, const std::string& value1_);
-        void pp_effect_enable(float value0_, bool value1_);
-        void pp_effect_force_in_nvg(float value0_, bool value1_);
+
 
         void public_variable_client(float value0_, const std::string& value1_);
         bool register_task(const team_member &value0_, const std::string& value1_);
@@ -1136,8 +1070,8 @@ namespace intercept {
         void set_anim_speed_coef(const object &value0_, float value1_);
         void set_autonomous(const object &value0_, bool value1_);
         void set_bleeding_remaining(const object &value0_, float value1_);
-        void set_cam_use_ti(float value0_, bool value1_);
-        void set_camera_interest(const object &value0_, float value1_);
+
+
         void set_collision_light(const object &value0_, bool value1_);
         void set_combat_mode(const team_member &value0_, const std::string& value1_);
         void set_custom_aim_coef(const object &value0_, float value1_);
@@ -1205,7 +1139,7 @@ namespace intercept {
         void stop(const object &value0_, bool value1_);
         void suppress_for(const object &value0_, float value1_);
         void switch_action(const object &value0_, const std::string& value1_);
-        void switch_camera(const object &value0_, const std::string& value1_);
+
         void switch_gesture(const object &value0_, const std::string& value1_);
         void switch_light(const object &value0_, const std::string& value1_);
         void switch_move(const object &value0_, const std::string& value1_);
@@ -1369,7 +1303,7 @@ namespace intercept {
 
         // originally "side", but is already a type
         side get_side(const object &object_);
-        side get_side(const group &group_);
+
 
         std::string wf_side_text(const object &object_);
         std::string wf_side_text(const group &group_);
@@ -1408,7 +1342,7 @@ namespace intercept {
         std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_);
 
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
-        std::vector<object> units(const group& gp_);
+
         std::vector<object> units(const object& unit_);
 
         std::string call_extension(const std::string& extension_, const std::string& arguments_);
@@ -1429,12 +1363,7 @@ namespace intercept {
 
 
 
-        void join(const std::vector<object> &units_, const group &group_);
-        void join(const std::vector<object> &units_, const object &unit_group_);
-        void join_silent(const std::vector<object> &units_, const group &group_);
-        void join_silent(const std::vector<object> &units_, const object &unit_group_);
-        void join_as(const object &unit_, const group &group_, int pos_id_);
-        void join_as_silent(const object &unit_, const group &group_, int pos_id_);
+
 
         bool in(const object &unit_, const object &vehicle_);
 
@@ -1585,7 +1514,7 @@ namespace intercept {
         void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_);
         void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_);
 
-        bool preload_camera(const vector3 &pos_);
+
 
 
 
@@ -1626,11 +1555,9 @@ namespace intercept {
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, const std::string &expression_, float precision_, float max_results_);
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, const std::string &expression_, float precision_, float max_results_);
 
-        void set_aperture_new(float min_, float std_, float max_, float std_lum_);
-        void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_);
-        void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_);
+
         void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
-        void set_default_camera(const vector3 &pos_, const vector3 &dir_);
+
         void set_detail_map_blend_pars(float full_detail_, float no_detail_);
         void set_group_icons_visible(bool map_, bool hud_);
         std::vector<bool> group_icons_visible();
@@ -1683,7 +1610,7 @@ namespace intercept {
         rv_uav_control uav_control(const object& uav_);
 
 
-        void pp_effect_destroy(std::vector<float> effect_handles_);
+
         std::vector<std::string> task_description(const task& task_);
         void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_);
 
@@ -1702,22 +1629,7 @@ namespace intercept {
 
         rv_expected_destination expected_destination(const object& unit_);
 
-        struct rv_group_icon_params {
-            rv_color color;
-            std::string text;
-            float scale;
-            bool visible;
 
-            rv_group_icon_params(const game_value &ret_game_value_) :
-                color(ret_game_value_[0]),
-                text(ret_game_value_[1]),
-                scale(ret_game_value_[2]),
-                visible(ret_game_value_[3])
-            {
-            }
-        };
-
-        rv_group_icon_params get_group_icon_params(const group& group_);
 
         struct rv_model_info {
             std::string name;
@@ -1779,15 +1691,13 @@ namespace intercept {
 
       
         bool is_equal_to(const object& l_, const object& r_);
-        vector3 get_camera_view_direction(const object & obj_);
         std::string format(const std::vector<game_value> &params_);
+        bool open_dlc_page(float value_);
+        bool open_map(bool value_);
+        bool open_youtube_video(const std::string &value_);
+        bool show_subtitles(bool value_);
+        bool open_map(bool show_, bool forced_);
+        bool sling_load_assistant_shown();
     }
-
-    bool open_dlc_page(float value_);
-    bool open_map(bool value_);
-    bool open_youtube_video(const std::string &value_);
-    bool show_subtitles(bool value_);
-    bool open_map(bool show_, bool forced_);
-    bool sling_load_assistant_shown();
    
 }

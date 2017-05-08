@@ -145,21 +145,21 @@ namespace intercept {
             float alpha;
 
             operator game_value() {
-                return game_value(std::vector<game_value>({
+                return game_value({
                     red,
                     green,
                     blue,
                     alpha
-                }));
+                });
             }
 
             operator game_value() const {
-                return game_value(std::vector<game_value>({
+                return game_value({
                     red,
                     green,
                     blue,
                     alpha
-                }));
+                });
             }
 
             rv_color(const game_value &ret_game_value_) :

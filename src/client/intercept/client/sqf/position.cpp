@@ -197,7 +197,7 @@ namespace intercept {
 
         vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
             game_value result = host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (((game_data_array *) result.data.getRef())->length == 2)
+            if (((game_data_array *) result.data.getRef())->length() == 2)
                 in_screen_ = true;
             else
                 in_screen_ = false;

@@ -156,7 +156,7 @@ namespace intercept {
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {
-        uintptr_t types_array = state_addr_;  //#TODO AutoArray impl
+        uintptr_t types_array = state_addr_;
         auto game_state = (__internal::game_state*) state_addr_;
 
 

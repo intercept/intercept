@@ -88,7 +88,7 @@ namespace intercept {
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length(); ++i) {
                 output.push_back(object(intersects->data[i]));
             }
 
@@ -108,7 +108,7 @@ namespace intercept {
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length(); ++i) {
                 output.push_back(object(intersects->data[i]));
             }
 
@@ -128,7 +128,7 @@ namespace intercept {
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
             std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length(); ++i) {
                 output.push_back(object(intersects->data[i]));
             }
 
@@ -195,7 +195,7 @@ namespace intercept {
             game_data_array* intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
 
             std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length; ++i) {
+            for (uint32_t i = 0; i < intersects->length(); ++i) {
                 output.push_back(object(intersects->data[i]));
             }
             return output;

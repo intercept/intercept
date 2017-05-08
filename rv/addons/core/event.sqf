@@ -1,1 +1,1 @@
-(_this select 0) interceptEvent (_this select 1);
+interceptEvent [(_this select 0),(_this select 1)];

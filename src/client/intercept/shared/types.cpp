@@ -124,13 +124,6 @@ namespace intercept {
         uintptr_t game_value::__vptr_def;
 
 
-
-        rv_string::rv_string() : length(0), ref_count_internal(0) {}
-
-        std::string rv_string::string() {
-            return std::string((char *) &char_string);
-        }
-
         value_types op_value_entry::type() {
             if (single_type != NULL) {
                 return{ static_cast<std::string>(single_type->type_name) };
@@ -308,98 +301,54 @@ namespace intercept {
         game_data_array::game_data_array() {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            length = 0;
-            max_size = 0;
-            data = nullptr;
         }
 
         game_data_array::game_data_array(size_t size_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            data = rv_allocator<game_value>::createArray(size_); //_array_pool.acquire(size_);
-            length = size_;
-            max_size = size_;
+            data.resize(size_);
         }
 
-        game_data_array::game_data_array(const std::initializer_list<game_value> &init_) {
+        game_data_array::game_data_array(const std::initializer_list<game_value> &init_) : data(init_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            data = rv_allocator<game_value>::createArray(init_.size()); //_array_pool.acquire(init_.size());
-            length = init_.size();
-            max_size = init_.size();
-            size_t i = 0;
-            for (auto& it : init_)
-                data[i++] = it;
         }
 
-        game_data_array::game_data_array(const std::vector<game_value> &init_) {
+        game_data_array::game_data_array(const std::vector<game_value> &init_) {  //#TODO this should not be used in wrappers
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            data = rv_allocator<game_value>::createArray(init_.size()); //_array_pool.acquire(init_.size());
-            length = init_.size();
-            max_size = init_.size();
-            size_t i = 0;
+            data.resize(init_.size()); 
             for (auto& it : init_)
-                data[i++] = it;
+               data.push_back(it);
         }
 
         game_data_array::game_data_array(const game_data_array & copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            length = copy_.length;
-            max_size = copy_.max_size;
-            data = rv_allocator<game_value>::createArray(length); //_array_pool.acquire(length);
-            for (size_t i = 0; i < length; ++i)
-                data[i] = copy_.data[i];
+            data = copy_.data;
         }
 
         game_data_array::game_data_array(game_data_array && move_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            if (data)
-                rv_allocator<game_value>::deallocate(data); //_array_pool.release(data);
-            data = move_.data;
-            length = move_.length;
-            max_size = move_.max_size;
-            move_.data = nullptr;
+            data = std::move(move_.data);
         }
 
         game_data_array & game_data_array::operator = (const game_data_array &copy_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            length = copy_.length;
-            data = rv_allocator<game_value>::createArray(length); //_array_pool.acquire(length);
-            for (size_t i = 0; i < length; ++i)
-                data[i] = copy_.data[i];
+            data = copy_.data;
             return *this;
         }
 
         game_data_array & game_data_array::operator = (game_data_array &&move_) {
             if (this == &move_)
                 return *this;
-            if (data)
-                rv_allocator<game_value>::deallocate(data); //_array_pool.release(data);
-            data = move_.data;
-            length = move_.length;
-            max_size = move_.max_size;
-            move_.data = nullptr;
+            data = std::move(move_.data);
             return *this;
         }
 
-        void game_data_array::free() {
-            //Should never be called. Because this call goes through the vtable and we will call Arma's function
-            if (data) {
-                for (auto it = 0u; it < length; ++it) {
-                    data[it].~game_value();
-                }
-                rv_allocator<game_value>::deallocate(data); // _array_pool.release(data);
-                data = nullptr;
-            }
-
-        }
-
         game_data_array::~game_data_array() {
-            free();
         }
 
         void * game_data_array::operator new(std::size_t) {
@@ -580,14 +529,14 @@ namespace intercept {
 
         game_value::operator vector3() {
             auto array = (game_data_array *) data.getRef();
-            if (array->length == 3)
+            if (array->length() == 3)
                 return vector3{ array->data[0], array->data[1], array->data[2] };
             return vector3();
         }
 
         game_value::operator vector2() {
             auto array = (game_data_array *) data.getRef();
-            if (array->length == 2)
+            if (array->length() == 2)
                 return vector2{ array->data[0], array->data[1] };
             return vector2();
         }
@@ -616,14 +565,14 @@ namespace intercept {
 
         game_value::operator vector3() const {
             auto array = (game_data_array *) data.getRef();
-            if (array->length == 3)
+            if (array->length() == 3)
                 return vector3{ array->data[0], array->data[1], array->data[2] };
             return vector3();
         }
 
         game_value::operator vector2() const {
             auto array = (game_data_array *) data.getRef();
-            if (array->length == 2)
+            if (array->length() == 2)
                 return vector2{ array->data[0], array->data[1] };
             return vector2();
         }
@@ -641,12 +590,12 @@ namespace intercept {
         }
 
         game_value & game_value::operator [](int i_) {
-            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length);
+            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length());
             return ((game_data_array *) data.getRef())->data[i_];
         }
 
         game_value game_value::operator [](int i_) const {
-            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length);
+            assert(data && *reinterpret_cast<uintptr_t*>(data.getRef()) == game_data_array::type_def && (uint32_t) i_ < ((game_data_array *) data.getRef())->length());
             return ((game_data_array *) data.getRef())->data[i_];
         }
 
@@ -658,7 +607,7 @@ namespace intercept {
 
         size_t game_value::length() const {
             if (type() == game_data_array::type_def)
-                return ((game_data_array *) data.getRef())->length;
+                return ((game_data_array *) data.getRef())->length();
             return 0;
         }
 
@@ -680,39 +629,104 @@ namespace intercept {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
         }
 
-        template<class Type>
-        void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
+
+        class MemTableFunctions { //We don't want to expose this in the header. It's only used here
+        public:
+            virtual void *New(size_t size) = 0;
+            virtual void *New(size_t size, const char *file, int line) = 0;
+            virtual void Delete(void *mem) = 0;
+            virtual void Delete(void *mem, const char *file, int line) = 0;
+            virtual void *Realloc(void *mem, size_t size) = 0;
+            virtual void *Realloc(void *mem, size_t size, const char *file, int line) = 0;
+            virtual void *Resize(void *mem, size_t size) = 0; //This actually doesn't do anything.
+
+            virtual void *NewPage(size_t size, size_t align) = 0;
+            virtual void DeletePage(void *page, size_t size) = 0;
+
+            virtual void *HeapAlloc(void *mem, size_t size) = 0;
+            virtual void *HeapAlloc(void *mem, size_t size, const char *file, int line) = 0;//HeapAlloc
+
+            virtual void *HeapDelete(void *mem, size_t size) = 0;
+            virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
+
+            virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
+
+            virtual size_t GetPageRecommendedSize() = 0;
+
+            virtual void *HeapBase() = 0;
+            virtual size_t HeapUsed() = 0;
+
+            virtual size_t HeapUsedByNew() = 0;
+            virtual size_t HeapCommited() = 0;
+            virtual int FreeBlocks() = 0;
+            virtual int MemoryAllocatedBlocks() = 0;
+            virtual void Report() = 0;//Does nothing on release build. Maybe on Profiling build
+            virtual bool CheckIntegrity() = 0;//Does nothing on release build. Maybe on Profiling build returns true.
+            virtual bool IsOutOfMemory() = 0;//If true we are so full we are already moving memory to disk.
+
+            virtual void CleanUp() = 0;//Does nothing? I guess.
+                                       //Synchronization for Multithreaded access
+            virtual void Lock() = 0;
+            virtual void Unlock() = 0;
+            char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
+        };
+
+        void* __internal::rv_allocator_allocate_generic(size_t size) {
+            auto allocatorBase = GET_ENGINE_ALLOCATOR;
+            //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
+            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
+            return alloc->New(size);
+        }
+
+        void __internal::rv_allocator_deallocate_generic(void* _Ptr) {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
             MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-            //std::stringstream stream;
-            //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
-            //OutputDebugStringA(stream.str().c_str());
             alloc->Delete(_Ptr);
         }
 
-        template<class Type>
-        Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
-
+        void* __internal::rv_allocator_reallocate_generic(void* _Ptr, size_t _size) {
+            //#TODO assert when _ptr is not 32/64bit aligned
+            // deallocate object at _Ptr
             auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
             MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-            Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
-            //std::stringstream stream;
-            //stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
-            //OutputDebugStringA(stream.str().c_str());
-            return newData;
+            return alloc->Realloc(_Ptr, _size);
         }
 
+        //template<class Type>
+        //void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
+        //    //#TODO assert when _ptr is not 32/64bit aligned
+        //    // deallocate object at _Ptr
+        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
+        //    //std::stringstream stream;
+        //    //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
+        //    //OutputDebugStringA(stream.str().c_str());
+        //    alloc->Delete(_Ptr);
+        //}
+        //
+        //template<class Type>
+        //Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
+        //
+        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        //    //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
+        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
+        //    Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
+        //    //std::stringstream stream;
+        //    //stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
+        //    //OutputDebugStringA(stream.str().c_str());
+        //    return newData;
+        //}
 
-        template<class Type>
-        Type* rv_allocator<Type>::reallocate(Type* _Ptr, size_t _count) {
-            auto allocatorBase = GET_ENGINE_ALLOCATOR;   
-            MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-            Type* newData = reinterpret_cast<Type*>(alloc->Realloc(_Ptr,sizeof(Type)*_count));
-            return newData;
-        }
+
+        //template<class Type>
+        //Type* rv_allocator<Type>::reallocate(Type* _Ptr, size_t _count) {
+        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;   
+        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
+        //    Type* newData = reinterpret_cast<Type*>(alloc->Realloc(_Ptr,sizeof(Type)*_count));
+        //    return newData;
+        //}
 
         void* rv_pool_allocator::allocate(size_t count) {
             auto allocatorBase = GET_ENGINE_ALLOCATOR;

@@ -9,7 +9,7 @@ namespace intercept {
         }
 
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
-            std::vector<game_value> offset;
+            std::vector<game_value> offset; //#TODO remove temp std::vector
             for (float item : offset_) {
                 offset.push_back(game_value((float) item));
             }
@@ -90,7 +90,7 @@ namespace intercept {
             return rv_group_icon_params(host::functions.invoke_raw_unary(client::__sqf::unary__getgroupiconparams__group__ret__array, group_));
         }
         void join(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -99,7 +99,7 @@ namespace intercept {
         }
 
         void join(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -108,7 +108,7 @@ namespace intercept {
         }
 
         void join_silent(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -117,7 +117,7 @@ namespace intercept {
         }
 
         void join_silent(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -126,19 +126,19 @@ namespace intercept {
         }
 
         void join_as(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
+            game_value params({
                 group_,
                 (float) pos_id_
-            };
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
         }
 
         void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
+            game_value params({
                 group_,
                 (float) pos_id_
-            };
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
         }

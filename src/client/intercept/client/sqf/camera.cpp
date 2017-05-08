@@ -7,7 +7,7 @@ namespace intercept {
     namespace sqf {
         /* potential namespace: camera */
         void add_cam_shake(float power_, float duration_, float frequency_) {
-            std::vector<game_value> params{ power_, duration_, frequency_ };
+            game_value params{ power_, duration_, frequency_ };
 
             host::functions.invoke_raw_unary(client::__sqf::unary__addcamshake__array__ret__nothing, params);
         }
@@ -47,11 +47,11 @@ namespace intercept {
         }
 
         void cam_constuction_set_params(const object &camera_, const vector3 & position_, float radius_, float max_above_land_) {
-            std::vector<game_value> args{
+            game_value args({
                 position_,
                 radius_,
                 max_above_land_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
         }
 
@@ -60,35 +60,35 @@ namespace intercept {
         }
 
         void camera_effect(const object & camera_, const std::string & name_, const std::string & position_) {
-            std::vector<game_value> args{
+            game_value args({
                 name_,
                 position_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
         void camera_effect(const object & camera_, const std::string & name_, const std::string & position_, const std::string & rtt_) {
-            std::vector<game_value> args{
+            game_value args({
                 name_,
                 position_,
                 rtt_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
         void cam_prepare_focus(const object & camera_, float distance_, float blur_) {
-            std::vector<game_value> args{
+            game_value args({
                 distance_,
                 blur_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__campreparefocus__object__array__ret__nothing, camera_, args);
         }
 
         void cam_prepare_fov_range(const object & camera_, float min_, float max_) {
-            std::vector<game_value> args{
+            game_value args({
                 min_,
                 max_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__campreparefovrange__object__array__ret__nothing, camera_, args);
         }
 
@@ -109,18 +109,18 @@ namespace intercept {
         }
 
         void cam_set_focus(const object & camera_, float distance_, float blur_) {
-            std::vector<game_value> args{
+            game_value args({
                 distance_,
                 blur_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__camsetfocus__object__array__ret__nothing, camera_, args);
         }
 
         void cam_set_fov_range(const object & camera_, float min_, float max_) {
-            std::vector<game_value> args{
+            game_value args({
                 min_,
                 max_
-            };
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__camsetfovrange__object__array__ret__nothing, camera_, args);
         }
 
@@ -190,18 +190,18 @@ namespace intercept {
             __helpers::__empty_unary_number(client::__sqf::unary__setaperture__scalar__ret__nothing, value_);
         }
         void set_aperture_new(float min_, float std_, float max_, float std_lum_) {
-            std::vector<game_value> params{
+            game_value params({
                 min_,
                 std_,
                 max_,
                 std_lum_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setaperturenew__array__ret__nothing, params);
         }
 
         void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_) {
-            std::vector<game_value> params{
+            game_value params({
                 power_,
                 duration_,
                 freq_,
@@ -209,13 +209,13 @@ namespace intercept {
                 min_mass_,
                 caliber_coef_hit_,
                 vehicle_coef_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakedefparams__array__ret__nothing, params);
         }
 
         void set_cam_shake_params(float pos_coef_, float vert_coef_, float horz_coef_, float bank_coef_, bool interpolate_) {
-            std::vector<game_value> params{
+            game_value params{
                 pos_coef_,
                 vert_coef_,
                 horz_coef_,
@@ -230,10 +230,10 @@ namespace intercept {
         }
 
         void set_default_camera(const vector3& pos_, const vector3& dir_) {
-            std::vector<game_value> params{
+            game_value params({
                 pos_,
                 dir_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setdefaultcamera__array__ret__nothing, params);
         }
@@ -264,16 +264,16 @@ namespace intercept {
         //post processing effects
 
         float pp_effect_create(const std::string& name_, const float& priority_) {
-            std::vector<game_value> params{
+            game_value params({
                 name_,
                 priority_
-            };
+            });
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params));
         }
 
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
-            std::vector<game_value> effects;
+            std::vector<game_value> effects; //#TODO remove temp std::vector
             for (rv_pp_effect item : effects_) {
                 effects.push_back(game_value(item));
             }
@@ -318,7 +318,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__ppeffectforceinnvg__scalar__bool__ret__nothing, value0_, value1_);
         }
         void pp_effect_destroy(std::vector<float> effect_handles_) {
-            std::vector<game_value> effect_handles;
+            std::vector<game_value> effect_handles; //#TODO remove temp std::vector
             for (auto effect_handle : effect_handles_)
                 effect_handles.push_back(game_value(effect_handle));
 

@@ -21,7 +21,8 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* Waypoint */
-        struct waypoint {
+        class waypoint {
+        public:
             group wgroup;
             float windex;
 

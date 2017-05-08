@@ -174,7 +174,7 @@ namespace intercept {
         bool rv_event(const std::string& event_name_, game_value& params_);
         
 
-        static game_value _intercept_signal(game_value left_arg_, game_value right_arg_);
+        static game_value _intercept_signal(game_value left_arg_);
         /*!
         @brief Get signal from sqf code dispatch it.
         */
@@ -223,7 +223,7 @@ namespace intercept {
         /*!
         @brief The interceptEvent SQF Function that's used to get events with arguments
         */
-        static game_value _intercept_event(game_value left_arg_, game_value right_arg_);
+        static game_value _intercept_event(game_value left_arg_);
         registered_sqf_function _intercept_event_function;
         static game_value _intercept_do_invoke_period(game_value right_arg_);
         registered_sqf_function _intercept_do_invoke_period_function;

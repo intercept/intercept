@@ -75,9 +75,9 @@ namespace intercept {
             LOG(INFO) << "Registration function failed to unhook.";
         }
         sqf_functions::get().initialize();
-        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
+        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
-        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal", "", userFunctionWrapper<_intercept_signal>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ANY);
+        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal", "", userFunctionWrapper<_intercept_signal>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY);
 
         return true;
     }
@@ -104,8 +104,8 @@ namespace intercept {
         return true;
     }
 
-    game_value invoker::_intercept_event(game_value left_arg_, game_value right_arg_) {
-        return invoker::get().rv_event(left_arg_, right_arg_);
+    game_value invoker::_intercept_event(game_value left_arg_) {
+        return invoker::get().rv_event(left_arg_[0], left_arg_[1]);
     }
 
     bool invoker::rv_event(const std::string& event_name_, game_value& params_) {
@@ -127,8 +127,8 @@ namespace intercept {
         return false;
     }
 
-    game_value invoker::_intercept_signal(game_value left_arg_, game_value right_arg_) {
-        return invoker::get().signal(left_arg_[0], left_arg_[1], right_arg_);
+    game_value invoker::_intercept_signal(game_value left_arg_) {
+        return invoker::get().signal(left_arg_[0], left_arg_[1], left_arg_[2]);
     }
 
     bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value args)

@@ -20,54 +20,23 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         class rv_pool_allocator;
+        namespace __internal {
+            void* rv_allocator_allocate_generic(size_t _size);
+            void rv_allocator_deallocate_generic(void* _Ptr);
+            void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
+        }
 
         template<class Type>
         class rv_allocator : std::allocator<Type> {
-            class MemTableFunctions {
-            public:
-                virtual void *New(size_t size) = 0;
-                virtual void *New(size_t size, const char *file, int line) = 0;
-                virtual void Delete(void *mem) = 0;
-                virtual void Delete(void *mem, const char *file, int line) = 0;
-                virtual void *Realloc(void *mem, size_t size) = 0;
-                virtual void *Realloc(void *mem, size_t size, const char *file, int line) = 0;
-                virtual void *Resize(void *mem, size_t size) = 0; //This actually doesn't do anything.
-
-                virtual void *NewPage(size_t size, size_t align) = 0;
-                virtual void DeletePage(void *page, size_t size) = 0;
-
-                virtual void *HeapAlloc(void *mem, size_t size) = 0;
-                virtual void *HeapAlloc(void *mem, size_t size, const char *file, int line) = 0;//HeapAlloc
-
-                virtual void *HeapDelete(void *mem, size_t size) = 0;
-                virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-
-                virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
-
-                virtual size_t GetPageRecommendedSize() = 0;
-
-                virtual void *HeapBase() = 0;
-                virtual size_t HeapUsed() = 0;
-
-                virtual size_t HeapUsedByNew() = 0;
-                virtual size_t HeapCommited() = 0;
-                virtual int FreeBlocks() = 0;
-                virtual int MemoryAllocatedBlocks() = 0;
-                virtual void Report() = 0;//Does nothing on release build. Maybe on Profiling build
-                virtual bool CheckIntegrity() = 0;//Does nothing on release build. Maybe on Profiling build returns true.
-                virtual bool IsOutOfMemory() = 0;//If true we are so full we are already moving memory to disk.
-
-                virtual void CleanUp() = 0;//Does nothing? I guess.
-                                           //Synchronization for Multithreaded access
-                virtual void Lock() = 0;
-                virtual void Unlock() = 0;
-                char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
-            };
         public:
-            static void deallocate(Type* _Ptr, size_t _unused = 0); //#TODO if its unused why not just remove it?!
+            static void deallocate(Type* _Ptr, size_t = 0) {
+                return __internal::rv_allocator_deallocate_generic(_Ptr);
+            }
             //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called! 
             //use the create* Methods instead
-            static Type* allocate(size_t _count);
+            static Type* allocate(size_t _count) {
+                return reinterpret_cast<Type*>(__internal::rv_allocator_allocate_generic(sizeof(Type)*_count));
+            }
 
             //Allocates and Initializes one Object
             template<class... _Types>
@@ -99,7 +68,9 @@ namespace intercept {
                 return ptr;
             }
 
-            static Type* reallocate(Type* _Ptr, size_t _count);
+            static Type* reallocate(Type* _Ptr, size_t _count) {
+                return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr,sizeof(Type)*_count));
+            }
 
             //#TODO implement game_data_pool and string pool here
         };
@@ -374,7 +345,7 @@ namespace intercept {
 
         class[[deprecated]] rv_string{
         public:
-            rv_string();
+            rv_string() : length(0), ref_count_internal(0) {};
             rv_string(const rv_string &) = delete;
             rv_string(rv_string &&) = delete;
             rv_string & operator=(const rv_string &) = delete;
@@ -383,7 +354,6 @@ namespace intercept {
             uint32_t ref_count_internal;
             uint32_t length;
             char char_string; //#TODO add .natvis to display full string in Visual Studio dbg
-            std::string string();
         };
 
 
@@ -397,17 +367,17 @@ namespace intercept {
             Type *_data;
             int _n;
         public:
-            rv_array() {};
-            Type &get(int i) {
+            rv_array() :_data(nullptr),_n(0) {};
+            Type &get(size_t i) {
                 return _data[i];
             }
-            const Type &get(int i) const {
+            const Type &get(size_t i) const {
                 return _data[i];
             }
-            Type &operator [] (int i) { return get(i); }
-            const Type &operator [] (int i) const { return get(i); }
+            Type &operator [] (size_t i) { return get(i); }
+            const Type &operator [] (size_t i) const { return get(i); }
             Type *data() { return _data; }
-            int count() const { return _n; }
+            size_t count() const { return static_cast<size_t>(_n); }
 
             Type &front() { return get(0); }
             Type &back() { return get(_n - 1); }
@@ -425,28 +395,28 @@ namespace intercept {
 
             template <class Func>
             void for_each(const Func &f) const {
-                for (int i = 0; i < count(); i++) {
+                for (size_t i = 0; i < count(); i++) {
                     f(get(i));
                 }
             }
 
             template <class Func>
             void for_each_backwards(const Func &f) const { //This returns if Func returns true
-                for (int i = count() - 1; i >= 0; i--) {
+                for (size_t i = count() - 1; i >= 0; i--) {
                     if (f(get(i))) return;
                 }
             }
 
             template <class Func>
             void for_each(const Func &f) {
-                for (int i = 0; i < count(); i++) {
+                for (size_t i = 0; i < count(); i++) {
                     f(get(i));
                 }
             }
 
         };
 
-        template<class Type>
+        template<class Type, unsigned int growthFactor = 32>
         class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
         protected:
             int _maxItems;
@@ -460,6 +430,7 @@ namespace intercept {
 
                 if (_n > size) {
                     resize(size);
+                    return;//resize calls reallocate and reallocates... Ugly.. I know
                 }
                 Type *newData = nullptr;
                 if (_data && size > 0 && (newData = try_realloc(_data, _maxItems, size))) {
@@ -477,40 +448,63 @@ namespace intercept {
                 _maxItems = size;
 
             }
-
+            void grow(size_t n) {
+            #undef max
+                reallocate(_maxItems + std::max(n, growthFactor));
+            }
         public:
 
             auto_array() : _maxItems(0), rv_array<Type>() {};
+            auto_array(const std::initializer_list<Type> &init_) : _maxItems(0), rv_array<Type>() {
+                resize(init_.size());
+                for (auto& it : init_)
+                    push_back(it);
+            }
             ~auto_array() {
                 resize(0);
             }
-            void resize(size_t n) {
-                if (n < _n) {
-                    for (size_t i = n; i < _n; i++) {
+
+            auto_array& operator = (auto_array &&move_) {
+                _n = move_._n;
+                _maxItems = move_._maxItems;
+                _data = move_._data;
+                move_._data = nullptr;
+                move_._n = 0;
+                move_._maxItems = 0;
+                return *this;
+            }
+
+            auto_array& operator = (const auto_array &copy_) {
+                resize(copy_._n);
+                for (auto it : copy_)
+                    push_back(std::move(it));
+                std::vector<int> x = {1,2,3};
+                return *this;
+            }
+
+            void resize(size_t n) {//#TODO split this between resize/reserve
+                if (static_cast<int>(n) < _n) {
+                    for (int i = static_cast<int>(n); i < _n; i++) {
                         (*this)[i].~Type();
                     }
-                    _n = n;
+                    _n = static_cast<int>(n);
                 }
                 if (n == 0 && _data) {
                     rv_allocator<Type>::deallocate(_data);
                     _data = nullptr;
                     return;
                 }
-                if (n > _maxItems) {
-                #undef max
-                    reallocate(n - 1 + std::max(_maxItems >> 1, 32));
-                } else if (n < _maxItems) {
-                    reallocate(n);
-                }
+                reallocate(n);
             }
 
             template<class... _Valty>
             Type& emplace_back(_Valty&&... _Val) {
                 if (_maxItems < _n + 1) {
-                    resize(_maxItems + 1);
+                    grow(1);
                 }
-                auto item = (*this)[_n];
+                auto& item = (*this)[_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
+                ++_n;
                 return item;
             }
             Type& push_back(const Type& _Val) {
@@ -573,11 +567,11 @@ namespace intercept {
         public:
 
             class iterator {
-                int _table;
-                int _item;
+                size_t _table;
+                size_t _item;
                 const map_string_to_class<Type, Container, Traits> *_map;
-                int number_of_tables() {
-                    return _map->_table ? _map->_tableCount : 0;
+                size_t number_of_tables() {
+                    return _map->_table ? static_cast<size_t>(_map->_tableCount) : 0u;
                 }
                 void get_next() {
                     while (_table < number_of_tables() && _item >= _map->_table[_table].count()) {
@@ -681,7 +675,7 @@ namespace intercept {
             Type &get(const char* key) {
                 if (!_table || !_count) return _null_entry;
                 int hashedKey = hash_key(key);
-                for (int i = 0; i < _table[hashedKey].count(); i++) {
+                for (size_t i = 0; i < _table[hashedKey].count(); i++) {
                     Type &item = _table[hashedKey][i];
                     if (Traits::compare_keys(item.get_map_key(), key) == 0)
                         return item;
@@ -1016,11 +1010,9 @@ namespace intercept {
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);
             game_data_array & game_data_array::operator = (game_data_array &&move_);
-            void free();
             ~game_data_array();
-            game_value *data; //#TODO autoArray class
-            uint32_t length;
-            uint32_t max_size;
+            auto_array<game_value> data;
+            auto length() { return data.count(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };

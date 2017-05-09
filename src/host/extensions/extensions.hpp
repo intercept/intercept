@@ -13,8 +13,8 @@ https://github.com/NouberNou/intercept
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "shared\functions.hpp"
-#include "shared\client_types.hpp"
+#include "shared/functions.hpp"
+#include "shared/client_types.hpp"
 
 #include "search.hpp"
 

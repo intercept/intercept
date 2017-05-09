@@ -104,10 +104,10 @@ namespace intercept {
 
         float date_to_number(int year_, int month_, int day_, int hour_, float minute_) {
             game_value date({
-                (float) year_,
-                (float) month_,
-                (float) day_,
-                (float) hour_,
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
                 minute_
             });
 
@@ -116,7 +116,7 @@ namespace intercept {
 
         rv_date number_to_date(int year_, float time_) {
             game_value params({
-                (float) year_,
+                static_cast<float>(year_),
                 time_
             });
 
@@ -138,10 +138,10 @@ namespace intercept {
         }
         void set_date(int year_, int month_, int day_, int hour_, float minute_) {
             game_value date({
-                (float) year_,
-                (float) month_,
-                (float) day_,
-                (float) hour_,
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
                 minute_
             });
 

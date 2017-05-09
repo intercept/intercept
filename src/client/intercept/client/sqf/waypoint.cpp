@@ -16,7 +16,7 @@ namespace intercept {
             game_value args({
                 center_,
                 radius_,
-                (float) index_,
+                static_cast<float>(index_),
                 name_
             });
 
@@ -27,7 +27,7 @@ namespace intercept {
             game_value args({
                 center_,
                 radius_,
-                (float) index_,
+                static_cast<float>(index_),
                 name_
             });
 
@@ -207,7 +207,7 @@ namespace intercept {
         }
 
         void waypoint_attach_object(waypoint& wp_, int obj_id_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), (float) obj_id_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), static_cast<float>(obj_id_));
         }
 
         void waypoint_attach_object(waypoint& wp_, object & obj_) {

@@ -45,7 +45,7 @@ namespace intercept {
         }
 
         float add_eden_layer(int parent_layer_id_, const std::string& name_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float) parent_layer_id_, name_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, static_cast<float>(parent_layer_id_), name_);
         }
 
         float add_eden_event_handler(const std::string &type_, const code &code_) {

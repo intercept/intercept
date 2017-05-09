@@ -66,7 +66,7 @@ namespace intercept {
                 ignore_obj1_,
                 ignore_obj2_,
                 sort_mode_,
-                (float) max_results_,
+                static_cast<float>(max_results_),
                 lod1_,
                 lod2_
             });
@@ -188,7 +188,7 @@ namespace intercept {
                 with_obj_,
                 ignore_obj_,
                 sort_by_distance_,
-                (float) flags_
+                static_cast<float>(flags_)
             });
 
             game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectsobjs__array__ret__array, array_input);

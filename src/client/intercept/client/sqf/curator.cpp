@@ -110,7 +110,7 @@ namespace intercept {
 
         void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector2 & position_, float radius_) {
             game_value args({
-                (float) camera_area_id_,
+                static_cast<float>(camera_area_id_),
                 position_,
                 radius_
             });
@@ -120,7 +120,7 @@ namespace intercept {
 
         void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector3 & position_, float radius_) {
             game_value args({
-                (float) camera_area_id_,
+                static_cast<float>(camera_area_id_),
                 position_,
                 radius_
             });
@@ -143,7 +143,7 @@ namespace intercept {
 
         void add_curator_editing_area(const object & curator_object_, int edit_area_id_, const vector2 & position_, float radius_) {
             game_value args({
-                (float) edit_area_id_,
+                static_cast<float>(edit_area_id_),
                 position_,
                 radius_
             });

@@ -11,7 +11,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 text_
             });
@@ -34,7 +34,7 @@ namespace intercept {
         }
 
         std::vector<int> tv_cursel(int idc_) {
-            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__tvcursel__scalar__ret__array, (float) idc_));
+            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__tvcursel__scalar__ret__array, static_cast<float>(idc_)));
         }
 
         std::vector<int> tv_cursel(const control& ctrl_) {
@@ -48,7 +48,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -71,7 +71,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -94,7 +94,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -117,7 +117,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -140,7 +140,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -163,7 +163,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -186,7 +186,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -209,7 +209,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -232,7 +232,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 data_
             });
@@ -261,7 +261,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 name_
             });
@@ -290,7 +290,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 name_
             });
@@ -319,7 +319,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 color_
             });
@@ -348,7 +348,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 color_
             });
@@ -377,7 +377,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 text_
             });
@@ -406,7 +406,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path,
                 value_
             });
@@ -463,7 +463,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -486,7 +486,7 @@ namespace intercept {
             }
 
             game_value params({
-                (float) idc_,
+                static_cast<float>(idc_),
                 path
             });
 
@@ -636,7 +636,7 @@ namespace intercept {
 
         void ctrl_enable(int control_id_, bool enable_) {
             game_value params({
-                (float) control_id_,
+                static_cast<float>(control_id_),
                 enable_
             });
 
@@ -789,7 +789,7 @@ namespace intercept {
 
         void ctrl_set_text(int control_id_, const std::string &text_) {
             game_value params({
-                (float) control_id_,
+                static_cast<float>(control_id_),
                 text_
             });
 
@@ -810,7 +810,7 @@ namespace intercept {
 
         void ctrl_show(int control_id_, bool show_) {
             game_value params({
-                (float) control_id_,
+                static_cast<float>(control_id_),
                 show_
             });
             host::functions.invoke_raw_unary(client::__sqf::unary__ctrlshow__array__ret__nothing, params);
@@ -1315,7 +1315,7 @@ namespace intercept {
                 height_,
                 angle_,
                 text_,
-                (float) shadow_,
+                static_cast<float>(shadow_),
                 text_size_,
                 font_,
                 align_
@@ -1332,7 +1332,7 @@ namespace intercept {
                 height_,
                 angle_,
                 text_,
-                (float) shadow_,
+                static_cast<float>(shadow_),
                 text_size_,
                 font_,
                 align_
@@ -1564,7 +1564,7 @@ namespace intercept {
 
         void button_set_action(int control_id_, const std::string &code_) {
             game_value params({
-                (float) control_id_,
+                static_cast<float>(control_id_),
                 code_
             });
 
@@ -1581,7 +1581,7 @@ namespace intercept {
         }
         float lb_add(int control_id_, const std::string &text_) {
             game_value args({
-                (float) (control_id_),
+                static_cast<float>((control_id_)),
                 (text_)
             });
 
@@ -1602,7 +1602,7 @@ namespace intercept {
         }
 
         float lb_color(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbcolor__control__scalar__ret__array, control_, static_cast<float>(index_));
         }
 
         float lb_color_right(int control_id_, int index_) {
@@ -1615,7 +1615,7 @@ namespace intercept {
         }
 
         float lb_color_right(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbcolorright__control__scalar__ret__array, control_, static_cast<float>(index_));
         }
 
         std::string lb_data(int control_id_, int index_) {
@@ -1628,7 +1628,7 @@ namespace intercept {
         }
 
         std::string lb_data(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbdata__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
         void lb_delete(int control_id_, int index_) {
@@ -1641,7 +1641,7 @@ namespace intercept {
         }
 
         void lb_delete(const control &control_, int index_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, (float) index_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbdelete__control__scalar__ret__nothing, control_, static_cast<float>(index_));
         }
 
         std::string lb_picture(int control_id_, int index_) {
@@ -1654,7 +1654,7 @@ namespace intercept {
         }
 
         std::string lb_picture(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbpicture__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
         std::string lb_picture_right(int control_id_, int index_) {
@@ -1666,15 +1666,15 @@ namespace intercept {
         }
 
         std::string lb_picture_right(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbpictureright__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
         // TODO std::vector<float> lb_selection(const control &control_) { ... }; // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 
         void lb_set_color(int control_id_, int index_, rv_color color_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1683,7 +1683,7 @@ namespace intercept {
 
         void lb_set_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1692,8 +1692,8 @@ namespace intercept {
 
         void lb_set_color_right(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1702,7 +1702,7 @@ namespace intercept {
 
         void lb_set_color_right(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1718,13 +1718,13 @@ namespace intercept {
         }
 
         void lb_set_cur_sel(const control &control_, int index_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, (float) index_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__lbsetcursel__control__scalar__ret__nothing, control_, static_cast<float>(index_));
         }
 
         void lb_set_data(int control_id_, int index_, const std::string &data_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 data_
             });
 
@@ -1734,7 +1734,7 @@ namespace intercept {
 
         void lb_set_data(const control &control_, int index_, const std::string &data_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 (data_)
             });
 
@@ -1743,8 +1743,8 @@ namespace intercept {
 
         void lb_set_picture(int control_id_, int index_, const std::string &name_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 name_
             });
 
@@ -1753,7 +1753,7 @@ namespace intercept {
 
         void lb_set_picture(const control &control_, int index_, const std::string &name_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 (name_)
             });
 
@@ -1762,8 +1762,8 @@ namespace intercept {
 
         void lb_set_picture_right(int control_id_, int index_, const std::string &name_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 name_
             });
 
@@ -1772,7 +1772,7 @@ namespace intercept {
 
         void lb_set_picture_right(const control &control_, int index_, const std::string &name_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 (name_)
             });
 
@@ -1781,8 +1781,8 @@ namespace intercept {
 
         void lb_set_picture_color(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1792,7 +1792,7 @@ namespace intercept {
 
         void lb_set_picture_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1801,8 +1801,8 @@ namespace intercept {
 
         void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1811,7 +1811,7 @@ namespace intercept {
 
         void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1820,8 +1820,8 @@ namespace intercept {
 
         void lb_set_picture_color_selected(int control_id_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1830,7 +1830,7 @@ namespace intercept {
 
         void lb_set_picture_color_selected(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1839,7 +1839,7 @@ namespace intercept {
 
         void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1848,7 +1848,7 @@ namespace intercept {
 
         void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1858,7 +1858,7 @@ namespace intercept {
 
         void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 color_
             });
 
@@ -1869,8 +1869,8 @@ namespace intercept {
 
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_) {
             game_value args({
-                (float) (control_id_),
-                (float) (index_),
+                static_cast<float>((control_id_)),
+                static_cast<float>((index_)),
                 tooltip_
             });
 
@@ -1879,7 +1879,7 @@ namespace intercept {
 
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_) {
             game_value args({
-                (float) (index_),
+                static_cast<float>((index_)),
                 (tooltip_)
             });
 
@@ -1928,7 +1928,7 @@ namespace intercept {
         }
 
         std::string lb_text(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbtext__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
         std::string lb_text_right(int control_id_, int index_) {
@@ -1941,7 +1941,7 @@ namespace intercept {
         }
 
         std::string lb_text_right(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbtextright__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
         float lb_value(int control_id_, int index_) {
@@ -1954,13 +1954,13 @@ namespace intercept {
         }
 
         float lb_value(const control &control_, int index_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, (float) index_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, static_cast<float>(index_));
         }
 
         void lb_set_select_color(int idc_, int index_, const rv_color & color_) {
             game_value params({
-                (float) idc_,
-                (float) index_,
+                static_cast<float>(idc_),
+                static_cast<float>(index_),
                 (color_)
             });
 
@@ -1970,8 +1970,8 @@ namespace intercept {
 
         void lb_set_select_color_right(int idc_, int index_, const rv_color & color_) {
             game_value params({
-                (float) idc_,
-                (float) index_,
+                static_cast<float>(idc_),
+                static_cast<float>(index_),
                 color_
             });
 
@@ -2005,7 +2005,7 @@ namespace intercept {
         }
 
         std::string button_action(int idc_) {
-            return host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, (float) idc_);
+            return host::functions.invoke_raw_unary(client::__sqf::unary__buttonaction__scalar__ret__string, static_cast<float>(idc_));
         }
 
         bool cb_checked(const control & control_) {

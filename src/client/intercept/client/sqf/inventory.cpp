@@ -25,7 +25,7 @@ namespace intercept {
         void add_backpack_cargo(const object & vehicle_, const std::string & packClassName_, int count_) {
             game_value args({
                 packClassName_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackcargo__object__array__ret__nothing, vehicle_, args);
@@ -34,7 +34,7 @@ namespace intercept {
         void add_backpack_cargo_global(const object & vehicle_, const std::string & packClassName_, int count_) {
             game_value args({
                 packClassName_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addbackpackcargoglobal__object__array__ret__nothing, vehicle_, args);
@@ -43,7 +43,7 @@ namespace intercept {
         void add_item_cargo(const object & object_, const std::string & item_, int count_) {
             game_value args({
                 item_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__additemcargo__object__array__ret__nothing, object_, args);
@@ -52,7 +52,7 @@ namespace intercept {
         void add_item_cargo_global(const object & object_, const std::string & item_, int count_) {
             game_value args({
                 item_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__additemcargoglobal__object__array__ret__nothing, object_, args);
@@ -113,7 +113,7 @@ namespace intercept {
             game_value params({
                 classname_,
                 path,
-                (float) ammocount_
+                static_cast<float>(ammocount_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineturret__object__array__ret__nothing, obj_, params);
@@ -273,7 +273,7 @@ namespace intercept {
         bool can_add(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             return host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, params);
@@ -286,7 +286,7 @@ namespace intercept {
         bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, params);
@@ -299,7 +299,7 @@ namespace intercept {
         bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, params);
@@ -312,7 +312,7 @@ namespace intercept {
         bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                (float) count_
+                static_cast<float>(count_)
             });
 
             return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, params);
@@ -770,7 +770,7 @@ namespace intercept {
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_) {
             std::vector<game_value> turret_path; //#TODO remove temp std::vector
             for (auto path : turret_path_)
-                turret_path.push_back((float) path);
+                turret_path.push_back(static_cast<float>(path));
 
             game_value params({
                 vehicle_,

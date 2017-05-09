@@ -57,7 +57,7 @@ namespace intercept {
         }
 
         bool set_group_owner(const group & group_, int client_id_) {
-            return host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, (float) client_id_, group_);
+            return host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, static_cast<float>(client_id_), group_);
         }
 
         object leader(const group &value_) {
@@ -69,7 +69,7 @@ namespace intercept {
         }
 
         void remove_group_icon(const group & group_, int icon_id_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, (float) icon_id_, group_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, static_cast<float>(icon_id_), group_);
         }
 
         void select_leader(const group & group_, const object & unit_) {
@@ -128,7 +128,7 @@ namespace intercept {
         void join_as(const object &unit_, const group &group_, int pos_id_) {
             game_value params({
                 group_,
-                (float) pos_id_
+                static_cast<float>(pos_id_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
@@ -137,7 +137,7 @@ namespace intercept {
         void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
             game_value params({
                 group_,
-                (float) pos_id_
+                static_cast<float>(pos_id_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);

@@ -35,7 +35,7 @@ namespace intercept {
         }
 
         void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_) {
-            game_value args({ ((float) channel_id_), message_ });
+            game_value args({ (static_cast<float>( channel_id_)), message_ });
             host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
         }
 

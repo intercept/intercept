@@ -570,7 +570,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_) {
             game_value params({
                 user_action_,
-                (float)max_keys_,
+                static_cast<float>(max_keys_),
                 input_device_priority_
             });
 
@@ -592,7 +592,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_) {
             game_value params({
                 user_action_,
-                (float)max_keys_,
+                static_cast<float>(max_keys_),
                 input_device_priority_
             });
 
@@ -1540,7 +1540,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void airport_side(int id_) {
-            __helpers::__empty_unary_number(client::__sqf::unary__airportside__object_scalar__ret__nothing, (float)id_);
+            __helpers::__empty_unary_number(client::__sqf::unary__airportside__object_scalar__ret__nothing, static_cast<float>(id_));
         }
         void airport_side(const object & target_) {
             __helpers::__empty_unary_number(client::__sqf::unary__airportside__object_scalar__ret__nothing, target_);
@@ -3721,7 +3721,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             {
                 game_value params({
                     vehicle_,
-                    (float)cargo_index_
+                    static_cast<float>(cargo_index_)
                 });
 
                 host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__array__ret__nothing, unit_, params);
@@ -4000,7 +4000,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_) {
             game_value params({
                 vehicle_,
-                (float)index_
+                static_cast<float>(index_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__assignascargoindex__object__array__ret__nothing, unit_, params);
@@ -4020,7 +4020,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value params({
                 pos_,
                 type_,
-                (float)rounds_
+                static_cast<float>(rounds_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
@@ -4030,7 +4030,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value params({
                 pos_,
                 type_,
-                (float)rounds_
+                static_cast<float>(rounds_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
@@ -4045,7 +4045,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value params({
                 pos_,
                 type_,
-                (float)rounds_
+                static_cast<float>(rounds_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
@@ -4060,7 +4060,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value params({
                 pos_,
                 type_,
-                (float)rounds_
+                static_cast<float>(rounds_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
@@ -4269,7 +4269,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void set_hit_index(const object &object_, int part_index_, float damage_) {
             game_value params({
-                (float)part_index_,
+                static_cast<float>(part_index_),
                 damage_
             });
 
@@ -4334,7 +4334,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void add_weapon_pool(const std::string &weapon_name_, int count_) {
             game_value params({
                 weapon_name_,
-                (float)count_
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__addweaponpool__array__ret__nothing, params);
@@ -4520,7 +4520,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 get_wp_pos(const group &group_, int index_) {
             game_value params({
                 group_,
-                (float)index_
+                static_cast<float>(index_)
             });
 
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__getwppos__array__ret__array, params));
@@ -4615,7 +4615,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_) {
             game_value params({
                 amount_,
-                (float)wheel_index_
+                static_cast<float>(wheel_index_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setbrakesrtd__object__array__ret__nothing, heli_, params);
@@ -4624,7 +4624,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_) {
             game_value params({
                 rpms_,
-                (float)engine_index_
+                static_cast<float>(engine_index_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setenginerpmrtd__object__array__ret__nothing, heli_, params);
@@ -4634,7 +4634,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value params({
                 rpms_,
                 time_,
-                (float)engine_index_
+                static_cast<float>(engine_index_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setwantedrpmrtd__object__array__ret__nothing, heli_, params);

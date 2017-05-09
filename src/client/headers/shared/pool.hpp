@@ -37,8 +37,8 @@ namespace intercept {
     protected:
         inline void _buy_entry() {
             void *entry = malloc(sizeof(T));
-            _pool_queue.push((T *)entry);
-            _pool.push_back((T *)entry);
+            _pool_queue.push(reinterpret_cast<T *>(entry));
+            _pool.push_back(reinterpret_cast<T *>(entry));
         }
 
         std::queue<T *> _pool_queue;

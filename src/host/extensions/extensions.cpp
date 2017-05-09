@@ -140,16 +140,16 @@ namespace intercept {
 
         auto new_module = module::entry(full_path, dllHandle);
 
-        new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
-        new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
-        new_module.functions.handle_unload = (module::handle_unload_func)GetProcAddress(dllHandle, "handle_unload");
-        new_module.functions.mission_end = (module::mission_end_func)GetProcAddress(dllHandle, "mission_end");
-        new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
-        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
-        new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
-        new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
-        new_module.functions.pre_start = (module::pre_start_func)GetProcAddress(dllHandle, "pre_start");
-        new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
+        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GetProcAddress(dllHandle, "api_version"));
+        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GetProcAddress(dllHandle, "assign_functions"));
+        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GetProcAddress(dllHandle, "handle_unload"));
+        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GetProcAddress(dllHandle, "mission_end"));
+        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GetProcAddress(dllHandle, "on_frame"));
+        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
+        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GetProcAddress(dllHandle, "post_init"));
+        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GetProcAddress(dllHandle, "pre_init"));
+        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GetProcAddress(dllHandle, "pre_start"));
+        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GetProcAddress(dllHandle, "mission_stopped"));
 
 #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
 

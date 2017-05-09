@@ -30,7 +30,7 @@ namespace intercept {
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
                 if (op.op->arg_type.type().count(arg_signature_)) {
-                    function_ = (unary_function) op.op->procedure_addr;
+                    function_ = reinterpret_cast<unary_function>(op.op->procedure_addr);
                     return true;
                 }
             }
@@ -42,7 +42,7 @@ namespace intercept {
     bool loader::get_function(std::string function_name_, unary_function & function_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
-            function_ = (unary_function) it->second[0].op->procedure_addr;
+            function_ = reinterpret_cast<unary_function>(it->second[0].op->procedure_addr);
             return true;
         }
         return false;
@@ -51,7 +51,7 @@ namespace intercept {
     bool loader::get_function(std::string function_name_, binary_function & function_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
-            function_ = (binary_function) it->second[0].op->procedure_addr;
+            function_ = reinterpret_cast<binary_function>(it->second[0].op->procedure_addr);
             return true;
         }
         return false;
@@ -62,7 +62,7 @@ namespace intercept {
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
                 if (op.op->arg1_type.type().count(arg1_signature_) && op.op->arg2_type.type().count(arg2_signature_)) {
-                    function_ = (binary_function) op.op->procedure_addr;
+                    function_ = reinterpret_cast<binary_function>(op.op->procedure_addr);
                     return true;
                 }
             }
@@ -74,7 +74,7 @@ namespace intercept {
     bool loader::get_function(std::string function_name_, nular_function & function_) {
         auto it = _nular_operators.find(function_name_);
         if (it != _nular_operators.end()) {
-            function_ = (nular_function) it->second[0].op->procedure_addr;
+            function_ = reinterpret_cast<nular_function>(it->second[0].op->procedure_addr);
             return true;
         }
         return false;
@@ -85,8 +85,8 @@ namespace intercept {
         auto op = _unary_operators.find(function_name_);
         if (op != _unary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            trampoline_ = *(unary_function *) op_ptr;
-            memcpy((void *) op_ptr, &hook_, sizeof(uintptr_t));
+            trampoline_ = *reinterpret_cast<unary_function *>(op_ptr);
+            memcpy(reinterpret_cast<void *>(op_ptr), &hook_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -97,8 +97,8 @@ namespace intercept {
         auto op = _binary_operators.find(function_name_);
         if (op != _binary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            trampoline_ = *(binary_function *) op_ptr;
-            memcpy((void *) op_ptr, &hook_, sizeof(uintptr_t));
+            trampoline_ = *reinterpret_cast<binary_function *>(op_ptr);
+            memcpy(reinterpret_cast<void *>(op_ptr), &hook_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -109,8 +109,8 @@ namespace intercept {
         auto op = _nular_operators.find(function_name_);
         if (op != _nular_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            trampoline_ = *(nular_function *) op_ptr;
-            memcpy((void *) op_ptr, &hook_, sizeof(uintptr_t));
+            trampoline_ = *reinterpret_cast<nular_function *>(op_ptr);
+            memcpy(reinterpret_cast<void *>(op_ptr), &hook_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -118,12 +118,12 @@ namespace intercept {
 
     bool loader::unhook_function(std::string function_name_, void * hook_, unary_function & trampoline_) {
         LOG(DEBUG) << "Attempting to unhook unary function " << function_name_;
-        if (&trampoline_ == 0x0)
+        if (&trampoline_ == nullptr)
             return false;
         auto op = _unary_operators.find(function_name_);
         if (op != _unary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            memcpy((void *) op_ptr, &trampoline_, sizeof(uintptr_t));
+            memcpy(reinterpret_cast<void *>(op_ptr), &trampoline_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -131,12 +131,12 @@ namespace intercept {
 
     bool loader::unhook_function(std::string function_name_, void * hook_, binary_function & trampoline_) {
         LOG(DEBUG) << "Attempting to unhook binary function " << function_name_;
-        if (&trampoline_ == 0x0)
+        if (&trampoline_ == nullptr)
             return false;
         auto op = _binary_operators.find(function_name_);
         if (op != _binary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            memcpy((void *) op_ptr, &trampoline_, sizeof(uintptr_t));
+            memcpy(reinterpret_cast<void *>(op_ptr), &trampoline_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -144,12 +144,12 @@ namespace intercept {
 
     bool loader::unhook_function(std::string function_name_, void * hook_, nular_function & trampoline_) {
         LOG(DEBUG) << "Attempting to unhook nular function " << function_name_;
-        if (&trampoline_ == 0x0)
+        if (&trampoline_ == nullptr)
             return false;
         auto op = _nular_operators.find(function_name_);
         if (op != _nular_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
-            memcpy((void *) op_ptr, &trampoline_, sizeof(uintptr_t));
+            memcpy(reinterpret_cast<void *>(op_ptr), &trampoline_, sizeof(uintptr_t));
             return true;
         }
         return false;
@@ -157,10 +157,10 @@ namespace intercept {
 
     void loader::do_function_walk(uintptr_t state_addr_) {
         uintptr_t types_array = state_addr_;
-        auto game_state = (__internal::game_state*) state_addr_;
+        auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
 
-        MODULEINFO modInfo = { 0 };
+        MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
         GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
 
@@ -184,7 +184,7 @@ namespace intercept {
             uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
             uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
 
-            uintptr_t patternLength = (DWORD) strlen(mask);
+            uintptr_t patternLength = static_cast<DWORD>(strlen(mask));
 
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
@@ -200,9 +200,9 @@ namespace intercept {
         };
 
         auto getRTTIName = [](uintptr_t vtable) -> const char* {
-            uintptr_t typeBase = *((uintptr_t*) (vtable - 4));
-            uintptr_t type = *((uintptr_t*) (typeBase + 0xC));
-            return (char*) (type + 9);
+            uintptr_t typeBase = *reinterpret_cast<uintptr_t*>(vtable - 4);
+            uintptr_t type = *reinterpret_cast<uintptr_t*>(typeBase + 0xC);
+            return reinterpret_cast<char*>(type + 9);
         };
 
         //Start them async before doing the other stuff so they are done when we are done parsing the script functions
@@ -234,7 +234,7 @@ namespace intercept {
             for (auto& entry : it) {
                 unary_entry new_entry;
                 new_entry.op = entry._operator;
-                new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+                new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
                 LOG(INFO) << "Found unary operator: " <<
                     new_entry.op->return_type.type_str() << " " <<
@@ -254,7 +254,7 @@ namespace intercept {
             for (auto& entry : it) {
                 binary_entry new_entry;
                 new_entry.op = entry._operator;
-                new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+                new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
                 LOG(INFO) << "Found binary operator: " <<
                     new_entry.op->return_type.type_str() << " " <<
@@ -278,7 +278,7 @@ namespace intercept {
         for (auto& entry : game_state->_scriptNulars) {
             nular_entry new_entry;
             new_entry.op = entry._operator;
-            new_entry.procedure_ptr_addr = (uintptr_t) &entry._operator->procedure_addr;
+            new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
             LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
                 << new_entry.name << " @ " << new_entry.op->procedure_addr;

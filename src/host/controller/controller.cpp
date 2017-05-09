@@ -36,7 +36,7 @@ namespace intercept {
 		return true;
 	}
 
-    bool controller::get_ready(const arguments &args_, std::string & result_) {
+    bool controller::get_ready(const arguments &args_, std::string & result_) const {
         result_ = "0";
 
         if (!_ready)
@@ -79,7 +79,7 @@ namespace intercept {
         return true;
     }
 
-    bool controller::export_ptr_list(const arguments &args_, std::string & result_) {
+    bool controller::export_ptr_list(const arguments &args_, std::string & result_) const {
         std::ofstream pointers("sqf_pointers_declaration.hpp");
         std::ofstream pointers_def("sqf_pointers_definitions.hpp");
 

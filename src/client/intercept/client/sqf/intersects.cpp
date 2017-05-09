@@ -35,7 +35,7 @@ namespace intercept {
                 end_pos_
             });
 
-            return host::functions.invoke_raw_binary(client::__sqf::binary__intersect__array__array__ret__array, params1, params2);
+            return host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, params1, params2);
         }
 
         intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_) {
@@ -44,7 +44,7 @@ namespace intercept {
                 end_pos_asl_
             });
 
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
@@ -55,7 +55,7 @@ namespace intercept {
                 ignore_obj1_
             });
 
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
@@ -71,7 +71,7 @@ namespace intercept {
                 lod2_
             });
 
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
@@ -83,7 +83,7 @@ namespace intercept {
                 game_value(),
                 sort_by_distance_
             });
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
@@ -103,7 +103,7 @@ namespace intercept {
                 game_value(),
                 sort_by_distance_
             });
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
@@ -123,7 +123,7 @@ namespace intercept {
                 ignore_obj_two_,
                 sort_by_distance_
             });
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectswith__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
             game_data_array* intersects = static_cast<game_data_array*>(intersects_value.data.getRef());
 
@@ -141,7 +141,7 @@ namespace intercept {
                 end_pos_
             });
 
-            return host::functions.invoke_raw_unary(client::__sqf::unary__terrainintersect__array__ret__bool, array_input);
+            return host::functions.invoke_raw_unary(__sqf::unary__terrainintersect__array__ret__bool, array_input);
         }
 
         bool terrain_intersect_asl(const vector3 &begin_pos_, const vector3 &end_pos_) {
@@ -149,7 +149,7 @@ namespace intercept {
                 begin_pos_,
                 end_pos_
             });
-            return host::functions.invoke_raw_unary(client::__sqf::unary__terrainintersectasl__array__ret__bool, array_input);
+            return host::functions.invoke_raw_unary(__sqf::unary__terrainintersectasl__array__ret__bool, array_input);
         }
 
         bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_) {
@@ -158,7 +158,7 @@ namespace intercept {
                 begin_position_,
                 end_position_
             });
-            return host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input);
+            return host::functions.invoke_raw_unary(__sqf::unary__lineintersects__array__ret__bool, array_input);
         }
 
         bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object & ignore_obj_one_) {
@@ -167,7 +167,7 @@ namespace intercept {
                 end_position_,
                 ignore_obj_one_
             });
-            return host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input);
+            return host::functions.invoke_raw_unary(__sqf::unary__lineintersects__array__ret__bool, array_input);
         }
 
         bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object & ignore_obj_one_, const object & ignore_obj_two_) {
@@ -178,7 +178,7 @@ namespace intercept {
                 ignore_obj_one_,
                 ignore_obj_two_
             });
-            return host::functions.invoke_raw_unary(client::__sqf::unary__lineintersects__array__ret__bool, array_input);
+            return host::functions.invoke_raw_unary(__sqf::unary__lineintersects__array__ret__bool, array_input);
         }
 
         std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object & with_obj_, const object & ignore_obj_, bool sort_by_distance_, int flags_) {
@@ -191,7 +191,7 @@ namespace intercept {
                 static_cast<float>(flags_)
             });
 
-            game_value intersects_value = host::functions.invoke_raw_unary(client::__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
+            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
             game_data_array* intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
 
             std::vector<object> output;

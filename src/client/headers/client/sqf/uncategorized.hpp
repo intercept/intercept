@@ -277,9 +277,9 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     file,
                     16.0f,
-                    (float) row,
-                    (float) column,
-                    (float) loop
+                    static_cast<float>(row),
+                    static_cast<float>(column),
+                    static_cast<float>(loop)
                 }));
             }
 
@@ -287,9 +287,9 @@ namespace intercept {
                 return game_value(std::vector<game_value>({
                     file,
                     16.0f,
-                    (float) row,
-                    (float) column,
-                    (float) loop
+                    static_cast<float>(row),
+                    static_cast<float>(column),
+                    static_cast<float>(loop)
                 }));
             }
         };

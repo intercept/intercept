@@ -31,9 +31,9 @@ namespace intercept {
 
             vector3_base(std::istream & read_) {
                 // Constructor to read from a stream
-                read_.read((char *)&x, sizeof(T));
-                read_.read((char *)&y, sizeof(T));
-                read_.read((char *)&z, sizeof(T));
+                read_.read(reinterpret_cast<char *>(&x), sizeof(T));
+                read_.read(reinterpret_cast<char *>(&y), sizeof(T));
+                read_.read(reinterpret_cast<char *>(&z), sizeof(T));
             }
 
             vector3_base(const float *buffer) {
@@ -110,8 +110,8 @@ namespace intercept {
 
             vector2_base(std::istream & read_) {
                 // Constructor to read from a stream
-                read_.read((char *)&x, sizeof(T));
-                read_.read((char *)&y, sizeof(T));
+                read_.read(reinterpret_cast<char *>(&x), sizeof(T));
+                read_.read(reinterpret_cast<char *>(&y), sizeof(T));
             }
             vector2_base(const float *buffer) {
                 x = buffer[0];

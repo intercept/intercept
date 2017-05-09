@@ -817,7 +817,7 @@ namespace intercept {
         float owner(const object &value_);
         float parse_number(const std::string &value_);
         float parse_number(bool value_);
-        std::string parse_text(const std::string &value_);
+        rv_text parse_text(const std::string &value_);
         void pick_weapon_pool(const object &value_);
         std::string pitch(const object &value_);
         void play_music(const std::string &class_);

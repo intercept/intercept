@@ -8,7 +8,7 @@ namespace intercept {
         /* Position */
         namespace __helpers {
             vector3 get_pos_obj(unary_function fnc_, const object & obj_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+                return host::functions.invoke_raw_unary(fnc_, obj_);
             }
         }
 
@@ -43,7 +43,7 @@ namespace intercept {
         }
 
         vector3 position_camera_to_world(const vector3 & pos_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__positioncameratoworld__array__ret__array, pos_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__positioncameratoworld__array__ret__array, pos_);
         }
 
         vector3 get_pos_visual(const object & obj_) {
@@ -58,7 +58,7 @@ namespace intercept {
         }
 
         vector3 aim_pos(const object & obj_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__aimpos__object__ret__array, obj_);
         }
 
         vector3 eye_pos(const object &object_) {
@@ -66,7 +66,7 @@ namespace intercept {
         }
 
         vector3 eye_direction(const object& unit_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__eyedirection__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__eyedirection__object__ret__array, unit_);
         }
 
         void set_pos(const object & obj_, const vector3 & pos_) {
@@ -90,70 +90,70 @@ namespace intercept {
         }
 
         vector3 agl_to_asl(const vector3 & agl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, agl_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__agltoasl__array__ret__array, agl_);
         }
 
         vector3 asl_to_agl(const vector3 & asl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__asltoagl__array__ret__array, asl_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__asltoagl__array__ret__array, asl_);
         }
 
         vector3 atl_to_asl(const vector3 & atl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__atltoasl__array__ret__array, atl_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__atltoasl__array__ret__array, atl_);
         }
         vector3 asl_to_atl(const vector3 & asl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__asltoatl__array__ret__array, asl_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__asltoatl__array__ret__array, asl_);
         }
         vector3 get_pos(const object& obj_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, obj_, args));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, obj_, args);
         }
 
         vector3 get_pos(const vector3& pos_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, pos_, args));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, pos_, args);
         }
 
         vector3 get_rel_pos(const object& obj_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, obj_, args));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, obj_, args);
         }
 
         vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, pos_, args));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, pos_, args);
         }
         float get_rel_dir(const object& obj_, const object& pos_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_);
         }
 
         float get_rel_dir(const object& obj_, const vector3& pos_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_);
         }
         void set_vector_up(const object &object_, const vector3 &vector_up_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__setvectorup__object__array__ret__nothing, object_, vector_up_);
         }
 
         void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_) {
-            std::vector<game_value> vector{
+            game_value vector({
                 vector_dir_,
                 vector_up_
-            };
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setvectordirandup__object__array__ret__nothing, object_, vector);
         }
@@ -162,18 +162,18 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setposworld__object__array__ret__nothing, object_, position_);
         }
         vector3 get_pos_world(const object& unit_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getposworld__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__getposworld__object__ret__array, unit_);
         }
 
         float get_terrain_height_asl(const vector3 position_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getterrainheightasl__array__ret__scalar, position_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__getterrainheightasl__array__ret__scalar, position_);
         }
         vector3 world_to_model(const object &object_, const vector3 &position_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodel__object__array__ret__array, object_, position_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodel__object__array__ret__array, object_, position_);
         }
 
         vector3 world_to_model_visual(const object &object_, const vector3 &position_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodelvisual__object__array__ret__array, object_, position_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__worldtomodelvisual__object__array__ret__array, object_, position_);
         }
 
         vector3 velocity_model_space(const object& obj_) {
@@ -188,11 +188,11 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(client::__sqf::unary__vectorup__object__ret__array, obj_));
         }
         vector3 model_to_world_visual(const object & model_, const vector3 & model_pos_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_);
         }
 
         vector2 world_to_screen(const vector3 & pos_agl_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
         }
 
         vector2 world_to_screen(const vector3 & pos_agl_, bool & in_screen_) {
@@ -211,7 +211,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvelocity__object__array__ret__nothing, obj_, vel_);
         }
         vector3 velocity(const object & obj_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__velocity__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__velocity__object__ret__array, obj_);
         }
 
         float direction(const object &value_) {

@@ -13,8 +13,8 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 
 using namespace intercept::types;
 

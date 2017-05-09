@@ -11,9 +11,9 @@ These are helpers that are used to do repetitive tasks in similar SQF wrappers.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
-#include "shared\vector.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
+#include "shared/vector.hpp"
 
 using namespace intercept::types;
 namespace intercept {

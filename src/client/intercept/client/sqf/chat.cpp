@@ -1,5 +1,5 @@
 ﻿#include "chat.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -35,7 +35,7 @@ namespace intercept {
         }
 
         void custom_chat(const object & obj_, uint32_t channel_id_, const std::string &message_) {
-            game_value args = game_value({ ((float) channel_id_), message_ });
+            game_value args({ (static_cast<float>( channel_id_)), message_ });
             host::functions.invoke_raw_binary(client::__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
         }
 
@@ -60,34 +60,34 @@ namespace intercept {
         }
 
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (auto unit : units_)
                 units.push_back(game_value(unit));
 
-            std::vector<game_value> params{
+            game_value params({
                 color_,
                 label_,
                 callsign_,
                 units
-            };
+            });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
 
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (auto unit : units_)
                 units.push_back(game_value(unit));
 
-            std::vector<game_value> params{
+            game_value params({
                 color_,
                 label_,
                 callsign_,
                 units,
                 quote_
-            };
+            });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
 
         float current_channel() {

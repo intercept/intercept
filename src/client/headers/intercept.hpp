@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\functions.hpp"
-#include "client\sqf\sqf.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/functions.hpp"
+#include "client/sqf/sqf.hpp"
+#include "shared/client_types.hpp"
 
 #define DLLEXPORT __declspec(dllexport)
 

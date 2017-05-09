@@ -1,17 +1,17 @@
 ﻿#include "group.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "waypoint.hpp"
 namespace intercept {
     namespace sqf {
         std::string combat_mode(const group &grp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
-            std::vector<game_value> offset;
+            std::vector<game_value> offset; //#TODO remove temp std::vector
             for (float item : offset_) {
-                offset.push_back(game_value((float) item));
+                offset.push_back(static_cast<float>(item));
             }
 
             game_value params({
@@ -19,7 +19,7 @@ namespace intercept {
                 offset
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
         }
         /* Group */
         bool group_icon_selectable() {
@@ -49,15 +49,15 @@ namespace intercept {
         }
 
         std::string group_id(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_);
         }
 
         float group_owner(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_);
         }
 
         bool set_group_owner(const group & group_, int client_id_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, (float) client_id_, group_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, static_cast<float>(client_id_), group_);
         }
 
         object leader(const group &value_) {
@@ -69,7 +69,7 @@ namespace intercept {
         }
 
         void remove_group_icon(const group & group_, int icon_id_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, (float) icon_id_, group_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__removegroupicon__group__scalar__ret__nothing, static_cast<float>(icon_id_), group_);
         }
 
         void select_leader(const group & group_, const object & unit_) {
@@ -77,7 +77,7 @@ namespace intercept {
         }
 
         float current_waypoint(const group & group_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, group_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, group_);
         }
 
         void set_group_icons_selectable(bool val_) {
@@ -90,7 +90,7 @@ namespace intercept {
             return rv_group_icon_params(host::functions.invoke_raw_unary(client::__sqf::unary__getgroupiconparams__group__ret__array, group_));
         }
         void join(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -99,7 +99,7 @@ namespace intercept {
         }
 
         void join(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -108,7 +108,7 @@ namespace intercept {
         }
 
         void join_silent(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -117,7 +117,7 @@ namespace intercept {
         }
 
         void join_silent(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units;
+            std::vector<game_value> units; //#TODO remove temp std::vector
             for (object unit : units_) {
                 units.push_back(game_value(unit));
             }
@@ -126,19 +126,19 @@ namespace intercept {
         }
 
         void join_as(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
+            game_value params({
                 group_,
-                (float) pos_id_
-            };
+                static_cast<float>(pos_id_)
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
         }
 
         void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
-            std::vector<game_value> params{
+            game_value params({
                 group_,
-                (float) pos_id_
-            };
+                static_cast<float>(pos_id_)
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
         }
@@ -153,7 +153,7 @@ namespace intercept {
                 client::__sqf::unary__allvariables__group__ret__array, value_));
         }
         bool is_null(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_);
         }
 
     }

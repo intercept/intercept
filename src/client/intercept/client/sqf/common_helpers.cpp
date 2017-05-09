@@ -1,4 +1,4 @@
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -10,11 +10,11 @@ namespace intercept {
             }
 
             std::string __retrieve_nular_string(nular_function fnc_) {
-                return game_value(host::functions.invoke_raw_nular(fnc_));
+                return host::functions.invoke_raw_nular(fnc_);
             }
 
             float __retrieve_nular_number(nular_function fnc_) {
-                return game_value(host::functions.invoke_raw_nular(fnc_));
+                return host::functions.invoke_raw_nular(fnc_);
             }
 
             object __retrieve_nular_object(nular_function fnc_) {
@@ -54,11 +54,11 @@ namespace intercept {
             }
 
             vector3 __retrieve_nular_vector3(nular_function fnc_) {
-                return game_value(host::functions.invoke_raw_nular(fnc_));
+                return host::functions.invoke_raw_nular(fnc_);
             }
 
             bool __retrieve_nular_bool(nular_function fnc_) {
-                return game_value(host::functions.invoke_raw_nular(fnc_));
+                return host::functions.invoke_raw_nular(fnc_);
             }
 
             void __empty_unary_object(unary_function fnc_, const object &obj_) {
@@ -86,51 +86,51 @@ namespace intercept {
             }
 
             bool __bool_unary_object(unary_function fnc_, const object &obj_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+                return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
             bool __bool_unary_string(unary_function fnc_, const std::string &str_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, str_));
+                return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
             bool __bool_unary_number(unary_function fnc_, float val_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, val_));
+                return host::functions.invoke_raw_unary(fnc_, val_);
             }
 
             bool __bool_unary_control(unary_function fnc_, const control &ctl_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
+                return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
             float __number_unary_number(unary_function fnc_, float val_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, val_));
+                return host::functions.invoke_raw_unary(fnc_, val_);
             }
 
             float __number_unary_control(unary_function fnc_, const control &ctl_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
+                return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
             float __number_unary_string(unary_function fnc_, const std::string &str_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, str_));
+                return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
             float __number_unary_location(unary_function fnc_, const location &obj_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+                return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
             float __number_unary_object(unary_function fnc_, const object &obj_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+                return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
             std::string __string_unary_control(unary_function fnc_, const control &ctl_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, ctl_));
+                return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
             std::string __string_unary_object(unary_function fnc_, const object &obj_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, obj_));
+                return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
             std::string __string_unary_string(unary_function fnc_, const std::string &str_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, str_));
+                return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
             object __object_unary_object(unary_function fnc_, const object &obj_) {

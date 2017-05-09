@@ -1,6 +1,6 @@
-﻿#include "shared\types.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+﻿#include "shared/types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 #include <assert.h>
 #include <future>
 #include <sstream> //Debugging

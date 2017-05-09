@@ -1,6 +1,6 @@
 ﻿#include "client.hpp"
-#include "shared\client_types.hpp"
-#include "shared\vector.hpp"
+#include "shared/client_types.hpp"
+#include "shared/vector.hpp"
 #include "pointers.hpp"
 
 using namespace intercept::types;

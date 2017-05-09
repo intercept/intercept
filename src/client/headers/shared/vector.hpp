@@ -3,9 +3,9 @@
 namespace intercept {
     namespace types {
 
-        template <typename T> T acos(T n) { return -1; }
-        template <typename T> T cos(T n) { return -1; }
-        template <typename T> T sin(T n) { return -1; }
+        template <typename T> T acos(T) { return -1; }
+        template <typename T> T cos(T) { return -1; }
+        template <typename T> T sin(T) { return -1; }
 
         template<typename T>
         class vector3_base {
@@ -58,10 +58,10 @@ namespace intercept {
             vector3_base operator - () const { return vector3_base(-x, -y, -z); }
 
             bool operator == (const vector3_base &r) const { return (x == r.x && y == r.y && z == r.z); }
-            bool operator >  (const vector3_base &r) const { throw 1; }
-            bool operator <  (const vector3_base &r) const { throw 1; }
-            bool operator <= (const vector3_base &r) const { throw 1; }
-            bool operator >= (const vector3_base &r) const { throw 1; }
+            bool operator >  (const vector3_base &) const { throw 1; }
+            bool operator <  (const vector3_base &) const { throw 1; }
+            bool operator <= (const vector3_base &) const { throw 1; }
+            bool operator >= (const vector3_base &) const { throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y + z * z); }
             T dot(const vector3_base &v) const { return (x * v.x + y * v.y + z * v.z); }
@@ -133,10 +133,10 @@ namespace intercept {
             vector2_base operator - () const { return vector2_base(-x, -y); }
 
             bool operator == (const vector2_base &r) const { return (x == r.x && y == r.y); }
-            bool operator >  (const vector2_base &r) const { throw 1; }
-            bool operator <  (const vector2_base &r) const { throw 1; }
-            bool operator <= (const vector2_base &r) const { throw 1; }
-            bool operator >= (const vector2_base &r) const { throw 1; }
+            bool operator >  (const vector2_base &) const { throw 1; }
+            bool operator <  (const vector2_base &) const { throw 1; }
+            bool operator <= (const vector2_base &) const { throw 1; }
+            bool operator >= (const vector2_base &) const { throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y); }
             T dot(const vector2_base &v) const { return (x * v.x + y * v.y); }

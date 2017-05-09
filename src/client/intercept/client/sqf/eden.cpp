@@ -1,5 +1,5 @@
 ﻿#include "eden.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -45,7 +45,7 @@ namespace intercept {
         }
 
         float add_eden_layer(int parent_layer_id_, const std::string& name_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, (float) parent_layer_id_, name_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__add3denlayer__scalar__string__ret__scalar, static_cast<float>(parent_layer_id_), name_);
         }
 
         float add_eden_event_handler(const std::string &type_, const code &code_) {
@@ -54,7 +54,7 @@ namespace intercept {
                 code_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3deneventhandler__array__ret__scalar, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3deneventhandler__array__ret__scalar, params);
         }
         std::vector<object> all_eden_entities() {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(client::__sqf::nular__all3denentities__ret__array));
@@ -72,19 +72,19 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__collect3denhistory__code__ret__nothing, code_);
         }
         float get_eden_entity_id(const object &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_);
         }
 
         float get_eden_entity_id(const group &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_);
         }
 
         float get_eden_entity_id(const vector3 &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_);
         }
 
         float get_eden_entity_id(const marker &entity_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__get3denentityid__any__ret__scalar, entity_);
         }
         void delete_eden_entities(const object &entity_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__delete3denentities__array__ret__nothing, entity_);
@@ -112,7 +112,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_) {
@@ -126,7 +126,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_) {
@@ -140,7 +140,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_) {
@@ -154,7 +154,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_) {
@@ -168,7 +168,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_) {
@@ -182,7 +182,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_) {
@@ -196,7 +196,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_) {
@@ -210,7 +210,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_) {
@@ -224,7 +224,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_) {
@@ -238,7 +238,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_) {
@@ -252,7 +252,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_) {
@@ -266,7 +266,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_) {
@@ -280,7 +280,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_) {
@@ -294,7 +294,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_) {
@@ -308,7 +308,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_) {
@@ -322,7 +322,7 @@ namespace intercept {
                 to_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_) {
             std::vector<game_value> params{
@@ -374,7 +374,7 @@ namespace intercept {
                 value_
             };
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__set3denmissionattributes__array__ret__nothing, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__set3denmissionattributes__array__ret__nothing, params);
         }
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
             std::vector<game_value> parameters_;
@@ -396,7 +396,7 @@ namespace intercept {
             parameters_.push_back(game_value(position_));
             parameters_.push_back(game_value(is_empty_));
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_));
+            return host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__create3denentity__array__ret__any, parameters_);
         }
 
         std::vector<game_value> create_3den_connections(const game_value &entity_) {
@@ -409,7 +409,7 @@ namespace intercept {
         }
 
         game_value get_3den_entity(const float &entity_id_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_));
+            return host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__get3denentity__scalar__ret__any, entity_id_);
         }
 
         std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
@@ -431,7 +431,7 @@ namespace intercept {
         }
 
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_));
+            return host::functions.invoke_raw_unary(client::__sqf::__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_);
         }
     }
 }

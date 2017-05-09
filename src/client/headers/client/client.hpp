@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "../shared.hpp"
-#include "shared\functions.hpp"
+#include "shared/functions.hpp"
 #include <chrono>
 #include <regex>
 

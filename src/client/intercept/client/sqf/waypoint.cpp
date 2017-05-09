@@ -1,5 +1,5 @@
 ﻿#include "waypoint.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -16,7 +16,7 @@ namespace intercept {
             game_value args({
                 center_,
                 radius_,
-                (float) index_,
+                static_cast<float>(index_),
                 name_
             });
 
@@ -27,7 +27,7 @@ namespace intercept {
             game_value args({
                 center_,
                 radius_,
-                (float) index_,
+                static_cast<float>(index_),
                 name_
             });
 
@@ -60,11 +60,11 @@ namespace intercept {
         }
 
         float waypoint_completeion_radius(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointcompletionradius__array__ret__scalar, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointcompletionradius__array__ret__scalar, wp_.__to_gv());
         }
 
         std::string waypoint_description(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointdescription__array__ret__string, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointdescription__array__ret__string, wp_.__to_gv());
         }
 
         waypoint::formation waypoint_formation(waypoint & wp_) {
@@ -72,11 +72,11 @@ namespace intercept {
         }
 
         float waypoint_house_position(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointhouseposition__array__ret__scalar, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointhouseposition__array__ret__scalar, wp_.__to_gv());
         }
 
         float waypoint_loiter_radius(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointloiterradius__array__ret__scalar, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointloiterradius__array__ret__scalar, wp_.__to_gv());
         }
 
         waypoint::loiter_type waypoint_loiter_type(waypoint & wp_) {
@@ -84,14 +84,14 @@ namespace intercept {
         }
 
         std::string waypoint_name(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointname__array__ret__string, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointname__array__ret__string, wp_.__to_gv());
         }
         vector3 waypoint_position(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointposition__array__ret__array, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointposition__array__ret__array, wp_.__to_gv());
         }
 
         std::string waypoint_script(waypoint & wp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointscript__array__ret__string, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointscript__array__ret__string, wp_.__to_gv());
         }
         waypoint::show waypoint_show(waypoint & wp_) {
             return waypoint::__parse_show(game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointshow__array__ret__string, wp_.__to_gv())));
@@ -104,7 +104,7 @@ namespace intercept {
         }
         bool waypoint_visible(waypoint & wp_) {
             // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__waypointvisible__array__ret__scalar, wp_.__to_gv()));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__waypointvisible__array__ret__scalar, wp_.__to_gv());
         }
         std::vector<waypoint> synchronized_waypoints(waypoint & wp_) {
             game_value rv_ret_vals(host::functions.invoke_raw_unary(client::__sqf::unary__synchronizedwaypoints__array__ret__array, wp_.__to_gv()));
@@ -171,7 +171,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointstatements__array__array__ret__nothing, wp_.__to_gv(), args);
         }
         void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_) {
-            game_value args({ std::vector<game_value> { min_, mid_, max_ } });
+            game_value args({
+                game_value({
+                    min_,
+                    mid_,
+                    max_
+                })
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointtimeout__array__array__ret__nothing, wp_.__to_gv(), args);
         }
         void set_waypoint_type(waypoint& wp_, waypoint::type type_) {
@@ -186,14 +192,14 @@ namespace intercept {
         }
 
         void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_) {
-            std::vector<game_value> waypoints;
+            std::vector<game_value> waypoints; //#TODO remove temp std::vector
             for (auto it : others_)
                 waypoints.push_back(it.__to_gv());
 
             host::functions.invoke_raw_binary(client::__sqf::binary__synchronizewaypoint__array__array__ret__nothing, wp_.__to_gv(), waypoints);
         }
         void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_) {
-            std::vector<game_value> waypoints;
+            std::vector<game_value> waypoints; //#TODO remove temp std::vector
             for (auto it : others_)
                 waypoints.push_back(it.__to_gv());
 
@@ -201,15 +207,11 @@ namespace intercept {
         }
 
         void waypoint_attach_object(waypoint& wp_, int obj_id_) {
-            host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), (float) obj_id_);
+            host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), static_cast<float>(obj_id_));
         }
 
         void waypoint_attach_object(waypoint& wp_, object & obj_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), obj_);
         }
-
-
-
-
     }
 }

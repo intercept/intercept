@@ -11,7 +11,7 @@ namespace intercept {
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
             std::vector<game_value> offset; //#TODO remove temp std::vector
             for (float item : offset_) {
-                offset.push_back(game_value((float) item));
+                offset.push_back(static_cast<float>(item));
             }
 
             game_value params({

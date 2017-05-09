@@ -8,7 +8,7 @@ namespace intercept {
         void add_item_pool(const std::string &item_name_, int item_count_) {
             game_value params({
                 item_name_,
-                game_value((float) item_count_)
+                static_cast<float>(item_count_)
             });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__additempool__array__ret__nothing, params);
@@ -17,7 +17,7 @@ namespace intercept {
         void add_magazine_pool(const std::string &mag_name_, int mag_count_) {
             game_value params({
                 mag_name_,
-                game_value((float) mag_count_)
+                static_cast<float>(mag_count_)
             });
             host::functions.invoke_raw_unary(client::__sqf::unary__addmagazinepool__array__ret__nothing, params);
         }
@@ -61,7 +61,7 @@ namespace intercept {
         void add_magazine(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazine__object__array__ret__nothing, obj_, params);
@@ -70,8 +70,8 @@ namespace intercept {
         void add_magazine_ammo_cargo(const object& obj_, const std::string& classname_, int quantity_, int ammocount_) {
             game_value params({
                 classname_,
-                game_value((float) quantity_),
-                game_value((float) ammocount_)
+                static_cast<float>(quantity_),
+                static_cast<float>(ammocount_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazineammocargo__object__array__ret__nothing, obj_, params);
@@ -80,7 +80,7 @@ namespace intercept {
         void add_magazine_cargo(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargo__object__array__ret__nothing, obj_, params);
@@ -89,7 +89,7 @@ namespace intercept {
         void add_magazine_cargo_global(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazinecargoglobal__object__array__ret__nothing, obj_, params);
@@ -98,7 +98,7 @@ namespace intercept {
         void add_magazines(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
@@ -107,7 +107,7 @@ namespace intercept {
         void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_) {
             std::vector<game_value> path; //#TODO remove temp std::vector
             for (int item : turretpath_) {
-                path.push_back(game_value((float) item));
+                path.push_back(static_cast<float>(item));
             }
 
             game_value params({
@@ -122,7 +122,7 @@ namespace intercept {
         void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_) {
             std::vector<game_value> path; //#TODO remove temp std::vector
             for (int item : turretpath_) {
-                path.push_back(game_value((float) item));
+                path.push_back(static_cast<float>(item));
             }
 
             game_value params({
@@ -136,7 +136,7 @@ namespace intercept {
         void add_weapon_cargo(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargo__object__array__ret__nothing, obj_, params);
@@ -145,7 +145,7 @@ namespace intercept {
         void add_weapon_cargo_global(const object& obj_, const std::string& classname_, int count_) {
             game_value params({
                 classname_,
-                game_value((float) count_)
+                static_cast<float>(count_)
             });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__addweaponcargoglobal__object__array__ret__nothing, obj_, params);
@@ -165,7 +165,7 @@ namespace intercept {
                 weapon_name_,
                 game_value({
                     item_name_,
-                    game_value((float) ammo_count_)
+                    static_cast<float>(ammo_count_)
                 })
             });
 
@@ -177,7 +177,7 @@ namespace intercept {
                 weapon_name_,
                 game_value({
                     item_name_,
-                    game_value((float) ammo_count_),
+                    static_cast<float>(ammo_count_),
                     muzzle_name_
                 })
             });
@@ -752,7 +752,7 @@ namespace intercept {
         void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_) {
             std::vector<game_value> turret_path; //#TODO remove temp std::vector
             for (int item : turret_path_) {
-                turret_path.push_back(game_value((float) item));
+                turret_path.push_back(static_cast<float>(item));
             }
 
             game_value params({

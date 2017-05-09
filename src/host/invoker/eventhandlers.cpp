@@ -137,7 +137,7 @@ namespace intercept {
     {
         rv_list<int> turret_path(args_[3].length());
         for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
-            turret_path[turret] = ((int)args_[3][turret]);
+            turret_path[turret] = static_cast<int>(args_[3][turret]);
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
@@ -152,7 +152,7 @@ namespace intercept {
     {
         rv_list<int> turret_path(args_[3].length());
         for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
-            turret_path[turret] = ((int)args_[3][turret]);
+            turret_path[turret] = static_cast<int>(args_[3][turret]);
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {

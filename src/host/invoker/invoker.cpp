@@ -13,11 +13,11 @@ namespace intercept {
     bool invoker::invoker_accessible = false;
     bool invoker::invoker_accessible_all = false;
 
-    unary_function invoker::_register_hook_trampoline = NULL;
+    unary_function invoker::_register_hook_trampoline = nullptr;
     uintptr_t invoker::sqf_game_state = NULL;
-    char * invoker::sqf_this = NULL;
+    char * invoker::sqf_this = nullptr;
 
-    invoker::invoker() : _attached(false), _patched(false), _thread_count(0)
+    invoker::invoker() : _thread_count(0), _patched(false), _attached(false)
     {
         
     }
@@ -142,7 +142,7 @@ namespace intercept {
         auto signal_func_it = signal_module->second.signal_funcs.find(signal_name);
         module::on_signal_func signal_func;
         if (signal_func_it == signal_module->second.signal_funcs.end()) {
-            signal_func = (module::on_signal_func)GetProcAddress(signal_module->second.handle, signal_name.c_str());
+            signal_func = (module::on_signal_func)GetProcAddress(signal_module->second.handle, signal_name.c_str()); //#TODO why?! The signal module function thingy is commented out.. also has a #TODO with ?! on it
             if (!signal_func)
                 return false;
             else
@@ -258,14 +258,14 @@ namespace intercept {
 
         std::pair<value_type, value_type> gv_structure;
 
-        game_value::__vptr_def = *(uintptr_t *)right_arg_;
+        game_value::__vptr_def = *reinterpret_cast<uintptr_t *>(right_arg_);
         gv_structure.first = game_value::__vptr_def;
         gv_structure.second = game_value::__vptr_def;
         invoker::get().type_structures["GV"] = gv_structure;
 
         std::pair<value_type, value_type> structure;
-        structure.first = *(uintptr_t *)(*(uintptr_t *)(right_arg_ + 4));
-        structure.second = *(uintptr_t *)((*(uintptr_t *)(right_arg_ + 4)) + 8);
+        structure.first = *reinterpret_cast<uintptr_t *>(*reinterpret_cast<uintptr_t *>(right_arg_ + 4));
+        structure.second = *reinterpret_cast<uintptr_t *>((*reinterpret_cast<uintptr_t *>(right_arg_ + 4)) + 8);
         if (step == "delete_ptr") {
             LOG(INFO) << "Assigned Delete Ptr";
             invoker::get().type_map[structure.first] = "ARRAY";
@@ -399,7 +399,7 @@ namespace intercept {
         _thread_count = _thread_count - 1;
     }
 
-    invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _all(all_threads_), _instance(instance_), _unlocked(false) {
+    invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _unlocked(false), _instance(instance_), _all(all_threads_) {
         if (!delayed_) {
             unlock();
         }

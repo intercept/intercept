@@ -39,18 +39,17 @@ namespace intercept {
             return static_cast<game_data_object *>(data.getRef())->object > static_cast<game_data_object *>(compare_.data.getRef())->object;
         }
 
-        bool internal_object::is_null()
-        {
+        bool internal_object::is_null() const {
             //#TODO use GameData's isNil virtual function
             if (!data)
                 return true;
             //#TODO pointer games = forbidden
-            uintptr_t datax = (uintptr_t)(data.getRef());
+            uintptr_t datax = reinterpret_cast<uintptr_t>(data.getRef());
             uintptr_t data_1 = datax + 12;
-            uintptr_t data_2 = *(uintptr_t *)data_1;
+            uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
             if (data_2) {
                 uintptr_t data_3 = data_2 + 4;
-                uintptr_t val = *(uintptr_t *)data_3;
+                uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
                 return !val;
             }
             return true;

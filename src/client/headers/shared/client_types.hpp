@@ -20,7 +20,7 @@ namespace intercept {
             bool operator<(const internal_object& compare_) const;
             bool operator>(const internal_object& compare_) const;
 
-            bool is_null();
+            bool is_null() const;
 
         };
 
@@ -53,9 +53,9 @@ namespace intercept {
         typedef std::string marker;
 
         template<typename T>
-        class rv_list { //#TODO is this supposed to be AutoArray?
+        class rv_list { //#TODO replace by rv_array
         public:
-            rv_list() : _length(0), _data(nullptr) {};
+            rv_list() : _data(nullptr), _length(0) {}
             rv_list(size_t _init_length) : _length(_init_length) {
                 _data = new T[_init_length];
             }

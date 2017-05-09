@@ -166,8 +166,8 @@ namespace intercept {
         */
         class entry {
         public:
-            entry() : handle(nullptr), name("") {}
-            entry(const std::string & name_, HMODULE handle_) : handle(handle_), name(name_) {}
+            entry() : name(""), handle(nullptr) {}
+            entry(const std::string & name_, HMODULE handle_) : name(name_), handle(handle_) {}
             /*!
             @brief The name of the module
             */

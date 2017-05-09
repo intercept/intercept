@@ -272,7 +272,7 @@ namespace intercept {
                 return _strcmpi(*this, other) != 0;
             }
 
-            bool compare_case_sensitive(const char *other) {
+            bool compare_case_sensitive(const char *other) const {
                 return _stricmp(*this, other) == 0;
             }
 
@@ -418,6 +418,7 @@ namespace intercept {
 
         template<class Type, unsigned int growthFactor = 32>
         class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
+            typedef rv_array<Type> base;
         protected:
             int _maxItems;
             Type *try_realloc(Type *old, int oldN, int &n) {
@@ -428,23 +429,23 @@ namespace intercept {
 
                 if (_maxItems == size) return;
 
-                if (_n > size) {
+                if (base::_n > size) {
                     resize(size);
                     return;//resize calls reallocate and reallocates... Ugly.. I know
                 }
                 Type *newData = nullptr;
-                if (_data && size > 0 && (newData = try_realloc(_data, _maxItems, size))) {
+                if (base::_data && size > 0 && (newData = try_realloc(base::_data, _maxItems, size))) {
                     _maxItems = size;
-                    rv_allocator<Type>::deallocate(_data);
-                    _data = newData;
+                    rv_allocator<Type>::deallocate(base::_data);
+                    base::_data = newData;
                     return;
                 }
                 newData = rv_allocator<Type>::createUninitializedArray(size);
-                if (_data) {
-                    memmove_s(newData, size * sizeof(Type), _data, _n * sizeof(Type));
-                    rv_allocator<Type>::deallocate(_data);
+                if (base::_data) {
+                    memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                    rv_allocator<Type>::deallocate(base::_data);
                 }
-                _data = newData;
+                base::_data = newData;
                 _maxItems = size;
 
             }
@@ -454,8 +455,8 @@ namespace intercept {
             }
         public:
 
-            auto_array() : _maxItems(0), rv_array<Type>() {};
-            auto_array(const std::initializer_list<Type> &init_) : _maxItems(0), rv_array<Type>() {
+            auto_array() : rv_array<Type>(), _maxItems(0) {};
+            auto_array(const std::initializer_list<Type> &init_) : rv_array<Type>(), _maxItems(0) {
                 resize(init_.size());
                 for (auto& it : init_)
                     push_back(it);
@@ -465,9 +466,9 @@ namespace intercept {
             }
 
             auto_array& operator = (auto_array &&move_) {
-                _n = move_._n;
+                base::_n = move_._n;
                 _maxItems = move_._maxItems;
-                _data = move_._data;
+                base::_data = move_._data;
                 move_._data = nullptr;
                 move_._n = 0;
                 move_._maxItems = 0;
@@ -483,15 +484,15 @@ namespace intercept {
             }
 
             void resize(size_t n) {//#TODO split this between resize/reserve
-                if (static_cast<int>(n) < _n) {
-                    for (int i = static_cast<int>(n); i < _n; i++) {
+                if (static_cast<int>(n) < base::_n) {
+                    for (int i = static_cast<int>(n); i < base::_n; i++) {
                         (*this)[i].~Type();
                     }
-                    _n = static_cast<int>(n);
+                    base::_n = static_cast<int>(n);
                 }
-                if (n == 0 && _data) {
-                    rv_allocator<Type>::deallocate(_data);
-                    _data = nullptr;
+                if (n == 0 && base::_data) {
+                    rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                    rv_array<Type>::_data = nullptr;
                     return;
                 }
                 reallocate(n);
@@ -499,12 +500,12 @@ namespace intercept {
 
             template<class... _Valty>
             Type& emplace_back(_Valty&&... _Val) {
-                if (_maxItems < _n + 1) {
+                if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[_n];
+                auto& item = (*this)[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
-                ++_n;
+                ++base::_n;
                 return item;
             }
             Type& push_back(const Type& _Val) {
@@ -515,10 +516,10 @@ namespace intercept {
             }
 
             void erase(int index) {
-                if (index > _n) return;
+                if (index > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
-                memmove_s(&(*this)[index], (_n - index) * sizeof(Type), &(*this)[index + 1], (_n - index - 1) * sizeof(Type));
+                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
             }
             //#TODO Implement find, operator==, Copy/Move Contructor/Operator.
 
@@ -725,8 +726,8 @@ namespace intercept {
             uintptr_t               v_table;
             value_entry             *single_type;
             compound_value_entry    *compound_type;
-            value_types type();
-            std::string type_str();
+            value_types type() const;
+            std::string type_str() const;
         };
 
         struct unary_operator {
@@ -877,8 +878,8 @@ namespace intercept {
             virtual void _dummy() const {};
             virtual ~game_data() {}
 
-            virtual int IAddRef() { return add_ref(); };
-            virtual int IRelease() { return release(); };
+            int IAddRef() override { return add_ref(); };
+            int IRelease() override { return release(); };
         };
 
         class game_data_number : public game_data {
@@ -983,9 +984,7 @@ namespace intercept {
 
             size_t length() const;
 
-            bool is_null();
-
-            bool client_owned() const;
+            bool is_null() const;
 
 
             ref<game_data> data;
@@ -1028,7 +1027,6 @@ namespace intercept {
             game_data_string(game_data_string &&move_);
             game_data_string & game_data_string::operator = (const game_data_string &copy_);
             game_data_string & game_data_string::operator = (game_data_string &&move_);
-            void free();
             ~game_data_string();
             r_string raw_string;
             static void* operator new(std::size_t sz_);

@@ -28,18 +28,18 @@ namespace intercept {
 
             waypoint(const group& rv_game_value, uint32_t windex)
                 : wgroup(rv_game_value),
-                windex((float) windex) {}
+                windex(static_cast<float>(windex)) {}
 
             waypoint(const game_value& from_)
                 : wgroup(group(from_[0])),
                 windex(from_[1]) {}
 
-            std::vector<game_value> __to_gv_vec() {
+            std::vector<game_value> __to_gv_vec() const {//#TODO return std::pair instead
                 return std::vector<game_value>{wgroup, game_value(windex)};
             }
 
-            game_value __to_gv() {
-                return game_value(std::vector<game_value>{ wgroup, windex });
+            game_value __to_gv() const {
+                return{ wgroup, windex };
             }
 
             static const std::string __speed_lookup[4];
@@ -178,25 +178,25 @@ namespace intercept {
             }
 
             static std::string __get_enum_as_str(speed subject_) {
-                return __speed_lookup[(int) subject_];
+                return __speed_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(show subject_) {
-                return __show_lookup[(int) subject_];
+                return __show_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(type subject_) {
-                return __type_lookup[(int) subject_];
+                return __type_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(behaviour subject_) {
-                return __behaviour_lookup[(int) subject_];
+                return __behaviour_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(combat_mode subject_) {
-                return __combat_mode_lookup[(int) subject_];
+                return __combat_mode_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(formation subject_) {
-                return __formation_lookup[(int) subject_];
+                return __formation_lookup[static_cast<int>(subject_)];
             }
             static std::string __get_enum_as_str(loiter_type subject_) {
-                return __loiter_lookup[(int) subject_];
+                return __loiter_lookup[static_cast<int>(subject_)];
             }
 
         };

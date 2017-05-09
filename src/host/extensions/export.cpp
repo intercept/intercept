@@ -31,7 +31,7 @@ namespace intercept {
             if (intercept::loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
-            return NULL;
+            return nullptr;
         }
 
         unary_function get_unary_function(const char *function_name_) {
@@ -39,7 +39,7 @@ namespace intercept {
             if (intercept::loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
-            return NULL;
+            return nullptr;
         }
 
         unary_function get_unary_function_typed(const char *function_name_, const char *right_arg_type_) {
@@ -47,7 +47,7 @@ namespace intercept {
             if (intercept::loader::get().get_function(std::string(function_name_), function, std::string(right_arg_type_))) {
                 return function;
             }
-            return NULL;
+            return nullptr;
         }
 
         binary_function get_binary_function(const char *function_name_) {
@@ -55,7 +55,7 @@ namespace intercept {
             if (intercept::loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
-            return NULL;
+            return nullptr;
         }
 
         binary_function get_binary_function_typed(const char *function_name_, const char *left_arg_type_, const char *right_arg_type_) {
@@ -63,7 +63,7 @@ namespace intercept {
             if (intercept::loader::get().get_function(std::string(function_name_), function, std::string(left_arg_type_), std::string(right_arg_type_))) {
                 return function;
             }
-            return NULL;
+            return nullptr;
         }
 
         void invoker_lock()

@@ -4,7 +4,7 @@ using namespace intercept;
 using namespace intercept::__internal;
 using GameDataType = types::__internal::GameDataType;
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, gsNular* func_) :
-    _returnType(return_type_), _type(functionType::sqf_nular), _nular(func_), _lArgType(GameDataType::NOTHING), _rArgType(types::__internal::GameDataType::NOTHING) {
+    _type(functionType::sqf_nular), _nular(func_), _lArgType(GameDataType::NOTHING), _rArgType(types::__internal::GameDataType::NOTHING), _returnType(return_type_) {
 
 }
 
@@ -29,7 +29,7 @@ public:
                 //#TODO figure out how to create null object I guess...
                 break;
         }
-        return (uintptr_t)ret_;
+        return reinterpret_cast<uintptr_t>(ret_);
     }
     static uintptr_t _cdecl unusedFunction(char* ret_, uintptr_t gs_, uintptr_t larg_) {
         return unusedNular(ret_, gs_);
@@ -75,10 +75,10 @@ void registered_sqf_func_wrapper::setUnused() {
 }
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, gsFunction* func_) :
-    _returnType(return_type_), _type(functionType::sqf_function), _func(func_), _lArgType(left_arg_type_), _rArgType(GameDataType::NOTHING) {}
+    _type(functionType::sqf_function), _func(func_), _lArgType(left_arg_type_), _rArgType(GameDataType::NOTHING), _returnType(return_type_) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, gsOperator* func_) :
-    _returnType(return_type_), _type(functionType::sqf_operator), _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_) {}
+    _type(functionType::sqf_operator), _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_), _returnType(return_type_) {}
 
 intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
 
@@ -113,9 +113,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(left_arg_type)] == 0) __debugbreak();   //and all supported types are implemented
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
     
-    op_value_entry retType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
-    op_value_entry leftType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
-    op_value_entry rightype{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
+    op_value_entry retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
+    op_value_entry leftType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),nullptr };
+    op_value_entry rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
 
 
 
@@ -155,8 +155,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
-    op_value_entry retType{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
-    op_value_entry rightype{ _registerFuncs._type_vtable,(value_entry*) _registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
+    op_value_entry retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
+    op_value_entry rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
     //#TODO confirm types by calling toString and comparing with expected string
     constructUnary(&op, retType, name.c_str(), function_,
         rightype,
@@ -184,8 +184,8 @@ void intercept::sqf_functions::initialize() {
     _registerFuncs = loader::get().get_register_sqf_info();
 }
 
-intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) {
-    auto gs = (__internal::game_state*) _registerFuncs._gameState;
+intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) const {
+    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     gs->_scriptFunctions.get_table_for_key(name.c_str())->for_each([](const game_functions& it) {
         OutputDebugStringA(it._name);
@@ -205,8 +205,8 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     return nullptr;
 }
 
-intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) {
-    auto gs = (__internal::game_state*) _registerFuncs._gameState;
+intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) const {
+    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     auto& found = gs->_scriptOperators.get(name.c_str());
     gs->_scriptOperators.get_table_for_key(name.c_str())->for_each([](const game_operators& it) {

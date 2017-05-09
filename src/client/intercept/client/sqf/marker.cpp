@@ -339,7 +339,7 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__locationposition__location__ret__array, loc_));
         }
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_) {
-            std::vector<game_value> loctypes;
+            std::vector<game_value> loctypes; //#TODO remove temp std::vector
             for (std::string l_ : location_types_)
                 loctypes.push_back(l_);
 
@@ -359,7 +359,7 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
-            std::vector<game_value> loctypes;
+            std::vector<game_value> loctypes; //#TODO remove temp std::vector
             for (std::string l_ : location_types_)
                 loctypes.push_back(l_);
 
@@ -380,7 +380,7 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_) {
-            std::vector<game_value> loctypes;
+            std::vector<game_value> loctypes; //#TODO remove temp std::vector
             for (std::string l_ : location_types_)
                 loctypes.push_back(l_);
 
@@ -400,7 +400,7 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
-            std::vector<game_value> loctypes;
+            std::vector<game_value> loctypes; //#TODO remove temp std::vector
             for (std::string l_ : location_types_)
                 loctypes.push_back(l_);
 
@@ -420,45 +420,45 @@ namespace intercept {
             return output;
         }
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_) {
-            std::vector<game_value> loc_types;
+            std::vector<game_value> loc_types; //#TODO remove temp std::vector
             for (auto loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
-            std::vector<game_value> params{
+            game_value params({
                 pos_,
                 loc_types,
                 radius_
-            };
+            });
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_) {
-            std::vector<game_value> loc_types;
+            std::vector<game_value> loc_types; //#TODO remove temp std::vector
             for (auto loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
-            std::vector<game_value> params{
+            game_value params({
                 pos_,
                 loc_types,
                 radius_,
                 sort_pos_
-            };
+            });
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_) {
-            std::vector<game_value> loc_types;
+            std::vector<game_value> loc_types; //#TODO remove temp std::vector
             for (auto loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
-            std::vector<game_value> params{
+            game_value params({
                 pos_,
                 loc_types,
                 radius_,
                 sort_obj_
-            };
+            });
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocations__array__ret__array, params));
         }
@@ -590,11 +590,11 @@ namespace intercept {
         }
 
         object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
-            std::vector<game_value> args = {
+            game_value args({
                 (type_),
                 pos_,
                 (make_global_)
-            };
+            });
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }

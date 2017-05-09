@@ -12,7 +12,7 @@ https://github.com/NouberNou/intercept
 #include "logging.hpp"
 #include "arguments.hpp"
 #include "loader.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 #include <mutex>
 #include <condition_variable>
 #include <queue>

@@ -1,5 +1,5 @@
 ﻿#include "camera.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "position.hpp"
 

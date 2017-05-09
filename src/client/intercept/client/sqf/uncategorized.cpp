@@ -1,5 +1,5 @@
 ﻿#include "uncategorized.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "position.hpp" //for uses of get_pos_obj. Should be removed once they are sorted
 

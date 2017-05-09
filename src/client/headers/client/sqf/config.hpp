@@ -13,8 +13,8 @@ Engine.
 https://github.com/NouberNou/intercept
 */
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 
 using namespace intercept::types;
 

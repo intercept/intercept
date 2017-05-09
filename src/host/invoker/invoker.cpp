@@ -1,7 +1,7 @@
 ﻿#include "invoker.hpp"
 #include "controller.hpp"
 #include "extensions.hpp"
-#include "shared\client_types.hpp"
+#include "shared/client_types.hpp"
 
 namespace intercept {
     //game_data_string_pool<> invoker::string_pool;

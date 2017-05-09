@@ -12,9 +12,9 @@
 #include "logging.hpp"
 #include "invoker.hpp"
 #include "export.hpp"
-#include "client\client.hpp"
+#include "client/client.hpp"
 #include "extensions.hpp"
-#include "shared\functions.hpp"
+#include "shared/functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 

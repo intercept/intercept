@@ -171,7 +171,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointstatements__array__array__ret__nothing, wp_.__to_gv(), args);
         }
         void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_) {
-            game_value args({ std::vector<game_value> { min_, mid_, max_ } });
+            game_value args({
+                game_value({
+                    min_,
+                    mid_,
+                    max_
+                })
+            });
             host::functions.invoke_raw_binary(client::__sqf::binary__setwaypointtimeout__array__array__ret__nothing, wp_.__to_gv(), args);
         }
         void set_waypoint_type(waypoint& wp_, waypoint::type type_) {
@@ -186,14 +192,14 @@ namespace intercept {
         }
 
         void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_) {
-            std::vector<game_value> waypoints;
+            std::vector<game_value> waypoints; //#TODO remove temp std::vector
             for (auto it : others_)
                 waypoints.push_back(it.__to_gv());
 
             host::functions.invoke_raw_binary(client::__sqf::binary__synchronizewaypoint__array__array__ret__nothing, wp_.__to_gv(), waypoints);
         }
         void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_) {
-            std::vector<game_value> waypoints;
+            std::vector<game_value> waypoints; //#TODO remove temp std::vector
             for (auto it : others_)
                 waypoints.push_back(it.__to_gv());
 
@@ -207,9 +213,5 @@ namespace intercept {
         void waypoint_attach_object(waypoint& wp_, object & obj_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_.__to_gv(), obj_);
         }
-
-
-
-
     }
 }

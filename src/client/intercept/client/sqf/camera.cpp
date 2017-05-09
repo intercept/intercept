@@ -226,7 +226,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__setcamshakeparams__array__ret__nothing, params);
         }
         bool preload_camera(const vector3 &pos_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__preloadcamera__array__ret__bool, pos_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__preloadcamera__array__ret__bool, pos_);
         }
 
         void set_default_camera(const vector3& pos_, const vector3& dir_) {
@@ -269,7 +269,7 @@ namespace intercept {
                 priority_
             });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__ppeffectcreate__array__ret__scalar_array, params);
         }
 
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {

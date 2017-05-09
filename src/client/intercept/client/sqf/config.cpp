@@ -49,7 +49,7 @@ namespace intercept {
         }
 
         std::string config_name(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__configname__config__ret__string, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__configname__config__ret__string, config_entry_);
         }
 
         std::vector<config> config_properties(const config &config_entry, const std::string& condition_, bool inherit) {
@@ -63,7 +63,7 @@ namespace intercept {
         }
 
         std::string config_source_mod(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__configsourcemod__config__ret__string, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__configsourcemod__config__ret__string, config_entry_);
         }
 
         std::vector<std::string> config_source_mod_list(const config &config_entry_) {
@@ -72,7 +72,7 @@ namespace intercept {
         }
 
         float count(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__count__config__ret__scalar, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__count__config__ret__scalar, config_entry_);
         }
 
         //std::vector<game_value> get_array(const config &config_entry_) {
@@ -84,11 +84,11 @@ namespace intercept {
         }
 
         float get_number(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__getnumber__config__ret__scalar, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__getnumber__config__ret__scalar, config_entry_);
         }
 
         std::string get_text(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__gettext__config__ret__string, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__gettext__config__ret__string, config_entry_);
         }
 
         config inherits_from(const config &config_entry_) {
@@ -96,23 +96,23 @@ namespace intercept {
         }
 
         bool is_array(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isarray__config__ret__bool, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isarray__config__ret__bool, config_entry_);
         }
 
         bool is_class(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isclass__config__ret__bool, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isclass__config__ret__bool, config_entry_);
         }
 
         bool is_null(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__config__ret__bool, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isnull__config__ret__bool, config_entry_);
         }
 
         bool is_number(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnumber__config__ret__bool, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isnumber__config__ret__bool, config_entry_);
         }
 
         bool is_text(const config &config_entry_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__istext__config__ret__bool, config_entry_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__istext__config__ret__bool, config_entry_);
         }
 
         std::vector<std::string> config_classes(const std::string& value_, const config & a_config_) {

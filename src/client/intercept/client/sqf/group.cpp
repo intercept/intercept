@@ -5,7 +5,7 @@
 namespace intercept {
     namespace sqf {
         std::string combat_mode(const group &grp_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
         float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
@@ -19,7 +19,7 @@ namespace intercept {
                 offset
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
         }
         /* Group */
         bool group_icon_selectable() {
@@ -49,15 +49,15 @@ namespace intercept {
         }
 
         std::string group_id(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__groupid__group__ret__string, value_);
         }
 
         float group_owner(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__groupowner__group__ret__scalar, value_);
         }
 
         bool set_group_owner(const group & group_, int client_id_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, (float) client_id_, group_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__setgroupowner__group__scalar__ret__bool, (float) client_id_, group_);
         }
 
         object leader(const group &value_) {
@@ -77,7 +77,7 @@ namespace intercept {
         }
 
         float current_waypoint(const group & group_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, group_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__currentwaypoint__group__ret__scalar, group_);
         }
 
         void set_group_icons_selectable(bool val_) {
@@ -153,7 +153,7 @@ namespace intercept {
                 client::__sqf::unary__allvariables__group__ret__array, value_));
         }
         bool is_null(const group &value_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isnull__group__ret__bool, value_);
         }
 
     }

@@ -10,7 +10,7 @@ namespace intercept {
         }
 
         std::string world_name() {
-            return game_value(host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string));
+            return host::functions.invoke_raw_nular(client::__sqf::nular__worldname__ret__string);
         }
 
         float wind_str() {
@@ -111,7 +111,7 @@ namespace intercept {
                 minute_
             });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date);
         }
 
         rv_date number_to_date(int year_, float time_) {

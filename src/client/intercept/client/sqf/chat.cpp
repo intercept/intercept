@@ -71,7 +71,7 @@ namespace intercept {
                 units
             });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
 
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_) {
@@ -87,7 +87,7 @@ namespace intercept {
                 quote_
             });
 
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
 
         float current_channel() {

@@ -11,7 +11,7 @@ namespace intercept {
                 pos_
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         std::string create_marker(const std::string &name_, const vector3 &pos_) {
@@ -20,7 +20,7 @@ namespace intercept {
                 pos_
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         std::string create_marker(const std::string &name_, const object &pos_) {
@@ -29,7 +29,7 @@ namespace intercept {
                 pos_
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         std::string create_marker_local(const std::string &name_, const vector2 &pos_) {
@@ -38,7 +38,7 @@ namespace intercept {
                 pos_,
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
 
         std::string create_marker_local(const std::string &name_, const vector3 &pos_) {
@@ -47,7 +47,7 @@ namespace intercept {
                 pos_,
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
 
         std::string create_marker_local(const std::string &name_, const object &pos_) {
@@ -56,7 +56,7 @@ namespace intercept {
                 pos_,
             });
 
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
 
         void delete_marker(const std::string& value_) {
@@ -246,7 +246,7 @@ namespace intercept {
 
         namespace __helpers {
             vector3 get_pos_loc(unary_function fnc_, const location & loc_) {
-                return game_value(host::functions.invoke_raw_unary(fnc_, loc_));
+                return host::functions.invoke_raw_unary(fnc_, loc_);
             }
         }
 
@@ -271,30 +271,30 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__attachobject__location__object__ret__nothing, location_, object_);
         }
         bool is_null(const location& loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__isnull__location__ret__bool, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__isnull__location__ret__bool, loc_);
         }
         bool rectangular(const location& loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__rectangular__location__ret__bool, loc_);
         }
         bool in(const vector3 &pos_, const location &loc_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__in__array__location__ret__bool, pos_, loc_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__in__array__location__ret__bool, pos_, loc_);
         }
         float direction(const location &value_) {
             return __helpers::__number_unary_location(client::__sqf::unary__direction__location__ret__scalar, value_);
         }
         float importance(const location &loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__importance__location__ret__scalar, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__importance__location__ret__scalar, loc_);
         }
         float distance(const location& start_, const location& end_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__location__ret__scalar, start_, end_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__location__ret__scalar, start_, end_);
         }
 
         float distance(const location& start_, const vector3& end_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__array__ret__scalar, start_, end_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__distance__location__array__ret__scalar, start_, end_);
         }
 
         float distance(const vector3& start_, const location& end_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__distance__array__location__ret__scalar, start_, end_);
         }
         location nearest_location(const vector3& pos_, const std::string& location_class_) {
             game_value args({
@@ -314,11 +314,11 @@ namespace intercept {
             return location(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocation__array__ret__location, args));
         }
         location nearest_location_with_dubbing(const vector3 &pos_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, pos_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, pos_);
         }
 
         location nearest_location_with_dubbing(const object &obj_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, obj_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__nearestlocationwithdubbing__array__ret__location, obj_);
         }
         object attached_object(const location &loc_) {
             return object(host::functions.invoke_raw_unary(client::__sqf::unary__attachedobject__location__ret__object, loc_));
@@ -327,16 +327,16 @@ namespace intercept {
             return side(host::functions.invoke_raw_unary(client::__sqf::unary__side__location__ret__side, loc_));
         }
         vector3 position(const location& loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__position__location__ret__array, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__position__location__ret__array, loc_);
         }
         vector2 size(const location &loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__size__location__ret__array, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__size__location__ret__array, loc_);
         }
         vector3 get_pos(const location & loc_) {
             return __helpers::get_pos_loc(__sqf::unary__getpos__location__ret__array, loc_);
         }
         vector2 location_position(const location &loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__locationposition__location__ret__array, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__locationposition__location__ret__array, loc_);
         }
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_) {
             std::vector<game_value> loctypes; //#TODO remove temp std::vector
@@ -467,17 +467,17 @@ namespace intercept {
                 client::__sqf::unary__allvariables__location__ret__array, value_));
         }
         std::string name(const location &loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__name__location__ret__string, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__name__location__ret__string, loc_);
         }
         std::string type(const location& loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__type__location__ret__string, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__type__location__ret__string, loc_);
         }
         game_value get_variable(const location & loc_, const std::string & var_name_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_);
         }
         // What a confusing command name.
         std::string class_name(const location &loc_) {
-            return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_));
+            return host::functions.invoke_raw_unary(client::__sqf::unary__classname__location__ret__string, loc_);
         }
         location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_) {
             game_value params({

@@ -267,7 +267,7 @@ namespace intercept {
         }
 
         bool can_add(const object& obj_, const std::string& classname_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, classname_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, classname_);
         }
 
         bool can_add(const object& obj_, const std::string& classname_, int count_) {
@@ -276,11 +276,11 @@ namespace intercept {
                 (float) count_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadd__object__string_array__ret__bool, obj_, params);
         }
 
         bool can_add_item_to_backpack(const object& obj_, const std::string& classname_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, classname_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, classname_);
         }
 
         bool can_add_item_to_backpack(const object& obj_, const std::string& classname_, int count_) {
@@ -289,11 +289,11 @@ namespace intercept {
                 (float) count_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, params);
         }
 
         bool can_add_item_to_uniform(const object& obj_, const std::string& classname_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, classname_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, classname_);
         }
 
         bool can_add_item_to_uniform(const object& obj_, const std::string& classname_, int count_) {
@@ -302,11 +302,11 @@ namespace intercept {
                 (float) count_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, params);
         }
 
         bool can_add_item_to_vest(const object& obj_, const std::string& classname_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, classname_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, classname_);
         }
 
         bool can_add_item_to_vest(const object& obj_, const std::string& classname_, int count_) {
@@ -315,7 +315,7 @@ namespace intercept {
                 (float) count_
             });
 
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, params));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, params);
         }
 
         std::string current_magazine_detail(const object &veh_) {
@@ -511,13 +511,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__assignitem__object__string__ret__nothing, value0_, value1_);
         }
         bool has_weapon(const object &value0_, const std::string& value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, value0_, value1_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__hasweapon__object__string__ret__bool, value0_, value1_);
         }
         void link_item(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__linkitem__object__string__ret__nothing, value0_, value1_);
         }
         bool is_uniform_allowed(const object &value0_, const std::string& value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__isuniformallowed__object__string__ret__bool, value0_, value1_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__isuniformallowed__object__string__ret__bool, value0_, value1_);
         }
         void remove_handgun_item(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(client::__sqf::binary__removehandgunitem__object__string__ret__nothing, value0_, value1_);

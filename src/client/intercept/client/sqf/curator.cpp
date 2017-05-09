@@ -77,7 +77,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(client::__sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing, value0_, value1_);
         }
         float curator_coef(const object &value0_, const std::string &value1_) {
-            return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__curatorcoef__object__string__ret__scalar, value0_, value1_));
+            return host::functions.invoke_raw_binary(client::__sqf::binary__curatorcoef__object__string__ret__scalar, value0_, value1_);
         }
 
         void remove_curator_camera_area(const object &value1_, float value0_) {

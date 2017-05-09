@@ -1,4 +1,4 @@
-#include "eventhandlers.hpp"
+﻿#include "eventhandlers.hpp"
 #include "invoker.hpp"
 #include "extensions.hpp"
 #include "shared\client_types.hpp"
@@ -69,7 +69,7 @@ namespace intercept {
     }
     void eventhandlers::pre_start(const std::string & name_, game_value & args_) {
         LOG(INFO) << "Pre-start";
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) {
                 module.second.functions.pre_start();
             }
@@ -79,7 +79,7 @@ namespace intercept {
     {
         extensions::get().reload_all();
         LOG(INFO) << "Pre-init";
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_init) {
                 module.second.functions.pre_init();
             }
@@ -88,7 +88,7 @@ namespace intercept {
     void eventhandlers::post_init(const std::string & name_, game_value & args_)
     {
         LOG(INFO) << "Post-init";
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_init) {
                 module.second.functions.post_init();
             }
@@ -97,14 +97,14 @@ namespace intercept {
     void eventhandlers::mission_stopped(const std::string & name_, game_value & args_)
     {
         LOG(INFO) << "Mission Stopped";
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.functions.mission_stopped) {
                 module.second.functions.mission_stopped();
             }
         }
     }
 #define EH_START(x) void eventhandlers::x(const std::string & name_, game_value & args_) {\
-        for (auto module : extensions::get().modules()) {\
+        for (auto& module : extensions::get().modules()) {\
             if (module.second.eventhandlers.x) {\
                 module.second.eventhandlers.x
 
@@ -139,7 +139,7 @@ namespace intercept {
         for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
             turret_path[turret] = ((int)args_[3][turret]);
 
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
                 module.second.eventhandlers.get_in(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), turret_path);
             }
@@ -154,7 +154,7 @@ namespace intercept {
         for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
             turret_path[turret] = ((int)args_[3][turret]);
 
-        for (auto module : extensions::get().modules()) {
+        for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {
                 module.second.eventhandlers.get_out(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), turret_path);
             }

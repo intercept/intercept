@@ -95,7 +95,7 @@ namespace intercept {
         {
             _invoker_unlock on_frame_lock(this);
             // do the per-frame handler here.
-            for (auto module : extensions::get().modules()) {
+            for (auto& module : extensions::get().modules()) {
                 if (module.second.functions.on_frame) {
                     module.second.functions.on_frame();
                 }

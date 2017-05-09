@@ -21,20 +21,20 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__winddir__ret__scalar);
         }
         void set_wind(float x_, float y_) {
-            std::vector<game_value> params{
+            game_value params({
                 x_,
                 y_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setwind__array__ret__nothing, params);
         }
 
         void set_wind(float x_, float y_, bool force_) {
-            std::vector<game_value> params{
+            game_value params({
                 x_,
                 y_,
                 force_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setwind__array__ret__nothing, params);
         }
@@ -103,22 +103,22 @@ namespace intercept {
         }
 
         float date_to_number(int year_, int month_, int day_, int hour_, float minute_) {
-            std::vector<game_value> date{
+            game_value date({
                 (float) year_,
                 (float) month_,
                 (float) day_,
                 (float) hour_,
                 minute_
-            };
+            });
 
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__datetonumber__array__ret__scalar, date));
         }
 
         rv_date number_to_date(int year_, float time_) {
-            std::vector<game_value> params{
+            game_value params({
                 (float) year_,
                 time_
-            };
+            });
 
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(client::__sqf::unary__numbertodate__array__ret__array, params)));
         }
@@ -137,13 +137,13 @@ namespace intercept {
             return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
         }
         void set_date(int year_, int month_, int day_, int hour_, float minute_) {
-            std::vector<game_value> date{
+            game_value date({
                 (float) year_,
                 (float) month_,
                 (float) day_,
                 (float) hour_,
                 minute_
-            };
+            });
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setdate__array__ret__nothing, date);
         }

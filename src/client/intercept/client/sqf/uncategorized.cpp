@@ -564,7 +564,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string action_keys_names(const std::string &user_action_, int max_keys_) {
-            game_value params({ user_action_, game_value((float)max_keys_) });
+            game_value params({ user_action_, static_cast<float>(max_keys_) });
             return host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnames__string_array__ret__string, params);
         }
         std::string action_keys_names(const std::string &user_action_, int max_keys_, const std::string &input_device_priority_) {
@@ -585,7 +585,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<std::string> action_keys_names_array(const std::string &user_action_, int max_keys_) {
-            game_value params({ user_action_, game_value((float)max_keys_) });
+            game_value params({ user_action_, static_cast<float>(max_keys_) });
 
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(client::__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
@@ -3743,7 +3743,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void move_in_turret(const object& unit_, const object& vehicle_, const std::vector<int> turret_path_) {
             std::vector<game_value> path; //#TODO remove temp std::vector
             for (int item : turret_path_)
-                path.push_back(game_value((float)item));
+                path.push_back(static_cast<float>(item));
 
             game_value params({
                 vehicle_,

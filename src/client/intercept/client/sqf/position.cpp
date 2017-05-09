@@ -104,36 +104,36 @@ namespace intercept {
             return game_value(host::functions.invoke_raw_unary(client::__sqf::unary__asltoatl__array__ret__array, asl_));
         }
         vector3 get_pos(const object& obj_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, obj_, args));
         }
 
         vector3 get_pos(const vector3& pos_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getpos__object_array__array__ret__array, pos_, args));
         }
 
         vector3 get_rel_pos(const object& obj_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, obj_, args));
         }
 
         vector3 get_rel_pos(const vector3& pos_, float distance_, float heading_) {
-            game_value args(std::vector<game_value> {
+            game_value args({
                 distance_,
-                    heading_
+                heading_
             });
 
             return game_value(host::functions.invoke_raw_binary(client::__sqf::binary__getrelpos__object__array__ret__array, pos_, args));
@@ -150,10 +150,10 @@ namespace intercept {
         }
 
         void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_) {
-            std::vector<game_value> vector{
+            game_value vector({
                 vector_dir_,
                 vector_up_
-            };
+            });
 
             host::functions.invoke_raw_binary(client::__sqf::binary__setvectordirandup__object__array__ret__nothing, object_, vector);
         }

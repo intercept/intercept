@@ -3482,7 +3482,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(client::__sqf::unary__parsenumber__bool__ret__scalar, value_);
         }
 
-        std::string parse_text(const std::string& value_) {
+        rv_text parse_text(const std::string& value_) {
             return host::functions.invoke_raw_unary(client::__sqf::unary__parsetext__string__ret__text, value_);
         }
 

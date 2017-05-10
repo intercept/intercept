@@ -144,15 +144,6 @@ namespace intercept {
             float blue{ 0.f };
             float alpha{ 0.f };
 
-            operator game_value() {
-                return game_value({
-                    red,
-                    green,
-                    blue,
-                    alpha
-                });
-            }
-
             operator game_value() const {
                 return game_value({
                     red,

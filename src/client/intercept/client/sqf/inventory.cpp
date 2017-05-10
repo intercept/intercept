@@ -197,7 +197,7 @@ namespace intercept {
             game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesallturrets__object__ret__array, obj_);
 
             std::vector<rv_turret_magazine> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 std::vector<int> turret_path = __helpers::__convert_to_integers_vector(input[i][1]);
                 output.push_back(rv_turret_magazine({ input[i][0], turret_path, input[i][2], input[i][3], input[i][4] }));
             }
@@ -209,7 +209,7 @@ namespace intercept {
             game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammo__object__ret__array, obj_);
 
             std::vector<rv_magazine_ammo> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], false, -1, "" }));
             }
 
@@ -220,7 +220,7 @@ namespace intercept {
             game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammocargo__object__ret__array, obj_);
 
             std::vector<rv_magazine_ammo> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], false, -1, "" }));
             }
 
@@ -231,7 +231,7 @@ namespace intercept {
             game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammofull__object__ret__array, obj_);
 
             std::vector<rv_magazine_ammo> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 output.push_back(rv_magazine_ammo({ input[i][0], input[i][1], input[i][2], input[i][3], input[i][4] }));
             }
 
@@ -594,7 +594,7 @@ namespace intercept {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__everycontainer__object__ret__array, container_);
 
             std::vector<rv_container> containers;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 containers.push_back(rv_container({ ret[i][0], ret[i][1] }));
             }
 
@@ -606,7 +606,7 @@ namespace intercept {
 
 
             std::vector<rv_cargo> cargo;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<std::string> types = __helpers::__convert_to_strings_vector(ret[0][i]);
                 std::vector<float> amounts = __helpers::__convert_to_numbers_vector(ret[1][i]);
                 cargo.push_back(rv_cargo({ types, amounts }));
@@ -620,7 +620,7 @@ namespace intercept {
 
 
             std::vector<rv_cargo> cargo;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<std::string> types = __helpers::__convert_to_strings_vector(ret[0][i]);
                 std::vector<float> amounts = __helpers::__convert_to_numbers_vector(ret[1][i]);
                 cargo.push_back(rv_cargo({ types, amounts }));
@@ -634,7 +634,7 @@ namespace intercept {
 
 
             std::vector<rv_cargo> cargo;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<std::string> types = __helpers::__convert_to_strings_vector(ret[0][i]);
                 std::vector<float> amounts = __helpers::__convert_to_numbers_vector(ret[1][i]);
                 cargo.push_back(rv_cargo({ types, amounts }));
@@ -648,7 +648,7 @@ namespace intercept {
 
 
             std::vector<rv_cargo> cargo;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<std::string> types = __helpers::__convert_to_strings_vector(ret[0][i]);
                 std::vector<float> amounts = __helpers::__convert_to_numbers_vector(ret[1][i]);
                 cargo.push_back(rv_cargo({ types, amounts }));
@@ -687,11 +687,11 @@ namespace intercept {
         std::vector<rv_weapon_items> weapons_items(const object& obj_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitems__object__ret__array, obj_);
 
-            if (ret.length() == 0) {
+            if (ret.size() == 0) {
                 return {};
             } else {
                 std::vector<rv_weapon_items> ret_weapon_items;
-                for (uint32_t i = 0; i < ret.length(); ++i)
+                for (uint32_t i = 0; i < ret.size(); ++i)
                     ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }
@@ -700,11 +700,11 @@ namespace intercept {
         std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitemscargo__object__ret__array, veh_);
 
-            if (ret.length() == 0) {
+            if (ret.size() == 0) {
                 return {};
             } else {
                 std::vector<rv_weapon_items> ret_weapon_items;
-                for (uint32_t i = 0; i < ret.length(); ++i)
+                for (uint32_t i = 0; i < ret.size(); ++i)
                     ret_weapon_items.emplace_back(ret[i]);
                 return ret_weapon_items;
             }

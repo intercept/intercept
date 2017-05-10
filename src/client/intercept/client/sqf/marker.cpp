@@ -352,7 +352,7 @@ namespace intercept {
             game_value rval(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
 
             std::vector<location> output;
-            for (uint32_t i = 0; i < rval.length(); ++i) {
+            for (uint32_t i = 0; i < rval.size(); ++i) {
                 output.push_back(location(rval[i]));
             }
             return output;
@@ -373,7 +373,7 @@ namespace intercept {
             game_value rval(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
 
             std::vector<location> output;
-            for (uint32_t i = 0; i < rval.length(); ++i) {
+            for (uint32_t i = 0; i < rval.size(); ++i) {
                 output.push_back(location(rval[i]));
             }
             return output;
@@ -393,7 +393,7 @@ namespace intercept {
             game_value rval(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
 
             std::vector<location> output;
-            for (uint32_t i = 0; i < rval.length(); ++i) {
+            for (uint32_t i = 0; i < rval.size(); ++i) {
                 output.push_back(location(rval[i]));
             }
             return output;
@@ -414,7 +414,7 @@ namespace intercept {
             game_value rval(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
 
             std::vector<location> output;
-            for (uint32_t i = 0; i < rval.length(); ++i) {
+            for (uint32_t i = 0; i < rval.size(); ++i) {
                 output.push_back(location(rval[i]));
             }
             return output;
@@ -544,7 +544,7 @@ namespace intercept {
         std::vector<object> list(const object& trigger_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__list__object__ret__array, trigger_);
 
-            if (ret.length() == 0) {
+            if (ret.size() == 0) {
                 return {};
             } else {
                 return __helpers::__convert_to_objects_vector(ret);

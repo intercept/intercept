@@ -280,9 +280,6 @@ namespace intercept {
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, effects);
 
-            if (ret.length() == 0) {
-                return {};
-            }
             return __helpers::__convert_to_numbers_vector(ret);
         }
 

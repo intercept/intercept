@@ -187,10 +187,10 @@ void intercept::sqf_functions::initialize() {
 intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::string name, GameDataType argument_type) const {
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-    gs->_scriptFunctions.get_table_for_key(name.c_str())->for_each([](const game_functions& it) {
-        OutputDebugStringA(it._name);
-        OutputDebugStringA("\n");
-    });
+    //gs->_scriptFunctions.get_table_for_key(name.c_str())->for_each([](const game_functions& it) {
+    //    OutputDebugStringA(it._name.c_str());
+    //    OutputDebugStringA("\n");
+    //});
 
 
     auto& found = gs->_scriptFunctions.get(name.c_str());
@@ -209,10 +209,10 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     auto& found = gs->_scriptOperators.get(name.c_str());
-    gs->_scriptOperators.get_table_for_key(name.c_str())->for_each([](const game_operators& it) {
-        OutputDebugStringA(it._name);
-        OutputDebugStringA("\n");
-    });
+    //gs->_scriptOperators.get_table_for_key(name.c_str())->for_each([](const game_operators& it) {
+    //    OutputDebugStringA(it._name.c_str());
+    //    OutputDebugStringA("\n");
+    //});
     if (gs->_scriptOperators.is_null(found)) return nullptr;
     std::string left_argTypeString = to_string(left_argument_type);
     std::string right_argTypeString = to_string(right_argument_type);

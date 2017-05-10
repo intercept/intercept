@@ -69,7 +69,7 @@ namespace intercept {
             }
 
             static Type* reallocate(Type* _Ptr, size_t _count) {
-                return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr,sizeof(Type)*_count));
+                return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr, sizeof(Type)*_count));
             }
 
             //#TODO implement game_data_pool and string pool here
@@ -264,16 +264,21 @@ namespace intercept {
 
             //== is case insensitive just like scripting
             bool operator == (const char *other) const {
-                return _strcmpi(*this, other) == 0;
+                return _strcmpi(data(), other) == 0;
             }
 
             //!= is case insensitive just like scripting
             bool operator != (const char *other) const {
-                return _strcmpi(*this, other) != 0;
+                return _strcmpi(data(), other) != 0;
+            }
+
+            friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
+                _os << _s.data();
+                return _os;
             }
 
             bool compare_case_sensitive(const char *other) const {
-                return _stricmp(*this, other) == 0;
+                return _stricmp(data(), other) == 0;
             }
 
             size_t find(char ch, size_t start = 0) const {
@@ -367,7 +372,7 @@ namespace intercept {
             Type *_data;
             int _n;
         public:
-            rv_array() :_data(nullptr),_n(0) {};
+            rv_array() :_data(nullptr), _n(0) {};
             Type &get(size_t i) {
                 return _data[i];
             }
@@ -479,7 +484,7 @@ namespace intercept {
                 resize(copy_._n);
                 for (auto it : copy_)
                     push_back(std::move(it));
-                std::vector<int> x = {1,2,3};
+                std::vector<int> x = { 1,2,3 };
                 return *this;
             }
 
@@ -728,6 +733,12 @@ namespace intercept {
             compound_value_entry    *compound_type;
             value_types type() const;
             std::string type_str() const;
+            bool operator==(const op_value_entry& other) const {
+                return single_type == other.single_type && compound_type == other.compound_type;
+            }
+            bool operator!=(const op_value_entry& other) const {
+                return single_type != other.single_type || compound_type != other.compound_type;
+            }
         };
 
         struct unary_operator {
@@ -771,98 +782,6 @@ namespace intercept {
             uintptr_t procedure_ptr_addr;
             nular_operator *op;
         };
-        /*
-        typedef union ref_count {
-        public:
-            ref_count() { current_count = 0; __initial_count = 0; }
-            int32_t rv_ref_count;
-            struct {
-            public:
-                uint16_t current_count;
-                uint16_t __initial_count;
-            };
-
-            void set_initial(uint16_t val_, bool is_intercept_) {
-                assert(val_ <= SHRT_MAX);
-                __initial_count = val_;
-                if (is_intercept_) {
-                    __initial_count |= 1 << 15;
-                }
-            }
-
-            uint16_t get_initial() {
-                if ((__initial_count >> 15) & 1)
-                    return __initial_count & ~(1 << 15);
-                return __initial_count;
-            }
-
-            bool is_intercept() {
-                return (__initial_count >> 15) & 1;
-            }
-        } ref_count_type;
-        */
-
-        class ref_count {
-        public:
-            ref_count() { _count = 0; };
-
-            ref_count(int16_t initial_, int16_t actual_, bool is_intercept_) {
-                _count = (((int32_t) initial_) << 16) | ((int32_t) actual_);
-                if (is_intercept_)
-                    _count |= 1 << 31;
-            }
-
-            void operator = (int16_t val_) {
-                _count = (((int32_t) _initial()) << 16) | ((int32_t) val_);
-            }
-
-            uint16_t operator + (const int32_t val_) {
-                return _actual() + (uint16_t) val_;
-            }
-
-            uint16_t operator - (const int32_t val_) {
-                return _actual() - (uint16_t) val_;
-            }
-
-            void operator ++ (const int32_t val_) {
-                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() + 1);
-            }
-
-            void operator -- (const int32_t val_) {
-                _count = (((int32_t) _initial()) << 16) | ((int32_t) _actual() - 1);
-            }
-
-            operator int16_t() {
-                return _actual();
-            }
-
-            void set_initial(int16_t val_, bool is_intercept_) {
-                _count = (((int32_t) val_) << 16) | (int32_t) _actual();
-                if (is_intercept_)
-                    _count |= 1 << 31;
-            }
-
-            int16_t get_initial() {
-                return ((int16_t) (_count >> 16)) & ~(1 << 15);
-            }
-
-            bool is_intercept() {
-                return (_count >> 31) & 1;
-            }
-
-            void clear_initial() {
-                _count = (((int32_t) 0) << 16) | (int32_t) _actual();
-            }
-        protected:
-            inline int16_t _actual() {
-            #undef max // fucking hell i hate these macros, need to turn them off...
-                return ((int32_t) ((std::numeric_limits<int16_t>::max()) & _count));
-            }
-            inline int16_t _initial() {
-                return (int16_t) (_count >> 16);
-            }
-            int32_t _count;
-        };
 
         class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
         public:                //#TODO move this into __internal
@@ -872,11 +791,28 @@ namespace intercept {
             virtual int IAddRef() = 0;
             virtual int IRelease() = 0;
         };
-
+        class game_value;
         class game_data : public refcount, public I_debug_value {
+            friend class game_value;
         public:
-            virtual void _dummy() const {};
+            virtual const op_value_entry & type() const { static op_value_entry dummy; return dummy; }//#TODO replace op_value_entry by some better name
             virtual ~game_data() {}
+
+        protected:
+            virtual bool get_as_bool() const { return false; }
+            virtual float get_as_number() const { return 0.f; }
+            virtual r_string get_as_string() const { return ""; } //Only usable on String and Code! Use to_string instead!
+            virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; return dummy; } //Why would you ever need this?
+            virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; return dummy; }
+            virtual game_data *copy() const { return NULL; }
+            virtual void set_readonly(bool val) {} //No clue what this does...
+            virtual bool get_readonly() const { return false; }
+            virtual bool get_final() const { return false; }
+            virtual void set_final(bool val) {}; //Only on GameDataCode AFAIK
+            virtual r_string to_string() const { return ""; }
+            virtual bool equals(const game_data *data) const { return false; };
+            virtual const char *type_as_string() const { return "unknown"; }
+            virtual bool is_nil() const { return false; }
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
@@ -933,10 +869,14 @@ namespace intercept {
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
-            void copy(const game_value & copy_);
+            ~game_value();
+            void copy(const game_value & copy_); //I don't see any use for this.
             game_value(const game_value &copy_);
             game_value(game_value &&move_);
 
+
+
+            //Conversions
             game_value(float val_);
             game_value(bool val_);
             game_value(const std::string &val_);
@@ -947,14 +887,12 @@ namespace intercept {
             game_value(const vector2 &vec_);
             game_value(const internal_object &internal_);
 
-            ~game_value();
-
             game_value & operator = (const game_value &copy_);
             game_value & operator = (game_value &&move_);
-
             game_value & operator = (float val_);
             game_value & operator = (bool val_);
             game_value & operator = (const std::string &val_);
+            game_value & operator = (const r_string &val_);
             game_value & operator = (const char *val_);
             game_value & operator = (const std::vector<game_value> &list_);
             game_value & operator = (const vector3 &vec_);
@@ -962,13 +900,6 @@ namespace intercept {
             game_value & operator = (const internal_object &internal_);
 
 
-            operator int();
-            operator float();
-            operator bool();
-            operator std::string();
-            operator r_string();
-            operator vector3();
-            operator vector2();
             operator int() const;
             operator float() const;
             operator bool() const;
@@ -977,14 +908,21 @@ namespace intercept {
             operator vector3() const;
             operator vector2() const;
 
-            game_value & operator [](int i_);
-            game_value operator [](int i_) const;
+            game_value& operator [](size_t i_);
+            game_value operator [](size_t i_) const;
 
-            uintptr_t type() const;
+            uintptr_t type() const;//#TODO return GameDataType
 
-            size_t length() const;
+            [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
+            size_t size() const;
+            //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
+            //Returns true for uninitialized game_value's and Nil values returned from Arma
+            bool is_nil() const;
 
-            bool is_null() const;
+            bool operator==(const game_value& other) const;
+            bool operator!=(const game_value& other) const;
+
+
 
 
             ref<game_data> data;
@@ -1023,6 +961,7 @@ namespace intercept {
             static rv_pool_allocator* pool_alloc_base;
             game_data_string();
             game_data_string(const std::string &str_);
+            game_data_string(const r_string &str_);
             game_data_string(const game_data_string &copy_);
             game_data_string(game_data_string &&move_);
             game_data_string & game_data_string::operator = (const game_data_string &copy_);

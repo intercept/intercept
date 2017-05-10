@@ -1520,7 +1520,7 @@ namespace intercept {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ctrlposition__control__ret__array, ctrl_);
 
             std::vector<float> position;
-            for (uint32_t i = 0; i < ret.length(); ++i)
+            for (uint32_t i = 0; i < ret.size(); ++i)
                 position.push_back(float(ret[i]));
 
             return position;
@@ -1990,7 +1990,7 @@ namespace intercept {
         std::vector<control> all_controls(const display &display_) {
             game_value input__ = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
             std::vector<control> output;
-            for (uint32_t i = 0; i < input__.length(); ++i) {
+            for (uint32_t i = 0; i < input__.size(); ++i) {
                 output.push_back(control(input__[i]));
             }
             return output;

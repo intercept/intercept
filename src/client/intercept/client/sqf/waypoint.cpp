@@ -111,7 +111,7 @@ namespace intercept {
 
             // TODO test for logic.
             std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.length() - 1; i++)
+            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
                 waypoints.push_back(waypoint(rv_ret_vals[i]));
 
             return waypoints;
@@ -121,7 +121,7 @@ namespace intercept {
 
             // TODO test for logic.
             std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.length() - 1; i++)
+            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
                 waypoints.push_back(waypoint(rv_ret_vals[i]));
 
             return waypoints;

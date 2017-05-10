@@ -135,8 +135,8 @@ namespace intercept {
 
     void eventhandlers::get_in(const std::string & name_, game_value & args_)
     {
-        rv_list<int> turret_path(args_[3].length());
-        for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
+        rv_list<int> turret_path(args_[3].size());
+        for (uint32_t turret = 0; turret < args_[3].size(); ++turret)
             turret_path[turret] = static_cast<int>(args_[3][turret]);
 
         for (auto& module : extensions::get().modules()) {
@@ -150,8 +150,8 @@ namespace intercept {
 
     void eventhandlers::get_out(const std::string & name_, game_value & args_)
     {
-        rv_list<int> turret_path(args_[3].length());
-        for (uint32_t turret = 0; turret < args_[3].length(); ++turret)
+        rv_list<int> turret_path(args_[3].size());
+        for (uint32_t turret = 0; turret < args_[3].size(); ++turret)
             turret_path[turret] = static_cast<int>(args_[3][turret]);
 
         for (auto& module : extensions::get().modules()) {

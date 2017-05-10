@@ -7,8 +7,8 @@ namespace intercept {
         namespace __helpers {
             intersect_surfaces_list __line_intersects_surfaces(const game_value& intersects_value_) {
                 intersect_surfaces_list output;
-                output.reserve(intersects_value_.length());
-                for (uint32_t i = 0; i < intersects_value_.length(); ++i) {
+                output.reserve(intersects_value_.size());
+                for (uint32_t i = 0; i < intersects_value_.size(); ++i) {
                     game_value element = intersects_value_[i];
                     intersect_surfaces surfaces; // Our intersecting surfaces
                     surfaces.intersect_pos_asl = element[0]; // the actual position where line intersects 1st surface

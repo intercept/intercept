@@ -536,7 +536,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             game_value ret = host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args);
             std::vector<object> ret_objects;
-            for (uint32_t i = 0; i < ret.length(); ++i)
+            for (uint32_t i = 0; i < ret.size(); ++i)
                 ret_objects.push_back(object(ret[i]));
             return ret_objects;
         }
@@ -827,7 +827,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input = host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_);
 
             std::vector<task> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 output.push_back(task(input[i]));
             }
 
@@ -897,7 +897,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__object__ret__array, veh_);
 
             std::vector<rv_crew_member> crew_members;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
                 crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
             }
@@ -915,7 +915,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__array__ret__array, params);
 
             std::vector<rv_crew_member> crew_members;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[i][3]);
                 crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], turret_path, ret[i][4]));
             }
@@ -1366,7 +1366,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value input = host::functions.invoke_raw_nular(__sqf::nular__librarycredits__ret__array);
 
             std::vector<rv_credit> output;
-            for (uint32_t i = 0; i < input.length(); ++i) {
+            for (uint32_t i = 0; i < input.size(); ++i) {
                 output.push_back(input[i]);
             }
             return output;
@@ -4343,10 +4343,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         rv_vehicle_role assigned_vehicle_role(const object &unit_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__assignedvehiclerole__object__ret__array, unit_);
 
-            if (ret.length() == 0) {
+            if (ret.size() == 0) {
                 return rv_vehicle_role({});
             }
-            else if (ret.length() == 1) {
+            else if (ret.size() == 1) {
                 return rv_vehicle_role({ ret[0] });
             }
             else {
@@ -4586,7 +4586,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__rotorsforcesrtd__object__ret__array, heli_);
 
             std::vector<rv_forces_rtd> rotors_forces;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 rotors_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
             }
 
@@ -4597,7 +4597,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__wingsforcesrtd__object__ret__array, heli_);
 
             std::vector<rv_forces_rtd> wings_forces;
-            for (uint32_t i = 0; i < ret.length(); ++i) {
+            for (uint32_t i = 0; i < ret.size(); ++i) {
                 wings_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
             }
 
@@ -5110,7 +5110,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
-            for (uint32_t i = 0; i < ret.length(); ++i)
+            for (uint32_t i = 0; i < ret.size(); ++i)
                 best_places.push_back(rv_best_place({ ret[i] }));
 
             return best_places;
@@ -5128,7 +5128,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
-            for (uint32_t i = 0; i < ret.length(); ++i)
+            for (uint32_t i = 0; i < ret.size(); ++i)
                 best_places.push_back(rv_best_place({ ret[i] }));
 
             return best_places;
@@ -5403,7 +5403,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 task_destination(const task& task_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__taskdestination__task__ret__array, task_);
 
-            if (ret.length() == 0) {
+            if (ret.size() == 0) {
                 return {};
             }
             else {

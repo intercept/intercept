@@ -5498,5 +5498,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
 
+        void diag_dynamic_simulation_end(const std::string type_) {
+            host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
+        }
+
     }
 }

@@ -1578,6 +1578,7 @@ namespace intercept {
         display display_parent(const display &display_);
         float dynamic_simulation_distance(const std::string &category_);
         float dynamic_simulation_distance_coef(const std::string &class_);
+        bool dynamic_simulation_enabled(const object &object_);
     }
 
 }

@@ -5471,21 +5471,31 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
         }
 
-        void diag_capture_frame(const float frame_) {
+        void diag_capture_frame(const float &frame_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
         }
 
-        void diag_capture_frame_to_file(const float frame_) {
+        void diag_capture_frame_to_file(const float &frame_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
         }
 
-        void diag_capture_slow_frame(const std::string section_, const float threshold_) {
+        void diag_capture_slow_frame(const std::string &section_, const float &threshold_) {
             game_value params({
                 section_,
                 threshold_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
+        }
+
+        void diag_code_performance(const code &code_,const game_value &arguments_, const float cycles_) {
+            game_value params({
+                code_,
+                arguments_,
+                cycles_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
 
     }

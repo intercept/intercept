@@ -1568,9 +1568,10 @@ namespace intercept {
         bool can_trigger_dynamic_simulation(const object &unit_);
         std::vector<std::string> config_source_addon_list(const config &config_);
         object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
-        void diag_capture_frame(const float frame_);
-        void diag_capture_frame_to_file(const float frame_);
-        void diag_capture_slow_frame(const std::string section_, const float threshold_);
+        void diag_capture_frame(const float &frame_);
+        void diag_capture_frame_to_file(const float &frame_);
+        void diag_capture_slow_frame(const std::string &section_, const float &threshold_);
+        void diag_code_performance(const code &code_, const game_value &arguments_, const float cycles_);
     }
 
 }

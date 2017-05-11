@@ -1564,7 +1564,7 @@ namespace intercept {
 
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
-
+        std::vector<object> all_simple_objects(const game_value &params_);
 
     }
 

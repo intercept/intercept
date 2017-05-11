@@ -5515,5 +5515,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
+        display display_parent(const display &display_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
+        }
+
     }
 }

@@ -5488,7 +5488,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
         }
 
-        void diag_code_performance(const code &code_,const game_value &arguments_, const float cycles_) {
+        void diag_code_performance(const code &code_,const game_value &arguments_, const float &cycles_) {
             game_value params({
                 code_,
                 arguments_,
@@ -5498,7 +5498,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
 
-        void diag_dynamic_simulation_end(const std::string type_) {
+        void diag_dynamic_simulation_end(const std::string &type_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
         }
 
@@ -5509,6 +5509,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_logslowframe__array__ret__nothing, params);
+        }
+
+        float difficulty_option(const std::string &optionname_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
     }

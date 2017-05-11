@@ -5479,5 +5479,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
         }
 
+        void diag_capture_slow_frame(const std::string section_, const float threshold_) {
+            game_value params({
+                section_,
+                threshold_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
+        }
+
     }
 }

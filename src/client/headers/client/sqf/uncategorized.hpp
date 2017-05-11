@@ -1570,6 +1570,7 @@ namespace intercept {
         object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
         void diag_capture_frame(const float frame_);
         void diag_capture_frame_to_file(const float frame_);
+        void diag_capture_slow_frame(const std::string section_, const float threshold_);
     }
 
 }

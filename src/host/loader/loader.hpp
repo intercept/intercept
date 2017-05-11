@@ -334,7 +334,7 @@ namespace intercept {
             game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
             game_functions() {}
-            const char *get_map_key() const { return _name; }
+            const char *get_map_key() const { return _name.data(); }
         };
 
         struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
@@ -343,7 +343,7 @@ namespace intercept {
             r_string _name;
             int32_t placeholder10{4}; //0x2C Small int 0-5  priority
             game_operators() {}
-            const char *get_map_key() const { return _name; }
+            const char *get_map_key() const { return _name.data(); }
         };
         class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
         public:

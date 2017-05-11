@@ -8,6 +8,7 @@
 #include <utility> //std::hash
 #include "vector.hpp"
 #include "pool.hpp"
+#include <string_view>
 
 namespace intercept {
     class sqf_functions;
@@ -24,6 +25,12 @@ namespace intercept {
             void* rv_allocator_allocate_generic(size_t _size);
             void rv_allocator_deallocate_generic(void* _Ptr);
             void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
+            template <typename T, typename U>
+            std::size_t pairhash(const T& first, const U& second) {
+                size_t _hash = std::hash<T>()(first);
+                _hash ^= std::hash<U>()(second) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
+                return _hash;
+            }
         }
 
         template<class Type>
@@ -77,11 +84,11 @@ namespace intercept {
 
         class refcount_base {
         public:
-            refcount_base() { _refcount = 0; }
+            constexpr refcount_base() : _refcount(0) {}
             refcount_base(const refcount_base &src) { _refcount = 0; }
             void operator = (const refcount_base &src) const {}
 
-            int add_ref() const {
+            constexpr int add_ref() const {
                 return ++_refcount;
             }
             int dec_ref() const {
@@ -211,19 +218,38 @@ namespace intercept {
             Type *operator -> () const { return _ref; }
             operator Type *() const { return _ref; }
             bool operator != (const ref<Type>& other_) { return _ref != other_._ref; }
+            size_t ref_count() const { return _ref ? _ref->ref_count() : 0; }
+        };
+
+
+        template<std::size_t N>
+        class r_string_const : public compact_array<char> { // constexpr string
+        private:
+            const size_t _size;
+            char _data[N];
+        public:
+            constexpr r_string_const(const char a[N]) : _data(a), _size(N - 1), _refcount(2) { add_ref(); }
         };
 
         class r_string {
+            //friend constexpr const r_string& operator ""_rs(const char*, size_t);
+        protected:
         public:
             r_string() {}
-            r_string(const char* str, size_t len) {
-                if (str) _ref = create(str, len);
-                else _ref = create(len);
+            r_string(std::string_view str) {
+                if (str.length()) _ref = create(str.data(), str.length());
             }
-            r_string(const char* str) {
-                if (str) _ref = create(str);
-            }
-
+            constexpr r_string(compact_array<char>* dat) : _ref(dat) {}
+            template<std::size_t N>
+            constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
+            //constexpr r_string(std::string_view str) {   //https://woboq.com/blog/qstringliteral.html
+            //    _ref = [str]() -> compact_array<char>* {
+            //        static const r_string_const<str.length()> r_string_literal{
+            //        str.data()
+            //    };
+            //    return reinterpret_cast<compact_array<char>>(&r_string_literal);
+            //    }();
+            //}
             r_string(r_string&& _move) {
                 _ref = _move._ref;
                 _move._ref = nullptr;
@@ -244,18 +270,28 @@ namespace intercept {
                 _ref = _copy._ref;
                 return *this;
             }
+            r_string& operator = (std::string_view _copy) {
+                //if (!_ref || _ref.ref_count() <= 1) {
+                _ref = _copy.length() ? create(_copy.data(), _copy.length()) : nullptr;
+                //}
+                //_ref->assign(_copy.data(), _copy.length());  //#TODO compact_array::assign. Reallocates if already has memory
+                return *this;
+            }
             const char* data() const {
                 if (_ref) return _ref->data();
                 static char empty[]{ 0 };
                 return empty;
             }
+            const char* c_str() const { return data(); }
             char* data_mutable() {
                 if (!_ref) return nullptr;
                 make_mutable();
                 return _ref->data();
             }
 
-            operator const char *() const { return data(); }
+            explicit operator const char *() const { return data(); }
+            operator std::string_view() const { return std::string_view(data()); }
+            //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
             //This calls strlen so O(N) 
             int length() const {
                 if (!_ref) return 0;
@@ -294,10 +330,12 @@ namespace intercept {
                 if (pos == nullptr) return -1;
                 return pos - _ref->data();
             }
-
-
-
-
+            void clear() {
+                _ref = nullptr;
+            }
+            size_t hash() const {
+                return std::hash<const char*>()(data()); //#TODO string_view hash might be better...
+            }
 
         public://#TODO make private after all rv_strings were replaced
             ref<compact_array<char>> _ref;
@@ -305,7 +343,7 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
-                strncpy_s(string->data(), string->size(), str, len);
+                strncpy_s(string->data(), string->size(), str, len);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
                 string->data()[len] = 0;
                 return string;
             }
@@ -328,7 +366,16 @@ namespace intercept {
             }
         };
 
+        //constexpr r_string tests
+        //#define r_string_literal(str) \
+        //    ([]() -> const r_string_const<sizeof(str)- 1>& { \
+        //        static const r_string_const<sizeof(str)- 1> literal{ str }; \
+        //        return literal; \
+        //    }())
 
+        //constexpr const r_string& operator ""_rs(const char* __str, size_t len) {
+        //    return r_string_literal(__str);
+        //};
 
         class rv_pool_allocator {
             char pad_0x0000[0x24]; //0x0000
@@ -418,7 +465,13 @@ namespace intercept {
                     f(get(i));
                 }
             }
-
+            size_t hash() const {
+                size_t _hash{ 0 };
+                for (const auto& it : *this) {
+                    _hash ^= std::hash<Type>()(it) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
+                }
+                return _hash;
+            };
         };
 
         template<class Type, unsigned int growthFactor = 32>
@@ -816,6 +869,9 @@ namespace intercept {
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
+            uintptr_t get_vtable() const {
+                return *reinterpret_cast<const uintptr_t*>(this);
+            }
         };
 
         class game_data_number : public game_data {
@@ -832,6 +888,9 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
+            size_t hash() const {
+                return __internal::pairhash(type_def, number);
+            };
         protected:
             static thread_local game_data_pool<game_data_number> _data_pool;
         };
@@ -850,6 +909,7 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
+            size_t hash() const { return __internal::pairhash(type_def, val); };
         protected:
             static thread_local game_data_pool<game_data_bool> _data_pool;
         };
@@ -923,7 +983,7 @@ namespace intercept {
             bool operator!=(const game_value& other) const;
 
 
-
+            size_t hash() const;
 
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
@@ -950,6 +1010,7 @@ namespace intercept {
             ~game_data_array();
             auto_array<game_value> data;
             auto length() { return data.count(); }
+            size_t hash() const { return __internal::pairhash(type_def, data.hash()); };
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };
@@ -968,6 +1029,7 @@ namespace intercept {
             game_data_string & game_data_string::operator = (game_data_string &&move_);
             ~game_data_string();
             r_string raw_string;
+            size_t hash() const { return __internal::pairhash(type_def, raw_string); };
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         protected:
@@ -982,6 +1044,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, group); };
             void *group;
         };
 
@@ -993,6 +1056,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, config); };
             void *config;
         };
 
@@ -1004,6 +1068,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, control); };
             void *control;
         };
 
@@ -1015,6 +1080,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, display); };
             void *display;
         };
 
@@ -1026,6 +1092,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, location); };
             void *location;
         };
 
@@ -1037,6 +1104,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, script); };//#TODO might want to hash script string
             void *script;
         };
 
@@ -1048,6 +1116,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, side ); };
             void *side;
         };
 
@@ -1059,6 +1128,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, rv_text ); };
             void *rv_text;
         };
 
@@ -1070,6 +1140,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, team ); };
             void *team;
         };
 
@@ -1081,6 +1152,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, rv_namespace ); };
             void *rv_namespace;
         };
 
@@ -1092,6 +1164,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, code_string ); };
             r_string code_string;
             uintptr_t instruction_array;
             uint32_t instruction_array_size;
@@ -1107,6 +1180,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
+            size_t hash() const { return __internal::pairhash(type_def, object ); };
             void *object;
         };
 
@@ -1269,3 +1343,18 @@ namespace intercept {
         }
     }
 }
+
+namespace std {
+    template <> struct hash<intercept::types::r_string> {
+        size_t operator()(const intercept::types::r_string& x) const {
+            return x.hash();
+        }
+    };
+    template <> struct hash<intercept::types::game_value> {
+        size_t operator()(const intercept::types::game_value& x) const {
+            return x.hash();
+        }
+    };
+}
+
+

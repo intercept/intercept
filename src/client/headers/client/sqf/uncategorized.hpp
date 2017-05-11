@@ -1567,6 +1567,7 @@ namespace intercept {
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
         bool can_trigger_dynamic_simulation(const object &unit_);
         std::vector<std::string> config_source_addon_list(const config &config_);
+        object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
     }
 
 }

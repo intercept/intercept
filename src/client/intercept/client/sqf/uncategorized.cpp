@@ -5462,5 +5462,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
         }
 
+        object create_simple_object(const std::string &shapename_, const vector3 &positionworld_) {
+            game_value params({
+                shapename_,
+                positionworld_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
+        }
+
     }
 }

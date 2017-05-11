@@ -339,13 +339,13 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__locationposition__location__ret__array, loc_);
         }
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_) {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : location_types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : location_types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 pos_,
-                loctypes,
+                std::move(loctypes),
                 radius_
             });
 
@@ -359,13 +359,13 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : location_types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : location_types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 pos_,
-                loctypes,
+                std::move(loctypes),
                 radius_,
                 sort_position_
             });
@@ -380,13 +380,13 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_) {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : location_types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : location_types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 unit_,
-                loctypes,
+                std::move(loctypes),
                 radius_
             });
 
@@ -400,13 +400,13 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_) {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : location_types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : location_types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 unit_,
-                loctypes,
+                std::move(loctypes),
                 radius_,
                 sort_position_
             });
@@ -420,13 +420,13 @@ namespace intercept {
             return output;
         }
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_) {
-            std::vector<game_value> loc_types; //#TODO remove temp std::vector
-            for (auto loc_type : loc_types_)
+            auto_array<game_value> loc_types;
+            for (auto& loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
             game_value params({
                 pos_,
-                loc_types,
+                std::move(loc_types),
                 radius_
             });
 
@@ -434,13 +434,13 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_) {
-            std::vector<game_value> loc_types; //#TODO remove temp std::vector
+            auto_array<game_value> loc_types;
             for (auto loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
             game_value params({
                 pos_,
-                loc_types,
+                std::move(loc_types),
                 radius_,
                 sort_pos_
             });
@@ -449,13 +449,13 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_) {
-            std::vector<game_value> loc_types; //#TODO remove temp std::vector
-            for (auto loc_type : loc_types_)
+            auto_array<game_value> loc_types;
+            for (auto& loc_type : loc_types_)
                 loc_types.push_back(game_value(loc_type));
 
             game_value params({
                 pos_,
-                loc_types,
+                std::move(loc_types),
                 radius_,
                 sort_obj_
             });

@@ -15,6 +15,7 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
+#include <optional>
 
 using namespace intercept::types;
 
@@ -119,7 +120,7 @@ namespace intercept {
         object uniform_container(const object &value_);
         object unit_backpack(const object &value_);
         std::string vest(const object &value_);
-        object vest_container(const object &value_); //#TODO return rv_container class.. I think.
+        object vest_container(const object &value_);
         std::string backpack(const object & unit_);
         object backpack_container(const object & unit_);
         object first_backpack(const object &value_);
@@ -215,6 +216,7 @@ namespace intercept {
             std::string laser;
             std::string optics;
             rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
+            std::optional<rv_magazine> grenade_launcher_magazine;
             std::string bipod;
 
             rv_weapon_items(const game_value &ret_game_value_) :
@@ -223,7 +225,8 @@ namespace intercept {
                 laser(ret_game_value_[2]),
                 optics(ret_game_value_[3]),
                 magazine(ret_game_value_[4]),
-                bipod(ret_game_value_[5]) {}
+                grenade_launcher_magazine(ret_game_value_.length() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
+                bipod(ret_game_value_.length() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
         };
 
         std::vector<rv_weapon_items> weapons_items(const object& obj_);

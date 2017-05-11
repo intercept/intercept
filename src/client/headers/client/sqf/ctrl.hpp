@@ -14,6 +14,7 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
+#include <variant>
 
 using namespace intercept::types;
 
@@ -159,7 +160,7 @@ namespace intercept {
         control ctrl_parent_controls_group(const control &value_);
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
 
-        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::vector<float>& position_);
+        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::variant<vector2,vector3> &position_);//#TODO this proably copies vec2 or vec3
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
 
 

@@ -420,6 +420,7 @@ namespace intercept {
             int _n;
         public:
             rv_array() :_data(nullptr), _n(0) {};
+            rv_array(rv_array<Type>&& move_) :_data(move_._data), _n(move_._n) { _move.data = nullptr; _move._n = 0; };
             Type &get(size_t i) {
                 return _data[i];
             }
@@ -518,6 +519,9 @@ namespace intercept {
                 resize(init_.size());
                 for (auto& it : init_)
                     push_back(it);
+            }
+            auto_array(auto_array<Type> &&move_) : rv_array<Type>(move_), _maxItems(move_._maxItems) {
+                move_._maxItems = 0;
             }
             ~auto_array() {
                 resize(0);
@@ -943,6 +947,7 @@ namespace intercept {
             game_value(const char *);
             game_value(const std::vector<game_value> &list_);
             game_value(const std::initializer_list<game_value> &list_);
+            game_value(auto_array<game_value> &&array_);
             game_value(const vector3 &vec_);
             game_value(const vector2 &vec_);
             game_value(const internal_object &internal_);
@@ -967,6 +972,7 @@ namespace intercept {
             operator r_string() const;
             operator vector3() const;
             operator vector2() const;
+            //#TODO add operator to const auto_array ref and then replace stuff with foreach loops
 
             game_value& operator [](size_t i_);
             game_value operator [](size_t i_) const;
@@ -1003,6 +1009,7 @@ namespace intercept {
             game_data_array(size_t size_);
             game_data_array(const std::vector<game_value> &init_);
             game_data_array(const std::initializer_list<game_value> &init_);
+            game_data_array(auto_array<game_value> &&init_);
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);

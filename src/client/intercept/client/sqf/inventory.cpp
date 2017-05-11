@@ -105,14 +105,14 @@ namespace intercept {
         }
 
         void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : turretpath_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 classname_,
-                path,
+                std::move(path),
                 static_cast<float>(ammocount_)
             });
 
@@ -120,14 +120,14 @@ namespace intercept {
         }
 
         void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : turretpath_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 classname_,
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponturret__object__array__ret__nothing, obj_, params);
@@ -750,13 +750,13 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__currentweaponmode__object__ret__string, gunner_);
         }
         void load_magazine(const object &obj_, const std::vector<int> &turret_path_, const std::string &weapon_name_, const std::string &magazine_name_) {
-            std::vector<game_value> turret_path; //#TODO remove temp std::vector
+            auto_array<game_value> turret_path;
             for (int item : turret_path_) {
                 turret_path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                turret_path,
+                std::move(turret_path),
                 weapon_name_,
                 magazine_name_
             });
@@ -768,13 +768,13 @@ namespace intercept {
         }
 
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_) {
-            std::vector<game_value> turret_path; //#TODO remove temp std::vector
+            auto_array<game_value> turret_path;
             for (auto path : turret_path_)
                 turret_path.push_back(static_cast<float>(path));
 
             game_value params({
                 vehicle_,
-                turret_path
+                std::move(turret_path)
             });
 
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object_array__ret__array, params));

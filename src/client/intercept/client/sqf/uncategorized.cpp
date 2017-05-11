@@ -5519,8 +5519,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
         }
 
-        float dynamic_simulation_distance(std::string &category_) {
+        float dynamic_simulation_distance(const std::string &category_) {
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistance__string__ret__scalar, category_);
+        }
+
+        float dynamic_simulation_distance_coef(const std::string &class_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistancecoef__string__ret__scalar, class_);
         }
 
     }

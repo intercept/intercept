@@ -1576,7 +1576,8 @@ namespace intercept {
         void diag_log_slow_frame(const std::string &section_, const float &threshold_);
         float difficulty_option(const std::string &optionname_);
         display display_parent(const display &display_);
-        float dynamic_simulation_distance(std::string &category_);
+        float dynamic_simulation_distance(const std::string &category_);
+        float dynamic_simulation_distance_coef(const std::string &class_);
     }
 
 }

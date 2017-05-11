@@ -249,7 +249,7 @@ namespace intercept {
         game_data_string::game_data_string(const std::string &str_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            raw_string = r_string(str_.c_str(), str_.length());
+            raw_string = r_string(str_);
         }
         game_data_string::game_data_string(const r_string &str_) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
@@ -268,7 +268,7 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
             raw_string = move_.raw_string;
-            move_.raw_string = nullptr;
+            move_.raw_string.clear();
         }
 
         game_data_string & game_data_string::operator=(const game_data_string & copy_) {
@@ -283,7 +283,7 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
             raw_string = move_.raw_string;
-            move_.raw_string = nullptr;
+            move_.raw_string.clear();
             return *this;
         }
 
@@ -536,7 +536,7 @@ namespace intercept {
 
         game_value::operator std::string() const {
             if (data)
-                return data->get_as_string();
+                return static_cast<std::string>(data->get_as_string());
             return {};
         }
 
@@ -589,6 +589,42 @@ namespace intercept {
             return !data->equals(other.data);
         }
 
+        size_t game_value::hash() const {
+            if (!data) return 0;
+            auto _type = data->get_vtable();
+            if (_type == game_data_object::type_def)
+                return reinterpret_cast<game_data_object*>(data.getRef())->hash();
+            if (_type == game_data_number::type_def)
+                return reinterpret_cast<game_data_number*>(data.getRef())->hash();
+            if (_type == game_data_string::type_def)
+                return reinterpret_cast<game_data_string*>(data.getRef())->hash();
+            if (_type == game_data_array::type_def)
+                return reinterpret_cast<game_data_array*>(data.getRef())->hash();
+            if (_type == game_data_bool::type_def)
+                return reinterpret_cast<game_data_bool*>(data.getRef())->hash();
+            if (_type == game_data_group::type_def)
+                return reinterpret_cast<game_data_group*>(data.getRef())->hash();
+            if (_type == game_data_config::type_def)
+                return reinterpret_cast<game_data_config*>(data.getRef())->hash();
+            if (_type == game_data_control::type_def)
+                return reinterpret_cast<game_data_control*>(data.getRef())->hash();
+            if (_type == game_data_display::type_def)
+                return reinterpret_cast<game_data_display*>(data.getRef())->hash();
+            if (_type == game_data_location::type_def)
+                return reinterpret_cast<game_data_location*>(data.getRef())->hash();
+            if (_type == game_data_script::type_def)
+                return reinterpret_cast<game_data_script*>(data.getRef())->hash();
+            if (_type == game_data_side::type_def)
+                return reinterpret_cast<game_data_side*>(data.getRef())->hash();
+            if (_type == game_data_rv_text::type_def)
+                return reinterpret_cast<game_data_rv_text*>(data.getRef())->hash();
+            if (_type == game_data_rv_namespace::type_def)
+                return reinterpret_cast<game_data_rv_namespace*>(data.getRef())->hash();
+            if (_type == game_data_code::type_def)
+                return reinterpret_cast<game_data_code*>(data.getRef())->hash();
+            __debugbreak(); //#TODO remove when done testing
+            return 0;
+        };
 
         void* game_value::operator new(std::size_t sz_) {
             return rv_allocator<game_value>::createArray(sz_);

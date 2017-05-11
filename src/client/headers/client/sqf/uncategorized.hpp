@@ -1569,7 +1569,7 @@ namespace intercept {
         std::vector<std::string> config_source_addon_list(const config &config_);
         object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
         void diag_capture_frame(const float frame_);
-        void diag_capture_frame_to_file(const float frame_)();
+        void diag_capture_frame_to_file(const float frame_);
     }
 
 }

@@ -313,6 +313,11 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
+        game_data_array::game_data_array(auto_array<game_value> &&init_) : data(init_) {
+            *reinterpret_cast<uintptr_t*>(this) = type_def;
+            *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
+        }
+
         game_data_array::game_data_array(const std::vector<game_value> &init_) {  //#TODO this should not be used in wrappers
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
@@ -411,6 +416,11 @@ namespace intercept {
         game_value::game_value(const std::initializer_list<game_value> &list_) {
             set_vtable(__vptr_def);
             data = new game_data_array(list_);
+        }
+
+        game_value::game_value(auto_array<game_value> &&array_) {
+            set_vtable(__vptr_def);
+            data = new game_data_array(array_);
         }
 
         game_value::game_value(const vector3 & vec_) {

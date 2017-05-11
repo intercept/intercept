@@ -8,16 +8,8 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
-        float add_group_icon(const group& group_, const std::string& icon_, const std::vector<float>& offset_) {
-            std::vector<game_value> offset; //#TODO remove temp std::vector
-            for (float item : offset_) {
-                offset.push_back(static_cast<float>(item));
-            }
-
-            game_value params({
-                icon_,
-                offset
-            });
+        float add_group_icon(const group& group_, const std::string& icon_, std::optional<const vector2&> offset_) {
+            game_value params(offset_.has_value() ? game_value{ icon_, *offset_ } : game_value{ icon_ });
 
             return host::functions.invoke_raw_binary(__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
         }
@@ -84,45 +76,45 @@ namespace intercept {
             __helpers::__empty_unary_bool(__sqf::unary__setgroupiconsselectable__bool__ret__nothing, val_);
         }
         void set_current_waypoint(group & gp_, waypoint & wp_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_.__to_gv());
+            host::functions.invoke_raw_binary(__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_);
         }
         rv_group_icon_params get_group_icon_params(const group& group_) {
             return rv_group_icon_params(host::functions.invoke_raw_unary(__sqf::unary__getgroupiconparams__group__ret__array, group_));
         }
         void join(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object unit : units_) {
-                units.push_back(game_value(unit));
+                units.push_back(unit);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, units, group_);
+                host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, std::move(units), group_);
         }
 
         void join(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object unit : units_) {
-                units.push_back(game_value(unit));
+                units.push_back(unit);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, units, unit_group_);
+            host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, std::move(units), unit_group_);
         }
 
         void join_silent(const std::vector<object> &units_, const group &group_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object unit : units_) {
-                units.push_back(game_value(unit));
+                units.push_back(unit);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, units, group_);
+            host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, std::move(units), group_);
         }
 
         void join_silent(const std::vector<object> &units_, const object &unit_group_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object unit : units_) {
-                units.push_back(game_value(unit));
+                units.push_back(unit);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, units, unit_group_);
+            host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, std::move(units), unit_group_);
         }
 
         void join_as(const object &unit_, const group &group_, int pos_id_) {

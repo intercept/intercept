@@ -526,11 +526,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         
 
         std::vector<object> near_entities(const vector3 & pos_agl_, const std::vector<std::string>& types_, float range_) {
-            std::vector<game_value> types; //#TODO remove temp std::vector
+            auto_array<game_value> types;
             for (auto type : types_)
                 types.push_back(type);
             game_value args({
-                types,
+                std::move(types),
                 range_
             });
 
@@ -600,21 +600,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void activate_addons(std::vector<std::string> &addons_) {
-            std::vector<game_value> addons; //#TODO remove temp std::vector
-            for (auto it : addons_)
+            auto_array<game_value> addons;
+            for (auto& it : addons_)
                 addons.push_back(it);
 
-            host::functions.invoke_raw_unary(__sqf::unary__activateaddons__array__ret__nothing, addons);
+            host::functions.invoke_raw_unary(__sqf::unary__activateaddons__array__ret__nothing, std::move(addons));
         }
 
 
         
 
         void add_to_remains_collector(const std::vector<object> & objects_) {
-            std::vector<game_value> objects; //#TODO remove temp std::vector
-            for (auto &it : objects_)
+            auto_array<game_value> objects;
+            for (auto& it : objects_)
                 objects.push_back(it);
-            host::functions.invoke_raw_unary(__sqf::unary__addtoremainscollector__array__ret__nothing, objects);
+            host::functions.invoke_raw_unary(__sqf::unary__addtoremainscollector__array__ret__nothing, std::move(objects));
         }
 
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_) {
@@ -699,33 +699,33 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_get_out(const std::vector<object> & units_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
-            for (auto it : units_)
+            auto_array<game_value> units;
+            for (auto& it : units_)
                 units.push_back(it);
 
-            host::functions.invoke_raw_unary(__sqf::unary__commandgetout__object_array__ret__nothing, units);
+            host::functions.invoke_raw_unary(__sqf::unary__commandgetout__object_array__ret__nothing, std::move(units));
         }
 
         void command_stop(const object &unit_) {
             return __helpers::__empty_unary_object(__sqf::unary__commandstop__object_array__ret__nothing, unit_);
         }
         void command_stop(const std::vector<object> & units_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
-            for (auto it : units_)
+            auto_array<game_value> units;
+            for (auto& it : units_)
                 units.push_back(it);
 
-            host::functions.invoke_raw_unary(__sqf::unary__commandstop__object_array__ret__nothing, units);
+            host::functions.invoke_raw_unary(__sqf::unary__commandstop__object_array__ret__nothing, std::move(units));
         }
 
         object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/) {
-            std::vector<game_value> markers; //#TODO remove temp std::vector
+            auto_array<game_value> markers;
             for (auto &it : markers_)
                 markers.push_back(it);
 
             game_value args({
                 type_,
                 pos_,
-                markers,
+                std::move(markers),
                 placement_,
                 special_
             });
@@ -779,14 +779,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         
 
         object create_mine(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/) {
-            std::vector<game_value> markers; //#TODO remove temp std::vector
+            auto_array<game_value> markers;
             for (auto &it : markers_)
                 markers.push_back(it);
 
             game_value args({
                 type_,
                 pos_,
-                markers,
+                std::move(markers),
                 placement_,
             });
 
@@ -794,14 +794,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         object create_sound_source(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/) {
-            std::vector<game_value> markers; //#TODO remove temp std::vector
-            for (auto it : markers_)
+            auto_array<game_value> markers;
+            for (auto& it : markers_)
                 markers.push_back(it);
 
             game_value args({
                 type_,
                 pos_,
-                markers,
+                std::move(markers),
                 placement_,
             });
 
@@ -924,11 +924,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<std::string> get_artillery_ammo(const std::vector<object>& units_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (auto &it : units_)
                 units.push_back(it);
 
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getartilleryammo__array__ret__array, units));
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getartilleryammo__array__ret__array, std::move(units));
         }
 
         vector3 get_center_of_mass(const object &obj_) {
@@ -949,14 +949,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         object create_vehicle(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_) {
-            std::vector<game_value> markers; //#TODO remove temp std::vector
-            for (auto it : markers_) {
+            auto_array<game_value> markers;
+            for (auto& it : markers_) {
                 markers.push_back(it);
             }
             game_value args({
                 type_,
                 pos_,
-                markers,
+                std::move(markers),
                 placement_,
                 special_
             });
@@ -981,14 +981,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         object create_unit(const group &group_, const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, const std::string &special_) {
-            std::vector<game_value> markers; //#TODO remove temp std::vector
+            auto_array<game_value> markers;
             for (auto it : markers_) {
                 markers.push_back(it);
             }
             game_value args({
                 type_,
                 pos_,
-                markers,
+                std::move(markers),
                 placement_,
                 special_
             });
@@ -3741,13 +3741,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void move_in_turret(const object& unit_, const object& vehicle_, const std::vector<int> turret_path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : turret_path_)
                 path.push_back(static_cast<float>(item));
 
             game_value params({
                 vehicle_,
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
@@ -3804,11 +3804,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         float count_side(const side &side_, std::vector<object> &objects_) {
-            std::vector<game_value> objects; //#TODO remove temp std::vector
+            auto_array<game_value> objects;
             for (auto type : objects_)
                 objects.push_back(type);
 
-            return host::functions.invoke_raw_binary(__sqf::binary__countside__side__array__ret__scalar, side_, objects);
+            return host::functions.invoke_raw_binary(__sqf::binary__countside__side__array__ret__scalar, side_, std::move(objects));
         }
 
         float get_friend(const side &side1_, const side &side2_) {
@@ -3840,13 +3840,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::vector<object> nearest_terrain_objects(const vector3& pos_, const std::vector<std::string> types_, float radius_)
         {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 pos_,
-                loctypes,
+                std::move(loctypes),
                 radius_
             });
 
@@ -3855,13 +3855,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::vector<object> nearest_terrain_objects(const object& unit_, const std::vector<std::string> types_, float radius_)
         {
-            std::vector<game_value> loctypes; //#TODO remove temp std::vector
-            for (std::string l_ : types_)
+            auto_array<game_value> loctypes;
+            for (auto& l_ : types_)
                 loctypes.push_back(l_);
 
             game_value args({
                 unit_,
-                loctypes,
+                std::move(loctypes),
                 radius_
             });
 
@@ -3893,11 +3893,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void hintc(const std::string& title_, std::vector<std::string> content_)
         {
-            std::vector<game_value> ga_content; //#TODO remove temp std::vector
+            auto_array<game_value> ga_content;
             for (std::string _str : content_)
                 ga_content.push_back(_str);
 
-            host::functions.invoke_raw_binary(__sqf::binary__hintc__string__array__ret__nothing, title_, ga_content);
+            host::functions.invoke_raw_binary(__sqf::binary__hintc__string__array__ret__nothing, title_, std::move(ga_content));
         }
 
 
@@ -3930,12 +3930,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void allow_get_in(const std::vector<object>& units_, bool allow_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(item);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__allowgetin__array__bool__ret__nothing, units, allow_);
+            host::functions.invoke_raw_binary(__sqf::binary__allowgetin__array__bool__ret__nothing, std::move(units), allow_);
         }
 
         void animate(const object& obj_, const std::string& animation_name_, float phase_) {
@@ -3984,14 +3984,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_) {
-            std::vector<game_value> turret_path; //#TODO remove temp std::vector
+            auto_array<game_value> turret_path;
             for (float item : turret_path_) {
                 turret_path.push_back(game_value(item));
             }
 
             game_value params({
                 vehicle_,
-                turret_path
+                std::move(turret_path)
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, params);
@@ -4037,7 +4037,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
@@ -4048,13 +4048,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 static_cast<float>(rounds_)
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
+            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, std::move(units), params);
         }
 
         void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
-            for (object item : units_) {
-                units.push_back(game_value(item));
+            auto_array<game_value> units;
+            for (object item : units_) {  //#TODO add auto_array::insert with iterators.. and use that here and other places like this
+                units.push_back(item);
             }
 
             game_value params({
@@ -4063,7 +4063,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 static_cast<float>(rounds_)
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, units, params);
+            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, std::move(units), params);
         }
 
         void command_fire(const object& unit_, const object& target_) {
@@ -4071,12 +4071,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_fire(const std::vector<object>& units_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
-                units.push_back(game_value(item));
+                units.push_back(item);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandfire__object_array__object__ret__nothing, units, target_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandfire__object_array__object__ret__nothing, std::move(units), target_);
         }
 
         void command_follow(const object& unit_, const object& target_) {
@@ -4084,12 +4084,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_follow(const std::vector<object>& units_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
-                units.push_back(game_value(item));
+                units.push_back(item);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandfollow__object_array__object__ret__nothing, units, target_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandfollow__object_array__object__ret__nothing, std::move(units), target_);
         }
 
         void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_) {
@@ -4113,7 +4113,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
@@ -4124,13 +4124,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 target_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, units, params);
+            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, std::move(units), params);
         }
 
         void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
-                units.push_back(game_value(item));
+                units.push_back(item);
             }
 
             game_value params({
@@ -4139,7 +4139,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 target_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, units, params);
+            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, std::move(units), params);
         }
 
         void command_move(const object& unit_, const vector3& pos_) {
@@ -4151,21 +4151,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_move(const std::vector<object>& units_, const vector3& pos_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
-                units.push_back(game_value(item));
+                units.push_back(item);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, units, pos_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, std::move(units), pos_);
         }
 
         void command_move(const std::vector<object>& units_, const vector2& pos_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, units, pos_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, std::move(units), pos_);
         }
 
         void command_radio(const object& unit_, const std::string& radio_name_) {
@@ -4173,12 +4173,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_radio(const std::vector<object>& units_, const std::string& radio_name_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, units, radio_name_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, std::move(units), radio_name_);
         }
 
         void command_target(const object& unit_, const object& target_) {
@@ -4186,12 +4186,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_target(const std::vector<object>& units_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandtarget__object_array__object__ret__nothing, units, target_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandtarget__object_array__object__ret__nothing, std::move(units), target_);
         }
 
         void command_watch(const object& unit_, const vector3& pos_) {
@@ -4203,21 +4203,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_watch(const std::vector<object>& units_, const vector3& pos_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, std::move(units), pos_);
         }
 
         void command_watch(const std::vector<object>& units_, const vector2& pos_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, units, pos_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, std::move(units), pos_);
         }
 
         void command_watch(const object& unit_, const object& target_) {
@@ -4225,12 +4225,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void command_watch(const std::vector<object>& units_, const object& target_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (object item : units_) {
                 units.push_back(game_value(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__object__ret__nothing, units, target_);
+            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__object__ret__nothing, std::move(units), target_);
         }
 
         float distance(const object& start_, const object& end_) {
@@ -4356,11 +4356,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::string compose_text(const std::vector<std::string> &texts_) {
-            std::vector<game_value> texts; //#TODO remove temp std::vector
-            for (auto text : texts_)
-                texts.push_back(game_value(text));
+            auto_array<game_value> texts;
+            for (auto& text : texts_)
+                texts.push_back(text);
 
-            return host::functions.invoke_raw_unary(__sqf::unary__composetext__array__ret__text, texts);
+            return host::functions.invoke_raw_unary(__sqf::unary__composetext__array__ret__text, std::move(texts));
         }
 
         std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_) {
@@ -4531,11 +4531,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void do_stop(const std::vector<object> &units_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (auto unit : units_)
                 units.push_back(game_value(unit));
 
-            host::functions.invoke_raw_unary(__sqf::unary__dostop__object_array__ret__nothing, units);
+            host::functions.invoke_raw_unary(__sqf::unary__dostop__object_array__ret__nothing, std::move(units));
         }
 
         void do_get_out(const object &unit_) {
@@ -4543,11 +4543,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void do_get_out(const std::vector<object> &units_) {
-            std::vector<game_value> units; //#TODO remove temp std::vector
+            auto_array<game_value> units;
             for (auto unit : units_)
                 units.push_back(game_value(unit));
 
-            host::functions.invoke_raw_unary(__sqf::unary__dogetout__object_array__ret__nothing, units);
+            host::functions.invoke_raw_unary(__sqf::unary__dogetout__object_array__ret__nothing, std::move(units));
         }
 
 
@@ -4700,13 +4700,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> nearest_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_) {
-            std::vector<game_value> types; //#TODO remove temp std::vector
+            auto_array<game_value> types;
             for (auto type : types_)
                 types.push_back(game_value(type));
 
             game_value params({
                 pos_,
-                types,
+                std::move(types),
                 radius_
             });
 
@@ -4714,13 +4714,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> nearest_objects(const object &obj_, const std::vector<std::string> &types_, float radius_) {
-            std::vector<game_value> types; //#TODO remove temp std::vector
+            auto_array<game_value> types;
             for (auto type : types_)
                 types.push_back(game_value(type));
 
             game_value params({
                 obj_,
-                types,
+                std::move(types),
                 radius_
             });
 
@@ -4728,13 +4728,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> nearest_terrain_objects(const vector3 &pos_, const std::vector<std::string> &types_, float radius_) {
-            std::vector<game_value> types; //#TODO remove temp std::vector
-            for (auto type : types_)
+            auto_array<game_value> types; 
+            for (auto& type : types_)
                 types.push_back(game_value(type));
 
             game_value params({
                 pos_,
-                types,
+                std::move(types),
                 radius_
             });
 
@@ -4742,13 +4742,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> nearest_terrain_objects(const object &obj_, const std::vector<std::string> &types_, float radius_) {
-            std::vector<game_value> types; //#TODO remove temp std::vector
-            for (auto type : types_)
+            auto_array<game_value> types;
+            for (auto& type : types_)
                 types.push_back(game_value(type));
 
             game_value params({
                 obj_,
-                types,
+                std::move(types),
                 radius_
             });
 
@@ -4895,11 +4895,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void remove_from_remains_collector(const std::vector<object> &remains_) {
-            std::vector<game_value> remains; //#TODO remove temp std::vector
+            auto_array<game_value> remains;
             for (auto remain : remains_)
                 remains.push_back(game_value(remain));
 
-            host::functions.invoke_raw_unary(__sqf::unary__removefromremainscollector__array__ret__nothing, remains);
+            host::functions.invoke_raw_unary(__sqf::unary__removefromremainscollector__array__ret__nothing, std::move(remains));
         }
 
         void remove_mission_event_handler(const std::string &type_, float index_) {

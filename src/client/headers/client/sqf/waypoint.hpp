@@ -34,11 +34,7 @@ namespace intercept {
                 : wgroup(group(from_[0])),
                 windex(from_[1]) {}
 
-            std::vector<game_value> __to_gv_vec() const {//#TODO return std::pair instead
-                return std::vector<game_value>{wgroup, game_value(windex)};
-            }
-
-            game_value __to_gv() const {
+            operator game_value() const {
                 return{ wgroup, windex };
             }
 

@@ -5440,7 +5440,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
         }
 
-
+        //UNARY -- https://github.com/intercept/intercept/issues/13
+        std::vector<float> action_ids(const object& entity_) {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__actionids__object__ret__array, entity_));
+        }
 
     }
 }

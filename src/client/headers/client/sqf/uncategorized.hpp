@@ -1561,6 +1561,11 @@ namespace intercept {
         bool show_subtitles(bool value_);
         bool open_map(bool show_, bool forced_);
         bool sling_load_assistant_shown();
+
+        //UNARY -- https://github.com/intercept/intercept/issues/13
+        std::vector<float> action_ids(const object& entity_);
+
+
     }
 
 }

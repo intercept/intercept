@@ -5502,5 +5502,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
         }
 
+        void diag_log_slow_frame(const std::string &section_, const float &threshold_) {
+            game_value params({
+                section_,
+                threshold_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__diag_logslowframe__array__ret__nothing, params);
+        }
+
     }
 }

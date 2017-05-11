@@ -1573,6 +1573,7 @@ namespace intercept {
         void diag_capture_slow_frame(const std::string &section_, const float &threshold_);
         void diag_code_performance(const code &code_, const game_value &arguments_, const float cycles_);
         void diag_dynamic_simulation_end(const std::string type_);
+        void diag_log_slow_frame(const std::string &section_, const float &threshold_);
     }
 
 }

@@ -5445,12 +5445,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__actionids__object__ret__array, entity_));
         }
 
-        std::vector<object> all_simple_objects(const game_value &params_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, params_));
+        std::vector<object> all_simple_objects(const std::vector<std::string> &params_) {
+            std::vector<game_value> params;
+            for (auto& it : params_) {
+                params.push_back(it);
+            }
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, params));
         }
 
         bool can_trigger_dynamic_simulation(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__cantriggerdynamicsimulation__object__ret__bool, unit_);
+        }
+
+        std::vector<std::string> config_source_addon_list(const config &config_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
         }
 
     }

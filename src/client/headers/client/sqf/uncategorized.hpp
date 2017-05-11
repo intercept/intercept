@@ -1564,8 +1564,9 @@ namespace intercept {
 
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
-        std::vector<object> all_simple_objects(const game_value &params_);
+        std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
         bool can_trigger_dynamic_simulation(const object &unit_);
+        std::vector<std::string> config_source_addon_list(const config &config_);
     }
 
 }

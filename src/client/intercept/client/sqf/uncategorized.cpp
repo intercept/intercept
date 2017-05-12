@@ -5581,5 +5581,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value get_all_env_sound_controllers(const vector3 &position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getallenvsoundcontrollers__array__ret__array, position_);
         }
+
+        std::vector<object> get_all_owned_mines(const object &unit_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
+        }
+
     }
 }

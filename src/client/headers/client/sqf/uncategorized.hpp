@@ -1586,5 +1586,6 @@ namespace intercept {
         std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_);
         float flag_animation_phase(const object &flag_);
         game_value get_all_env_sound_controllers(const vector3 &position_);
+        std::vector<object> get_all_owned_mines(const object &unit_);
     }
 }

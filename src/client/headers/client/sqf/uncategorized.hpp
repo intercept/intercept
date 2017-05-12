@@ -1607,5 +1607,6 @@ namespace intercept {
         vector3 get_pilot_camera_rotation(const object &object_);
         rv_camera_target get_pilot_camera_target(const object &object_);
         rv_shot_parents get_shot_parents(const object &projectile_);
+        std::vector<object> get_vehicle_cargo(const object &vehicle_);
     }
 }

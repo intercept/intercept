@@ -5836,5 +5836,20 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
+
+        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_) {
+            std::vector<game_value> from;
+            for (auto& it : from_) {
+                from.push_back(it);
+            }
+
+            game_value params({
+                type_,
+                from,
+                to_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
+        }
     }
 }

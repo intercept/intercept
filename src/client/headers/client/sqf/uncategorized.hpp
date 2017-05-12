@@ -1633,6 +1633,7 @@ namespace intercept {
         game_value remote_exec_call(const std::string &function_name_, const side &targets_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, const group &targets_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_);
-
+        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_); //#TODO: Create class 'rv_eden_entity'
+        
     }
 }

@@ -5577,5 +5577,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float flag_animation_phase(const object &flag_) {
             return host::functions.invoke_raw_unary(__sqf::unary__flaganimationphase__object__ret__scalar, flag_);
         }
+
+        game_value get_all_env_sound_controllers(const vector3 &position_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getallenvsoundcontrollers__array__ret__array, position_);
+        }
     }
 }

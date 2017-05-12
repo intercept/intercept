@@ -5955,5 +5955,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool unit_is_uav(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__unitisuav__object__ret__bool, unit_);
         }
+
+        void use_ai_oper_map_obstruction_test(const bool &use_) {
+            host::functions.invoke_raw_unary(__sqf::unary__useaiopermapobstructiontest__bool__ret__nothing, use_);
+        }
     }
 }

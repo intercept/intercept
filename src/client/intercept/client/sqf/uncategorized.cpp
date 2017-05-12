@@ -5914,5 +5914,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 task_marker_offset(const object &unit_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__taskmarkeroffset__object__ret__array, unit_));
         }
+
+        std::string task_type(const task &task_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__tasktype__task__ret__string, task_);
+        }
     }
 }

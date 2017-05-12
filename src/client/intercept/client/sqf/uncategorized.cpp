@@ -5879,5 +5879,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value select_min(const game_value &array_) {
             return host::functions.invoke_raw_unary(__sqf::unary__selectmin__array__ret__any, array_);
         }
+
+        void set_3den_selected(const std::vector<object> &entites_) {
+            std::vector<game_value> entites;
+            for (auto& it : entites_) {
+                entites.push_back(it);
+            }
+
+            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, entites);
+        }
     }
 }

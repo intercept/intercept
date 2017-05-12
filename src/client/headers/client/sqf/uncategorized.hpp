@@ -1641,5 +1641,6 @@ namespace intercept {
         std::vector<std::string> selection_names(const object &object_);
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
+        void set_3den_selected(const std::vector<object> &entites_);
     }
 }

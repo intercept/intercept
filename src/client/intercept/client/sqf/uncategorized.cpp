@@ -5918,5 +5918,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::string task_type(const task &task_) {
             return host::functions.invoke_raw_unary(__sqf::unary__tasktype__task__ret__string, task_);
         }
+
+        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_) {
+            game_value params({
+                pos1_,
+                pos2_
+            });
+
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
+        }
     }
 }

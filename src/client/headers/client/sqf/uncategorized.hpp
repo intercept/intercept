@@ -1639,5 +1639,6 @@ namespace intercept {
         object road_at(const vector3 &position_);
         bool screen_shot(const std::string &filename_);
         std::vector<std::string> selection_names(const object &object_);
+        game_value select_max(const game_value &array_);
     }
 }

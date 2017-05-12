@@ -5871,5 +5871,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<std::string> selection_names(const object &object_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
         }
+
+        game_value select_max(const game_value &array_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__selectmax__array__ret__any, array_);
+        }
     }
 }

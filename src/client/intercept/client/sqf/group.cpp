@@ -8,7 +8,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
-        float add_group_icon(const group& group_, const std::string& icon_, std::optional<const vector2&> offset_) {
+        float add_group_icon(const group& group_, const std::string& icon_, std::optional<vector2> offset_) {
             game_value params(offset_.has_value() ? game_value{ icon_, *offset_ } : game_value{ icon_ });
 
             return host::functions.invoke_raw_binary(__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
@@ -82,19 +82,13 @@ namespace intercept {
             return rv_group_icon_params(host::functions.invoke_raw_unary(__sqf::unary__getgroupiconparams__group__ret__array, group_));
         }
         void join(const std::vector<object> &units_, const group &group_) {
-            auto_array<game_value> units;
-            for (object unit : units_) {
-                units.push_back(unit);
-            }
+            auto_array<game_value> units(units_.begin(), units_.end());
 
-                host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, std::move(units), group_);
+            host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, std::move(units), group_);
         }
 
         void join(const std::vector<object> &units_, const object &unit_group_) {
-            auto_array<game_value> units;
-            for (object unit : units_) {
-                units.push_back(unit);
-            }
+            auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__join__array__object_group__ret__nothing, std::move(units), unit_group_);
         }

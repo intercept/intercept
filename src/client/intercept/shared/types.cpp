@@ -313,7 +313,7 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
-        game_data_array::game_data_array(auto_array<game_value> &&init_) : data(init_) {
+        game_data_array::game_data_array(auto_array<game_value> &&init_) : data(std::move(init_)) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
@@ -362,13 +362,17 @@ namespace intercept {
             return pool_alloc_base->deallocate(ptr_);
         }
 
+        __game_value_vtable_dummy::__game_value_vtable_dummy() {
+            *reinterpret_cast<uintptr_t*>(this) = game_value::__vptr_def;
+        }
+
         game_value::game_value() {
             set_vtable(__vptr_def);
             data = nullptr;
         }
 
         void game_value::copy(const game_value & copy_) {
-            set_vtable(copy_.get_vtable());
+            set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
             if (copy_.data) {
                 data = copy_.data;
             }
@@ -379,7 +383,7 @@ namespace intercept {
         }
 
         game_value::game_value(game_value && move_) {
-            set_vtable(move_.get_vtable());
+            set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
             data = move_.data;
             move_.data = nullptr;
         }
@@ -420,7 +424,7 @@ namespace intercept {
 
         game_value::game_value(auto_array<game_value> &&array_) {
             set_vtable(__vptr_def);
-            data = new game_data_array(array_);
+            data = new game_data_array(std::move(array_));
         }
 
         game_value::game_value(const vector3 & vec_) {
@@ -452,7 +456,7 @@ namespace intercept {
         game_value & game_value::operator = (game_value &&move_) {
             if (this == &move_)
                 return *this;
-            set_vtable(move_.get_vtable());
+            set_vtable(__vptr_def);
             data = move_.data;
             move_.data = nullptr;
             return *this;
@@ -500,7 +504,7 @@ namespace intercept {
 
         game_value & game_value::operator=(const internal_object &internal_) {
             data = internal_.data;
-            set_vtable(internal_.get_vtable());
+            set_vtable(__vptr_def);
             return *this;
         }
 
@@ -551,11 +555,13 @@ namespace intercept {
         }
 
         game_value& game_value::operator [](size_t i_) {
-            static game_value dummy;//else we would return a temporary. //#TODO this is also not good because users could modify the dummy
-            if (!data) return dummy;
-            auto& array = data->get_as_array();
-            if (array.count() >= i_)
-                return array[i_];
+            static game_value dummy;//else we would return a temporary.
+            if (data) {
+                auto& array = data->get_as_array();
+                if (array.count() >= i_)
+                    return array[i_];
+            }
+            dummy.clear(); //In case user modified it before
             return dummy;
         }
 

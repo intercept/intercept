@@ -66,7 +66,7 @@ namespace intercept {
 
 
 #define EH(x) typedef void(__cdecl *x##_func)
-        //#TODO might want r_string& here
+
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
         EH(anim_state_changed)(object &unit_, r_string anim_name_);

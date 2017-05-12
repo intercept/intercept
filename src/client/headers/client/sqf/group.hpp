@@ -23,7 +23,7 @@ namespace intercept {
         class waypoint;
 
         std::string combat_mode(const group &loc_);
-        float add_group_icon(const group& group_, const std::string& icon_, std::optional<const vector2&> offset_ = std::optional<const vector2&>());
+        float add_group_icon(const group& group_, const std::string& icon_, std::optional<vector2> offset_ = std::optional<vector2>());
 
 
 

@@ -1,33 +1,29 @@
-#include "shared/client_types.hpp"
+﻿#include "shared/client_types.hpp"
 #include "client/client.hpp"
 #include "shared/functions.hpp"
 
 namespace intercept {
     namespace types {
 
-        internal_object::internal_object() {}
+        internal_object::internal_object() : game_value() {}
         //internal_object::internal_object(const rv_game_value &value_) : game_value(value_) {}
-        internal_object::internal_object(const game_value & value_) : game_value(value_)
-        {
-
+        internal_object::internal_object(const game_value & value_) : game_value(value_) {
+            set_vtable(game_value::__vptr_def);//vtable is set after initializers ran... apparently.. wtf..
         }
-        internal_object::internal_object(const internal_object & copy_)
-        {
-            copy(copy_);
+        internal_object::internal_object(const internal_object & copy_) : game_value(copy_) {
+            set_vtable(game_value::__vptr_def);
         }
-        internal_object::internal_object(internal_object && move_) : game_value(move_) {};
+        internal_object::internal_object(internal_object && move_) : game_value(move_) { set_vtable(game_value::__vptr_def); };
 
-        internal_object & internal_object::operator=(internal_object && move_)
-        {
+        internal_object & internal_object::operator=(internal_object && move_) {
             if (this == &move_)
                 return *this;
             game_value::operator=(std::move(move_));
             return *this;
         }
 
-        internal_object & internal_object::operator=(const internal_object & copy_)
-        {
-            copy(copy_);
+        internal_object & internal_object::operator=(const internal_object & copy_) {
+            game_value::operator=(copy_);
             return *this;
         }
 
@@ -57,11 +53,9 @@ namespace intercept {
 
 
         //type::type(const rv_game_value &value_) : internal_object(value_) {}\ //deprecated
-#define RV_GENERIC_OBJECT_DEF(type)         type::type() {}\
+#define RV_GENERIC_OBJECT_DEF(type)         type::type() : internal_object() {}\
         type::type(const game_value & value_) : internal_object(value_) {}\
-        type::type(const type &copy_) {\
-            copy(copy_);\
-        }\
+        type::type(const type &copy_) : internal_object(copy_) {}\
         type::type(type && move_) : internal_object(std::move(move_)) {}\
         type & type::operator=(type && move_) {\
             if (this == &move_)\
@@ -69,9 +63,8 @@ namespace intercept {
             game_value::operator=(std::move(move_));\
             return *this;\
         }\
-        type & type::operator=(const type & copy_)\
-        {\
-            copy(copy_);\
+        type & type::operator=(const type & copy_) {\
+            game_value::operator=(copy_);\
             return *this;\
         }
 

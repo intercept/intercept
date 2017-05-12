@@ -1573,6 +1573,12 @@ namespace intercept {
             object instigator;
         };
 
+        struct rv_task_custom_data {
+            std::string icon_path;
+            std::string icon_text;
+            std::string description_text;
+        };
+
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
@@ -1646,5 +1652,7 @@ namespace intercept {
         void show_way_points(const bool &enabled_);
         void switch_camera(const object &target_);
         bool task_always_visible(const task &task_);
+        rv_task_custom_data task_custom_data(const task &task_);
+        vector3 task_marker_offset(const object &unit_);
     }
 }

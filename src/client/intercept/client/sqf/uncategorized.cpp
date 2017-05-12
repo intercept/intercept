@@ -5904,5 +5904,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool task_always_visible(const task &task_) {
            return host::functions.invoke_raw_unary(__sqf::unary__taskalwaysvisible__task__ret__bool, task_);
         }
+
+        rv_task_custom_data task_custom_data(const task &task_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__taskcustomdata__task__ret__array, task_);
+        
+            return rv_task_custom_data({ res[0], res[1], res[2] });
+        }
+
+        vector3 task_marker_offset(const object &unit_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__taskmarkeroffset__object__ret__array, unit_));
+        }
     }
 }

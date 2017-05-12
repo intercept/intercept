@@ -1615,5 +1615,6 @@ namespace intercept {
         object is_vehicle_cargo(const object &vehicle_);
         float lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_);
+        float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
     }
 }

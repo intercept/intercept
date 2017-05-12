@@ -5682,5 +5682,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params);
         }
+
+        float moon_phase(int year_, int month_, int day_, int hour_, float minute_) {
+            game_value date({
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
+                minute_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__moonphase__array__ret__scalar, date);
+        }
     }
 }

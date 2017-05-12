@@ -1613,5 +1613,6 @@ namespace intercept {
         bool is_null(const object &netobject_);
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);
+        float lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
     }
 }

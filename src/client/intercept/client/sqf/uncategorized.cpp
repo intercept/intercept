@@ -5654,5 +5654,19 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         object is_vehicle_cargo(const object &vehicle_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isvehiclecargo__object__ret__object, vehicle_);
         }
+
+        float lnb_add_row(const int &idc_, const std::vector<std::string> &items_) {
+            std::vector<game_value> items;
+            for (auto& it : items_) {
+                items.push_back(it);
+            }
+
+            game_value params({
+                static_cast<float>(idc_),
+                items
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params);
+        }
     }
 }

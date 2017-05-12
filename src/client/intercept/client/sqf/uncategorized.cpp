@@ -5867,5 +5867,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool screen_shot(const std::string &filename_) {
             return host::functions.invoke_raw_unary(__sqf::unary__screenshot__string__ret__bool, filename_);
         }
+
+        std::vector<std::string> selection_names(const object &object_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
+        }
     }
 }

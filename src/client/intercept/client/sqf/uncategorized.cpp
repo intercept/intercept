@@ -5669,7 +5669,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params);
         }
 
-        std::vector<std::string> mod_params(const std::string &mod_class_, const std::vector<std::string> &options_) {
+        game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_) {
             std::vector<game_value> options;
             for (auto& it : options_) {
                 options.push_back(it);
@@ -5680,7 +5680,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 options
             });
             
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params);
         }
     }
 }

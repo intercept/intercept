@@ -5943,5 +5943,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void tv_expand_all(const control &control_) {
             host::functions.invoke_raw_unary(__sqf::unary__tvexpandall__control__ret__nothing, control_);
         }
+
+        vector3 unit_aim_position(const object &unit_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_));
+        }
     }
 }

@@ -1659,5 +1659,6 @@ namespace intercept {
         void tv_collapse_all(const int &idc_);
         void tv_collapse_all(const control &control_);
         void tv_expand_all(const int &idc_);
+        void tv_expand_all(const control &control_);
     }
 }

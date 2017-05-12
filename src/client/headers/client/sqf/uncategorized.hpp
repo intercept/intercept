@@ -1640,5 +1640,6 @@ namespace intercept {
         bool screen_shot(const std::string &filename_);
         std::vector<std::string> selection_names(const object &object_);
         game_value select_max(const game_value &array_);
+        game_value select_min(const game_value &array_);
     }
 }

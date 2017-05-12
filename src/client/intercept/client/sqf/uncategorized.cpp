@@ -5875,5 +5875,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value select_max(const game_value &array_) {
             return host::functions.invoke_raw_unary(__sqf::unary__selectmax__array__ret__any, array_);
         }
+
+        game_value select_min(const game_value &array_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__selectmin__array__ret__any, array_);
+        }
     }
 }

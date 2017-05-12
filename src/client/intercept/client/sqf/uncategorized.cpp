@@ -5861,7 +5861,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_3den_selected(const std::vector<object> &entites_) {
             auto_array<game_value> entities(entites_.begin(), entites_.end());
 
-            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entites));
+            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entities));
         }
 
         void show_score_table(const int &force_) {

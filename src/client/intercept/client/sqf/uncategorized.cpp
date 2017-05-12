@@ -5694,5 +5694,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_unary(__sqf::unary__moonphase__array__ret__scalar, date);
         }
+
+        game_value parse_simple_array(const std::string &string_array_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_);
+        }
     }
 }

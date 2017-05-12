@@ -1584,5 +1584,6 @@ namespace intercept {
         void enable_dynamic_simulation_system(const bool &enable_);
         void enable_weapon_disassembly(const bool &enable_);
         std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_);
+        float flag_animation_phase(const object &flag_);
     }
 }

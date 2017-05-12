@@ -5851,5 +5851,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
         }
+
+        void remove_all_owned_mines(const object &unit_) {
+            host::functions.invoke_raw_unary(__sqf::unary__removeallownedmines__object__ret__nothing, unit_);
+        }
     }
 }

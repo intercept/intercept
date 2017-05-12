@@ -1664,5 +1664,6 @@ namespace intercept {
         vector3 unit_aim_position_visual(const object &unit_);
         bool unit_is_uav(const object &unit_);
         void use_ai_oper_map_obstruction_test(const bool &use_);
+        void use_ai_steering_component(const bool &use_);
     }
 }

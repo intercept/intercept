@@ -5959,5 +5959,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void use_ai_oper_map_obstruction_test(const bool &use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaiopermapobstructiontest__bool__ret__nothing, use_);
         }
+
+        void use_ai_steering_component(const bool &use_) {
+            host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
+        }
     }
 }

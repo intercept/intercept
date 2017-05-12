@@ -5594,5 +5594,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__getarray__config__ret__array, config_);
         }
 
+        float get_container_max_load(const std::string &containerclass_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getcontainermaxload__string__ret__scalar, containerclass_);
+        }
+
     }
 }

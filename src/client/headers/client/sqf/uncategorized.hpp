@@ -1589,5 +1589,6 @@ namespace intercept {
         std::vector<object> get_all_owned_mines(const object &unit_);
         game_value get_all_sound_controllers(const object &vehicle_);
         game_value get_array(const config config_);
+        float get_container_max_load(const std::string &containerclass_);
     }
 }

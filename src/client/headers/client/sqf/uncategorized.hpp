@@ -1588,5 +1588,6 @@ namespace intercept {
         game_value get_all_env_sound_controllers(const vector3 &position_);
         std::vector<object> get_all_owned_mines(const object &unit_);
         game_value get_all_sound_controllers(const object &vehicle_);
+        game_value get_array(const config config_);
     }
 }

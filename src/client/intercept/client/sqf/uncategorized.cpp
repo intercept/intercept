@@ -5590,5 +5590,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__getallsoundcontrollers__object__ret__array, vehicle_);
         }
 
+        game_value get_array(const config config_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getarray__config__ret__array, config_);
+        }
+
     }
 }

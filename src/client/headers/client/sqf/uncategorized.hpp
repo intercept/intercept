@@ -1562,6 +1562,12 @@ namespace intercept {
         bool open_map(bool show_, bool forced_);
         bool sling_load_assistant_shown();
 
+        struct rv_camera_target {
+            bool is_tracking;
+            vector3 target_position;
+            object target_object;
+        };
+
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
@@ -1594,5 +1600,6 @@ namespace intercept {
         vector3 get_pilot_camera_direction(const object &object_);
         vector3 get_pilot_camera_position(const object &object_);
         vector3 get_pilot_camera_rotation(const object &object_);
+        rv_camera_target get_pilot_camera_target(const object &object_);
     }
 }

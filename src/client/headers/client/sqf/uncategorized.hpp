@@ -1590,5 +1590,6 @@ namespace intercept {
         game_value get_all_sound_controllers(const object &vehicle_);
         game_value get_array(const config config_);
         float get_container_max_load(const std::string &containerclass_);
+        std::vector<object> get_mission_layer_entities(const std::string &layername_);
     }
 }

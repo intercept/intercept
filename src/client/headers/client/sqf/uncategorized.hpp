@@ -1637,5 +1637,6 @@ namespace intercept {
         void remove_all_owned_mines(const object &unit_);
         object road_at(const object &object_);
         object road_at(const vector3 &position_);
+        bool screen_shot(const std::string &filename_);
     }
 }

@@ -5863,5 +5863,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         object road_at(const vector3 &position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__roadat__object_array__ret__object, position_);
         }
+
+        bool screen_shot(const std::string &filename_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__screenshot__string__ret__bool, filename_);
+        }
     }
 }

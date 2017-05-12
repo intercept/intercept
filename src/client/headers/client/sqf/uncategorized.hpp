@@ -1644,5 +1644,6 @@ namespace intercept {
         void set_3den_selected(const std::vector<object> &entites_);
         void show_score_table(const int &force_);
         void show_way_points(const bool &enabled_);
+        void switch_camera(const object target_);
     }
 }

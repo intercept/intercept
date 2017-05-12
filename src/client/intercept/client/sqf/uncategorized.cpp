@@ -5545,5 +5545,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
         }
+
+        void enable_dynamic_simulation_system(const bool &enable_) {
+            host::functions.invoke_raw_unary(__sqf::unary__enabledynamicsimulationsystem__bool__ret__nothing, enable_);
+        }
     }
 }

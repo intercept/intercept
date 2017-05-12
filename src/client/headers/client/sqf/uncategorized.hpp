@@ -1662,5 +1662,6 @@ namespace intercept {
         void tv_expand_all(const control &control_);
         vector3 unit_aim_position(const object &unit_);
         vector3 unit_aim_position_visual(const object &unit_);
+        bool unit_is_uav(const object &unit_);
     }
 }

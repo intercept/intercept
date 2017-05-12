@@ -11,19 +11,19 @@ def parse():
     projectpath_sqf = os.path.join(projectpath, "sqf")
     projectpath_headers = os.path.join(projectpath_base, "src/client/headers/client")
     projectpath_sqf_headers = os.path.join(projectpath_headers, "sqf")
-	
+
     implementations = []
     declarations = []
     project_files = []
     errors_found = []
     warnings_found = []
-	
-	# Collect all the headers and the implementations.
+
+    # Collect all the headers and the implementations.
     for file in os.listdir(projectpath_sqf):
         project_files.append(os.path.join(projectpath_sqf, file))
     for file in os.listdir(projectpath_sqf_headers):
         project_files.append(os.path.join(projectpath_sqf_headers, file))
-		
+
     # Walk through our source files and figure out which ones are used in our code
     for file in project_files:
         foundInFile = 0

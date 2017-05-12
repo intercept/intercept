@@ -5888,5 +5888,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, entites);
         }
+
+        void show_score_table(const int &force_) {
+            host::functions.invoke_raw_unary(__sqf::unary__showscoretable__scalar__ret__nothing, static_cast<float>(force_));
+        }
     }
 }

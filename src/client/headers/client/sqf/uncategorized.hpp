@@ -1614,5 +1614,6 @@ namespace intercept {
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);
         float lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
+        std::vector<std::string> mod_params(const std::string &mod_class_, const std::vector<std::string> &options_);
     }
 }

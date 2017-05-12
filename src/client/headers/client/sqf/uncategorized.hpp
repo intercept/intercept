@@ -1621,7 +1621,6 @@ namespace intercept {
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
         bool has_pilot_camera(const object &object_);
         bool is_group_deleted_when_empty(const group &group_);
-        bool is_null(const object &netobject_);
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);
         float lnb_add_row(const int &idc_, const std::vector<std::string> &items_);

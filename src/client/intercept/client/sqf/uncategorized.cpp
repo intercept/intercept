@@ -5586,5 +5586,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
         }
 
+        game_value get_all_sound_controllers(const object &vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getallsoundcontrollers__object__ret__array, vehicle_);
+        }
+
     }
 }

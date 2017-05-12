@@ -5976,5 +5976,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
         }
+
+        rv_way_point way_points(const object &player_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
+
+            return rv_way_point({ res[0], res[1] });
+        }
+
+        rv_way_point way_points(const group &group_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
+
+            return rv_way_point({ res[0], res[1] });
+        }
     }
 }

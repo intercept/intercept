@@ -1579,6 +1579,11 @@ namespace intercept {
             std::string description_text;
         };
 
+        struct rv_way_point {
+            group group;
+            int index;
+        };
+
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
@@ -1667,5 +1672,7 @@ namespace intercept {
         void use_ai_steering_component(const bool &use_);
         bool vehicle_cargo_enabled(const object &vehicle_);
         bool way_point_force_behaviour(const group &group_, const int &index_);
+        rv_way_point way_points(const object &player_);
+        rv_way_point way_points(const group &group_);
     }
 }

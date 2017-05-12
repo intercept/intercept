@@ -5931,5 +5931,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void tv_collapse_all(const int &idc_) {
             host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__scalar__ret__nothing, static_cast<float>(idc_));
         }
+
+        void tv_collapse_all(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__control__ret__nothing, control_);
+        }
     }
 }

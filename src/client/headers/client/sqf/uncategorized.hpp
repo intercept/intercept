@@ -1656,6 +1656,7 @@ namespace intercept {
         vector3 task_marker_offset(const object &unit_);
         std::string task_type(const task &task_);
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
-        void tv_collapse_all(const int &idc_)
+        void tv_collapse_all(const int &idc_);
+        void tv_collapse_all(const control &control_);
     }
 }

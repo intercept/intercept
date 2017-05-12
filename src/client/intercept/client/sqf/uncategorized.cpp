@@ -5642,7 +5642,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__isvehiclecargo__object__ret__object, vehicle_);
         }
 
-        float lnb_add_row(const int &idc_, const std::vector<std::string> &items_) {
+        int lnb_add_row(const int &idc_, const std::vector<std::string> &items_) {
             auto_array<game_value> items(items_.begin(), items_.end());
 
             game_value params({
@@ -5650,7 +5650,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 std::move(items)
             });
 
-            return host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params);
+            return static_cast<int>(host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params));
         }
 
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_) {
@@ -5676,8 +5676,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__moonphase__array__ret__scalar, date);
         }
 
-        game_value parse_simple_array(const std::string &string_array_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_);
+        std::vector<game_value> parse_simple_array(const std::string &string_array_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_);
+            
+            std::vector<game_value> result; //#TODO replace by helper function
+            for (int i = 0; i < res.size(); i++) {
+                result.push_back(res[i]);
+            }
+
+            return result;
         }
 
         game_value remote_exec(const std::string &function_name_, const std::string &jip_id_) {
@@ -5952,16 +5959,26 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
         }
 
-        rv_waypoint waypoints(const object &player_) {
+        std::vector<rv_waypoint> waypoints(const object &player_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
 
-            return rv_waypoint({ res[0], res[1] });
+            std::vector<rv_waypoint> waypoints;
+            for (int i = 0; i < res.size(); i++) {
+                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+            };
+
+            return waypoints;
         }
 
-        rv_waypoint waypoints(const group &group_) {
+        std::vector<rv_waypoint> waypoints(const group &group_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
 
-            return rv_waypoint({ res[0], res[1] });
+            std::vector<rv_waypoint> waypoints;
+            for (int i = 0; i < res.size(); i++) {
+                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+            };
+
+            return waypoints;
         }
     }
 }

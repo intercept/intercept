@@ -1623,7 +1623,7 @@ namespace intercept {
         bool is_group_deleted_when_empty(const group &group_);
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);
-        float lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
+        int lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_);
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
         game_value parse_simple_array(const std::string &string_array_);
@@ -1671,7 +1671,7 @@ namespace intercept {
         void use_ai_steering_component(const bool &use_);
         bool vehicle_cargo_enabled(const object &vehicle_);
         bool waypoint_force_behaviour(const group &group_, const int &index_);
-        rv_waypoint waypoints(const object &player_);
-        rv_waypoint waypoints(const group &group_);
+        std::vector<rv_waypoint> waypoints(const object &player_);
+        std::vector<rv_waypoint> waypoints(const group &group_);
     }
 }

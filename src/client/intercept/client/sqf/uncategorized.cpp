@@ -5927,5 +5927,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
         }
+
+        void tv_collapse_all(const int &idc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__scalar__ret__nothing, static_cast<float>(idc_));
+        }
     }
 }

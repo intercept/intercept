@@ -5646,5 +5646,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool is_null(const object &netobject_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isnull__netobject__ret__bool, netobject_);
         }
+
+        bool is_simple_object(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__issimpleobject__object__ret__bool, object_);
+        }
     }
 }

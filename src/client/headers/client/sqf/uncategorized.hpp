@@ -1609,5 +1609,6 @@ namespace intercept {
         rv_shot_parents get_shot_parents(const object &projectile_);
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
         bool has_pilot_camera(const object &object_);
+        bool is_group_deleted_when_empty(const group &group_);
     }
 }

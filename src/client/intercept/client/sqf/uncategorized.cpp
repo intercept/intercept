@@ -5634,5 +5634,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<object> get_vehicle_cargo(const object &vehicle_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
         }
+
+        bool has_pilot_camera(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__haspilotcamera__object__ret__bool, object_);
+        }
     }
 }

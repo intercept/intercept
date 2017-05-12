@@ -1608,5 +1608,6 @@ namespace intercept {
         rv_camera_target get_pilot_camera_target(const object &object_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
+        bool has_pilot_camera(const object &object_);
     }
 }

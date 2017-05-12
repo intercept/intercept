@@ -5947,5 +5947,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 unit_aim_position(const object &unit_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_));
         }
+
+        vector3 unit_aim_position_visual(const object &unit_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_));
+        }
     }
 }

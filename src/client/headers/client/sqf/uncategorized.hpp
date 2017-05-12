@@ -1665,5 +1665,7 @@ namespace intercept {
         bool unit_is_uav(const object &unit_);
         void use_ai_oper_map_obstruction_test(const bool &use_);
         void use_ai_steering_component(const bool &use_);
+        bool vehicle_cargo_enabled(const object &vehicle_);
+        bool way_point_force_behaviour(const group &group_, const int &index_);
     }
 }

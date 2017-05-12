@@ -5963,5 +5963,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void use_ai_steering_component(const bool &use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
         }
+
+        bool vehicle_cargo_enabled(const object &vehicle_) {
+           return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
+        }
+
+        bool way_point_force_behaviour(const group &group_, const int &index_) {
+            game_value params({
+                group_,
+                static_cast<float>(index_)
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
+        }
     }
 }

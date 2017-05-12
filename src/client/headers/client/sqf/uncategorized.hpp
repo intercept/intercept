@@ -1643,5 +1643,6 @@ namespace intercept {
         game_value select_min(const game_value &array_);
         void set_3den_selected(const std::vector<object> &entites_);
         void show_score_table(const int &force_);
+        void show_way_points(const bool &enabled_);
     }
 }

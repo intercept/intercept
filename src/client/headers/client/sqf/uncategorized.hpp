@@ -1626,7 +1626,7 @@ namespace intercept {
         int lnb_add_row(const int &idc_, const std::vector<std::string> &items_);
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_);
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
-        game_value parse_simple_array(const std::string &string_array_);
+        std::vector<game_value> parse_simple_array(const std::string &string_array_);
         game_value remote_exec(const std::string &function_name_, const int &targets_, const std::string &jip_id_);
         game_value remote_exec(const std::string &function_name_, const std::string &jip_id_);
         game_value remote_exec(const std::string &function_name_, const int &targets_, const std::string &jip_id_);

@@ -3624,15 +3624,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__retrieve_nular_bool(__sqf::nular__didjip__ret__bool);
         }
 
-        std::vector<object> near_objects(const vector3 &pos_, const float &radius_) {
+        std::vector<object> near_objects(const vector3 &pos_, float radius_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, radius_));
         }
 
-        std::vector<object> near_objects(const object &object_, const float &radius_) {
+        std::vector<object> near_objects(const object &object_, float radius_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, radius_));
         }
 
-        std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, const float &radius_) {
+        std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, float radius_) {
             game_value args({
                 type_,
                 radius_
@@ -3641,7 +3641,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args));
         }
 
-        std::vector<object> near_objects(const object &object_, const std::string &type_, const float &radius_) {
+        std::vector<object> near_objects(const object &object_, const std::string &type_, float radius_) {
             game_value args({
                 type_,
                 radius_
@@ -5393,7 +5393,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
 
 
-        void log_network_terminate(const float& handle_) {
+        void log_network_terminate(float handle_) {
             host::functions.invoke_raw_unary(__sqf::unary__lognetworkterminate__scalar__ret__nothing, handle_);
         }
 
@@ -5468,15 +5468,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
         }
 
-        void diag_capture_frame(const float &frame_) {
+        void diag_capture_frame(float frame_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
         }
 
-        void diag_capture_frame_to_file(const float &frame_) {
+        void diag_capture_frame_to_file(float frame_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
         }
 
-        void diag_capture_slow_frame(const std::string &section_, const float &threshold_) {
+        void diag_capture_slow_frame(const std::string &section_, float threshold_) {
             game_value params({
                 section_,
                 threshold_
@@ -5485,7 +5485,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
         }
 
-        void diag_code_performance(const code &code_,const game_value &arguments_, const float &cycles_) {
+        void diag_code_performance(const code &code_,const game_value &arguments_, float cycles_) {
             game_value params({
                 code_,
                 arguments_,
@@ -5499,7 +5499,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
         }
 
-        void diag_log_slow_frame(const std::string &section_, const float &threshold_) {
+        void diag_log_slow_frame(const std::string &section_, float threshold_) {
             game_value params({
                 section_,
                 threshold_
@@ -5532,7 +5532,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__group__ret__bool, group_);
         }
 
-        void enable_debriefing_stats(const float &left_, const float &top_, const float &width_, const float &height_) {
+        void enable_debriefing_stats(float left_, float top_, float width_, float height_) {
             game_value params({
                 left_,
                 top_,
@@ -5543,15 +5543,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
         }
 
-        void enable_dynamic_simulation_system(const bool &enable_) {
+        void enable_dynamic_simulation_system(bool enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enabledynamicsimulationsystem__bool__ret__nothing, enable_);
         }
 
-        void enable_weapon_disassembly(const bool &enable_) {
+        void enable_weapon_disassembly(bool enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
         }
 
-        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_) {
+        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_) {
             auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
             auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
             
@@ -5642,7 +5642,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__isvehiclecargo__object__ret__object, vehicle_);
         }
 
-        int lnb_add_row(const int &idc_, const std::vector<std::string> &items_) {
+        int lnb_add_row(int idc_, const std::vector<std::string> &items_) {
             auto_array<game_value> items(items_.begin(), items_.end());
 
             game_value params({
@@ -5696,7 +5696,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
         }
 
-        game_value remote_exec(const std::string &function_name_, const int &targets_, const std::string &jip_id_) {
+        game_value remote_exec(const std::string &function_name_, int targets_, const std::string &jip_id_) {
             game_value params({
                 function_name_,
                 static_cast<float>(targets_),
@@ -5765,7 +5765,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
 
-        game_value remote_exec_call(const std::string &function_name_, const int &targets_, const std::string &jip_id_) {
+        game_value remote_exec_call(const std::string &function_name_, int targets_, const std::string &jip_id_) {
             game_value params({
                 function_name_,
                 static_cast<float>(targets_),
@@ -5871,11 +5871,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entities));
         }
 
-        void show_score_table(const int &force_) {
+        void show_score_table(int force_) {
             host::functions.invoke_raw_unary(__sqf::unary__showscoretable__scalar__ret__nothing, static_cast<float>(force_));
         }
 
-        void show_waypoints(const bool &enabled_) {
+        void show_waypoints(bool enabled_) {
             host::functions.invoke_raw_unary(__sqf::unary__showwaypoints__bool__ret__nothing, enabled_);
         }
 
@@ -5910,7 +5910,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
         }
 
-        void tv_collapse_all(const int &idc_) {
+        void tv_collapse_all(int idc_) {
             host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__scalar__ret__nothing, static_cast<float>(idc_));
         }
 
@@ -5918,7 +5918,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__control__ret__nothing, control_);
         }
 
-        void tv_expand_all(const int &idc_) {
+        void tv_expand_all(int idc_) {
             host::functions.invoke_raw_unary(__sqf::unary__tvexpandall__scalar__ret__nothing, static_cast<float>(idc_));
         }
 
@@ -5938,11 +5938,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__unitisuav__object__ret__bool, unit_);
         }
 
-        void use_ai_oper_map_obstruction_test(const bool &use_) {
+        void use_ai_oper_map_obstruction_test(bool use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaiopermapobstructiontest__bool__ret__nothing, use_);
         }
 
-        void use_ai_steering_component(const bool &use_) {
+        void use_ai_steering_component(bool use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
         }
 
@@ -5950,7 +5950,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
            return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
         }
 
-        bool waypoint_force_behaviour(const group &group_, const int &index_) {
+        bool waypoint_force_behaviour(const group &group_, int index_) {
             game_value params({
                 group_,
                 static_cast<float>(index_)

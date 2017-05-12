@@ -1579,7 +1579,7 @@ namespace intercept {
             std::string description_text;
         };
 
-        struct rv_way_point {
+        struct rv_waypoint {
             group group;
             int index;
         };
@@ -1653,7 +1653,7 @@ namespace intercept {
         game_value select_min(const game_value &array_);
         void set_3den_selected(const std::vector<object> &entites_);
         void show_score_table(const int &force_);
-        void show_way_points(const bool &enabled_);
+        void show_waypoints(const bool &enabled_);
         void switch_camera(const object &target_);
         bool task_always_visible(const task &task_);
         rv_task_custom_data task_custom_data(const task &task_);
@@ -1670,8 +1670,8 @@ namespace intercept {
         void use_ai_oper_map_obstruction_test(const bool &use_);
         void use_ai_steering_component(const bool &use_);
         bool vehicle_cargo_enabled(const object &vehicle_);
-        bool way_point_force_behaviour(const group &group_, const int &index_);
-        rv_way_point way_points(const object &player_);
-        rv_way_point way_points(const group &group_);
+        bool waypoint_force_behaviour(const group &group_, const int &index_);
+        rv_waypoint waypoints(const object &player_);
+        rv_waypoint waypoints(const group &group_);
     }
 }

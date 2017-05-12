@@ -5446,12 +5446,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_) {
-            std::vector<game_value> params;
-            for (auto& it : params_) {
-                params.push_back(it);
-            }
+            auto_array<game_value> params(params_.begin(), params_.end());
 
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, params));
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, std::move(params)));
         }
 
         bool can_trigger_dynamic_simulation(const object &unit_) {
@@ -5555,18 +5552,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_) {
-            std::vector<game_value> typesinclude;
-            for (auto& it : typesinclude_) {
-                typesinclude.push_back(it);
-            }
-            std::vector<game_value> typesexclude;
-            for (auto& it : typesinclude_) {
-                typesexclude.push_back(it);
-            }
+            auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
+            auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
             
             game_value params({
-                typesinclude,
-                typesexclude,
+                std::move(typesinclude),
+                std::move(typesexclude),
                 includeCrews_,
                 excludeDead_
             });
@@ -5652,28 +5643,22 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         float lnb_add_row(const int &idc_, const std::vector<std::string> &items_) {
-            std::vector<game_value> items;
-            for (auto& it : items_) {
-                items.push_back(it);
-            }
+            auto_array<game_value> items(items_.begin(), items_.end());
 
             game_value params({
                 static_cast<float>(idc_),
-                items
+                std::move(items)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params);
         }
 
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_) {
-            std::vector<game_value> options;
-            for (auto& it : options_) {
-                options.push_back(it);
-            }
+            auto_array<game_value> options(options_.begin(), options_.end());
 
             game_value params({
                 mod_class_,
-                options
+                std::move(options)
             });
             
             return host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params);
@@ -5834,14 +5819,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_) {
-            std::vector<game_value> from;
-            for (auto& it : from_) {
-                from.push_back(it);
-            }
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             game_value params({
                 type_,
-                from,
+                std::move(from),
                 to_
             });
 
@@ -5877,19 +5859,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_3den_selected(const std::vector<object> &entites_) {
-            std::vector<game_value> entites;
-            for (auto& it : entites_) {
-                entites.push_back(it);
-            }
+            auto_array<game_value> entities(entites_.begin(), entites_.end());
 
-            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, entites);
+            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entites));
         }
 
         void show_score_table(const int &force_) {
             host::functions.invoke_raw_unary(__sqf::unary__showscoretable__scalar__ret__nothing, static_cast<float>(force_));
         }
 
-        void show_way_points(const bool &enabled_) {
+        void show_waypoints(const bool &enabled_) {
             host::functions.invoke_raw_unary(__sqf::unary__showwaypoints__bool__ret__nothing, enabled_);
         }
 
@@ -5964,7 +5943,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
            return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
         }
 
-        bool way_point_force_behaviour(const group &group_, const int &index_) {
+        bool waypoint_force_behaviour(const group &group_, const int &index_) {
             game_value params({
                 group_,
                 static_cast<float>(index_)
@@ -5973,16 +5952,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
         }
 
-        rv_way_point way_points(const object &player_) {
+        rv_waypoint waypoints(const object &player_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
 
-            return rv_way_point({ res[0], res[1] });
+            return rv_waypoint({ res[0], res[1] });
         }
 
-        rv_way_point way_points(const group &group_) {
+        rv_waypoint waypoints(const group &group_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
 
-            return rv_way_point({ res[0], res[1] });
+            return rv_waypoint({ res[0], res[1] });
         }
     }
 }

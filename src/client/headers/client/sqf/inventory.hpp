@@ -225,8 +225,8 @@ namespace intercept {
                 laser(ret_game_value_[2]),
                 optics(ret_game_value_[3]),
                 magazine(ret_game_value_[4]),
-                grenade_launcher_magazine(ret_game_value_.length() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
-                bipod(ret_game_value_.length() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
+                grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
+                bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
         };
 
         std::vector<rv_weapon_items> weapons_items(const object& obj_);

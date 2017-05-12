@@ -1583,5 +1583,6 @@ namespace intercept {
         void enable_debriefing_stats(const float &left_, const float &top_, const float &width_, const float &height_);
         void enable_dynamic_simulation_system(const bool &enable_);
         void enable_weapon_disassembly(const bool &enable_);
+        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_);
     }
 }

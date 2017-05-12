@@ -5553,5 +5553,25 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_weapon_disassembly(const bool &enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
         }
+
+        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, const bool &includeCrews_, const bool &excludeDead_) {
+            std::vector<game_value> typesinclude;
+            for (auto& it : typesinclude_) {
+                typesinclude.push_back(it);
+            }
+            std::vector<game_value> typesexclude;
+            for (auto& it : typesinclude_) {
+                typesexclude.push_back(it);
+            }
+            
+            game_value params({
+                typesinclude,
+                typesexclude,
+                includeCrews_,
+                excludeDead_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__entities__array__ret__array, params));
+        }
     }
 }

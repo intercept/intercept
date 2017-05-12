@@ -5650,5 +5650,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool is_simple_object(const object &object_) {
             return host::functions.invoke_raw_unary(__sqf::unary__issimpleobject__object__ret__bool, object_);
         }
+
+        object is_vehicle_cargo(const object &vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isvehiclecargo__object__ret__object, vehicle_);
+        }
     }
 }

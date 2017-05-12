@@ -1593,5 +1593,6 @@ namespace intercept {
         std::vector<object> get_mission_layer_entities(const std::string &layername_);
         vector3 get_pilot_camera_direction(const object &object_);
         vector3 get_pilot_camera_position(const object &object_);
+        vector3 get_pilot_camera_rotation(const object &object_);
     }
 }

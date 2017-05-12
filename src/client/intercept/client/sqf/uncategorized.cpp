@@ -5609,5 +5609,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 get_pilot_camera_position(const object &object_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraposition__object__ret__array, object_));
         }
+        vector3 get_pilot_camera_rotation(const object &object_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_));
+        }
     }
 }

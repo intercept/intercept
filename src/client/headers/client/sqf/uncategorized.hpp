@@ -1580,6 +1580,6 @@ namespace intercept {
         float dynamic_simulation_distance_coef(const std::string &class_);
         bool dynamic_simulation_enabled(const object &object_);
         bool dynamic_simulation_enabled(const group &group_);
+        void enable_debriefing_stats(const float &left_, const float &top_, const float &width_, const float &height_);
     }
-
 }

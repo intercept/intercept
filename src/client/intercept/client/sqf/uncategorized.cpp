@@ -5535,5 +5535,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__group__ret__bool, group_);
         }
 
+        void enable_debriefing_stats(const float &left_, const float &top_, const float &width_, const float &height_) {
+            game_value params({
+                left_,
+                top_,
+                width_,
+                height_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
+        }
     }
 }

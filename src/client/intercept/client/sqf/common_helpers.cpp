@@ -1,4 +1,4 @@
-#include "client/pointers.hpp"
+﻿#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -193,6 +193,14 @@ namespace intercept {
                 std::vector<group> output;
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(group(input_[i]));
+                }
+                return output;
+            }
+
+            std::vector<control> __convert_to_controls_vector(game_value input_) {
+                std::vector<control> output;
+                for (uint32_t i = 0; i < input_.size(); ++i) {
+                    output.push_back(control(input_[i]));
                 }
                 return output;
             }

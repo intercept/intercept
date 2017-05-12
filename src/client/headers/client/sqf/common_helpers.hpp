@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -70,6 +70,7 @@ namespace intercept {
             std::vector<bool> __convert_to_booleans_vector(game_value input__);
             std::vector<team_member> __convert_to_team_members_vector(game_value input__);
             std::vector<group> __convert_to_groups_vector(game_value input__);
+            std::vector<control> __convert_to_controls_vector(game_value input_);
             std::vector<display> __convert_to_displays_vector(game_value input__);
             std::vector<marker> __convert_to_markers_vector(game_value input__);
             std::vector<config> __convert_to_configs_vector(game_value input__);

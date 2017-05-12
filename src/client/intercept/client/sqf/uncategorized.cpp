@@ -5615,7 +5615,20 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         rv_camera_target get_pilot_camera_target(const object &object_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
             
-            return rv_camera_target({ ret[0], ret[1], ret[2] });
+            return rv_camera_target({
+                ret[0],
+                __helpers::__convert_to_vector3(ret[1]),
+                ret[2]
+            });
+        }
+
+        rv_shot_parents get_shot_parents(const object &projectile_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getshotparents__object__ret__array, projectile_);
+
+            return rv_shot_parents({
+                ret[0],
+                ret[1]
+            });
         }
     }
 }

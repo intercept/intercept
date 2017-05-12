@@ -1568,6 +1568,11 @@ namespace intercept {
             object target_object;
         };
 
+        struct rv_shot_parents {
+            object vehicle;
+            object instigator;
+        };
+
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
@@ -1601,5 +1606,6 @@ namespace intercept {
         vector3 get_pilot_camera_position(const object &object_);
         vector3 get_pilot_camera_rotation(const object &object_);
         rv_camera_target get_pilot_camera_target(const object &object_);
+        rv_shot_parents get_shot_parents(const object &projectile_);
     }
 }

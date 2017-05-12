@@ -127,7 +127,7 @@ def parse():
             warnings_found.append("Implementation ({} {}{}) in header file ({})".format(impl[0], impl[1], impl[2], impl[3][0]))
 
         for decl in declarations:
-            if (decl[1] == impl[1]): # same name
+            if (decl[1] == impl[1] and decl[2] == impl[2]): # same name and arguments
                 if (os.path.basename(decl[3][0].split('.')[0]) != os.path.basename(file_name)):
                     warnings_found.append("Found implemenation with filename mismatch ({} {}{}) ({} should be {})".format(impl[0], impl[1], impl[2], file_name, decl[3][0].split('.')[0]))
 

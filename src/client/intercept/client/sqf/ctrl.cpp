@@ -5,14 +5,14 @@
 namespace intercept {
     namespace sqf {
         int tv_add(int idc_, const std::vector<int>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 text_
             });
 
@@ -20,13 +20,13 @@ namespace intercept {
         }
 
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 text_
             });
 
@@ -42,198 +42,198 @@ namespace intercept {
         }
 
         void tv_collapse(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__tvcollapse__array__ret__nothing, params);
         }
 
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, path);
+            host::functions.invoke_raw_binary(__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         int tv_count(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvcount__array__ret__scalar, params);
         }
 
         int tv_count(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvcount__control__array__ret__scalar, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvcount__control__array__ret__scalar, ctrl_, std::move(path));
         }
 
         std::string tv_data(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvdata__array__ret__string, params);
         }
 
         std::string tv_data(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvdata__control__array__ret__string, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvdata__control__array__ret__string, ctrl_, std::move(path));
         }
 
         void tv_delete(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__tvdelete__array__ret__nothing, params);
         }
 
         void tv_delete(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__tvdelete__control__array__ret__nothing, ctrl_, path);
+            host::functions.invoke_raw_binary(__sqf::binary__tvdelete__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         void tv_expand(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__tvexpand__array__ret__nothing, params);
         }
 
         void tv_expand(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__tvexpand__control__array__ret__nothing, ctrl_, path);
+            host::functions.invoke_raw_binary(__sqf::binary__tvexpand__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         std::string tv_picture(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvpicture__array__ret__string, params);
         }
 
         std::string tv_picture(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvpicture__control__array__ret__string, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvpicture__control__array__ret__string, ctrl_, std::move(path));
         }
 
         std::string tv_picture_right(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvpicture__array__ret__string, params);
         }
 
         std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvpictureright__control__array__ret__string, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvpictureright__control__array__ret__string, ctrl_, std::move(path));
         }
 
         void tv_set_cur_sel(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__tvsetcursel__array__ret__nothing, params);
         }
 
         void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__tvsetcursel__control__array__ret__nothing, ctrl_, path);
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetcursel__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         void tv_set_data(int idc_, const std::vector<int>& path_, const std::string& data_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 data_
             });
 
@@ -241,13 +241,13 @@ namespace intercept {
         }
 
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 data_
             });
 
@@ -255,14 +255,14 @@ namespace intercept {
         }
 
         void tv_set_picture(int idc_, const std::vector<int>& path_, const std::string& name_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 name_
             });
 
@@ -270,13 +270,13 @@ namespace intercept {
         }
 
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 name_
             });
 
@@ -284,14 +284,14 @@ namespace intercept {
         }
 
         void tv_set_picture_right(int idc_, const std::vector<int>& path_, const std::string& name_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 name_
             });
 
@@ -299,13 +299,13 @@ namespace intercept {
         }
 
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 name_
             });
 
@@ -313,14 +313,14 @@ namespace intercept {
         }
 
         void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 color_
             });
 
@@ -328,13 +328,13 @@ namespace intercept {
         }
 
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 color_
             });
 
@@ -342,14 +342,14 @@ namespace intercept {
         }
         //#TODO rename https://community.bistudio.com/wiki/tvSetPictureRightColor color and right swapped
         void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 color_
             });
 
@@ -357,13 +357,13 @@ namespace intercept {
         }
 
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 color_
             });
 
@@ -371,14 +371,14 @@ namespace intercept {
         }
 
         void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 text_
             });
 
@@ -386,13 +386,13 @@ namespace intercept {
         }
 
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 text_
             });
 
@@ -400,14 +400,14 @@ namespace intercept {
         }
 
         void tv_set_value(int idc_, const std::vector<int>& path_, float value_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path,
+                std::move(path),
                 value_
             });
 
@@ -415,13 +415,13 @@ namespace intercept {
         }
 
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 value_
             });
 
@@ -429,13 +429,13 @@ namespace intercept {
         }
 
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 reversed_
             });
 
@@ -443,13 +443,13 @@ namespace intercept {
         }
 
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
-                path,
+                std::move(path),
                 reversed_
             });
 
@@ -457,49 +457,49 @@ namespace intercept {
         }
 
         std::string tv_text(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvtext__array__ret__string, params);
         }
 
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvtext__control__array__ret__string, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvtext__control__array__ret__string, ctrl_, std::move(path));
         }
 
         float tv_value(int idc_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
             game_value params({
                 static_cast<float>(idc_),
-                path
+                std::move(path)
             });
 
             return host::functions.invoke_raw_unary(__sqf::unary__tvvalue__array__ret__scalar, params);
         }
 
         float tv_value(const control& ctrl_, const std::vector<int>& path_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (int item : path_) {
                 path.push_back(static_cast<float>(item));
             }
 
-            return host::functions.invoke_raw_binary(__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, path);
+            return host::functions.invoke_raw_binary(__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, std::move(path));
         }
 
         void ctrl_activate(const control &value_) {
@@ -858,61 +858,59 @@ namespace intercept {
         }
 
         float lnb_add_array(float idc_, const std::vector<rv_lnb_array>& lnb_array_) {
-            std::vector<game_value> lnb_array; //#TODO remove temp std::vector
+            auto_array<game_value> lnb_array;
             for (rv_lnb_array item : lnb_array_)
                 lnb_array.push_back(item);
 
             game_value params{
                 idc_,
-                lnb_array
+                std::move(lnb_array)
             };
 
             return host::functions.invoke_raw_unary(__sqf::unary__lnbaddarray__array__ret__scalar, params);
         }
 
         float lnb_add_array(const control& ctrl_, const std::vector<rv_lnb_array>& lnb_array_) {
-            std::vector<game_value> lnb_array; //#TODO remove temp std::vector
+            auto_array<game_value> lnb_array;
             for (rv_lnb_array item : lnb_array_)
                 lnb_array.push_back(item);
 
             game_value params{
                 ctrl_,
-                lnb_array
+                std::move(lnb_array)
             };
 
             return host::functions.invoke_raw_unary(__sqf::unary__lnbaddarray__array__ret__scalar, params);
         }
 
         float lnb_add_row(float idc_, const std::vector<std::string>& strings_) {
-            std::vector<game_value> strings; //#TODO remove temp std::vector
+            auto_array<game_value> strings;
             for (auto item : strings_)
                 strings.push_back(item);
 
             game_value params{
                 idc_,
-                strings
+                std::move(strings)
             };
 
             return host::functions.invoke_raw_unary(__sqf::unary__lnbaddcolumn__array__ret__scalar, params);
         }
 
         float lnb_add_row(const control& ctrl_, std::vector<std::string>& strings_) {
-            std::vector<game_value> strings; //#TODO remove temp std::vector
+            auto_array<game_value> strings;
             for (auto item : strings_)
                 strings.push_back(item);
 
-            return host::functions.invoke_raw_binary(__sqf::binary__lnbaddrow__control__array__ret__scalar, ctrl_, strings);
+            return host::functions.invoke_raw_binary(__sqf::binary__lnbaddrow__control__array__ret__scalar, ctrl_, std::move(strings));
         }
 
         rv_color lnb_color(float idc_, float row_, float column_) {
-            game_value item({
-                row_,
-                column_
-            });
-
             game_value params({
                 idc_,
-                item
+                {
+                    row_,
+                    column_
+                }
             });
 
             return rv_color(host::functions.invoke_raw_unary(__sqf::unary__lnbcolor__array__ret__array, params));
@@ -1083,24 +1081,24 @@ namespace intercept {
         }
 
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_) {
-            std::vector<game_value> positions; //#TODO remove temp std::vector
+            auto_array<game_value> positions; 
             for (auto item : positions_)
                 positions.push_back(item);
 
             game_value params({
                 idc_,
-                positions
+                std::move(positions)
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__lnbsetcolumnspos__array__ret__nothing, params);
         }
 
         void lnb_set_columns_pos(const control& ctrl_, std::vector<float> positions_) {
-            std::vector<game_value> positions; //#TODO remove temp std::vector
+            auto_array<game_value> positions;
             for (auto item : positions_)
                 positions.push_back(item);
 
-            host::functions.invoke_raw_binary(__sqf::binary__lnbsetcolumnspos__control__array__ret__nothing, ctrl_, positions);
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetcolumnspos__control__array__ret__nothing, ctrl_, std::move(positions));
         }
 
         void lnb_set_data(float idc_, float row_, float column_, const std::string& data_) {
@@ -1235,13 +1233,13 @@ namespace intercept {
         //}
 
         void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (auto num : path_)
                 path.push_back(num);
 
             game_value params({
                 idc_,
-                path,
+                std::move(path),
                 text_
             });
 
@@ -1249,13 +1247,13 @@ namespace intercept {
         }
 
         void tv_set_text(const control& ctrl_, const std::vector<float>& path_, const std::string& text_) {
-            std::vector<game_value> path; //#TODO remove temp std::vector
+            auto_array<game_value> path;
             for (auto num : path_)
                 path.push_back(num);
 
             game_value params({
                 ctrl_,
-                path,
+                std::move(path),
                 text_
             });
 
@@ -1452,13 +1450,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlmapcursor__control__array__ret__nothing, ctrl_, params);
         }
 
-        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::vector<float>& position_) {
-            std::vector<game_value> pos; //#TODO remove temp std::vector
-            for (float item : position_) {
-                pos.push_back(static_cast<float>(item));
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__ctrlmapworldtoscreen__control__array__ret__array, ctrl_, pos);
+        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::variant<vector2, vector3>& position_) {
+            if (position_.index() == 0)
+                return host::functions.invoke_raw_binary(__sqf::binary__ctrlmapworldtoscreen__control__array__ret__array, ctrl_, std::get<vector2>(position_));
+            else
+                return host::functions.invoke_raw_binary(__sqf::binary__ctrlmapworldtoscreen__control__array__ret__array, ctrl_, std::get<vector3>(position_));
         }
 
         void ctrl_set_active_color(const control& ctrl_, const rv_color& color_) {

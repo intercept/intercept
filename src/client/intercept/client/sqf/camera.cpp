@@ -183,8 +183,8 @@ namespace intercept {
         void cam_set_fov(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__camsetfov__object__scalar__ret__nothing, value0_, value1_);
         }
-        void set_cam_use_ti(float value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcamuseti__bool__scalar__ret__nothing, value0_, value1_);
+        void set_cam_use_ti(thermal_modes mode_, bool value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcamuseti__bool__scalar__ret__nothing, static_cast<float>(mode_), value1_);
         }
         void set_aperture(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__setaperture__scalar__ret__nothing, value_);
@@ -273,12 +273,12 @@ namespace intercept {
         }
 
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
-            std::vector<game_value> effects; //#TODO remove temp std::vector
+            auto_array<game_value> effects;
             for (rv_pp_effect item : effects_) {
                 effects.push_back(game_value(item));
             }
 
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, effects);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, std::move(effects));
 
             return __helpers::__convert_to_numbers_vector(ret);
         }
@@ -314,11 +314,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectforceinnvg__scalar__bool__ret__nothing, value0_, value1_);
         }
         void pp_effect_destroy(std::vector<float> effect_handles_) {
-            std::vector<game_value> effect_handles; //#TODO remove temp std::vector
+            auto_array<game_value> effect_handles;
             for (auto effect_handle : effect_handles_)
-                effect_handles.push_back(game_value(effect_handle));
+                effect_handles.push_back(effect_handle);
 
-            host::functions.invoke_raw_unary(__sqf::unary__ppeffectdestroy__array__ret__nothing, effect_handles);
+            host::functions.invoke_raw_unary(__sqf::unary__ppeffectdestroy__array__ret__nothing, std::move(effect_handles));
         }
     }
 }

@@ -101,11 +101,11 @@ namespace intercept {
         }
 
         void add_curator_addons(const object & curator_object_, const std::vector<std::string>& addons_) {
-            std::vector<game_value> addons; //#TODO remove temp std::vector
-            for (std::string addon : addons_) {
-                addons.push_back(game_value(addon));
+            auto_array<game_value> addons;
+            for (auto& addon : addons_) {
+                addons.push_back(addon);
             }
-            host::functions.invoke_raw_binary(__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, addons);
+            host::functions.invoke_raw_binary(__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, std::move(addons));
         }
 
         void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector2 & position_, float radius_) {
@@ -129,12 +129,12 @@ namespace intercept {
         }
 
         void add_curator_editable_object(const object & curator_object_, const std::vector<object>& objects_, bool add_crew_) {
-            std::vector<game_value> objects; //#TODO remove temp std::vector
-            for (object cobject : objects_) {
-                objects.push_back(game_value(cobject));
+            auto_array<game_value> objects;
+            for (auto& it : objects_) {
+                objects.push_back(it);
             }
             game_value args({
-                objects,
+                std::move(objects),
                 add_crew_
             });
 

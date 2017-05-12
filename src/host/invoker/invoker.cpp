@@ -216,7 +216,10 @@ namespace intercept {
 
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_)
     {
-        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&left_arg_), reinterpret_cast<uintptr_t>(&right_arg_));
+        auto left = reinterpret_cast<uintptr_t>(&left_arg_);
+        auto right = reinterpret_cast<uintptr_t>(&right_arg_);
+
+        uintptr_t ret_ptr = function_(invoker::sqf_this, invoker::sqf_game_state, left, right);
         return game_value(std::move(*reinterpret_cast<game_value*>(ret_ptr)));
     }
 

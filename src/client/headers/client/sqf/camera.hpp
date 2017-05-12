@@ -62,7 +62,18 @@ namespace intercept {
         void cam_set_dive(const object &value0_, float value1_);
         void cam_set_fov(const object &value0_, float value1_);
 
-        void set_cam_use_ti(float value0_, bool value1_); //#TODO enum for different TI modes
+        enum class thermal_modes {
+            white_hot = 0,
+            black_hot = 1,
+            lightgreen_hot = 2, //Light Green Hot / Darker Green cold
+            black_hot_green_cold = 3, //Black Hot / Darker Green cold
+            red_hot = 4, //Light Red Hot / Darker Red Cold
+            black_hot_red_cold = 5, //Black Hot / Darker Red Cold
+            white_hot_red_cold = 6, //White Hot.Darker Red Cold
+            thermal = 7 //Shade of Red and Green, Bodies are white
+        };
+
+        void set_cam_use_ti(thermal_modes mode_, bool value1_);
 
         void set_aperture(float value_);
         void set_aperture_new(float min_, float std_, float max_, float std_lum_);

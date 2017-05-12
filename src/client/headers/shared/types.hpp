@@ -337,7 +337,7 @@ namespace intercept {
                 return std::hash<const char*>()(data()); //#TODO string_view hash might be better...
             }
 
-        public://#TODO make private after all rv_strings were replaced
+        private:
             ref<compact_array<char>> _ref;
 
             static compact_array<char> *create(const char *str, int len) {
@@ -420,6 +420,7 @@ namespace intercept {
             int _n;
         public:
             rv_array() :_data(nullptr), _n(0) {};
+            rv_array(rv_array<Type>&& move_) :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
             Type &get(size_t i) {
                 return _data[i];
             }
@@ -434,8 +435,8 @@ namespace intercept {
             Type &front() { return get(0); }
             Type &back() { return get(_n - 1); }
 
-            Type* begin() { return &get(0); }
-            Type* end() { return &get(_n); }
+            Type* begin() { if (!_data) return nullptr; return &get(0); }
+            Type* end() { if (!_data) return nullptr; return &get(_n); }
 
             const Type* begin() const { return &get(0); }
             const Type* end() const { return &get(_n); }
@@ -493,12 +494,15 @@ namespace intercept {
                 }
                 Type *newData = nullptr;
                 if (base::_data && size > 0 && (newData = try_realloc(base::_data, _maxItems, size))) {
+                    //#TODO was only used for debugging.. Is probably not needed
+                    if (size > _maxItems)//Don't null out new stuff if there is no new stuff
+                        std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
                     _maxItems = size;
-                    rv_allocator<Type>::deallocate(base::_data);
                     base::_data = newData;
                     return;
                 }
                 newData = rv_allocator<Type>::createUninitializedArray(size);
+                memset(newData, 0, size * sizeof(Type));
                 if (base::_data) {
                     memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
                     rv_allocator<Type>::deallocate(base::_data);
@@ -519,10 +523,20 @@ namespace intercept {
                 for (auto& it : init_)
                     push_back(it);
             }
+            template<class _InIt>
+            auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
+                insert(end(), _first, _last);
+            }
+            auto_array(auto_array<Type> &&move_) : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
+                move_._maxItems = 0;
+            }
             ~auto_array() {
+                if (base::_data == nullptr) return;
                 resize(0);
             }
-
+            void shrink_to_fit() {
+                resize(_n);
+            }
             auto_array& operator = (auto_array &&move_) {
                 base::_n = move_._n;
                 _maxItems = move_._maxItems;
@@ -555,6 +569,11 @@ namespace intercept {
                 }
                 reallocate(n);
             }
+            void reserve(size_t res) {
+                if (_maxItems < static_cast<int>(res)) {
+                    grow(res - _maxItems);
+                }
+            }
 
             template<class... _Valty>
             Type& emplace_back(_Valty&&... _Val) {
@@ -579,6 +598,40 @@ namespace intercept {
                 item.~Type();
                 memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
             }
+            //This is sooo not threadsafe!
+            template<class _InIt>
+            void insert(const Type* _where, _InIt _first, _InIt _last) {
+                if (_first == _last) return; //Boogie!
+                if (_where < begin() || _where > end()) return; //WTF?!
+                const size_t insertOffset = _where - begin();
+                bool atEnd = _where == end();
+                size_t oldSize = count();
+                size_t insertedSize = std::distance(_first, _last);
+                reserve(oldSize + insertedSize);
+                if (atEnd) {
+                    auto index = base::_n;
+                    for (; _first != _last; ++_first) {
+                        //emplace_back(*_first);
+                        //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
+                        auto& item = (*this)[index];
+                        ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
+                        ++index;
+                    }
+                    base::_n = index;
+                    return;
+                }
+                //else we need to move stuff around
+
+                //#TODO don't really like the casting.. Maybe we should just make _where non-const
+                std::move(const_cast<Type*>(_where), const_cast<Type*>(_where) + insertedSize, const_cast<Type*>(_where) + insertedSize);
+                //#TODO now actually insert stuff..........
+            }
+
+            //#TODO implement. That's probably useful
+            //template<class _InIt, class _Pr>
+            //void insert_if() {
+            //}
+
             //#TODO Implement find, operator==, Copy/Move Contructor/Operator.
 
         };
@@ -923,9 +976,11 @@ namespace intercept {
         class __game_value_vtable_dummy {
         public:
             virtual void __dummy_vtable(void) {};
+            __game_value_vtable_dummy();
         };
 
-        class game_value : public __game_value_vtable_dummy {
+        class game_value {
+            uintptr_t __vptr;
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
@@ -943,6 +998,7 @@ namespace intercept {
             game_value(const char *);
             game_value(const std::vector<game_value> &list_);
             game_value(const std::initializer_list<game_value> &list_);
+            game_value(auto_array<game_value> &&array_);
             game_value(const vector3 &vec_);
             game_value(const vector2 &vec_);
             game_value(const internal_object &internal_);
@@ -967,6 +1023,7 @@ namespace intercept {
             operator r_string() const;
             operator vector3() const;
             operator vector2() const;
+            //#TODO add operator to const auto_array ref and then replace stuff with foreach loops
 
             game_value& operator [](size_t i_);
             game_value operator [](size_t i_) const;
@@ -984,6 +1041,8 @@ namespace intercept {
 
 
             size_t hash() const;
+            //set's this game_value to null
+            void clear() { data = nullptr; }
 
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
@@ -1003,6 +1062,7 @@ namespace intercept {
             game_data_array(size_t size_);
             game_data_array(const std::vector<game_value> &init_);
             game_data_array(const std::initializer_list<game_value> &init_);
+            game_data_array(auto_array<game_value> &&init_);
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
             game_data_array & game_data_array::operator = (const game_data_array &copy_);
@@ -1181,6 +1241,10 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, object ); };
+            //struct {
+            //    uint32_t _x;
+            //    void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
+            //};
             void *object;
         };
 

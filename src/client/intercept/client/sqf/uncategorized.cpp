@@ -5855,5 +5855,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void remove_all_owned_mines(const object &unit_) {
             host::functions.invoke_raw_unary(__sqf::unary__removeallownedmines__object__ret__nothing, unit_);
         }
+
+        object road_at(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__roadat__object_array__ret__object, object_);
+        }
+
+        object road_at(const vector3 &position_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__roadat__object_array__ret__object, position_);
+        }
     }
 }

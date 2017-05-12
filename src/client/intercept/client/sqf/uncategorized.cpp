@@ -5549,5 +5549,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_dynamic_simulation_system(const bool &enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enabledynamicsimulationsystem__bool__ret__nothing, enable_);
         }
+
+        void enable_weapon_disassembly(const bool &enable_) {
+            host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
+        }
     }
 }

@@ -101,10 +101,8 @@ namespace intercept {
         }
 
         void add_curator_addons(const object & curator_object_, const std::vector<std::string>& addons_) {
-            auto_array<game_value> addons;
-            for (auto& addon : addons_) {
-                addons.push_back(addon);
-            }
+            auto_array<game_value> addons(addons_.begin(), addons_.end());
+
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, std::move(addons));
         }
 
@@ -129,10 +127,8 @@ namespace intercept {
         }
 
         void add_curator_editable_object(const object & curator_object_, const std::vector<object>& objects_, bool add_crew_) {
-            auto_array<game_value> objects;
-            for (auto& it : objects_) {
-                objects.push_back(it);
-            }
+            auto_array<game_value> objects(objects_.begin(), objects_.end());
+
             game_value args({
                 std::move(objects),
                 add_crew_

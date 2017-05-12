@@ -94,19 +94,13 @@ namespace intercept {
         }
 
         void join_silent(const std::vector<object> &units_, const group &group_) {
-            auto_array<game_value> units;
-            for (object unit : units_) {
-                units.push_back(unit);
-            }
+            auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, std::move(units), group_);
         }
 
         void join_silent(const std::vector<object> &units_, const object &unit_group_) {
-            auto_array<game_value> units;
-            for (object unit : units_) {
-                units.push_back(unit);
-            }
+            auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__joinsilent__array__object_group__ret__nothing, std::move(units), unit_group_);
         }

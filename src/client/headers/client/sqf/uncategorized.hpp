@@ -1673,5 +1673,7 @@ namespace intercept {
         bool waypoint_force_behaviour(const group &group_, int index_);
         std::vector<rv_waypoint> waypoints(const object &player_);
         std::vector<rv_waypoint> waypoints(const group &group_);
+
+        //BINARY -- https://github.com/intercept/intercept/issues/13
     }
 }

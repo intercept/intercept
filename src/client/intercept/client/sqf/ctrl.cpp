@@ -5,10 +5,7 @@
 namespace intercept {
     namespace sqf {
         int tv_add(int idc_, const std::vector<int>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -20,10 +17,7 @@ namespace intercept {
         }
 
         int tv_add(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -42,10 +36,7 @@ namespace intercept {
         }
 
         void tv_collapse(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -56,19 +47,13 @@ namespace intercept {
         }
 
         void tv_collapse(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__tvcollapse__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         int tv_count(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -79,19 +64,13 @@ namespace intercept {
         }
 
         int tv_count(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvcount__control__array__ret__scalar, ctrl_, std::move(path));
         }
 
         std::string tv_data(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -102,19 +81,13 @@ namespace intercept {
         }
 
         std::string tv_data(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvdata__control__array__ret__string, ctrl_, std::move(path));
         }
 
         void tv_delete(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -125,19 +98,13 @@ namespace intercept {
         }
 
         void tv_delete(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__tvdelete__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         void tv_expand(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -148,19 +115,13 @@ namespace intercept {
         }
 
         void tv_expand(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__tvexpand__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         std::string tv_picture(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -171,19 +132,13 @@ namespace intercept {
         }
 
         std::string tv_picture(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvpicture__control__array__ret__string, ctrl_, std::move(path));
         }
 
         std::string tv_picture_right(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -194,19 +149,13 @@ namespace intercept {
         }
 
         std::string tv_picture_right(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvpictureright__control__array__ret__string, ctrl_, std::move(path));
         }
 
         void tv_set_cur_sel(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -217,19 +166,13 @@ namespace intercept {
         }
 
         void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__tvsetcursel__control__array__ret__nothing, ctrl_, std::move(path));
         }
 
         void tv_set_data(int idc_, const std::vector<int>& path_, const std::string& data_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -241,10 +184,7 @@ namespace intercept {
         }
 
         void tv_set_data(const control& ctrl_, const std::vector<int>& path_, const std::string& data_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -255,10 +195,7 @@ namespace intercept {
         }
 
         void tv_set_picture(int idc_, const std::vector<int>& path_, const std::string& name_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -270,10 +207,7 @@ namespace intercept {
         }
 
         void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -284,10 +218,7 @@ namespace intercept {
         }
 
         void tv_set_picture_right(int idc_, const std::vector<int>& path_, const std::string& name_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -299,10 +230,7 @@ namespace intercept {
         }
 
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, const std::string& name_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -313,10 +241,7 @@ namespace intercept {
         }
 
         void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -328,10 +253,7 @@ namespace intercept {
         }
 
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -342,10 +264,7 @@ namespace intercept {
         }
         //#TODO rename https://community.bistudio.com/wiki/tvSetPictureRightColor color and right swapped
         void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -357,10 +276,7 @@ namespace intercept {
         }
 
         void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -371,10 +287,7 @@ namespace intercept {
         }
 
         void tv_set_tooltip(int idc_, const std::vector<int>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -386,10 +299,7 @@ namespace intercept {
         }
 
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -400,10 +310,7 @@ namespace intercept {
         }
 
         void tv_set_value(int idc_, const std::vector<int>& path_, float value_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -415,10 +322,7 @@ namespace intercept {
         }
 
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -429,10 +333,7 @@ namespace intercept {
         }
 
         void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -443,10 +344,7 @@ namespace intercept {
         }
 
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 std::move(path),
@@ -457,10 +355,7 @@ namespace intercept {
         }
 
         std::string tv_text(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -471,19 +366,13 @@ namespace intercept {
         }
 
         std::string tv_text(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvtext__control__array__ret__string, ctrl_, std::move(path));
         }
 
         float tv_value(int idc_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 static_cast<float>(idc_),
@@ -494,10 +383,7 @@ namespace intercept {
         }
 
         float tv_value(const control& ctrl_, const std::vector<int>& path_) {
-            auto_array<game_value> path;
-            for (int item : path_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, std::move(path));
         }
@@ -858,9 +744,7 @@ namespace intercept {
         }
 
         float lnb_add_array(float idc_, const std::vector<rv_lnb_array>& lnb_array_) {
-            auto_array<game_value> lnb_array;
-            for (rv_lnb_array item : lnb_array_)
-                lnb_array.push_back(item);
+            auto_array<game_value> lnb_array(lnb_array_.begin(), lnb_array_.end());
 
             game_value params{
                 idc_,
@@ -871,9 +755,7 @@ namespace intercept {
         }
 
         float lnb_add_array(const control& ctrl_, const std::vector<rv_lnb_array>& lnb_array_) {
-            auto_array<game_value> lnb_array;
-            for (rv_lnb_array item : lnb_array_)
-                lnb_array.push_back(item);
+            auto_array<game_value> lnb_array(lnb_array_.begin(), lnb_array_.end());
 
             game_value params{
                 ctrl_,
@@ -884,9 +766,7 @@ namespace intercept {
         }
 
         float lnb_add_row(float idc_, const std::vector<std::string>& strings_) {
-            auto_array<game_value> strings;
-            for (auto item : strings_)
-                strings.push_back(item);
+            auto_array<game_value> strings(strings_.begin(), strings_.end());
 
             game_value params{
                 idc_,
@@ -897,9 +777,7 @@ namespace intercept {
         }
 
         float lnb_add_row(const control& ctrl_, std::vector<std::string>& strings_) {
-            auto_array<game_value> strings;
-            for (auto item : strings_)
-                strings.push_back(item);
+            auto_array<game_value> strings(strings_.begin(), strings_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__lnbaddrow__control__array__ret__scalar, ctrl_, std::move(strings));
         }
@@ -1081,9 +959,7 @@ namespace intercept {
         }
 
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_) {
-            auto_array<game_value> positions; 
-            for (auto item : positions_)
-                positions.push_back(item);
+            auto_array<game_value> positions(positions_.begin(), positions_.end());
 
             game_value params({
                 idc_,
@@ -1094,9 +970,7 @@ namespace intercept {
         }
 
         void lnb_set_columns_pos(const control& ctrl_, std::vector<float> positions_) {
-            auto_array<game_value> positions;
-            for (auto item : positions_)
-                positions.push_back(item);
+            auto_array<game_value> positions(positions_.begin(), positions_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__lnbsetcolumnspos__control__array__ret__nothing, ctrl_, std::move(positions));
         }
@@ -1233,9 +1107,7 @@ namespace intercept {
         //}
 
         void tv_set_text(float idc_, const std::vector<float>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (auto num : path_)
-                path.push_back(num);
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 idc_,
@@ -1247,9 +1119,7 @@ namespace intercept {
         }
 
         void tv_set_text(const control& ctrl_, const std::vector<float>& path_, const std::string& text_) {
-            auto_array<game_value> path;
-            for (auto num : path_)
-                path.push_back(num);
+            auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
                 ctrl_,
@@ -1986,6 +1856,7 @@ namespace intercept {
         std::vector<control> all_controls(const display &display_) {
             game_value input__ = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
             std::vector<control> output;
+
             for (uint32_t i = 0; i < input__.size(); ++i) {
                 output.push_back(control(input__[i]));
             }

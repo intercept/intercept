@@ -105,10 +105,7 @@ namespace intercept {
         }
 
         void add_magazine_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_, int ammocount_) {
-            auto_array<game_value> path;
-            for (int item : turretpath_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(turretpath_.begin(), turretpath_.end());
 
             game_value params({
                 classname_,
@@ -120,10 +117,7 @@ namespace intercept {
         }
 
         void add_weapon_turret(const object& obj_, const std::string& classname_, const std::vector<int>& turretpath_) {
-            auto_array<game_value> path;
-            for (int item : turretpath_) {
-                path.push_back(static_cast<float>(item));
-            }
+            auto_array<game_value> path(turretpath_.begin(), turretpath_.end());
 
             game_value params({
                 classname_,

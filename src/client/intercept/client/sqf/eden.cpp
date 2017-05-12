@@ -102,13 +102,11 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__delete3denentities__array__ret__nothing, entity_);
         }
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -116,13 +114,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -130,13 +126,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -144,13 +138,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -158,13 +150,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -172,13 +162,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -186,13 +174,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -200,13 +186,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -214,13 +198,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -228,13 +210,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -242,13 +222,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -256,13 +234,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -270,13 +246,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -284,13 +258,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -298,13 +270,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -312,13 +282,11 @@ namespace intercept {
         }
 
         bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_) {
-            std::vector<game_value> from;
-            for (auto entity : from_)
-                from.push_back(game_value(entity));
+            auto_array<game_value> from(from_.begin(), from_.end());
 
             std::vector<game_value> params{
                 type_,
-                from,
+                std::move(from),
                 to_
             };
 
@@ -377,9 +345,10 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__set3denmissionattributes__array__ret__nothing, params);
         }
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
-            std::vector<game_value> parameters_;
-            parameters_.push_back(game_value(configPath_));
-            parameters_.push_back(game_value(position_));
+            game_value parameters_({
+                configPath_,
+                position_
+            });
 
             auto eden_entities_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__create3dencomposition__array__ret__array, parameters_));
             std::vector<game_value> output_;
@@ -390,11 +359,12 @@ namespace intercept {
         }
 
         game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_) {
-            std::vector<game_value> parameters_;
-            parameters_.push_back(game_value(mode_));
-            parameters_.push_back(game_value(class_));
-            parameters_.push_back(game_value(position_));
-            parameters_.push_back(game_value(is_empty_));
+            game_value parameters_({
+                mode_,
+                class_,
+                position_,
+                is_empty_
+            });
 
             return host::functions.invoke_raw_unary(__sqf::unary__create3denentity__array__ret__any, parameters_);
         }

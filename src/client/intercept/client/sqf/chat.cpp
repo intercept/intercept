@@ -60,9 +60,7 @@ namespace intercept {
         }
 
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_) {
-            auto_array<game_value> units;
-            for (auto unit : units_)
-                units.push_back(game_value(unit));
+            auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
                 color_,
@@ -75,9 +73,7 @@ namespace intercept {
         }
 
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_) {
-            auto_array<game_value> units;
-            for (auto unit : units_)
-                units.push_back(unit);
+            auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
                 color_,

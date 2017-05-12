@@ -273,10 +273,7 @@ namespace intercept {
         }
 
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
-            auto_array<game_value> effects;
-            for (rv_pp_effect item : effects_) {
-                effects.push_back(game_value(item));
-            }
+            auto_array<game_value> effects(effects_.begin(), effects_.end());
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, std::move(effects));
 
@@ -314,9 +311,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectforceinnvg__scalar__bool__ret__nothing, value0_, value1_);
         }
         void pp_effect_destroy(std::vector<float> effect_handles_) {
-            auto_array<game_value> effect_handles;
-            for (auto effect_handle : effect_handles_)
-                effect_handles.push_back(effect_handle);
+            auto_array<game_value> effect_handles(effect_handles_.begin(), effect_handles_.end());
 
             host::functions.invoke_raw_unary(__sqf::unary__ppeffectdestroy__array__ret__nothing, std::move(effect_handles));
         }

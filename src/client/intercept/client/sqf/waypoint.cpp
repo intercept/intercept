@@ -192,16 +192,12 @@ namespace intercept {
         }
 
         void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_) {
-            auto_array<game_value> waypoints;
-            for (auto it : others_)
-                waypoints.push_back(it);
+            auto_array<game_value> waypoints(others_.begin(), others_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizewaypoint__array__array__ret__nothing, wp_, std::move(waypoints));
         }
         void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_) {
-            auto_array<game_value> waypoints;
-            for (auto it : others_)
-                waypoints.push_back(it);
+            auto_array<game_value> waypoints(others_.begin(), others_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizewaypoint__object__array__ret__nothing, trigger_, std::move(waypoints));
         }

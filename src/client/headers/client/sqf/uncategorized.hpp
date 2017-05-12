@@ -1591,5 +1591,6 @@ namespace intercept {
         game_value get_array(const config config_);
         float get_container_max_load(const std::string &containerclass_);
         std::vector<object> get_mission_layer_entities(const std::string &layername_);
+        vector3 get_pilot_camera_direction(const object &object_);
     }
 }

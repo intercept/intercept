@@ -6058,5 +6058,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void button_set_action(const control &control_, const std::string &action_) {
             host::functions.invoke_raw_binary(__sqf::binary__buttonsetaction__control__string__ret__nothing, control_, action_);
         }
+
+        std::vector<game_value> call_extension(const std::string &extension_, const std::string &function_, std::vector<game_value> &arguments_) {
+            auto_array<game_value> arguments(arguments_.begin(), arguments_.end());
+
+            game_value params_right({
+                function_,
+                std::move(arguments)
+            });
+            
+            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
+        }
     }
 }

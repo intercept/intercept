@@ -1725,5 +1725,6 @@ namespace intercept {
         vector3 building_exit(const object &building_, int index_);
         vector3 building_pos(const object &building_, int index_);
         void button_set_action(const control &control_, const std::string &action_);
+        std::vector<game_value> call_extension(const std::string &extension_, const std::string &function_, std::vector<game_value> &arguments_);
     }
 }

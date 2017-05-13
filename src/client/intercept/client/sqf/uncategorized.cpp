@@ -5820,5 +5820,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_scripts_vector(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
         }
 
+        bool dynamic_simulation_system_enabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
+        }
+
+        rv_environment_enabled environment_enabled() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__environmentenabled__ret__array);
+
+            return rv_environment_enabled({ res[0], res[1] });
+        }
+
+
+
     }
 }

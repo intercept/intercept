@@ -1667,8 +1667,15 @@ namespace intercept {
         std::vector<rv_waypoint> waypoints(const group &group_);
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
+        struct rv_environment_enabled {
+            bool ambient_life;
+            bool ambient_sound;
+        };
+
         std::vector<std::string> all_cut_layers();
         bool can_suspend();
         std::vector<script> diag_active_scripts();
+        bool dynamic_simulation_system_enabled();
+        rv_environment_enabled environment_enabled();
     }
 }

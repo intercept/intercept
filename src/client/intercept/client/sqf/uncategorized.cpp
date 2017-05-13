@@ -5972,5 +5972,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void add_owned_mine(const object &unit_, const object &mine_) {
             host::functions.invoke_raw_binary(__sqf::binary__addownedmine__object__object__ret__nothing, unit_, mine_);
         }
+
+        void add_player_scores(const object &unit_, int kills_infantry_, int kills_soft_, int kills_armor_, int kills_air_, int killed_) {
+            game_value params_right({
+                static_cast<float>(kills_infantry_),
+                static_cast<float>(kills_soft_),
+                static_cast<float>(kills_armor_),
+                static_cast<float>(kills_air_),
+                static_cast<float>(killed_),
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addplayerscores__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

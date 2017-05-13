@@ -5839,5 +5839,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<std::string> get_mission_layers() { //#TODO: Find out if this really returns std::vector<std::string>
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__getmissionlayers__ret__array));
         }
+
+        int get_terrain_grid() {
+            return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__getterraingrid__ret__scalar));
+        }
     }
 }

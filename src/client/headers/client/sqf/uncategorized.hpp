@@ -1683,5 +1683,6 @@ namespace intercept {
         rv_environment_enabled environment_enabled();
         rv_forced_map forced_map();
         std::vector<std::string> get_mission_layers();
+        int get_terrain_grid();
     }
 }

@@ -1732,5 +1732,7 @@ namespace intercept {
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
         bool connect_terminal_to_uav(const object &unit_, const object &uav_);
         int count_enemy(const object &unit_, const std::vector<object> &units_);
+        int count_friendly(const object &unit_, const std::vector<object> &units_);
+        int count_type(const std::string &type_, const object &objects_);
     }
 }

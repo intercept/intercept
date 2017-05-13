@@ -6097,5 +6097,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__countenemy__object__array__ret__scalar, unit_, std::move(units));
         }
+
+        int count_friendly(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countfriendly__object__array__ret__scalar, unit_, std::move(units));
+        }
+
+        int count_type(const std::string &type_, const object &objects_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__counttype__string__array__ret__scalar, type_, std::move(units));
+        }
+        
+        
     }
 }

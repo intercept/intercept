@@ -1719,5 +1719,6 @@ namespace intercept {
         void add_team_member(const team_member &team_, const team_member &member_);
         void animate_source(const object &object_, const std::string &source_, float phase_, bool speed_);
         void animate_source(const object &object_, const std::string &source_, float phase_, float speed_);
+        float animation_source_phase(const object &object_, const std::string &source_);
     }
 }

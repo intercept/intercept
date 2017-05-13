@@ -1693,5 +1693,6 @@ namespace intercept {
         int shown_score_table();
         side side_ambient_life();
         side side_empty();
+        bool user_input_disabled();
     }
 }

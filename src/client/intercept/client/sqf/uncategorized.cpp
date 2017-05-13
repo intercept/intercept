@@ -5879,5 +5879,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         side side_empty() {
             return host::functions.invoke_raw_nular(__sqf::nular__sideempty__ret__side);
         }
+
+        bool user_input_disabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__userinputdisabled__ret__bool);
+        }
     }
 }

@@ -1682,5 +1682,6 @@ namespace intercept {
         bool dynamic_simulation_system_enabled();
         rv_environment_enabled environment_enabled();
         rv_forced_map forced_map();
+        std::vector<std::string> get_mission_layers();
     }
 }

@@ -1671,11 +1671,16 @@ namespace intercept {
             bool ambient_life;
             bool ambient_sound;
         };
+        struct rv_forced_map {
+            bool force_map_forced;
+            bool open_map_forced;
+        };
 
         std::vector<std::string> all_cut_layers();
         bool can_suspend();
         std::vector<script> diag_active_scripts();
         bool dynamic_simulation_system_enabled();
         rv_environment_enabled environment_enabled();
+        rv_forced_map forced_map();
     }
 }

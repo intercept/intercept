@@ -5830,6 +5830,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return rv_environment_enabled({ res[0], res[1] });
         }
 
+        rv_forced_map forced_map() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__forcedmap__ret__array);
+
+            return rv_forced_map({ res[0], res[1] });
+        }
+
 
 
     }

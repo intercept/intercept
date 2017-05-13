@@ -1734,5 +1734,6 @@ namespace intercept {
         int count_enemy(const object &unit_, const std::vector<object> &units_);
         int count_friendly(const object &unit_, const std::vector<object> &units_);
         int count_type(const std::string &type_, const object &objects_);
+        int count_unknown(const std::string &type_, const object &objects_);
     }
 }

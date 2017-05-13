@@ -6007,5 +6007,25 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void add_team_member(const team_member &team_, const team_member &member_) {
             host::functions.invoke_raw_binary(__sqf::binary__addteammember__team_member__team_member__ret__nothing, team_, member_);
         }
+
+        void animate_source(const object &object_, const std::string &source_, float phase_, bool speed_) {
+            game_value params_right({
+                source_,
+                phase_,
+                speed_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__animatesource__object__array__ret__nothing, object_, params_right);
+        }
+
+        void animate_source(const object &object_, const std::string &source_, float phase_, float speed_) {
+            game_value params_right({
+                source_,
+                phase_,
+                speed_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__animatesource__object__array__ret__nothing, object_, params_right);
+        }
     }
 }

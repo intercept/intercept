@@ -1722,5 +1722,6 @@ namespace intercept {
         float animation_source_phase(const object &object_, const std::string &source_);
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_);
         void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_);
+        vector3 building_exit(const object &building_, int index_);
     }
 }

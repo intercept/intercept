@@ -6046,5 +6046,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasturret__object__array__ret__nothing, unit_, params_right);
         }
+
+        vector3 building_exit(const object &building_, int index_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingexit__object__scalar__ret__array, building_, index_));
+        }
     }
 }

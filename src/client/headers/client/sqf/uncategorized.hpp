@@ -1686,5 +1686,6 @@ namespace intercept {
         int get_terrain_grid();
         bool is_multiplayer_solo();
         bool is_remote_executed();
+        bool is_remote_executed_jip();
     }
 }

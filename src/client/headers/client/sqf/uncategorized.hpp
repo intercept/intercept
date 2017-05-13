@@ -1694,5 +1694,6 @@ namespace intercept {
         side side_ambient_life();
         side side_empty();
         bool user_input_disabled();
+        bool visible_score_table();
     }
 }

@@ -5883,5 +5883,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool user_input_disabled() {
             return host::functions.invoke_raw_nular(__sqf::nular__userinputdisabled__ret__bool);
         }
+
+        bool visible_score_table() {
+            return host::functions.invoke_raw_nular(__sqf::nular__visiblescoretable__ret__bool);
+        }
     }
 }

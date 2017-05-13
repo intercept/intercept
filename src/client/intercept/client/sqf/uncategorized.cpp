@@ -5928,5 +5928,27 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenu__control__array__ret__scalar, map_, params_right));
         }
+
+        int add_menu_item(const control &map_, const std::string &menu_, const std::string &text_, const std::string &command_, float priority_) {
+            game_value params_right({
+                menu_,
+                text_,
+                command_,
+                priority_
+            });
+
+            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right));
+        }
+
+        int add_menu_item(const control &map_, int menu_, const std::string &text_, const std::string &command_, float priority_) {
+            game_value params_right({
+                static_cast<float>(menu_),
+                text_,
+                command_,
+                priority_
+            });
+
+            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right));
+        }
     }
 }

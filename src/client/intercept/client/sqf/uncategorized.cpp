@@ -6035,5 +6035,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_) {
             return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__apply__array__code__ret__array, array_, code_));
         }
+
+        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
+            
+            game_value params_right({
+                vehicle_,
+                std::move(turret_path)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__assignasturret__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

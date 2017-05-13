@@ -1715,5 +1715,6 @@ namespace intercept {
         void add_player_scores(const object &unit_, int kills_infantry_, int kills_soft_, int kills_armor_, int kills_air_, int killed_);
         void add_public_variable_eventhandler(const std::string &var_name_, const code &code_);
         void add_public_variable_eventhandler(const std::string &var_name_, const object &target_, const code &code_);
+        void add_resources(const team_member &team_member_, const std::vector<std::string> &resources_);
     }
 }

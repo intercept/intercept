@@ -5812,5 +5812,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__allcutlayers__ret__array));
         }
 
+        bool can_suspend() {
+            return host::functions.invoke_raw_nular(__sqf::nular__cansuspend__ret__bool);
+        }
+
     }
 }

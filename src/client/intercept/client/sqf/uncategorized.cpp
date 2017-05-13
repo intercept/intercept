@@ -5824,16 +5824,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
         }
 
-        rv_environment_enabled environment_enabled() {
+        std::pair<bool,bool> environment_enabled() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__environmentenabled__ret__array);
 
-            return rv_environment_enabled({ res[0], res[1] });
+            return std::pair<bool,bool>({ res[0], res[1] });
         }
 
-        rv_forced_map forced_map() {
+        std::pair<bool, bool> forced_map() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__forcedmap__ret__array);
 
-            return rv_forced_map({ res[0], res[1] });
+            return std::pair<bool, bool>({ res[0], res[1] });
         }
 
         std::vector<std::string> get_mission_layers() { //#TODO: Find out if this really returns std::vector<std::string>

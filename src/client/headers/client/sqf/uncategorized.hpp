@@ -1667,21 +1667,12 @@ namespace intercept {
         std::vector<rv_waypoint> waypoints(const group &group_);
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
-        struct rv_environment_enabled {
-            bool ambient_life;
-            bool ambient_sound;
-        };
-        struct rv_forced_map {
-            bool force_map_forced;
-            bool open_map_forced;
-        };
-
         std::vector<std::string> all_cut_layers();
         bool can_suspend();
         std::vector<script> diag_active_scripts();
         bool dynamic_simulation_system_enabled();
-        rv_environment_enabled environment_enabled();
-        rv_forced_map forced_map();
+        std::pair<bool, bool> environment_enabled();
+        std::pair<bool, bool> forced_map();
         std::vector<std::string> get_mission_layers();
         int get_terrain_grid();
         bool is_multiplayer_solo();

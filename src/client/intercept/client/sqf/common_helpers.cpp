@@ -181,6 +181,15 @@ namespace intercept {
                 return output;
             }
 
+            std::vector<script> __convert_to_scripts_vector(game_value input__) {
+                std::vector<script> output;
+                for (uint32_t i = 0; i < input__.size(); ++i) {
+                    output.push_back(input__[i]);
+                }
+
+                return output;
+            }
+
             std::vector<team_member> __convert_to_team_members_vector(game_value input__) {
                 std::vector<team_member> output;
                 for (uint32_t i = 0; i < input__.size(); ++i) {

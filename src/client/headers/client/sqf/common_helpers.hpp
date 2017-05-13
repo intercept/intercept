@@ -68,6 +68,7 @@ namespace intercept {
             std::vector<float> __convert_to_numbers_vector(game_value input__);
             std::vector<int> __convert_to_integers_vector(game_value input__);
             std::vector<bool> __convert_to_booleans_vector(game_value input__);
+            std::vector<script> __convert_to_scripts_vector(game_value input__);
             std::vector<team_member> __convert_to_team_members_vector(game_value input__);
             std::vector<group> __convert_to_groups_vector(game_value input__);
             std::vector<control> __convert_to_controls_vector(game_value input_);

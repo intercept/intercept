@@ -1715,5 +1715,6 @@ namespace intercept {
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
+        int add_menu(const control &map_, const std::string &text_, float priority_);
     }
 }

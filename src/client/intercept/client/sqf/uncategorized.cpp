@@ -5919,5 +5919,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__addeditorobject__control__array__ret__string, map_, params_right);
         }
+
+        int add_menu(const control &map_, const std::string &text_, float priority_) {
+            game_value params_right({
+                text_,
+                priority_
+            });
+
+            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenu__control__array__ret__scalar, map_, params_right));
+        }
     }
 }

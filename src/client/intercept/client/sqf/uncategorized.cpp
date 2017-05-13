@@ -6112,7 +6112,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__countunknown__object__array__ret__scalar, unit_, std::move(units));
         }
 
-        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false) {
+        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty) {
             game_value params_right({
                 mode_,
                 class_,
@@ -6121,6 +6121,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
             
             return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
+        }
+
+        display create_mission_display(const display &display_, const std::string &mission_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__createmissiondisplay__display__array__ret__display, display_, mission_);
         }
 
     }

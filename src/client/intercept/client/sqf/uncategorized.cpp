@@ -6069,5 +6069,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
+
+        std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__canvehiclecargo__object__object__ret__array, vehicle_, cargo_);
+
+            return std::pair<bool, bool>({ res [0],res [1]});
+        }
     }
 }

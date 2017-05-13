@@ -1716,5 +1716,6 @@ namespace intercept {
         void add_public_variable_eventhandler(const std::string &var_name_, const code &code_);
         void add_public_variable_eventhandler(const std::string &var_name_, const object &target_, const code &code_);
         void add_resources(const team_member &team_member_, const std::vector<std::string> &resources_);
+        void add_team_member(const team_member &team_, const team_member &member_);
     }
 }

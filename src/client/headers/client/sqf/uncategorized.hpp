@@ -1737,5 +1737,6 @@ namespace intercept {
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false);
         display create_mission_display(const display &display_, const std::string &mission_);
+        display create_mp_campaign_display(const display &display_, const std::string &mission_);
     }
 }

@@ -6127,5 +6127,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__createmissiondisplay__display__array__ret__display, display_, mission_);
         }
 
+        display create_mp_campaign_display(const display &display_, const std::string &mission_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__creatempcampaigndisplay__display__string__ret__nothing, display_, mission_);
+        }
+
     }
 }

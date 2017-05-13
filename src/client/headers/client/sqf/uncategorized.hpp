@@ -1688,5 +1688,6 @@ namespace intercept {
         bool is_remote_executed();
         bool is_remote_executed_jip();
         float pixel_grid();
+        float pixel_grid_base();
     }
 }

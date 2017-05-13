@@ -5871,5 +5871,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         int shown_score_table() {
             return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__shownscoretable__ret__scalar));
         }
+
+        side side_ambient_life() {
+            return host::functions.invoke_raw_nular(__sqf::nular__sideambientlife__ret__side);
+        }
     }
 }

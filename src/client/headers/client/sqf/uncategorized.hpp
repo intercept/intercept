@@ -1709,6 +1709,7 @@ namespace intercept {
         int add_menu(const control &map_, const std::string &text_, float priority_);
         int add_menu_item(const control &map_, const std::string &menu_, const std::string &text_, const std::string &command_, float priority_);
         int add_menu_item(const control &map_, int menu_, const std::string &text_, const std::string &command_, float priority_);
-
+        int add_mp_event_handler(const object &object_, const std::string &type_, const std::string &expression_);
+        int add_mp_event_handler(const object &object_, const std::string &type_, const code &expression_);
     }
 }

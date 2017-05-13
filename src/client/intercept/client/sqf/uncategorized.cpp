@@ -5926,7 +5926,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 priority_
             });
 
-            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenu__control__array__ret__scalar, map_, params_right));
+            return host::functions.invoke_raw_binary(__sqf::binary__addmenu__control__array__ret__scalar, map_, params_right);
         }
 
         int add_menu_item(const control &map_, const std::string &menu_, const std::string &text_, const std::string &command_, float priority_) {
@@ -5937,7 +5937,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 priority_
             });
 
-            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right));
+            return host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right);
         }
 
         int add_menu_item(const control &map_, int menu_, const std::string &text_, const std::string &command_, float priority_) {
@@ -5948,7 +5948,25 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 priority_
             });
 
-            return static_cast<float>(host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right));
+            return host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right);
+        }
+
+        int add_mp_event_handler(const object &object_, const std::string &type_, const std::string &expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+        }
+
+        int add_mp_event_handler(const object &object_, const std::string &type_, const code &expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
         }
     }
 }

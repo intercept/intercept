@@ -5843,5 +5843,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         int get_terrain_grid() {
             return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__getterraingrid__ret__scalar));
         }
+
+        bool is_multiplayer_solo() {
+            return host::functions.invoke_raw_nular(__sqf::nular__ismultiplayersolo__ret__bool);
+        }
     }
 }

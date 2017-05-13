@@ -1695,5 +1695,24 @@ namespace intercept {
         side side_empty();
         bool user_input_disabled();
         bool visible_score_table();
+
+        //BINARY -- https://github.com/intercept/intercept/issues/13
+        struct rv_action_params {
+            std::string title;
+            std::string script;
+            game_value arguments;
+            float priority;
+            bool show_window;
+            bool hide_on_use;
+            std::string shortcut;
+            std::string condition;
+            float radius;
+            bool unconscious;
+            std::string text_window_background;
+            std::string text_window_foreground;
+            std::string selection;
+        };
+
+        rv_action_params action_params(const object &entity_, int id_);
     }
 }

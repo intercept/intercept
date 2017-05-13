@@ -5887,5 +5887,27 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool visible_score_table() {
             return host::functions.invoke_raw_nular(__sqf::nular__visiblescoretable__ret__bool);
         }
+
+        //BINARY -- https://github.com/intercept/intercept/issues/13
+
+        rv_action_params action_params(const object &entity_, int id_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__actionparams__object__scalar__ret__array,entity_,static_cast<float>(id_));
+        
+            return rv_action_params({
+                res[0],
+                res[1],
+                res[2],
+                res[3],
+                res[4],
+                res[5],
+                res[6],
+                res[7],
+                res[8],
+                res[9],
+                res[10],
+                res[11],
+                res[12]
+            });
+        }
     }
 }

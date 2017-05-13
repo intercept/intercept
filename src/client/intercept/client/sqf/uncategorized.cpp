@@ -6031,5 +6031,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float animation_source_phase(const object &object_, const std::string &source_) {
             return host::functions.invoke_raw_binary(__sqf::binary__animationsourcephase__object__string__ret__scalar, object_, source_);
         }
+
+        std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_) {
+            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__apply__array__code__ret__array, array_, code_));
+        }
     }
 }

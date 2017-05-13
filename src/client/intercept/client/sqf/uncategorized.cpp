@@ -6075,5 +6075,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return std::pair<bool, bool>({ res [0],res [1]});
         }
+
+        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_) {
+            host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
+        }
     }
 }

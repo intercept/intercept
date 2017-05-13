@@ -1727,5 +1727,6 @@ namespace intercept {
         void button_set_action(const control &control_, const std::string &action_);
         std::vector<game_value> call_extension(const std::string &extension_, const std::string &function_, std::vector<game_value> &arguments_);
         std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_);
+        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_);
     }
 }

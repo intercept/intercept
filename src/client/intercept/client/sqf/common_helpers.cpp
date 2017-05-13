@@ -137,6 +137,13 @@ namespace intercept {
                 return object(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
+            std::vector<game_value> __convert_to_game_value_vector(game_value input_) {
+                std::vector<game_value> output;
+                for (uint32_t i = 0; i < input_.size(); ++i) {
+                    output.push_back(object(input_[i]));
+                }
+                return output;
+            }
 
             std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;

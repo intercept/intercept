@@ -63,6 +63,7 @@ namespace intercept {
 
             object __object_unary_object(unary_function fnc_, const object &obj_);
 
+            std::vector<game_value> __convert_to_game_value_vector(game_value input_;
             std::vector<object> __convert_to_objects_vector(game_value input__);
             std::vector<std::string> __convert_to_strings_vector(game_value input__);
             std::vector<float> __convert_to_numbers_vector(game_value input__);

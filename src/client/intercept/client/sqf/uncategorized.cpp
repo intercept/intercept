@@ -6112,8 +6112,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__countunknown__object__array__ret__scalar, unit_, std::move(units));
         }
 
-        
-        
-        
+        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false) {
+            game_value params_right({
+                mode_,
+                class_,
+                position_,
+                is_empty
+            });
+            
+            return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
+        }
+
     }
 }

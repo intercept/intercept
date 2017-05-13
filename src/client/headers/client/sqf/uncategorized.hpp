@@ -1666,6 +1666,7 @@ namespace intercept {
         std::vector<rv_waypoint> waypoints(const object &player_);
         std::vector<rv_waypoint> waypoints(const group &group_);
 
-        //BINARY -- https://github.com/intercept/intercept/issues/13
+        //NULAR -- https://github.com/intercept/intercept/issues/13
+        std::vector<std::string> all_cut_layers();
     }
 }

@@ -5806,7 +5806,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return waypoints;
         }
 
-        //BINARY -- https://github.com/intercept/intercept/issues/13
+        //NULAR -- https://github.com/intercept/intercept/issues/13
+
+        std::vector<std::string> all_cut_layers() {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__allcutlayers__ret__array));
+        }
 
     }
 }

@@ -1692,5 +1692,6 @@ namespace intercept {
         float pixel_grid_no_ui_scale();
         int shown_score_table();
         side side_ambient_life();
+        side side_empty();
     }
 }

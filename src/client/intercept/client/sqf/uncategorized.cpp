@@ -5875,5 +5875,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         side side_ambient_life() {
             return host::functions.invoke_raw_nular(__sqf::nular__sideambientlife__ret__side);
         }
+        
+        side side_empty() {
+            return host::functions.invoke_raw_nular(__sqf::nular__sideempty__ret__side);
+        }
     }
 }

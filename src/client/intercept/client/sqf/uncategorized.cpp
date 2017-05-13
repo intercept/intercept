@@ -5984,5 +5984,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__addplayerscores__object__array__ret__nothing, unit_, params_right);
         }
+
+        void add_public_variable_eventhandler(const std::string &var_name_, const code &code_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, code_);
+        }
+
+        void add_public_variable_eventhandler(const std::string &var_name_, const object &target_, const code &code_) {
+            game_value params_right({
+                target_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, params_right);
+        }
     }
 }

@@ -1713,5 +1713,7 @@ namespace intercept {
         int add_mp_event_handler(const object &object_, const std::string &type_, const code &expression_);
         void add_owned_mine(const object &unit_, const object &mine_);
         void add_player_scores(const object &unit_, int kills_infantry_, int kills_soft_, int kills_armor_, int kills_air_, int killed_);
+        void add_public_variable_eventhandler(const std::string &var_name_, const code &code_);
+        void add_public_variable_eventhandler(const std::string &var_name_, const object &target_, const code &code_);
     }
 }

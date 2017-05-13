@@ -6054,5 +6054,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 building_pos(const object &building_, int index_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, index_));
         }
+
+        void button_set_action(const control &control_, const std::string &action_) {
+            host::functions.invoke_raw_binary(__sqf::binary__buttonsetaction__control__string__ret__nothing, control_, action_);
+        }
     }
 }

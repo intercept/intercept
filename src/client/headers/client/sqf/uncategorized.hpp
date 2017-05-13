@@ -1668,6 +1668,7 @@ namespace intercept {
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
         std::vector<std::string> all_cut_layers();
-        bool can_suspend()
+        bool can_suspend();
+        std::vector<script> diag_active_scripts();
     }
 }

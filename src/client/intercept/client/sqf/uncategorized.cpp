@@ -5847,5 +5847,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool is_multiplayer_solo() {
             return host::functions.invoke_raw_nular(__sqf::nular__ismultiplayersolo__ret__bool);
         }
+
+        bool is_remote_executed() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isremoteexecuted__ret__bool);
+        }
     }
 }

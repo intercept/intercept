@@ -1685,5 +1685,6 @@ namespace intercept {
         std::vector<std::string> get_mission_layers();
         int get_terrain_grid();
         bool is_multiplayer_solo();
+        bool is_remote_executed();
     }
 }

@@ -5600,7 +5600,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 case 1: params.push_back(std::get<1>(target_));break;
                 case 2: params.push_back(std::get<2>(target_));break;
                 case 3: params.push_back(std::get<3>(target_)); break;
-                case 4: params.push_back(std::get<4>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_).get()); break;
             }
             params.push_back(jip_id_);
 
@@ -5633,7 +5633,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 case 1: params.push_back(std::get<1>(target_)); break;
                 case 2: params.push_back(std::get<2>(target_)); break;
                 case 3: params.push_back(std::get<3>(target_)); break;
-                case 4: params.push_back(std::get<4>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_).get()); break;
             }
             params.push_back(jip_id_);
 

@@ -5867,5 +5867,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float pixel_grid_no_ui_scale() {
             return host::functions.invoke_raw_nular(__sqf::nular__pixelgridnouiscale__ret__scalar);
         }
+
+        int shown_score_table() {
+            return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__shownscoretable__ret__scalar));
+        }
     }
 }

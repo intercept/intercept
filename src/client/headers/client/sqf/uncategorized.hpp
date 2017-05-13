@@ -1690,5 +1690,6 @@ namespace intercept {
         float pixel_grid();
         float pixel_grid_base();
         float pixel_grid_no_ui_scale();
+        int shown_score_table();
     }
 }

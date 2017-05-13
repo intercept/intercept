@@ -6079,5 +6079,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_) {
             host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
         }
+
+        void command_suppressive_fire(const object &unit_, const object &target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
+        }
+
+        void command_suppressive_fire(const object &unit_, const vector3 &target_position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_position_);
+        }
     }
 }

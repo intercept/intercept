@@ -16,6 +16,7 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client\client.hpp"
 #include "shared\client_types.hpp"
+#include <variant> //#TODO move that into shared
 
 using namespace intercept::types;
 
@@ -1545,7 +1546,7 @@ namespace intercept {
 
 
 
-        void log_network_terminate(const float& handle_);
+        void log_network_terminate(float handle_);
 
 
 
@@ -1590,7 +1591,7 @@ namespace intercept {
         bool can_trigger_dynamic_simulation(const object &unit_);
         std::vector<std::string> config_source_addon_list(const config &config_);
         object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
-        void diag_capture_frame(float frame_);
+        void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
         void diag_capture_frame_to_file(float frame_);
         void diag_capture_slow_frame(const std::string &section_, float threshold_);
         void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);
@@ -1627,21 +1628,12 @@ namespace intercept {
         game_value mod_params(const std::string &mod_class_, const std::vector<std::string> &options_);
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
         std::vector<game_value> parse_simple_array(const std::string &string_array_);
-        game_value remote_exec(const std::string &function_name_, int targets_, const std::string &jip_id_);
+        
         game_value remote_exec(const std::string &function_name_, const std::string &jip_id_);
-        game_value remote_exec(const std::string &function_name_, int targets_, const std::string &jip_id_);
-        game_value remote_exec(const std::string &function_name_, const object &target_, const std::string &jip_id_);
-        game_value remote_exec(const std::string &function_name_, const std::string &targets_, const std::string &jip_id_);
-        game_value remote_exec(const std::string &function_name_, const side &targets_, const std::string &jip_id_);
-        game_value remote_exec(const std::string &function_name_, const group &targets_, const std::string &jip_id_);
+        game_value remote_exec(const std::string &function_name_, std::variant<int, object, side, group, std::reference_wrapper<const std::string>> target_, const std::string &jip_id_);
         game_value remote_exec(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, int targets_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, int targets_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, const object &target_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, const std::string &targets_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, const side &targets_, const std::string &jip_id_);
-        game_value remote_exec_call(const std::string &function_name_, const group &targets_, const std::string &jip_id_);
+        game_value remote_exec_call(const std::string &function_name_, std::variant<int, object, side, group, std::reference_wrapper<const std::string>> target_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_);
         void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_); //#TODO: Create class 'rv_eden_entity'
         void remove_all_owned_mines(const object &unit_);

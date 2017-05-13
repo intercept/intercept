@@ -993,6 +993,7 @@ namespace intercept {
 
             //Conversions
             game_value(float val_);
+            game_value(int val_);
             game_value(bool val_);
             game_value(const std::string &val_);
             game_value(const char *);

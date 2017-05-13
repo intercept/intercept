@@ -806,7 +806,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<task> current_tasks(const team_member &team_member_) {
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_))
+            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_));
         }
 
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
@@ -5593,54 +5593,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
         }
 
-        game_value remote_exec(const std::string &function_name_, int targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                static_cast<float>(targets_),
-                jip_id_
-            });
+        game_value remote_exec(const std::string &function_name_, std::variant<int, object, side, group, std::reference_wrapper<const std::string>> target_, const std::string &jip_id_) {
+            auto_array<game_value> params({ function_name_ });
+            switch (target_.index()) {
+                case 0: params.push_back(std::get<0>(target_));break;
+                case 1: params.push_back(std::get<1>(target_));break;
+                case 2: params.push_back(std::get<2>(target_));break;
+                case 3: params.push_back(std::get<3>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_)); break;
+            }
+            params.push_back(jip_id_);
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
-        }
-
-        game_value remote_exec(const std::string &function_name_, const object &target_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                target_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
-        }
-
-        game_value remote_exec(const std::string &function_name_, const std::string &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
-        }
-
-        game_value remote_exec(const std::string &function_name_, const side &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
-        }
-
-        game_value remote_exec(const std::string &function_name_, const group &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, std::move(params));
         }
 
         game_value remote_exec(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_) {
@@ -5662,54 +5626,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
 
-        game_value remote_exec_call(const std::string &function_name_, int targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                static_cast<float>(targets_),
-                jip_id_
-            });
+        game_value remote_exec_call(const std::string &function_name_, std::variant<int, object, side, group, std::reference_wrapper<const std::string>> target_, const std::string &jip_id_) {
+            auto_array<game_value> params({ function_name_ });
+            switch (target_.index()) {
+                case 0: params.push_back(std::get<0>(target_)); break;
+                case 1: params.push_back(std::get<1>(target_)); break;
+                case 2: params.push_back(std::get<2>(target_)); break;
+                case 3: params.push_back(std::get<3>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_)); break;
+            }
+            params.push_back(jip_id_);
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
-        }
-
-        game_value remote_exec_call(const std::string &function_name_, const object &target_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                target_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
-        }
-
-        game_value remote_exec_call(const std::string &function_name_, const std::string &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
-        }
-
-        game_value remote_exec_call(const std::string &function_name_, const side &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
-        }
-
-        game_value remote_exec_call(const std::string &function_name_, const group &targets_, const std::string &jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, std::move(params));
         }
 
         game_value remote_exec_call(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_) {

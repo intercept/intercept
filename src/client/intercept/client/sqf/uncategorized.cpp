@@ -5909,5 +5909,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 res[12]
             });
         }
+
+        std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_) {
+            game_value params_right({
+                type_,
+                values_,
+                subtype_class_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addeditorobject__control__array__ret__string, map_, params_right);
+        }
     }
 }

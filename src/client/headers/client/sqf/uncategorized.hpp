@@ -1687,5 +1687,6 @@ namespace intercept {
         bool is_multiplayer_solo();
         bool is_remote_executed();
         bool is_remote_executed_jip();
+        float pixel_grid();
     }
 }

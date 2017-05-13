@@ -5855,5 +5855,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool is_remote_executed_jip() {
             return host::functions.invoke_raw_nular(__sqf::nular__isremoteexecutedjip__ret__bool);
         }
+
+        float pixel_grid() {
+            return host::functions.invoke_raw_nular(__sqf::nular__pixelgrid__ret__scalar);
+        }
     }
 }

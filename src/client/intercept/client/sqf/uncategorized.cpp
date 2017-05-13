@@ -5968,5 +5968,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
         }
+
+        void add_owned_mine(const object &unit_, const object &mine_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addownedmine__object__object__ret__nothing, unit_, mine_);
+        }
     }
 }

@@ -1730,5 +1730,6 @@ namespace intercept {
         void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_);
         void command_suppressive_fire(const object &unit_, const object &target_);
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
+        bool connect_terminal_to_uav(const object &unit_, const object &uav_);
     }
 }

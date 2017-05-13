@@ -6087,5 +6087,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_position_);
         }
+
+        bool connect_terminal_to_uav(const object &unit_, const object &uav_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__connectterminaltouav__object__object__ret__bool, unit_, uav_);
+        }
     }
 }

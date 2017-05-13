@@ -6091,5 +6091,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool connect_terminal_to_uav(const object &unit_, const object &uav_) {
             return host::functions.invoke_raw_binary(__sqf::binary__connectterminaltouav__object__object__ret__bool, unit_, uav_);
         }
+
+        int count_enemy(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countenemy__object__array__ret__scalar, unit_, std::move(units));
+        }
     }
 }

@@ -6312,5 +6312,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__displayseteventhandler__display__array__ret__nothing, display_, params_right);
         }
+
+        float distance_2d(const object &object1_, const object &object2_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, object1_, object2_);
+        }
+
+        float distance_2d(const vector3 &position1_, const vector3 &position2_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, position1_, position2_);
+        }
+
+        float distance_2d(const object &object_, const vector3 &position_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, object_, position_);
+        }
+
+        float distance_2d(const vector3 &position_, const object &object_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, position_, object_);
+        }
     }
 }

@@ -1764,5 +1764,9 @@ namespace intercept {
         int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
         void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_);
         void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_);
+        float distance_2d(const object &object1_, const object &object2_);
+        float distance_2d(const vector3 &position1_, const vector3 &position2_);
+        float distance_2d(const object &object_, const vector3 &position_);
+        float distance_2d(const vector3 &position_, const object &object_);
     }
 }

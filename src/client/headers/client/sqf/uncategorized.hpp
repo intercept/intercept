@@ -1783,5 +1783,7 @@ namespace intercept {
         void do_follow(const std::vector<object> &units_, const object &target_);
         void do_fsm(const object &unit_, const std::string &fsm_name_, const vector3 &position_, const object &target_);
         void do_fsm(const std::vector<object> &units_, const std::string &fsm_name_, const vector3 &position_, const object &target_);
+        void do_move(const object &unit_, const vector3 &position_);
+        void do_move(const std::vector<object> &units_, const vector3 &position_);
     }
 }

@@ -6420,5 +6420,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__dofsm__object_array__array__ret__nothing, std::move(units), params_right);
         }
+
+        void do_move(const object &unit_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__domove__object_array__array__ret__nothing, unit_, position_);
+        }
+
+        void do_move(const std::vector<object> &units_, const vector3 &position_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__domove__object_array__array__ret__nothing, std::move(units), position_);
+        }
     }
 }

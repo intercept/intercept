@@ -1745,5 +1745,6 @@ namespace intercept {
         std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        void custom_radio(const object &unit_, int &channel_, std::string &message_);
     }
 }

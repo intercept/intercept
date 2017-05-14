@@ -1785,5 +1785,9 @@ namespace intercept {
         void do_fsm(const std::vector<object> &units_, const std::string &fsm_name_, const vector3 &position_, const object &target_);
         void do_move(const object &unit_, const vector3 &position_);
         void do_move(const std::vector<object> &units_, const vector3 &position_);
+        void do_suppressive_fire(const object &unit_, const object &target_);
+        void do_suppressive_fire(const object &unit_, const vector3 &position_);
+        void do_suppressive_fire(const std::vector<object> &units_, const object &target_);
+        void do_suppressive_fire(const std::vector<object> &units_, const vector3 &position_);
     }
 }

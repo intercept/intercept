@@ -1747,5 +1747,6 @@ namespace intercept {
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void custom_radio(const object &unit_, int channel_, std::string &message_);
         int cut_fade_out(const std::string &layer_name_, float duration_);
+        int cut_fade_out(int layer_, float duration_);
     }
 }

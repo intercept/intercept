@@ -6175,5 +6175,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         int cut_fade_out(const std::string &layer_name_, float duration_) {
             host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
         }
+
+        int cut_fade_out(int layer_, float duration_) {
+            host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__scalar__scalar__ret__nothing, static_cast<float>(layer_), duration_);
+        }
     }
 }

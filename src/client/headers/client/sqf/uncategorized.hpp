@@ -1755,5 +1755,6 @@ namespace intercept {
         int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
         int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
         void delete_editor_object(const control &map_, const std::string &object_);
+        void delete_group_when_empty(const group &group_, bool delete_);
     }
 }

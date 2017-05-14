@@ -4,7 +4,7 @@
 #include <future>
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
-
+#pragma comment (lib, "version.lib") //GetFileVersionInfoSize
 template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
 template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
 template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
@@ -205,13 +205,41 @@ namespace intercept {
             return reinterpret_cast<char*>(type + 9);
         };
 
+        //Shamelessly copied from Dedmen's Hack :3
+        CHAR fileName[_MAX_PATH];
+        DWORD size = GetModuleFileName(0, fileName, _MAX_PATH);
+        fileName[size] = NULL;
+        DWORD handle = 0;
+        size = GetFileVersionInfoSize(fileName, &handle);
+        BYTE* versionInfo = new BYTE[size];
+        if (!GetFileVersionInfo(fileName, handle, size, versionInfo)) {
+            delete[] versionInfo;
+        }
+        UINT    			len = 0;
+        VS_FIXEDFILEINFO*   vsfi = NULL;
+        VerQueryValue(versionInfo, "\\", (void**) &vsfi, &len);
+        short version = HIWORD(vsfi->dwFileVersionLS);//131
+        short version1 = LOWORD(vsfi->dwFileVersionLS);//646
+        short version2 = HIWORD(vsfi->dwFileVersionMS);// 1
+        short version3 = LOWORD(vsfi->dwFileVersionMS);// 48
+        delete[] versionInfo;
+
+
+
+
         //Start them async before doing the other stuff so they are done when we are done parsing the script functions
 
         auto future_stringOffset = std::async([&]() {return findInMemory("tbb4malloc_bi", 13); });
+        //1.71 sig changed
+        auto future_unary_construct =
+            (version3 > 68) ?
+            std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxx"); })
+            :
+            std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x83\xcb\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x6b\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcd\xf0\x0f\xc1\x08\x89\x06\x85\xd2\x74\x00\x8b\xc3\xf0\x0f\xc1\x02\x48\x75", "xxx?xxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxxxxxxx?xxxxxxxx"); })
+            ;
 
         auto future_operator_construct = std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x57\x83\xcf\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x5f\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcb\xf0\x0f\xc1\x08", "xxx?xxxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxx"); });
-        auto future_unary_construct = std::async([&]() {return findInMemoryPattern("\x8b\x44\x24\x00\x53\x55\x56\x83\xcb\x00\x8b\xf1\xc7\x06\x00\x00\x00\x00\x8d\x6b\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x16\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcd\xf0\x0f\xc1\x08\x89\x06\x85\xd2\x74\x00\x8b\xc3\xf0\x0f\xc1\x02\x48\x75", "xxx?xxxxx?xxxx????xx?xxx?xx????xxxx?xxx?xxxxxxxxxxx?xxxxxxxx"); });
-
+         
         //make sure insert patterns are long enough. they have to include the offset after the target of the first jmp instruction
         auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
         auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });

@@ -283,34 +283,38 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
+            //#Update 1.71 or 1.70
+            //uint32_t placeholder9;//0x24
+            //uint32_t placeholder10;//0x28
+            //uint32_t placeholder11;//0x2C
         };
         class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
-            uint32_t placeholder9;//0x24
+            uint32_t placeholder12;//0x30
         public:
             const r_string _name2;//0x28 this is (tolower name)
             unary_operator * _operator;//0x2C
-            uint32_t placeholder10;//0x30 RString to something
+            uint32_t placeholder_10;//0x30 RString to something
             const r_string _description;//0x34
             const r_string _example;
             const r_string _example2;
-            const r_string placeholder11;
-            const r_string placeholder12;
+            const r_string placeholder_11;
+            const r_string placeholder_12;
             const r_string _category; //0x48
                                         //const rv_string* placeholder13;
         };
         class gsOperator : public gsFuncBase {
-            uint32_t placeholder9;//0x24  JNI function
-        public:
+            uint32_t placeholder12;//0x30  JNI function
+        public:                  //#TODO fix offsets in comments
             r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder10; //0x2C Small int 0-5  priority
+            int32_t placeholder_10; //0x2C Small int 0-5  priority
             binary_operator * _operator;//0x30
             r_string _leftType;//0x34 Description of left hand side parameter
             r_string _rightType;//0x38 Description of right hand side parameter
             r_string _description;//0x3C
             r_string _example;//0x40
-            r_string placeholder11;//0x44
+            r_string placeholder_11;//0x44
             r_string _version;//0x48 some version number
-            r_string placeholder12;//0x4C
+            r_string placeholder_12;//0x4C
             r_string _category; //0x50
         };
         class gsNular : public gsFuncBase {
@@ -321,7 +325,7 @@ namespace intercept {
             const r_string _example;
             const r_string _example2;
             const r_string _version;//0x38 some version number
-            const r_string placeholder10;
+            const r_string placeholder_10;
             const r_string _category; //0x40
             uint32_t placeholder11;//0x44
         };

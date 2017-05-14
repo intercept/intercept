@@ -545,7 +545,7 @@ namespace intercept {
         game_value::operator vector2() const {
             if (!data) return {};
             auto& array = data->get_as_array();
-            if (array.count() == 3)
+            if (array.count() == 2)
                 return vector2{ array[0], array[1] };
             return {};
         }

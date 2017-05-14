@@ -6223,5 +6223,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__cutrsc__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
+
+        int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                text_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__cuttext__string__array__ret__scalar, layer_name_, params_right);
+        }
     }
 }

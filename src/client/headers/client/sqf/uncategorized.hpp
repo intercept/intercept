@@ -1742,5 +1742,6 @@ namespace intercept {
         task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
         object create_site(const std::string &type_, const vector3 &pos_);
         void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
+        std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
     }
 }

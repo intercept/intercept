@@ -1777,9 +1777,11 @@ namespace intercept {
         float distance_sqr(const vector3 &position_, const location &location_);
         void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
         void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
-        void  do_fire(const object &unit_, const object &target_);
-        void  do_fire(const std::vector<object> &units_, const object &target_);
-        void  do_follow(const object &unit_, const object &target_);
-        void  do_follow(const std::vector<object> &units_, const object &target_);
+        void do_fire(const object &unit_, const object &target_);
+        void do_fire(const std::vector<object> &units_, const object &target_);
+        void do_follow(const object &unit_, const object &target_);
+        void do_follow(const std::vector<object> &units_, const object &target_);
+        void do_fsm(const object &unit_, const std::string &fsm_name_, const vector3 &position_, const object &target_);
+        void do_fsm(const std::vector<object> &units_, const std::string &fsm_name_, const vector3 &position_, const object &target_);
     }
 }

@@ -1779,5 +1779,7 @@ namespace intercept {
         void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
         void  do_fire(const object &unit_, const object &target_);
         void  do_fire(const std::vector<object> &units_, const object &target_);
+        void  do_follow(const object &unit_, const object &target_);
+        void  do_follow(const std::vector<object> &units_, const object &target_);
     }
 }

@@ -1768,5 +1768,9 @@ namespace intercept {
         float distance_2d(const vector3 &position1_, const vector3 &position2_);
         float distance_2d(const object &object_, const vector3 &position_);
         float distance_2d(const vector3 &position_, const object &object_);
+        float distance_sqr(const object &object1_, const object &object2_);
+        float distance_sqr(const vector3 &position1_, const vector3 &position2_);
+        float distance_sqr(const object &object_, const vector3 &position_);
+        float distance_sqr(const vector3 &position_, const object &object_);
     }
 }

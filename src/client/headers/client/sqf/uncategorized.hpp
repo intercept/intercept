@@ -1791,5 +1791,9 @@ namespace intercept {
         void do_suppressive_fire(const std::vector<object> &units_, const vector3 &position_);
         void do_target(const object &unit_, const object &target_);
         void do_target(const std::vector<object> &units_, const object &target_);
+        void do_watch(const object &unit_, const vector3 &position_);
+        void do_watch(const std::vector<object> &units_, const vector3 &position_);
+        void do_watch(const object &unit_, const object &target_);
+        void do_watch(const std::vector<object> &units_, const object &target_);
     }
 }

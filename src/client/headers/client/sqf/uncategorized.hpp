@@ -1758,5 +1758,6 @@ namespace intercept {
         void delete_group_when_empty(const group &group_, bool delete_);
         void delete_resources(const object &team_member_, const std::vector<std::string> resources_);
         void delete_vehicle_crew(const object &vehicle_, const object &unit_);
+        void disable_collision_with(const object &object1_, const object &object2_);
     }
 }

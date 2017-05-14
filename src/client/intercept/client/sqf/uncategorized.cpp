@@ -6187,8 +6187,19 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 speed_,
                 show_on_map_
             });
-            
+
             host::functions.invoke_raw_binary(__sqf::binary__cutobj__string__array__ret__scalar, layer_name_, params_right);
+        }
+
+        int cut_obj(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__cutobj__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
     }
 }

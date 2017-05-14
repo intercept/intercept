@@ -6173,11 +6173,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         int cut_fade_out(const std::string &layer_name_, float duration_) {
-            host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
         }
 
         int cut_fade_out(int layer_, float duration_) {
-            host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__scalar__scalar__ret__nothing, static_cast<float>(layer_), duration_);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__scalar__scalar__ret__nothing, static_cast<float>(layer_), duration_);
         }
 
         int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6188,7 +6188,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cutobj__string__array__ret__scalar, layer_name_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutobj__string__array__ret__scalar, layer_name_, params_right);
         }
 
         int cut_obj(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6199,7 +6199,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cutobj__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutobj__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
 
         int cut_rsc(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6210,7 +6210,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cutrsc__string__array__ret__scalar, layer_name_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutrsc__string__array__ret__scalar, layer_name_, params_right);
         }
 
         int cut_rsc(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6221,7 +6221,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cutrsc__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cutrsc__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
 
         int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6232,7 +6232,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cuttext__string__array__ret__scalar, layer_name_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cuttext__string__array__ret__scalar, layer_name_, params_right);
         }
 
         int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_) {
@@ -6243,7 +6243,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 show_on_map_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__cuttext__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__cuttext__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
     }
 }

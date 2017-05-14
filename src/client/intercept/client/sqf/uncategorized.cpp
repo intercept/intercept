@@ -6137,5 +6137,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__createsimpletask__object__array__ret__task, unit_, params_right);
         }
 
+        object create_site(const std::string &type_, const vector3 &pos_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__createsite__string__array__ret__object, type_, pos_);
+        }
+
     }
 }

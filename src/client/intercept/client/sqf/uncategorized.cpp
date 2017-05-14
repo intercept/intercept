@@ -6265,7 +6265,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void disable_collision_with(const object &object1_, const object &object2_) {
-            host::functions.invoke_raw_binary(__sqf::binary__disablecollisionwith__object__object__ret__nothing, vehicle_, unit_);
+            host::functions.invoke_raw_binary(__sqf::binary__disablecollisionwith__object__object__ret__nothing, object1_, object2_);
+        }
+
+        void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_) {
+            game_value params_right({
+                uav_,
+                check_all_items_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__disableuavconnectability__object__array__ret__nothing, object_, params_right);
         }
     }
 }

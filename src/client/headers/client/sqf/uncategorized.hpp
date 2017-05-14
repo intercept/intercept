@@ -1775,5 +1775,8 @@ namespace intercept {
         float distance_sqr(const location &location1_, const location &location2_);
         float distance_sqr(const location &location_, const vector3 &position_);
         float distance_sqr(const vector3 &position_, const location &location_);
+        void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
+        void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
+
     }
 }

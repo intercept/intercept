@@ -6356,5 +6356,27 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float distance_sqr(const vector3 &position_, const location &location_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__array__location__ret__scalar, position_, location_);
         }
+
+        void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_) {
+            game_value params_right({
+                position_,
+                radius_,
+                static_cast<float>(rounds_)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__doartilleryfire__object_array__array__ret__nothing, unit_, params_right);
+        }
+
+        void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+            
+            game_value params_right({
+                position_,
+                radius_,
+                static_cast<float>(rounds_)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__doartilleryfire__object_array__array__ret__nothing, std::move(units), params_right);
+        }
     }
 }

@@ -6163,13 +6163,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__currentweaponturret__object__array__ret__string, vehicle_, std::move(turret_path));
         }
 
-        void custom_radio(const object &unit_, int &channel_, std::string &message_) {
+        void custom_radio(const object &unit_, int channel_, std::string &message_) {
             game_value params_right({
                 static_cast<float>(channel_),
                 message_
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__customradio__object__array__ret__nothing, unit_, params_right);
+        }
+
+        int cut_fade_out(const std::string &layer_name_, float duration_) {
+            host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
         }
     }
 }

@@ -6283,7 +6283,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 code_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
         }
 
         int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_) {

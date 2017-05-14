@@ -1753,5 +1753,6 @@ namespace intercept {
         int cut_rsc(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
         int cut_rsc(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
         int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
     }
 }

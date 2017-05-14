@@ -6259,5 +6259,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             host::functions.invoke_raw_binary(__sqf::binary__deleteresources__team_member__array__ret__nothing, team_member_, std::move(resources));
         }
+
+        void delete_vehicle_crew(const object &vehicle_,const object &unit_) {
+            host::functions.invoke_raw_binary(__sqf::binary__deletevehiclecrew__object__object__ret__nothing, vehicle_, unit_);
+        }
     }
 }

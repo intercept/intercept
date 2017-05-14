@@ -1763,5 +1763,6 @@ namespace intercept {
         int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_);
         int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
         void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_);
+        void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_);
     }
 }

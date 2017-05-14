@@ -6303,5 +6303,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__displayremoveeventhandler__display__array__ret__nothing, display_, params_right);
         }
+
+        void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayseteventhandler__display__array__ret__nothing, display_, params_right);
+        }
     }
 }

@@ -1772,5 +1772,6 @@ namespace intercept {
         float distance_sqr(const vector3 &position1_, const vector3 &position2_);
         float distance_sqr(const object &object_, const vector3 &position_);
         float distance_sqr(const vector3 &position_, const object &object_);
+        float distance_sqr(const location &location1_, const location &location2_);
     }
 }

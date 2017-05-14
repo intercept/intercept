@@ -6344,5 +6344,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float distance_sqr(const vector3 &position_, const object &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, position_, object_);
         }
+
+        float distance_sqr(const location &location1_, const location &location2_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__location__ret__scalar, location1_, location2_);
+        }
     }
 }

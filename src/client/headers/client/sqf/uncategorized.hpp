@@ -1741,5 +1741,6 @@ namespace intercept {
         display create_mp_campaign_display(const display &display_, const std::string &mission_);
         task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
         object create_site(const std::string &type_, const vector3 &pos_);
+        void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
     }
 }

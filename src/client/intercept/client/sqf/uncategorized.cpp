@@ -6379,21 +6379,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__doartilleryfire__object_array__array__ret__nothing, std::move(units), params_right);
         }
 
-        void  do_fire(const object &unit_, const object &target_) {
+        void do_fire(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__dofire__object_array__object__ret__nothing, unit_, target_);
         }
 
-        void  do_fire(const std::vector<object> &units_, const object &target_) {
+        void do_fire(const std::vector<object> &units_, const object &target_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__dofire__object_array__object__ret__nothing, std::move(units), target_);
         }
 
-        void  do_follow(const object &unit_, const object &target_) {
+        void do_follow(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__dofollow__object_array__object__ret__nothing, unit_, target_);
         }
 
-        void  do_follow(const std::vector<object> &units_, const object &target_) {
+        void do_follow(const std::vector<object> &units_, const object &target_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__dofollow__object_array__object__ret__nothing, std::move(units), target_);

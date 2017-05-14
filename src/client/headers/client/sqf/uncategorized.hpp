@@ -1748,5 +1748,6 @@ namespace intercept {
         void custom_radio(const object &unit_, int channel_, std::string &message_);
         int cut_fade_out(const std::string &layer_name_, float duration_);
         int cut_fade_out(int layer_, float duration_);
+        int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
     }
 }

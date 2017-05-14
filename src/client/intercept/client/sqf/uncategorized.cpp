@@ -6276,5 +6276,23 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__disableuavconnectability__object__array__ret__nothing, object_, params_right);
         }
+
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+        }
+
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+        }
     }
 }

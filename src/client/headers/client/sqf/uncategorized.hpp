@@ -1760,5 +1760,7 @@ namespace intercept {
         void delete_vehicle_crew(const object &vehicle_, const object &unit_);
         void disable_collision_with(const object &object1_, const object &object2_);
         void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_);
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_);
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
     }
 }

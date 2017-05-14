@@ -6292,7 +6292,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 code_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+        }
+
+        void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_) {
+            game_value params_right({
+                event_name_,
+                static_cast<float>(id_)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayremoveeventhandler__display__array__ret__nothing, display_, params_right);
         }
     }
 }

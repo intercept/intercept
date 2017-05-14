@@ -1762,5 +1762,6 @@ namespace intercept {
         void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_);
         int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_);
         int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
+        void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_);
     }
 }

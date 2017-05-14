@@ -6245,5 +6245,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__cuttext__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
         }
+
+        void delete_editor_object(const control &map_, const std::string &object_) {
+            host::functions.invoke_raw_binary(__sqf::binary__deleteeditorobject__control__string__ret__any, map_, object_);
+        }
     }
 }

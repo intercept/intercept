@@ -6254,9 +6254,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__deletegroupwhenempty__group__bool__ret__nothing, group_, delete_);
         }
 
-        void delete_resources(const object &team_member_, const std::vector<std::string> resources_) {
+        void delete_resources(const team_member &team_member_, const std::vector<std::string> resources_) {
             auto_array<game_value> resources(resources_.begin(), resources_.end());
-
+            
             host::functions.invoke_raw_binary(__sqf::binary__deleteresources__team_member__array__ret__nothing, team_member_, std::move(resources));
         }
     }

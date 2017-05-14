@@ -1744,5 +1744,6 @@ namespace intercept {
         void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
         std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
     }
 }

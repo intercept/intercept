@@ -6131,11 +6131,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__creatempcampaigndisplay__display__string__ret__nothing, display_, mission_);
         }
 
-        task create_simple_task(const object &unit_, const std::string &name_, const task &parent_task_) {
-            game_value params_right({
-                name_,
-                parent_task_
-            });
+        task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_) {
+            game_value params_right(parent_task_.has_value() ? game_value{ name_, *parent_task_ } : game_value{ name_ });
 
             return host::functions.invoke_raw_binary(__sqf::binary__createsimpletask__object__array__ret__task, unit_, params_right);
         }

@@ -17,6 +17,7 @@ https://github.com/NouberNou/intercept
 #include "client\client.hpp"
 #include "shared\client_types.hpp"
 #include <variant> //#TODO move that into shared
+#include <optional>
 
 using namespace intercept::types;
 
@@ -1738,6 +1739,6 @@ namespace intercept {
         game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false);
         display create_mission_display(const display &display_, const std::string &mission_);
         display create_mp_campaign_display(const display &display_, const std::string &mission_);
-        task create_simple_task(const object &unit_, const std::string &name_, const task &parent_task_);
+        task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
     }
 }

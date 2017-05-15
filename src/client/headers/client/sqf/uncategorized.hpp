@@ -1816,5 +1816,6 @@ namespace intercept {
         void enable_uav_connect_ability(const object &unit_, const object &uav_, bool check_all_items_);
         void enable_vehicle_cargo(const object &vehicle_, bool enable_);
         void enable_weapon_disassembly(const object &unit_, bool enable_);
+        void eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_);
     }
 }

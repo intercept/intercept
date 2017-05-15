@@ -6707,12 +6707,29 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__findcover__object__array__ret__object, object_, std::move(params_right));
         }
 
-        /*              #TODO: Find out about the usage of this command
+        /*             
+        #TODO: Find out about the usage of this command
+        binary__findeditorobject__control__array__ret__string
+        binary__findeditorobject__control__any__ret__string
+        
         std::string find_editor_object(const control &map_, const ) {
             return host::functions.invoke_raw_binary(__sqf::binary__findeditorobject__control__array__ret__string, object_, std::move(params_right));
         }
         */
 
+        std::string find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
+            auto_array<game_value> params_right({
+                min_distance_,
+                max_distance_
+            });
+
+            if (vehicle_type_.has_value()) params_right.push_back(*vehicle_type_);
+            
+            switch (center_.index()) {
+            case 0: params_right.push_back(std::get<0>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
+            case 1: params_right.push_back(std::get<1>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
+            }
+        }
 
     }
 }

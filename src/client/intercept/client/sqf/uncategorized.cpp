@@ -6517,7 +6517,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__drawellipse__control__array__ret__nothing, map_, std::move(params_right));
         }
 
-        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_) {
+        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_) {
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
@@ -6533,6 +6533,26 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             params_right.push_back(color_);
 
             host::functions.invoke_raw_binary(__sqf::binary__drawline__control__array__ret__nothing, map_, std::move(params_right));
+        }
+
+        void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const std::string &param_type_, const std::string &line_type_, rv_color &color_) {
+            auto_array<game_value> params_right;
+
+            switch (from_.index()) {
+            case 0: params_right.push_back(std::get<0>(from_).get()); break;
+            case 1: params_right.push_back(std::get<1>(from_).get()); break;
+            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+            }
+            switch (to_.index()) {
+            case 0: params_right.push_back(std::get<0>(to_).get()); break;
+            case 1: params_right.push_back(std::get<1>(to_).get()); break;
+            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+            }
+            params_right.push_back(param_type_);
+            params_right.push_back(line_type_);
+            params_right.push_back(color_);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawlink__control__array__ret__nothing, map_, std::move(params_right));
         }
     }
 }

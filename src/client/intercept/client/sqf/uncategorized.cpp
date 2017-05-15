@@ -6480,5 +6480,22 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__dowatch__object_array__object__ret__nothing, std::move(units), target_);
         }
+
+        void draw_arrow(const control &map_,std::variant<std::reference_wrapper<const vector2>,std::reference_wrapper<const vector3>,std::reference_wrapper<const object>> from_,std::variant<std::reference_wrapper<const vector2>,std::reference_wrapper<const vector3>,std::reference_wrapper<const object>> to_,const rv_color &color_) {
+            auto_array<game_value> params_right;
+
+            switch (from_.index()) {
+            case 0: params_right.push_back(std::get<0>(from_).get()); break;
+            case 1: params_right.push_back(std::get<1>(from_).get()); break;
+            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+            }
+            switch (to_.index()) {
+            case 0: params_right.push_back(std::get<0>(to_).get()); break;
+            case 1: params_right.push_back(std::get<1>(to_).get()); break;
+            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawarrow__control__array__ret__nothing, map_, std::move(params_right));
+        }
     }
 }

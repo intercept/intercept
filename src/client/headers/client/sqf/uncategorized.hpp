@@ -1795,5 +1795,6 @@ namespace intercept {
         void do_watch(const std::vector<object> &units_, const vector3 &position_);
         void do_watch(const object &unit_, const object &target_);
         void do_watch(const std::vector<object> &units_, const object &target_);
+        void draw_arrow(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
     }
 }

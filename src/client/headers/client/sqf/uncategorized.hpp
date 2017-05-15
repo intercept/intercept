@@ -1802,5 +1802,7 @@ namespace intercept {
         void draw_location(const control &map_, const location &location_);
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
         game_value edit_object(const control &map_, const std::string &object_);
+        void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_);
+
     }
 }

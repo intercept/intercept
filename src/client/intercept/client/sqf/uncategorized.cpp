@@ -6573,5 +6573,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value edit_object(const control &map_, const std::string &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__editobject__control__string__ret__any, map_, object_);
         }
+
+        void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_) {
+            game_value params_right({
+                event_type_,
+                event_function_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__editorseteventhandler__control__array__ret__nothing, map_, params_right);
+        }
     }
 }

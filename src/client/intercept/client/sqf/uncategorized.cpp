@@ -6554,5 +6554,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__drawlink__control__array__ret__nothing, map_, std::move(params_right));
         }
+
+        void draw_location(const control &map_, const location &location_) {
+            host::functions.invoke_raw_binary(__sqf::binary__drawlocation__control__location__ret__nothing, map_, location_);
+        }
     }
 }

@@ -6676,5 +6676,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         script exec_vm(const game_value &arguments_, const std::string &file_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__execvm__any__string__ret__script, arguments_, file_name_);
         }
+
+        void fade_music(float time_, float volume_) {
+            host::functions.invoke_raw_binary(__sqf::binary__fademusic__scalar__scalar__ret__nothing, time_, volume_);
+        }
+
+        void fade_radio(float time_, float volume_) {
+            host::functions.invoke_raw_binary(__sqf::binary__faderadio__scalar__scalar__ret__nothing, time_, volume_);
+        }
+
+        void fade_sound(float time_, float volume_) {
+            host::functions.invoke_raw_binary(__sqf::binary__fadesound__scalar__scalar__ret__nothing, time_, volume_);
+        }
+
+        void fade_speech(float time_, float volume_) {
+            host::functions.invoke_raw_binary(__sqf::binary__fadespeech__scalar__scalar__ret__nothing, time_, volume_);
+        }
     }
 }

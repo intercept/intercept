@@ -1821,5 +1821,9 @@ namespace intercept {
         game_value exec_editor_script(const control &map_, std::string &object_, std::string &script_);
         int exec_fsm(const game_value &arguments_, const std::string &file_name_);
         script exec_vm(const game_value &arguments_, const std::string &file_name_);
+        void fade_music(float time_, float volume_);
+        void fade_radio(float time_, float volume_);
+        void fade_sound(float time_, float volume_);
+        void fade_speech(float time_, float volume_);
     }
 }

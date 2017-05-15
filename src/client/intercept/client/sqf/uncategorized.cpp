@@ -6653,7 +6653,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_) {
-            host::functions.invoke_raw_binary(__sqf::binary__evalobjectargument__control__array__ret__any, object_, argument_);
+            return host::functions.invoke_raw_binary(__sqf::binary__evalobjectargument__control__array__ret__any, object_, argument_);
         }
 
         void exec(const game_value &argument_, const std::string &script_) {
@@ -6717,7 +6717,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
         */
 
-        std::string find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
+        vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
             auto_array<game_value> params_right({
                 min_distance_,
                 max_distance_
@@ -6725,28 +6725,33 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             if (vehicle_type_.has_value()) params_right.push_back(*vehicle_type_);
 
-            switch (center_.index()) {
-            case 0: params_right.push_back(std::get<0>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
-            case 1: params_right.push_back(std::get<1>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
+            if (center_.index() == 0) {
+                return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
+            }
+            else {
+                return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
             }
         }
 
-        std::string find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
-            auto_array<game_value> params_right({
+        bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
+            game_value params_right({
                 radius_,
                 max_distance_
             });
 
-            switch (center_.index()) {
-            case 0: params_right.push_back(std::get<0>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), std::move(params_right));
-            case 1: params_right.push_back(std::get<1>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), std::move(params_right));
+            if (center_.index() == 0) {
+                return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), params_right);
+            }
+            else {
+                return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), params_right);
             }
         }
 
         object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_) {
-            switch (position_.index()) {
-            case 0: return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<0>(position_).get());
-            case 1: return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<0>(position_).get());
+            if (position_.index() == 0) {
+                return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<0>(position_).get());
+            } else {
+                return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<1>(position_).get());
             }
         }
 

@@ -1808,5 +1808,7 @@ namespace intercept {
         void enable_collision_with(const object &object1_, const object &object2_);
         void enable_dynamic_simulation(const object &object_, bool enable_);
         void enable_dynamic_simulation(const group &group_, bool enable_);
+        void enable_gun_lights(const object &unit_, bool &enable_);
+        void enable_gun_lights(const group &group_, bool &enable_);
     }
 }

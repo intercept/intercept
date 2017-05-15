@@ -6558,5 +6558,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void draw_location(const control &map_, const location &location_) {
             host::functions.invoke_raw_binary(__sqf::binary__drawlocation__control__location__ret__nothing, map_, location_);
         }
+
+        void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_) {
+            auto_array<game_value> polygon(polygon_.begin(), polygon_.end());
+
+            game_value params_right({
+                std::move(polygon),
+                color_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawpolygon__control__array__ret__nothing, map_, params_right);
+        }
     }
 }

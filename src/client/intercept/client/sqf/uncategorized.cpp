@@ -6652,7 +6652,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__enableweapondisassembly__object__bool__ret__nothing, unit_, enable_);
         }
 
-        void eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_) {
+        game_value eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_) {
             host::functions.invoke_raw_binary(__sqf::binary__evalobjectargument__control__array__ret__any, object_, argument_);
         }
     }

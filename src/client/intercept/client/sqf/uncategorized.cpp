@@ -6586,5 +6586,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_attack(const group &group_, bool enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enableattack__object_group__bool__ret__nothing, group_, enable_);
         }
+
+        void enable_channel(int channel_, bool chat_, bool voice_over_net_) {
+            game_value params_right({
+                chat_,
+                voice_over_net_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__enablechannel__scalar__array__ret__nothing, channel_, params_right);
+        }
     }
 }

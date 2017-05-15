@@ -1804,5 +1804,6 @@ namespace intercept {
         game_value edit_object(const control &map_, const std::string &object_);
         void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_);
         void enable_attack(const group &group_, bool enable_);
+        void enable_channel(int channel_, bool chat_, bool voice_over_net_);
     }
 }

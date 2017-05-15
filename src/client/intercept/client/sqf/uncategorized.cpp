@@ -6706,5 +6706,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__findcover__object__array__ret__object, object_, std::move(params_right));
         }
+
+        /*              #TODO: Find out about the usage of this command
+        std::string find_editor_object(const control &map_, const ) {
+            return host::functions.invoke_raw_binary(__sqf::binary__findeditorobject__control__array__ret__string, object_, std::move(params_right));
+        }
+        */
+
+
     }
 }

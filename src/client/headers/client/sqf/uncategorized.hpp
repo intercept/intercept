@@ -1820,5 +1820,6 @@ namespace intercept {
         void exec(const game_value &argument_, const std::string &script_);
         game_value exec_editor_script(const control &map_, std::string &object_, std::string &script_);
         int exec_fsm(const game_value &arguments_, const std::string &file_name_);
+        script exec_vm(const game_value &arguments_, const std::string &file_name_);
     }
 }

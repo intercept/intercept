@@ -6634,5 +6634,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__enablepersonturret__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void enable_uav_connect_ability(const object &unit_, const object &uav_, bool check_all_items_) {
+            game_value params_right({
+                uav_,
+                check_all_items_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__enableuavconnectability__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

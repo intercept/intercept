@@ -6692,5 +6692,19 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void fade_speech(float time_, float volume_) {
             host::functions.invoke_raw_binary(__sqf::binary__fadespeech__scalar__scalar__ret__nothing, time_, volume_);
         }
+
+        object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_) {
+            auto_array<game_value> params_right({
+                position_,
+                hide_position_,
+                max_dist_
+            });
+           
+            if (min_dist_.has_value()) params_right.push_back(*min_dist_);
+            if (visible_position_.has_value()) params_right.push_back(*visible_position_);
+            if (ignore_object_.has_value()) params_right.push_back(*ignore_object_);
+
+            return host::functions.invoke_raw_binary(__sqf::binary__findcover__object__array__ret__object, object_, std::move(params_right));
+        }
     }
 }

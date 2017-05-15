@@ -1825,5 +1825,7 @@ namespace intercept {
         void fade_radio(float time_, float volume_);
         void fade_sound(float time_, float volume_);
         void fade_speech(float time_, float volume_);
+        object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_);
+
     }
 }

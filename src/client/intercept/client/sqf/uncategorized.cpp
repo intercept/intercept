@@ -6599,5 +6599,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_collision_with(const object &object1_, const object &object2_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablecollisionwith__object__object__ret__nothing, object1_, object2_);
         }
+
+        void enable_dynamic_simulation(const object &object_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__object__bool__ret__nothing, object_, enable_);
+        }
+
+        void enable_dynamic_simulation(const group &group_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__group__bool__ret__nothing, group_, enable_);
+        }
     }
 }

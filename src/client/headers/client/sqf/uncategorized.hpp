@@ -1812,5 +1812,6 @@ namespace intercept {
         void enable_gun_lights(const group &group_, bool &enable_);
         void enable_ir_lasers(const object &unit_, bool &enable_);
         void enable_ir_lasers(const group &group_, bool &enable_);
+        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_);
     }
 }

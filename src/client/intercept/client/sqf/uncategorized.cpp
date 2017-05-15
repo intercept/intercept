@@ -6623,5 +6623,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_ir_lasers(const group &group_, bool &enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, group_, enable_);
         }
+
+        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_) {
+            auto_array<game_value> turrent_path(turrent_path_.begin(), turrent_path_.end());
+            
+            game_value params_right({
+                std::move(turrent_path),
+                enable_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__enablepersonturret__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

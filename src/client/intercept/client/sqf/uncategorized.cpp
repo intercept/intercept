@@ -6497,5 +6497,23 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__drawarrow__control__array__ret__nothing, map_, std::move(params_right));
         }
+
+        void draw_ellipse(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> center_, const vector2 &radius_, float angle_ , const rv_color &color_, const std::string &fill_texture) {
+            auto_array<game_value> params_right;
+
+            switch (center_.index()) {
+            case 0: params_right.push_back(std::get<0>(center_).get()); break;
+            case 1: params_right.push_back(std::get<1>(center_).get()); break;
+            case 2: params_right.push_back(std::get<2>(center_).get()); break;
+            }
+
+            params_right.push_back(radius_.x);
+            params_right.push_back(radius_.y);
+            params_right.push_back(angle_);
+            params_right.push_back(color_);
+            params_right.push_back(fill_texture);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawellipse__control__array__ret__nothing, map_, std::move(params_right));
+        }
     }
 }

@@ -6724,10 +6724,22 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             if (vehicle_type_.has_value()) params_right.push_back(*vehicle_type_);
-            
+
             switch (center_.index()) {
             case 0: params_right.push_back(std::get<0>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
             case 1: params_right.push_back(std::get<1>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
+            }
+        }
+
+        std::string find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
+            auto_array<game_value> params_right({
+                radius_,
+                max_distance_
+            });
+
+            switch (center_.index()) {
+            case 0: params_right.push_back(std::get<0>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), std::move(params_right));
+            case 1: params_right.push_back(std::get<1>(center_).get()); return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), std::move(params_right));
             }
         }
 

@@ -1805,5 +1805,6 @@ namespace intercept {
         void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_);
         void enable_attack(const group &group_, bool enable_);
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
+        void enable_collision_with(const object &object1_, const object &object2_);
     }
 }

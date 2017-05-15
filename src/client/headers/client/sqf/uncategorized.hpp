@@ -1818,5 +1818,6 @@ namespace intercept {
         void enable_weapon_disassembly(const object &unit_, bool enable_);
         game_value eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_);
         void exec(const game_value &argument_, const std::string &script_);
+        game_value exec_editor_script(const control &map_, std::string &object_, std::string &script_);
     }
 }

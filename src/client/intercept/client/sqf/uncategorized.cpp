@@ -6659,5 +6659,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void exec(const game_value &argument_, const std::string &script_) {
             host::functions.invoke_raw_binary(__sqf::binary__exec__any__string__ret__nothing, argument_, script_);
         }
+
+        game_value exec_editor_script(const control &map_, std::string &object_, std::string &script_) {
+            game_value params_right({
+                object_,
+                script_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__execeditorscript__control__array__ret__any, object_, params_right);
+        }
     }
 }

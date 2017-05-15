@@ -1810,5 +1810,7 @@ namespace intercept {
         void enable_dynamic_simulation(const group &group_, bool enable_);
         void enable_gun_lights(const object &unit_, bool &enable_);
         void enable_gun_lights(const group &group_, bool &enable_);
+        void enable_ir_lasers(const object &unit_, bool &enable_);
+        void enable_ir_lasers(const group &group_, bool &enable_);
     }
 }

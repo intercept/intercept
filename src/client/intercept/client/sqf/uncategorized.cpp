@@ -6615,5 +6615,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_gun_lights(const group &group_, bool &enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablegunlights__object_group__string__ret__nothing, group_, enable_);
         }
+
+        void enable_ir_lasers(const object &unit_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, unit_, enable_);
+        }
+
+        void enable_ir_lasers(const group &group_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, group_, enable_);
+        }
     }
 }

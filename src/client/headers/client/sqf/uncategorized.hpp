@@ -1803,6 +1803,6 @@ namespace intercept {
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
         game_value edit_object(const control &map_, const std::string &object_);
         void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_);
-
+        void enable_attack(const group &group_, bool enable_);
     }
 }

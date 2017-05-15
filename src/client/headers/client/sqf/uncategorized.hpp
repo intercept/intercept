@@ -1801,5 +1801,6 @@ namespace intercept {
         void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const std::string &param_type_, const std::string &line_type_, rv_color &color_);
         void draw_location(const control &map_, const location &location_);
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
+        game_value edit_object(const control &map_, const std::string &object_);
     }
 }

@@ -6647,5 +6647,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void enable_vehicle_cargo(const object &vehicle_, bool enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablevehiclecargo__object__bool__ret__nothing, vehicle_, enable_);
         }
+
+        void enable_weapon_disassembly(const object &unit_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableweapondisassembly__object__bool__ret__nothing, unit_, enable_);
+        }
     }
 }

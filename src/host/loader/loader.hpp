@@ -283,6 +283,9 @@ namespace intercept {
                     placeholder6 = other->placeholder6;
                     placeholder7 = other->placeholder7;
                     placeholder8 = other->placeholder8;
+                    placeholder9 = other->placeholder9;
+                    placeholder10 = other->placeholder10;
+                    placeholder11 = other->placeholder11;
             }
         private:
             uint32_t placeholder1;//0x4
@@ -293,10 +296,9 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
-            //#Update 1.71 or 1.70
-            //uint32_t placeholder9;//0x24
-            //uint32_t placeholder10;//0x28
-            //uint32_t placeholder11;//0x2C
+            uint32_t placeholder9;//0x24
+            uint32_t placeholder10;//0x28
+            uint32_t placeholder11;//0x2C
         };
         class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
             uint32_t placeholder12;//0x30

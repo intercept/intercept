@@ -31,6 +31,14 @@ namespace intercept {
                 _hash ^= std::hash<U>()(second) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
                 return _hash;
             }
+            class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
+            public:                //#TODO move this into __internal
+                I_debug_value() {}
+                virtual ~I_debug_value() {}
+                // IDebugValue
+                virtual int IAddRef() = 0;
+                virtual int IRelease() = 0;
+            };
         }
 
         template<class Type>
@@ -527,6 +535,9 @@ namespace intercept {
             auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
                 insert(end(), _first, _last);
             }
+            auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(copy_._n) {
+                insert(end(), copy_.begin(), copy_.end());
+            }
             auto_array(auto_array<Type> &&move_) : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
                 move_._maxItems = 0;
             }
@@ -548,9 +559,9 @@ namespace intercept {
             }
 
             auto_array& operator = (const auto_array &copy_) {
-                resize(copy_._n);
-                for (auto it : copy_)
-                    push_back(std::move(it));
+                if (copy_._n) {
+                    insert(end(), copy_.begin(), copy_.end());
+                }
                 std::vector<int> x = { 1,2,3 };
                 return *this;
             }
@@ -624,7 +635,16 @@ namespace intercept {
 
                 //#TODO don't really like the casting.. Maybe we should just make _where non-const
                 std::move(const_cast<Type*>(_where), const_cast<Type*>(_where) + insertedSize, const_cast<Type*>(_where) + insertedSize);
-                //#TODO now actually insert stuff..........
+                //#TODO actually test this...
+                auto index = base::_n;
+                for (; _first != _last; ++_first) {
+                    //emplace_back(*_first);
+                    //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
+                    auto& item = (*this)[index];
+                    ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
+                    ++index;
+                }
+                base::_n = index;
             }
             void clear() {
                 if (base::_data)
@@ -633,13 +653,17 @@ namespace intercept {
                 _maxItems = 0;
             }
 
-            //#TODO implement. That's probably useful
-            //template<class _InIt, class _Pr>
-            //void insert_if() {
-            //}
-
-            //#TODO Implement find, operator==, Copy/Move Contructor/Operator.
-
+            bool operator==(rv_array<Type> other) {
+                if (other._n != _n || ((_data == nullptr || other._data==nullptr) && _data != other._data))
+                    return false;
+                auto index = 0;
+                for (auto& it : other) {
+                    if ((*this[index]) != it)
+                        return false;
+                    ++index;
+                }
+                return true;
+            }
         };
 
 
@@ -867,7 +891,7 @@ namespace intercept {
             unary_operator *op;
         };
 
-        struct binary_operator {
+        struct binary_operator {//#TODO rework to correctly use refcount stuff
             uintptr_t        v_table;
             uint32_t         ref_count;
             binary_function   *procedure_addr;
@@ -895,16 +919,8 @@ namespace intercept {
             nular_operator *op;
         };
 
-        class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
-        public:                //#TODO move this into __internal
-            I_debug_value() {}
-            virtual ~I_debug_value() {}
-            // IDebugValue
-            virtual int IAddRef() = 0;
-            virtual int IRelease() = 0;
-        };
         class game_value;
-        class game_data : public refcount, public I_debug_value {
+        class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
         public:
             virtual const op_value_entry & type() const { static op_value_entry dummy; return dummy; }//#TODO replace op_value_entry by some better name
@@ -999,10 +1015,13 @@ namespace intercept {
 
             //Conversions
             game_value(float val_);
+
+
             game_value(bool val_);
             game_value(const std::string &val_);
             game_value(const r_string &val_);
             game_value(std::string_view val_);
+            game_value(const char* str_) : game_value(std::string_view(str_)) {}
             game_value(const std::vector<game_value> &list_);
             game_value(const std::initializer_list<game_value> &list_);
             game_value(auto_array<game_value> &&array_);
@@ -1017,6 +1036,9 @@ namespace intercept {
             game_value & operator = (const std::string &val_);
             game_value & operator = (const r_string &val_);
             game_value & operator = (std::string_view val_);
+            game_value & operator = (const char* str_) {
+                return this->operator =(std::string_view(str_));
+            }
             game_value & operator = (const std::vector<game_value> &list_);
             game_value & operator = (const vector3 &vec_);
             game_value & operator = (const vector2 &vec_);

@@ -135,19 +135,35 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op_value_entry rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
 
 
+    std::string lowerName(name);
+    std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
+    auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
+    op._name = name;
+    op._name2 = lowerName;
+    op._description = description;
+    op.copyPH(test);
+    op._operator = rv_allocator<binary_operator>::createSingle();
+    op._operator->v_table = test->_operator->v_table;
+    op._operator->ref_count = 1;
+    op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
+    op._operator->return_type = retType;
+    op._operator->arg1_type = leftType;
+    op._operator->arg2_type = rightype;
+    //#TODO fix
+    //__internal::gsOperator op2;
+    //constructBinary(&op2, retType, name.c_str(), 4, function_,
+    //    leftType, rightype,
+    //    "", "", description.c_str(), "", "", "", "", "Intercept", 0);
 
-    constructBinary(&op, retType, name.c_str(), 4, function_,
-        leftType, rightype,
-        "", "", description.c_str(), "", "", "", "", "Intercept", 0);
 
-    //auto gs = (__internal::game_state*) _registerFuncs._gameState;
-    //std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-    //gs->_scriptOperators.get_table_for_key(name.c_str())->push_back(game_operators(name)).push_back(op);
+    auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    auto& funcs = gs->_scriptOperators.get_table_for_key(lowerName.c_str())->push_back(game_operators(lowerName.c_str()));
+    funcs.push_back(op);
+    funcs.copyPH(test);
 
-    //#TODO reenable
     //insertBinary(_registerFuncs._gameState, op);
 
-    auto inserted = nullptr;// findBinary(name, left_arg_type, right_arg_type);
+    auto inserted = findBinary(name, left_arg_type, right_arg_type);
     //std::stringstream stream;
     //stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
     //    << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "

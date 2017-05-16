@@ -546,6 +546,11 @@ class CfgPatches {
     };
 };
 
+class CfgFunctions {
+	init = "z\intercept\rv\addons\core\initFunctionsWrapper.sqf";
+	//init = "A3\functions_f\initFunctions.sqf";
+};
+
 #define QUOTE(var1) #var1
 #define ARR_2(ARG1,ARG2) ARG1, ARG2
 #define EVENT_ARGS(x) rv_event:##x
@@ -614,18 +619,19 @@ class Intercept {
 };
 */
 
-
-class Extended_PreStart_EventHandlers {
-    class Intercept_Core {
-        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\boot.sqf';";
-    };
-};
+//initFunctionsWrapper takes care of that for us
+//class Extended_PreStart_EventHandlers {
+//    class Intercept_Core {
+//        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\boot.sqf';";
+//    };
+//};
 
 class Extended_PreInit_EventHandlers {
     class Intercept_Core {
         init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\lib.sqf';";
     };
 };
+
 
 class Extended_PostInit_EventHandlers {
     class Intercept_Core {

@@ -294,9 +294,9 @@ namespace intercept {
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
             //#Update 1.71 or 1.70
-            //uint32_t placeholder9;//0x24
-            //uint32_t placeholder10;//0x28
-            //uint32_t placeholder11;//0x2C
+            uint32_t placeholder9;//0x24
+            uint32_t placeholder10;//0x28
+            uint32_t placeholder11;//0x2C
         };
         class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
             uint32_t placeholder12;//0x30

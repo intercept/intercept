@@ -6880,5 +6880,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float get_sound_controller(const object &vehicle_, const std::string &controller_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontroller__object__string__ret__scalar, vehicle_, controller_);
         }
+
+        float get_sound_controller_result(const object &object_, const config &config_entry_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontrollerresult__object__config__ret__scalar, object_, config_entry_);
+        }
     }
 }

@@ -6863,5 +6863,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 get_hide_from(const object &unit_, const object &enemy_) {
             return host::functions.invoke_raw_binary(__sqf::binary__gethidefrom__object__object__ret__array, unit_, enemy_);
         }
+
+        std::string get_object_argument(const control &map_, const object &object_, const std::string &argument_) {
+            game_value params_right({
+                object_,
+                argument_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getobjectargument__control__array__ret__string, map_, params_right);
+        }
     }
 }

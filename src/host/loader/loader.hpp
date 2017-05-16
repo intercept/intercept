@@ -274,6 +274,16 @@ namespace intercept {
         class gsFuncBase {
         public:
             const r_string _name;
+            void copyPH(gsFuncBase* other) {
+                    placeholder1 = other->placeholder1;
+                    placeholder2 = other->placeholder2;
+                    placeholder3 = other->placeholder3;
+                    placeholder4 = other->placeholder4;
+                    placeholder5 = other->placeholder5;
+                    placeholder6 = other->placeholder6;
+                    placeholder7 = other->placeholder7;
+                    placeholder8 = other->placeholder8;
+            }
         private:
             uint32_t placeholder1;//0x4
             uint32_t placeholder2;//0x8 actually a pointer to empty memory

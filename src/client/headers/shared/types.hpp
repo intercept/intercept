@@ -476,7 +476,7 @@ namespace intercept {
         };
 
         template<class Type, unsigned int growthFactor = 32>
-        class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
+        class auto_array : public rv_array<Type> {
             typedef rv_array<Type> base;
         protected:
             int _maxItems;
@@ -555,7 +555,7 @@ namespace intercept {
                 return *this;
             }
 
-            void resize(size_t n) {//#TODO split this between resize/reserve
+            void resize(size_t n) {
                 if (static_cast<int>(n) < base::_n) {
                     for (int i = static_cast<int>(n); i < base::_n; i++) {
                         (*this)[i].~Type();
@@ -625,6 +625,12 @@ namespace intercept {
                 //#TODO don't really like the casting.. Maybe we should just make _where non-const
                 std::move(const_cast<Type*>(_where), const_cast<Type*>(_where) + insertedSize, const_cast<Type*>(_where) + insertedSize);
                 //#TODO now actually insert stuff..........
+            }
+            void clear() {
+                if (base::_data)
+                    rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                base::_n = 0;
+                _maxItems = 0;
             }
 
             //#TODO implement. That's probably useful
@@ -908,8 +914,8 @@ namespace intercept {
             virtual bool get_as_bool() const { return false; }
             virtual float get_as_number() const { return 0.f; }
             virtual r_string get_as_string() const { return ""; } //Only usable on String and Code! Use to_string instead!
-            virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; return dummy; } //Why would you ever need this?
-            virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; return dummy; }
+            virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; dummy.clear(); return dummy; } //Why would you ever need this?
+            virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; dummy.clear(); return dummy; }
             virtual game_data *copy() const { return NULL; }
             virtual void set_readonly(bool val) {} //No clue what this does...
             virtual bool get_readonly() const { return false; }
@@ -1026,6 +1032,9 @@ namespace intercept {
             operator vector2() const;
             //#TODO add operator to const auto_array ref and then replace stuff with foreach loops
 
+
+            auto_array<game_value>& to_array();
+            const auto_array<game_value>& to_array() const;
             game_value& operator [](size_t i_);
             game_value operator [](size_t i_) const;
 
@@ -1177,7 +1186,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, side ); };
+            size_t hash() const { return __internal::pairhash(type_def, side); };
             void *side;
         };
 
@@ -1189,7 +1198,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, rv_text ); };
+            size_t hash() const { return __internal::pairhash(type_def, rv_text); };
             void *rv_text;
         };
 
@@ -1201,7 +1210,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, team ); };
+            size_t hash() const { return __internal::pairhash(type_def, team); };
             void *team;
         };
 
@@ -1213,7 +1222,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, rv_namespace ); };
+            size_t hash() const { return __internal::pairhash(type_def, rv_namespace); };
             void *rv_namespace;
         };
 
@@ -1225,7 +1234,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, code_string ); };
+            size_t hash() const { return __internal::pairhash(type_def, code_string); };
             r_string code_string;
             uintptr_t instruction_array;
             uint32_t instruction_array_size;
@@ -1241,7 +1250,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, object ); };
+            size_t hash() const { return __internal::pairhash(type_def, object); };
             //struct {
             //    uint32_t _x;
             //    void* object; //#TODO this is real object pointer. Other classes are probably also incorrect

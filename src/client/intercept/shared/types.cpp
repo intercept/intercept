@@ -556,13 +556,31 @@ namespace intercept {
             return {};
         }
 
+        auto_array<game_value>& game_value::to_array() {
+            if (data) {
+                return data->get_as_array();
+            }
+            static auto_array<game_value> dummy;//else we would return a temporary.
+            dummy.clear(); //In case user modified it before
+            return dummy;
+        }
+
+        const auto_array<game_value>& game_value::to_array() const {
+            if (data) {
+                return data->get_as_const_array();
+            }
+            static auto_array<game_value> dummy;//else we would return a temporary.
+            dummy.clear(); //In case user modified it before
+            return dummy;
+        }
+
         game_value& game_value::operator [](size_t i_) {
-            static game_value dummy;//else we would return a temporary.
             if (data) {
                 auto& array = data->get_as_array();
                 if (array.count() >= i_)
                     return array[i_];
             }
+            static game_value dummy;//else we would return a temporary.
             dummy.clear(); //In case user modified it before
             return dummy;
         }

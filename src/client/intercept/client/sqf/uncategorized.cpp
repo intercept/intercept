@@ -6769,7 +6769,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__fire__object__array__ret__nothing, unit_, params_right);
         }
 
-        void fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_) {
+        bool fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_) {
             auto_array<game_value> params_right({
                 target_
             });
@@ -6778,7 +6778,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 params_right.push_back(*muzzle_);
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__fireattarget__object__array__ret__bool, unit_, std::move(params_right));
+            return host::functions.invoke_raw_binary(__sqf::binary__fireattarget__object__array__ret__bool, unit_, std::move(params_right));
+        }
+
+        void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_) {
+            game_value params_right({
+                height_careless_safe_aware_,
+                height_combat_,
+                height_stealth_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__flyinheightasl__object__array__ret__nothing, aircraft_, params_right);
         }
     }
 }

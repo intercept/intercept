@@ -6758,5 +6758,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         object find_nearest_enemy(const object &unit_,const object &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, object_);
         }
+
+        void fire(const object &unit_, const std::string &muzzle_, const std::string &mode_, const std::string &magazine_) {
+            game_value params_right({
+                muzzle_,
+                mode_,
+                magazine_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__fire__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

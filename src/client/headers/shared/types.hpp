@@ -476,7 +476,7 @@ namespace intercept {
         };
 
         template<class Type, unsigned int growthFactor = 32>
-        class auto_array : public rv_array<Type> { //#TODO make writeable. This is read-only right now
+        class auto_array : public rv_array<Type> {
             typedef rv_array<Type> base;
         protected:
             int _maxItems;
@@ -555,7 +555,7 @@ namespace intercept {
                 return *this;
             }
 
-            void resize(size_t n) {//#TODO split this between resize/reserve
+            void resize(size_t n) {
                 if (static_cast<int>(n) < base::_n) {
                     for (int i = static_cast<int>(n); i < base::_n; i++) {
                         (*this)[i].~Type();

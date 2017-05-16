@@ -60,15 +60,15 @@ switch (_returnType) { \
 void registered_sqf_func_wrapper::setUnused() {
     switch (_type) {
         case functionType::sqf_nular:
-            if (_nular)
+            if (_nular && _nular->_operator)
                 UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_nular, unusedNular);
             break;
         case functionType::sqf_function:
-            if (_func)
+            if (_func && _func->_operator)
                 UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_func, unusedFunction);
             break;
         case functionType::sqf_operator:
-            if (_op)
+            if (_op && _op->_operator)
                 UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_op, unusedOperator);
             break;
     }
@@ -96,6 +96,23 @@ intercept::sqf_functions::sqf_functions() {}
 
 intercept::sqf_functions::~sqf_functions() {}
 
+/*
+ Dedmen
+ Our Problem with registering SQF functions is that we are reallocating the Array that contains the function.
+ Every compiled script compiles into Instructions. And the Instructions that call the actual engine functions keep pointers to the function
+ which is inside said Array. Meaning by reallocating that Array we invalidate each pointer into it from any function that was compiled before we
+ inserted our Function.
+
+ Current workaround is by just registering our stuff before any function is compiled by overwriting
+ CfgFunctions >> init
+ to point to our script.
+
+ Alternative workaround is to never deallocate the old Array and just keep it dangling.
+ That way pointers into that still stay valid.
+ This means however that we cannot use the Engines "InsertFunctionIntoFunctionMap" function but we don't want to use that anyway.
+
+*/
+
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
     //#TODO max length of name is 22 chars... Somehow.. Need to investigate why
     //#TODO check if name already exists. If we assigned that overwrite it except it has a Final flag (Add Final flag)
@@ -112,7 +129,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
     if (_registerFuncs._types[static_cast<size_t>(left_arg_type)] == 0) __debugbreak();   //and all supported types are implemented
     if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
-    
+
     op_value_entry retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
     op_value_entry leftType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),nullptr };
     op_value_entry rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
@@ -121,13 +138,13 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     constructBinary(&op, retType, name.c_str(), 4, function_,
         leftType, rightype,
-        "", "", "", "", "", "", "", "Intercept", 0);
+        "", "", description.c_str(), "", "", "", "", "Intercept", 0);
 
     //auto gs = (__internal::game_state*) _registerFuncs._gameState;
     //std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     //gs->_scriptOperators.get_table_for_key(name.c_str())->push_back(game_operators(name)).push_back(op);
 
-    //#TODO Too crashy
+    //#TODO reenable
     //insertBinary(_registerFuncs._gameState, op);
 
     auto inserted = nullptr;// findBinary(name, left_arg_type, right_arg_type);
@@ -150,6 +167,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         uintptr_t jFunc);
     __internal::gsFunction op;
 
+    auto test = findUnary("diag_log", GameDataType::ANY);
     f_construct_unary constructUnary = reinterpret_cast<f_construct_unary>(_registerFuncs._unary_construct);
 
     if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak(); //#TODO remove when registerFunction with unsupported type throws compiler error
@@ -160,17 +178,25 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //#TODO confirm types by calling toString and comparing with expected string
     constructUnary(&op, retType, name.c_str(), function_,
         rightype,
-        "", "", "", "", "", "", "Intercept", 0);
+        "", description.c_str(), "", "", "", "", "Intercept", 0);
 
     //auto gs = (__internal::game_state*) _registerFuncs._gameState;
     //std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     //gs->_scriptFunctions.get_table_for_key(name.c_str())->push_back(game_functions(name)).push_back(op);
 
+    //std::string lowerName(name);
+    //std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
+    //auto tbl = gs->_scriptFunctions.get_table_for_key(name);
+    //auto& funcs = gs->_scriptFunctions.get_table_for_key(lowerName.c_str())->push_back(game_functions(lowerName.c_str()));
+    //funcs.push_back(op);
+    //funcs.copyPH(test);
+    //gs->_scriptFunctions.get_table_for_key(lowerName.c_str())->shrink_to_fit();
+    //auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     insertUnary(_registerFuncs._gameState, op);
 
     auto inserted = findUnary(name, right_arg_type);
     std::stringstream stream;
-    stream << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type) 
+    stream << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
         << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
     OutputDebugStringA(stream.str().c_str());

@@ -6814,5 +6814,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             //#TODO: add binary__get3denattribute__array__string__ret__array
         }
+
+        game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_) {
+            host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
+        }
     }
 }

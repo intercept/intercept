@@ -6827,5 +6827,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
         }
+
+        float get_dir(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> from_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> to_) {
+            game_value from;
+            game_value to;
+
+            if (from_.index() == 0) from = std::get<0>(from_).get();
+            if (from_.index() == 1) from = std::get<1>(from_).get();
+            if (to_.index() == 0) to = std::get<0>(to_).get();
+            if (to_.index() == 1) to = std::get<1>(to_).get();
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getdir__object_array__object_array__ret__scalar, from, to);
+        }
     }
 }

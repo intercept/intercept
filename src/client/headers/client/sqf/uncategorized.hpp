@@ -1836,6 +1836,7 @@ namespace intercept {
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_);
         game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_);
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_);
+        float get_dir(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> from_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> to_);
 
     }
 }

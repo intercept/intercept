@@ -6843,5 +6843,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float get_env_sound_controller(const vector3 &position_, const std::string &controller_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getenvsoundcontroller__array__string__ret__scalar, position_, controller_);
         }
+
+        game_value get_fsm_variable(int &fsm_handle_, const std::string &variable_, std::optional<game_value> default_value_) {
+            if (default_value_.has_value()) {
+                game_value params_right({
+                    variable_,
+                    *default_value_
+                });
+
+                return host::functions.invoke_raw_binary(__sqf::binary__getfsmvariable__scalar__string_array__ret__any, fsm_handle_, params_right);
+            }
+            return host::functions.invoke_raw_binary(__sqf::binary__getfsmvariable__scalar__string_array__ret__any, fsm_handle_, variable_);
+        }
     }
 }

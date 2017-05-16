@@ -6876,5 +6876,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<std::string> get_object_children(const control &map_, const std::string &object_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__getobjectchildren__control__string__ret__array, map_, object_));
         }
+
+        float get_sound_controller(const object &vehicle_, const std::string &controller_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontroller__object__string__ret__scalar, vehicle_, controller_);
+        }
     }
 }

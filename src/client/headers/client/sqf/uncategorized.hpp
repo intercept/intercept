@@ -1843,5 +1843,6 @@ namespace intercept {
         vector3 get_hide_from(const object &unit_, const object &enemy_);
         std::string get_object_argument(const control &map_, const object &object_, const std::string &argument_);
         std::vector<std::string> get_object_children(const control &map_, const std::string &object_);
+        float get_sound_controller(const object &vehicle_, const std::string &controller_);
     }
 }

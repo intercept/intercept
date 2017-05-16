@@ -1829,5 +1829,7 @@ namespace intercept {
         vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);
         void fire(const object &unit_, const std::string &muzzle_, const std::string &mode_, const std::string &magazine_);
+        void fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_);
+
     }
 }

@@ -6765,8 +6765,20 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 mode_,
                 magazine_
             });
-            
+
             host::functions.invoke_raw_binary(__sqf::binary__fire__object__array__ret__nothing, unit_, params_right);
+        }
+
+        void fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_) {
+            auto_array<game_value> params_right({
+                target_
+            });
+
+            if (muzzle_.has_value()) {
+                params_right.push_back(*muzzle_);
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__fireattarget__object__array__ret__bool, unit_, std::move(params_right));
         }
     }
 }

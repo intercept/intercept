@@ -1831,5 +1831,6 @@ namespace intercept {
         void fire(const object &unit_, const std::string &muzzle_, const std::string &mode_, const std::string &magazine_);
         bool fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_);
         void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
+        void force_follow_road(const object &vehicle_, bool follow_);
     }
 }

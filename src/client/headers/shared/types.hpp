@@ -1001,7 +1001,8 @@ namespace intercept {
             game_value(float val_);
             game_value(bool val_);
             game_value(const std::string &val_);
-            game_value(const char *);
+            game_value(const r_string &val_);
+            game_value(std::string_view val_);
             game_value(const std::vector<game_value> &list_);
             game_value(const std::initializer_list<game_value> &list_);
             game_value(auto_array<game_value> &&array_);
@@ -1015,7 +1016,7 @@ namespace intercept {
             game_value & operator = (bool val_);
             game_value & operator = (const std::string &val_);
             game_value & operator = (const r_string &val_);
-            game_value & operator = (const char *val_);
+            game_value & operator = (std::string_view val_);
             game_value & operator = (const std::vector<game_value> &list_);
             game_value & operator = (const vector3 &vec_);
             game_value & operator = (const vector2 &vec_);

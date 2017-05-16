@@ -407,9 +407,14 @@ namespace intercept {
             data = new game_data_string(val_);
         }
 
-        game_value::game_value(const char *val_) {
+        game_value::game_value(const r_string &val_) {
             set_vtable(__vptr_def);
-            data = new game_data_string(r_string(val_));
+            data = new game_data_string(val_);
+        }
+
+        game_value::game_value(std::string_view val_) {
+            set_vtable(__vptr_def);
+            data = new game_data_string(val_);
         }
 
         game_value::game_value(const std::vector<game_value> &list_) {
@@ -482,8 +487,8 @@ namespace intercept {
             return *this;
         }
 
-        game_value & game_value::operator=(const char * val_) {
-            data = new game_data_string(r_string(val_));
+        game_value & game_value::operator=(std::string_view val_) {
+            data = new game_data_string(val_);
             return *this;
         }
 

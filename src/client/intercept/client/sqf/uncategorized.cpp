@@ -6816,7 +6816,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_) {
-            host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
+            return host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
+        }
+
+        float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_) {
+            game_value params_right({
+                target_position_,
+                magazine_type_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
         }
     }
 }

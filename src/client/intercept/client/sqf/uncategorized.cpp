@@ -6794,5 +6794,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void force_follow_road(const object &vehicle_, bool follow_) {
             host::functions.invoke_raw_binary(__sqf::binary__forcefollowroad__object__bool__ret__nothing, vehicle_, follow_);
         }
+
+        void force_weapon_fire(const object &unit_, const std::string &muzzle_, const std::string &fire_mode_) {
+            game_value params_right({
+                muzzle_,
+                fire_mode_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__forceweaponfire__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

@@ -1840,5 +1840,6 @@ namespace intercept {
         float get_env_sound_controller(const vector3 &position_, const std::string &controller_);
         game_value get_fsm_variable(int &fsm_handle_, const std::string &variable_, std::optional<game_value> default_value_);
         std::vector<game_value> get_group_icon(const group &group_, int &id_);
+        vector3 get_hide_from(const object &unit_, const object &enemy_);
     }
 }

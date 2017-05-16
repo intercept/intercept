@@ -1833,5 +1833,6 @@ namespace intercept {
         void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
         void force_follow_road(const object &vehicle_, bool follow_);
         void force_weapon_fire(const object &unit_, const std::string &muzzle_, const std::string &fire_mode_);
+        std::vector<game_value> get_3den_attribute(const object &entity_, const std::string &attribute_);
     }
 }

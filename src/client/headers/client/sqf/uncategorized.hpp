@@ -1839,6 +1839,6 @@ namespace intercept {
         float get_dir(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> from_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> to_);
         float get_env_sound_controller(const vector3 &position_, const std::string &controller_);
         game_value get_fsm_variable(int &fsm_handle_, const std::string &variable_, std::optional<game_value> default_value_);
-
+        std::vector<game_value> get_group_icon(const group &group_, int &id_);
     }
 }

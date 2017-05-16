@@ -273,7 +273,7 @@ namespace intercept {
     namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
         class gsFuncBase {
         public:
-            const r_string _name;
+            r_string _name;
             void copyPH(gsFuncBase* other) {
                     placeholder1 = other->placeholder1;
                     placeholder2 = other->placeholder2;
@@ -283,6 +283,9 @@ namespace intercept {
                     placeholder6 = other->placeholder6;
                     placeholder7 = other->placeholder7;
                     placeholder8 = other->placeholder8;
+                    placeholder9 = other->placeholder9;
+                    placeholder10 = other->placeholder10;
+                    placeholder11 = other->placeholder11;
             }
         private:
             uint32_t placeholder1;//0x4
@@ -293,7 +296,6 @@ namespace intercept {
             uint32_t placeholder6;//0x18
             uint32_t placeholder7;//0x1C
             uint32_t placeholder8;//0x20
-            //#Update 1.71 or 1.70
             uint32_t placeholder9;//0x24
             uint32_t placeholder10;//0x28
             uint32_t placeholder11;//0x2C
@@ -316,7 +318,7 @@ namespace intercept {
             uint32_t placeholder12;//0x30  JNI function
         public:                  //#TODO fix offsets in comments
             r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder_10; //0x2C Small int 0-5  priority
+            int32_t placeholder_10 { 4 }; //0x2C Small int 0-5  priority
             binary_operator * _operator;//0x30
             r_string _leftType;//0x34 Description of left hand side parameter
             r_string _rightType;//0x38 Description of right hand side parameter
@@ -325,7 +327,7 @@ namespace intercept {
             r_string placeholder_11;//0x44
             r_string _version;//0x48 some version number
             r_string placeholder_12;//0x4C
-            r_string _category; //0x50
+            r_string _category{ "intercept" }; //0x50
         };
         class gsNular : public gsFuncBase {
         public:

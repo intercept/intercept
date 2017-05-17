@@ -1873,5 +1873,7 @@ namespace intercept {
         bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const location &location_);
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
         bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, const std::string &magazine_type_);
+        std::string insert_editor_object(const control &map_, const std::string &type_, const game_value &value_, const std::vector<std::string> &values_, const std::string &sub_type_);
+
     }
 }

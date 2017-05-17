@@ -145,6 +145,14 @@ namespace intercept {
                 return output;
             }
 
+            std::vector<vector3> __convert_to_vector3_vector(game_value input_) {
+                std::vector<vector3> output;
+                for (uint32_t i = 0; i < input_.size(); ++i) {
+                    output.push_back(object(input_[i]));
+                }
+                return output;
+            }
+
             std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;
                 for (uint32_t i = 0; i < input_.size(); ++i) {

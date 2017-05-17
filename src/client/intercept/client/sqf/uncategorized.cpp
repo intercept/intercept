@@ -7149,5 +7149,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return host::functions.invoke_raw_binary(__sqf::binary__inserteditorobject__control__array__ret__string, map_, params_right);
         }
+
+        std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water_, bool shore_line_, const object &ignore_object_) {
+            game_value params_right({
+                min_distance_,
+                max_gradient_,
+                max_gradient_radius_,
+                over_land_or_water_,
+                shore_line_,
+                ignore_object_
+            });
+            
+            return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
+        }
     }
 }

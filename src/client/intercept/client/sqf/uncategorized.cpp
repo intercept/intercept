@@ -7127,5 +7127,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
         }
+
+        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, const std::string &magazine_type_) {
+            auto_array<game_value> units({ units_.begin(), units_.end() });
+            
+            game_value params_right({
+                std::move(units),
+                magazine_type_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inrangeofartillery__array__array__ret__bool, position_, params_right);
+        }
     }
 }

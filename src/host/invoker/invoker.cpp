@@ -173,7 +173,7 @@ namespace intercept {
 
     game_value invoker::invoke_raw_nolock(nular_function function_) {
         game_value ret;
-        function_((char*) &ret, invoker::sqf_game_state);  //#TODO change nular_function definition to take game_value*
+        function_(&ret, invoker::sqf_game_state);  //#TODO change nular_function definition to take game_value*
         return ret;
     }
 
@@ -187,7 +187,7 @@ namespace intercept {
 
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
         game_value ret;
-        function_((char*) &ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
+        function_(&ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
         return ret;
     }
 
@@ -212,7 +212,7 @@ namespace intercept {
         auto left = reinterpret_cast<uintptr_t>(&left_arg_);
         auto right = reinterpret_cast<uintptr_t>(&right_arg_);
         game_value ret;
-        uintptr_t ret_ptr = function_((char*) &ret, invoker::sqf_game_state, left, right);
+        function_(&ret, invoker::sqf_game_state, left, right);
         return ret;
     }
 

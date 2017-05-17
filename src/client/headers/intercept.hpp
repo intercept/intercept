@@ -42,7 +42,7 @@ namespace intercept {
         EH(handle_rating)(object &unit_, float rating_);
         EH(handle_score)(object &unit_, object &object_, float score_);
         EH(hit)(object &unit_, object &caused_by_, float damage_);
-        EH(hit_part)(rv_list<hit_part_data> &data_);
+        EH(hit_part)(std::vector<hit_part_data> &data_);
         EH(init)(object &unit_);
         EH(incoming_missile)(object &unit_, r_string ammo_, object &firer_);
         EH(inventory_closed)(object &object_, object &container_);

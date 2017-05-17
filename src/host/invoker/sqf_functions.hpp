@@ -68,16 +68,19 @@ namespace intercept {
         sqf_functions();
         ~sqf_functions();
 
-        using WrapperFunctionBinary = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
-        using WrapperFunctionUnary = uintptr_t(*)(char*, uintptr_t, uintptr_t);
-        //[[nodiscard]]
-        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
-        registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
-
+        using WrapperFunctionBinary = game_value*(*)(game_value*, uintptr_t, uintptr_t, uintptr_t);
+        using WrapperFunctionUnary = game_value*(*)(game_value*, uintptr_t, uintptr_t);
+        using WrapperFunctionNular = game_value*(*)(game_value*, uintptr_t);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
         void initialize();
     private:
+        __internal::gsNular* findNular(std::string name);
         __internal::gsFunction* findUnary(std::string name, types::__internal::GameDataType argument_type) const;
         __internal::gsOperator* findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) const;
+        __internal::game_operators* findOperators(std::string name) const;
+        __internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;
     };
 

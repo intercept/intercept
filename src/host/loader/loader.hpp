@@ -246,14 +246,6 @@ namespace intercept {
         //!@}
 
         /*!
-        @name Initial Hook Functionality
-        */
-        //!@{
-        static int __cdecl _initial_patch(char *a_, int b_, int c_);
-        static unary_function _initial_trampoline;
-        //!@}
-
-        /*!
         @brief Stores the hooked functions.
         */
         std::unordered_set<uint32_t> _hooked_functions;
@@ -305,15 +297,15 @@ namespace intercept {
         class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
             uint32_t placeholder12;//0x30
         public:
-            const r_string _name2;//0x28 this is (tolower name)
+            r_string _name2;//0x28 this is (tolower name)
             unary_operator * _operator;//0x2C
             uint32_t placeholder_10;//0x30 RString to something
-            const r_string _description;//0x34
-            const r_string _example;
-            const r_string _example2;
-            const r_string placeholder_11;
-            const r_string placeholder_12;
-            const r_string _category; //0x48
+            r_string _description;//0x34
+            r_string _example;
+            r_string _example2;
+            r_string placeholder_11;
+            r_string placeholder_12;
+            r_string _category{ "intercept" }; //0x48
                                         //const rv_string* placeholder13;
         };
         class gsOperator : public gsFuncBase {
@@ -333,15 +325,16 @@ namespace intercept {
         };
         class gsNular : public gsFuncBase {
         public:
-            const r_string _name2;//0x24 this is (tolower name)
+            r_string _name2;//0x24 this is (tolower name)
             nular_operator * _operator;//0x28
-            const r_string _description;//0x2C
-            const r_string _example;
-            const r_string _example2;
-            const r_string _version;//0x38 some version number
-            const r_string placeholder_10;
-            const r_string _category; //0x40
+            r_string _description;//0x2C
+            r_string _example;
+            r_string _example2;
+            r_string _version;//0x38 some version number
+            r_string placeholder_10;
+            r_string _category; //0x40
             uint32_t placeholder11;//0x44
+            const char *get_map_key() const { return _name2.data(); }
         };
         struct gsTypeInfo { //Donated from ArmaDebugEngine
             const r_string _name;            //#TODO this is same as value_type

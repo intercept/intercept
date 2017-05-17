@@ -1265,12 +1265,62 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, object); };
-            //struct {
-            //    uint32_t _x;
-            //    void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
-            //};
-            void *object;
+            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); };
+            struct visualState {
+                //will be false if you called stuff on nullObj
+                bool valid{ false };
+                vector3 _aside;
+                vector3 _up;
+                vector3 _dir;
+
+                vector3 _position;
+                float _scale;
+                float _maxScale;
+
+                float _deltaT;
+                vector3 _speed; // speed in world coordinates
+                vector3 _modelSpeed; // speed in model coordinates (updated in Move())
+                vector3 _acceleration;
+            };
+            visualState get_position_matrix() const {
+                if (!object || !object->object) return visualState();
+                uintptr_t vbase = *((uintptr_t*) (((uintptr_t) object->object) + 0xA0));
+
+                struct visState1 {
+                    vector3 _aside;
+                    vector3 _up;
+                    vector3 _dir;
+
+                    vector3 _position;
+                    float _scale;
+                    float _maxScale;
+                };
+                struct visState2 {
+                    float _deltaT;
+                    vector3 _speed;
+                    vector3 _modelSpeed;
+                    vector3 _acceleration;
+                };
+                visState1* s1 = (visState1*) (vbase + 4);
+                visState2* s2 = (visState2*) (vbase + 0x44);
+                return visualState{
+                    true,
+                    s1->_aside,
+                    s1->_up,
+                    s1->_dir,
+                    s1->_position,
+                    s1->_scale,
+                    s1->_maxScale,
+                    s2->_deltaT,
+                    s2->_speed,
+                    s2->_modelSpeed,
+                    s2->_acceleration
+                };
+            }
+            struct {
+                uint32_t _x;
+                void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
+            } *object;
         };
 
         template<size_t Size = 1024, size_t Alloc_Length = 512>

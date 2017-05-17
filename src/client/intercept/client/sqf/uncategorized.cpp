@@ -6943,5 +6943,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             host::functions.invoke_raw_binary(__sqf::binary__glanceat__object_array__object_array__ret__nothing, param_left, param_right);
         }
+
+        void group_select_unit(const object &player_, const object &unit_, bool select_) {
+            game_value params_right({
+                unit_,
+                select_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
+        }
     }
 }

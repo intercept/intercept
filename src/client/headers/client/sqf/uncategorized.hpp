@@ -1875,6 +1875,7 @@ namespace intercept {
         bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, const std::string &magazine_type_);
         std::string insert_editor_object(const control &map_, const std::string &type_, const game_value &value_, const std::vector<std::string> &values_, const std::string &sub_type_);
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
+        bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
 
     }
 }

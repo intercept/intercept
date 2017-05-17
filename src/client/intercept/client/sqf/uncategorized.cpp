@@ -7162,5 +7162,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
         }
+
+        bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_) {
+            game_value params_right({
+                uav_,
+                check_all_items_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__isuavconnectable__object__array__ret__bool, unit_, params_right);
+        }
     }
 }

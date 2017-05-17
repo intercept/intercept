@@ -1862,5 +1862,7 @@ namespace intercept {
         void hc_select_group(const object &unit, const std::vector<game_value> &array_);
         void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
         void hide_selection(const object &object_, const std::string &selection_, bool hide_);
+        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const object &trigger_);
+
     }
 }

@@ -6986,5 +6986,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__hideselection__object__array__ret__nothing, object_, params_right);
         }
+
+        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const object &trigger_) {
+            game_value param_left;
+            
+            if (position_.index() == 0) {
+                param_left = std::get<0>(position_).get();
+            }
+            else {
+                param_left = std::get<1>(position_).get();
+            }
+            
+            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__object__ret__bool, param_left, trigger_);
+        }
     }
 }

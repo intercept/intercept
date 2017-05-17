@@ -615,27 +615,12 @@ namespace intercept {
                 if (_first == _last) return; //Boogie!
                 if (_where < begin() || _where > end()) return; //WTF?!
                 const size_t insertOffset = _where - begin();
+                auto previousEnd = end();
                 bool atEnd = _where == end();
                 size_t oldSize = count();
                 size_t insertedSize = std::distance(_first, _last);
                 reserve(oldSize + insertedSize);
-                if (atEnd) {
-                    auto index = base::_n;
-                    for (; _first != _last; ++_first) {
-                        //emplace_back(*_first);
-                        //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                        auto& item = (*this)[index];
-                        ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
-                        ++index;
-                    }
-                    base::_n = index;
-                    return;
-                }
-                //else we need to move stuff around
 
-                //#TODO don't really like the casting.. Maybe we should just make _where non-const
-                std::move(const_cast<Type*>(_where), const_cast<Type*>(_where) + insertedSize, const_cast<Type*>(_where) + insertedSize);
-                //#TODO actually test this...
                 auto index = base::_n;
                 for (; _first != _last; ++_first) {
                     //emplace_back(*_first);
@@ -645,6 +630,10 @@ namespace intercept {
                     ++index;
                 }
                 base::_n = index;
+                return;
+                //#TEST does rotate really do correct stuff?
+                //#TODO test insert in mid
+                std::rotate(const_cast<Type*>(_where), previousEnd, end());
             }
             void clear() {
                 if (base::_data)
@@ -654,7 +643,7 @@ namespace intercept {
             }
 
             bool operator==(rv_array<Type> other) {
-                if (other._n != _n || ((_data == nullptr || other._data==nullptr) && _data != other._data))
+                if (other._n != _n || ((_data == nullptr || other._data == nullptr) && _data != other._data))
                     return false;
                 auto index = 0;
                 for (auto& it : other) {
@@ -1052,8 +1041,6 @@ namespace intercept {
             operator r_string() const;
             operator vector3() const;
             operator vector2() const;
-            //#TODO add operator to const auto_array ref and then replace stuff with foreach loops
-
 
             auto_array<game_value>& to_array();
             const auto_array<game_value>& to_array() const;

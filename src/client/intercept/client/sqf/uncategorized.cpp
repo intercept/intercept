@@ -6987,30 +6987,57 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__hideselection__object__array__ret__nothing, object_, params_right);
         }
 
-        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const object &trigger_) {
+        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, const object &trigger_) {
             game_value param_left;
 
-            if (position_.index() == 0) {
-                param_left = std::get<0>(position_).get();
-            }
-            else {
-                param_left = std::get<1>(position_).get();
+            switch (position_.index())
+            {
+            case 0: param_left = std::get<0>(position_).get();
+            case 1: param_left = std::get<1>(position_).get();
+            case 2: param_left = std::get<2>(position_).get();
             }
 
             return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__object__ret__bool, param_left, trigger_);
         }
 
-        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const std::string &marker_) {
+        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, const std::string &marker_) {
             game_value param_left;
 
-            if (position_.index() == 0) {
-                param_left = std::get<0>(position_).get();
-            }
-            else {
-                param_left = std::get<1>(position_).get();
+            switch (position_.index())
+            {
+            case 0: param_left = std::get<0>(position_).get();
+            case 1: param_left = std::get<1>(position_).get();
+            case 2: param_left = std::get<2>(position_).get();
             }
 
             return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__string__ret__bool, param_left, marker_);
+        }
+
+        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            game_value param_left;
+            auto_array<game_value> params_right;
+
+            switch (position_.index())
+            {
+            case 0: param_left = std::get<0>(position_).get();
+            case 1: param_left = std::get<1>(position_).get();
+            case 2: param_left = std::get<2>(position_).get();
+            }
+
+            switch (center_.index())
+            {
+            case 0: params_right.push_back(std::get<0>(center_).get());
+            case 1: params_right.push_back(std::get<1>(center_).get());
+            case 2: params_right.push_back(std::get<2>(center_).get());
+            }
+
+            params_right.push_back(radius_x_);
+            params_right.push_back(radius_y_);
+            params_right.push_back(is_rectangle_);
+
+            if (radius_z_.has_value()) params_right.push_back(*radius_z_);
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__array__ret__bool, param_left, std::move(params_right));
         }
     }
 }

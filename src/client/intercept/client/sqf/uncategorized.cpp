@@ -7187,5 +7187,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                         
             host::functions.invoke_raw_binary(__sqf::binary__kbaddtopic__object__array__ret__nothing, unit_, std::move(params_right));
         }
+
+        //#TODO: Find out what arguments this command takes
+        void kb_react() {
+            //host::functions.invoke_raw_binary(__sqf::binary__kbreact__object__array__ret__nothing, unit_, std::move(params_right));
+        }
     }
 }

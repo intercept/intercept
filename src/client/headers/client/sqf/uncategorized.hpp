@@ -1859,5 +1859,6 @@ namespace intercept {
         void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void group_select_unit(const object &player_, const object &unit_, bool select_);
         rv_hc_group_params hc_group_params(const object &unit_, const group &group_);
+        void hc_select_group(const object &unit, const std::vector<game_value> &array_);
     }
 }

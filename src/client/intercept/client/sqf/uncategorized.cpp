@@ -6966,5 +6966,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__hcselectgroup__object__array__ret__nothing, unit, std::move(params_right));
         }
+
+        //#TODO: Find out about what exactly is team_
+        void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_) {
+            auto_array<game_value> params_right({
+                group_
+            });
+            if (group_name_.has_value()) params_right.push_back(*group_name_);
+            if (team_.has_value()) params_right.push_back(*team_);
+
+            host::functions.invoke_raw_binary(__sqf::binary__hcsetgroup__object__array__ret__nothing, unit_, std::move(params_right));
+        }
     }
 }

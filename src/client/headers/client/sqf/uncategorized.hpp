@@ -1847,5 +1847,6 @@ namespace intercept {
         float get_sound_controller_result(const object &object_, const config &config_entry_);
         std::variant<bool, float> get_unit_trait(const object &unit_, const std::string &skill_name_);
         game_value get_variable(const control &control_, const std::string &variable_, std::optional<game_value> default_value_);
+        game_value get_variable(const task &task_, const std::string &variable_, const game_value &default_value_);
     }
 }

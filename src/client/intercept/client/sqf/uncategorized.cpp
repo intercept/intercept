@@ -6900,8 +6900,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 variable_
             });
             if (default_value_.has_value()) params_right.push_back(*default_value_);
-            
+
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__control__string_array__ret__any, control_, std::move(params_right));
+        }
+
+        game_value get_variable(const task &task_, const std::string &variable_, const game_value &default_value_) {
+            game_value params_right({
+                variable_,
+                default_value_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__task__array__ret__any, task_, params_right);
         }
     }
 }

@@ -7053,7 +7053,73 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             case 1: param_left = std::get<1>(position_).get();
             }
             
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object__location__ret__bool, param_left, location_);
+            return host::functions.invoke_raw_binary(__sqf::binary__inarea__array__location__ret__bool, param_left, location_);
+        }
+
+        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const object &trigger_) {
+            game_value param_left;
+
+            switch (position_.index())
+            {
+            case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));
+            case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));
+            case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__object__ret__array, param_left, trigger_);
+        }
+
+        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const std::string &marker_) {
+            game_value param_left;
+
+            switch (position_.index())
+            {
+            case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));
+            case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));
+            case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__string__ret__array, param_left, marker_);
+        }
+
+        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            game_value param_left;
+            auto_array<game_value> params_right;
+
+            switch (position_.index())
+            {
+            case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));
+            case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));
+            case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));
+            }
+
+            switch (center_.index())
+            {
+            case 0: params_right.push_back(std::get<0>(center_).get());
+            case 1: params_right.push_back(std::get<1>(center_).get());
+            case 2: params_right.push_back(std::get<2>(center_).get());
+            }
+
+            params_right.push_back(radius_x_);
+            params_right.push_back(radius_y_);
+            params_right.push_back(is_rectangle_);
+
+            if (radius_z_.has_value()) params_right.push_back(*radius_z_);
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__array__ret__array, param_left, std::move(params_right));
+        }
+
+        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const location &location_) {
+            game_value param_left;
+
+            switch (position_.index())
+            {
+            case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));
+            case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));
+            case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__location__ret__array, param_left, location_);
         }
     }
 }

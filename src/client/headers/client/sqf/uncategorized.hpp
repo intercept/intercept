@@ -1845,5 +1845,6 @@ namespace intercept {
         std::vector<std::string> get_object_children(const control &map_, const std::string &object_);
         float get_sound_controller(const object &vehicle_, const std::string &controller_);
         float get_sound_controller_result(const object &object_, const config &config_entry_);
+        std::variant<bool, float> get_unit_trait(const object &unit_, const std::string &skill_name_);
     }
 }

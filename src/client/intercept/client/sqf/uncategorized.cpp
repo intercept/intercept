@@ -6884,5 +6884,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float get_sound_controller_result(const object &object_, const config &config_entry_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontrollerresult__object__config__ret__scalar, object_, config_entry_);
         }
+
+        std::variant<bool, float> get_unit_trait(const object &unit_, const std::string &skill_name_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__getunittrait__object__string__ret__bool_scalar, unit_, skill_name_);
+        
+            if (res.type() == game_data_bool::type_def) {
+                return static_cast<bool>(res);
+            } else {
+                return static_cast<float>(res);
+            }
+        }
     }
 }

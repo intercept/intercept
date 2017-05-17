@@ -1849,5 +1849,7 @@ namespace intercept {
         game_value get_variable(const control &control_, const std::string &variable_, std::optional<game_value> default_value_);
         game_value get_variable(const task &task_, const std::string &variable_, const game_value &default_value_);
         game_value get_variable(const location &location_, const std::string &variable_, const game_value &default_value_);
+        void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
+
     }
 }

@@ -6921,5 +6921,27 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, params_right);
         }
+
+        void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_) {
+            game_value param_left;
+            game_value param_right;
+            
+            if (unit_.index() == 0) {
+                param_left = std::get<0>(unit_).get();
+            }
+            else {
+                auto_array<game_value> units({ std::get<1>(unit_).get().begin(), std::get<1>(unit_).get().end() });
+
+                param_left = std::move(units);
+            }
+            if (target_.index() == 0) {
+                param_right = std::get<0>(target_).get();
+            }
+            else {
+                param_right = std::get<1>(target_).get();
+            }
+            
+            host::functions.invoke_raw_binary(__sqf::binary__glanceat__object_array__object_array__ret__nothing, param_left, param_right);
+        }
     }
 }

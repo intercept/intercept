@@ -7171,5 +7171,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__isuavconnectable__object__array__ret__bool, unit_, params_right);
         }
+
+        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_) {
+            auto_array<game_value> params_right({
+                topic_name_,
+                bikb_file_,
+                fsm_file_
+            });
+
+            switch (event_handler_.index())
+            {
+            case 0: params_right.push_back(std::get<0>(event_handler_).get());
+            case 1: params_right.push_back(std::get<1>(event_handler_).get());
+            }
+                        
+            host::functions.invoke_raw_binary(__sqf::binary__kbaddtopic__object__array__ret__nothing, unit_, std::move(params_right));
+        }
     }
 }

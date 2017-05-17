@@ -6912,5 +6912,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__task__array__ret__any, task_, params_right);
         }
+
+        game_value get_variable(const location &location_, const std::string &variable_, const game_value &default_value_) {
+            game_value params_right({
+                variable_,
+                default_value_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, params_right);
+        }
     }
 }

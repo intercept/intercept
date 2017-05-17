@@ -7121,5 +7121,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__location__ret__array, param_left, location_);
         }
+
+        bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {
+            auto_array<game_value> polygon({ polygon_.begin(), polygon_.end() });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
+        }
     }
 }

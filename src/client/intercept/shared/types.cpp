@@ -318,12 +318,9 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
-        game_data_array::game_data_array(const std::vector<game_value> &init_) {  //#TODO this should not be used in wrappers
+        game_data_array::game_data_array(const std::vector<game_value> &init_) : data(init_.begin(),init_.end()) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            data.resize(init_.size());
-            for (auto& it : init_)
-                data.push_back(it);
         }
 
         game_data_array::game_data_array(const game_data_array & copy_) {

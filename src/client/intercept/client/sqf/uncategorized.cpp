@@ -6952,5 +6952,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
         }
+
+        rv_hc_group_params hc_group_params(const object &unit_, const group &group_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__hcgroupparams__object__group__ret__array, unit_, group_);
+        
+            return rv_hc_group_params({res[0],res[1][0], res[1][1], res[1][2], res[1][3]});
+        }
     }
 }

@@ -1704,6 +1704,13 @@ namespace intercept {
             std::string text_window_foreground;
             std::string selection;
         };
+        struct rv_hc_group_params {
+            std::string string;
+            float f1;
+            float f2;
+            float f3;
+            float f4;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
@@ -1851,6 +1858,6 @@ namespace intercept {
         game_value get_variable(const location &location_, const std::string &variable_, const game_value &default_value_);
         void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void group_select_unit(const object &player_, const object &unit_, bool select_);
-
+        rv_hc_group_params hc_group_params(const object &unit_, const group &group_);
     }
 }

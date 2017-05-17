@@ -20,6 +20,7 @@ namespace intercept {
         functions.get_engine_allocator = client_function_defs::get_engine_allocator;
         functions.register_sqf_function = client_function_defs::register_sqf_function;
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
+        functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         for (auto file : _searcher.active_pbo_list()) {
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);

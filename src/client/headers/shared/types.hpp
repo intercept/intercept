@@ -15,9 +15,10 @@ namespace intercept {
     class registered_sqf_function_impl;
     class invoker;
     namespace types {
-        typedef uintptr_t(__cdecl *nular_function)(char *, uintptr_t);
-        typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
-        typedef uintptr_t(__cdecl *binary_function)(char *, uintptr_t, uintptr_t, uintptr_t);
+        class game_value;
+        typedef game_value*(__cdecl *nular_function)(game_value *, uintptr_t);
+        typedef game_value*(__cdecl *unary_function)(game_value *, uintptr_t, uintptr_t);
+        typedef game_value*(__cdecl *binary_function)(game_value *, uintptr_t, uintptr_t, uintptr_t);
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -1467,25 +1468,31 @@ namespace intercept {
         };
 
         template <game_value(*T)(game_value, game_value)>
-        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*l, *r));
-            return reinterpret_cast<uintptr_t>(sqf_this_);
+            return sqf_this_;
         }
 
         template <game_value(*T)(game_value)>
-        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
-            return reinterpret_cast<uintptr_t>(sqf_this_);
+            return sqf_this_;
         }
 
         template <game_value(*T)(const game_value&)>
-        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
-            return reinterpret_cast<uintptr_t>(sqf_this_);
+            return sqf_this_;
+        }
+
+        template <game_value(*T)()>
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
+            ::new (sqf_this_) game_value(T());
+            return sqf_this_;
         }
     }
 }

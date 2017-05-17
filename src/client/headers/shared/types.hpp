@@ -13,6 +13,7 @@
 namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
+    class invoker;
     namespace types {
         typedef uintptr_t(__cdecl *nular_function)(char *, uintptr_t);
         typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
@@ -911,6 +912,7 @@ namespace intercept {
         class game_value;
         class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
+            friend class invoker;
         public:
             virtual const op_value_entry & type() const { static op_value_entry dummy; return dummy; }//#TODO replace op_value_entry by some better name
             virtual ~game_data() {}
@@ -935,6 +937,9 @@ namespace intercept {
             int IRelease() override { return release(); };
             uintptr_t get_vtable() const {
                 return *reinterpret_cast<const uintptr_t*>(this);
+            }
+            uintptr_t get_secondary_vtable() const {
+                return *reinterpret_cast<const uintptr_t*>(static_cast<const __internal::I_debug_value*>(this));
             }
         };
 
@@ -992,6 +997,7 @@ namespace intercept {
 
         class game_value {
             uintptr_t __vptr;
+            friend class invoker;
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
@@ -1419,6 +1425,13 @@ namespace intercept {
         }
 
         template <game_value(*T)(game_value)>
+        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return reinterpret_cast<uintptr_t>(sqf_this_);
+        }
+
+        template <game_value(*T)(const game_value&)>
         static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));

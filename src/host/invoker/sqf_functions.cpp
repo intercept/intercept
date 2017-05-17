@@ -27,6 +27,7 @@ public:
                 break;
             case GameDataType::OBJECT:
                 //#TODO figure out how to create null object I guess...
+                //Type::createFunction returns objNull
                 break;
         }
         return reinterpret_cast<uintptr_t>(ret_);
@@ -114,7 +115,6 @@ intercept::sqf_functions::~sqf_functions() {}
 */
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
-    //#TODO max length of name is 22 chars... Somehow.. Need to investigate why
     //#TODO check if name already exists. If we assigned that overwrite it except it has a Final flag (Add Final flag)
     typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
@@ -157,6 +157,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
 
     auto gs = (__internal::game_state*) _registerFuncs._gameState;
+    //#TODO if name already exists game_operators will already exist.
     auto& funcs = gs->_scriptOperators.get_table_for_key(lowerName.c_str())->push_back(game_operators(lowerName.c_str()));
     funcs.push_back(op);
     funcs.copyPH(test);

@@ -6977,5 +6977,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__hcsetgroup__object__array__ret__nothing, unit_, std::move(params_right));
         }
+
+        void hide_selection(const object &object_, const std::string &selection_, bool hide_) {
+            game_value params_right({
+                selection_,
+                hide_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__hideselection__object__array__ret__nothing, object_, params_right);
+        }
     }
 }

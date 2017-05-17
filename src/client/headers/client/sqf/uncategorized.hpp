@@ -1861,6 +1861,6 @@ namespace intercept {
         rv_hc_group_params hc_group_params(const object &unit_, const group &group_);
         void hc_select_group(const object &unit, const std::vector<game_value> &array_);
         void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
-
+        void hide_selection(const object &object_, const std::string &selection_, bool hide_);
     }
 }

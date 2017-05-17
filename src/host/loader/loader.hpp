@@ -27,7 +27,9 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<unary_entry>> unary_map;
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
-
+    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+        struct gsTypeInfo;
+    };
     struct sqf_register_functions {
         uintptr_t _gameState;
         uintptr_t _operator_construct;
@@ -35,7 +37,7 @@ namespace intercept {
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
         uintptr_t _type_vtable;
-        std::array<uintptr_t, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {0};
+        std::array<__internal::gsTypeInfo *, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {0};
     };
 
     /*!
@@ -342,8 +344,9 @@ namespace intercept {
             uint32_t placeholder11;//0x44
         };
         struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;
-            void* _createFunction{ nullptr };
+            const r_string _name;            //#TODO this is same as value_type
+            using createFunc = game_data* (*)(void* _null);
+            createFunc _createFunction{ nullptr };
         };
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:

@@ -1930,6 +1930,7 @@ namespace intercept {
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_event_handler(const object &object_, const std::string &event_, int index_);
         void remove_magazine(const object &unit_, const std::string &magazine_class_);
+        void remove_magazine_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_);
 
     }
 }

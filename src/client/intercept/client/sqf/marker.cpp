@@ -544,11 +544,9 @@ namespace intercept {
         std::vector<object> list(const object& trigger_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__list__object__ret__array, trigger_);
 
-            if (ret.size() == 0) {
-                return {};
-            } else {
-                return __helpers::__convert_to_objects_vector(ret);
-            }
+            if (ret.size() == 0) return {};
+            
+            return __helpers::__convert_to_objects_vector(ret);
         }
         void trigger_attach_object(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);
@@ -581,9 +579,9 @@ namespace intercept {
         }
         object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_/* = true*/) {
             game_value args({
-                (type_),
-                (pos_),
-                (make_global_)
+                type_,
+                pos_,
+                make_global_
             });
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
@@ -591,9 +589,9 @@ namespace intercept {
 
         object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
             game_value args({
-                (type_),
+                type_,
                 pos_,
-                (make_global_)
+                make_global_
             });
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));

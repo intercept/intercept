@@ -37,7 +37,7 @@ namespace intercept {
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
         uintptr_t _type_vtable;
-        std::array<__internal::gsTypeInfo *, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {0};
+        std::array<__internal::gsTypeInfo *, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {nullptr};
     };
 
     /*!
@@ -294,13 +294,13 @@ namespace intercept {
             uint32_t placeholder10;//0x28
             uint32_t placeholder11;//0x2C
         };
-        class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
+        class gsFunction : public gsFuncBase {
             uint32_t placeholder12;//0x30
         public:
-            r_string _name2;//0x28 this is (tolower name)
-            unary_operator * _operator;//0x2C
-            uint32_t placeholder_10;//0x30 RString to something
-            r_string _description;//0x34
+            r_string _name2;//0x34 this is (tolower name)
+            unary_operator * _operator;//0x38
+            uint32_t placeholder_10;//0x3c RString to something
+            r_string _description;//0x38
             r_string _example;
             r_string _example2;
             r_string placeholder_11;
@@ -310,30 +310,30 @@ namespace intercept {
         };
         class gsOperator : public gsFuncBase {
             uint32_t placeholder12;//0x30  JNI function
-        public:                  //#TODO fix offsets in comments
-            r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder_10 { 4 }; //0x2C Small int 0-5  priority
-            binary_operator * _operator;//0x30
-            r_string _leftType;//0x34 Description of left hand side parameter
-            r_string _rightType;//0x38 Description of right hand side parameter
-            r_string _description;//0x3C
-            r_string _example;//0x40
-            r_string placeholder_11;//0x44
-            r_string _version;//0x48 some version number
-            r_string placeholder_12;//0x4C
-            r_string _category{ "intercept" }; //0x50
+        public:
+            r_string _name2;//0x34 this is (tolower name)
+            int32_t placeholder_10 { 4 }; //0x38 Small int 0-5  priority
+            binary_operator * _operator;//0x3c
+            r_string _leftType;//0x40 Description of left hand side parameter
+            r_string _rightType;//0x44 Description of right hand side parameter
+            r_string _description;//0x48
+            r_string _example;//0x4c
+            r_string placeholder_11;//0x60
+            r_string _version;//0x64 some version number
+            r_string placeholder_12;//0x68
+            r_string _category{ "intercept" }; //0x6c
         };
         class gsNular : public gsFuncBase {
         public:
-            r_string _name2;//0x24 this is (tolower name)
-            nular_operator * _operator;//0x28
-            r_string _description;//0x2C
+            r_string _name2;//0x30 this is (tolower name)
+            nular_operator * _operator;//0x34
+            r_string _description;//0x38
             r_string _example;
             r_string _example2;
-            r_string _version;//0x38 some version number
+            r_string _version;//0x44 some version number
             r_string placeholder_10;
-            r_string _category; //0x40
-            uint32_t placeholder11;//0x44
+            r_string _category; //0x4d
+            uint32_t placeholder11;//0x50
             const char *get_map_key() const { return _name2.data(); }
         };
         struct gsTypeInfo { //Donated from ArmaDebugEngine

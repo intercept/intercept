@@ -192,7 +192,7 @@ namespace intercept {
 
         @return Returns `true` if it was bound, `false` if it was not.
         */
-        bool add_eventhandler(const std::string & name_, std::function<void(const std::string &, game_value &)> func_);
+        bool add_eventhandler(const std::string & name_, std::function<void(game_value &)> func_);
 
         /*!
         @brief A map of vtable ptrs to string stypes.
@@ -278,7 +278,7 @@ namespace intercept {
         @brief A collection of bound functions for processing event handlers in
         the client plugins.
         */
-        std::unordered_map < std::string, std::function<void(const std::string &, game_value &)> > _eventhandlers;
+        std::unordered_map < std::string, std::function<void(game_value &)> > _eventhandlers;
 
         bool _patched;
         bool _attached;

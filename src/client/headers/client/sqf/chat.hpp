@@ -37,8 +37,13 @@ namespace intercept {
         void radio_channel_set_label(float value0_, const std::string& value1_);
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_);
         float radio_channel_create(const rv_color &color_, const std::string &label_, const std::string &callsign_, const std::vector<object> &units_, bool quote_);
-        float current_channel();
-        // returns [chat enabled, VoN enabled]  https://community.bistudio.com/wiki/channelEnabled
+        float current_channel();  
+        /**
+         * \brief channel_enabled
+         * \see https://community.bistudio.com/wiki/channelEnabled
+         * \param channel_ 
+         * \return [chat enabled, VoN enabled]
+         */
         std::pair<bool, bool> channel_enabled(float channel_);
         float get_player_channel(const object &value_);
         bool set_current_channel(float value_);

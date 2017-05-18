@@ -85,7 +85,7 @@ namespace intercept {
 
         This returns a pointer to Arma's internal memory allocator for use by rv_allocator
 
-        @param value_ A pointer to the allocator
+        @return A pointer to the allocator
         */
         const types::__internal::allocatorInfo* get_engine_allocator();
 

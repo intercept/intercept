@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "shared.hpp"
 
@@ -20,7 +20,7 @@ namespace intercept {
         int as_int() const { return atoi(_args[_index].c_str()); }
         operator int() const { return as_int(); }
 
-        int as_uint32() const { return (uint32_t)atoi(_args[_index].c_str()); }
+        int as_uint32() const { return static_cast<uint32_t>(atoi(_args[_index].c_str())); }
         operator uint32_t() const { return as_uint32(); }
 
     protected:
@@ -48,12 +48,12 @@ namespace intercept {
 		const std::string & as_string() { return _args[_internal_index++]; }
 		float as_float() { return to_float(_args[_internal_index++]); }
 		int as_int() { return atoi(_args[_internal_index++].c_str()); }
-		int as_uint32() { return (uint32_t)atoi(_args[_internal_index++].c_str()); }
+		int as_uint32() { return static_cast<uint32_t>(atoi(_args[_internal_index++].c_str())); }
 
         const std::string & as_string(uint32_t _index) const { return _args[_index]; }
         float as_float(uint32_t _index) const { return to_float(_args[_index]); }
         int as_int(uint32_t _index) const { return atoi(_args[_index].c_str()); }
-        int as_uint32(uint32_t _index) const { return (uint32_t)atoi(_args[_index].c_str()); }
+        int as_uint32(uint32_t _index) const { return static_cast<uint32_t>(atoi(_args[_index].c_str())); }
 
 
         const std::string & get() const {

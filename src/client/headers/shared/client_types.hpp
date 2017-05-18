@@ -2,7 +2,7 @@
 #include "shared.hpp"
 #include "types.hpp"
 #include <vector>
-#include <memory>
+
 namespace intercept {
     namespace types {
 
@@ -12,8 +12,8 @@ namespace intercept {
             //internal_object(const rv_game_value &value_);  //deprecated
             internal_object(const game_value &value_);
             internal_object(const internal_object &copy_);
-            internal_object(internal_object &&move_);
-            internal_object & operator = (internal_object &&move_);
+            internal_object(internal_object &&move_) noexcept;
+            internal_object & operator = (internal_object &&move_) noexcept;
 
             internal_object & operator = (const internal_object &copy_);
 

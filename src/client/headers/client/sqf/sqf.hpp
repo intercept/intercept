@@ -17,6 +17,7 @@
 #include "inventory.hpp"
 
 #include "uncategorized.hpp"
+#include <regex>
 
 #define __XXXSQF_QUOTE(...) #__VA_ARGS__
 #define __XXXSQF_EXPAND_AND_QUOTE(str) __XXXSQF_QUOTE(str)
@@ -34,7 +35,7 @@ class __inline_sqf_helper_launcher {
 protected:
     class __inline_sqf_helper {
     public:
-        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false) {
+        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false), _capture_return(nullptr) {
             _capture_args = game_value();
         }
 

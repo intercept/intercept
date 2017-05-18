@@ -1,5 +1,5 @@
 ﻿#include "chat.hpp"
-#include "client\pointers.hpp"
+#include "client/pointers.hpp"
 #include "position.hpp"
 #include "common_helpers.hpp"
 

@@ -7444,5 +7444,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__array__scalar__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), duration_);
             }
         }
+
+        void pp_effect_enable(const std::vector<int> &effets_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_)
+        }
     }
 }

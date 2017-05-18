@@ -1950,5 +1950,6 @@ namespace intercept {
         task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_);
         task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<std::string> &values_);
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
+        bool server_command(const std::string &password_, const std::string &command_);
     }
 }

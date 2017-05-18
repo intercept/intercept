@@ -1914,6 +1914,7 @@ namespace intercept {
         game_value on_show_new_object(const object &control_, const std::string &command_);
         void order_get_in(const std::vector<object> &units_, bool order_);
         void pp_effect_adjust(std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<int>> effect_, const game_value &settings_);
+        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
 
     }
 }

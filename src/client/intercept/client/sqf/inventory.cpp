@@ -794,6 +794,29 @@ namespace intercept {
         std::string primary_weapon(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__primaryweapon__object__ret__string, value_);
         }
+        void remove_magazine(const object& target_, const std::string &magazine_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazine__object__string_array__ret__nothing, target_, magazine_);
+        }
+        void remove_magazines_turret(const object& target_, const std::string& magazine_, const std::vector<int>& turretPath_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, target_, { magazine_, game_value(auto_array<game_value>(turretPath_.begin(),turretPath_.end())) });
+        }
+        void remove_magazine_turret(const object& target_, const std::string& magazine_, const std::vector<int>& turretPath_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, target_, { magazine_, game_value(auto_array<game_value>(turretPath_.begin(),turretPath_.end())) });
+        }
+        void remove_weapon_attachment_cargo(const object&, const std::vector<game_value> &) {
+            //binary__removeweaponattachmentcargo__object__array__ret__nothing
+        }
+        void remove_weapon_cargo(const object&, const std::vector<game_value> &) {
+            //binary__removeweaponcargo__object__array__ret__nothing
+        }
+        void remove_weapon_turret(const object& target_, const std::string& weapon_name_, const std::vector<int>& turretPath_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, target_, { weapon_name_, game_value(auto_array<game_value>(turretPath_.begin(),turretPath_.end())) });
+        }
+        void set_ammo(const object& target_, const std::string &weapon_, int count) {
+            host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, target_, { weapon_, count });
+        }
+
+
     }
 }
 

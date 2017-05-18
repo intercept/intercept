@@ -300,5 +300,18 @@ namespace intercept {
 
         std::string secondary_weapon(const object &value_);
         std::string primary_weapon(const object &value_);
+
+
+        void remove_magazine(const object& target_, const std::string &magazine_);
+        void remove_magazines_turret(const object& target_, const std::string& magazine_, const std::vector<int>& turretPath_);
+        void remove_magazine_turret(const object& target_, const std::string& magazine_, const std::vector<int>& turretPath_);
+        //Unimplemented in Engine - Arguments are nonsense
+        void remove_weapon_attachment_cargo(const object& target_, const std::vector<game_value> &arg);
+        //Unimplemented in Engine - Arguments are nonsense
+        void remove_weapon_cargo(const object& target_, const std::vector<game_value> &arg);
+        void remove_weapon_turret(const object& target_, const std::string& weapon_name_, const std::vector<int>& turretPath_);
+        void set_ammo(const object& target_, const std::string &weapon_, int count);
+
+
     }
 }

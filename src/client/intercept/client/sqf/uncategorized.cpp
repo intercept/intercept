@@ -7401,5 +7401,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void obj_status(const std::string &objective_number_, const std::string &status_) {
             host::functions.invoke_raw_binary(__sqf::binary__objstatus__string__string__ret__nothing, objective_number_, status_);
         }
+
+        game_value on_double_click(const control &map_, const std::string &command_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ondoubleclick__control__string__ret__any, map_, command_);
+        }
     }
 }

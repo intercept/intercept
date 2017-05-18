@@ -1909,5 +1909,6 @@ namespace intercept {
         int nmenu_items(const control &map_, const std::string &menu_name_);
         int nmenu_items(const control &map_, int index_);
         void obj_status(const std::string &objective_number_, const std::string &status_);
+        game_value on_double_click(const control &map_, const std::string &command_);
     }
 }

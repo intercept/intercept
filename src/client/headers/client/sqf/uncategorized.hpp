@@ -1943,6 +1943,6 @@ namespace intercept {
         void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const object &target_);
         void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const std::vector<object> &targets_);
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
-
+        void rope_detach(const object &vehicle_, const object &rope_);
     }
 }

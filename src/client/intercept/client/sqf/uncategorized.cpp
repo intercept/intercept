@@ -7720,5 +7720,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__array__ret__nothing, param_left, std::move(targets));
         }
+
+        void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_) {
+            game_value params_left({
+                vehicle_,
+                offset_,
+                rope_end_down_dir_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__array__object__ret__nothing, params_left, rope_);
+        }
     }
 }

@@ -7361,7 +7361,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
-        {
             game_value param_left;
             switch (position_.index())
             {
@@ -7371,6 +7370,24 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             }
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearsupplies__object_array__scalar_array__ret__array, param_left, radius_));
+        }
+
+        std::vector<rv_target> near_targets(const object &unit_, float radius_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__neartargets__object__scalar__ret__array, unit_, radius_);
+
+            std::vector<rv_target> targets;
+            for (int i = 0; i < res.size(); i++) {
+                targets.push_back(rv_target({
+                    __helpers::__convert_to_vector3(res[i][0]),
+                    res[i][1],
+                    res[i][2],
+                    res[i][3],
+                    res[i][4],
+                    res[i][5],
+                }));
+            }
+
+            return targets;
         }
     }
 }

@@ -1711,6 +1711,14 @@ namespace intercept {
             float f3;
             float f4;
         };
+        struct rv_target {
+            vector3 position;
+            std::string type;
+            side side;
+            float subjective_cost;
+            object object_;
+            float position_accuracy;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
@@ -1897,6 +1905,6 @@ namespace intercept {
         bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
         std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
         std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-
+        std::vector<rv_target> near_targets(const object &unit_, float radius_);
     }
 }

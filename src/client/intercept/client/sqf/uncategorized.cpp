@@ -7687,5 +7687,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void respawn_vehicle(const object &vehicle_, float delay_, int count_) {
+            game_value params_right({
+                delay_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__respawnvehicle__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

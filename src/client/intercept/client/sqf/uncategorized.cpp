@@ -7610,5 +7610,129 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, params_right);
         }
+
+        void remove_magazine(const object &unit_, const std::string &magazine_class_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazine__object__string_array__ret__nothing, unit_, magazine_class_);
+        }
+
+        void remove_magazine_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path({ turret_path_.begin(),turret_path_.end() });
+
+            game_value params_right({
+                magazine_class_,
+                std::move(turret_path)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void remove_magazines_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path({ turret_path_.begin(),turret_path_.end() });
+
+            game_value params_right({
+                magazine_class_,
+                std::move(turret_path)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void remove_mp_event_handler(const object &object_, const std::string &event_, int index_) {
+            game_value params_right({
+                event_,
+                index_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
+        }
+
+        void remove_owned_mine(const object &unit_, const object &mine_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeownedmine__object__object__ret__nothing, unit_, mine_);
+        }
+
+        void remove_simple_task(const object &unit_, const task &task_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removesimpletask__object__task__ret__nothing, unit_, task_);
+        }
+
+        void remove_team_member(const team_member &team_, const team_member &member_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
+        }
+
+        void remove_weapon_attachment_cargo(const object &vehicle_, int weapon_id_, int creator_id_, const std::string &attachment_) {
+            game_value params_right({
+                weapon_id_,
+                creator_id_,
+                attachment_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponattachmentcargo__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void remove_weapon_cargo(const object &vehicle_, int weapon_id_, int creator_id_) {
+            game_value params_right({
+                weapon_id_,
+                creator_id_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponcargo__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void remove_weapon_turret(const object &vehicle_, const std::string &weapon_name_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path({ turret_path_.begin(),turret_path_.end() });
+            
+            game_value params_right({
+                weapon_name_,
+                std::move(turret_path)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void respawn_vehicle(const object &vehicle_, float delay_, int count_) {
+            game_value params_right({
+                delay_,
+                count_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__respawnvehicle__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const object &target_) {
+            game_value param_left;
+            switch (unit_.index())
+            {
+            case 0: param_left = std::get<0>(unit_).get();
+            case 1: param_left = std::get<1>(unit_).get();
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__object__ret__nothing, param_left, target_);
+        }
+
+        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const std::vector<object> &targets_) {
+            auto_array<game_value> targets({ targets_.begin(),targets_.end() });
+            
+            game_value param_left;
+            switch (unit_.index())
+            {
+            case 0: param_left = std::get<0>(unit_).get();
+            case 1: param_left = std::get<1>(unit_).get();
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__array__ret__nothing, param_left, std::move(targets));
+        }
+
+        void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_) {
+            game_value params_left({
+                vehicle_,
+                offset_,
+                rope_end_down_dir_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__array__object__ret__nothing, params_left, rope_);
+        }
+
+        void rope_detach(const object &vehicle_, const object &rope_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ropedetach__object__object__ret__nothing, vehicle_, rope_);
+        }
     }
 }

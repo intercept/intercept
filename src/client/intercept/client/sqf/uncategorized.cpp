@@ -7704,8 +7704,21 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             case 0: param_left = std::get<0>(unit_).get();
             case 1: param_left = std::get<1>(unit_).get();
             }
-            
+
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__object__ret__nothing, param_left, target_);
+        }
+
+        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const std::vector<object> &targets_) {
+            auto_array<game_value> targets({ targets_.begin(),targets_.end() });
+            
+            game_value param_left;
+            switch (unit_.index())
+            {
+            case 0: param_left = std::get<0>(unit_).get();
+            case 1: param_left = std::get<1>(unit_).get();
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__array__ret__nothing, param_left, std::move(targets));
         }
     }
 }

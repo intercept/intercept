@@ -7636,5 +7636,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void remove_mp_event_handler(const object &object_, const std::string &event_, int index_) {
+            game_value params_right({
+                event_,
+                index_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
+        }
     }
 }

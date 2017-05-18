@@ -7657,5 +7657,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void remove_team_member(const team_member &team_, const team_member &member_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
         }
+
+        void remove_weapon_attachment_cargo(const object &vehicle_, int weapon_id_, int creator_id_, const std::string &attachment_) {
+            game_value params_right({
+                weapon_id_,
+                creator_id_,
+                attachment_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponattachmentcargo__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

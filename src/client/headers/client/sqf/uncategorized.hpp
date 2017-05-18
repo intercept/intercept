@@ -1936,5 +1936,7 @@ namespace intercept {
         void remove_owned_mine(const object &unit_, const object &mine_);
         void remove_simple_task(const object &unit_, const task &task_);
         void remove_team_member(const team_member &team_, const team_member &member_);
+        void remove_weapon_attachment_cargo(const object &vehicle_, int weapon_id_, int creator_id_, const std::string &attachment_);
+
     }
 }

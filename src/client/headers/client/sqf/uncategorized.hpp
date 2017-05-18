@@ -1959,5 +1959,6 @@ namespace intercept {
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_);
         void set_behaviour(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &behaviour_);
         void set_captive(const object &unit_, bool captive_);
+        void set_center_of_mass(const object &object_, const vector3 &offset_, std::optional<float> time_);
     }
 }

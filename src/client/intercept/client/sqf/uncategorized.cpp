@@ -7873,5 +7873,18 @@ pitch_
         void set_captive(const object &unit_, bool captive_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcaptive__object__bool_scalar__ret__nothing, unit_, captive_);
         }
+
+        void set_center_of_mass(const object &object_, const vector3 &offset_, std::optional<float> time_) {
+            if (time_.has_value()) {
+                game_value params_right({
+                    offset_,
+                    *time_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__setcenterofmass__object__array__ret__nothing, object_, params_right);
+                return;
+            };
+
+            host::functions.invoke_raw_binary(__sqf::binary__setcenterofmass__object__array__ret__nothing, object_, offset_);
+        }
     }
 }

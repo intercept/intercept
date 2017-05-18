@@ -7649,5 +7649,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void remove_owned_mine(const object &unit_, const object &mine_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeownedmine__object__object__ret__nothing, unit_, mine_);
         }
+
+        void remove_simple_task(const object &unit_, const task &task_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removesimpletask__object__task__ret__nothing, unit_, task_);
+        }
     }
 }

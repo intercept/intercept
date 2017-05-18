@@ -1934,6 +1934,6 @@ namespace intercept {
         void remove_magazines_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_);
         void remove_mp_event_handler(const object &object_, const std::string &event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
-
+        void remove_simple_task(const object &unit_, const task &task_);
     }
 }

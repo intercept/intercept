@@ -7900,5 +7900,14 @@ pitch_
         void set_convoy_seperation(const object &vehicle_, float distance_) {
             host::functions.invoke_raw_binary(__sqf::binary__setconvoyseparation__object__scalar__ret__nothing, vehicle_, distance_);
         }
+
+        void set_curator_coef(const object &curator_object_, const std::string &action_, float coefficient_) {
+            game_value params_right({
+                action_,
+                coefficient_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_object_, params_right);
+        }
     }
 }

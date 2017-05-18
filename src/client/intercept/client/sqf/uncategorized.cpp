@@ -7233,5 +7233,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsettext__control__array__ret__nothing, control_, params_right);
         }
+
+        void leave_vehicle(const object &unit_, const object &vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__leavevehicle__object__object__ret__nothing, unit_, vehicle_);
+        }
     }
 }

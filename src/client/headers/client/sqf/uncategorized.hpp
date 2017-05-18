@@ -1881,6 +1881,7 @@ namespace intercept {
         void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_);
         bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_);
         void lb_set_text(const control &control_, int index_, const std::string &text_);
+        void leave_vehicle(const object &unit_, const object &vehicle_);
 
     }
 }

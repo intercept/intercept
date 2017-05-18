@@ -1940,5 +1940,7 @@ namespace intercept {
         void remove_weapon_cargo(const object &vehicle_, int weapon_id_, int creator_id_);
         void remove_weapon_turret(const object &vehicle_, const std::string &weapon_name_, const std::vector<int> &turret_path_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
+        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const object &target_);
+
     }
 }

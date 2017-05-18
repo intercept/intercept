@@ -7869,5 +7869,9 @@ pitch_
             
             host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, param_left, behaviour_);
         }
+
+        void set_captive(const object &unit_, bool captive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcaptive__object__bool_scalar__ret__nothing, unit_, captive_);
+        }
     }
 }

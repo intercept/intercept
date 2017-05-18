@@ -1958,6 +1958,6 @@ namespace intercept {
         void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_);
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_);
         void set_behaviour(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &behaviour_);
-
+        void set_captive(const object &unit_, bool captive_);
     }
 }

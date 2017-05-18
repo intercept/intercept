@@ -1731,7 +1731,7 @@ namespace intercept {
         void lb_set_data(const control &control_, int index_, const std::string &data_) {
             game_value args({
                 static_cast<float>(index_),
-                (data_)
+                data_
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsetdata__control__array__ret__nothing, control_, args);
@@ -1750,7 +1750,7 @@ namespace intercept {
         void lb_set_picture(const control &control_, int index_, const std::string &name_) {
             game_value args({
                 static_cast<float>(index_),
-                (name_)
+                name_
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsetpicture__control__array__ret__nothing, control_, args);
@@ -1769,7 +1769,7 @@ namespace intercept {
         void lb_set_picture_right(const control &control_, int index_, const std::string &name_) {
             game_value args({
                 static_cast<float>(index_),
-                (name_)
+                name_
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsetpictureright__control__array__ret__nothing, control_, args);
@@ -1908,7 +1908,7 @@ namespace intercept {
         void lb_sort(const control &control_, const std::string &sort_order_) {
             game_value args({
                 control_,
-                (sort_order_)
+                sort_order_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__scalar, args);
@@ -1957,7 +1957,7 @@ namespace intercept {
             game_value params({
                 static_cast<float>(idc_),
                 static_cast<float>(index_),
-                (color_)
+                color_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__lbsetselectcolor__array__ret__nothing, params);
@@ -2222,9 +2222,9 @@ namespace intercept {
 
         void cut_obj(const std::string &name_, const std::string &type_, float speed_) {
             game_value args({
-                (name_),
-                (type_),
-                (speed_)
+                name_,
+                type_,
+                speed_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__cutobj__array__ret__nothing, args);
@@ -2232,10 +2232,10 @@ namespace intercept {
 
         void cut_rsc(const std::string &name_, const std::string &type_, float speed_, bool show_on_map_) {
             game_value args({
-                (name_),
-                (type_),
-                (speed_),
-                (show_on_map_)
+                name_,
+                type_,
+                speed_,
+                show_on_map_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__cutrsc__array__ret__nothing, args);
@@ -2243,10 +2243,10 @@ namespace intercept {
 
         void cut_text(const std::string &name_, const std::string &type_, float speed_, bool show_on_map_) {
             game_value args({
-                (name_),
-                (type_),
-                (speed_),
-                (show_on_map_)
+                name_,
+                type_,
+                speed_,
+                show_on_map_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__cuttext__array__ret__nothing, args);

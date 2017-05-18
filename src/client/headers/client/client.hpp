@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "../shared.hpp"
 #include "shared/functions.hpp"
-#include <chrono>
-#include <regex>
 
 #define DLLEXPORT __declspec(dllexport)
 
@@ -26,7 +24,7 @@ namespace intercept {
 
         
         extern "C" {
-            DLLEXPORT void __cdecl assign_functions(const struct intercept::client_functions funcs);
+            DLLEXPORT void __cdecl assign_functions(const struct client_functions funcs);
             DLLEXPORT void __cdecl handle_unload();
         }
 
@@ -34,7 +32,7 @@ namespace intercept {
 
         class invoker_lock {
         public:
-            invoker_lock(bool delayed_ = false);
+            explicit invoker_lock(bool delayed_ = false);
             invoker_lock(const invoker_lock &) = delete;
             invoker_lock(invoker_lock &&) = delete;
             invoker_lock & operator=(const invoker_lock &) = delete;

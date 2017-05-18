@@ -51,7 +51,7 @@ namespace intercept {
             std::string type;
             game_value entity;
 
-            rv_eden_mouse_over(const game_value &rv_game_value_)
+            explicit rv_eden_mouse_over(const game_value &rv_game_value_)
                 : type(rv_game_value_[0]),
                 entity(rv_game_value_[1]) {}
         };

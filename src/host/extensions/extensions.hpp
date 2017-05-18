@@ -20,7 +20,7 @@ https://github.com/NouberNou/intercept
 
 namespace intercept {
     /*!
-    @namespace
+    @namespace module
     @brief Contains the module entry definitions and classes.
     */
     namespace module {
@@ -31,7 +31,7 @@ namespace intercept {
         @brief Function definitions.
         */
         typedef int(__cdecl *api_version_func)();
-        typedef void(__cdecl *assign_functions_func)(const struct intercept::client_functions funcs);
+        typedef void(__cdecl *assign_functions_func)(const struct client_functions funcs);
         typedef void(__cdecl *handle_unload_func)();
         typedef void(__cdecl *pre_start_func)();
         typedef void(__cdecl *pre_init_func)();
@@ -266,9 +266,9 @@ namespace intercept {
         */
         std::unordered_map<std::string, module::entry> _modules;
 
-        intercept::pbo::search _searcher;
+        pbo::search _searcher;
 
         std::list<std::string> _mod_folders;
     };
     
-};
+}

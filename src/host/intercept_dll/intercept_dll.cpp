@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
@@ -21,17 +21,15 @@ INITIALIZE_EASYLOGGINGPP
 extern "C"
 {
     __declspec(dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
-};
-
+}
 
 
 static char version[] = "1.0";
 
 std::string get_command(const std::string & input) {
-    size_t cmd_end;
     std::string command;
 
-    cmd_end = input.find(':');
+    size_t cmd_end = input.find(':');
     if (cmd_end < 1) {
         return "";
     }
@@ -48,11 +46,10 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     std::string input = function;
 
     std::string command = get_command(input);
-    bool block_execute = false;
 
     std::string argument_str;
     if (command.length() > 1 && input.length() > command.length() + 1) {
-        argument_str = input.substr(command.length() + 1, (input.length() + 1 - command.length()));
+        argument_str = input.substr(command.length() + 1, input.length() + 1 - command.length());
     }
     intercept::arguments _args(argument_str);
 
@@ -96,7 +93,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 intercept::client_functions intercept::client::host::functions;
 
 
-void Init(void) {
+void Init() {
     intercept::client::host::functions = intercept::extensions::get().functions;
     el::Configurations conf;
 
@@ -113,7 +110,7 @@ void Init(void) {
     LOG(INFO) << "Intercept DLL Loaded";
 }
 
-void Cleanup(void) {
+void Cleanup() {
 
 }
 

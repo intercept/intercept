@@ -200,7 +200,7 @@ namespace intercept {
 
         //Shamelessly copied from Dedmen's Hack :3
         CHAR fileName[_MAX_PATH];
-        DWORD size = GetModuleFileName(0, fileName, _MAX_PATH);
+        DWORD size = GetModuleFileName(nullptr, fileName, _MAX_PATH);
         fileName[size] = NULL;
         DWORD handle = 0;
         size = GetFileVersionInfoSize(fileName, &handle);
@@ -209,8 +209,8 @@ namespace intercept {
             delete[] versionInfo;
         }
         UINT    			len = 0;
-        VS_FIXEDFILEINFO*   vsfi = NULL;
-        VerQueryValue(versionInfo, "\\", (void**) &vsfi, &len);
+        VS_FIXEDFILEINFO*   vsfi = nullptr;
+        VerQueryValue(versionInfo, "\\", reinterpret_cast<void**>(&vsfi), &len);
         short version = HIWORD(vsfi->dwFileVersionLS);//131
         short version1 = LOWORD(vsfi->dwFileVersionLS);//646
         short version2 = HIWORD(vsfi->dwFileVersionMS);// 1

@@ -13,9 +13,9 @@ namespace intercept {
         internal_object::internal_object(const internal_object & copy_) : game_value(copy_) {
             set_vtable(game_value::__vptr_def);
         }
-        internal_object::internal_object(internal_object && move_) : game_value(move_) { set_vtable(game_value::__vptr_def); };
+        internal_object::internal_object(internal_object && move_) noexcept : game_value(move_) { set_vtable(game_value::__vptr_def); };
 
-        internal_object & internal_object::operator=(internal_object && move_) {
+        internal_object & internal_object::operator=(internal_object && move_) noexcept {
             if (this == &move_)
                 return *this;
             game_value::operator=(std::move(move_));

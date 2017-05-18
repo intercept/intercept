@@ -124,7 +124,7 @@ namespace intercept {
         uintptr_t game_value::__vptr_def;
 
 
-        value_types op_value_entry::type() const {
+        value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
                 return{ static_cast<std::string>(single_type->type_name) };
             } else {
@@ -135,7 +135,7 @@ namespace intercept {
             }
         }
 
-        std::string op_value_entry::type_str() const {
+        std::string sqf_script_type::type_str() const {
             if (single_type != nullptr) {
                 return static_cast<std::string>(single_type->type_name);
             } else {
@@ -839,6 +839,7 @@ namespace intercept {
                 case GameDataType::TASK: return "TASK";
                 case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
                 case GameDataType::LOCATION: return "LOCATION";
+                default: ;
             }
             return "";
         }

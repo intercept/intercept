@@ -68,6 +68,8 @@ namespace intercept {
     }
 
     bool invoker::invoker_end_register(const arguments & args_, std::string & result_) {
+        //#TODO move pre_start to here
+        _intercept_registerTypes_function.clear(); //#TEST
         //#deprecate
         //if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
         //    LOG(INFO) << "Registration function unhooked.";
@@ -117,7 +119,7 @@ namespace intercept {
                 all = true;
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
-            handler->second(event_name_, params_);
+            handler->second(params_);
             LOG(DEBUG) << "EH " << event_name_ << " END";
             return true;
         }
@@ -138,7 +140,7 @@ namespace intercept {
         auto signal_func_it = signal_module->second.signal_funcs.find(signal_name);
         module::on_signal_func signal_func;
         if (signal_func_it == signal_module->second.signal_funcs.end()) {
-            signal_func = (module::on_signal_func)GetProcAddress(signal_module->second.handle, signal_name.c_str()); //#TODO why?! The signal module function thingy is commented out.. also has a #TODO with ?! on it
+            signal_func = reinterpret_cast<module::on_signal_func>(GetProcAddress(signal_module->second.handle, signal_name.c_str())); //#TODO why?! The signal module function thingy is commented out.. also has a #TODO with ?! on it
             if (!signal_func)
                 return false;
             else
@@ -251,13 +253,11 @@ namespace intercept {
         invoker::get()._sqf_game_state = regInfo._gameState;
         sqf_game_state = regInfo._gameState;
 
-        std::pair<value_type, value_type> structure;
-
         game_value::__vptr_def = left_arg_.get_vtable();
         invoker::get().type_structures["GV"] = { game_value::__vptr_def ,game_value::__vptr_def };
 
         ref<game_data> gd_ar(regInfo._types[static_cast<size_t>(GameDataType::ARRAY)]->_createFunction(nullptr));
-        structure = { gd_ar->get_vtable(), gd_ar->get_secondary_vtable() };
+        std::pair<value_type, value_type> structure = { gd_ar->get_vtable(), gd_ar->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "ARRAY";
         invoker::get().type_structures["ARRAY"] = structure;
         game_data_array::type_def = structure.first;
@@ -361,7 +361,7 @@ namespace intercept {
         return true;
     }
 
-    bool invoker::add_eventhandler(const std::string & name_, std::function<void(const std::string&, game_value&)> func_) {
+    bool invoker::add_eventhandler(const std::string & name_, std::function<void(game_value&)> func_) {
         if (_eventhandlers.find(name_) != _eventhandlers.end()) {
             // @TODO: Exceptions
             return false;

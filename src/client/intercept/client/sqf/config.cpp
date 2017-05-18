@@ -12,7 +12,7 @@ namespace intercept {
             _config_entry = copy_._config_entry;
             _initialized = copy_._initialized;
         }
-        config_entry::config_entry(config_entry && move_) {
+        config_entry::config_entry(config_entry && move_) noexcept {
             _config_entry = std::move(move_._config_entry);
             _initialized = move_._initialized;
         }
@@ -21,7 +21,7 @@ namespace intercept {
             _initialized = copy_._initialized;
             return *this;
         }
-        config_entry & config_entry::operator=(config_entry && move_) {
+        config_entry & config_entry::operator=(config_entry && move_) noexcept {
             if (this == &move_)
                 return *this;
             _config_entry = std::move(move_._config_entry);

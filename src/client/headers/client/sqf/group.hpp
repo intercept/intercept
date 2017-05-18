@@ -55,7 +55,7 @@ namespace intercept {
             float scale;
             bool visible;
 
-            rv_group_icon_params(const game_value &ret_game_value_) :
+            explicit rv_group_icon_params(const game_value &ret_game_value_) :
                 color(ret_game_value_[0]),
                 text(ret_game_value_[1]),
                 scale(ret_game_value_[2]),

@@ -1928,6 +1928,7 @@ namespace intercept {
         void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
+        void remove_event_handler(const object &object_, const std::string &event_, int index_);
 
     }
 }

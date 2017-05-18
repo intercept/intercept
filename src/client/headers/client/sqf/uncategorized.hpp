@@ -1929,6 +1929,7 @@ namespace intercept {
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_event_handler(const object &object_, const std::string &event_, int index_);
+        void remove_magazine(const object &unit_, const std::string &magazine_class_);
 
     }
 }

@@ -7769,5 +7769,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__select__array__code__ret__array, std::move(array_source), condition_);
         }
+
+        game_value select_editor_object(const control &map_, const std::string &object_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selecteditorobject__control__string__ret__any, map_, object_);
+        }
     }
 }

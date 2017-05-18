@@ -1945,5 +1945,6 @@ namespace intercept {
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
         game_value select(const std::vector<game_value> &array_, const code &condition_);
+        game_value select_editor_object(const control &map_, const std::string &object_);
     }
 }

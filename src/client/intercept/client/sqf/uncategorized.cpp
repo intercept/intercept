@@ -7474,5 +7474,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__radiochannelremove__scalar__array__ret__nothing, index_, std::move(units));
         }
+
+        float random(float seed_, float x_, std::optional<float> y_) {
+            if (y_.has_value()) {
+                game_value params_right({
+                    x_,
+                    *y_
+                });
+
+                return host::functions.invoke_raw_binary(__sqf::binary__random__scalar__scalar_array__ret__scalar, seed_, params_right);
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__random__scalar__scalar_array__ret__scalar, seed_, x_);
+        }
     }
 }

@@ -7582,5 +7582,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__removecuratoreditableobjects__object__array__ret__nothing, curator_module_, params_right);
         }
+
+        void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier) {
+            game_value params_right({
+                object_,
+                string_identifier
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removedrawicon__control__array__ret__nothing, map_, params_right);
+        }
     }
 }

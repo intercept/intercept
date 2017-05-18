@@ -7962,5 +7962,9 @@ pitch_
 
             host::functions.invoke_raw_binary(__sqf::binary__setdriveonpath__object__array__ret__nothing, vehicle_, std::move(points));
         }
+
+        void set_dynamic_simulation_distance(const std::string &category_, float distance_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistance__string__scalar__ret__nothing, category_, distance_);
+        }
     }
 }

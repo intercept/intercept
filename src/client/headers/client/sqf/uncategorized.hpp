@@ -1969,6 +1969,7 @@ namespace intercept {
         void set_direction(const location &location_, float direction_);
         void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_);
         void set_drive_on_path(const object &vehicle_, const std::vector<vector3> &points_);
+        void set_dynamic_simulation_distance(const std::string &category_, float distance_);
 
     }
 }

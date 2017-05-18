@@ -1740,7 +1740,6 @@ namespace intercept {
         void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_);
         vector3 building_exit(const object &building_, int index_);
         vector3 building_pos(const object &building_, int index_);
-        void button_set_action(const control &control_, const std::string &action_);
         std::vector<game_value> call_extension(const std::string &extension_, const std::string &function_, std::vector<game_value> &arguments_);
         std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_);
         void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_);
@@ -1843,6 +1842,9 @@ namespace intercept {
         object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_);
         vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);
+        //#TODO use t_in_area typedef for position
+        object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_);
+        object find_nearest_enemy(const object &unit_, const object &object_);
         void fire(const object &unit_, const std::string &muzzle_, const std::string &mode_, const std::string &magazine_);
         bool fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_);
         void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
@@ -1851,7 +1853,8 @@ namespace intercept {
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_);
         game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_);
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_);
-        float get_dir(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> from_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> to_);
+        typedef std::variant<std::reference_wrapper<const object> , std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> t_sqf_in_area_position;
+        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
         float get_env_sound_controller(const vector3 &position_, const std::string &controller_);
         game_value get_fsm_variable(int &fsm_handle_, const std::string &variable_, std::optional<game_value> default_value_);
         std::vector<game_value> get_group_icon(const group &group_, int &id_);
@@ -1870,15 +1873,16 @@ namespace intercept {
         void hc_select_group(const object &unit, const std::vector<game_value> &array_);
         void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
         void hide_selection(const object &object_, const std::string &selection_, bool hide_);
-        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const object &trigger_);
-        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> position_, const std::string &marker_);
-        bool in_area(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        bool in_area(t_sqf_in_area_position position_, const object &trigger_);
+        bool in_area(t_sqf_in_area_position position_, const std::string &marker_);
+        bool in_area(t_sqf_in_area_position position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
         bool in_area(const object &object_, const location &location_);
-        bool in_area(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, const location &location_);
-        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const object &trigger_);
-        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const std::string &marker_);
-        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
-        bool in_area_array(std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> position_, const location &location_);
+        bool in_area(t_sqf_in_area_position position_, const location &location_);
+        typedef std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> t_sqf_in_area_position_array;
+        bool in_area_array(t_sqf_in_area_position_array position_, const object &trigger_);
+        bool in_area_array(t_sqf_in_area_position_array position_, const std::string &marker_);
+        bool in_area_array(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        bool in_area_array(t_sqf_in_area_position_array position_, const location &location_);
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
         bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, const std::string &magazine_type_);
         std::string insert_editor_object(const control &map_, const std::string &type_, const game_value &value_, const std::vector<std::string> &values_, const std::string &sub_type_);
@@ -1922,8 +1926,8 @@ namespace intercept {
         void radio_channel_add(int index_, const std::vector<object> &units_);
         void radio_channel_remove(int index_, const std::vector<object> &units_);
         float random(float seed_, float x_, std::optional<float> y_);
-        game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<std::reference_wrapper<int>, std::reference_wrapper<const object>, std::reference_wrapper<const std::string>, std::reference_wrapper<const side>, std::reference_wrapper<const group>, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<bool>, std::reference_wrapper<const object>, std::reference_wrapper<const group>>> jip_);
-        game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<std::reference_wrapper<int>, std::reference_wrapper<const object>, std::reference_wrapper<const std::string>, std::reference_wrapper<const side>, std::reference_wrapper<const group>, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<bool>, std::reference_wrapper<const object>, std::reference_wrapper<const group>>> jip_);
+        game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
+        game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_);
         void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);

@@ -1938,5 +1938,7 @@ namespace intercept {
         void remove_team_member(const team_member &team_, const team_member &member_);
         void remove_weapon_attachment_cargo(const object &vehicle_, int weapon_id_, int creator_id_, const std::string &attachment_);
         void remove_weapon_cargo(const object &vehicle_, int weapon_id_, int creator_id_);
+        void remove_weapon_turret(const object &vehicle_, const std::string &weapon_name_, const std::vector<int> &turret_path_);
+
     }
 }

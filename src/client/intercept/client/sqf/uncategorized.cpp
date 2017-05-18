@@ -7676,5 +7676,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__removeweaponcargo__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void remove_weapon_turret(const object &vehicle_, const std::string &weapon_name_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path({ turret_path_.begin(),turret_path_.end() });
+            
+            game_value params_right({
+                weapon_name_,
+                std::move(turret_path)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

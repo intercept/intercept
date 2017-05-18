@@ -7886,5 +7886,15 @@ pitch_
 
             host::functions.invoke_raw_binary(__sqf::binary__setcenterofmass__object__array__ret__nothing, object_, offset_);
         }
+
+        void set_combat_mode(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &mode_) {
+            game_value param_left;
+            switch (unit_.index()) {
+            case 0: param_left = std::move(std::get<0>(unit_)); break;
+            case 1: param_left = std::move(std::get<1>(unit_)); break;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, param_left, mode_);
+        }
     }
 }

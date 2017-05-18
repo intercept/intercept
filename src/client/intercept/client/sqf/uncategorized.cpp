@@ -7251,5 +7251,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<std::string> list_objects(const control &map_, const std::string &type_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__listobjects__control__string__ret__array, map_, type_));
         }
+
+        void lock_camera_to(const object &vehicle_, const object &target_, const std::vector<int> &turret_path_) {
+            game_value params_right({
+                target_,
+                std::move(auto_array<game_value>({turret_path_.begin(),turret_path_.end()}))
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__lockcamerato__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

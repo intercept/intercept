@@ -1884,6 +1884,7 @@ namespace intercept {
         void leave_vehicle(const object &unit_, const object &vehicle_);
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
         std::vector<std::string> list_objects(const control &map_, const std::string &type_);
+        void lock_camera_to(const object &vehicle_, const object &target_, const std::vector<int> &turret_path_);
 
     }
 }

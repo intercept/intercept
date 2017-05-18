@@ -7835,5 +7835,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right) {
             host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, attribute_, params_right);
         }
+
+        void set_3den_object_type(const object &objects_, const std::string &class_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, objects_, class_name_);
+        }
     }
 }

@@ -7966,5 +7966,9 @@ pitch_
         void set_dynamic_simulation_distance(const std::string &category_, float distance_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistance__string__scalar__ret__nothing, category_, distance_);
         }
+
+        void set_dynamic_simulation_distance_coef(const std::string &class_, float multiplayer_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing, class_, multiplayer_);
+        }
     }
 }

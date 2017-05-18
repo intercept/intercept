@@ -1893,6 +1893,7 @@ namespace intercept {
         void look_at_pos(const control &map_, const vector3 &position_);
         std::vector<std::string> magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         int magazine_turret_ammo(const std::string &magazine_class_, const std::vector<int> &turret_path_);
+        vector3 model_to_world(const object &object_, const vector3 &offset_);
 
     }
 }

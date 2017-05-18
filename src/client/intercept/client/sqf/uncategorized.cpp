@@ -7913,5 +7913,14 @@ pitch_
         void set_current_task(const object &object_, const task &task_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcurrenttask__object__task__ret__nothing, object_, task_);
         }
+
+        void set_debriefing_text(const std::string &end_type_, const std::string &title_, const std::string &description_) {
+            game_value params_right({
+                title_,
+                description_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setdebriefingtext__string__array__ret__nothing, end_type_, params_right);
+        }
     }
 }

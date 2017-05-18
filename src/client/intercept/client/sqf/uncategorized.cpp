@@ -7830,5 +7830,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool set_3den_layer(const game_value &entity_, int layer_id_) {
             return host::functions.invoke_raw_binary(__sqf::binary__set3denlayer__any__scalar__ret__bool, entity_, layer_id_);
         }
+
+        //#TODO: Find out which arguments this function really takes
+        void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right) {
+            host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, attribute_, params_right);
+        }
     }
 }

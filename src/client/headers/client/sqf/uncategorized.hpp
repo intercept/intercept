@@ -1953,5 +1953,6 @@ namespace intercept {
         bool server_command(const std::string &password_, const std::string &command_);
         bool set_3den_attribute(const game_value &entity_, const std::string &attribute_, game_value &value_);
         bool set_3den_layer(const game_value &entity_, int layer_id_);
+        void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right);
     }
 }

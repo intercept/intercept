@@ -1913,5 +1913,7 @@ namespace intercept {
         void on_map_single_click(const game_value &params_, std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<const code>> command_);
         game_value on_show_new_object(const object &control_, const std::string &command_);
         void order_get_in(const std::vector<object> &units_, bool order_);
+        void pp_effect_adjust(const std::string &effect_, const game_value &settings_);
+
     }
 }

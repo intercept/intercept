@@ -7427,5 +7427,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__ordergetin__array__bool__ret__nothing, std::move(units), order_);
         }
+
+        //#TODO: Replace &settings_ with the right pp_effect_parameters
+        void pp_effect_adjust(const std::string &effect_, const game_value &settings_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__string__array__ret__nothing, effect_, settings_);
+        }
     }
 }

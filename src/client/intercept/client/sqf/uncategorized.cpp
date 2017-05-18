@@ -7750,7 +7750,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_) {
             game_value params_right({
                 max_distance_,
-                pitch_
+pitch_
             });
 
             if (to_.has_value()) {
@@ -7847,6 +7847,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, weapon_class_, params_right);
+        }
+
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_) {
+            auto_array<game_value> attributes;
+            
+            for (int i = 0; i < attributes_.size(); i++) {
+                attributes.push_back(attributes_[i].first);
+                attributes.push_back(attributes_[i].second);
+            };
+
+            return host::functions.invoke_raw_binary(__sqf::binary__setattributes__text_string__array__ret__text, text_, std::move(attributes));
         }
     }
 }

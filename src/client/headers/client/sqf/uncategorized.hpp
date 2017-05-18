@@ -1956,5 +1956,6 @@ namespace intercept {
         void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right);
         void set_3den_object_type(const object &objects_, const std::string &class_name_);
         void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_);
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_);
     }
 }

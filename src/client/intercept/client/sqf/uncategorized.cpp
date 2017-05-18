@@ -7275,5 +7275,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__lockedturret__object__array__ret__bool, vehicle_, std::move(turret_path));
         }
+
+        void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_) {
+            game_value params_right({
+                std::move(auto_array<game_value>({ turret_path_.begin(),turret_path_.end() })),
+                lock_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__lockturret__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

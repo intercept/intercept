@@ -7677,39 +7677,62 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__ropedetach__object__object__ret__nothing, vehicle_, rope_);
         }
 
-        void say(const object &object_, const std::string &sound_class_, float max_distance_, float pitch_) {
+        void say(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_) {
             game_value params_right({
                 max_distance_,
                 pitch_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, object_, params_right);
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, params_left, params_right);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, from_, params_right);            
         }
 
-        void say(const object &from_, const object &to_, const std::string &sound_class_, float max_distance_, float pitch_) {
-            game_value params_left({
-                from_,
-                to_
-            });
+        void say(const object &from_, std::optional<object> to_, const std::string &sound_class_) {
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, params_left, sound_class_);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, from_, sound_class_);
+        }
+
+        void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_) {
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, params_left, sound_class_);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, from_, sound_class_);
+        }
+
+        void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_) {
             game_value params_right({
                 max_distance_,
                 pitch_
             });
-
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, params_left, params_right);
-        }
-
-        void say(const object &object_, const std::string &sound_class_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, object_, sound_class_);
-        }
-
-        void say(const object &from_, const object &to_, const std::string &sound_class_) {
-            game_value params_left({
-                from_,
-                to_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, params_left, sound_class_);
+            
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, params_left, params_right);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, from_, params_right);
         }
     }
 }

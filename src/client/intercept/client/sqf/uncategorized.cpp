@@ -7246,5 +7246,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
         }
+
+        //#TODO: Find out if the return type is correct
+        std::vector<std::string> list_objects(const control &map_, const std::string &type_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__listobjects__control__string__ret__array, map_, type_));
+        }
     }
 }

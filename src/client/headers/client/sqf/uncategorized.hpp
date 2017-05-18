@@ -1916,6 +1916,8 @@ namespace intercept {
         void pp_effect_adjust(std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<int>> effect_, const game_value &settings_);
         void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
+        bool preload_object(float distance_, const object &object_);
+        bool preload_object(float distance_, const std::string &class_name_);
 
     }
 }

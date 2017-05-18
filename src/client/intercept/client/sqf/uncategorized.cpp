@@ -7446,7 +7446,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_)
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_);
+        }
+
+        bool preload_object(float distance_, const object &object_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, object_);
+        }
+
+        bool preload_object(float distance_, const std::string &class_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, class_name_);
         }
     }
 }

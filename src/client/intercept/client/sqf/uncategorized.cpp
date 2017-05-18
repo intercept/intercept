@@ -7817,5 +7817,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool server_command(const std::string &password_, const std::string &command_) {
             return host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, password_, command_);
         }
+
+        bool set_3den_attribute(const game_value &entity_, const std::string &attribute_, game_value &value_) {
+            game_value params_right({
+                attribute_,
+                value_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, params_right);
+        }
     }
 }

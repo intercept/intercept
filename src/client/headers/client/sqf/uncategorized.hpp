@@ -1892,6 +1892,7 @@ namespace intercept {
         void look_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> units_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void look_at_pos(const control &map_, const vector3 &position_);
         std::vector<std::string> magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        int magazine_turret_ammo(const std::string &magazine_class_, const std::vector<int> &turret_path_);
 
     }
 }

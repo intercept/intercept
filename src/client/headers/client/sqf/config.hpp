@@ -52,7 +52,7 @@ namespace intercept {
         bool is_null(const config &config_entry_);
         bool is_number(const config &config_entry_);
         bool is_text(const config &config_entry_);
-        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_);
+        std::vector<config> config_classes(const std::string &condition_, const config &config_);
         config select(const config &a_config_, float a_number_);
         config campaign_config_file();
         config config_file();

@@ -115,9 +115,8 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__istext__config__ret__bool, config_entry_);
         }
 
-        std::vector<std::string> config_classes(const std::string& value_, const config & a_config_) {
-            game_value output = host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, value_, a_config_);
-            return __helpers::__convert_to_strings_vector(output);
+        std::vector<config> config_classes(const std::string &condition_, const config &config_) {
+            return __helpers::__convert_to_configs_vector(host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, condition_, config_));
         }
 
         config select(const config &a_config_, float a_number_) {

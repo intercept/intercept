@@ -1965,6 +1965,6 @@ namespace intercept {
         void set_curator_coef(const object &curator_object_, const std::string &action_, float coefficient_);
         void set_current_task(const object &object_, const task &task_);
         void set_debriefing_text(const std::string &end_type_, const std::string &title_, const std::string &description_);
-
+        void set_destination(const object &unit_, const vector3 &position_, const std::string &planning_mode_, bool force_replan_);
     }
 }

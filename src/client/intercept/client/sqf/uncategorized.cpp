@@ -7922,5 +7922,15 @@ pitch_
 
             host::functions.invoke_raw_binary(__sqf::binary__setdebriefingtext__string__array__ret__nothing, end_type_, params_right);
         }
+
+        void set_destination(const object &unit_, const vector3 &position_, const std::string &planning_mode_, bool force_replan_) {
+            game_value params_right({
+                position_,
+                planning_mode_,
+                force_replan_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__setdestination__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

@@ -7405,5 +7405,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value on_double_click(const control &map_, const std::string &command_) {
             return host::functions.invoke_raw_binary(__sqf::binary__ondoubleclick__control__string__ret__any, map_, command_);
         }
+
+        void on_map_single_click(const game_value &params_, std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<const code>> command_) {
+            game_value param_right;
+            switch (command_.index())
+            {
+            case 0: param_right = std::get<0>(command_).get();
+            case 1: param_right = std::get<1>(command_).get();
+            case 2: param_right = std::get<2>(command_).get();
+            }
+            
+            host::functions.invoke_raw_binary(__sqf::binary__onmapsingleclick__any__code_string__ret__nothing, params_, param_right);
+        }
     }
 }

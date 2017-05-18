@@ -1910,5 +1910,6 @@ namespace intercept {
         int nmenu_items(const control &map_, int index_);
         void obj_status(const std::string &objective_number_, const std::string &status_);
         game_value on_double_click(const control &map_, const std::string &command_);
+        void on_map_single_click(const game_value &params_, std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<const code>> command_);
     }
 }

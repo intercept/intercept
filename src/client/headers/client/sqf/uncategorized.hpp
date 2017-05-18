@@ -1939,6 +1939,8 @@ namespace intercept {
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
         void rope_detach(const object &vehicle_, const object &rope_);
         void say(const object &object_, const std::string &sound_class_, float max_distance_, float pitch_);
-
+        void say(const object &from_, const object &to_, const std::string &sound_class_, float max_distance_, float pitch_);
+        void say(const object &object_, const std::string &sound_class_);
+        void say(const object &from_, const object &to_, const std::string &sound_class_);
     }
 }

@@ -7683,7 +7683,33 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 pitch_
             });
 
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, object_, params_right);
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, object_, params_right);
+        }
+
+        void say(const object &from_, const object &to_, const std::string &sound_class_, float max_distance_, float pitch_) {
+            game_value params_left({
+                from_,
+                to_
+            });
+            game_value params_right({
+                max_distance_,
+                pitch_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, params_left, params_right);
+        }
+
+        void say(const object &object_, const std::string &sound_class_) {
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, object_, sound_class_);
+        }
+
+        void say(const object &from_, const object &to_, const std::string &sound_class_) {
+            game_value params_left({
+                from_,
+                to_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, params_left, sound_class_);
         }
     }
 }

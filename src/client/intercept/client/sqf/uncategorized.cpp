@@ -7932,5 +7932,9 @@ pitch_
             
             host::functions.invoke_raw_binary(__sqf::binary__setdestination__object__array__ret__nothing, unit_, params_right);
         }
+
+        void set_direction(const location &location_, float direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
+        }
     }
 }

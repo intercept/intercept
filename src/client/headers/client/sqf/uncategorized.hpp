@@ -1971,6 +1971,7 @@ namespace intercept {
         void set_drive_on_path(const object &vehicle_, const std::vector<vector3> &points_);
         void set_dynamic_simulation_distance(const std::string &category_, float distance_);
         void set_dynamic_simulation_distance_coef(const std::string &class_, float multiplayer_);
+        void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_);
 
     }
 }

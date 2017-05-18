@@ -7970,5 +7970,17 @@ pitch_
         void set_dynamic_simulation_distance_coef(const std::string &class_, float multiplayer_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing, class_, multiplayer_);
         }
+
+        void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_) {
+            game_value params_right({
+                std::move(auto_array<game_value>(objects_.begin(), objects_.end())),
+                editor_type_,
+                condition_,
+                scope_,
+                sub_ordinates_also_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__seteditorobjectscope__control__array__ret__nothing, map_, params_right);
+        }
     }
 }

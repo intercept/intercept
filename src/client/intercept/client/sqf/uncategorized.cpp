@@ -7412,7 +7412,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             {
             case 0: param_right = std::get<0>(command_).get();
             case 1: param_right = std::get<1>(command_).get();
-            case 2: param_right = std::get<2>(command_).get();
             }
             
             host::functions.invoke_raw_binary(__sqf::binary__onmapsingleclick__any__code_string__ret__nothing, params_, param_right);
@@ -7486,6 +7485,46 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             }
 
             return host::functions.invoke_raw_binary(__sqf::binary__random__scalar__scalar_array__ret__scalar, seed_, x_);
+        }
+
+        game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<std::reference_wrapper<int>, std::reference_wrapper<const object>, std::reference_wrapper<const std::string>, std::reference_wrapper<const side>, std::reference_wrapper<const group>, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<bool>, std::reference_wrapper<const object>, std::reference_wrapper<const group>>> jip_) {
+            game_value targets;
+            game_value jip;
+            game_value params_right;
+            switch (targets_.index())
+            {
+            case 0: targets = static_cast<float>(std::get<0>(targets_).get());
+            case 1: targets = std::get<1>(targets_).get();
+            case 2: targets = std::get<2>(targets_).get();
+            case 3: targets = std::get<3>(targets_).get();
+            case 4: targets = std::get<4>(targets_).get();
+            case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() }));
+            }
+
+            if (jip_.has_value()) {
+                switch ((*jip_).index())
+                {
+                case 0: jip = std::get<0>(*jip_).get();
+                case 1: jip = std::get<1>(*jip_).get();
+                case 2: jip = std::get<2>(*jip_).get();
+                case 3: jip = std::get<3>(*jip_).get();
+                }
+
+                params_right = game_value({
+                    function_,
+                    targets,
+                    jip
+                });
+            }
+            else {
+                params_right = game_value({
+                    function_,
+                    targets,
+                    jip
+                });
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__remoteexec__any__array__ret__any, params_, params_right);
         }
     }
 }

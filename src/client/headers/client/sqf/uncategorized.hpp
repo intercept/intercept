@@ -1925,6 +1925,7 @@ namespace intercept {
         game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<std::reference_wrapper<int>, std::reference_wrapper<const object>, std::reference_wrapper<const std::string>, std::reference_wrapper<const side>, std::reference_wrapper<const group>, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<bool>, std::reference_wrapper<const object>, std::reference_wrapper<const group>>> jip_);
         game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<std::reference_wrapper<int>, std::reference_wrapper<const object>, std::reference_wrapper<const std::string>, std::reference_wrapper<const side>, std::reference_wrapper<const group>, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<bool>, std::reference_wrapper<const object>, std::reference_wrapper<const group>>> jip_);
         void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_);
+        void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
 
     }
 }

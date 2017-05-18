@@ -7826,5 +7826,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, params_right);
         }
+
+        bool set_3den_layer(const game_value &entity_, int layer_id_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__set3denlayer__any__scalar__ret__bool, entity_, layer_id_);
+        }
     }
 }

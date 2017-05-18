@@ -1952,5 +1952,6 @@ namespace intercept {
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
         bool server_command(const std::string &password_, const std::string &command_);
         bool set_3den_attribute(const game_value &entity_, const std::string &attribute_, game_value &value_);
+        bool set_3den_layer(const game_value &entity_, int layer_id_);
     }
 }

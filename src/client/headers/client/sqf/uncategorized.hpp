@@ -1889,6 +1889,7 @@ namespace intercept {
         bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
         void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
+        void look_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> units_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
 
     }
 }

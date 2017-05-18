@@ -7566,5 +7566,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
+
+        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_) {
+            auto_array<game_value> addons({ addons_.begin(), addons_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removecuratoraddons__object__array__ret__nothing, curator_module_, std::move(addons));
+        }
     }
 }

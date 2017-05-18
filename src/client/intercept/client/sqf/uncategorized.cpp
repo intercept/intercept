@@ -154,6 +154,7 @@ namespace intercept {
         // nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------
         // nular__nil__ret__any
         // nular__true__ret__bool
+        // unary__isnull__netobject__ret__bool
 
 
         /// INVESTIGATE

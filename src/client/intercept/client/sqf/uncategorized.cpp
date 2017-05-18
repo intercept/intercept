@@ -7802,5 +7802,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
         }
+
+        //#TODO: Find out which types state_, result_ and sentence_ are
+        void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_) {
+            game_value params_right({
+                state_,
+                result_,
+                sentence_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__sendtaskresult__task__array__ret__nothing, task_, params_right);
+        }
     }
 }

@@ -7260,5 +7260,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__lockcamerato__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void lock_cargo(const object &vehicle_, int index_, bool lock_) {
+            game_value params_right({
+                index_,
+                lock_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__lockcargo__object__array__ret__nothing, vehicle_, params_right);
+        }
     }
 }

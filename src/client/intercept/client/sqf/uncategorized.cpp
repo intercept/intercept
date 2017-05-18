@@ -7347,5 +7347,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return host::functions.invoke_raw_binary(__sqf::binary__nearobjectsready__object_array__scalar__ret__bool, param_left, radius_);
         }
+
+        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
+            game_value param_left;
+            switch (position_.index())
+            {
+            case 0: param_left = std::get<0>(position_).get();
+            case 1: param_left = std::get<1>(position_).get();
+            case 2: param_left = std::get<2>(position_).get();
+            }
+
+            
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearroads__object_array__scalar__ret__array, param_left, radius_));
+        }
     }
 }

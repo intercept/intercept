@@ -1895,6 +1895,7 @@ namespace intercept {
         int magazine_turret_ammo(const std::string &magazine_class_, const std::vector<int> &turret_path_);
         vector3 model_to_world(const object &object_, const vector3 &offset_);
         bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
 
     }
 }

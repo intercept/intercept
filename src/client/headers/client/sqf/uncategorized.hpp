@@ -1906,5 +1906,8 @@ namespace intercept {
         std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
         std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
         std::vector<rv_target> near_targets(const object &unit_, float radius_);
+        int nmenu_items(const control &map_, const std::string &menu_name_);
+        int nmenu_items(const control &map_, int index_);
+
     }
 }

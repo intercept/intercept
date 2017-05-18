@@ -7389,5 +7389,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return targets;
         }
+
+        int nmenu_items(const control &map_, const std::string &menu_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__nmenuitems__control__string_scalar__ret__scalar, map_, menu_name_);
+        }
+
+        int nmenu_items(const control &map_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__nmenuitems__control__string_scalar__ret__scalar, map_, index_);
+        }
     }
 }

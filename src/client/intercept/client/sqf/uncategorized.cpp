@@ -7429,8 +7429,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         //#TODO: Replace &settings_ with the right pp_effect_parameters
-        void pp_effect_adjust(const std::string &effect_, const game_value &settings_) {
-            host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__string__array__ret__nothing, effect_, settings_);
+        void pp_effect_adjust(std::variant<std::reference_wrapper<const std::string>, std::reference_wrapper<int>> effect_, const game_value &settings_) {
+            game_value param_left;
+            switch (effect_.index())
+            {
+            case 0: param_left = std::get<0>(effect_).get();
+            case 1: param_left = static_cast<float>(std::get<1>(effect_).get());
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__string__array__ret__nothing, std::move(param_left), settings_);
         }
     }
 }

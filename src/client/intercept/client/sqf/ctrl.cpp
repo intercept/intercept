@@ -1437,14 +1437,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__buttonsetaction__array__ret__nothing, params);
         }
 
-        void button_set_action(const control &control_, const std::string &code_) {
-            game_value params({
-                control_,
-                code_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__buttonsetaction__array__ret__nothing, params);
+        void button_set_action(const control &control_, const std::string &action_) {
+            host::functions.invoke_raw_binary(__sqf::binary__buttonsetaction__control__string__ret__nothing, control_, action_);
         }
+
         float lb_add(int control_id_, const std::string &text_) {
             game_value args({
                 static_cast<float>(control_id_),

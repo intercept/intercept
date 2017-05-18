@@ -448,7 +448,7 @@ namespace intercept {
         void show_legend(const control &value0_, bool value1_);
         /* potential namespace: controls, ui, gui, misc */
         void button_set_action(int control_id_, const std::string &code_);
-        void button_set_action(const control &control_, const std::string &code_);
+        void button_set_action(const control &control_, const std::string &action_);
         void map_anim_clear();
         void map_anim_commit();
         void force_map(bool value_);

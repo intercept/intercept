@@ -369,7 +369,7 @@ game_value call(const code & code_, game_value args_)
 {
     game_value args({ args_, code_ });
  
-    sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS", args);
+    set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
     //#TODO these notes refer to old way call method.
     /*
     Why is this in a wrapper? Because code compiled in intercept apparently lacks
@@ -379,19 +379,19 @@ game_value call(const code & code_, game_value args_)
     */
     host::functions.invoke_raw_unary(
         __sqf::unary__isnil__code_string__ret__bool,
-        sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_isNilWrapper")
+        get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
     );
 
     // And returns are not handled correctly because of assumingly the SQF stack
     // implementation so, we just grab it from a gvar.
-    return sqf::get_variable(sqf::mission_namespace(), "INTERCEPT_CALL_RETURN");
+    return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
 }
 
 game_value call(const code & code_)
 {
     game_value args({game_value(), code_ });
 
-    sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS", args);
+    set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
     //#TODO these notes refer to old way call method.
     /*
     Why is this in a wrapper? Because code compiled in intercept apparently lacks
@@ -401,12 +401,12 @@ game_value call(const code & code_)
     */
     host::functions.invoke_raw_unary(
         __sqf::unary__isnil__code_string__ret__bool,
-        sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_isNilWrapper")
+        get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
     );
 
     // And returns are not handled correctly because of assumingly the SQF stack
     // implementation so, we just grab it from a gvar.
-    return sqf::get_variable(sqf::mission_namespace(), "INTERCEPT_CALL_RETURN");
+    return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
 }
 
 code compile(const std::string & sqf_)
@@ -665,14 +665,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__attackenabled__object_group__ret__bool, group_);
         }
 
-        sqf::rv_bounding_box bounding_box(const object &model_) {
+        rv_bounding_box bounding_box(const object &model_) {
             game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
-            return sqf::rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
+            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
         }
 
-        sqf::rv_bounding_box bounding_box_real(const object &model_) {
+        rv_bounding_box bounding_box_real(const object &model_) {
             game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
-            return sqf::rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
+            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
         }
 
         vector3 bounding_center(const object &obj_) {
@@ -793,8 +793,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         team_member create_team(const std::string &type_, const std::string &name_) {
             game_value args({
-                (type_),
-                (name_),
+                type_,
+                name_,
             });
 
             return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
@@ -846,8 +846,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void enable_saving(bool enable_, bool autosave_) {
             game_value args({
-                (enable_),
-                (autosave_)
+                enable_,
+                autosave_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
@@ -4260,13 +4260,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             if (ret.size() == 0) {
                 return rv_vehicle_role({});
             }
-            else if (ret.size() == 1) {
+            if (ret.size() == 1) {
                 return rv_vehicle_role({ ret[0] });
             }
-            else {
-                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[1]);
-                return rv_vehicle_role({ ret[0], turret_path });
-            }
+            std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[1]);
+            return rv_vehicle_role({ ret[0], turret_path });
         }
 
         std::string compose_text(const std::vector<std::string> &texts_) {
@@ -5304,19 +5302,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             if (ret.size() == 0) {
                 return {};
             }
-            else {
-                return __helpers::__convert_to_vector3(ret);
-            }
+            return __helpers::__convert_to_vector3(ret);
         }
 
         
 
         bool is_equal_to(const object& l_, const object& r_) {
-            return host::functions.invoke_raw_binary(__sqf::__sqf::binary__isequalto__any__any__ret__bool, l_,r_);
+            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, l_,r_);
         }
 
         std::string format(const std::vector<game_value> &params_) {
-            return host::functions.invoke_raw_unary(__sqf::__sqf::unary__format__array__ret__string, params_);         
+            return host::functions.invoke_raw_unary(__sqf::unary__format__array__ret__string, params_);         
         }
 
 
@@ -5791,7 +5787,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             std::vector<rv_waypoint> waypoints;
             for (int i = 0; i < res.size(); i++) {
                 waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
-            };
+            }
 
             return waypoints;
         }
@@ -5802,7 +5798,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             std::vector<rv_waypoint> waypoints;
             for (int i = 0; i < res.size(); i++) {
                 waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
-            };
+            }
 
             return waypoints;
         }
@@ -6101,11 +6097,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__countfriendly__object__array__ret__scalar, unit_, std::move(units));
         }
 
-        int count_type(const std::string &type_, const object &objects_) {
+        int count_type(const std::string &type_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
             return host::functions.invoke_raw_binary(__sqf::binary__counttype__string__array__ret__scalar, type_, std::move(units));
         }
 
         int count_unknown(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
             return host::functions.invoke_raw_binary(__sqf::binary__countunknown__object__array__ret__scalar, unit_, std::move(units));
         }
 
@@ -6482,14 +6482,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(color_);
 
@@ -6500,9 +6500,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> params_right;
 
             switch (center_.index()) {
-            case 0: params_right.push_back(std::get<0>(center_).get()); break;
-            case 1: params_right.push_back(std::get<1>(center_).get()); break;
-            case 2: params_right.push_back(std::get<2>(center_).get()); break;
+                case 0: params_right.push_back(std::get<0>(center_).get()); break;
+                case 1: params_right.push_back(std::get<1>(center_).get()); break;
+                case 2: params_right.push_back(std::get<2>(center_).get()); break;
             }
 
             params_right.push_back(radius_.x);
@@ -6518,14 +6518,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(color_);
 
@@ -6536,14 +6536,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(param_type_);
             params_right.push_back(line_type_);
@@ -6650,7 +6650,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         game_value eval_object_argument(const control &map_, const std::string &object_, const std::string &argument_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__evalobjectargument__control__array__ret__any, object_, argument_);
+            return host::functions.invoke_raw_binary(__sqf::binary__evalobjectargument__control__array__ret__any, map_, { object_, argument_ });
         }
 
         void exec(const game_value &argument_, const std::string &script_) {
@@ -6663,7 +6663,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 script_
             });
 
-            return host::functions.invoke_raw_binary(__sqf::binary__execeditorscript__control__array__ret__any, object_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__execeditorscript__control__array__ret__any, map_, params_right);
         }
 
         int exec_fsm(const game_value &arguments_, const std::string &file_name_) {
@@ -6725,9 +6725,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             if (center_.index() == 0) {
                 return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
             }
-            else {
-                return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
-            }
+            return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
         }
 
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
@@ -6739,17 +6737,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             if (center_.index() == 0) {
                 return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), params_right);
             }
-            else {
-                return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), params_right);
-            }
+            return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), params_right);
         }
 
         object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_) {
             if (position_.index() == 0) {
                 return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<0>(position_).get());
-            } else {
-                return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<1>(position_).get());
             }
+            return host::functions.invoke_raw_binary(__sqf::binary__findnearestenemy__object__object_array__ret__object, unit_, std::get<1>(position_).get());
         }
 
         object find_nearest_enemy(const object &unit_,const object &object_) {
@@ -6803,10 +6798,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_) {
             switch (entity_.index()) {
-            case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_)); break;
-            case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_)); break;
-            case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_)); break;
-            case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_)); break;
+                case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
+                case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
+                case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
+                case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
             }
 
             //#TODO: add binary__get3denattribute__array__string__ret__array
@@ -6887,9 +6882,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         
             if (res.type() == game_data_bool::type_def) {
                 return static_cast<bool>(res);
-            } else {
-                return static_cast<float>(res);
             }
+            return static_cast<float>(res);
         }
 
         game_value get_variable(const control &control_, const std::string &variable_, std::optional<game_value> default_value_) {
@@ -7024,6 +7018,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             params_right.push_back(radius_x_);
             params_right.push_back(radius_y_);
+            params_right.push_back(angle_);
             params_right.push_back(is_rectangle_);
 
             if (radius_z_.has_value()) params_right.push_back(*radius_z_);
@@ -7089,6 +7084,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             params_right.push_back(radius_x_);
             params_right.push_back(radius_y_);
+            params_right.push_back(angle_);
             params_right.push_back(is_rectangle_);
 
             if (radius_z_.has_value()) params_right.push_back(*radius_z_);

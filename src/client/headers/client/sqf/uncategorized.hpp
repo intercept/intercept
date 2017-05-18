@@ -1748,7 +1748,7 @@ namespace intercept {
         bool connect_terminal_to_uav(const object &unit_, const object &uav_);
         int count_enemy(const object &unit_, const std::vector<object> &units_);
         int count_friendly(const object &unit_, const std::vector<object> &units_);
-        int count_type(const std::string &type_, const object &objects_);
+        int count_type(const std::string &type_, const std::vector<object> &objects_);
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false);
         display create_mission_display(const display &display_, const std::string &mission_);

@@ -1942,6 +1942,7 @@ namespace intercept {
         void say(const object &from_, std::optional<object> to_, const std::string &sound_class_);
         void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
         void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
-
+        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
+        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
     }
 }

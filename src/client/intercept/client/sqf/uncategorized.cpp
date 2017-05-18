@@ -7723,7 +7723,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 max_distance_,
                 pitch_
             });
-            
+
             if (to_.has_value()) {
                 game_value params_left({
                     from_,
@@ -7733,6 +7733,35 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 return;
             }
             host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, from_, params_right);
+        }
+
+        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_) {
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, params_left, sound_class_);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, from_, sound_class_);
+        }
+
+        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_) {
+            game_value params_right({
+                max_distance_,
+                pitch_
+            });
+
+            if (to_.has_value()) {
+                game_value params_left({
+                    from_,
+                    *to_
+                });
+                host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, params_left, params_right);
+                return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, params_right);
         }
     }
 }

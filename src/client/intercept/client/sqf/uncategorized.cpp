@@ -7284,5 +7284,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__lockturret__object__array__ret__nothing, vehicle_, params_right);
         }
+
+        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_) {
+            game_value param_left;
+            
+            switch (target_.index())
+            {
+            case 0: param_left = std::get<0>(target_).get();
+            case 1: param_left = std::get<1>(target_).get();
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__lockwp__object_group__bool__ret__nothing, param_left, lock_);
+        }
     }
 }

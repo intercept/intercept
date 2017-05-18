@@ -1888,6 +1888,7 @@ namespace intercept {
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
         bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
+        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
 
     }
 }

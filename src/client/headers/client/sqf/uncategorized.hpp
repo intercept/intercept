@@ -1957,5 +1957,7 @@ namespace intercept {
         void set_3den_object_type(const object &objects_, const std::string &class_name_);
         void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_);
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_);
+        void set_behaviour(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &behaviour_);
+
     }
 }

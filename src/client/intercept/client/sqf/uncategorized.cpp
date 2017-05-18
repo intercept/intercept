@@ -7859,5 +7859,15 @@ pitch_
 
             return host::functions.invoke_raw_binary(__sqf::binary__setattributes__text_string__array__ret__text, text_, std::move(attributes));
         }
+
+        void set_behaviour(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &behaviour_) {
+            game_value param_left;
+            switch (unit_.index()) {
+                case 0: param_left = std::move(std::get<0>(unit_)); break;
+                case 1: param_left = std::move(std::get<1>(unit_)); break;
+            }
+            
+            host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, param_left, behaviour_);
+        }
     }
 }

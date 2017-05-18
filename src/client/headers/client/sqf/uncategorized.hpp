@@ -1920,6 +1920,7 @@ namespace intercept {
         bool preload_object(float distance_, const std::string &class_name_);
         int push_back_unique(const std::vector<game_value> &array_, const game_value &element_);
         void radio_channel_add(int index_, const std::vector<object> &units_);
+        void radio_channel_remove(int index_, const std::vector<object> &units_);
 
     }
 }

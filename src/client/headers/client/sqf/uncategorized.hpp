@@ -1882,6 +1882,7 @@ namespace intercept {
         bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_);
         void lb_set_text(const control &control_, int index_, const std::string &text_);
         void leave_vehicle(const object &unit_, const object &vehicle_);
+        void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
 
     }
 }

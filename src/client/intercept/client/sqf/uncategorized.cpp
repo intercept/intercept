@@ -7237,5 +7237,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void leave_vehicle(const object &unit_, const object &vehicle_) {
             host::functions.invoke_raw_binary(__sqf::binary__leavevehicle__object__object__ret__nothing, unit_, vehicle_);
         }
+
+        void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
+            game_value params_right({
+                object_,
+                offset_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
+        }
     }
 }

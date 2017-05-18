@@ -7462,5 +7462,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__pushbackunique__array__any__ret__scalar, std::move(base_array), element_);
         }
+
+        void radio_channel_add(int index_, const std::vector<object> &units_) {
+            auto_array<game_value> units({ units_.begin(), units_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__radiochanneladd__scalar__array__ret__nothing, index_ , std::move(units));
+        }
     }
 }

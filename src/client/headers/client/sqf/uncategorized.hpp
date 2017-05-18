@@ -1944,6 +1944,6 @@ namespace intercept {
         void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
-        std::vector<game_value> select(const std::vector<game_value> &array_, const code &condition_);
+        game_value select(const std::vector<game_value> &array_, const code &condition_);
     }
 }

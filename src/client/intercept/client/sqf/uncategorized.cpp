@@ -7764,10 +7764,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, params_right);
         }
 
-        std::vector<game_value> select(const std::vector<game_value> &array_, const code &condition_) {
+        game_value select(const std::vector<game_value> &array_, const code &condition_) {
             auto_array<game_value> array_source(array_.begin(), array_.end());
 
-            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__select__array__code__ret__array, std::move(array_source), condition_));
+            return host::functions.invoke_raw_binary(__sqf::binary__select__array__code__ret__array, std::move(array_source), condition_);
         }
     }
 }

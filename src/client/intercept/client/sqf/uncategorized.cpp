@@ -7982,5 +7982,16 @@ pitch_
             
             host::functions.invoke_raw_binary(__sqf::binary__seteditorobjectscope__control__array__ret__nothing, map_, params_right);
         }
+
+        void set_effect_condition(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const rv_waypoint>> unit_, const std::string &statement_) {
+            game_value param_left;
+            switch (unit_.index()) {
+                case 0: param_left = std::move(std::get<0>(unit_)); break;
+                //#TODO: Make this work
+                //case 1: param_left = game_value({ (std::move(std::get<1>(unit_))).get<0>(), std::move(std::get<1>(unit_))[1] }); break;
+            }
+            
+            host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);
+        }
     }
 }

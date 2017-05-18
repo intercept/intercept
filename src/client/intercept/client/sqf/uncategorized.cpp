@@ -7224,5 +7224,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             return host::functions.invoke_raw_binary(__sqf::binary__kbwassaid__object__array__ret__bool, unit_, params_right);
         }
+
+        void lb_set_text(const control &control_, int index_, const std::string &text_) {
+            game_value params_right({
+                index_,
+                text_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__lbsettext__control__array__ret__nothing, control_, params_right);
+        }
     }
 }

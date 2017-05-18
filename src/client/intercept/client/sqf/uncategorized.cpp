@@ -7335,5 +7335,17 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 model_to_world(const object &object_, const vector3 &offset_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworld__object__array__ret__array, object_, offset_));
         }
+        
+        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
+            game_value param_left;
+            switch (position_.index())
+            {
+            case 0: param_left = std::get<0>(position_).get();
+            case 1: param_left = std::get<1>(position_).get();
+            case 2: param_left = std::get<2>(position_).get();
+            }
+            
+            return host::functions.invoke_raw_binary(__sqf::binary__nearobjectsready__object_array__scalar__ret__bool, param_left, radius_);
+        }
     }
 }

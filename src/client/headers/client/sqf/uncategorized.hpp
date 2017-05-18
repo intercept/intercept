@@ -178,8 +178,8 @@ namespace intercept {
         bool can_sling_load(const object& vehicle_, const object& cargo_);
 
         /* potential namespace: misc, model, position? */
-        sqf::rv_bounding_box bounding_box(const object &model_);
-        sqf::rv_bounding_box bounding_box_real(const object &model_);
+        rv_bounding_box bounding_box(const object &model_);
+        rv_bounding_box bounding_box_real(const object &model_);
         vector3 bounding_center(const object &obj_);
 
         /* potential namespace: ai, group, unit */
@@ -1290,7 +1290,7 @@ namespace intercept {
 
 
         std::string compose_text(const std::vector<std::string> &texts_);
-
+        //#categorize this goes into tasks together with other tasks stuff 
         std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_);
         std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_);
         std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_);
@@ -1584,6 +1584,7 @@ namespace intercept {
         struct rv_waypoint {
             group group;
             int index;
+            //#TODO add to game_value conversion
         };
 
         //UNARY -- https://github.com/intercept/intercept/issues/13
@@ -1942,41 +1943,109 @@ namespace intercept {
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
         void rope_detach(const object &vehicle_, const object &rope_);
-        void say(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
-        void say(const object &from_, std::optional<object> to_, const std::string &sound_class_);
-        void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
-        void say_2d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
-        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_);
-        void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
-        game_value select(const std::vector<game_value> &array_, const code &condition_);
-        game_value select_editor_object(const control &map_, const std::string &object_);
-        void select_weapon_turret(const object &vehicle_, const std::string &weapon_class_, const std::vector<int> &turret_path_);
+        
+        
+        
+        task create_task(const team_member& member_, const std::string& type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_ = {});
+
+        void say(const object& from_, const std::string& sound_classname_);
+        void say(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say(const object& from_, const object& to_, const std::string& sound_classname_);
+        void say(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+
+        void say_2d(const object& from_, const std::string& sound_classname_);
+        void say_2d(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_2d(const object& from_, const object& to_, const std::string& sound_classname_);
+        void say_2d(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+
+        void say_3d(const object& from_, const std::string& sound_classname_);
+        void say_3d(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_3d(const object& from_, const object& to_, const std::string& sound_classname_);
+        void say_3d(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed = 1.f);
+
+        //#TODO return game_value or split into vector of game_values? 
+        game_value select(game_value array_, const code& code_);
+        game_value select_editor_object(const control& map_, const std::string& object_);
+        void select_weapon_turret(const object&, const std::string& weapon_, const std::vector<int>& turretPath_);
+        //#TODO arguments incorrect
         task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_);
         task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<std::string> &values_);
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
-        bool server_command(const std::string &password_, const std::string &command_);
-        bool set_3den_attribute(const game_value &entity_, const std::string &attribute_, game_value &value_);
-        bool set_3den_layer(const game_value &entity_, int layer_id_);
-        void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right);
-        void set_3den_object_type(const object &objects_, const std::string &class_name_);
-        void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_);
-        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::string>> &attributes_);
-        void set_behaviour(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &behaviour_);
-        void set_captive(const object &unit_, bool captive_);
-        void set_center_of_mass(const object &object_, const vector3 &offset_, std::optional<float> time_);
-        void set_combat_mode(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &mode_);
-        void set_convoy_seperation(const object &vehicle_, float distance_);
-        void set_curator_coef(const object &curator_object_, const std::string &action_, float coefficient_);
-        void set_current_task(const object &object_, const task &task_);
-        void set_debriefing_text(const std::string &end_type_, const std::string &title_, const std::string &description_);
-        void set_destination(const object &unit_, const vector3 &position_, const std::string &planning_mode_, bool force_replan_);
-        void set_direction(const location &location_, float direction_);
+        //Server/Headless Client only! 
+        void serverCommand(const std::string& command_, const std::string& password_);
+        bool set_3den_mission_attribute(const std::string& section_, const std::string& attribute_class_, game_value _attribute_value);
+
+        //#TODO not object but Eden_Entity 
+        //#TODO typedef variant for Eden_Entity 
+        //#TODO use it for https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
+        bool set_3den_attribute(const object& entity_, const std::string& attribute_class_, game_value _attribute_value);
+        //#TODO not object but Eden_Entity 
+        bool set_3den_layer(const object& entity_, float layer_);
+        void set_3den_object_type(const std::vector<object> & objects_, const std::string& classname_);
+
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, std::reference_wrapper<const std::string>>>> &attributes_);
+        //#TODO take Enum as behaviour 
+        void set_behaviour(std::variant<group, object> group_, const std::string& behaviour_);
+        void set_captive(const object& object_, bool status);
+        /**
+        * \brief Mark a unit as captive. If unit is a vehicle, commander is marked. A captive is neutral to everyone (belong to civilian side), and will not trigger "detected by" conditions for its original side.
+        * \param object_
+        * \param status Using a number (instead of a boolean) for the status has no further effect on the engine's behavior, but can be used by captiveNum to keep track of the captivity status at a finer resolution (e.g. handcuffed, grouped, etc.). The numbered status syntax was introduced in Arma 2.
+        */
+        void set_captive(const object& object_, float status);
+
+        void set_center_of_mass(const object& object_, const vector3& offset_, float time_ = 0.f);
+
+        //#TODO take enum 
+        void set_combat_mode(std::variant<group, object> group_, const std::string& mode_);
+        //#TODO take enum 
+        void set_formation(std::variant<group, object> group_, const std::string& mode_);
+        void set_convoy_seperation(const object& object_, float distance_);
+        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_);
+        void set_current_task(const object& object_, const task& task_);
+
+        void set_debriefing_text(const std::string& endType_, const std::string& title_, const std::string& description_);
+        //#TODO Enum for planningMode 
+        void set_destination(const object& object_, const vector3& position_, const std::string& planning_mode_, bool force_replan);
+        void set_direction(const location& location_, float direction_);
         void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_);
-        void set_drive_on_path(const object &vehicle_, const std::vector<vector3> &points_);
-        void set_dynamic_simulation_distance(const std::string &category_, float distance_);
-        void set_dynamic_simulation_distance_coef(const std::string &class_, float multiplayer_);
+        //category AI 
+        void set_drive_on_path(const object& object_, const std::vector<vector3>& points_);
+        /**
+        * \brief
+        * \param category_ - one of:
+
+        "Group" - Infantry units. Set to a reasonable distance, player should not see disabled infantry units. Default: 500m
+        "Vehicle" - Vehicles with crew. Set to a reasonable distance, player should not see disabled vehicles. Default: 350m
+        "EmptyVehicle" - All vehicles without crew. Separated from Props as Empty Vehicles have often more complex damage states and selective destruction. Their activation distance should by larger that the one used for Props. Default: 250m
+        "Prop" - Static objects. Anything from a small tin can to a building. Default: 50m
+
+        * \param distance_
+        */
+        void set_dynamic_simulation_distance(const std::string& category_, float distance_);
+        //#TODO add BIKI entry and implement 
+        //void set_dynamic_simulation_distance_coef(const std::string&, float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing 
+        enum class feature_type {
+            disabled = 0,// - Feature disabled 
+            visible_object_distance = 1,// - Object is always visible within object view distance 
+            visible_terrain_distance = 2// - Object is always visible within terrain view distance 
+        };
+        bool set_feature_type(const object& object_, feature_type type_);
+
+        float set_flag_animation_phase(const object& object_, float phase);
+        void set_flag_owner(const object& flag_, const object& owner_);
+        void set_fog(float time_, float fog_);
+        void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_);
+        //category AI 
+        void set_form_dir(std::variant<group, object> group_, float heading_);
+
+        void set_fsm_variable(float handle_, const std::string& name_, game_value value_);
+        void set_group_icon(const group& group_, float icon_id, const std::string& icon_path_, const vector2 offset_);
+
+
+
         void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_);
-        void set_effect_condition(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const rv_waypoint>> unit_, const std::string &statement_);
+        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
 
     }
 }

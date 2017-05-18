@@ -681,27 +681,21 @@ namespace intercept {
         std::vector<rv_weapon_items> weapons_items(const object& obj_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitems__object__ret__array, obj_);
 
-            if (ret.size() == 0) {
-                return {};
-            } else {
-                std::vector<rv_weapon_items> ret_weapon_items;
-                for (uint32_t i = 0; i < ret.size(); ++i)
-                    ret_weapon_items.emplace_back(ret[i]);
-                return ret_weapon_items;
-            }
+            if (ret.size() == 0) return {};
+            std::vector<rv_weapon_items> ret_weapon_items;
+            for (uint32_t i = 0; i < ret.size(); ++i)
+                ret_weapon_items.emplace_back(ret[i]);
+            return ret_weapon_items;
         }
 
         std::vector<rv_weapon_items> weapons_items_cargo(const object& veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitemscargo__object__ret__array, veh_);
 
-            if (ret.size() == 0) {
-                return {};
-            } else {
-                std::vector<rv_weapon_items> ret_weapon_items;
-                for (uint32_t i = 0; i < ret.size(); ++i)
-                    ret_weapon_items.emplace_back(ret[i]);
-                return ret_weapon_items;
-            }
+            if (ret.size() == 0)  return {};
+            std::vector<rv_weapon_items> ret_weapon_items;
+            for (uint32_t i = 0; i < ret.size(); ++i)
+                ret_weapon_items.emplace_back(ret[i]);
+            return ret_weapon_items;
         }
         rv_handgun_items handgun_items(const object& unit_) {
             return rv_handgun_items(host::functions.invoke_raw_unary(__sqf::unary__handgunitems__object__ret__array, unit_));

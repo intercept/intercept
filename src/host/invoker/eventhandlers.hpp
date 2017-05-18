@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -35,13 +35,13 @@ namespace intercept {
 
         void initialize();
 
-        void pre_init(const std::string &name_, game_value &args_);
-        void pre_start(const std::string &name_, game_value &args_);
-        void post_init(const std::string &name_, game_value &args_);
-        void mission_stopped(const std::string &name_, game_value &args_);
+        static void pre_init(game_value &args_);
+        static void pre_start(game_value &args_);
+        static void post_init(game_value &args_);
+        static void mission_stopped(game_value &args_);
 
         
-#define EH_CLASS_DEF(x) void x(const std::string &name_, game_value &args_)
+#define EH_CLASS_DEF(x) static void x(game_value &args_)
 
         EH_CLASS_DEF(anim_changed);
         EH_CLASS_DEF(anim_done);

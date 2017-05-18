@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 
 #include <queue>
-
+#if 0 //Disabled as not needed
 namespace intercept {
     template<typename T, std::size_t Size = 1024>
     class game_data_pool {
@@ -104,3 +104,4 @@ namespace intercept {
 
 
 }
+#endif

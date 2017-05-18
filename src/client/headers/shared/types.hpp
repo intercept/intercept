@@ -13,10 +13,12 @@
 namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
+    class invoker;
     namespace types {
-        typedef uintptr_t(__cdecl *nular_function)(char *, uintptr_t);
-        typedef uintptr_t(__cdecl *unary_function)(char *, uintptr_t, uintptr_t);
-        typedef uintptr_t(__cdecl *binary_function)(char *, uintptr_t, uintptr_t, uintptr_t);
+        class game_value;
+        typedef game_value*(__cdecl *nular_function)(game_value *, uintptr_t);
+        typedef game_value*(__cdecl *unary_function)(game_value *, uintptr_t, uintptr_t);
+        typedef game_value*(__cdecl *binary_function)(game_value *, uintptr_t, uintptr_t, uintptr_t);
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -230,14 +232,14 @@ namespace intercept {
         };
 
 
-        template<std::size_t N>
-        class r_string_const : public compact_array<char> { // constexpr string
-        private:
-            const size_t _size;
-            char _data[N];
-        public:
-            constexpr r_string_const(const char a[N]) : _data(a), _size(N - 1), _refcount(2) { add_ref(); }
-        };
+        //template<std::size_t N>
+        //class r_string_const : public compact_array<char> { // constexpr string
+        //private:
+        //    const size_t _size;
+        //    char _data[N];
+        //public:
+        //    constexpr r_string_const(const char a[N]) : _data(a), _size(N - 1), _refcount(2) { add_ref(); }
+        //};
 
         class r_string {
             //friend constexpr const r_string& operator ""_rs(const char*, size_t);
@@ -247,9 +249,10 @@ namespace intercept {
             r_string(std::string_view str) {
                 if (str.length()) _ref = create(str.data(), str.length());
             }
-            constexpr r_string(compact_array<char>* dat) : _ref(dat) {}
+
+            explicit constexpr r_string(compact_array<char>* dat) : _ref(dat) {}
             template<std::size_t N>
-            constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
+            //constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
             //constexpr r_string(std::string_view str) {   //https://woboq.com/blog/qstringliteral.html
             //    _ref = [str]() -> compact_array<char>* {
             //        static const r_string_const<str.length()> r_string_literal{
@@ -307,8 +310,12 @@ namespace intercept {
             }
 
             //== is case insensitive just like scripting
-            bool operator == (const char *other) const {
+            bool operator == (const char *other) const {//#TODO check for data==nullptr first
                 return _strcmpi(data(), other) == 0;
+            }
+
+            bool operator == (const r_string& other) const {//#TODO check for data==nullptr first
+                return _strcmpi(data(), other.data()) == 0;
             }
 
             //!= is case insensitive just like scripting
@@ -400,23 +407,6 @@ namespace intercept {
             void deallocate(void* data);
 
         };
-
-
-
-        class[[deprecated]] rv_string{
-        public:
-            rv_string() : length(0), ref_count_internal(0) {};
-            rv_string(const rv_string &) = delete;
-            rv_string(rv_string &&) = delete;
-            rv_string & operator=(const rv_string &) = delete;
-            rv_string & operator=(rv_string &&) = delete;
-
-            uint32_t ref_count_internal;
-            uint32_t length;
-            char char_string; //#TODO add .natvis to display full string in Visual Studio dbg
-        };
-
-
 
         //Contributed by ArmaDebugEngine
         class rv_arraytype {};
@@ -533,10 +523,10 @@ namespace intercept {
             }
             template<class _InIt>
             auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
-                insert(end(), _first, _last);
+                insert(base::end(), _first, _last);
             }
             auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(copy_._n) {
-                insert(end(), copy_.begin(), copy_.end());
+                insert(base::end(), copy_.begin(), copy_.end());
             }
             auto_array(auto_array<Type> &&move_) : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
                 move_._maxItems = 0;
@@ -546,7 +536,7 @@ namespace intercept {
                 resize(0);
             }
             void shrink_to_fit() {
-                resize(_n);
+                resize(base::_n);
             }
             auto_array& operator = (auto_array &&move_) {
                 base::_n = move_._n;
@@ -560,7 +550,7 @@ namespace intercept {
 
             auto_array& operator = (const auto_array &copy_) {
                 if (copy_._n) {
-                    insert(end(), copy_.begin(), copy_.end());
+                    insert(base::end(), copy_.begin(), copy_.end());
                 }
                 std::vector<int> x = { 1,2,3 };
                 return *this;
@@ -609,33 +599,27 @@ namespace intercept {
                 item.~Type();
                 memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
             }
+            void erase(Type* element) {
+                //#TODO check if element in range
+                //#TODO use std::distance to find out offset from start
+                auto index = (reinterpret_cast<uintptr_t>(element) - reinterpret_cast<uintptr_t>(base::begin())) / sizeof(Type); //#TODO check if this is correct
+                if (index > base::_n) return;
+                auto item = (*this)[index];
+                item.~Type();
+                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            }
             //This is sooo not threadsafe!
             template<class _InIt>
             void insert(const Type* _where, _InIt _first, _InIt _last) {
                 if (_first == _last) return; //Boogie!
-                if (_where < begin() || _where > end()) return; //WTF?!
-                const size_t insertOffset = _where - begin();
-                bool atEnd = _where == end();
-                size_t oldSize = count();
+                if (_where < base::begin() || _where > base::end()) return; //WTF?!
+                const size_t insertOffset = _where - base::begin();
+                auto previousEnd = base::end();
+                bool atEnd = _where == previousEnd;
+                size_t oldSize = base::count();
                 size_t insertedSize = std::distance(_first, _last);
                 reserve(oldSize + insertedSize);
-                if (atEnd) {
-                    auto index = base::_n;
-                    for (; _first != _last; ++_first) {
-                        //emplace_back(*_first);
-                        //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                        auto& item = (*this)[index];
-                        ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
-                        ++index;
-                    }
-                    base::_n = index;
-                    return;
-                }
-                //else we need to move stuff around
 
-                //#TODO don't really like the casting.. Maybe we should just make _where non-const
-                std::move(const_cast<Type*>(_where), const_cast<Type*>(_where) + insertedSize, const_cast<Type*>(_where) + insertedSize);
-                //#TODO actually test this...
                 auto index = base::_n;
                 for (; _first != _last; ++_first) {
                     //emplace_back(*_first);
@@ -645,6 +629,10 @@ namespace intercept {
                     ++index;
                 }
                 base::_n = index;
+
+                //#TEST does rotate really do correct stuff?
+                //#TODO test insert in mid
+                std::rotate(const_cast<Type*>(_where), previousEnd, base::end());
             }
             void clear() {
                 if (base::_data)
@@ -654,7 +642,7 @@ namespace intercept {
             }
 
             bool operator==(rv_array<Type> other) {
-                if (other._n != _n || ((_data == nullptr || other._data==nullptr) && _data != other._data))
+                if (other._n != base::_n || ((base::_data == nullptr || other._data == nullptr) && base::_data != other._data))
                     return false;
                 auto index = 0;
                 for (auto& it : other) {
@@ -862,17 +850,17 @@ namespace intercept {
             compound_value_pair *types;
         };
 
-        class op_value_entry {
+        class sqf_script_type {
         public:
             uintptr_t               v_table;
             value_entry             *single_type;
             compound_value_entry    *compound_type;
             value_types type() const;
             std::string type_str() const;
-            bool operator==(const op_value_entry& other) const {
+            bool operator==(const sqf_script_type& other) const {
                 return single_type == other.single_type && compound_type == other.compound_type;
             }
-            bool operator!=(const op_value_entry& other) const {
+            bool operator!=(const sqf_script_type& other) const {
                 return single_type != other.single_type || compound_type != other.compound_type;
             }
         };
@@ -881,8 +869,8 @@ namespace intercept {
             uintptr_t        v_table;
             uint32_t         ref_count;
             unary_function   *procedure_addr;
-            op_value_entry   return_type;
-            op_value_entry   arg_type;
+            sqf_script_type   return_type;
+            sqf_script_type   arg_type;
         };
 
         struct unary_entry {
@@ -895,9 +883,9 @@ namespace intercept {
             uintptr_t        v_table;
             uint32_t         ref_count;
             binary_function   *procedure_addr;
-            op_value_entry   return_type;
-            op_value_entry   arg1_type;
-            op_value_entry   arg2_type;
+            sqf_script_type   return_type;
+            sqf_script_type   arg1_type;
+            sqf_script_type   arg2_type;
         };
 
         struct binary_entry {
@@ -910,7 +898,7 @@ namespace intercept {
             uintptr_t        v_table;
             uint32_t         ref_count;
             nular_function   *procedure_addr;
-            op_value_entry   return_type;
+            sqf_script_type   return_type;
         };
 
         struct nular_entry {
@@ -922,23 +910,24 @@ namespace intercept {
         class game_value;
         class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
+            friend class invoker;
         public:
-            virtual const op_value_entry & type() const { static op_value_entry dummy; return dummy; }//#TODO replace op_value_entry by some better name
+            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_value_entry by some better name
             virtual ~game_data() {}
 
         protected:
             virtual bool get_as_bool() const { return false; }
             virtual float get_as_number() const { return 0.f; }
-            virtual r_string get_as_string() const { return ""; } //Only usable on String and Code! Use to_string instead!
+            virtual r_string get_as_string() const { return r_string(); } //Only usable on String and Code! Use to_string instead!
             virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; dummy.clear(); return dummy; } //Why would you ever need this?
             virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; dummy.clear(); return dummy; }
-            virtual game_data *copy() const { return NULL; }
-            virtual void set_readonly(bool val) {} //No clue what this does...
+            virtual game_data *copy() const { return nullptr; }
+            virtual void set_readonly(bool) {} //No clue what this does...
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
-            virtual void set_final(bool val) {}; //Only on GameDataCode AFAIK
-            virtual r_string to_string() const { return ""; }
-            virtual bool equals(const game_data *data) const { return false; };
+            virtual void set_final(bool) {}; //Only on GameDataCode AFAIK
+            virtual r_string to_string() const { return r_string(); }
+            virtual bool equals(const game_data *) const { return false; };
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
 
@@ -946,6 +935,9 @@ namespace intercept {
             int IRelease() override { return release(); };
             uintptr_t get_vtable() const {
                 return *reinterpret_cast<const uintptr_t*>(this);
+            }
+            uintptr_t get_secondary_vtable() const {
+                return *reinterpret_cast<const uintptr_t*>(static_cast<const __internal::I_debug_value*>(this));
             }
         };
 
@@ -966,8 +958,8 @@ namespace intercept {
             size_t hash() const {
                 return __internal::pairhash(type_def, number);
             };
-        protected:
-            static thread_local game_data_pool<game_data_number> _data_pool;
+            //protected:
+            //    static thread_local game_data_pool<game_data_number> _data_pool;
         };
 
         class game_data_bool : public game_data {
@@ -985,8 +977,8 @@ namespace intercept {
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
             size_t hash() const { return __internal::pairhash(type_def, val); };
-        protected:
-            static thread_local game_data_pool<game_data_bool> _data_pool;
+            //protected:
+            //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
         class[[deprecated]] rv_game_value{
@@ -1003,6 +995,7 @@ namespace intercept {
 
         class game_value {
             uintptr_t __vptr;
+            friend class invoker;
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
@@ -1051,8 +1044,6 @@ namespace intercept {
             operator r_string() const;
             operator vector3() const;
             operator vector2() const;
-            //#TODO add operator to const auto_array ref and then replace stuff with foreach loops
-
 
             auto_array<game_value>& to_array();
             const auto_array<game_value>& to_array() const;
@@ -1123,8 +1114,8 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, raw_string); };
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
-        protected:
-            static thread_local game_data_pool<game_data_string> _data_pool;
+        //protected:
+        //    static thread_local game_data_pool<game_data_string> _data_pool;
         };
 
         class game_data_group : public game_data {
@@ -1271,14 +1262,64 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, object); };
-            //struct {
-            //    uint32_t _x;
-            //    void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
-            //};
-            void *object;
-        };
+            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); };
+            struct visualState {
+                //will be false if you called stuff on nullObj
+                bool valid{ false };
+                vector3 _aside;
+                vector3 _up;
+                vector3 _dir;
 
+                vector3 _position;
+                float _scale;
+                float _maxScale;
+
+                float _deltaT;
+                vector3 _speed; // speed in world coordinates
+                vector3 _modelSpeed; // speed in model coordinates (updated in Move())
+                vector3 _acceleration;
+            };
+            visualState get_position_matrix() const {
+                if (!object || !object->object) return visualState();
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+
+                struct visState1 {
+                    vector3 _aside;
+                    vector3 _up;
+                    vector3 _dir;
+
+                    vector3 _position;
+                    float _scale;
+                    float _maxScale;
+                };
+                struct visState2 {
+                    float _deltaT;
+                    vector3 _speed;
+                    vector3 _modelSpeed;
+                    vector3 _acceleration;
+                };
+                visState1* s1 = reinterpret_cast<visState1*>(vbase + 4);
+                visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
+                return visualState{
+                    true,
+                    s1->_aside,
+                    s1->_up,
+                    s1->_dir,
+                    s1->_position,
+                    s1->_scale,
+                    s1->_maxScale,
+                    s2->_deltaT,
+                    s2->_speed,
+                    s2->_modelSpeed,
+                    s2->_acceleration
+                };
+            }
+            struct {
+                uint32_t _x;
+                void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
+            } *object;
+        };
+    #if 0
         template<size_t Size = 1024, size_t Alloc_Length = 512>
         class game_data_string_pool {
         public:
@@ -1372,7 +1413,7 @@ namespace intercept {
                 */
             }
         };
-
+    #endif
 
         namespace __internal {
             enum class GameDataType {
@@ -1417,24 +1458,38 @@ namespace intercept {
             friend class sqf_functions;
         public:
             registered_sqf_function() {};
-            registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_);
+            explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_);
+            void clear() { _function = nullptr; }
         private:
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
 
         template <game_value(*T)(game_value, game_value)>
-        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*l, *r));
-            return reinterpret_cast<uintptr_t>(sqf_this_);
+            return sqf_this_;
         }
 
         template <game_value(*T)(game_value)>
-        static uintptr_t userFunctionWrapper(char* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
-            return reinterpret_cast<uintptr_t>(sqf_this_);
+            return sqf_this_;
+        }
+
+        template <game_value(*T)(const game_value&)>
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return sqf_this_;
+        }
+
+        template <game_value(*T)()>
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
+            ::new (sqf_this_) game_value(T());
+            return sqf_this_;
         }
     }
 }

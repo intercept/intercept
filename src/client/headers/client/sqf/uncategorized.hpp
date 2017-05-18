@@ -14,8 +14,8 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 #include <variant> //#TODO move that into shared
 #include <optional>
 

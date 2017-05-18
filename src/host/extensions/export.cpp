@@ -28,7 +28,7 @@ namespace intercept {
 
         nular_function get_nular_function(const char *function_name_) {
             nular_function function;
-            if (intercept::loader::get().get_function(std::string(function_name_), function)) {
+            if (loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
             return nullptr;
@@ -36,7 +36,7 @@ namespace intercept {
 
         unary_function get_unary_function(const char *function_name_) {
             unary_function function;
-            if (intercept::loader::get().get_function(std::string(function_name_), function)) {
+            if (loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
             return nullptr;
@@ -44,7 +44,7 @@ namespace intercept {
 
         unary_function get_unary_function_typed(const char *function_name_, const char *right_arg_type_) {
             unary_function function;
-            if (intercept::loader::get().get_function(std::string(function_name_), function, std::string(right_arg_type_))) {
+            if (loader::get().get_function(std::string(function_name_), function, std::string(right_arg_type_))) {
                 return function;
             }
             return nullptr;
@@ -52,7 +52,7 @@ namespace intercept {
 
         binary_function get_binary_function(const char *function_name_) {
             binary_function function;
-            if (intercept::loader::get().get_function(std::string(function_name_), function)) {
+            if (loader::get().get_function(std::string(function_name_), function)) {
                 return function;
             }
             return nullptr;
@@ -60,7 +60,7 @@ namespace intercept {
 
         binary_function get_binary_function_typed(const char *function_name_, const char *left_arg_type_, const char *right_arg_type_) {
             binary_function function;
-            if (intercept::loader::get().get_function(std::string(function_name_), function, std::string(left_arg_type_), std::string(right_arg_type_))) {
+            if (loader::get().get_function(std::string(function_name_), function, std::string(left_arg_type_), std::string(right_arg_type_))) {
                 return function;
             }
             return nullptr;
@@ -80,12 +80,15 @@ namespace intercept {
             return loader::get().get_allocator();
         }
 
-        intercept::types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+        registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }
 
-        intercept::types::registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+        registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type, right_arg_type);
+        }
+        registered_sqf_function register_sqf_function_nular(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
+            return sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
         }
     }
 }

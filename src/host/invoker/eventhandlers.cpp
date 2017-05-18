@@ -1,7 +1,7 @@
 ﻿#include "eventhandlers.hpp"
 #include "invoker.hpp"
 #include "extensions.hpp"
-#include "shared\client_types.hpp"
+#include "shared/client_types.hpp"
 
 namespace intercept {
     eventhandlers::eventhandlers() : _initialized(false)
@@ -13,12 +13,12 @@ namespace intercept {
     void eventhandlers::initialize()
     {
         if (!_initialized) {
-            invoker::get().add_eventhandler("pre_start", std::bind(&eventhandlers::pre_start, this, std::placeholders::_1, std::placeholders::_2));
-            invoker::get().add_eventhandler("pre_init", std::bind(&eventhandlers::pre_init, this, std::placeholders::_1, std::placeholders::_2));
-            invoker::get().add_eventhandler("post_init", std::bind(&eventhandlers::post_init, this, std::placeholders::_1, std::placeholders::_2));
-            invoker::get().add_eventhandler("mission_stopped", std::bind(&eventhandlers::mission_stopped, this, std::placeholders::_1, std::placeholders::_2));
+            invoker::get().add_eventhandler("pre_start", std::bind(&eventhandlers::pre_start, std::placeholders::_1));
+            invoker::get().add_eventhandler("pre_init", std::bind(&eventhandlers::pre_init, std::placeholders::_1));
+            invoker::get().add_eventhandler("post_init", std::bind(&eventhandlers::post_init, std::placeholders::_1));
+            invoker::get().add_eventhandler("mission_stopped", std::bind(&eventhandlers::mission_stopped, std::placeholders::_1));
 
-#define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::x, this, std::placeholders::_1, std::placeholders::_2));
+#define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::x, std::placeholders::_1));
 
             EH_EVENT_DEF(anim_changed);
             EH_EVENT_DEF(anim_done);
@@ -67,7 +67,7 @@ namespace intercept {
             _initialized = true;
         }
     }
-    void eventhandlers::pre_start(const std::string & name_, game_value & args_) {
+    void eventhandlers::pre_start(game_value &) {
         LOG(INFO) << "Pre-start";
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) {
@@ -75,7 +75,7 @@ namespace intercept {
             }
         }
     }
-    void eventhandlers::pre_init(const std::string & name_, game_value & args_)
+    void eventhandlers::pre_init(game_value &)
     {
         extensions::get().reload_all();
         LOG(INFO) << "Pre-init";
@@ -85,7 +85,7 @@ namespace intercept {
             }
         }
     }
-    void eventhandlers::post_init(const std::string & name_, game_value & args_)
+    void eventhandlers::post_init(game_value &)
     {
         LOG(INFO) << "Post-init";
         for (auto& module : extensions::get().modules()) {
@@ -94,7 +94,7 @@ namespace intercept {
             }
         }
     }
-    void eventhandlers::mission_stopped(const std::string & name_, game_value & args_)
+    void eventhandlers::mission_stopped(game_value &)
     {
         LOG(INFO) << "Mission Stopped";
         for (auto& module : extensions::get().modules()) {
@@ -103,7 +103,7 @@ namespace intercept {
             }
         }
     }
-#define EH_START(x) void eventhandlers::x(const std::string & name_, game_value & args_) {\
+#define EH_START(x) void eventhandlers::x(game_value & args_) {\
         for (auto& module : extensions::get().modules()) {\
             if (module.second.eventhandlers.x) {\
                 module.second.eventhandlers.x
@@ -133,11 +133,10 @@ namespace intercept {
     EH_START(gear)(static_cast<object &>(args_[0]), static_cast<bool>(args_[1]))EH_END;
     //EH_START(get_in)(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), std::vector<int> turret_path)EH_END;
 
-    void eventhandlers::get_in(const std::string & name_, game_value & args_)
+    void eventhandlers::get_in(game_value & args_)
     {
-        rv_list<int> turret_path(args_[3].size());
-        for (uint32_t turret = 0; turret < args_[3].size(); ++turret)
-            turret_path[turret] = static_cast<int>(args_[3][turret]);
+        std::vector<int> turret_path;
+        turret_path.insert(turret_path.end(), args_[3].to_array().begin(), args_[3].to_array().end());
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
@@ -148,11 +147,10 @@ namespace intercept {
 
     //EH_START(get_out)(static_cast<object &>(args_[0]), static_cast<rv_string>(args_[REPLACE_ME]), static_cast<object &>(args_[REPLACE_ME]), std::vector<int> turret_path)EH_END;
 
-    void eventhandlers::get_out(const std::string & name_, game_value & args_)
+    void eventhandlers::get_out(game_value & args_)
     {
-        rv_list<int> turret_path(args_[3].size());
-        for (uint32_t turret = 0; turret < args_[3].size(); ++turret)
-            turret_path[turret] = static_cast<int>(args_[3][turret]);
+        std::vector<int> turret_path;
+        turret_path.insert(turret_path.end(), args_[3].to_array().begin(), args_[3].to_array().end());
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {

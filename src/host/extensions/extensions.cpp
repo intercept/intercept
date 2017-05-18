@@ -20,6 +20,7 @@ namespace intercept {
         functions.get_engine_allocator = client_function_defs::get_engine_allocator;
         functions.register_sqf_function = client_function_defs::register_sqf_function;
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
+        functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         for (auto file : _searcher.active_pbo_list()) {
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);
@@ -52,7 +53,7 @@ namespace intercept {
         controller::get().add("unload_extension", std::bind(&extensions::unload, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    bool extensions::load(const arguments & args_, std::string & result) {
+    bool extensions::load(const arguments & args_, std::string &) {
         return do_load(args_.as_string(0));
     }
 
@@ -68,7 +69,6 @@ namespace intercept {
     }
 
     bool extensions::do_load(const std::string &path_) {
-        HMODULE dllHandle;
         std::string path = path_;
         LOG(INFO) << "Load requested [" << path_ << "]";
 
@@ -131,7 +131,7 @@ namespace intercept {
 
 
 
-        dllHandle = LoadLibrary(full_path.c_str());
+        HMODULE dllHandle = LoadLibrary(full_path.c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
             return false;
@@ -216,7 +216,7 @@ namespace intercept {
         return false;
     }
 
-    bool extensions::unload(const arguments & args_, std::string & result) {
+    bool extensions::unload(const arguments & args_, std::string &) {
         return do_unload(args_.as_string(0));
     }
 
@@ -244,7 +244,7 @@ namespace intercept {
         return true;
     }
 
-    bool extensions::list(const arguments & args_, std::string & result) {
+    bool extensions::list(const arguments &, std::string & result) {
 
         LOG(INFO) << "Listing loaded modules";
         std::string res;

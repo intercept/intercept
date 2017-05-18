@@ -12,17 +12,10 @@ template class intercept::types::rv_allocator<intercept::__internal::game_functi
 template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
 
 namespace intercept {
-    unary_function loader::_initial_trampoline;
-
     loader::loader() : _attached(false), _patched(false) {}
 
     loader::~loader() {
 
-    }
-
-    int __cdecl loader::_initial_patch(char * a_, int b_, int c_) {
-        loader::get().do_function_walk(b_);
-        return _initial_trampoline(a_, b_, c_);
     }
 
     bool loader::get_function(std::string function_name_, unary_function & function_, std::string arg_signature_) {
@@ -207,7 +200,7 @@ namespace intercept {
 
         //Shamelessly copied from Dedmen's Hack :3
         CHAR fileName[_MAX_PATH];
-        DWORD size = GetModuleFileName(0, fileName, _MAX_PATH);
+        DWORD size = GetModuleFileName(nullptr, fileName, _MAX_PATH);
         fileName[size] = NULL;
         DWORD handle = 0;
         size = GetFileVersionInfoSize(fileName, &handle);
@@ -216,8 +209,8 @@ namespace intercept {
             delete[] versionInfo;
         }
         UINT    			len = 0;
-        VS_FIXEDFILEINFO*   vsfi = NULL;
-        VerQueryValue(versionInfo, "\\", (void**) &vsfi, &len);
+        VS_FIXEDFILEINFO*   vsfi = nullptr;
+        VerQueryValue(versionInfo, "\\", reinterpret_cast<void**>(&vsfi), &len);
         short version = HIWORD(vsfi->dwFileVersionLS);//131
         short version1 = LOWORD(vsfi->dwFileVersionLS);//646
         short version2 = HIWORD(vsfi->dwFileVersionMS);// 1
@@ -230,13 +223,13 @@ namespace intercept {
         //Start them async before doing the other stuff so they are done when we are done parsing the script functions
 
         auto future_stringOffset = std::async([&]() {return findInMemory("tbb4malloc_bi", 13); });
-        auto future_unary_construct =std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxx"); });
+        //auto future_unary_construct =std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxx"); });
 
         //auto future_operator_construct = std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x6a\x00\x8d\x4f\x00\x89\x37\xe8\x00\x00\x00\x00\x83\xcd\x00\x85\xf6\x74\x00\x8b\xc5\xf0\x0f\xc1\x06\x48\x75\x00\x8b\x0d\x00\x00\x00\x00\x56\x8b\x01\xff\x50\x00\xc7\x44\x24\x00\x00\x00\x00\x00\x8b\x0f\x8b\x44\x24\x00\x89\x47\x00\x85\xc9\x74\x00\x8b\xc3\xf0\x0f\xc1\x01\x8b\x44\x24\x00\x89\x4f\x00\x89\x47\x00\x8b\x44\x24\x00\xc7\x47\x00\x00\x00\x00\x00\xc7\x47\x00\x00\x00\x00\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x57\x00\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcb\xf0\x0f\xc1\x08", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxxx?xx?xxx????xx?xxx?xxxxxxxx?xx????xxxxx?xxx?????xxxxx?xx?xxx?xxxxxxxxx?xx?xx?xxx?xx?????xx?????xxx?xx????xx?xx?xxx?xxxxxx"); });
          
         //make sure insert patterns are long enough. they have to include the offset after the target of the first jmp instruction
         //auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
-        auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
+        //auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
 
         //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
@@ -349,7 +342,7 @@ namespace intercept {
             auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::__internal::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
-                _sqf_register_funcs._types[static_cast<size_t>(type)] = reinterpret_cast<uintptr_t>(entry);
+                _sqf_register_funcs._types[static_cast<size_t>(type)] = const_cast<__internal::gsTypeInfo*>(entry);
             }
         }
 
@@ -364,8 +357,8 @@ namespace intercept {
 
         //_sqf_register_funcs._operator_construct = future_operator_construct.get();
         //_sqf_register_funcs._operator_insert = future_operator_insert.get();
-        _sqf_register_funcs._unary_construct = future_unary_construct.get();
-        _sqf_register_funcs._unary_insert = future_unary_insert.get();
+        //_sqf_register_funcs._unary_construct = future_unary_construct.get();
+        //_sqf_register_funcs._unary_insert = future_unary_insert.get();
         _sqf_register_funcs._gameState = state_addr_;
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();

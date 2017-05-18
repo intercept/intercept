@@ -192,7 +192,7 @@ namespace intercept {
 
         @return Returns `true` if it was bound, `false` if it was not.
         */
-        bool add_eventhandler(const std::string & name_, std::function<void(const std::string &, game_value &)> func_);
+        bool add_eventhandler(const std::string & name_, std::function<void(game_value &)> func_);
 
         /*!
         @brief A map of vtable ptrs to string stypes.
@@ -210,7 +210,6 @@ namespace intercept {
 
         //static game_data_string_pool<> string_pool;
         static uintptr_t sqf_game_state;
-        static char *sqf_this;
 
         static bool invoker_accessible;
         static bool invoker_accessible_all;
@@ -232,8 +231,8 @@ namespace intercept {
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.
         */
-        static int __cdecl _register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_);
-
+        static game_value _intercept_registerTypes(const game_value& left_arg_);
+        registered_sqf_function _intercept_registerTypes_function;
         /*!
         @brief The trampoline for `str` that is used as the type registration function.
         */
@@ -253,15 +252,6 @@ namespace intercept {
         //game_value _signal_params;
 
         //game_value _eh_params_name;
-
-        /*!
-        @brief This is actually null. Really it should just be exchanged with a
-        null literal where it is used.
-
-        This is a pointless `__thiscall` convention `this` pointer. It is never
-        used by any SQF function because they are not member functions.
-        */
-        char *_sqf_this;
 
         /*!
         @brief The address of the game state object.
@@ -288,7 +278,7 @@ namespace intercept {
         @brief A collection of bound functions for processing event handlers in
         the client plugins.
         */
-        std::unordered_map < std::string, std::function<void(const std::string &, game_value &)> > _eventhandlers;
+        std::unordered_map < std::string, std::function<void(game_value &)> > _eventhandlers;
 
         bool _patched;
         bool _attached;

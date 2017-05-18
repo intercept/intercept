@@ -25,9 +25,9 @@ namespace intercept {
             config_entry();
             config_entry(types::config entry_);
             config_entry(config_entry const &copy_);
-            config_entry(config_entry &&move_);
+            config_entry(config_entry &&move_) noexcept;
             config_entry & operator=(const config_entry &copy_);
-            config_entry & operator=(config_entry &&move_);
+            config_entry & operator=(config_entry &&move_) noexcept;
             config_entry operator>>(const std::string &entry_);
 
             operator config &();

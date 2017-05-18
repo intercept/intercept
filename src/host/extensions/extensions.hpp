@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -20,7 +20,7 @@ https://github.com/NouberNou/intercept
 
 namespace intercept {
     /*!
-    @namespace
+    @namespace module
     @brief Contains the module entry definitions and classes.
     */
     namespace module {
@@ -31,7 +31,7 @@ namespace intercept {
         @brief Function definitions.
         */
         typedef int(__cdecl *api_version_func)();
-        typedef void(__cdecl *assign_functions_func)(const struct intercept::client_functions funcs);
+        typedef void(__cdecl *assign_functions_func)(const struct client_functions funcs);
         typedef void(__cdecl *handle_unload_func)();
         typedef void(__cdecl *pre_start_func)();
         typedef void(__cdecl *pre_init_func)();
@@ -82,14 +82,14 @@ namespace intercept {
         EH(fired_near)(object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_);
         EH(fuel)(object &vehicle_, bool fuel_state_);
         EH(gear)(object &vehicle_, bool gear_state_);
-        EH(get_in)(object &vehicle_, r_string position_, object &unit_, rv_list<int> &turret_path);
-        EH(get_out)(object &vehicle_, r_string position_, object &unit_, rv_list<int> &turret_path);
+        EH(get_in)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
+        EH(get_out)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
         EH(handle_damage)(object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_);
         EH(handle_heal)(object &unit_, object &healder_, bool healer_can_heal_);
         EH(handle_rating)(object &unit_, float rating_);
         EH(handle_score)(object &unit_, object &object_, float score_);
         EH(hit)(object &unit_, object &caused_by_, float damage_);
-        EH(hit_part)(rv_list<hit_part_data> &data_);
+        EH(hit_part)(std::vector<hit_part_data> &data_);
         EH(init)(object &unit_);
         EH(incoming_missile)(object &unit_, r_string ammo_, object &firer_);
         EH(inventory_closed)(object &object_, object &container_);
@@ -266,9 +266,9 @@ namespace intercept {
         */
         std::unordered_map<std::string, module::entry> _modules;
 
-        intercept::pbo::search _searcher;
+        pbo::search _searcher;
 
         std::list<std::string> _mod_folders;
     };
     
-};
+}

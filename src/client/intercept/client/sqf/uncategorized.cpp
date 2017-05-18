@@ -7936,5 +7936,25 @@ pitch_
         void set_direction(const location &location_, float direction_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
         }
+
+        void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_) {
+            game_value params_right({
+                object_,
+                texture_,
+                color_,
+                offset_,
+                width_,
+                height_,
+                size_,
+                angle_,
+                identifier_,
+                shadow_,
+                is_3d_,
+                draw_line_,
+                priority_
+            });
+            
+            host::functions.invoke_raw_binary(__sqf::binary__setdrawicon__control__array__ret__nothing, map_, params_right);
+        }
     }
 }

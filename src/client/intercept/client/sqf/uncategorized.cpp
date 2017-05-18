@@ -7653,5 +7653,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void remove_simple_task(const object &unit_, const task &task_) {
             host::functions.invoke_raw_binary(__sqf::binary__removesimpletask__object__task__ret__nothing, unit_, task_);
         }
+
+        void remove_team_member(const team_member &team_, const team_member &member_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
+        }
     }
 }

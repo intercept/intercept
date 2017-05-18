@@ -7319,5 +7319,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void look_at_pos(const control &map_, const vector3 &position_) {
             host::functions.invoke_raw_binary(__sqf::binary__lookatpos__control__array__ret__nothing, map_, position_);
         }
+
+        std::vector<std::string> magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
+            auto_array<game_value> turret_path({ turret_path_.begin(),turret_path_.end() });
+
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__magazinesturret__object__array__ret__array, vehicle_, std::move(turret_path)));
+        }
     }
 }

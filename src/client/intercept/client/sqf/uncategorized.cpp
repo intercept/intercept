@@ -7421,5 +7421,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value on_show_new_object(const object &control_, const std::string &command_) {
             return host::functions.invoke_raw_binary(__sqf::binary__onshownewobject__control__string__ret__any, control_, command_);
         }
+
+        void order_get_in(const std::vector<object> &units_, bool order_) {
+            auto_array<game_value> units({ units_.begin(),units_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__ordergetin__array__bool__ret__nothing, std::move(units), order_);
+        }
     }
 }

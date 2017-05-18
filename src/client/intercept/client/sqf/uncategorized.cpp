@@ -7839,5 +7839,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_3den_object_type(const object &objects_, const std::string &class_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, objects_, class_name_);
         }
+
+        void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_) {
+            game_value params_right({
+                weapon_class_,
+                bullets_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, weapon_class_, params_right);
+        }
     }
 }

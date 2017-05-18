@@ -1955,5 +1955,6 @@ namespace intercept {
         bool set_3den_layer(const game_value &entity_, int layer_id_);
         void set_3den_mission_attribute(const std::string &attribute_, const game_value &params_right);
         void set_3den_object_type(const object &objects_, const std::string &class_name_);
+        void set_ammo(const object &unit_, const std::string &weapon_class_, int bullets_);
     }
 }

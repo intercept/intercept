@@ -7956,5 +7956,11 @@ pitch_
             
             host::functions.invoke_raw_binary(__sqf::binary__setdrawicon__control__array__ret__nothing, map_, params_right);
         }
+
+        void set_drive_on_path(const object &vehicle_, const std::vector<vector3> &points_) {
+            auto_array<game_value> points(points_.begin(), points_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__setdriveonpath__object__array__ret__nothing, vehicle_, std::move(points));
+        }
     }
 }

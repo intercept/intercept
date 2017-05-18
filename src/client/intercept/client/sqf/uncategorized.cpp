@@ -7397,5 +7397,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         int nmenu_items(const control &map_, int index_) {
             return host::functions.invoke_raw_binary(__sqf::binary__nmenuitems__control__string_scalar__ret__scalar, map_, index_);
         }
+
+        void obj_status(const std::string &objective_number_, const std::string &status_) {
+            host::functions.invoke_raw_binary(__sqf::binary__objstatus__string__string__ret__nothing, objective_number_, status_);
+        }
     }
 }

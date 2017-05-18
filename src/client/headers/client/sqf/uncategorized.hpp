@@ -1908,6 +1908,6 @@ namespace intercept {
         std::vector<rv_target> near_targets(const object &unit_, float radius_);
         int nmenu_items(const control &map_, const std::string &menu_name_);
         int nmenu_items(const control &map_, int index_);
-
+        void obj_status(const std::string &objective_number_, const std::string &status_);
     }
 }

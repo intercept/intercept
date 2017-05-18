@@ -1918,6 +1918,7 @@ namespace intercept {
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
         bool preload_object(float distance_, const object &object_);
         bool preload_object(float distance_, const std::string &class_name_);
+        int push_back_unique(const std::vector<game_value> &array_, const game_value &element_);
 
     }
 }

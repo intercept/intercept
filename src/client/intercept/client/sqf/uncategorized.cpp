@@ -7456,5 +7456,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool preload_object(float distance_, const std::string &class_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, class_name_);
         }
+
+        int push_back_unique(const std::vector<game_value> &array_, const game_value &element_) {
+            auto_array<game_value> base_array({ array_.begin(), array_.end() });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__pushbackunique__array__any__ret__scalar, std::move(base_array), element_);
+        }
     }
 }

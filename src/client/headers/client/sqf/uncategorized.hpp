@@ -1929,19 +1929,13 @@ namespace intercept {
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_event_handler(const object &object_, const std::string &event_, int index_);
-        void remove_magazine(const object &unit_, const std::string &magazine_class_);
-        void remove_magazine_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_);
-        void remove_magazines_turret(const object &vehicle_, const std::string &magazine_class_, const std::vector<int> &turret_path_);
         void remove_mp_event_handler(const object &object_, const std::string &event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
         void remove_simple_task(const object &unit_, const task &task_);
         void remove_team_member(const team_member &team_, const team_member &member_);
-        void remove_weapon_attachment_cargo(const object &vehicle_, int weapon_id_, int creator_id_, const std::string &attachment_);
-        void remove_weapon_cargo(const object &vehicle_, int weapon_id_, int creator_id_);
-        void remove_weapon_turret(const object &vehicle_, const std::string &weapon_name_, const std::vector<int> &turret_path_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
-        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const object &target_);
-        void reveal(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> &unit_, const std::vector<object> &targets_);
+        void reveal(std::variant<object, group> &unit_, const object &target_);
+        void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
         void rope_detach(const object &vehicle_, const object &rope_);
     }

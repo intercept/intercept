@@ -7773,5 +7773,34 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value select_editor_object(const control &map_, const std::string &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selecteditorobject__control__string__ret__any, map_, object_);
         }
+
+        void select_weapon_turret(const object &vehicle_, const std::string &weapon_class_, const std::vector<int> &turret_path_) {
+            game_value params_right({
+                weapon_class_,
+                std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end()))
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__selectweaponturret__object__array__ret__nothing, vehicle_, params_right);
+        }
+
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_) {
+            game_value params_right({
+                receiver_,
+                type_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
+        }
+
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<std::string> &values_) {
+            game_value params_right({
+                receiver_,
+                type_,
+                parent_task_,
+                std::move(auto_array<game_value>(values_.begin(), values_.end()))
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
+        }
     }
 }

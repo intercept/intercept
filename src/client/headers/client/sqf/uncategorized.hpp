@@ -1946,5 +1946,9 @@ namespace intercept {
         void say_3d(const object &from_, std::optional<object> to_, const std::string &sound_class_, float max_distance_, float pitch_);
         game_value select(const std::vector<game_value> &array_, const code &condition_);
         game_value select_editor_object(const control &map_, const std::string &object_);
+        void select_weapon_turret(const object &vehicle_, const std::string &weapon_class_, const std::vector<int> &turret_path_);
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_);
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<std::string> &values_);
+
     }
 }

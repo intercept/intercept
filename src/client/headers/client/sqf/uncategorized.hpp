@@ -1963,5 +1963,7 @@ namespace intercept {
         void set_combat_mode(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::string &mode_);
         void set_convoy_seperation(const object &vehicle_, float distance_);
         void set_curator_coef(const object &curator_object_, const std::string &action_, float coefficient_);
+        void set_current_task(const object &object_, const task &task_);
+
     }
 }

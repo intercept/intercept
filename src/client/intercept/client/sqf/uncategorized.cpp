@@ -7909,5 +7909,9 @@ pitch_
 
             host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_object_, params_right);
         }
+
+        void set_current_task(const object &object_, const task &task_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcurrenttask__object__task__ret__nothing, object_, task_);
+        }
     }
 }

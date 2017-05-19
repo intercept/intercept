@@ -8251,5 +8251,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_variable(const location &location_, const std::string &variable_, const game_value &value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, { variable_, value_ });
         }
+
+        bool set_vehicle_cargo(const object &vehicle_, const object &cargo_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setvehiclecargo__object__object__ret__bool, vehicle_, cargo_);
+        }
     }
 }

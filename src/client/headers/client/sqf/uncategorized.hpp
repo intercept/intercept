@@ -2118,6 +2118,7 @@ namespace intercept {
         void set_variable(const team_member &team_member_, const std::string &variable_, const game_value &value_);
         void set_variable(const task &task_, const std::string &variable_, const game_value &value_);
         void set_variable(const location &location_, const std::string &variable_, const game_value &value_);
+        bool set_vehicle_cargo(const object &vehicle_, const object &cargo_);
 
     }
 }

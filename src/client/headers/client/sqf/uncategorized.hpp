@@ -2066,6 +2066,8 @@ namespace intercept {
         void set_lightnings(float time_, float lightnings_value_);
         void set_magazine_turret_ammo(const object &vehicle_, const std::string &magazine_class_, int ammo_count_, const std::vector<int> &turret_path_);
         void set_mass(const object &object_, float mass_, std::optional<float> time_);
+        void set_music_effect(const object &trigger_, const std::string &track_);
+        void set_music_effect(const group &group_, int index_, const std::string &track_);
 
     }
 }

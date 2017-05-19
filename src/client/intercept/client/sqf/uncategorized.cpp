@@ -8002,5 +8002,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 host::functions.invoke_raw_binary(__sqf::binary__setmass__object__scalar_array__ret__nothing, object_, { mass_, *time_ });
             host::functions.invoke_raw_binary(__sqf::binary__setmass__object__scalar_array__ret__nothing, object_, mass_);
         }
+
+        void set_music_effect(const object &trigger_, const std::string &track_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, trigger_, track_);
+        }
+
+        void set_music_effect(const group &group_, int index_, const std::string &track_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, { group_, index_ }, track_);
+        }
     }
 }

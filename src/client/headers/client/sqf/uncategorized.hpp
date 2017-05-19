@@ -2070,6 +2070,7 @@ namespace intercept {
         void set_music_effect(const group &group_, int index_, const std::string &track_);
         void set_name(const object &unit_, const std::string &name_, const std::string &first_name_, const std::string &last_name_);
         void set_name(const location &location_, const std::string &name_);
+        game_value set_object_arguments(const control &map_, const std::string &object_, const std::vector<std::string> &values_);
 
     }
 }

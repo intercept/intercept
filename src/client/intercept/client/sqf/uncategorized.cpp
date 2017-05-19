@@ -8018,5 +8018,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_name(const location &location_, const std::string &name_) {
             host::functions.invoke_raw_binary(__sqf::binary__setname__location__string__ret__nothing, location_, name_);
         }
+
+        game_value set_object_arguments(const control &map_, const std::string &object_, const std::vector<std::string> &values_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setobjectarguments__control__array__ret__any, map_, {object_, std::move(auto_array<game_value>(values_.begin(), values_.end()))});
+        }
     }
 }

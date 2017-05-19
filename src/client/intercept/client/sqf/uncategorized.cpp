@@ -8438,5 +8438,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__array__scalar__ret__array, std::move(auto_array<game_value>(units_.begin(), units_.end())), height_));
         }
+
+        void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__updatedrawicon__control__array__ret__nothing, map_, { object_, string_identifier_ , color_, offset_, width_, height_, maintain_size_, angle_, shadow_});
+        }
     }
 }

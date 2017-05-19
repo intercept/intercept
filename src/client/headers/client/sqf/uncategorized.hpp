@@ -2123,6 +2123,7 @@ namespace intercept {
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
         void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
         void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
+        void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_);
 
     }
 }

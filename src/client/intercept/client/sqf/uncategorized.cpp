@@ -8285,5 +8285,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvelocitytransformation__object__array__ret__nothing, object_, {position1_, position2_, velocity1_, velocity2_, direction1_, direction2_, up1_, up2_, time_});
         }
+
+        void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvisibleiftreecollapsed__control__array__ret__nothing, map_, { object_, visible_ });
+        }
     }
 }

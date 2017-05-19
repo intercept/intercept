@@ -8130,5 +8130,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_speed_mode(const group &group_, const std::string &speed_mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeedmode__object_group__string__ret__nothing, group_, speed_mode_);
         }
+
+        void set_task_marker_offset(const object &task_, const vector3 &offset_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settaskmarkeroffset__object__array__ret__nothing, task_, offset_);
+        }
     }
 }

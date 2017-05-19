@@ -8350,5 +8350,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsremove__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
+
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_) {
+            auto_array<game_value> waypoints;
+            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group, waypoint.index });
+
+            host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
+        }
     }
 }

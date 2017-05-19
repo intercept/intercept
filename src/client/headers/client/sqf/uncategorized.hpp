@@ -2139,6 +2139,7 @@ namespace intercept {
         void swim_in_depth(const object &unit_, float depth_);
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
 
     }
 }

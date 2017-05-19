@@ -2111,6 +2111,13 @@ namespace intercept {
         void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_);
         void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
         void set_user_action_text(const object &object_, int action_index_, std::variant<const std::string, const rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_);
+        void set_variable(const display &display_, const std::string &variable_, const game_value &value_);
+        void set_variable(const control &control_, const std::string &variable_, const game_value &value_);
+        void set_variable(const object &object_, const std::string &variable_, const game_value &value_);
+        void set_variable(const group &group_, const std::string &variable_, const game_value &value_);
+        void set_variable(const team_member &team_member_, const std::string &variable_, const game_value &value_);
+        void set_variable(const task &task_, const std::string &variable_, const game_value &value_);
+        void set_variable(const location &location_, const std::string &variable_, const game_value &value_);
 
     }
 }

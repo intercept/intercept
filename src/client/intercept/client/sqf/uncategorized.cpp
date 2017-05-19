@@ -8223,5 +8223,33 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             
             host::functions.invoke_raw_binary(__sqf::binary__setuseractiontext__object__array__ret__nothing, object_, std::move(params_right));
         }
+
+        void set_variable(const display &display_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__display__array__ret__nothing, display_, { variable_, value_ });
+        }
+
+        void set_variable(const control &control_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__control__array__ret__nothing, control_, { variable_, value_ });
+        }
+
+        void set_variable(const object &object_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, { variable_, value_ });
+        }
+
+        void set_variable(const group &group_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, { variable_, value_ });
+        }
+
+        void set_variable(const team_member &team_member_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__team_member__array__ret__nothing, team_member_, { variable_, value_ });
+        }
+
+        void set_variable(const task &task_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__task__array__ret__nothing, task_, { variable_, value_ });
+        }
+
+        void set_variable(const location &location_, const std::string &variable_, const game_value &value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, { variable_, value_ });
+        }
     }
 }

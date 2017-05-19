@@ -2046,6 +2046,6 @@ namespace intercept {
 
         void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_);
         void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
-
+        bool set_feature_type(const object &object_, int type_);
     }
 }

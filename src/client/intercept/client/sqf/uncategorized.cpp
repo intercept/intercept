@@ -158,6 +158,9 @@ namespace intercept {
 
 
         /// INVESTIGATE
+        /* No documentation. */
+        // binary_dynamicsimulationdistancecoef__string__scalar__ret__nothing
+
         /* No documentation.*/
         // unary__addforcegeneratorrtd__array__ret__scalar
 
@@ -8108,7 +8111,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_skill(const object &vehicle_, float skill_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, vehicle_, skill_);
+            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, vehicle_, skill_);
         }
 
         bool set_sling_load(const object &vehicle_, const object &load_) {

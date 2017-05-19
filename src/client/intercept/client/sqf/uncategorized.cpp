@@ -8102,5 +8102,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_simple_task_destination(const object &task_, const vector3 &position_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdestination__task__array__ret__nothing, task_, position_);
         }
+
+        void set_simple_task_target(const task &task_, const object &target_, bool precise_position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktarget__task__array__ret__nothing, task_, { target_, precise_position_ });
+        }
     }
 }

@@ -8446,5 +8446,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_) {
             host::functions.invoke_raw_binary(__sqf::binary__updatemenuitem__control__array__ret__nothing, map_, { menu_item_index_, text_ , command_ });
         }
+
+        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
+        }
     }
 }

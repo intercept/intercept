@@ -8272,5 +8272,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return host::functions.invoke_raw_binary(__sqf::binary__setvehicleposition__object__array__ret__bool, object_, std::move(params_right));
         }
+
+        //#TODO: Find out which params are to the right
+        void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehicletipars__object__array__ret__nothing, vehicle_, params_right_);
+        }
     }
 }

@@ -8188,5 +8188,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, { skill_name_, std::get<0>(value_), is_custom_ }); return;
             host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, { skill_name_, std::get<1>(value_), is_custom_ });
         }
+
+        //#TODO: Find out which parameters should be on the right side of the command
+        void set_unit_load_in_combat(const object &unit_, const game_value &params_right_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, params_right_);
+        }
     }
 }

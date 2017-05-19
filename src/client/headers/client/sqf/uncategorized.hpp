@@ -2072,6 +2072,7 @@ namespace intercept {
         void set_name(const location &location_, const std::string &name_);
         game_value set_object_arguments(const control &map_, const std::string &object_, const std::vector<std::string> &values_);
         void set_object_material(const object &object_, int index_, const std::string &material_);
+        void set_object_material_global(const object &object_, int index_, const std::string &material_);
 
     }
 }

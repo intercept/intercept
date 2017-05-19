@@ -8398,5 +8398,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__turretunit__object__array__ret__object, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
         }
+
+        void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetcolor__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
     }
 }

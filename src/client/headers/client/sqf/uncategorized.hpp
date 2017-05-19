@@ -2167,6 +2167,7 @@ namespace intercept {
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
         int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
+        void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
 
     }
 }

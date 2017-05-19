@@ -8334,5 +8334,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void slider_set_range(const control &slider_, float min_, float max_) {
             host::functions.invoke_raw_binary(__sqf::binary__slidersetrange__control__array__ret__nothing, slider_, { min_, max_ });
         }
+
+        void slider_set_speed(const control &slider_, float line_, int page_) {
+            host::functions.invoke_raw_binary(__sqf::binary__slidersetspeed__control__array__ret__nothing, slider_, { line_, page_ });
+        }
     }
 }

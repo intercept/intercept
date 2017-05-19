@@ -2124,6 +2124,11 @@ namespace intercept {
         void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
         void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_);
-
+        void set_waves(float time_, float waves_value_);
+        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
+        void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
+        void set_wind_dir(float time_, float wind_value_);
+        void set_wind_force(float time_, float force_value_);
+        void set_wind_str(float time_, float strength_value_);
     }
 }

@@ -8289,5 +8289,29 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvisibleiftreecollapsed__control__array__ret__nothing, map_, { object_, visible_ });
         }
+
+        void set_waves(float time_, float waves_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaves__scalar__scalar__ret__nothing, time_, waves_value_);
+        }
+
+        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaypointforcebehaviour__array__bool__ret__nothing, { group_, index_ }, force_);
+        }
+
+        void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setweaponreloadingtime__object__array__ret__bool, vehicle_, { gunner_, muzzle_class_, reload_time_ });
+        }
+
+        void set_wind_dir(float time_, float wind_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwinddir__scalar__scalar__ret__nothing, time_, wind_value_);
+        }
+
+        void set_wind_force(float time_, float force_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwindforce__scalar__scalar__ret__nothing, time_, force_value_);
+        }
+
+        void set_wind_str(float time_, float strength_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwindstr__scalar__scalar__ret__nothing, time_, strength_value_);
+        }
     }
 }

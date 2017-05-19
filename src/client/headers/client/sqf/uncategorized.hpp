@@ -2134,6 +2134,7 @@ namespace intercept {
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
         void binary__sideradio__object_array__string__ret__nothing(const object &unit_, const std::string &radio_name_);
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, const std::string &identity_, const std::string &radio_name_);
+        void slider_set_range(const control &slider_, float min_, float max_);
 
     }
 }

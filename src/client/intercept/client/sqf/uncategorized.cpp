@@ -8330,5 +8330,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, const std::string &identity_, const std::string &radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, { side_, identity_ }, radio_name_);
         }
+
+        void slider_set_range(const control &slider_, float min_, float max_) {
+            host::functions.invoke_raw_binary(__sqf::binary__slidersetrange__control__array__ret__nothing, slider_, { min_, max_ });
+        }
     }
 }

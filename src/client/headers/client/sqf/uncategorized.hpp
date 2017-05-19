@@ -1093,7 +1093,6 @@ namespace intercept {
         void set_rank(const object &value0_, const std::string& value1_);
         void set_repair_cargo(const object &value0_, float value1_);
         void set_rotor_brake_rtd(const object &value0_, float value1_);
-        void set_skill(const object &value0_, float value1_);
         void set_speaker(const object &value0_, const std::string& value1_);
         void set_stamina(const object &value0_, float value1_);
         void set_suppression(const object &value0_, float value1_);
@@ -2048,7 +2047,6 @@ namespace intercept {
         void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
         bool set_feature_type(const object &object_, int type_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
-        void set_flag_owner(const object &flag_, const object &owner_);
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
         void set_formation(const group &group_, const std::string &formation_);
         void set_form_dir(const group &group_, float heading_);

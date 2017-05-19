@@ -3269,10 +3269,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_skill(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, value0_, value1_);
-        }
-
         void set_speaker(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeaker__object__string__ret__nothing, value0_, value1_);
         }
@@ -7871,10 +7867,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__setflaganimationphase__object__scalar__ret__nothing, object_, phase);
         }
 
-        void set_flag_owner(const object& flag_, const object& owner_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setflagowner__object__object__ret__nothing, flag_, owner_);
-        }
-
         void set_fog(float time_, float fog_) {
             host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_);
         }
@@ -8062,7 +8054,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, const vector3> target_) {
             if (target_.index() == 0)
-                return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_)); return;
+                return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_));
             return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_));
         }
 

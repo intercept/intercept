@@ -2056,5 +2056,7 @@ namespace intercept {
         void set_group_icon(const group &group_, int id_, const std::string &icon_, const vector2 &offset_);
         void set_group_icon_params(const group &group_, const rv_color &color_, const std::string &text_, float scale_, bool visible_);
         void set_group_id(const group &group_, const std::string &name_format_, const std::vector<std::string> &params_);
+        void set_group_id_global(const group &group_, const std::string &name_format_, const std::vector<std::string> &params_);
+
     }
 }

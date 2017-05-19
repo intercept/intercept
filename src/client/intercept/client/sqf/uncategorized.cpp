@@ -8430,5 +8430,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::string tv_tooltip(const control &control_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__tvtooltip__control__array__ret__string, control_, std::move(auto_array<game_value>(path_.begin(), path_.end())));
         }
+
+        std::vector<object> units_below_height(const group &group_, float height_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__group__scalar__ret__array, group_, height_));
+        }
+
+        std::vector<object> units_below_height(const std::vector<object> &units_, float height_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__array__scalar__ret__array, std::move(auto_array<game_value>(units_.begin(), units_.end())), height_));
+        }
     }
 }

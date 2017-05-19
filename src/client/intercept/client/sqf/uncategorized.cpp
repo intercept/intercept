@@ -8363,5 +8363,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return rv_target_knowledge({ res[0], res[1], res[2], res[3], res[4], res[5], res[6] });
         }
+
+        //#TODO: Find out how this function works
+        game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__targetsaggregate__array__array__ret__array, { speaker_, side_, unit_, place_, time_ }, candidates_);
+        }
     }
 }

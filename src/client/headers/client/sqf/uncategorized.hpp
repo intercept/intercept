@@ -2151,6 +2151,7 @@ namespace intercept {
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
         void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
+        game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
 
     }
 }

@@ -2074,6 +2074,7 @@ namespace intercept {
         void set_object_material(const object &object_, int index_, const std::string &material_);
         void set_object_material_global(const object &object_, int index_, const std::string &material_);
         void set_object_proxy(const control &map_, const std::string &object_, const object &proxy_object_);
+        void set_object_texture(const object &object_, int index_, const std::string &texture_);
 
     }
 }

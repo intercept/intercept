@@ -7936,5 +7936,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
                 host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_, *fog_decay_, *fog_base_}); return;
             host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_value_);
         }
+
+        void set_formation(const group &group_, const std::string &formation_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, group_, formation_);
+        }
     }
 }

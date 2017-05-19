@@ -2050,5 +2050,7 @@ namespace intercept {
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
         void set_flag_owner(const object &flag_, const object &owner_);
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
+        void set_formation(const group &group_, const std::string &formation_);
+
     }
 }

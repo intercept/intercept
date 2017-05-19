@@ -8074,5 +8074,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_rain(float time_, float rain_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setrain__scalar__scalar__ret__nothing, time_, rain_value_);
         }
+
+        void set_rain_bow(float time_, float rain_bow_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setrainbow__scalar__scalar__ret__nothing, time_, rain_bow_value_);
+        }
     }
 }

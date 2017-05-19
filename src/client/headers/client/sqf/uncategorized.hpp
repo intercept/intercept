@@ -2083,6 +2083,7 @@ namespace intercept {
         void set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void set_pipe_effect(const std::string &parameter_left, const game_value &parameters_left);
         void set_rain(float time_, float rain_value_);
+        void set_rain_bow(float time_, float rain_bow_value_);
 
     }
 }

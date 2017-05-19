@@ -8149,11 +8149,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, trigger_, { type_,effect_,text_ });
+            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, trigger_, { type_, effect_, text_ });
         }
 
         void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, { group_, index_ }, { type_,effect_,text_ });
+            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, { group_, index_ }, { type_, effect_, text_ });
+        }
+
+        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, { by_, repeating_ });
         }
     }
 }

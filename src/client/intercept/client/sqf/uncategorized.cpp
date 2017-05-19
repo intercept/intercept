@@ -8042,5 +8042,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_object_texture_global(const object &object_, int index_, const std::string &texture_) {
             host::functions.invoke_raw_binary(__sqf::binary__setobjecttextureglobal__object__array__ret__nothing, object_, { index_, texture_ });
         }
+
+        void set_overcast(float time_, float overcast_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setovercast__scalar__scalar__ret__nothing, time_, overcast_value_);
+        }
     }
 }

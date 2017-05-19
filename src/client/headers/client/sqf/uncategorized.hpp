@@ -2136,6 +2136,8 @@ namespace intercept {
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, const std::string &identity_, const std::string &radio_name_);
         void slider_set_range(const control &slider_, float min_, float max_);
         void slider_set_speed(const control &slider_, float line_, int page_);
+        void swim_in_depth(const object &unit_, float depth_);
+        void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
 
     }
 }

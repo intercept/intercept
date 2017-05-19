@@ -8338,5 +8338,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void slider_set_speed(const control &slider_, float line_, int page_) {
             host::functions.invoke_raw_binary(__sqf::binary__slidersetspeed__control__array__ret__nothing, slider_, { line_, page_ });
         }
+
+        void swim_in_depth(const object &unit_, float depth_) {
+            host::functions.invoke_raw_binary(__sqf::binary__swimindepth__object__scalar__ret__nothing, unit_, depth_);
+        }
+
+        void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_) {
+            host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsadd__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
+        }
     }
 }

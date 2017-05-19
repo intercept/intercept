@@ -8139,5 +8139,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_task_result(const task &task_, const game_value &params_right) {
             host::functions.invoke_raw_binary(__sqf::binary__settaskresult__task__array__ret__nothing, task_, params_right);
         }
+
+        void set_task_state(const task &task_, const std::string &state_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settaskstate__task__string__ret__nothing, task_, state_);
+        }
     }
 }

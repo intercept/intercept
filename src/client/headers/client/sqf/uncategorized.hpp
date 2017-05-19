@@ -2080,11 +2080,12 @@ namespace intercept {
         void set_particle_params();
         void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
         void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
-        void set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void set_pipe_effect(const std::string &parameter_left, const game_value &parameters_left);
         void set_rain(float time_, float rain_value_);
         void set_rain_bow(float time_, float rain_bow_value_);
         void set_rectangular(const location &location_, bool rectangular_);
+        void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
 
     }
 }

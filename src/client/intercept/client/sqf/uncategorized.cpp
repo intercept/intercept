@@ -8060,10 +8060,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__setpilotcamerarotation__object__array__ret__nothing, vehicle_, { yaw_,pitch_ });
         }
 
-        void set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, const vector3> target_) {
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, const vector3> target_) {
             if (target_.index() == 0)
-                host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_)); return;
-            host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_));
+                return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_)); return;
+            return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_));
         }
 
         //#TODO: Find out, which commands this command really takes (not documented)
@@ -8081,6 +8081,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void set_rectangular(const location &location_, bool rectangular_) {
             host::functions.invoke_raw_binary(__sqf::binary__setrectangular__location__bool__ret__nothing, location_, rectangular_);
+        }
+
+        void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setshotparents__object__array__ret__nothing, projectile_, { vehicle_, instigator_ });
         }
     }
 }

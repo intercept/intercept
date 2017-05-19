@@ -8052,12 +8052,18 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             //host::functions.invoke_raw_binary(__sqf::binary__setparticleparams__object__array__ret__nothing, time_, overcast_value_);
         }
 
-        void set_pilot_camera_direction(const object &object_, const vector3 &direction_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setpilotcameradirection__object__array__ret__nothing, object_, direction_);
+        void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpilotcameradirection__object__array__ret__nothing, vehicle_, direction_);
         }
 
-        void set_pilot_camera_rotation(const object &object_, float yaw_, float pitch_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setpilotcamerarotation__object__array__ret__nothing, object_, { yaw_,pitch_ });
+        void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpilotcamerarotation__object__array__ret__nothing, vehicle_, { yaw_,pitch_ });
+        }
+
+        void set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_) {
+            if (target_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_)); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_));
         }
     }
 }

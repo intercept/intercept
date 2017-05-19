@@ -2189,6 +2189,7 @@ namespace intercept {
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
+        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_);
 
     }
 }

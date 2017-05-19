@@ -8462,5 +8462,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return rv_weapon_accessories({ res[0], res[1], res[2], res[3] });
         }
+
+        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__weapondirection__object__string__ret__array, unit_, weapon_class_);
+        }
     }
 }

@@ -2161,6 +2161,7 @@ namespace intercept {
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, const std::string &target_type_, const vector3 &target_position_, float target_max_age_);
+        std::string to_fixed(float number_, int decimals_);
 
     }
 }

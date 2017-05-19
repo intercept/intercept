@@ -8374,5 +8374,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         
             return rv_query_target({ res[0], res[1], res[2], res[3], res[4], res[5] });
         }
+
+        std::string to_fixed(float number_, int decimals_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
+        }
     }
 }

@@ -1737,6 +1737,12 @@ namespace intercept {
             vector2 target_position;
             float target_age;
         };
+        struct rv_weapon_accessories {
+            std::string silencer;
+            std::string flashlight_laserpointer;
+            std::string optics;
+            std::string bipod;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
@@ -2181,6 +2187,7 @@ namespace intercept {
         void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_);
         void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_);
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
+        rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);
 
     }
 }

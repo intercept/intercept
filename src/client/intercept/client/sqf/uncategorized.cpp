@@ -8450,5 +8450,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
             host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
         }
+
+        rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessories__object__string__ret__array, unit_, weapon_class_);
+
+            return rv_weapon_accessories({ res[0], res[1], res[2], res[3] });
+        }
     }
 }

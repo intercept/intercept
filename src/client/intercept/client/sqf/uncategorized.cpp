@@ -8055,5 +8055,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_pilot_camera_direction(const object &object_, const vector3 &direction_) {
             host::functions.invoke_raw_binary(__sqf::binary__setpilotcameradirection__object__array__ret__nothing, object_, direction_);
         }
+
+        void set_pilot_camera_rotation(const object &object_, float yaw_, float pitch_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpilotcamerarotation__object__array__ret__nothing, object_, { yaw_,pitch_ });
+        }
     }
 }

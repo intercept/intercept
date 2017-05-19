@@ -8173,5 +8173,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggertimeout__object__array__ret__nothing, trigger_, { min_, mid_, max_, interruptable_ });
         }
+
+        void set_type(const location &location_, const std::string &type_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settype__location__string__ret__nothing, location_, type_);
+        }
     }
 }

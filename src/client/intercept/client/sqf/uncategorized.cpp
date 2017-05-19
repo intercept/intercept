@@ -7922,5 +7922,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool set_feature_type(const object &object_, int type_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setfeaturetype__object__scalar__ret__bool, object_, type_);
         }
+
+        void set_flag_animation_phase(const object &flag_, float &animation_phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setflaganimationphase__object__scalar__ret__nothing, flag_, animation_phase_);
+        }
     }
 }

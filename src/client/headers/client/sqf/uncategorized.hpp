@@ -2121,6 +2121,7 @@ namespace intercept {
         bool set_vehicle_cargo(const object &vehicle_, const object &cargo_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, std::vector<std::string> markers_, float placement_radius_, std::optional<std::string> special_);
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
+        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
 
     }
 }

@@ -8277,5 +8277,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvehicletipars__object__array__ret__nothing, vehicle_, params_right_);
         }
+
+        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvelocitymodelspace__object__array__ret__nothing, vehicle_, relative_direction_);
+        }
     }
 }

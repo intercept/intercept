@@ -8177,5 +8177,16 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_type(const location &location_, const std::string &type_) {
             host::functions.invoke_raw_binary(__sqf::binary__settype__location__string__ret__nothing, location_, type_);
         }
+
+        //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
+        //binary__setunitloadout__object__array__ret__nothing
+        //binary__setunitloadout__object__string__ret__nothing
+        //binary__setunitloadout__object__config__ret__nothing
+
+        void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_) {
+            if (value_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, { skill_name_, std::get<0>(value_), is_custom_ }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, { skill_name_, std::get<1>(value_), is_custom_ });
+        }
     }
 }

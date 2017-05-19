@@ -2108,6 +2108,7 @@ namespace intercept {
         void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
         void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
         void set_type(const location &location_, const std::string &type_);
+        void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_);
 
     }
 }

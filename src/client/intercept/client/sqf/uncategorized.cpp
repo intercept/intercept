@@ -8134,5 +8134,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_task_marker_offset(const object &task_, const vector3 &offset_) {
             host::functions.invoke_raw_binary(__sqf::binary__settaskmarkeroffset__object__array__ret__nothing, task_, offset_);
         }
+
+        //#TODO: Find out what the right parameters are
+        void set_task_result(const task &task_, const game_value &params_right) {
+            host::functions.invoke_raw_binary(__sqf::binary__settaskresult__task__array__ret__nothing, task_, params_right);
+        }
     }
 }

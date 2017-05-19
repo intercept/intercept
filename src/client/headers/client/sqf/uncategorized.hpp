@@ -2098,6 +2098,7 @@ namespace intercept {
         void set_speech(const location &location_, const std::string &speech_);
         void set_speed_mode(const group &group_, const std::string &speed_mode_);
         void set_task_marker_offset(const object &task_, const vector3 &offset_);
+        void set_task_result(const task &task_, const game_value &params_right);
 
     }
 }

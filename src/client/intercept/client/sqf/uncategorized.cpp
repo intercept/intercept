@@ -7968,5 +7968,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_gusts(float time_, float gusts_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setgusts__scalar__scalar__ret__nothing, time_, gusts_value_);
         }
+
+        void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__sethidebehind__object__array__ret__nothing, unit_, { object_where_hide_,hide_position_ });
+        }
     }
 }

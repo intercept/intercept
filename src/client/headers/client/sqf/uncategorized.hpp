@@ -2068,6 +2068,7 @@ namespace intercept {
         void set_mass(const object &object_, float mass_, std::optional<float> time_);
         void set_music_effect(const object &trigger_, const std::string &track_);
         void set_music_effect(const group &group_, int index_, const std::string &track_);
+        void set_name(const object &unit_, const std::string &name_, const std::string &first_name_, const std::string &last_name_);
 
     }
 }

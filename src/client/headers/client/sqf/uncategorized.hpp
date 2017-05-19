@@ -2100,6 +2100,7 @@ namespace intercept {
         void set_task_marker_offset(const object &task_, const vector3 &offset_);
         void set_task_result(const task &task_, const game_value &params_right);
         void set_task_state(const task &task_, const std::string &state_);
+        void set_text(const location &location_, const std::string &text_);
 
     }
 }

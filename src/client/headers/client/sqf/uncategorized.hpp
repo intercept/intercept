@@ -2131,6 +2131,7 @@ namespace intercept {
         void set_wind_force(float time_, float force_value_);
         void set_wind_str(float time_, float strength_value_);
         void set_wp_pos(const group &group_, int index_, const vector2 &position_);
+        game_value shown_editor_object(const control &map_, const game_value &params_right_);
 
     }
 }

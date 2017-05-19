@@ -8317,5 +8317,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_wp_pos(const group &group_, int index_, const vector2 &position_) {
             host::functions.invoke_raw_binary(__sqf::binary__setwppos__array__array__ret__nothing, { group_, index_ }, position_);
         }
+
+        //#TODO: Find out which params are to the right
+        game_value shown_editor_object(const control &map_, const game_value &params_right_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__showneweditorobject__control__array__ret__any, map_, params_right_);
+        }
     }
 }

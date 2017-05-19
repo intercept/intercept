@@ -2101,6 +2101,8 @@ namespace intercept {
         void set_task_result(const task &task_, const game_value &params_right);
         void set_task_state(const task &task_, const std::string &state_);
         void set_text(const location &location_, const std::string &text_);
+        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_);
+        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_);
 
     }
 }

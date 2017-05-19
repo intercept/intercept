@@ -2078,5 +2078,7 @@ namespace intercept {
         void set_object_texture_global(const object &object_, int index_, const std::string &texture_);
         void set_overcast(float time_, float overcast_value_);
         void set_particle_params();
+        void set_pilot_camera_direction(const object &object_, const vector3 &direction_);
+
     }
 }

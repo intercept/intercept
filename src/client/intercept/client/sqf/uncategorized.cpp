@@ -8193,5 +8193,35 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_unit_load_in_combat(const object &unit_, const game_value &params_right_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, params_right_);
         }
+        
+        void set_user_action_text(const object &object_, int action_index_, std::variant<const std::string, const rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_) {
+            auto_array<game_value> params_right({
+                action_index_
+            });
+
+            if (text_menu_.index() == 0) {
+                params_right.push_back(std::get<0>(text_menu_));
+            }
+            else {
+                params_right.push_back(std::get<1>(text_menu_));
+            }
+
+            if (text_window_background_.index() == 0) {
+                params_right.push_back(std::get<0>(text_window_background_));
+            }
+            else {
+                params_right.push_back(std::get<1>(text_window_background_));
+            }
+
+            if (text_window_foreground_.index() == 0) {
+                params_right.push_back(std::get<0>(text_window_foreground_));
+            }
+            else {
+                params_right.push_back(std::get<1>(text_window_foreground_));
+            }
+         
+            
+            host::functions.invoke_raw_binary(__sqf::binary__setuseractiontext__object__array__ret__nothing, object_, std::move(params_right));
+        }
     }
 }

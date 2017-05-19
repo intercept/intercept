@@ -2110,6 +2110,7 @@ namespace intercept {
         void set_type(const location &location_, const std::string &type_);
         void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_);
         void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
+        void set_user_action_text(const object &object_, int action_index_, std::variant<const std::string, const rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_);
 
     }
 }

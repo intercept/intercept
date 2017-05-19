@@ -2164,6 +2164,7 @@ namespace intercept {
         std::string to_fixed(float number_, int decimals_);
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
         void trigger_dynamic_simulation(const object &object_, bool trigger_);
+        bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
 
     }
 }

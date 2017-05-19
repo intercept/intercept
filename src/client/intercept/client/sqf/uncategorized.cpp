@@ -8386,5 +8386,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void trigger_dynamic_simulation(const object &object_, bool trigger_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerdynamicsimulation__object__bool__ret__nothing, object_, trigger_);
         }
+
+        bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__turretlocal__object__array__ret__bool, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
+        }
     }
 }

@@ -2179,6 +2179,7 @@ namespace intercept {
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
         void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_);
+        void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_);
 
     }
 }

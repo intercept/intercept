@@ -8442,5 +8442,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_) {
             host::functions.invoke_raw_binary(__sqf::binary__updatedrawicon__control__array__ret__nothing, map_, { object_, string_identifier_ , color_, offset_, width_, height_, maintain_size_, angle_, shadow_});
         }
+
+        void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_) {
+            host::functions.invoke_raw_binary(__sqf::binary__updatemenuitem__control__array__ret__nothing, map_, { menu_item_index_, text_ , command_ });
+        }
     }
 }

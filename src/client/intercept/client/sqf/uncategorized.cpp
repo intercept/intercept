@@ -8313,5 +8313,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_wind_str(float time_, float strength_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setwindstr__scalar__scalar__ret__nothing, time_, strength_value_);
         }
+
+        void set_wp_pos(const group &group_, int index_, const vector2 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwppos__array__array__ret__nothing, { group_, index_ }, position_);
+        }
     }
 }

@@ -2130,5 +2130,7 @@ namespace intercept {
         void set_wind_dir(float time_, float wind_value_);
         void set_wind_force(float time_, float force_value_);
         void set_wind_str(float time_, float strength_value_);
+        void set_wp_pos(const group &group_, int index_, const vector2 &position_);
+
     }
 }

@@ -8046,5 +8046,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_overcast(float time_, float overcast_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setovercast__scalar__scalar__ret__nothing, time_, overcast_value_);
         }
+
+        //#TODO: Implement with this massive amount of params
+        void set_particle_params() {
+            //host::functions.invoke_raw_binary(__sqf::binary__setparticleparams__object__array__ret__nothing, time_, overcast_value_);
+        }
     }
 }

@@ -2077,6 +2077,6 @@ namespace intercept {
         void set_object_texture(const object &object_, int index_, const std::string &texture_);
         void set_object_texture_global(const object &object_, int index_, const std::string &texture_);
         void set_overcast(float time_, float overcast_value_);
-
+        void set_particle_params();
     }
 }

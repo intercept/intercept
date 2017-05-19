@@ -7953,5 +7953,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, params_right);
         }
+
+        void set_group_icon(const group &group_, int id_, const std::string &icon_, const vector2 &offset_) {
+            game_value params_right({
+                id_,
+                icon_,
+                offset_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, params_right);
+        }
     }
 }

@@ -2106,6 +2106,7 @@ namespace intercept {
         void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
         void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
         void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
 
     }
 }

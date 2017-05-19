@@ -575,7 +575,23 @@ namespace intercept {
                     grow(res - _maxItems);
                 }
             }
+            template<class... _Valty>
+            Type& emplace(const Type* _where, _Valty&&... _Val) {
+                if (_where < base::begin() || _where > base::end()) throw 1337; //WTF?!
+                const size_t insertOffset = _where - base::begin();
+                auto previousEnd = base::_n;
+                bool atEnd = insertOffset == previousEnd;
+                if (_maxItems < base::_n + 1) {
+                    grow(1);
+                }
+                auto& item = (*this)[base::_n];
+                ::new (&item) Type(std::forward<_Valty>(_Val)...);
+                ++base::_n;
 
+                std::rotate(&get(insertOffset), &get(previousEnd), base::end());
+
+                return (*this)[insertOffset];
+            }
             template<class... _Valty>
             Type& emplace_back(_Valty&&... _Val) {
                 if (_maxItems < base::_n + 1) {
@@ -607,6 +623,7 @@ namespace intercept {
                 auto item = (*this)[index];
                 item.~Type();
                 memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+                --base::_n;
             }
             //This is sooo not threadsafe!
             template<class _InIt>
@@ -614,8 +631,8 @@ namespace intercept {
                 if (_first == _last) return; //Boogie!
                 if (_where < base::begin() || _where > base::end()) return; //WTF?!
                 const size_t insertOffset = _where - base::begin();
-                auto previousEnd = base::end();
-                bool atEnd = _where == previousEnd;
+                auto previousEnd = base::_n;
+                bool atEnd = insertOffset == previousEnd;
                 size_t oldSize = base::count();
                 size_t insertedSize = std::distance(_first, _last);
                 reserve(oldSize + insertedSize);
@@ -632,7 +649,7 @@ namespace intercept {
 
                 //#TEST does rotate really do correct stuff?
                 //#TODO test insert in mid
-                std::rotate(const_cast<Type*>(_where), previousEnd, base::end());
+                std::rotate(&get(insertOffset), &get(previousEnd), base::end());
             }
             void clear() {
                 if (base::_data)

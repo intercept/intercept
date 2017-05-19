@@ -8090,5 +8090,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_simple_task_always_visible(const task &task_, bool always_visible_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskalwaysvisible__task__bool__ret__nothing, task_, always_visible_);
         }
+
+        void set_simple_task_custom_data(const task &task_, const std::string &icon_path_, const std::string &tool_tip_, const std::string &description_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskcustomdata__task__array__ret__nothing, task_, {icon_path_, tool_tip_, description_});
+        }
     }
 }

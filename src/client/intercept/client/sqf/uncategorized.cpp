@@ -8456,5 +8456,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             return rv_weapon_accessories({ res[0], res[1], res[2], res[3] });
         }
+
+        rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessoriescargo__object__array__ret__array, container_, { weapon_id_, creator_id_ });
+
+            return rv_weapon_accessories({ res[0], res[1], res[2], res[3] });
+        }
     }
 }

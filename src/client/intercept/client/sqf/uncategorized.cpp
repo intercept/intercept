@@ -8322,5 +8322,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value shown_editor_object(const control &map_, const game_value &params_right_) {
             return host::functions.invoke_raw_binary(__sqf::binary__showneweditorobject__control__array__ret__any, map_, params_right_);
         }
+
+        void binary__sideradio__object_array__string__ret__nothing(const object &unit_, const std::string &radio_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, unit_, radio_name_);
+        }
+
+        void binary__sideradio__object_array__string__ret__nothing(const side &side_, const std::string &identity_, const std::string &radio_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, { side_, identity_ }, radio_name_);
+        }
     }
 }

@@ -2169,6 +2169,7 @@ namespace intercept {
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
         void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
 
     }
 }

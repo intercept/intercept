@@ -2104,6 +2104,7 @@ namespace intercept {
         void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_);
         void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_);
         void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
 
     }
 }

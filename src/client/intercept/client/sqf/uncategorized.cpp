@@ -8159,5 +8159,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, { by_, repeating_ });
         }
+
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            if(radius_z_.has_value())
+                host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_, *radius_z_ }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_ });
+        }
     }
 }

@@ -7980,5 +7980,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_light_ambient(const object &light_, float r_, float g_, float b_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightambient__object__array__ret__nothing, light_, { r_,g_,b_ });
         }
+
+        void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightattenuation__object__array__ret__nothing, light_, { start_,start_,constant_,linear_,quadratic_,hard_limit_start_,hard_limit_end_ });
+        }
     }
 }

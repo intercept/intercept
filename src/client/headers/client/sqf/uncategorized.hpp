@@ -2061,6 +2061,7 @@ namespace intercept {
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
         void set_leader(const team_member &team_, const team_member &leader_);
         void set_light_ambient(const object &light_, float r_, float g_, float b_);
+        void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_);
 
     }
 }

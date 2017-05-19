@@ -8255,5 +8255,22 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool set_vehicle_cargo(const object &vehicle_, const object &cargo_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setvehiclecargo__object__object__ret__bool, vehicle_, cargo_);
         }
+
+        bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, std::vector<std::string> markers_, float placement_radius_, std::optional<std::string> special_) {
+            auto_array<game_value> params_right;
+
+            switch (position_.index()) {
+            case 0: params_right.push_back(std::move(std::get<0>(position_).get())); break;
+            case 1: params_right.push_back(std::move(std::get<1>(position_).get())); break;
+            case 2: params_right.push_back(std::move(std::get<2>(position_))); break;
+            }
+            
+            params_right.push_back(std::move(auto_array<game_value>(markers_.begin(), markers_.end())));
+            params_right.push_back(placement_radius_);
+
+            if (special_.has_value()) params_right.push_back(*special_);
+
+            return host::functions.invoke_raw_binary(__sqf::binary__setvehicleposition__object__array__ret__bool, object_, std::move(params_right));
+        }
     }
 }

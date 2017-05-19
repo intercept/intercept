@@ -8411,8 +8411,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturecolorselected__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
         }
 
-        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+        void tv_set_picture_color__right_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
             host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturerightcolordisabled__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturerightcolorselected__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
         }
     }
 }

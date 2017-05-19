@@ -8368,5 +8368,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_) {
             return host::functions.invoke_raw_binary(__sqf::binary__targetsaggregate__array__array__ret__array, { speaker_, side_, unit_, place_, time_ }, candidates_);
         }
+
+        rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, const std::string &target_type_, const vector3 &target_position_, float target_max_age_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__targetsquery__object__array__ret__array, unit_, { target_ignore_, target_side, target_type_, target_position_, target_max_age_ });
+        
+            return rv_query_target({ res[0], res[1], res[2], res[3], res[4], res[5] });
+        }
     }
 }

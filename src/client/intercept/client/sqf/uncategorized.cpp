@@ -8070,5 +8070,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_pipe_effect(const std::string &parameter_left, const game_value &parameters_left) {
             host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);
         }
+
+        void set_rain(float time_, float rain_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setrain__scalar__scalar__ret__nothing, time_, rain_value_);
+        }
     }
 }

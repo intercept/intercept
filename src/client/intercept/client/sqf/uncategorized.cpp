@@ -8122,5 +8122,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, { group, index_ }, { sound_, voice_, sound_env_, sound_det_ });
         }
+
+        void set_speech(const location &location, const std::string &speech_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setspeech__location__string__ret__nothing, location, speech_);
+        }
     }
 }

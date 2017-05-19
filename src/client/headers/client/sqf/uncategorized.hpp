@@ -2095,6 +2095,7 @@ namespace intercept {
         bool set_sling_load(const object &vehicle_, const object &load_);
         void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
         void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
+        void set_speech(const location &location, const std::string &speech_);
 
     }
 }

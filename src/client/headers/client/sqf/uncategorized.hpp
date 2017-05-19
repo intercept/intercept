@@ -1563,11 +1563,6 @@ namespace intercept {
         bool open_map(bool show_, bool forced_);
         bool sling_load_assistant_shown();
 
-        struct rv_camera_target {
-            bool is_tracking;
-            vector3 target_position;
-            object target_object;
-        };
 
         struct rv_shot_parents {
             object vehicle;
@@ -1599,7 +1594,6 @@ namespace intercept {
         void diag_dynamic_simulation_end(const std::string &type_);
         void diag_log_slow_frame(const std::string &section_, float threshold_);
         float difficulty_option(const std::string &optionname_);
-        display display_parent(const display &display_);
         float dynamic_simulation_distance(const std::string &category_);
         float dynamic_simulation_distance_coef(const std::string &class_);
         bool dynamic_simulation_enabled(const object &object_);
@@ -1607,21 +1601,14 @@ namespace intercept {
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
         void enable_dynamic_simulation_system(bool enable_);
         void enable_weapon_disassembly(bool enable_);
-        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_);
         float flag_animation_phase(const object &flag_);
         game_value get_all_env_sound_controllers(const vector3 &position_);
         std::vector<object> get_all_owned_mines(const object &unit_);
         game_value get_all_sound_controllers(const object &vehicle_);
-        game_value get_array(const config config_);
         float get_container_max_load(const std::string &containerclass_);
         std::vector<object> get_mission_layer_entities(const std::string &layername_);
-        vector3 get_pilot_camera_direction(const object &object_);
-        vector3 get_pilot_camera_position(const object &object_);
-        vector3 get_pilot_camera_rotation(const object &object_);
-        rv_camera_target get_pilot_camera_target(const object &object_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
-        bool has_pilot_camera(const object &object_);
         bool is_group_deleted_when_empty(const group &group_);
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);

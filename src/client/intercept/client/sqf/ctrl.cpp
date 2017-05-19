@@ -2385,5 +2385,9 @@ namespace intercept {
         bool hc_shown_bar() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__hcshownbar__ret__bool);
         }
+
+        display display_parent(const display &display_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
+        }
     }
 }

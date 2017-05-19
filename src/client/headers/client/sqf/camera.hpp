@@ -127,5 +127,18 @@ namespace intercept {
 
         void pp_effect_destroy(std::vector<float> effect_handles_);
 
+        struct rv_camera_target {
+            bool is_tracking;
+            vector3 target_position;
+            object target_object;
+        };
+
+
+        vector3 get_pilot_camera_direction(const object &object_);
+        vector3 get_pilot_camera_position(const object &object_);
+        vector3 get_pilot_camera_rotation(const object &object_);
+        rv_camera_target get_pilot_camera_target(const object &object_);
+        bool has_pilot_camera(const object &object_);
+
     }
 }

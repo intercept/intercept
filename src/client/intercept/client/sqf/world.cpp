@@ -147,5 +147,19 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__setdate__array__ret__nothing, date);
         }
+
+        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_) {
+            auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
+            auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
+
+            game_value params({
+                std::move(typesinclude),
+                std::move(typesexclude),
+                includeCrews_,
+                excludeDead_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__entities__array__ret__array, params));
+        }
     }
 }

@@ -491,5 +491,6 @@ namespace intercept {
 
 
         game_value get_variable(const control & ctrl_, const std::string & var_name_, game_value default_value_);
+        display display_parent(const display &display_);
     }
 }

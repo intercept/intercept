@@ -58,7 +58,7 @@ namespace intercept {
         config config_file();
         config config_null();
         config mission_config_file();
-
+        game_value get_array(const config config_);
 
 
 

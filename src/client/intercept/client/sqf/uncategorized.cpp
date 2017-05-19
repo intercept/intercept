@@ -5412,10 +5412,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
-        display display_parent(const display &display_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
-        }
-
         float dynamic_simulation_distance(const std::string &category_) {
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistance__string__ret__scalar, category_);
         }
@@ -5451,20 +5447,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
         }
 
-        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_) {
-            auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
-            auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
-            
-            game_value params({
-                std::move(typesinclude),
-                std::move(typesexclude),
-                includeCrews_,
-                excludeDead_
-            });
-
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__entities__array__ret__array, params));
-        }
-
         float flag_animation_phase(const object &flag_) {
             return host::functions.invoke_raw_unary(__sqf::unary__flaganimationphase__object__ret__scalar, flag_);
         }
@@ -5481,36 +5463,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__getallsoundcontrollers__object__ret__array, vehicle_);
         }
 
-        game_value get_array(const config config_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getarray__config__ret__array, config_);
-        }
-
         float get_container_max_load(const std::string &containerclass_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getcontainermaxload__string__ret__scalar, containerclass_);
         }
 
         std::vector<object> get_mission_layer_entities(const std::string &layername_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
-        }
-
-        vector3 get_pilot_camera_direction(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameradirection__object__ret__array, object_));
-        }
-
-        vector3 get_pilot_camera_position(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraposition__object__ret__array, object_));
-        }
-        vector3 get_pilot_camera_rotation(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_));
-        }
-        rv_camera_target get_pilot_camera_target(const object &object_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
-            
-            return rv_camera_target({
-                ret[0],
-                __helpers::__convert_to_vector3(ret[1]),
-                ret[2]
-            });
         }
 
         rv_shot_parents get_shot_parents(const object &projectile_) {
@@ -5524,10 +5482,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::vector<object> get_vehicle_cargo(const object &vehicle_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
-        }
-
-        bool has_pilot_camera(const object &object_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__haspilotcamera__object__ret__bool, object_);
         }
 
         bool is_group_deleted_when_empty(const group &group_) {

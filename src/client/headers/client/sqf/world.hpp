@@ -144,5 +144,7 @@ namespace intercept {
         rv_rendering_distances get_object_view_distance();
 
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
+        
+        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_);
     }
 }

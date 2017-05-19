@@ -7940,5 +7940,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_formation(const group &group_, const std::string &formation_) {
             host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, group_, formation_);
         }
+
+        void set_form_dir(const group &group_, float heading_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, group_, heading_);
+        }
     }
 }

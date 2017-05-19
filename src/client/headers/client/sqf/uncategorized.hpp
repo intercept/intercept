@@ -2174,6 +2174,6 @@ namespace intercept {
         void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_select_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_text(const control &control_, const std::vector<int> &path_, const std::string &text_);
-
+        std::string tv_tooltip(const control &control_, const std::vector<int> &path_);
     }
 }

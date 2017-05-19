@@ -8426,5 +8426,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void tv_set_text(const control &control_, const std::vector<int> &path_, const std::string &text_) {
             host::functions.invoke_raw_binary(__sqf::binary__tvsettext__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), text_ });
         }
+
+        std::string tv_tooltip(const control &control_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__tvtooltip__control__array__ret__string, control_, std::move(auto_array<game_value>(path_.begin(), path_.end())));
+        }
     }
 }

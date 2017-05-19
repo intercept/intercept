@@ -8012,7 +8012,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_name(const object &unit_, const std::string &name_, const std::string &first_name_, const std::string &last_name_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setname__object__array__ret__nothing, unit_, {name_, first_name_, last_name_});
+            host::functions.invoke_raw_binary(__sqf::binary__setname__object__array__ret__nothing, unit_, { name_, first_name_, last_name_ });
+        }
+
+        void set_name(const location &location_, const std::string &name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setname__location__string__ret__nothing, location_, name_);
         }
     }
 }

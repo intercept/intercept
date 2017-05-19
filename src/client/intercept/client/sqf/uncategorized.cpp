@@ -8110,5 +8110,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_simple_task_type(const task &task_, const std::string &task_type_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktype__task__string__ret__nothing, task_, task_type_);
         }
+
+        void set_size(const location &location_, float size_x_, float size_y_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsize__location__array__ret__nothing, location_, { size_x_, size_y_ });
+        }
+
+        void set_skill(const object &vehicle_, float skill_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, vehicle_, skill_);
+        }
     }
 }

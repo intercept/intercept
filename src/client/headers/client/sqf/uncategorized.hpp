@@ -2092,6 +2092,8 @@ namespace intercept {
         void set_simple_task_destination(const object &task_, const vector3 &position_);
         void set_simple_task_target(const task &task_, const object &target_, bool precise_position_);
         void set_simple_task_type(const task &task_, const std::string &task_type_);
+        void set_size(const location &location_, float size_x_, float size_y_);
+        void set_skill(const object &vehicle_, float skill_);
 
     }
 }

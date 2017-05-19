@@ -2091,6 +2091,7 @@ namespace intercept {
         void set_simple_task_description(const task &task_, const std::string &description_, const std::string &description_short_, const std::string &description_hud_);
         void set_simple_task_destination(const object &task_, const vector3 &position_);
         void set_simple_task_target(const task &task_, const object &target_, bool precise_position_);
+        void set_simple_task_type(const task &task_, const std::string &task_type_);
 
     }
 }

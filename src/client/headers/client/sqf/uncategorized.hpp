@@ -2190,6 +2190,6 @@ namespace intercept {
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
         vector3 weapon_direction(const object &unit_, const std::string &weapon_class_);
-
+        std::vector<std::string> weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
     }
 }

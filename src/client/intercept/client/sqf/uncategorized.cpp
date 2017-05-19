@@ -8466,5 +8466,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         vector3 weapon_direction(const object &unit_, const std::string &weapon_class_) {
             return host::functions.invoke_raw_binary(__sqf::binary__weapondirection__object__string__ret__array, unit_, weapon_class_);
         }
+
+        std::vector<std::string> weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end()))));
+        }
     }
 }

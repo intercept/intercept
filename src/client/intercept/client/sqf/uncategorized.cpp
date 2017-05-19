@@ -8086,5 +8086,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_) {
             host::functions.invoke_raw_binary(__sqf::binary__setshotparents__object__array__ret__nothing, projectile_, { vehicle_, instigator_ });
         }
+        
+        void set_simple_task_always_visible(const task &task_, bool always_visible_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskalwaysvisible__task__bool__ret__nothing, task_, always_visible_);
+        }
     }
 }

@@ -2086,6 +2086,7 @@ namespace intercept {
         void set_rain_bow(float time_, float rain_bow_value_);
         void set_rectangular(const location &location_, bool rectangular_);
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
+        void set_simple_task_always_visible(const task &task_, bool always_visible_);
 
     }
 }

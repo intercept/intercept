@@ -2094,6 +2094,7 @@ namespace intercept {
         void set_simple_task_type(const task &task_, const std::string &task_type_);
         void set_size(const location &location_, float size_x_, float size_y_);
         void set_skill(const object &vehicle_, float skill_);
+        bool set_sling_load(const object &vehicle_, const object &load_);
 
     }
 }

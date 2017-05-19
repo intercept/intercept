@@ -8118,5 +8118,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_skill(const object &vehicle_, float skill_) {
             host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, vehicle_, skill_);
         }
+
+        bool set_sling_load(const object &vehicle_, const object &load_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setslingload__object__object__ret__bool, vehicle_, load_);
+        }
     }
 }

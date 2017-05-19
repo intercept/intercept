@@ -8022,5 +8022,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         game_value set_object_arguments(const control &map_, const std::string &object_, const std::vector<std::string> &values_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setobjectarguments__control__array__ret__any, map_, {object_, std::move(auto_array<game_value>(values_.begin(), values_.end()))});
         }
+
+        void set_object_material(const object &object_, int index_, const std::string &material_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setobjectmaterial__object__array__ret__nothing, object_, { index_, material_ });
+        }
     }
 }

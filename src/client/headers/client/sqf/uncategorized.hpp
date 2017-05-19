@@ -2088,6 +2088,7 @@ namespace intercept {
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
         void set_simple_task_always_visible(const task &task_, bool always_visible_);
         void set_simple_task_custom_data(const task &task_, const std::string &icon_path_, const std::string &tool_tip_, const std::string &description_);
+        void set_simple_task_description(const task &task_, const std::string &description_, const std::string &description_short_, const std::string &description_hud_);
 
     }
 }

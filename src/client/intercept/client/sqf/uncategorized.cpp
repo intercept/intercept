@@ -8094,5 +8094,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_simple_task_custom_data(const task &task_, const std::string &icon_path_, const std::string &tool_tip_, const std::string &description_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskcustomdata__task__array__ret__nothing, task_, {icon_path_, tool_tip_, description_});
         }
+
+        void set_simple_task_description(const task &task_, const std::string &description_, const std::string &description_short_, const std::string &description_hud_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdescription__task__array__ret__nothing, task_, { description_, description_short_, description_hud_ });
+        }
     }
 }

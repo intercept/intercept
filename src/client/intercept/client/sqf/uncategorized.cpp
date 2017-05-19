@@ -8357,5 +8357,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
         }
+
+        rv_target_knowledge target_knowledge(const object &unit_, const object &target_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__targetknowledge__object__object__ret__array, unit_, target_);
+
+            return rv_target_knowledge({ res[0], res[1], res[2], res[3], res[4], res[5], res[6] });
+        }
     }
 }

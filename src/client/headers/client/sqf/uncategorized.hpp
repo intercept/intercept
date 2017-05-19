@@ -1719,6 +1719,16 @@ namespace intercept {
             object object_;
             float position_accuracy;
         };
+        //#TODO: Verify the correctness of this struct
+        struct rv_target_knowledge {
+            bool known_by_group;
+            bool known_by_unit;
+            float last_seen_by_unit;
+            float last_endangered_by_unit;
+            side target_side;
+            bool position_error;
+            vector3 target_position;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
@@ -2140,6 +2150,7 @@ namespace intercept {
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
         void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
+        rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
 
     }
 }

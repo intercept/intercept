@@ -8346,5 +8346,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsadd__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
+
+        void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_) {
+            host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsremove__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
+        }
     }
 }

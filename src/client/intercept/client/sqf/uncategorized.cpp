@@ -7782,11 +7782,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_captive(const object & object_, bool status) {
-            host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, object_, status);
+            host::functions.invoke_raw_binary(__sqf::binary__setcaptive__object__bool_scalar__ret__nothing, object_, status);
         }
 
         void set_captive(const object & object_, float status) {
-            host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, object_, status);
+            host::functions.invoke_raw_binary(__sqf::binary__setcaptive__object__bool_scalar__ret__nothing, object_, status);
         }
 
         void set_center_of_mass(const object& object_, const vector3& offset_, float time_ /*= 0.f*/) {

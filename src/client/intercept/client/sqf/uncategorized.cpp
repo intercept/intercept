@@ -7992,5 +7992,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_lightnings(float time_, float lightnings_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightnings__scalar__scalar__ret__nothing, time_, lightnings_value_);
         }
+
+        void set_magazine_turret_ammo(const object &vehicle_, const std::string &magazine_class_, int ammo_count_, const std::vector<int> &turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmagazineturretammo__object__array__ret__nothing, vehicle_, {magazine_class_, ammo_count_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end()))});
+        }
     }
 }

@@ -2054,6 +2054,7 @@ namespace intercept {
         void set_form_dir(const group &group_, float heading_);
         void set_fsm_variable(int fsm_handle_, const std::string &variable_, const game_value &value_);
         void set_group_icon(const group &group_, int id_, const std::string &icon_, const vector2 &offset_);
+        void set_group_icon_params(const group &group_, const rv_color &color_, const std::string &text_, float scale_, bool visible_);
 
     }
 }

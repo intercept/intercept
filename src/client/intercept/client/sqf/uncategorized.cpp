@@ -7946,22 +7946,15 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         void set_fsm_variable(int fsm_handle_, const std::string &variable_, const game_value &value_) {
-            game_value params_right({
-                variable_,
-                value_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, params_right);
+            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, { variable_, value_ });
         }
 
         void set_group_icon(const group &group_, int id_, const std::string &icon_, const vector2 &offset_) {
-            game_value params_right({
-                id_,
-                icon_,
-                offset_
-            });
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, { id_,icon_,offset_ });
+        }
 
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, params_right);
+        void set_group_icon_params(const group &group_, const rv_color &color_, const std::string &text_, float scale_, bool visible_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupiconparams__group__array__ret__nothing, group_, { color_, text_,scale_,visible_ });
         }
     }
 }

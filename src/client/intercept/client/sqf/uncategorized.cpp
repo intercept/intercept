@@ -7926,5 +7926,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_flag_animation_phase(const object &flag_, float &animation_phase_) {
             host::functions.invoke_raw_binary(__sqf::binary__setflaganimationphase__object__scalar__ret__nothing, flag_, animation_phase_);
         }
+
+        void set_flag_owner(const object &flag_, const object &owner_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setflagowner__object__object__ret__nothing, flag_, owner_);
+        }
     }
 }

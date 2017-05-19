@@ -2048,5 +2048,6 @@ namespace intercept {
         void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
         bool set_feature_type(const object &object_, int type_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
+        void set_flag_owner(const object &flag_, const object &owner_);
     }
 }

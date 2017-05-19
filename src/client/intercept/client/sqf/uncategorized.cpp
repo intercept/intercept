@@ -8114,5 +8114,13 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         bool set_sling_load(const object &vehicle_, const object &load_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setslingload__object__object__ret__bool, vehicle_, load_);
         }
+
+        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, trigger, { sound_, voice_, sound_env_, sound_det_ });
+        }
+
+        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, { group, index_ }, { sound_, voice_, sound_env_, sound_det_ });
+        }
     }
 }

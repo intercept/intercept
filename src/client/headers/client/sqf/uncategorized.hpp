@@ -2093,6 +2093,8 @@ namespace intercept {
         void set_size(const location &location_, float size_x_, float size_y_);
         void set_skill(const object &vehicle_, float skill_);
         bool set_sling_load(const object &vehicle_, const object &load_);
+        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
+        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
 
     }
 }

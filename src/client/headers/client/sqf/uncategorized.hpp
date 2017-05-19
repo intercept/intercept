@@ -2052,6 +2052,7 @@ namespace intercept {
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
         void set_formation(const group &group_, const std::string &formation_);
         void set_form_dir(const group &group_, float heading_);
+        void set_fsm_variable(int fsm_handle_, const std::string &variable_, const game_value &value_);
 
     }
 }

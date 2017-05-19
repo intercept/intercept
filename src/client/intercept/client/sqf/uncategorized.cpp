@@ -7944,5 +7944,14 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_form_dir(const group &group_, float heading_) {
             host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, group_, heading_);
         }
+
+        void set_fsm_variable(int fsm_handle_, const std::string &variable_, const game_value &value_) {
+            game_value params_right({
+                variable_,
+                value_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, params_right);
+        }
     }
 }

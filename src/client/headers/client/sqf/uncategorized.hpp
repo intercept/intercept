@@ -2163,6 +2163,7 @@ namespace intercept {
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, const std::string &target_type_, const vector3 &target_position_, float target_max_age_);
         std::string to_fixed(float number_, int decimals_);
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
+        void trigger_dynamic_simulation(const object &object_, bool trigger_);
 
     }
 }

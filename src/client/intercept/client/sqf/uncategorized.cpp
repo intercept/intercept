@@ -8382,5 +8382,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerattachvehicle__object__array__ret__nothing, trigger_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
+
+        void trigger_dynamic_simulation(const object &object_, bool trigger_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerdynamicsimulation__object__bool__ret__nothing, object_, trigger_);
+        }
     }
 }

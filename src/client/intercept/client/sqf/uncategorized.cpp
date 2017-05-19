@@ -7973,8 +7973,12 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__sethidebehind__object__array__ret__nothing, unit_, { object_where_hide_,hide_position_ });
         }
 
-        void set_leader(const team_member &team, const team_member &leader_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setleader__team_member__team_member__ret__nothing, team, leader_);
+        void set_leader(const team_member &team_, const team_member &leader_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setleader__team_member__team_member__ret__nothing, team_, leader_);
+        }
+
+        void set_light_ambient(const object &light_, float r_, float g_, float b_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightambient__object__array__ret__nothing, light_, { r_,g_,b_ });
         }
     }
 }

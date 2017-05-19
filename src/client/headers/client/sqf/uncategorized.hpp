@@ -2059,7 +2059,8 @@ namespace intercept {
         void set_group_id_global(const group &group_, const std::string &name_format_, const std::vector<std::string> &params_);
         void set_gusts(float time_, float gusts_value_);
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
-        void set_leader(const team_member &team, const team_member &leader_);
+        void set_leader(const team_member &team_, const team_member &leader_);
+        void set_light_ambient(const object &light_, float r_, float g_, float b_);
 
     }
 }

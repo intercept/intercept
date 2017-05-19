@@ -8378,5 +8378,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::string to_fixed(float number_, int decimals_) {
             return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
         }
+
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerattachvehicle__object__array__ret__nothing, trigger_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
+        }
     }
 }

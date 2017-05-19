@@ -8388,7 +8388,11 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_) {
-            host::functions.invoke_raw_binary(__sqf::binary__turretlocal__object__array__ret__bool, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
+            return host::functions.invoke_raw_binary(__sqf::binary__turretlocal__object__array__ret__bool, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
+        }
+
+        int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__turretowner__object__array__ret__scalar, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
         }
     }
 }

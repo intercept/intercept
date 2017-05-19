@@ -2165,6 +2165,7 @@ namespace intercept {
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
         void trigger_dynamic_simulation(const object &object_, bool trigger_);
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
+        int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
 
     }
 }

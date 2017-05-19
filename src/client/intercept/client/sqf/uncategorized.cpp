@@ -8038,5 +8038,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_object_texture(const object &object_, int index_, const std::string &texture_) {
             host::functions.invoke_raw_binary(__sqf::binary__setobjecttexture__object__array__ret__nothing, object_, { index_, texture_ });
         }
+
+        void set_object_texture_global(const object &object_, int index_, const std::string &texture_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setobjecttextureglobal__object__array__ret__nothing, object_, { index_, texture_ });
+        }
     }
 }

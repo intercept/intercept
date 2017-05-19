@@ -7988,5 +7988,9 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         void set_light_color(const object &light_, float r_, float g_, float b_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightcolor__object__array__ret__nothing, light_, { r_,g_,b_ });
         }
+
+        void set_lightnings(float time_, float lightnings_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightnings__scalar__scalar__ret__nothing, time_, lightnings_value_);
+        }
     }
 }

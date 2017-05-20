@@ -1734,6 +1734,10 @@ namespace intercept {
             std::string name;
             game_value value;
         };
+        struct rv_group_icon {
+            std::string icon;
+            vector2 offset;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);

@@ -6808,8 +6808,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__getfsmvariable__scalar__string_array__ret__any, fsm_handle_, variable_);
         }
 
-        std::vector<game_value> get_group_icon(const group &group_, int &id_) { //#TODO: Find out what this function returns
-            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_));
+        rv_group_icon get_group_icon(const group &group_, int &id_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
+
+            return rv_group_icon({ res[0], vector2(res[1][0], res[1][0]) });
         }
 
         vector3 get_hide_from(const object &unit_, const object &enemy_) {

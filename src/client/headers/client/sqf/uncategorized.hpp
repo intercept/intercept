@@ -1606,7 +1606,7 @@ namespace intercept {
         std::vector<object> get_all_owned_mines(const object &unit_);
         game_value get_all_sound_controllers(const object &vehicle_);
         float get_container_max_load(const std::string &containerclass_);
-        std::vector<object> get_mission_layer_entities(const std::string &layername_);
+        std::vector<std::string> get_mission_layer_entities(const std::string &layername_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
         bool is_group_deleted_when_empty(const group &group_);

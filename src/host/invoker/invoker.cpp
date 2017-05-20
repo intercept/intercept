@@ -70,6 +70,7 @@ namespace intercept {
     bool invoker::invoker_end_register(const arguments & args_, std::string & result_) {
         //#TODO move pre_start to here
         _intercept_registerTypes_function.clear(); //#TEST
+        sqf_functions::get().setDisabled();
         //#deprecate
         //if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
         //    LOG(INFO) << "Registration function unhooked.";

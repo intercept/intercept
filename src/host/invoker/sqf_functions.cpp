@@ -107,6 +107,10 @@ void intercept::sqf_functions::initialize() {
     _canRegister = true;
 }
 
+void sqf_functions::setDisabled() {
+    _canRegister = false;
+}
+
 /*
  Dedmen
  Our Problem with registering SQF functions is that we are reallocating the Array that contains the function.
@@ -125,6 +129,7 @@ void intercept::sqf_functions::initialize() {
 */
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
     //
@@ -157,7 +162,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!operators) {//Name already exists
-        operators = &gs->_scriptOperators.get_table_for_key(lowerName.c_str())->push_back(game_operators(lowerName.c_str()));
+        operators = static_cast<game_operators*>(gs->_scriptOperators.get_table_for_key(lowerName.c_str())->push_back(game_operators(lowerName.c_str())));
         operators->copyPH(test);
     } else {
         if (findBinary(name, left_arg_type, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
@@ -176,7 +181,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._operator->arg1_type = leftType;
     op._operator->arg2_type = rightype;
 
-    auto inserted = &operators->push_back(op);
+    auto inserted = static_cast<__internal::gsOperator*>(operators->push_back(op));
 
 
     //insertBinary(_registerFuncs._gameState, op);
@@ -193,6 +198,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
     //
@@ -236,7 +242,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!functions) {
-        functions = &gs->_scriptFunctions.get_table_for_key(lowerName.c_str())->push_back(game_functions(lowerName.c_str()));
+        functions = static_cast<game_functions*>(gs->_scriptFunctions.get_table_for_key(lowerName.c_str())->push_back(game_functions(lowerName.c_str())));
         functions->copyPH(test);
     } else { //Name already exists
         if (findUnary(name, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
@@ -254,7 +260,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._operator->return_type = retType;
     op._operator->arg_type = rightype;
 
-    auto inserted = &functions->push_back(op);
+    auto inserted = static_cast<__internal::gsFunction*>(functions->push_back(op));
 
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
@@ -269,7 +275,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
-
+    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
 
     sqf_script_type retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
@@ -297,7 +303,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._operator->return_type = retType;
     op._category = "intercept";
 
-    auto inserted = &gs->_scriptNulars.get_table_for_key(lowerName.c_str())->push_back(op);
+    auto inserted = static_cast<__internal::gsNular*>(gs->_scriptNulars.get_table_for_key(lowerName.c_str())->push_back(op));
 
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
@@ -312,6 +318,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func_wrapper>& shared) {
+    if (!_canRegister) throw std::runtime_error("Can only unregister SQF Commands on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     switch (shared->_type) {
 

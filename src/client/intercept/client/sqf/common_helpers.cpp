@@ -193,6 +193,14 @@ namespace intercept {
                 return output;
             }
 
+            std::vector<script> __convert_to_scripts_vector(game_value input_) {
+                std::vector<script> output;
+                if (input_.type() != game_data_array::type_def) return output;
+                const auto& arr = input_.to_array();
+                output.insert(output.end(), arr.begin(), arr.end());
+                return output;
+            }
+
             std::vector<team_member> __convert_to_team_members_vector(game_value input_) {
                 std::vector<team_member> output;
                 if (input_.type() != game_data_array::type_def) return output;

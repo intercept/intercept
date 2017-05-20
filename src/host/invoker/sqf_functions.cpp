@@ -187,11 +187,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //insertBinary(_registerFuncs._gameState, op);
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
-    //std::stringstream stream;
-    //stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
-    //    << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-    //    << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
-    //OutputDebugStringA(stream.str().c_str());
+    std::stringstream stream;
+    stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
+        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
+        << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+    OutputDebugStringA(stream.str().c_str());
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));

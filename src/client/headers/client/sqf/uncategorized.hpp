@@ -1730,6 +1730,10 @@ namespace intercept {
             std::string optics;
             std::string bipod;
         };
+        struct rv_task_variables {
+            std::string name;
+            game_value value;
+        };
 
         rv_action_params action_params(const object &entity_, int id_);
         std::string add_editor_object(const control &map_, const std::string &type_, const game_value &values_, const std::string &subtype_class_);
@@ -1978,8 +1982,8 @@ namespace intercept {
         game_value select_editor_object(const control& map_, const std::string& object_);
         void select_weapon_turret(const object&, const std::string& weapon_, const std::vector<int>& turretPath_);
         //#TODO arguments incorrect
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_);
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<std::string> &values_);
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, float priority_);
+        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<rv_task_variables> &variables_);
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
         //Server/Headless Client only! 
         void serverCommand(const std::string& command_, const std::string& password_);

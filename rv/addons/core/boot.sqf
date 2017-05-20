@@ -6,9 +6,7 @@ diag_log text format["Initiated: %1", _res];
 _res = "intercept" callExtension format["init_patch:%1", (productVersion select 3)]; // find a patch
 "intercept" callExtension "invoker_begin_register:";
 call compile "interceptRegisterTypes parsingNamespace";
-"intercept" callExtension "invoker_end_register:";
-// };
-//"intercept" callExtension "load_extension:example_dll";
+
 
 _intercept_projects = configFile >> "Intercept";
 for "_i" from 0 to (count _intercept_projects)-1 do {
@@ -29,5 +27,7 @@ for "_i" from 0 to (count _intercept_projects)-1 do {
 
 uiNamespace setVariable ["intercept_fnc_event", compileFinal preprocessFileLineNumbers "\z\intercept\rv\addons\core\event.sqf"];
 ["pre_start",[]] call (uiNamespace getVariable "intercept_fnc_event");
+
+"intercept" callExtension "invoker_end_register:";
 
 //diag_log text format["_________________________________________Intercept Res: %1", _res];

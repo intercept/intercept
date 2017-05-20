@@ -417,8 +417,83 @@ namespace intercept {
             Type *_data;
             int _n;
         public:
+            class const_iterator;
+
+            class iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+                friend class const_iterator;
+                Type* p_;
+            public:
+                iterator() : p_(nullptr) {}
+                explicit iterator(Type* p) : p_(p) {}
+                iterator(const iterator& other) : p_(other.p_) {}
+                const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
+
+                iterator& operator++() { ++p_; return *this; } // prefix++
+                iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
+                iterator& operator--() { --p_; return *this; } // prefix--
+                iterator  operator--(int) { iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+                void     operator+=(const std::size_t& n) { p_ += n; }
+                void     operator+=(const iterator& other) { p_ += other.p_; }
+                iterator operator+ (const std::size_t& n) const { iterator tmp(*this); tmp += n; return tmp; }
+                iterator operator+ (const iterator& other) const { iterator tmp(*this); tmp += other; return tmp; }
+
+                void        operator-=(const std::size_t& n) { p_ -= n; }
+                void        operator-=(const iterator& other) { p_ -= other.p_; }
+                iterator    operator- (const std::size_t& n) const { iterator tmp(*this); tmp -= n; return tmp; }
+                std::size_t operator- (const iterator& other) const { return p_ - other.p_; }
+
+                bool operator< (const iterator& other) const { return (p_ - other.p_) < 0; }
+                bool operator<=(const iterator& other) const { return (p_ - other.p_) <= 0; }
+                bool operator> (const iterator& other) const { return (p_ - other.p_) > 0; }
+                bool operator>=(const iterator& other) const { return (p_ - other.p_) >= 0; }
+                bool operator==(const iterator& other) const { return  p_ == other.p_; }
+                bool operator!=(const iterator& other) const { return  p_ != other.p_; }
+
+                Type& operator*() const { return *p_; }
+                Type* operator->() { return  p_; }
+                explicit operator Type*() { return p_; }
+            };
+            class const_iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+                const Type* p_;
+            public:
+                const_iterator() : p_(nullptr) {}
+                explicit const_iterator(const Type* p) : p_(p) {}
+                const_iterator(const typename rv_array<Type>::iterator& other) : p_(other.p_) {}
+                const_iterator(const const_iterator& other) : p_(other.p_) {}
+                const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
+                const const_iterator& operator=(const typename rv_array<Type>::iterator& other) { p_ = other.p_; return other; }
+
+                const_iterator& operator++() { ++p_; return *this; } // prefix++
+                const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
+                const_iterator& operator--() { --p_; return *this; } // prefix--
+                const_iterator  operator--(int) { const_iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+                void           operator+=(const std::size_t& n) { p_ += n; }
+                void           operator+=(const const_iterator& other) { p_ += other.p_; }
+                const_iterator operator+ (const std::size_t& n)        const { const_iterator tmp(*this); tmp += n; return tmp; }
+                const_iterator operator+ (const const_iterator& other) const { const_iterator tmp(*this); tmp += other; return tmp; }
+
+                void           operator-=(const std::size_t& n) { p_ -= n; }
+                void           operator-=(const const_iterator& other) { p_ -= other.p_; }
+                const_iterator operator- (const std::size_t& n)        const { const_iterator tmp(*this); tmp -= n; return tmp; }
+                std::size_t    operator- (const const_iterator& other) const { return p_ - other.p_; }
+
+                bool operator< (const const_iterator& other) const { return (p_ - other.p_) < 0; }
+                bool operator<=(const const_iterator& other) const { return (p_ - other.p_) <= 0; }
+                bool operator> (const const_iterator& other) const { return (p_ - other.p_) > 0; }
+                bool operator>=(const const_iterator& other) const { return (p_ - other.p_) >= 0; }
+                bool operator==(const const_iterator& other) const { return  p_ == other.p_; }
+                bool operator!=(const const_iterator& other) const { return  p_ != other.p_; }
+
+                const Type& operator*()  const { return *p_; }
+                const Type* operator->() const { return  p_; }
+                explicit operator const Type*() const { return p_; }
+            };
+
+
             rv_array() :_data(nullptr), _n(0) {};
-            rv_array(rv_array<Type>&& move_) :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
+            rv_array(rv_array<Type>&& move_) noexcept :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
             Type &get(size_t i) {
                 return _data[i];
             }
@@ -430,17 +505,20 @@ namespace intercept {
             Type *data() { return _data; }
             size_t count() const { return static_cast<size_t>(_n); }
 
-            Type &front() { return get(0); }
-            Type &back() { return get(_n - 1); }
+            iterator begin() { if (!_data) return iterator(); return iterator(&get(0)); }
+            iterator end() { if (!_data) return iterator(); return iterator(&get(_n)); }
 
-            Type* begin() { if (!_data) return nullptr; return &get(0); }
-            Type* end() { if (!_data) return nullptr; return &get(_n); }
+            const_iterator cbegin() const { return const_iterator(&get(0)); }
+            const_iterator cend() const { return const_iterator(&get(_n)); }
 
-            const Type* begin() const { return &get(0); }
-            const Type* end() const { return &get(_n); }
+            const_iterator begin() const { return const_iterator(&get(0)); }
+            const_iterator end() const { return const_iterator(&get(_n)); }
 
             const Type &front() const { return get(0); }
             const Type &back() const { return get(_n - 1); }
+
+            Type &front() { return get(0); }
+            Type &back() { return get(_n - 1); }
 
             bool is_empty() const { return _n == 0; }
 
@@ -482,6 +560,7 @@ namespace intercept {
                 Type *ret = rv_allocator<Type>::reallocate(old, n);
                 return ret;
             }
+
             void reallocate(int size) {
 
                 if (_maxItems == size) return;
@@ -491,10 +570,9 @@ namespace intercept {
                     return;//resize calls reallocate and reallocates... Ugly.. I know
                 }
                 Type *newData = nullptr;
-                if (base::_data && size > 0 && (newData = try_realloc(base::_data, _maxItems, size))) {
-                    //#TODO was only used for debugging.. Is probably not needed
-                    if (size > _maxItems)//Don't null out new stuff if there is no new stuff
-                        std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
+                if (base::_data && size > 0 && ((newData = try_realloc(base::_data, _maxItems, size)))) {
+                    //if (size > _maxItems)//Don't null out new stuff if there is no new stuff
+                    //    std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
                     _maxItems = size;
                     base::_data = newData;
                     return;
@@ -509,17 +587,17 @@ namespace intercept {
                 _maxItems = size;
 
             }
+
             void grow(size_t n) {
             #undef max
                 reallocate(_maxItems + std::max(n, growthFactor));
             }
         public:
-
+            using iterator = typename base::iterator;
+            using const_iterator = typename base::const_iterator;
             auto_array() : rv_array<Type>(), _maxItems(0) {};
             auto_array(const std::initializer_list<Type> &init_) : rv_array<Type>(), _maxItems(0) {
-                resize(init_.size());
-                for (auto& it : init_)
-                    push_back(it);
+                insert(end(), init_.begin(), init_.end());
             }
             template<class _InIt>
             auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
@@ -528,7 +606,7 @@ namespace intercept {
             auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(copy_._n) {
                 insert(base::end(), copy_.begin(), copy_.end());
             }
-            auto_array(auto_array<Type> &&move_) : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
+            auto_array(auto_array<Type> &&move_) noexcept : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
                 move_._maxItems = 0;
             }
             ~auto_array() {
@@ -538,7 +616,7 @@ namespace intercept {
             void shrink_to_fit() {
                 resize(base::_n);
             }
-            auto_array& operator = (auto_array &&move_) {
+            auto_array& operator = (auto_array &&move_) noexcept {
                 base::_n = move_._n;
                 _maxItems = move_._maxItems;
                 base::_data = move_._data;
@@ -576,11 +654,10 @@ namespace intercept {
                 }
             }
             template<class... _Valty>
-            Type& emplace(const Type* _where, _Valty&&... _Val) {
-                if (_where < base::begin() || _where > base::end()) throw 1337; //WTF?!
+            iterator emplace(iterator _where, _Valty&&... _Val) {
+                if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
                 const size_t insertOffset = _where - base::begin();
                 auto previousEnd = base::_n;
-                bool atEnd = insertOffset == previousEnd;
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
@@ -588,37 +665,36 @@ namespace intercept {
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
 
-                std::rotate(&get(insertOffset), &get(previousEnd), base::end());
+                std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
 
-                return (*this)[insertOffset];
+                return base::begin() + insertOffset;
             }
             template<class... _Valty>
-            Type& emplace_back(_Valty&&... _Val) {
+            iterator emplace_back(_Valty&&... _Val) {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
                 auto& item = (*this)[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
-                return item;
+                return iterator(&item);
             }
-            Type& push_back(const Type& _Val) {
+            iterator push_back(const Type& _Val) {
                 return emplace_back(_Val);
             }
-            Type& push_back(Type&& _Val) {
+            iterator push_back(Type&& _Val) {
                 return emplace_back(std::move(_Val));
             }
 
-            void erase(int index) {
-                if (index > base::_n) return;
-                auto item = (*this)[index];
-                item.~Type();
-                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
-            }
-            void erase(Type* element) {
-                //#TODO check if element in range
-                //#TODO use std::distance to find out offset from start
-                auto index = (reinterpret_cast<uintptr_t>(element) - reinterpret_cast<uintptr_t>(base::begin())) / sizeof(Type); //#TODO check if this is correct
+            //void erase(int index) {
+            //    if (index > base::_n) return;
+            //    auto item = (*this)[index];
+            //    item.~Type();
+            //    memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            //}
+            void erase(const_iterator element) {
+                if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
+                size_t index = std::distance(base::cbegin(), element);
                 if (index > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
@@ -627,12 +703,11 @@ namespace intercept {
             }
             //This is sooo not threadsafe!
             template<class _InIt>
-            void insert(const Type* _where, _InIt _first, _InIt _last) {
-                if (_first == _last) return; //Boogie!
-                if (_where < base::begin() || _where > base::end()) return; //WTF?!
-                const size_t insertOffset = _where - base::begin();
-                auto previousEnd = base::_n;
-                bool atEnd = insertOffset == previousEnd;
+            iterator insert(iterator _where, _InIt _first, _InIt _last) {
+                if (_first == _last) return _where; //Boogie!
+                if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
+                size_t insertOffset = std::distance(base::begin(), _where);
+                size_t previousEnd = static_cast<size_t>(base::_n);
                 size_t oldSize = base::count();
                 size_t insertedSize = std::distance(_first, _last);
                 reserve(oldSize + insertedSize);
@@ -649,7 +724,8 @@ namespace intercept {
 
                 //#TEST does rotate really do correct stuff?
                 //#TODO test insert in mid
-                std::rotate(&get(insertOffset), &get(previousEnd), base::end());
+                std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
+                return base::begin() + insertOffset;
             }
             void clear() {
                 if (base::_data)
@@ -1296,6 +1372,11 @@ namespace intercept {
                 vector3 _modelSpeed; // speed in model coordinates (updated in Move())
                 vector3 _acceleration;
             };
+            struct visual_head_pos {
+                bool valid{ false };
+                vector3 _cameraPositionWorld;
+                vector3 _aimingPositionWorld;
+            };
             visualState get_position_matrix() const {
                 if (!object || !object->object) return visualState();
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
@@ -1315,14 +1396,16 @@ namespace intercept {
                     vector3 _modelSpeed;
                     vector3 _acceleration;
                 };
+
                 visState1* s1 = reinterpret_cast<visState1*>(vbase + 4);
                 visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
+                
                 return visualState{
                     true,
                     s1->_aside,
                     s1->_up,
                     s1->_dir,
-                    s1->_position,
+                    { s1->_position.x,s1->_position.z,s1->_position.y},
                     s1->_scale,
                     s1->_maxScale,
                     s2->_deltaT,
@@ -1331,6 +1414,32 @@ namespace intercept {
                     s2->_acceleration
                 };
             }
+
+            visual_head_pos get_head_pos() {
+                if (!object || !object->object) return visual_head_pos();
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+                
+                class v1 {
+                    virtual void doStuff() {}
+                };
+                class v2 : public v1 {
+                    virtual void doStuff() {}
+                };
+                v2* v = (v2*) vbase;
+                auto& typex = typeid(*v);
+                auto test = typex.raw_name();
+                auto hash = typex.hash_code();
+                if (hash != 0x6d4f3e40 && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
+                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase + 0x114);
+
+                return visual_head_pos{
+                    true,
+                    { s3->_cameraPositionWorld.x,s3->_cameraPositionWorld.z,s3->_cameraPositionWorld.y },
+                    { s3->_aimingPositionWorld.x,s3->_aimingPositionWorld.z,s3->_aimingPositionWorld.y }
+                };
+
+            }
+
             struct {
                 uint32_t _x;
                 void* object; //#TODO this is real object pointer. Other classes are probably also incorrect

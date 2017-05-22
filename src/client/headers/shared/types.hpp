@@ -184,7 +184,7 @@ namespace intercept {
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
             Type* _ref;
         public:
-            ref() { _ref = nullptr; }
+            ref() : _ref(nullptr) {}
             ~ref() { free(); }
 
             //Construct from Pointer
@@ -603,7 +603,7 @@ namespace intercept {
             auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
                 insert(base::end(), _first, _last);
             }
-            auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(copy_._n) {
+            auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(0) {
                 insert(base::end(), copy_.begin(), copy_.end());
             }
             auto_array(auto_array<Type> &&move_) noexcept : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
@@ -722,8 +722,6 @@ namespace intercept {
                 }
                 base::_n = index;
 
-                //#TEST does rotate really do correct stuff?
-                //#TODO test insert in mid
                 std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
                 return base::begin() + insertOffset;
             }

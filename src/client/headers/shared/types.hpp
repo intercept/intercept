@@ -310,11 +310,14 @@ namespace intercept {
             }
 
             //== is case insensitive just like scripting
-            bool operator == (const char *other) const {//#TODO check for data==nullptr first
+            bool operator == (const char *other) const {
+                if (!data())  return (!other || !*other); //empty?
+
                 return _strcmpi(data(), other) == 0;
             }
 
-            bool operator == (const r_string& other) const {//#TODO check for data==nullptr first
+            bool operator == (const r_string& other) const {
+                if (!data()) return (!other.data() || !*other.data()); //empty?
                 return _strcmpi(data(), other.data()) == 0;
             }
 
@@ -1206,8 +1209,8 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, raw_string); };
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
-        //protected:
-        //    static thread_local game_data_pool<game_data_string> _data_pool;
+            //protected:
+            //    static thread_local game_data_pool<game_data_string> _data_pool;
         };
 
         class game_data_group : public game_data {
@@ -1398,7 +1401,7 @@ namespace intercept {
 
                 visState1* s1 = reinterpret_cast<visState1*>(vbase + 4);
                 visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
-                
+
                 return visualState{
                     true,
                     s1->_aside,
@@ -1417,7 +1420,7 @@ namespace intercept {
             visual_head_pos get_head_pos() {
                 if (!object || !object->object) return visual_head_pos();
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
-                
+
                 class v1 {
                     virtual void doStuff() {}
                 };
@@ -1616,8 +1619,8 @@ namespace intercept {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }
+        }
     }
-}
 
 namespace std {
     template <> struct hash<intercept::types::r_string> {

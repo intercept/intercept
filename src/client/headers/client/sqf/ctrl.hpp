@@ -83,6 +83,7 @@ namespace intercept {
         void ctrl_commit(const control &value0_, float value1_);
         void ctrl_enable(int control_id_, bool enable_);
         void ctrl_enable(const control &control_, bool enable_);
+        void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
         void ctrl_set_fade(const control &value0_, float value1_);
         void ctrl_set_font(const control &value0_, const std::string& value1_);
         void ctrl_set_font_h1(const control &value0_, const std::string& value1_);
@@ -238,6 +239,7 @@ namespace intercept {
         void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_);
         void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_);
         void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_);
+        void lb_set_text(const control &control_, int index_, const std::string &text_);
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_);
         void lb_set_tooltip(const control &control_, int index_, const std::string &tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
@@ -326,6 +328,20 @@ namespace intercept {
         //std::string tv_tooltip(const control &value0_, float value1_);
         std::vector<int> tv_cursel(int idc_);
         std::vector<int> tv_cursel(const control& ctrl_);
+        
+        void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_select_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_text(const control &control_, const std::vector<int> &path_, const std::string &text_);
+        std::string tv_tooltip(const control &control_, const std::vector<int> &path_);
+        void tv_collapse_all(int idc_);
+        void tv_collapse_all(const control &control_);
+        void tv_expand_all(int idc_);
+        void tv_expand_all(const control &control_);
+
 
         //Slider
         void slider_set_range(float value0_, float value1_, float value2_);

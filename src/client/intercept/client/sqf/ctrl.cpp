@@ -388,6 +388,54 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__tvvalue__control__array__ret__scalar, ctrl_, std::move(path));
         }
 
+        void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetcolor__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturecolordisabled__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturecolorselected__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_picture_color__right_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturerightcolordisabled__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturerightcolorselected__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_select_color(const control &control_, const std::vector<int> &path_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetselectcolor__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), color_ });
+        }
+
+        void tv_set_text(const control &control_, const std::vector<int> &path_, const std::string &text_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsettext__control__array__ret__nothing, control_, { std::move(auto_array<game_value>(path_.begin(), path_.end())), text_ });
+        }
+
+        std::string tv_tooltip(const control &control_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__tvtooltip__control__array__ret__string, control_, std::move(auto_array<game_value>(path_.begin(), path_.end())));
+        }
+
+        void tv_collapse_all(int idc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__scalar__ret__nothing, static_cast<float>(idc_));
+        }
+
+        void tv_collapse_all(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvcollapseall__control__ret__nothing, control_);
+        }
+
+        void tv_expand_all(int idc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvexpandall__scalar__ret__nothing, static_cast<float>(idc_));
+        }
+
+        void tv_expand_all(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tvexpandall__control__ret__nothing, control_);
+        }
+
         void ctrl_activate(const control &value_) {
             __helpers::__empty_unary_control(__sqf::unary__ctrlactivate__control__ret__nothing, value_);
         }
@@ -426,6 +474,10 @@ namespace intercept {
 
         bool ctrl_enabled(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__ctrlenabled__scalar__ret__bool, value_);
+        }
+
+        void ctrl_set_disabled_color(const control &control_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetdisabledcolor__control__array__ret__nothing, control_, color_);
         }
 
         float ctrl_fade(const control &value_) {
@@ -1727,7 +1779,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lbsetpicturerightcolorselected__control__array__ret__nothing, control_, args);
         }
 
+        void lb_set_text(const control &control_, int index_, const std::string &text_) {
+            game_value params_right({
+                index_,
+                text_
+            });
 
+            host::functions.invoke_raw_binary(__sqf::binary__lbsettext__control__array__ret__nothing, control_, params_right);
+        }
 
         void lb_set_tooltip(int control_id_, int index_, const std::string &tooltip_) {
             game_value args({

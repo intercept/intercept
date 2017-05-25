@@ -1581,10 +1581,6 @@ namespace intercept {
         vector3 task_marker_offset(const object &unit_);
         std::string task_type(const task &task_);
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
-        void tv_collapse_all(int idc_);
-        void tv_collapse_all(const control &control_);
-        void tv_expand_all(int idc_);
-        void tv_expand_all(const control &control_);
         vector3 unit_aim_position(const object &unit_);
         vector3 unit_aim_position_visual(const object &unit_);
         bool unit_is_uav(const object &unit_);
@@ -1706,7 +1702,6 @@ namespace intercept {
         display create_mp_campaign_display(const display &display_, const std::string &mission_);
         task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
         object create_site(const std::string &type_, const vector3 &pos_);
-        void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
         std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
@@ -1833,7 +1828,6 @@ namespace intercept {
         std::string insert_editor_object(const control &map_, const std::string &type_, const game_value &value_, const std::vector<std::string> &values_, const std::string &sub_type_);
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
-        void lb_set_text(const control &control_, int index_, const std::string &text_);
         void leave_vehicle(const object &unit_, const object &vehicle_);
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
         std::vector<std::string> list_objects(const control &map_, const std::string &type_);
@@ -2076,14 +2070,6 @@ namespace intercept {
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
         int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
-        void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_select_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_text(const control &control_, const std::vector<int> &path_, const std::string &text_);
-        std::string tv_tooltip(const control &control_, const std::vector<int> &path_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);

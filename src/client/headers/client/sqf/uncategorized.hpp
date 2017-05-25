@@ -948,10 +948,6 @@ namespace intercept {
         bool is_kind_of(const std::string &type1_, const std::string &type2_);
         bool is_kind_of(const std::string &type1_, const std::string &type2_, const config &target_config_);
 
-        bool kb_add_database(const object &value0_, const std::string& value1_);
-        bool kb_add_database_targets(const object &value0_, const std::string& value1_);
-        bool kb_has_topic(const object &value0_, const std::string& value1_);
-        void kb_remove_topic(const object &value0_, const std::string& value1_);
         float knows_about(const object &source_, const object &target_);
         float knows_about(const group &source_, const object &target_);
         float knows_about(const side &side_, const object &target_);
@@ -1837,10 +1833,6 @@ namespace intercept {
         std::string insert_editor_object(const control &map_, const std::string &type_, const game_value &value_, const std::vector<std::string> &values_, const std::string &sub_type_);
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
-        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_);
-        void kb_react();
-        void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_);
-        bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_);
         void lb_set_text(const control &control_, int index_, const std::string &text_);
         void leave_vehicle(const object &unit_, const object &vehicle_);
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);

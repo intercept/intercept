@@ -60,5 +60,15 @@ namespace intercept {
         void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_);
         void assign_as_cargo(const object& unit_, const object& vehicle_);
         void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_);
+
+        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_);
+        void kb_react();
+        void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_);
+        bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_);
+        bool kb_add_database(const object &value0_, const std::string& value1_);
+        bool kb_add_database_targets(const object &value0_, const std::string& value1_);
+        bool kb_has_topic(const object &value0_, const std::string& value1_);
+        void kb_remove_topic(const object &value0_, const std::string& value1_);
+
     }
 }

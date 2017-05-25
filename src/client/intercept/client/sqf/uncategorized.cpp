@@ -2817,22 +2817,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__array__ret__bool, type1_, params);
         }
 
-        bool kb_add_database(const object &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__kbadddatabase__object__string__ret__bool, value0_, value1_);
-        }
-
-        bool kb_add_database_targets(const object &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__kbadddatabasetargets__object__string__ret__bool, value0_, value1_);
-        }
-
-        bool kb_has_topic(const object &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__kbhastopic__object__string__ret__bool, value0_, value1_);
-        }
-
-        void kb_remove_topic(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__kbremovetopic__object__string__ret__nothing, value0_, value1_);
-        }
-
         float knows_about(const object &source_, const object &target_) {
             return host::functions.invoke_raw_binary(__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_);
         }
@@ -6634,57 +6618,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             return host::functions.invoke_raw_binary(__sqf::binary__isuavconnectable__object__array__ret__bool, unit_, params_right);
-        }
-
-        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_) {
-            auto_array<game_value> params_right({
-                topic_name_,
-                bikb_file_,
-                fsm_file_
-            });
-
-            switch (event_handler_.index()) {
-                case 0: params_right.push_back(std::get<0>(event_handler_).get()); break;
-                case 1: params_right.push_back(std::get<1>(event_handler_).get()); break;
-            }
-                        
-            host::functions.invoke_raw_binary(__sqf::binary__kbaddtopic__object__array__ret__nothing, unit_, std::move(params_right));
-        }
-
-        //#TODO: Find out what arguments this command takes
-        void kb_react() {
-            //host::functions.invoke_raw_binary(__sqf::binary__kbreact__object__array__ret__nothing, unit_, std::move(params_right));
-        }
-
-        void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_) {
-            auto_array<game_value> params_right({
-                receiver_,
-                topic_name_,
-                sentence_class_,
-                argument_name_,
-                argument_value_,
-                argument_text_,
-                std::move(auto_array<game_value>({ argument_speech_.begin(), argument_speech_.end()}))
-            });
-            
-            switch (force_radio_.index()) {
-            case 0: params_right.push_back(std::get<0>(force_radio_).get()); break;
-            case 1: params_right.push_back(std::get<1>(force_radio_).get()); break;
-            case 2: params_right.push_back(std::get<1>(force_radio_).get()); break;
-            }
-            
-            host::functions.invoke_raw_binary(__sqf::binary__kbtell__object__array__ret__nothing, unit_, std::move(params_right));
-        }
-
-        bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_) {
-            game_value params_right({
-                receiver_,
-                topic_,
-                sentence_id_,
-                max_age_
-            });
-            
-            return host::functions.invoke_raw_binary(__sqf::binary__kbwassaid__object__array__ret__bool, unit_, params_right);
         }
 
         void lb_set_text(const control &control_, int index_, const std::string &text_) {

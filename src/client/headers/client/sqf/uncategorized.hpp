@@ -695,8 +695,6 @@ namespace intercept {
 
         object gunner(const object &value_);
         float hands_hit(const object &value_);
-        object hc_leader(const group &value_);
-        void hc_remove_all_groups(const object &value_);
         std::string headgear(const object &value_);
         void hide_body(const object &value_);
         void hide_object(const object &value_);
@@ -939,7 +937,6 @@ namespace intercept {
 
         float get_speed(const object &value0_, const std::string& value1_);
         
-        void hc_remove_group(const object &value0_, const group &value1_);
         void hide_object(const object &value0_, bool value1_);
         void hide_object_global(const object &value0_, bool value1_);
         void hint_c(const std::string& value0_, const std::string& value1_);
@@ -1267,8 +1264,6 @@ namespace intercept {
 
         void host_mission(const config &config_, const display &display_);
 
-        std::vector<group> hc_selected(const object &unit_);
-        std::vector<group> hc_all_groups(const object &unit_);
 
         group get_group(const object &unit_); // originally "group", but is already a type
 
@@ -1641,13 +1636,6 @@ namespace intercept {
             std::string text_window_foreground;
             std::string selection;
         };
-        struct rv_hc_group_params {
-            std::string string;
-            float f1;
-            float f2;
-            float f3;
-            float f4;
-        };
         struct rv_target {
             vector3 position;
             std::string type;
@@ -1833,9 +1821,6 @@ namespace intercept {
         game_value get_variable(const location &location_, const std::string &variable_, const game_value &default_value_);
         void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void group_select_unit(const object &player_, const object &unit_, bool select_);
-        rv_hc_group_params hc_group_params(const object &unit_, const group &group_);
-        void hc_select_group(const object &unit, const std::vector<game_value> &array_);
-        void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
         void hide_selection(const object &object_, const std::string &selection_, bool hide_);
         bool in_area(t_sqf_in_area_position position_, const object &trigger_);
         bool in_area(t_sqf_in_area_position position_, const std::string &marker_);

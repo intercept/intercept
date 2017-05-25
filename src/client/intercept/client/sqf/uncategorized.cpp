@@ -2558,10 +2558,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__bool_unary_string(__sqf::unary__verifysignature__string__ret__bool, value_);
         }
 
-        bool waypoints_enabled_uav(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__waypointsenableduav__object__ret__bool, value_);
-        }
-
         bool weapon_lowered(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__weaponlowered__object__ret__bool, value_);
         }
@@ -2726,10 +2722,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void enable_stamina(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablestamina__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void enable_uavwaypoints(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
         }
 
         void engine_on(const object &value0_, bool value1_) {
@@ -3333,10 +3325,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         std::string team_type(const team_member &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__teamtype__team_member__ret__string, value_);
-        }
-
-        float waypoint_timeout_current(const group &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_);
         }
 
         float radio_volume() {
@@ -4921,10 +4909,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__openmap__array__ret__bool, args);
         }
 
-        void enable_uav_waypoints(object & uav_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
-        }
-
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_) {
             return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__actionids__object__ret__array, entity_));
@@ -5225,10 +5209,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__showscoretable__scalar__ret__nothing, static_cast<float>(force_));
         }
 
-        void show_waypoints(bool enabled_) {
-            host::functions.invoke_raw_unary(__sqf::unary__showwaypoints__bool__ret__nothing, enabled_);
-        }
-
         void switch_camera(const object &target_) {
             host::functions.invoke_raw_unary(__sqf::unary__switchcamera__object__ret__nothing, target_);
         }
@@ -5282,15 +5262,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         bool vehicle_cargo_enabled(const object &vehicle_) {
            return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
-        }
-
-        bool waypoint_force_behaviour(const group &group_, int index_) {
-            game_value params({
-                group_,
-                static_cast<float>(index_)
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
         }
 
         std::vector<rv_waypoint> waypoints(const object &player_) {
@@ -7633,10 +7604,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void set_waves(float time_, float waves_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setwaves__scalar__scalar__ret__nothing, time_, waves_value_);
-        }
-
-        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setwaypointforcebehaviour__array__bool__ret__nothing, { group_, index_ }, force_);
         }
 
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_) {

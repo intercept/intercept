@@ -875,9 +875,6 @@ namespace intercept {
         object vehicle(const object &value_);
         std::string vehicle_var_name(const object &value_);
         bool verify_signature(const std::string &value_);
-        float waypoint_timeout_current(const group &value_);
-        bool waypoints_enabled_uav(const object &value_);
-        void enable_uav_waypoints(object & uav_, bool enable_);
         bool weapon_lowered(const object &value_);
 
         void add_live_stats(const object &value0_, float value1_);
@@ -1574,7 +1571,7 @@ namespace intercept {
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
         void show_score_table(int force_);
-        void show_waypoints(bool enabled_);
+        
         void switch_camera(const object &target_);
         bool task_always_visible(const task &task_);
         rv_task_custom_data task_custom_data(const task &task_);
@@ -1587,7 +1584,7 @@ namespace intercept {
         void use_ai_oper_map_obstruction_test(bool use_);
         void use_ai_steering_component(bool use_);
         bool vehicle_cargo_enabled(const object &vehicle_);
-        bool waypoint_force_behaviour(const group &group_, int index_);
+        
         std::vector<rv_waypoint> waypoints(const object &player_);
         std::vector<rv_waypoint> waypoints(const group &group_);
 
@@ -2047,7 +2044,6 @@ namespace intercept {
         void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_);
         void set_waves(float time_, float waves_value_);
-        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
         void set_wp_pos(const group &group_, int index_, const vector2 &position_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);

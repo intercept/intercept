@@ -209,5 +209,44 @@ namespace intercept {
         void waypoint_attach_object(waypoint& wp_, object & obj_) {
             host::functions.invoke_raw_binary(__sqf::binary__waypointattachobject__array__object_scalar__ret__nothing, wp_, obj_);
         }
+
+        void show_waypoints(bool enabled_) {
+            host::functions.invoke_raw_unary(__sqf::unary__showwaypoints__bool__ret__nothing, enabled_);
+        }
+
+        bool waypoint_force_behaviour(const group &group_, int index_) {
+            game_value params({
+                group_,
+                static_cast<float>(index_)
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
+        }
+
+        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaypointforcebehaviour__array__bool__ret__nothing, { group_, index_ }, force_);
+        }
+
+        
+
+        float waypoint_timeout_current(const group &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_);
+        }
+        
+        bool waypoints_enabled_uav(const object &value_) {
+            return __helpers::__bool_unary_object(__sqf::unary__waypointsenableduav__object__ret__bool, value_);
+        }
+
+        void enable_uavwaypoints(const object &value0_, bool value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, value0_, value1_);
+        }
+
+        void enable_uav_waypoints(object & uav_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
+        }
+
+
+
+
     }
 }

@@ -21,6 +21,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* Waypoint */
+        //#TODO change this to rv_waypoint
         class waypoint {
         public:
             group wgroup;
@@ -463,6 +464,13 @@ namespace intercept {
 
         void waypoint_attach_object(waypoint& wp_, int obj_id_);
         void waypoint_attach_object(waypoint& wp_, object & obj_);
+
+        void show_waypoints(bool enabled_);
+        bool waypoint_force_behaviour(const group &group_, int index_);
+        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
+        float waypoint_timeout_current(const group &value_);
+        bool waypoints_enabled_uav(const object &value_);
+        void enable_uav_waypoints(object & uav_, bool enable_);
 
     }
 }

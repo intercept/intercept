@@ -403,5 +403,71 @@ namespace intercept {
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
             return host::functions.invoke_raw_unary(__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_);
         }
+
+        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_) {
+            auto_array<game_value> from(from_.begin(), from_.end());
+
+            game_value params({
+                type_,
+                std::move(from),
+                to_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
+        }
+
+        void set_3den_selected(const std::vector<object> &entites_) {
+            auto_array<game_value> entities(entites_.begin(), entites_.end());
+
+            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entities));
+        }
+
+        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_) {
+            host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
+        }
+
+        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty) {
+            game_value params_right({
+                mode_,
+                class_,
+                position_,
+                is_empty
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
+        }
+
+        std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_) {
+            switch (entity_.index()) {
+            case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
+            case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
+            case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
+            case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
+            }
+
+            //#TODO: add binary__get3denattribute__array__string__ret__array
+        }
+
+        game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
+        }
+
+        bool set_3den_mission_attribute(const std::string& section_, const std::string& attribute_class_, game_value _attribute_value) {
+            return  host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, section_, { attribute_class_ , std::move(_attribute_value) });
+        }
+        bool set_3den_attribute(const object& entity_, const std::string& attribute_class_, game_value _attribute_value) {
+            return  host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, { attribute_class_ , std::move(_attribute_value) });
+        }
+
+        bool set_3den_layer(const object& entity_, float layer_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__set3denlayer__any__scalar__ret__bool, entity_, layer_);
+        }
+
+        void set_3den_object_type(const std::vector<object> & objects_, const std::string& classname_) {
+            auto_array<game_value> objects(objects_.begin(), objects_.end());
+            host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, std::move(objects), classname_);
+        }
+
+
     }
 }

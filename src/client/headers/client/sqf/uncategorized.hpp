@@ -144,35 +144,7 @@ namespace intercept {
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
 
-        /* potential namespace: ai */
-        bool attack_enabled(const object &unit_);
-        bool attack_enabled(const group &group_);
-        void command_artillery_fire(const object& unit_, const vector3& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const object& unit_, const vector2& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_);
-        void command_fire(const object& unit_, const object& target_);
-        void command_fire(const std::vector<object>& units_, const object& target_);
-        void command_follow(const object& unit_, const object& target_);
-        void command_follow(const std::vector<object>& units_, const object& target_);
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_);
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector2& pos_, const object& target_);
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_);
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_);
-        void command_move(const object& unit_, const vector3& pos_);
-        void command_move(const object& unit_, const vector2& pos_);
-        void command_move(const std::vector<object>& units_, const vector3& pos_);
-        void command_move(const std::vector<object>& units_, const vector2& pos_);
-        void command_radio(const object& unit_, const std::string& radio_name_);
-        void command_radio(const std::vector<object>& units_, const std::string& radio_name_);
-        void command_target(const object& unit_, const object& target_);
-        void command_target(const std::vector<object>& units_, const object& target_);
-        void command_watch(const object& unit_, const vector3& pos_);
-        void command_watch(const object& unit_, const vector2& pos_);
-        void command_watch(const std::vector<object>& units_, const vector3& pos_);
-        void command_watch(const std::vector<object>& units_, const vector2& pos_);
-        void command_watch(const object& unit_, const object& target_);
-        void command_watch(const std::vector<object>& units_, const object& target_);
+        
 
         /* potential namespace: cargo */
         bool can_sling_load(const object& vehicle_, const object& cargo_);
@@ -187,20 +159,7 @@ namespace intercept {
 
         void assign_curator(const object& player_, const object& curator_module_);
 
-        /* potential namespace: ai */
-        void command_get_out(const object &unit_);
-        void command_get_out(const std::vector<object> & units_);
-        void command_stop(const object &unit_);
-        void command_stop(const std::vector<object> & units_);
-        void allow_fleeing(const object& object_, float cowardice_);
-        void allow_fleeing(const group& group_, float cowardice_);
-        void allow_get_in(const std::vector<object>& units_, bool allow_);
-        void assign_as_commander(const object& unit_, const object& vehicle_);
-        void assign_as_driver(const object& unit_, const object& vehicle_);
-        void assign_as_gunner(const object& unit_, const object& vehicle_);
-        void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_);
-        void assign_as_cargo(const object& unit_, const object& vehicle_);
-        void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_);
+        
 
         /* potential namespace: core, create */
         object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, const std::string &special_ = "NONE");
@@ -493,7 +452,7 @@ namespace intercept {
         bool is_dedicated();
         bool did_jip();
 
-        float acc_time();
+
         object agent(const team_member &value_);
         std::vector<std::string> activated_addons();
         std::vector<team_member> agents();
@@ -526,36 +485,35 @@ namespace intercept {
         std::string copy_from_clipboard();
         rv_namespace current_namespace();
         object cursor_target();
-        float daytime();
+        
 
         bool dialog();
+        display display_null();
+        void disable_serialization();
+        void enable_end_dialog();
+        void end_loading_screen();
+       
         float difficulty();
         bool difficulty_enabled_rtd();
         void disable_debriefing_stats();
-        void disable_serialization();
-        display display_null();
         float distribution_region();
         side east();
-        void enable_end_dialog();
-        void end_loading_screen();
-        float estimated_end_server_time();
         void exit();
+        float estimated_end_server_time();
         void finish_mission_init();
 
         void force_end();
-        void force_weather_change();
         bool free_look();
         std::string getclientstate();
         float getelevationoffset();
         bool get_remote_sensors_disabled();
-        float get_shadow_distance();
+        
         float get_total_dlc_usage_time();
 
         void halt();
         bool has_interface();
 
         side independent();
-        void init_ambient_life();
         bool is_autotest();
         bool is_filepatching_enabled();
         bool is_instructor_figure_enabled();
@@ -602,7 +560,6 @@ namespace intercept {
         float system_of_units();
 
         float sound_volume();
-        void simul_weather_sync();
         void select_no_player();
         bool saving_enabled();
         void save_profile_namespace();
@@ -624,7 +581,6 @@ namespace intercept {
         std::string assigned_team(const object & unit_);
         object assigned_vehicle(const object & unit_);
 
-        std::string behaviour(const object & unit_);
         std::string binocular(const object & unit_);
         void buldozer(bool value_);
         bool buldozer(const std::string &value_);
@@ -634,7 +590,13 @@ namespace intercept {
         bool can_unload_in_combat(const object & unit_);
         bool captive(const object & unit_);
         float captive_num(const object & unit_);
+        
+        std::string behaviour(const object & unit_);
         bool check_aifeature(const std::string & feature_);
+        bool fleeing(const object &value_);
+        float skill(const object &value_);
+
+
 
         float collective_rtd(const object & helicopter_);
         object commander(const object & veh_);
@@ -670,13 +632,15 @@ namespace intercept {
         void enable_caustics(bool value_);
         void enable_diag_legend(bool value_);
         void enable_engine_artillery(bool value_);
-        void enable_environment(bool ambient_life_, bool ambient_sound_ = true);
         void enable_radio(bool value_);
-        void enable_sat_normal_on_detail(bool value_);
+        
+
+        
+        
+        void enable_traffic(bool value_);
         void enable_sentences(bool value_);
         void enable_stress_damage(bool value_);
         void enable_team_switch(bool value_);
-        void enable_traffic(bool value_);
         void end_mission(const std::string &value_);
         void estimated_time_left(float value_);
         float exec_fsm(const std::string &value_);
@@ -692,7 +656,7 @@ namespace intercept {
         object flag_owner(const object &value_);
         side flag_side(const object &value_);
         std::string flag_texture(const object &value_);
-        bool fleeing(const object &value_);
+        
         void force_respawn(const object &value_);
         object form_leader(const object &value_);
         float formation_direction(const object &value_);
@@ -875,27 +839,19 @@ namespace intercept {
         bool server_command(const std::string &value_);
         bool server_command_available(const std::string &value_);
         bool server_command_executable(const std::string &value_);
-        void set_acc_time(float value_);
 
         void set_armory_points(float value_);
 
-        void set_horizon_parallax_coef(float value_);
-        void set_object_view_distance(float distance_);
-        void set_object_view_distance(float object_distance_, float shadow_distance_);
         void set_playable(const object &value_);
         void set_player_respawn_time(float value_);
-        void set_shadow_distance(float value_);
-        void set_simul_weather_layers(float value_);
+       
+        
+        
         void set_stamina_scheme(const std::string &value_);
         void set_system_of_units(float value_);
-        void set_terrain_grid(float value_);
-        void set_time_multiplier(float value_);
         void set_traffic_distance(float value_);
-        void set_view_distance(float value_);
         bool simulation_enabled(const object &value_);
         float size_of(const std::string &value_);
-        float skill(const object &value_);
-        void skip_time(float value_);
         void sleep(float value_);
 
         bool some_ammo(const object &value_);
@@ -947,19 +903,19 @@ namespace intercept {
 
 
 
+        void disable_ai(const object &value0_, const std::string& value1_);
+        void enable_ai(const object &value0_, const std::string& value1_);
+        void enable_aifeature(bool value0_, const std::string& value1_);
 
         void debug_fsm(float value0_, bool value1_);
         bool diary_subject_exists(const object &value0_, const std::string& value1_);
         void direct_say(const object &value0_, const std::string& value1_);
-        void disable_ai(const object &value0_, const std::string& value1_);
         void disable_conversation(const object &value0_, bool value1_);
         void disable_nvgequipment(const object &value0_, bool value1_);
         void disable_tiequipment(const object &value0_, bool value1_);
         void display_remove_all_event_handlers(const std::string& value0_, const display &value1_);
         float door_phase(const object &value0_, const std::string& value1_);
         float empty_positions(const object &value0_, const std::string& value1_);
-        void enable_ai(const object &value0_, const std::string& value1_);
-        void enable_aifeature(bool value0_, const std::string& value1_);
         void enable_aim_precision(const object &value0_, bool value1_);
         void enable_auto_start_up_rtd(const object &value0_, bool value1_);
         bool enable_auto_trim_rtd(const object &value0_, bool value1_);
@@ -1112,10 +1068,15 @@ namespace intercept {
 
         float skill(const object &value0_, const std::string& value1_);
         float skill_final(const object &value0_, const std::string& value1_);
-
-
         void stop(const object &value0_, bool value1_);
         void suppress_for(const object &value0_, float value1_);
+        void move_to(const object &unit_, const vector3 &pos_);
+        void do_stop(const object &unit_);
+        void do_stop(const std::vector<object> &units_);
+        void do_get_out(const object &unit_);
+        void do_get_out(const std::vector<object> &units_);
+
+
         void switch_action(const object &value0_, const std::string& value1_);
 
         void switch_gesture(const object &value0_, const std::string& value1_);
@@ -1193,7 +1154,7 @@ namespace intercept {
         void move_in_driver(const object &unit_, const object &vehicle_);
         void move_in_gunner(const object &unit_, const object &vehicle_);
         void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
-        void move_to(const object &unit_, const vector3 &pos_);
+        
 
 
         struct rv_artillery_computer_settings {
@@ -1318,10 +1279,7 @@ namespace intercept {
 
         vector3 get_wp_pos(const group &group_, int index_);
 
-        void do_stop(const object &unit_);
-        void do_stop(const std::vector<object> &units_);
-        void do_get_out(const object &unit_);
-        void do_get_out(const std::vector<object> &units_);
+        
 
         std::vector<object> detected_mines(const side &side_);
 
@@ -1464,7 +1422,8 @@ namespace intercept {
 
         void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
 
-        void set_detail_map_blend_pars(float full_detail_, float no_detail_);
+        
+
         void set_group_icons_visible(bool map_, bool hud_);
         std::vector<bool> group_icons_visible();
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
@@ -1478,9 +1437,7 @@ namespace intercept {
         void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
 
         std::vector<task> simple_tasks(const object& unit_);
-        void simul_cloud_density(const vector3& pos_);
-        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_);
-        bool simul_in_clouds(const vector3& pos_);
+        
 
         std::vector<std::string> squad_params(const object& unit_);
         void start_loading_screen(const std::string& text_);
@@ -1623,7 +1580,6 @@ namespace intercept {
         game_value remote_exec_call(const std::string &function_name_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, std::variant<int, object, side, group, std::reference_wrapper<const std::string>> target_, const std::string &jip_id_);
         game_value remote_exec_call(const std::string &function_name_, const game_value &targets_, const std::string &jip_id_);
-        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_); //#TODO: Create class 'rv_eden_entity'
         void remove_all_owned_mines(const object &unit_);
         object road_at(const object &object_);
         object road_at(const vector3 &position_);
@@ -1631,7 +1587,6 @@ namespace intercept {
         std::vector<std::string> selection_names(const object &object_);
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
-        void set_3den_selected(const std::vector<object> &entites_);
         void show_score_table(int force_);
         void show_waypoints(bool enabled_);
         void switch_camera(const object &target_);
@@ -1761,7 +1716,6 @@ namespace intercept {
         vector3 building_pos(const object &building_, int index_);
         std::vector<game_value> call_extension(const std::string &extension_, const std::string &function_, std::vector<game_value> &arguments_);
         std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_);
-        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_);
         void command_suppressive_fire(const object &unit_, const object &target_);
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
         bool connect_terminal_to_uav(const object &unit_, const object &uav_);
@@ -1769,7 +1723,6 @@ namespace intercept {
         int count_friendly(const object &unit_, const std::vector<object> &units_);
         int count_type(const std::string &type_, const std::vector<object> &objects_);
         int count_unknown(const object &unit_, const std::vector<object> &units_);
-        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false);
         display create_mission_display(const display &display_, const std::string &mission_);
         display create_mp_campaign_display(const display &display_, const std::string &mission_);
         task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
@@ -1869,8 +1822,6 @@ namespace intercept {
         void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
         void force_follow_road(const object &vehicle_, bool follow_);
         void force_weapon_fire(const object &unit_, const std::string &muzzle_, const std::string &fire_mode_);
-        std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_);
-        game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_);
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_);
         typedef std::variant<std::reference_wrapper<const object> , std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> t_sqf_in_area_position;
         float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
@@ -1947,8 +1898,10 @@ namespace intercept {
         float random(float seed_, float x_, std::optional<float> y_);
         game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
+        
         void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_);
         void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
+        
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_event_handler(const object &object_, const std::string &event_, int index_);
@@ -1991,16 +1944,7 @@ namespace intercept {
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
         //Server/Headless Client only! 
         void serverCommand(const std::string& command_, const std::string& password_);
-        bool set_3den_mission_attribute(const std::string& section_, const std::string& attribute_class_, game_value _attribute_value);
-
-        //#TODO not object but Eden_Entity 
-        //#TODO typedef variant for Eden_Entity 
-        //#TODO use it for https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
-        bool set_3den_attribute(const object& entity_, const std::string& attribute_class_, game_value _attribute_value);
-        //#TODO not object but Eden_Entity 
-        bool set_3den_layer(const object& entity_, float layer_);
-        void set_3den_object_type(const std::vector<object> & objects_, const std::string& classname_);
-
+        
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, std::reference_wrapper<const std::string>>>> &attributes_);
         //#TODO take Enum as behaviour 
         void set_behaviour(std::variant<group, object> group_, const std::string& behaviour_);
@@ -2061,12 +2005,12 @@ namespace intercept {
         void set_group_icon(const group& group_, float icon_id, const std::string& icon_path_, const vector2 offset_);
 
 
+        
 
         void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_);
         void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
         bool set_feature_type(const object &object_, int type_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
-        void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
         void set_formation(const group &group_, const std::string &formation_);
         void set_form_dir(const group &group_, float heading_);
         void set_fsm_variable(int fsm_handle_, const std::string &variable_, const game_value &value_);
@@ -2074,7 +2018,6 @@ namespace intercept {
         void set_group_icon_params(const group &group_, const rv_color &color_, const std::string &text_, float scale_, bool visible_);
         void set_group_id(const group &group_, const std::string &name_format_, const std::vector<std::string> &params_);
         void set_group_id_global(const group &group_, const std::string &name_format_, const std::vector<std::string> &params_);
-        void set_gusts(float time_, float gusts_value_);
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
         void set_leader(const team_member &team_, const team_member &leader_);
         void set_light_ambient(const object &light_, float r_, float g_, float b_);
@@ -2093,14 +2036,11 @@ namespace intercept {
         void set_object_proxy(const control &map_, const std::string &object_, const object &proxy_object_);
         void set_object_texture(const object &object_, int index_, const std::string &texture_);
         void set_object_texture_global(const object &object_, int index_, const std::string &texture_);
-        void set_overcast(float time_, float overcast_value_);
         void set_particle_params();
         void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
         void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
         bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void set_pipe_effect(const std::string &parameter_left, const game_value &parameters_left);
-        void set_rain(float time_, float rain_value_);
-        void set_rainbow(float time_, float rainbow_value_);
         void set_rectangular(const location &location_, bool rectangular_);
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
         void set_simple_task_always_visible(const task &task_, bool always_visible_);
@@ -2146,9 +2086,6 @@ namespace intercept {
         void set_waves(float time_, float waves_value_);
         void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
-        void set_wind_dir(float time_, float wind_value_);
-        void set_wind_force(float time_, float force_value_);
-        void set_wind_str(float time_, float strength_value_);
         void set_wp_pos(const group &group_, int index_, const vector2 &position_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
         void binary__sideradio__object_array__string__ret__nothing(const object &unit_, const std::string &radio_name_);

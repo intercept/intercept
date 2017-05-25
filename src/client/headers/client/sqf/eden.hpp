@@ -91,5 +91,25 @@ namespace intercept {
         void remove_eden_event_handler(const std::string &type_, float id_);
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
 
+
+        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_); //#TODO: Create class 'rv_eden_entity'
+        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_);
+        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty = false);
+        std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_);
+        game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_);
+
+
+        bool set_3den_mission_attribute(const std::string& section_, const std::string& attribute_class_, game_value _attribute_value);
+
+        //#TODO not object but Eden_Entity 
+        //#TODO typedef variant for Eden_Entity 
+        //#TODO use it for https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
+        bool set_3den_attribute(const object& entity_, const std::string& attribute_class_, game_value _attribute_value);
+        //#TODO not object but Eden_Entity 
+        bool set_3den_layer(const object& entity_, float layer_);
+        void set_3den_object_type(const std::vector<object> & objects_, const std::string& classname_);
+
+        void set_3den_selected(const std::vector<object> &entites_);
+
     }
 }

@@ -667,13 +667,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
         }
 
-        bool attack_enabled(const object &unit_) {
-            return __helpers::__bool_unary_object(__sqf::unary__attackenabled__object_group__ret__bool, unit_);
-        }
-
-        bool attack_enabled(const group &group_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__attackenabled__object_group__ret__bool, group_);
-        }
+        
 
         rv_bounding_box bounding_box(const object &model_) {
             game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
@@ -697,24 +691,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__string_unary_object(__sqf::unary__combatmode__object_group__ret__string, unit_);
         }
 
-        void command_get_out(const object &unit_) {
-            return __helpers::__empty_unary_object(__sqf::unary__commandgetout__object_array__ret__nothing, unit_);
-        }
-
-        void command_get_out(const std::vector<object> & units_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_unary(__sqf::unary__commandgetout__object_array__ret__nothing, std::move(units));
-        }
-
-        void command_stop(const object &unit_) {
-            return __helpers::__empty_unary_object(__sqf::unary__commandstop__object_array__ret__nothing, unit_);
-        }
-        void command_stop(const std::vector<object> & units_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_unary(__sqf::unary__commandstop__object_array__ret__nothing, std::move(units));
-        }
+        
 
         object create_agent(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, const std::string &special_ /*= "NONE"*/) {
             auto_array<game_value> markers(markers_.begin(), markers_.end());
@@ -1101,9 +1078,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         
 
         /* Misc */
-        float acc_time() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__acctime__ret__scalar);
-        }
 
         object agent(const team_member &value_) {
             return object(host::functions.invoke_raw_unary(__sqf::unary__agent__team_member__ret__object, value_));
@@ -1191,10 +1165,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__retrieve_nular_object(__sqf::nular__cursortarget__ret__object);
         }
 
-        float daytime() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__daytime__ret__scalar);
-        }
-
         bool dialog() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__dialog__ret__bool);
         }
@@ -1255,10 +1225,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_nular(__sqf::nular__forceend__ret__nothing);
         }
 
-        void force_weather_change() {
-            __helpers::__empty_nular(__sqf::nular__forceweatherchange__ret__nothing);
-        }
-
         bool free_look() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__freelook__ret__bool);
         }
@@ -1281,9 +1247,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         }
 
         // TODO std::array<float, 6> get_resolution();
-        float get_shadow_distance() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__getshadowdistance__ret__scalar);
-        }
 
         float get_total_dlc_usage_time() {
             return __helpers::__retrieve_nular_number(__sqf::nular__gettotaldlcusagetime__ret__scalar);
@@ -1299,10 +1262,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         side independent() {
             return __helpers::__retrieve_nular_side(__sqf::nular__independent__ret__side);
-        }
-
-        void init_ambient_life() {
-            __helpers::__empty_nular(__sqf::nular__initambientlife__ret__nothing);
         }
 
         bool is_autotest() {
@@ -1484,10 +1443,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         bool sling_load_assistant_shown() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__slingloadassistantshown__ret__bool);
-        }
-
-        void simul_weather_sync() {
-            __helpers::__empty_nular(__sqf::nular__simulweathersync__ret__nothing);
         }
 
         void select_no_player() {
@@ -1749,16 +1704,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_bool(__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
         }
 
-        void enable_environment(bool ambient_life_, bool ambient_sound_) {
-            host::functions.invoke_raw_unary(__sqf::unary__enableenvironment__bool_array__ret__nothing, { ambient_life_, ambient_sound_ });
-        }
-
         void enable_radio(bool value_) {
             __helpers::__empty_unary_bool(__sqf::unary__enableradio__bool__ret__nothing, value_);
-        }
-
-        void enable_sat_normal_on_detail(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enablesatnormalondetail__bool__ret__nothing, value_);
         }
 
         void enable_sentences(bool value_) {
@@ -2497,31 +2444,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return __helpers::__bool_unary_string(__sqf::unary__servercommandexecutable__string__ret__bool, value_);
         }
 
-        void set_acc_time(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__setacctime__scalar__ret__nothing, value_);
-        }
-
-
-
         void set_armory_points(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__setarmorypoints__scalar__ret__nothing, value_);
-        }
-
-        void set_horizon_parallax_coef(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__sethorizonparallaxcoef__scalar__ret__nothing, value_);
-        }
-
-        void set_object_view_distance(float distance_) {
-            __helpers::__empty_unary_number(__sqf::unary__setobjectviewdistance__scalar__ret__nothing, distance_);
-        }
-
-        void set_object_view_distance(float object_distance_, float shadow_distance_) {
-            game_value params({
-                object_distance_,
-                shadow_distance_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__setobjectviewdistance__array__ret__nothing, params);
         }
 
         void set_playable(const object &value_) {
@@ -2532,14 +2456,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_number(__sqf::unary__setplayerrespawntime__scalar__ret__nothing, value_);
         }
 
-        void set_shadow_distance(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__setshadowdistance__scalar__ret__nothing, value_);
-        }
-
-        void set_simul_weather_layers(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__setsimulweatherlayers__scalar__ret__nothing, value_);
-        }
-
         void set_stamina_scheme(const std::string &value_) {
             __helpers::__empty_unary_string(__sqf::unary__setstaminascheme__string__ret__nothing, value_);
         }
@@ -2548,20 +2464,8 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_unary_number(__sqf::unary__setsystemofunits__scalar__ret__nothing, value_);
         }
 
-        void set_terrain_grid(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__setterraingrid__scalar__ret__nothing, value_);
-        }
-
-        void set_time_multiplier(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__settimemultiplier__scalar__ret__nothing, value_);
-        }
-
         void set_traffic_distance(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__settrafficdistance__scalar__ret__nothing, value_);
-        }
-
-        void set_view_distance(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__setviewdistance__scalar__ret__nothing, value_);
         }
 
         bool simulation_enabled(const object &value_) {
@@ -2574,10 +2478,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         float skill(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__skill__object__ret__scalar, value_);
-        }
-
-        void skip_time(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__skiptime__scalar__ret__nothing, value_);
         }
 
         void sleep(float value_) {
@@ -3886,19 +3786,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__aimedattarget__object__array__ret__scalar, vehicle_, params);
         }
 
-        void allow_fleeing(const object& object_, float cowardice_) {
-            host::functions.invoke_raw_binary(__sqf::binary__allowfleeing__object_group__scalar__ret__nothing, object_, cowardice_);
-        }
-
-        void allow_fleeing(const group& group_, float cowardice_) {
-            host::functions.invoke_raw_binary(__sqf::binary__allowfleeing__object_group__scalar__ret__nothing, group_, cowardice_);
-        }
-
-        void allow_get_in(const std::vector<object>& units_, bool allow_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__allowgetin__array__bool__ret__nothing, std::move(units), allow_);
-        }
+        
 
         void animate(const object& obj_, const std::string& animation_name_, float phase_) {
             game_value params({
@@ -3929,41 +3817,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__animatedoor__object__array__ret__nothing, obj_, params);
         }
 
-        void assign_as_cargo(const object& unit_, const object& vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assignascargo__object__object__ret__nothing, unit_, vehicle_);
-        }
-
-        void assign_as_commander(const object& unit_, const object& vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assignascommander__object__object__ret__nothing, unit_, vehicle_);
-        }
-
-        void assign_as_driver(const object& unit_, const object& vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assignasdriver__object__object__ret__nothing, unit_, vehicle_);
-        }
-
-        void assign_as_gunner(const object& unit_, const object& vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, vehicle_);
-        }
-
-        void assign_as_turret(const object& unit_, const object& vehicle_, const std::vector<float>& turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
-            game_value params({
-                vehicle_,
-                std::move(turret_path)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, params);
-        }
-
-        void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_) {
-            game_value params({
-                vehicle_,
-                static_cast<float>(index_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__assignascargoindex__object__array__ret__nothing, unit_, params);
-        }
+        
 
         void assign_curator(const object& player_, const object& curator_module_) {
             host::functions.invoke_raw_binary(__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
@@ -3975,183 +3829,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_);
         }
 
-        void command_artillery_fire(const object& unit_, const vector3& pos_, const std::string& type_, int rounds_) {
-            game_value params({
-                pos_,
-                type_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
-        }
-
-        void command_artillery_fire(const object& unit_, const vector2& pos_, const std::string& type_, int rounds_) {
-            game_value params({
-                pos_,
-                type_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
-        }
-
-        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            game_value params({
-                pos_,
-                type_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, std::move(units), params);
-        }
-
-        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            game_value params({
-                pos_,
-                type_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, std::move(units), params);
-        }
-
-        void command_fire(const object& unit_, const object& target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandfire__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void command_fire(const std::vector<object>& units_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfire__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void command_follow(const object& unit_, const object& target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandfollow__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void command_follow(const std::vector<object>& units_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfollow__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_) {
-            game_value params({
-                fsm_,
-                pos_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
-        }
-
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector2& pos_, const object& target_) {
-            game_value params({
-                fsm_,
-                pos_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
-        }
-
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            game_value params({
-                fsm_,
-                pos_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, std::move(units), params);
-        }
-
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            game_value params({
-                fsm_,
-                pos_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, std::move(units), params);
-        }
-
-        void command_move(const object& unit_, const vector3& pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, unit_, pos_);
-        }
-
-        void command_move(const object& unit_, const vector2& pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, unit_, pos_);
-        }
-
-        void command_move(const std::vector<object>& units_, const vector3& pos_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, std::move(units), pos_);
-        }
-
-        void command_move(const std::vector<object>& units_, const vector2& pos_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, std::move(units), pos_);
-        }
-
-        void command_radio(const object& unit_, const std::string& radio_name_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, unit_, radio_name_);
-        }
-
-        void command_radio(const std::vector<object>& units_, const std::string& radio_name_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, std::move(units), radio_name_);
-        }
-
-        void command_target(const object& unit_, const object& target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandtarget__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void command_target(const std::vector<object>& units_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandtarget__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void command_watch(const object& unit_, const vector3& pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
-        }
-
-        void command_watch(const object& unit_, const vector2& pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, unit_, pos_);
-        }
-
-        void command_watch(const std::vector<object>& units_, const vector3& pos_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, std::move(units), pos_);
-        }
-
-        void command_watch(const std::vector<object>& units_, const vector2& pos_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__array__ret__nothing, std::move(units), pos_);
-        }
-
-        void command_watch(const object& unit_, const object& target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void command_watch(const std::vector<object>& units_, const object& target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__commandwatch__object_array__object__ret__nothing, std::move(units), target_);
-        }
+        
 
         float distance(const object& start_, const object& end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
@@ -4168,11 +3846,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         float distance(const vector3& start_, const vector3& end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         }
-
-
-
-
-        
 
         void remote_control(const object &controller_, const object &controlled_) {
             host::functions.invoke_raw_binary(__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
@@ -5048,17 +4721,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__setcompassoscillation__array__ret__nothing, params);
         }
 
-
-
-        void set_detail_map_blend_pars(float full_detail_, float no_detail_) {
-            game_value params({
-                full_detail_,
-                no_detail_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__setdetailmapblendpars__array__ret__nothing, params);
-        }
-
         void set_group_icons_visible(bool map_, bool hud_) {
             game_value params({
                 map_,
@@ -5177,25 +4839,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         std::vector<task> simple_tasks(const object& unit_) {
             return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__simpletasks__object__ret__array, unit_));
         }
-
-        void simul_cloud_density(const vector3& pos_) {
-            host::functions.invoke_raw_unary(__sqf::unary__simulclouddensity__array__ret__scalar, pos_);
-        }
-
-        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_) {
-            game_value params({
-                pos1_,
-                pos2_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__simulcloudocclusion__array__ret__scalar, params);
-        }
-
-        bool simul_in_clouds(const vector3& pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__simulinclouds__array__ret__bool, pos_);
-        }
-
-
 
         std::vector<std::string> squad_params(const object &unit_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_));
@@ -5607,18 +5250,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
 
-        void remove_3den_connection(const std::string &type_, const std::vector<object> &from_, const std::string &to_) {
-            auto_array<game_value> from(from_.begin(), from_.end());
-
-            game_value params({
-                type_,
-                std::move(from),
-                to_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
-        }
-
+        
         void remove_all_owned_mines(const object &unit_) {
             host::functions.invoke_raw_unary(__sqf::unary__removeallownedmines__object__ret__nothing, unit_);
         }
@@ -5645,12 +5277,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         game_value select_min(const game_value &array_) {
             return host::functions.invoke_raw_unary(__sqf::unary__selectmin__array__ret__any, array_);
-        }
-
-        void set_3den_selected(const std::vector<object> &entites_) {
-            auto_array<game_value> entities(entites_.begin(), entites_.end());
-
-            host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entities));
         }
 
         void show_score_table(int force_) {
@@ -6029,10 +5655,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return std::pair<bool, bool>({ res [0],res [1]});
         }
 
-        void clear_3den_attribute(const game_value &unknown_, const std::string &attribute_) {
-            host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
-        }
-
         void command_suppressive_fire(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
         }
@@ -6067,17 +5689,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> units(units_.begin(), units_.end());
 
             return host::functions.invoke_raw_binary(__sqf::binary__countunknown__object__array__ret__scalar, unit_, std::move(units));
-        }
-
-        game_value create_3den_entity(const group &group_, const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty) {
-            game_value params_right({
-                mode_,
-                class_,
-                position_,
-                is_empty
-            });
-            
-            return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
         }
 
         display create_mission_display(const display &display_, const std::string &mission_) {
@@ -6754,21 +6365,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__forceweaponfire__object__array__ret__nothing, unit_, params_right);
-        }
-
-        std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, std::reference_wrapper<const std::string>, std::reference_wrapper<float>> entity_, const std::string &attribute_) {
-            switch (entity_.index()) {
-                case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
-                case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
-                case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
-                case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
-            }
-
-            //#TODO: add binary__get3denattribute__array__string__ret__array
-        }
-
-        game_value get_3den_mission_attribute(const std::string &section_, const std::string &class_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
         }
 
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_) {
@@ -7710,23 +7306,7 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
         }
 
-        bool set_3den_mission_attribute(const std::string& section_, const std::string& attribute_class_, game_value _attribute_value) {
-            return  host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, section_, { attribute_class_ , std::move(_attribute_value) });
-        }
-        bool set_3den_attribute(const object& entity_, const std::string& attribute_class_, game_value _attribute_value) {
-            return  host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, { attribute_class_ , std::move(_attribute_value) });
-        }
-
-        bool set_3den_layer(const object& entity_, float layer_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__set3denlayer__any__scalar__ret__bool, entity_, layer_);
-        }
-
-        void set_3den_object_type(const std::vector<object> & objects_, const std::string& classname_) {
-            auto_array<game_value> objects(objects_.begin(), objects_.end());
-            host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, std::move(objects), classname_);
-        }
-
-         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, std::reference_wrapper<const std::string>>>> &attributes_) {
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, std::reference_wrapper<const std::string>>>> &attributes_) {
             auto_array<game_value> attributes;
 
             for (auto& it : attributes_) {
@@ -7836,14 +7416,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__setflaganimationphase__object__scalar__ret__nothing, object_, phase);
         }
 
-        void set_fog(float time_, float fog_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_);
-        }
-
-        void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_ ,fog_decay_, fog_base_ });
-        }
-
         void set_form_dir(std::variant<group, object> group_, float heading_) {
             if (group_.index() == 0)
                 host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, std::get<0>(group_), heading_); return;
@@ -7926,10 +7498,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, { name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end())) });
         }
 
-        void set_gusts(float time_, float gusts_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgusts__scalar__scalar__ret__nothing, time_, gusts_value_);
-        }
-
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_) {
             host::functions.invoke_raw_binary(__sqf::binary__sethidebehind__object__array__ret__nothing, unit_, { object_where_hide_,hide_position_ });
         }
@@ -8004,10 +7572,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__setobjecttextureglobal__object__array__ret__nothing, object_, { index_, texture_ });
         }
 
-        void set_overcast(float time_, float overcast_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setovercast__scalar__scalar__ret__nothing, time_, overcast_value_);
-        }
-
         //#TODO: Implement with this massive amount of params
         void set_particle_params() {
             //host::functions.invoke_raw_binary(__sqf::binary__setparticleparams__object__array__ret__nothing, time_, overcast_value_);
@@ -8030,14 +7594,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
         //#TODO: Find out, which commands this command really takes (not documented)
         void set_pipe_effect(const std::string &parameter_left, const game_value &parameters_left) {
             host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);
-        }
-
-        void set_rain(float time_, float rain_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setrain__scalar__scalar__ret__nothing, time_, rain_value_);
-        }
-
-        void set_rainbow(float time_, float rainbow_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setrainbow__scalar__scalar__ret__nothing, time_, rainbow_value_);
         }
 
         void set_rectangular(const location &location_, bool rectangular_) {
@@ -8269,18 +7825,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_) {
             host::functions.invoke_raw_binary(__sqf::binary__setweaponreloadingtime__object__array__ret__bool, vehicle_, { gunner_, muzzle_class_, reload_time_ });
-        }
-
-        void set_wind_dir(float time_, float wind_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setwinddir__scalar__scalar__ret__nothing, time_, wind_value_);
-        }
-
-        void set_wind_force(float time_, float force_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setwindforce__scalar__scalar__ret__nothing, time_, force_value_);
-        }
-
-        void set_wind_str(float time_, float strength_value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setwindstr__scalar__scalar__ret__nothing, time_, strength_value_);
         }
 
         void set_wp_pos(const group &group_, int index_, const vector2 &position_) {

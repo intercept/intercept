@@ -161,5 +161,144 @@ namespace intercept {
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__entities__array__ret__array, params));
         }
+
+        void set_horizon_parallax_coef(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__sethorizonparallaxcoef__scalar__ret__nothing, value_);
+        }
+
+        void set_detail_map_blend_pars(float full_detail_, float no_detail_) {
+            game_value params({
+                full_detail_,
+                no_detail_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setdetailmapblendpars__array__ret__nothing, params);
+        }
+
+        void simul_cloud_density(const vector3& pos_) {
+            host::functions.invoke_raw_unary(__sqf::unary__simulclouddensity__array__ret__scalar, pos_);
+        }
+
+        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_) {
+            game_value params({
+                pos1_,
+                pos2_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__simulcloudocclusion__array__ret__scalar, params);
+        }
+
+        bool simul_in_clouds(const vector3& pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__simulinclouds__array__ret__bool, pos_);
+        }
+
+        void set_fog(float time_, float fog_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_);
+        }
+
+        void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_ ,fog_decay_, fog_base_ });
+        }
+
+        void set_gusts(float time_, float gusts_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgusts__scalar__scalar__ret__nothing, time_, gusts_value_);
+        }
+
+        void set_rain(float time_, float rain_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setrain__scalar__scalar__ret__nothing, time_, rain_value_);
+        }
+
+        void set_rainbow(float time_, float rainbow_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setrainbow__scalar__scalar__ret__nothing, time_, rainbow_value_);
+        }
+
+        void set_overcast(float time_, float overcast_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setovercast__scalar__scalar__ret__nothing, time_, overcast_value_);
+        }
+
+        void set_wind_dir(float time_, float wind_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwinddir__scalar__scalar__ret__nothing, time_, wind_value_);
+        }
+
+        void set_wind_force(float time_, float force_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwindforce__scalar__scalar__ret__nothing, time_, force_value_);
+        }
+
+        void set_wind_str(float time_, float strength_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwindstr__scalar__scalar__ret__nothing, time_, strength_value_);
+        }
+
+        void set_acc_time(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setacctime__scalar__ret__nothing, value_);
+        }
+        
+        void set_object_view_distance(float distance_) {
+            __helpers::__empty_unary_number(__sqf::unary__setobjectviewdistance__scalar__ret__nothing, distance_);
+        }
+
+        void set_object_view_distance(float object_distance_, float shadow_distance_) {
+            game_value params({
+                object_distance_,
+                shadow_distance_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setobjectviewdistance__array__ret__nothing, params);
+        }
+
+        void set_shadow_distance(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setshadowdistance__scalar__ret__nothing, value_);
+        }
+
+        void set_simul_weather_layers(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setsimulweatherlayers__scalar__ret__nothing, value_);
+        }
+
+        void set_terrain_grid(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setterraingrid__scalar__ret__nothing, value_);
+        }
+
+        void set_time_multiplier(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__settimemultiplier__scalar__ret__nothing, value_);
+        }
+
+        void set_view_distance(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setviewdistance__scalar__ret__nothing, value_);
+        }
+
+        void skip_time(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__skiptime__scalar__ret__nothing, value_);
+        }
+
+        void enable_environment(bool ambient_life_, bool ambient_sound_) {
+            host::functions.invoke_raw_unary(__sqf::unary__enableenvironment__bool_array__ret__nothing, { ambient_life_, ambient_sound_ });
+        }
+
+        void enable_sat_normal_on_detail(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__enablesatnormalondetail__bool__ret__nothing, value_);
+        }
+
+        float acc_time() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__acctime__ret__scalar);
+        }
+
+        float daytime() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__daytime__ret__scalar);
+        }
+
+        void force_weather_change() {
+            __helpers::__empty_nular(__sqf::nular__forceweatherchange__ret__nothing);
+        }
+
+        float get_shadow_distance() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__getshadowdistance__ret__scalar);
+        }
+
+        void init_ambient_life() {
+            __helpers::__empty_nular(__sqf::nular__initambientlife__ret__nothing);
+        }
+
+        void simul_weather_sync() {
+            __helpers::__empty_nular(__sqf::nular__simulweathersync__ret__nothing);
+        }
     }
 }

@@ -146,5 +146,37 @@ namespace intercept {
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
         
         std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_);
+    
+        void set_horizon_parallax_coef(float value_);
+        void set_detail_map_blend_pars(float full_detail_, float no_detail_);
+        void simul_cloud_density(const vector3& pos_);
+        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_);
+        bool simul_in_clouds(const vector3& pos_);
+        void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
+        void set_gusts(float time_, float gusts_value_);
+        void set_rain(float time_, float rain_value_);
+        void set_rainbow(float time_, float rainbow_value_);
+        void set_overcast(float time_, float overcast_value_);
+        void set_wind_dir(float time_, float wind_value_);
+        void set_wind_force(float time_, float force_value_);
+        void set_wind_str(float time_, float strength_value_);
+        void set_acc_time(float value_);
+        void set_object_view_distance(float distance_);
+        void set_object_view_distance(float object_distance_, float shadow_distance_);
+        void set_shadow_distance(float value_);
+        void set_simul_weather_layers(float value_);
+        void set_terrain_grid(float value_);
+        void set_time_multiplier(float value_);
+        void set_view_distance(float value_);
+        void skip_time(float value_);
+
+        void enable_environment(bool ambient_life_, bool ambient_sound_ = true);
+        void enable_sat_normal_on_detail(bool value_);
+        float acc_time();
+        float daytime();
+        void force_weather_change();
+        float get_shadow_distance();
+        void init_ambient_life();
+        void simul_weather_sync();
     }
 }

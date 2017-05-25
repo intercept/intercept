@@ -2178,6 +2178,316 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__cuttext__array__ret__nothing, args);
         }
 
+        //NULAR -- https://github.com/intercept/intercept/issues/13
+        std::vector<std::string> all_cut_layers() {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__allcutlayers__ret__array));
+        }
+
+        int cut_fade_out(const std::string &layer_name_, float duration_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
+        }
+
+        int cut_fade_out(int layer_, float duration_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__scalar__scalar__ret__nothing, static_cast<float>(layer_), duration_);
+        }
+
+        int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cutobj__string__array__ret__scalar, layer_name_, params_right);
+        }
+
+        int cut_obj(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cutobj__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+        }
+
+        int cut_rsc(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cutrsc__string__array__ret__scalar, layer_name_, params_right);
+        }
+
+        int cut_rsc(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                class_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cutrsc__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+        }
+
+        int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                text_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cuttext__string__array__ret__scalar, layer_name_, params_right);
+        }
+
+        int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_) {
+            game_value params_right({
+                text_,
+                type_,
+                speed_,
+                show_on_map_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__cuttext__scalar__array__ret__nothing, static_cast<float>(layer_), params_right);
+        }
+
+        void title_fade_out(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__titlefadeout__scalar__ret__nothing, value_);
+        }
+
+        bool open_dlc_page(float value_) {
+            return __helpers::__bool_unary_number(__sqf::unary__opendlcpage__scalar__ret__bool, value_);
+        }
+
+        bool open_youtube_video(const std::string &value_) {
+            return __helpers::__bool_unary_string(__sqf::unary__openyoutubevideo__string__ret__bool, value_);
+        }
+
+        bool open_map(bool value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__openmap__bool__ret__bool, value_);
+        }
+
+        bool open_map(bool show_, bool forced_) {
+            game_value args({
+                show_,
+                forced_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__openmap__array__ret__bool, args);
+        }
+
+        bool show_subtitles(bool value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__showsubtitles__bool__ret__bool, value_);
+        }
+
+        void create_gear_dialog(const object &unit_, const std::string &resource_) {
+            game_value params({
+                unit_,
+                resource_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__creategeardialog__array__ret__nothing, params);
+        }
+
+        bool dialog() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__dialog__ret__bool);
+        }
+
+        void disable_serialization() {
+            __helpers::__empty_nular(__sqf::nular__disableserialization__ret__nothing);
+        }
+
+        display display_null() {
+            return __helpers::__retrieve_nular_display(__sqf::nular__displaynull__ret__display);
+        }
+
+        void enable_end_dialog() {
+            __helpers::__empty_nular(__sqf::nular__enableenddialog__ret__nothing);
+        }
+
+        float pixel_h() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__pixelh__ret__scalar);
+        }
+
+        float pixel_w() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__pixelw__ret__scalar);
+        }
+
+        float pixel_grid() {
+            return host::functions.invoke_raw_nular(__sqf::nular__pixelgrid__ret__scalar);
+        }
+
+        float pixel_grid_base() {
+            return host::functions.invoke_raw_nular(__sqf::nular__pixelgridbase__ret__scalar);
+        }
+
+        float pixel_grid_no_ui_scale() {
+            return host::functions.invoke_raw_nular(__sqf::nular__pixelgridnouiscale__ret__scalar);
+        }
+
+        int shown_score_table() {
+            return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__shownscoretable__ret__scalar));
+        }
+
+        void end_loading_screen() {
+            __helpers::__empty_nular(__sqf::nular__endloadingscreen__ret__nothing);
+        }
+
+        void set_compass_oscillation(float angle_, float freq_min_, float freq_max_) {
+            game_value params({
+                angle_,
+                freq_min_,
+                freq_max_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setcompassoscillation__array__ret__nothing, params);
+        }
+
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object & obj_) {
+            game_value params({
+                min_speed_,
+                max_speed_,
+                min_alt_,
+                max_alt_,
+                min_dir_,
+                max_dir_,
+                obj_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__sethudmovementlevels__array__ret__nothing, params);
+        }
+
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3& pos_) {
+            game_value params({
+                min_speed_,
+                max_speed_,
+                min_alt_,
+                max_alt_,
+                min_dir_,
+                max_dir_,
+                pos_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__sethudmovementlevels__array__ret__nothing, params);
+        }
+
+        void start_loading_screen(const std::string& text_) {
+            game_value params({
+                text_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__startloadingscreen__array__ret__nothing, params);
+        }
+
+        void start_loading_screen(const std::string& text_, const std::string& resource_) {
+            game_value params({
+                text_,
+                resource_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__startloadingscreen__array__ret__nothing, params);
+        }
+
+        display create_mission_display(const display &display_, const std::string &mission_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__createmissiondisplay__display__array__ret__display, display_, mission_);
+        }
+
+        display create_mp_campaign_display(const display &display_, const std::string &mission_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__creatempcampaigndisplay__display__string__ret__nothing, display_, mission_);
+        }
+
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+        }
+
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__displayaddeventhandler__display__array__ret__scalar, display_, params_right);
+        }
+
+        void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_) {
+            game_value params_right({
+                event_name_,
+                static_cast<float>(id_)
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayremoveeventhandler__display__array__ret__nothing, display_, params_right);
+        }
+
+        void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_) {
+            game_value params_right({
+                event_name_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__displayseteventhandler__display__array__ret__nothing, display_, params_right);
+        }
+
+        void display_remove_all_event_handlers(const std::string& value0_, const display &value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__displayremovealleventhandlers__display__string__ret__nothing, value0_, value1_);
+        }
+
+        display find_display(float value_) {
+            return display(host::functions.invoke_raw_unary(__sqf::unary__finddisplay__scalar__ret__display, value_));
+        }
+
+        bool is_tut_hints_enabled() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__istuthintsenabled__ret__bool);
+        }
+
+        void hint_c(const std::string &value_) {
+            __helpers::__empty_unary_string(__sqf::unary__hintc__string__ret__nothing, value_);
+        }
+
+        void hint_c(const std::string& value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__hintc__string__text__ret__nothing, value0_, value1_);
+            // Identical from intercept's side: binary__hintc__string__string__ret__nothing
+        }
+
+        void hint(const std::string &text_) {
+            __helpers::__empty_unary_string(__sqf::unary__hint__text_string__ret__nothing, text_);
+        }
+
+        void hint_cadet(const std::string &text_) {
+            __helpers::__empty_unary_string(__sqf::unary__hintcadet__text_string__ret__nothing, text_);
+        }
+
+        void hint_silent(const std::string &text_) {
+            __helpers::__empty_unary_string(__sqf::unary__hintsilent__text_string__ret__nothing, text_);
+        }
+
+        void hintc(const std::string& title_, std::vector<std::string> content_)
+        {
+            auto_array<game_value> ga_content(content_.begin(), content_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__hintc__string__array__ret__nothing, title_, std::move(ga_content));
+        }
+
+        void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_) {
+            game_value params({
+                text_,
+                color_,
+                icon_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__taskhint__array__ret__nothing, params);
+        }
+
         void map_anim_clear() {
             __helpers::__empty_nular(__sqf::nular__mapanimclear__ret__nothing);
         }

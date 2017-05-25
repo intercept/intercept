@@ -156,9 +156,7 @@ namespace intercept {
         /* potential namespace: core, create, teams */
         team_member create_team(const std::string &type_, const std::string &name_);
 
-        /* potential namespace: gui, ui */
-        void create_gear_dialog(const object &unit_, const std::string &resource_);
-
+        
         /* potential namespace: misc */
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         void action(const object &unit_, const std::vector<game_value> &action_array_);
@@ -456,12 +454,7 @@ namespace intercept {
         object cursor_target();
         
 
-        bool dialog();
-        display display_null();
-        void disable_serialization();
-        void enable_end_dialog();
-        void end_loading_screen();
-       
+        
         float difficulty();
         bool difficulty_enabled_rtd();
         void disable_debriefing_stats();
@@ -487,7 +480,6 @@ namespace intercept {
         bool is_steam_mission();
         bool is_stream_friendly_ui_enabled();
         bool is_stress_damage_enabled();
-        bool is_tut_hints_enabled();
         std::string language();
         std::vector<rv_credit> library_credits();
         std::vector<std::string> library_disclaimers();
@@ -500,8 +492,6 @@ namespace intercept {
         float music_volume();
         float particles_quality();
         float pi();
-        float pixel_h();
-        float pixel_w();
         std::vector<object> playable_units();
         object player();
         float player_respawn_time();
@@ -602,7 +592,6 @@ namespace intercept {
         std::string faction(const object &value_);
         void fail_mission(const std::string &value_);
         void fill_weapons_from_pool(const object &value_);
-        display find_display(float value_);
         
         object flag(const object &value_);
         object flag_owner(const object &value_);
@@ -653,7 +642,6 @@ namespace intercept {
         void hide_body(const object &value_);
         void hide_object(const object &value_);
         void hide_object_global(const object &value_);
-        void hint_c(const std::string &value_);
         std::string hmd(const object &value_);
         std::string image(const std::string &value_);
         std::string incapacitated_state(const object &value_);
@@ -804,7 +792,6 @@ namespace intercept {
         void stop_engine_rtd(const object &value_);
         bool stopped(const object &value_);
         std::string text(const std::string &value_);
-        void title_fade_out(float value_);
         
 
         std::string type_of(const object &value_);
@@ -849,7 +836,6 @@ namespace intercept {
         void disable_conversation(const object &value0_, bool value1_);
         void disable_nvgequipment(const object &value0_, bool value1_);
         void disable_tiequipment(const object &value0_, bool value1_);
-        void display_remove_all_event_handlers(const std::string& value0_, const display &value1_);
         float door_phase(const object &value0_, const std::string& value1_);
         float empty_positions(const object &value0_, const std::string& value1_);
         void enable_aim_precision(const object &value0_, bool value1_);
@@ -879,8 +865,7 @@ namespace intercept {
         
         void hide_object(const object &value0_, bool value1_);
         void hide_object_global(const object &value0_, bool value1_);
-        void hint_c(const std::string& value0_, const std::string& value1_);
-
+        
         void inflame(const object &value0_, bool value1_);
         bool is_flashlight_on(const object &value0_, const std::string& value1_);
         bool is_irlaser_on(const object &value0_, const std::string& value1_);
@@ -1047,10 +1032,7 @@ namespace intercept {
         std::vector<object> near_objects(const vector3 &pos_, const std::string &type_, float radius_);
         std::vector<object> near_objects(const object &object_, const std::string &type_, float radius_);
 
-        void hint(const std::string &text_);
-        void hint_cadet(const std::string &text_);
-        void hint_silent(const std::string &text_);
-
+        
 
         std::vector<object> roads_connected_to(const object &obj_);
         std::vector<object> rope_attached_objects(const object &obj_);
@@ -1139,8 +1121,7 @@ namespace intercept {
 
         
 
-        void hintc(const std::string& title_, std::vector<std::string> content_);
-
+        
 
 
 
@@ -1338,14 +1319,11 @@ namespace intercept {
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, const std::string &expression_, float precision_, float max_results_);
 
 
-        void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
-
+        
         
 
         void set_group_icons_visible(bool map_, bool hud_);
         std::vector<bool> group_icons_visible();
-        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
-        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3 &pos_);
         void set_local_wind_params(float strength_, float diameter_);
         void set_mouse_position(float x_, float y_);
         float set_music_event_handler(const std::string &type_, const std::string &command_);
@@ -1358,8 +1336,6 @@ namespace intercept {
         
 
         std::vector<std::string> squad_params(const object& unit_);
-        void start_loading_screen(const std::string& text_);
-        void start_loading_screen(const std::string& text_, const std::string& resource_);
         std::vector<std::string> support_info(const std::string& mask_);
         bool surface_is_water(const vector3& pos_);
         vector3 surface_normal(const vector3& pos_);
@@ -1389,8 +1365,7 @@ namespace intercept {
 
 
         std::vector<std::string> task_description(const task& task_);
-        void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_);
-
+        
         struct rv_expected_destination {
             vector3 position;
             std::string planning_mode;
@@ -1430,11 +1405,6 @@ namespace intercept {
 
 
         std::string format(const std::vector<game_value> &params_);
-        bool open_dlc_page(float value_);
-        bool open_map(bool value_);
-        bool open_youtube_video(const std::string &value_);
-        bool show_subtitles(bool value_);
-        bool open_map(bool show_, bool forced_);
         bool sling_load_assistant_shown();
 
 
@@ -1520,7 +1490,6 @@ namespace intercept {
         std::vector<rv_waypoint> waypoints(const group &group_);
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
-        std::vector<std::string> all_cut_layers();
         std::vector<script> diag_active_scripts();
         bool dynamic_simulation_system_enabled();
         std::pair<bool, bool> environment_enabled();
@@ -1530,10 +1499,6 @@ namespace intercept {
         bool is_multiplayer_solo();
         bool is_remote_executed();
         bool is_remote_executed_jip();
-        float pixel_grid();
-        float pixel_grid_base();
-        float pixel_grid_no_ui_scale();
-        int shown_score_table();
         
         
         bool user_input_disabled();
@@ -1623,31 +1588,17 @@ namespace intercept {
         int count_friendly(const object &unit_, const std::vector<object> &units_);
         int count_type(const std::string &type_, const std::vector<object> &objects_);
         int count_unknown(const object &unit_, const std::vector<object> &units_);
-        display create_mission_display(const display &display_, const std::string &mission_);
-        display create_mp_campaign_display(const display &display_, const std::string &mission_);
         task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
         object create_site(const std::string &type_, const vector3 &pos_);
         std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        int cut_fade_out(const std::string &layer_name_, float duration_);
-        int cut_fade_out(int layer_, float duration_);
-        int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
-        int cut_obj(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
-        int cut_rsc(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
-        int cut_rsc(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
-        int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
-        int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
         void delete_editor_object(const control &map_, const std::string &object_);
         void delete_group_when_empty(const group &group_, bool delete_);
         void delete_resources(const team_member &team_member_, const std::vector<std::string> resources_);
         void delete_vehicle_crew(const object &vehicle_, const object &unit_);
         void disable_collision_with(const object &object1_, const object &object2_);
         void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_);
-        int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_);
-        int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
-        void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_);
-        void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_);
         float distance_2d(const object &object1_, const object &object2_);
         float distance_2d(const vector3 &position1_, const vector3 &position2_);
         float distance_2d(const object &object_, const vector3 &position_);

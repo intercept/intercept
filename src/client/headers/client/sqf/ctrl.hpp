@@ -365,8 +365,64 @@ namespace intercept {
         void load_overlay(const control &a_control_, const config & a_config_);
         void new_overlay(const control &a_control_, const config & a_config_);
 
+        //cut
+        //NULAR -- https://github.com/intercept/intercept/issues/13
+        std::vector<std::string> all_cut_layers();
+        int cut_fade_out(const std::string &layer_name_, float duration_);
+        int cut_fade_out(int layer_, float duration_);
+        int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_obj(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_rsc(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_rsc(int layer_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_text(const std::string &layer_name_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
+        int cut_text(int layer_, const std::string &text_, const std::string &type_, float speed_, bool show_on_map_);
+
+        void title_fade_out(float value_);
 
 
+        bool open_dlc_page(float value_);
+        bool open_map(bool value_);
+        bool open_youtube_video(const std::string &value_);
+        bool show_subtitles(bool value_);
+        bool open_map(bool show_, bool forced_);
+
+        void create_gear_dialog(const object &unit_, const std::string &resource_);
+        bool dialog();
+        display display_null();
+        void disable_serialization();
+        void enable_end_dialog();
+        void end_loading_screen();
+        float pixel_h();
+        float pixel_w();
+
+        void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
+        void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3 &pos_);
+        void start_loading_screen(const std::string& text_);
+        void start_loading_screen(const std::string& text_, const std::string& resource_);
+        display create_mission_display(const display &display_, const std::string &mission_);
+        display create_mp_campaign_display(const display &display_, const std::string &mission_);
+
+        float pixel_grid();
+        float pixel_grid_base();
+        float pixel_grid_no_ui_scale();
+        int shown_score_table();
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const std::string &code_);
+        int display_add_event_handler(const display &display_, const std::string &event_name_, const code &code_);
+        void display_remove_eventhandler(const display &display_, const std::string &event_name_, int id_);
+        void display_set_eventhandler(const display &display_, const std::string &event_name_, const std::string &code_);
+        void display_remove_all_event_handlers(const std::string& value0_, const display &value1_);
+        display find_display(float value_);
+
+
+        bool is_tut_hints_enabled();
+        void hint_c(const std::string &value_);
+        void hint_c(const std::string& value0_, const std::string& value1_);
+        void hint(const std::string &text_);
+        void hint_cadet(const std::string &text_);
+        void hint_silent(const std::string &text_);
+        void hintc(const std::string& title_, std::vector<std::string> content_);
+        void task_hint(const std::string& text_, const rv_color& color_, const std::string& icon_);
 
 
         bool visible_watch();

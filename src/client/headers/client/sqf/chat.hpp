@@ -47,5 +47,17 @@ namespace intercept {
         std::pair<bool, bool> channel_enabled(float channel_);
         float get_player_channel(const object &value_);
         bool set_current_channel(float value_);
+
+        void radio_channel_add(int index_, const std::vector<object> &units_);
+        void radio_channel_remove(int index_, const std::vector<object> &units_);
+        void clear_radio();
+        void enable_radio(bool value_);
+        void global_radio(const object &value0_, const std::string& value1_);
+        void set_radio_msg(float value0_, const std::string& value1_);
+        void vehicle_radio(const object &value0_, const std::string& value1_);
+        void custom_radio(const object &unit_, int channel_, std::string &message_);
+
+
+
     }
 }

@@ -478,7 +478,6 @@ namespace intercept {
         void clear_forces_rtd();
         void clear_item_pool();
         void clear_magazine_pool();
-        void clear_radio();
         void clear_weapon_pool();
         float client_owner();
         std::string commanding_menu();
@@ -632,7 +631,6 @@ namespace intercept {
         void enable_caustics(bool value_);
         void enable_diag_legend(bool value_);
         void enable_engine_artillery(bool value_);
-        void enable_radio(bool value_);
         
 
         
@@ -940,8 +938,7 @@ namespace intercept {
         float get_hit_point_damage(const object &value0_, const std::string& value1_);
 
         float get_speed(const object &value0_, const std::string& value1_);
-        void global_radio(const object &value0_, const std::string& value1_);
-
+        
         void hc_remove_group(const object &value0_, const group &value1_);
         void hide_object(const object &value0_, bool value1_);
         void hide_object_global(const object &value0_, bool value1_);
@@ -1044,7 +1041,6 @@ namespace intercept {
         void set_oxygen_remaining(const object &value0_, float value1_);
         void set_pilot_light(const object &value0_, bool value1_);
         void set_pitch(const object &value0_, float value1_);
-        void set_radio_msg(float value0_, const std::string& value1_);
         void set_random_lip(const object &value0_, bool value1_);
         void set_rank(const object &value0_, const std::string& value1_);
         void set_repair_cargo(const object &value0_, float value1_);
@@ -1087,8 +1083,7 @@ namespace intercept {
 
         bool unregister_task(const team_member &value0_, const std::string& value1_);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
-        void vehicle_radio(const object &value0_, const std::string& value1_);
-
+        
         void delete_team(const team_member &value_);
         std::string formation(const team_member &value_);
         bool from_editor(const team_member &value_);
@@ -1731,7 +1726,6 @@ namespace intercept {
         std::string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        void custom_radio(const object &unit_, int channel_, std::string &message_);
         int cut_fade_out(const std::string &layer_name_, float duration_);
         int cut_fade_out(int layer_, float duration_);
         int cut_obj(const std::string &layer_name_, const std::string &class_, const std::string &type_, float speed_, bool show_on_map_);
@@ -1893,8 +1887,6 @@ namespace intercept {
         bool preload_object(float distance_, const object &object_);
         bool preload_object(float distance_, const std::string &class_name_);
         int push_back_unique(const std::vector<game_value> &array_, const game_value &element_);
-        void radio_channel_add(int index_, const std::vector<object> &units_);
-        void radio_channel_remove(int index_, const std::vector<object> &units_);
         float random(float seed_, float x_, std::optional<float> y_);
         game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
@@ -2088,6 +2080,8 @@ namespace intercept {
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
         void set_wp_pos(const group &group_, int index_, const vector2 &position_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
+        
+        //is this supposed to be here?
         void binary__sideradio__object_array__string__ret__nothing(const object &unit_, const std::string &radio_name_);
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, const std::string &identity_, const std::string &radio_name_);
         void slider_set_range(const control &slider_, float min_, float max_);

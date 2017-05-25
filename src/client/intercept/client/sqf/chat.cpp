@@ -102,5 +102,46 @@ namespace intercept {
         bool set_current_channel(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__setcurrentchannel__scalar__ret__bool, value_);
         }
+
+        void radio_channel_add(int index_, const std::vector<object> &units_) {
+            auto_array<game_value> units({ units_.begin(), units_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__radiochanneladd__scalar__array__ret__nothing, index_, std::move(units));
+        }
+
+        void radio_channel_remove(int index_, const std::vector<object> &units_) {
+            auto_array<game_value> units({ units_.begin(), units_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__radiochannelremove__scalar__array__ret__nothing, index_, std::move(units));
+        }
+
+        void clear_radio() {
+            __helpers::__empty_nular(__sqf::nular__clearradio__ret__nothing);
+        }
+
+        void enable_radio(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__enableradio__bool__ret__nothing, value_);
+        }
+
+        void global_radio(const object &value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__globalradio__object__string__ret__nothing, value0_, value1_);
+        }
+
+        void set_radio_msg(float value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setradiomsg__scalar__string__ret__nothing, value0_, value1_);
+        }
+
+        void vehicle_radio(const object &value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__vehicleradio__object__string__ret__nothing, value0_, value1_);
+        }
+
+        void custom_radio(const object &unit_, int channel_, std::string &message_) {
+            game_value params_right({
+                static_cast<float>(channel_),
+                message_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__customradio__object__array__ret__nothing, unit_, params_right);
+        }
     }
 }

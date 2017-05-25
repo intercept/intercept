@@ -1137,10 +1137,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             __helpers::__empty_nular(__sqf::nular__clearmagazinepool__ret__nothing);
         }
 
-        void clear_radio() {
-            __helpers::__empty_nular(__sqf::nular__clearradio__ret__nothing);
-        }
-
         void clear_weapon_pool() {
             __helpers::__empty_nular(__sqf::nular__clearweaponpool__ret__nothing);
         }
@@ -1702,10 +1698,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void enable_engine_artillery(bool value_) {
             __helpers::__empty_unary_bool(__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
-        }
-
-        void enable_radio(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enableradio__bool__ret__nothing, value_);
         }
 
         void enable_sentences(bool value_) {
@@ -2787,10 +2779,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__getspeed__object__string__ret__scalar, value0_, value1_);
         }
 
-        void global_radio(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__globalradio__object__string__ret__nothing, value0_, value1_);
-        }
-
         void hc_remove_group(const object &value0_, const group &value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__hcremovegroup__object__group__ret__nothing, value0_, value1_);
         }
@@ -3152,10 +3140,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_binary(__sqf::binary__setpitch__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_radio_msg(float value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setradiomsg__scalar__string__ret__nothing, value0_, value1_);
-        }
-
         void set_random_lip(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setrandomlip__object__bool__ret__nothing, value0_, value1_);
         }
@@ -3285,10 +3269,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
 
         void use_audio_time_for_moves(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__useaudiotimeformoves__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void vehicle_radio(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__vehicleradio__object__string__ret__nothing, value0_, value1_);
         }
 
         side create_center(const side & side_) {
@@ -5731,15 +5711,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             return host::functions.invoke_raw_binary(__sqf::binary__currentweaponturret__object__array__ret__string, vehicle_, std::move(turret_path));
         }
 
-        void custom_radio(const object &unit_, int channel_, std::string &message_) {
-            game_value params_right({
-                static_cast<float>(channel_),
-                message_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__customradio__object__array__ret__nothing, unit_, params_right);
-        }
-
         int cut_fade_out(const std::string &layer_name_, float duration_) {
             return host::functions.invoke_raw_binary(__sqf::binary__cutfadeout__string__scalar__ret__scalar, layer_name_, duration_);
         }
@@ -6991,18 +6962,6 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             auto_array<game_value> base_array({ array_.begin(), array_.end() });
 
             return host::functions.invoke_raw_binary(__sqf::binary__pushbackunique__array__any__ret__scalar, std::move(base_array), element_);
-        }
-
-        void radio_channel_add(int index_, const std::vector<object> &units_) {
-            auto_array<game_value> units({ units_.begin(), units_.end() });
-
-            host::functions.invoke_raw_binary(__sqf::binary__radiochanneladd__scalar__array__ret__nothing, index_ , std::move(units));
-        }
-
-        void radio_channel_remove(int index_, const std::vector<object> &units_) {
-            auto_array<game_value> units({ units_.begin(), units_.end() });
-
-            host::functions.invoke_raw_binary(__sqf::binary__radiochannelremove__scalar__array__ret__nothing, index_, std::move(units));
         }
 
         float random(float seed_, float x_, std::optional<float> y_) {

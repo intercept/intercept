@@ -161,5 +161,32 @@ namespace intercept {
         std::vector<object> object_curators(const object &obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__objectcurators__object__ret__array, obj_));
         }
+
+        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_) {
+            auto_array<game_value> addons(addons_.begin(), addons_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__removecuratoraddons__object__array__ret__nothing, curator_module_, std::move(addons));
+        }
+
+        void remove_curator_editable_objects(const object &curator_module_, const std::vector<object> &objects_, bool &remove_crew_) {
+            auto_array<game_value> objects(objects_.begin(), objects_.end());
+            game_value params_right({
+                std::move(objects),
+                remove_crew_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removecuratoreditableobjects__object__array__ret__nothing, curator_module_, params_right);
+        }
+
+        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_) {
+            if (coef_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<bool>(coef_) }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<float>(coef_) });
+        }
+
+        void assign_curator(const object& player_, const object& curator_module_) {
+            host::functions.invoke_raw_binary(__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
+        }
+
     }
 }

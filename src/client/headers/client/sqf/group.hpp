@@ -75,5 +75,9 @@ namespace intercept {
         side get_side(const group &group_);
         std::vector<std::string> all_variables(const group &value_);
         bool is_null(const group &value_);
+
+        bool is_group_deleted_when_empty(const group &group_);
+        void delete_group_when_empty(const group &group_, bool delete_);
+
     }
 }

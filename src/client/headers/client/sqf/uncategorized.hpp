@@ -143,8 +143,7 @@ namespace intercept {
         /* potential namespace: ai, group, unit */
         std::string combat_mode(const object &loc_);
 
-        void assign_curator(const object& player_, const object& curator_module_);
-
+        
         
 
         /* potential namespace: core, create */
@@ -1176,7 +1175,7 @@ namespace intercept {
 
         group get_group(const object &unit_); // originally "group", but is already a type
 
-        vector3 get_wp_pos(const group &group_, int index_);
+        
 
         
 
@@ -1453,7 +1452,6 @@ namespace intercept {
         std::vector<std::string> get_mission_layer_entities(const std::string &layername_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         std::vector<object> get_vehicle_cargo(const object &vehicle_);
-        bool is_group_deleted_when_empty(const group &group_);
         bool is_simple_object(const object &object_);
         object is_vehicle_cargo(const object &vehicle_);
         int lnb_add_row(int idc_, const std::vector<std::string> &items_);
@@ -1594,7 +1592,6 @@ namespace intercept {
         std::string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         std::string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void delete_editor_object(const control &map_, const std::string &object_);
-        void delete_group_when_empty(const group &group_, bool delete_);
         void delete_resources(const team_member &team_member_, const std::vector<std::string> resources_);
         void delete_vehicle_crew(const object &vehicle_, const object &unit_);
         void disable_collision_with(const object &object1_, const object &object2_);
@@ -1704,7 +1701,6 @@ namespace intercept {
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
         bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
-        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
         void look_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> units_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void look_at_pos(const control &map_, const vector3 &position_);
         std::vector<std::string> magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
@@ -1729,8 +1725,6 @@ namespace intercept {
         game_value remote_exec(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         
-        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_);
-        void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
         
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
@@ -1791,7 +1785,6 @@ namespace intercept {
         //#TODO take enum 
         void set_formation(std::variant<group, object> group_, const std::string& mode_);
         void set_convoy_seperation(const object& object_, float distance_);
-        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_);
         void set_current_task(const object& object_, const task& task_);
 
         void set_debriefing_text(const std::string& endType_, const std::string& title_, const std::string& description_);
@@ -1904,7 +1897,6 @@ namespace intercept {
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_);
         void set_waves(float time_, float waves_value_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
-        void set_wp_pos(const group &group_, int index_, const vector2 &position_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
         
         //is this supposed to be here?

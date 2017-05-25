@@ -136,5 +136,13 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__isnull__group__ret__bool, value_);
         }
 
+        bool is_group_deleted_when_empty(const group &group_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isgroupdeletedwhenempty__group__ret__bool, group_);
+        }
+
+        void delete_group_when_empty(const group &group_, bool delete_) {
+            host::functions.invoke_raw_binary(__sqf::binary__deletegroupwhenempty__group__bool__ret__nothing, group_, delete_);
+        }
+
     }
 }

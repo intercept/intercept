@@ -3342,10 +3342,7 @@ namespace intercept {
 
         
 
-        void assign_curator(const object& player_, const object& curator_module_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
-        }
-
+        
 
 
         bool can_sling_load(const object& vehicle_, const object& cargo_) {
@@ -3593,15 +3590,6 @@ namespace intercept {
 
         group get_group(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__group__object__ret__group, unit_);
-        }
-
-        vector3 get_wp_pos(const group &group_, int index_) {
-            game_value params({
-                group_,
-                static_cast<float>(index_)
-            });
-
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params));
         }
 
         void do_stop(const object &unit_) {
@@ -4534,10 +4522,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
         }
 
-        bool is_group_deleted_when_empty(const group &group_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isgroupdeletedwhenempty__group__ret__bool, group_);
-        }
-
+        
         bool is_simple_object(const object &object_) {
             return host::functions.invoke_raw_unary(__sqf::unary__issimpleobject__object__ret__bool, object_);
         }
@@ -5052,10 +5037,6 @@ namespace intercept {
 
         void delete_editor_object(const control &map_, const std::string &object_) {
             host::functions.invoke_raw_binary(__sqf::binary__deleteeditorobject__control__string__ret__any, map_, object_);
-        }
-
-        void delete_group_when_empty(const group &group_, bool delete_) {
-            host::functions.invoke_raw_binary(__sqf::binary__deletegroupwhenempty__group__bool__ret__nothing, group_, delete_);
         }
 
         void delete_resources(const team_member &team_member_, const std::vector<std::string> resources_) {
@@ -5889,16 +5870,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lockturret__object__array__ret__nothing, vehicle_, params_right);
         }
 
-        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_) {
-            game_value param_left;
-            
-            switch (target_.index()) {
-                case 0: param_left = std::get<0>(target_).get(); break;
-                case 1: param_left = std::get<1>(target_).get(); break;
-            }
-
-            host::functions.invoke_raw_binary(__sqf::binary__lockwp__object_group__bool__ret__nothing, param_left, lock_);
-        }
+        
 
         void look_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> units_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_) {
             game_value param_left;
@@ -6111,22 +6083,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
 
-        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_) {
-            auto_array<game_value> addons(addons_.begin(), addons_.end());
-                                        
-            host::functions.invoke_raw_binary(__sqf::binary__removecuratoraddons__object__array__ret__nothing, curator_module_, std::move(addons));
-        }
-
-        void remove_curator_editable_objects(const object &curator_module_, const std::vector<object> &objects_, bool &remove_crew_) {
-            auto_array<game_value> objects(objects_.begin(), objects_.end());
-            game_value params_right({
-                std::move(objects),
-                remove_crew_
-            });
-                                            
-            host::functions.invoke_raw_binary(__sqf::binary__removecuratoreditableobjects__object__array__ret__nothing, curator_module_, params_right);
-        }
-
+        
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier) {
             game_value params_right({
                 object_,
@@ -6388,12 +6345,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setconvoyseparation__object__scalar__ret__nothing, object_, distance_);
         }
 
-        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_) {
-            if (coef_.index() == 0)
-                host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<bool>(coef_) }); return;
-            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<float>(coef_) });
-        }
-
+        
         void set_current_task(const object& object_, const task& task_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcurrenttask__object__task__ret__nothing, object_, task_);
         }
@@ -6818,9 +6770,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setweaponreloadingtime__object__array__ret__bool, vehicle_, { gunner_, muzzle_class_, reload_time_ });
         }
 
-        void set_wp_pos(const group &group_, int index_, const vector2 &position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setwppos__array__array__ret__nothing, { group_, index_ }, position_);
-        }
+        
 
         //#TODO: Find out which params are to the right
         game_value shown_editor_object(const control &map_, const game_value &params_right_) {

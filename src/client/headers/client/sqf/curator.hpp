@@ -54,5 +54,11 @@ namespace intercept {
         std::vector<object> curator_editable_objects(const object &curator_module_);
         std::vector<object> curator_registered_objects(const object &curator_);
         std::vector<object> object_curators(const object &obj_);
+
+        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_);
+        void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
+        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_);
+        void assign_curator(const object& player_, const object& curator_module_);
+
     }
 }

@@ -245,8 +245,29 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__enableuavwaypoints__object__bool__ret__nothing, enable_, uav_);
         }
 
+        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_) {
+            game_value param_left;
 
+            switch (target_.index()) {
+            case 0: param_left = std::get<0>(target_).get(); break;
+            case 1: param_left = std::get<1>(target_).get(); break;
+            }
 
+            host::functions.invoke_raw_binary(__sqf::binary__lockwp__object_group__bool__ret__nothing, param_left, lock_);
+        }
+
+        void set_wp_pos(const group &group_, int index_, const vector2 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwppos__array__array__ret__nothing, { group_, index_ }, position_);
+        }
+
+        vector3 get_wp_pos(const group &group_, int index_) {
+            game_value params({
+                group_,
+                static_cast<float>(index_)
+            });
+
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params));
+        }
 
     }
 }

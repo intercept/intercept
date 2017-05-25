@@ -472,5 +472,10 @@ namespace intercept {
         bool waypoints_enabled_uav(const object &value_);
         void enable_uav_waypoints(object & uav_, bool enable_);
 
+
+        void set_wp_pos(const group &group_, int index_, const vector2 &position_);
+        vector3 get_wp_pos(const group &group_, int index_);
+        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
+
     }
 }

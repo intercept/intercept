@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "shared.hpp"
 #include "types.hpp"
-#include <vector>
 
 namespace intercept {
     namespace types {
@@ -107,7 +106,7 @@ namespace intercept {
                 alpha(alpha_) {}
         };
 
-        typedef std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> t_sqf_in_area_position;
+        typedef std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> > t_sqf_in_area_position;
 
         struct rv_waypoint {
             group group;

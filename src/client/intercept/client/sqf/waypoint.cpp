@@ -269,5 +269,170 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params));
         }
 
+        std::vector<rv_waypoint> waypoints(const object &player_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
+
+            std::vector<rv_waypoint> waypoints;
+            for (size_t i = 0; i < res.size(); i++) {
+                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+            }
+
+            return waypoints;
+        }
+
+        std::vector<rv_waypoint> waypoints(const group &group_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
+
+            std::vector<rv_waypoint> waypoints;
+            for (size_t i = 0; i < res.size(); i++) {
+                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+            }
+
+            return waypoints;
+        }
+
+        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_) {
+            game_value param_left;
+            switch (unit_.index()) {
+            case 0: param_left = std::get<0>(unit_); break;
+            case 1: param_left = { std::get<1>(unit_).group, std::get<1>(unit_).index }; break;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);
+        }
+
+        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
+        }
+
+
+
+
+
+
+
+
+
+        //Trigger
+
+        rv_trigger_area trigger_area(const object& trigger_) {
+            return rv_trigger_area(host::functions.invoke_raw_unary(__sqf::unary__triggerarea__object__ret__array, trigger_));
+        }
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_) {
+            return rv_trigger_timeout(host::functions.invoke_raw_unary(__sqf::unary__triggertimeout__object__ret__array, trigger_));
+        }
+        std::vector<object> list(const object& trigger_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__list__object__ret__array, trigger_);
+
+            if (ret.size() == 0) return {};
+
+            return __helpers::__convert_to_objects_vector(ret);
+        }
+        void trigger_attach_object(const object &value0_, float value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);
+        }
+        void set_trigger_text(const object &value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggertext__object__string__ret__nothing, value0_, value1_);
+        }
+
+        void set_trigger_type(const object &value0_, const std::string& value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggertype__object__string__ret__nothing, value0_, value1_);
+        }
+        bool trigger_activated(const object &value_) {
+            return __helpers::__bool_unary_object(__sqf::unary__triggeractivated__object__ret__bool, value_);
+        }
+
+        object trigger_attached_vehicle(const object &value_) {
+            return __helpers::__object_unary_object(__sqf::unary__triggerattachedvehicle__object__ret__object, value_);
+        }
+
+        std::string trigger_text(const object &value_) {
+            return __helpers::__string_unary_object(__sqf::unary__triggertext__object__ret__string, value_);
+        }
+
+        float trigger_timeout_current(const object &value_) {
+            return __helpers::__number_unary_object(__sqf::unary__triggertimeoutcurrent__object__ret__scalar, value_);
+        }
+
+        std::string trigger_type(const object &value_) {
+            return __helpers::__string_unary_object(__sqf::unary__triggertype__object__ret__string, value_);
+        }
+        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_/* = true*/) {
+            game_value args({
+                type_,
+                pos_,
+                make_global_
+            });
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
+        }
+
+        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
+            game_value args({
+                type_,
+                pos_,
+                make_global_
+            });
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
+        }
+
+        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, { by_, repeating_ });
+        }
+
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            if (radius_z_.has_value())
+                host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_, *radius_z_ }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_ });
+        }
+
+        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerstatements__object__array__ret__nothing, trigger_, { condition_, activation_, deactivation_ });
+        }
+
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggertimeout__object__array__ret__nothing, trigger_, { min_, mid_, max_, interruptable_ });
+        }
+
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_) {
+            auto_array<game_value> waypoints;
+            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group, waypoint.index });
+
+            host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
+        }
+
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerattachvehicle__object__array__ret__nothing, trigger_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
+        }
+
+
+        //both
+        void set_music_effect(const object &trigger_, const std::string &track_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, trigger_, track_);
+        }
+
+        void set_music_effect(const group &group_, int index_, const std::string &track_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, { group_, index_ }, track_);
+        }
+
+        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, trigger, { sound_, voice_, sound_env_, sound_det_ });
+        }
+
+        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, { group, index_ }, { sound_, voice_, sound_env_, sound_det_ });
+        }
+
+        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, trigger_, { type_, effect_, text_ });
+        }
+
+        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, { group_, index_ }, { type_, effect_, text_ });
+        }
+
+
     }
 }

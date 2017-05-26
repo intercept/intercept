@@ -477,5 +477,80 @@ namespace intercept {
         vector3 get_wp_pos(const group &group_, int index_);
         void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
 
+        std::vector<rv_waypoint> waypoints(const object &player_);
+        std::vector<rv_waypoint> waypoints(const group &group_);
+        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
+        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
+        void enable_uavwaypoints(const object &value0_, bool value1_);
+
+
+
+
+
+
+
+        //TRIGGERS
+        //Triggers
+
+        struct rv_trigger_area {
+            float x;
+            float y;
+            float angle;
+            bool rectangle;
+            float z; // since Arma 3 v1.59.135137
+
+            rv_trigger_area(const game_value &ret_game_value_) :
+                x(ret_game_value_[0]),
+                y(ret_game_value_[1]),
+                angle(ret_game_value_[2]),
+                rectangle(ret_game_value_[3]),
+                z(ret_game_value_[4]) {}
+        };
+
+        rv_trigger_area trigger_area(const object& trigger_);
+
+        struct rv_trigger_timeout {
+            float time_min;
+            float time_mid;
+            float time_max;
+            bool interruptable;
+
+            rv_trigger_timeout(const game_value &ret_game_value_) :
+                time_min(ret_game_value_[0]),
+                time_mid(ret_game_value_[1]),
+                time_max(ret_game_value_[2]),
+                interruptable(ret_game_value_[3]) {}
+        };
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        std::vector<object> list(const object& trigger_);
+        void trigger_attach_object(const object &value0_, float value1_);
+        void set_trigger_text(const object &value0_, const std::string& value1_);
+        void set_trigger_type(const object &value0_, const std::string& value1_);
+        bool trigger_activated(const object &value_);
+        object trigger_attached_vehicle(const object &value_);
+        std::string trigger_text(const object &value_);
+        float trigger_timeout_current(const object &value_);
+        std::string trigger_type(const object &value_);
+        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
+        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
+
+        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
+
+
+        //both
+        void set_music_effect(const object &trigger_, const std::string &track_);
+        void set_music_effect(const group &group_, int index_, const std::string &track_);
+        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
+        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
+        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_);
+        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_);
+
     }
 }

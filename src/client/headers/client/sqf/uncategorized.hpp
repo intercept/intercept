@@ -813,7 +813,6 @@ namespace intercept {
         void enable_rope_attach(const object &value0_, bool value1_);
         
         void enable_stamina(const object &value0_, bool value1_);
-        void enable_uavwaypoints(const object &value0_, bool value1_);
         void engine_on(const object &value0_, bool value1_);
         void fire(const object &value0_, const std::string& value1_);
         void fly_in_height(const object &value0_, float value1_);
@@ -1369,12 +1368,6 @@ namespace intercept {
             std::string description_text;
         };
 
-        struct rv_waypoint {
-            group group;
-            int index;
-            //#TODO add to game_value conversion
-        };
-
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
@@ -1427,9 +1420,7 @@ namespace intercept {
         void use_ai_steering_component(bool use_);
         bool vehicle_cargo_enabled(const object &vehicle_);
         
-        std::vector<rv_waypoint> waypoints(const object &player_);
-        std::vector<rv_waypoint> waypoints(const group &group_);
-
+        
         //NULAR -- https://github.com/intercept/intercept/issues/13
         std::vector<script> diag_active_scripts();
 
@@ -1725,7 +1716,6 @@ namespace intercept {
         
 
         void set_editor_object_scope(const control &map_, const std::vector<std::string> &objects_, const std::string &editor_type_, const std::string &condition_, const std::string &scope_, bool sub_ordinates_also_);
-        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_);
         bool set_feature_type(const object &object_, int type_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
         void set_formation(const group &group_, const std::string &formation_);
@@ -1742,8 +1732,6 @@ namespace intercept {
         void set_lightnings(float time_, float lightnings_value_);
         void set_magazine_turret_ammo(const object &vehicle_, const std::string &magazine_class_, int ammo_count_, const std::vector<int> &turret_path_);
         void set_mass(const object &object_, float mass_, std::optional<float> time_);
-        void set_music_effect(const object &trigger_, const std::string &track_);
-        void set_music_effect(const group &group_, int index_, const std::string &track_);
         void set_name(const object &unit_, const std::string &name_, const std::string &first_name_, const std::string &last_name_);
         void set_name(const location &location_, const std::string &name_);
         game_value set_object_arguments(const control &map_, const std::string &object_, const std::vector<std::string> &values_);
@@ -1768,16 +1756,12 @@ namespace intercept {
         void set_size(const location &location_, float size_x_, float size_y_);
         void set_skill(const object &vehicle_, float skill_);
         bool set_sling_load(const object &vehicle_, const object &load_);
-        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
-        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_);
         void set_speech(const location &location_, const std::string &speech_);
         void set_speed_mode(const group &group_, const std::string &speed_mode_);
         void set_task_marker_offset(const object &task_, const vector3 &offset_);
         void set_task_result(const task &task_, const game_value &params_right);
         void set_task_state(const task &task_, const std::string &state_);
         void set_text(const location &location_, const std::string &text_);
-        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_);
-        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_);
         void set_type(const location &location_, const std::string &type_);
         void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_);
         void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
@@ -1809,7 +1793,6 @@ namespace intercept {
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
         void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_);
-        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
         std::vector<std::string> weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);

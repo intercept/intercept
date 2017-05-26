@@ -129,64 +129,6 @@ namespace intercept {
 
 
 
-
-
-
-
-        //Triggers
-
-        struct rv_trigger_area {
-            float x;
-            float y;
-            float angle;
-            bool rectangle;
-            float z; // since Arma 3 v1.59.135137
-
-            rv_trigger_area(const game_value &ret_game_value_) :
-                x(ret_game_value_[0]),
-                y(ret_game_value_[1]),
-                angle(ret_game_value_[2]),
-                rectangle(ret_game_value_[3]),
-                z(ret_game_value_[4]) {}
-        };
-
-        rv_trigger_area trigger_area(const object& trigger_);
-
-        struct rv_trigger_timeout {
-            float time_min;
-            float time_mid;
-            float time_max;
-            bool interruptable;
-
-            rv_trigger_timeout(const game_value &ret_game_value_) :
-                time_min(ret_game_value_[0]),
-                time_mid(ret_game_value_[1]),
-                time_max(ret_game_value_[2]),
-                interruptable(ret_game_value_[3]) {}
-        };
-
-        rv_trigger_timeout trigger_timeout(const object& trigger_);
-
-        std::vector<object> list(const object& trigger_);
-        void trigger_attach_object(const object &value0_, float value1_);
-        void set_trigger_text(const object &value0_, const std::string& value1_);
-        void set_trigger_type(const object &value0_, const std::string& value1_);
-        bool trigger_activated(const object &value_);
-        object trigger_attached_vehicle(const object &value_);
-        std::string trigger_text(const object &value_);
-        float trigger_timeout_current(const object &value_);
-        std::string trigger_type(const object &value_);
-        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
-        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
-
-        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
-        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
-        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
-        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
-        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
-        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
-
-
         //icons/draw
         void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);

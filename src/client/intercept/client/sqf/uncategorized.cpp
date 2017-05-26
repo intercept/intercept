@@ -4445,28 +4445,6 @@ namespace intercept {
            return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
         }
 
-        std::vector<rv_waypoint> waypoints(const object &player_) {
-            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
-
-            std::vector<rv_waypoint> waypoints;
-            for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
-            }
-
-            return waypoints;
-        }
-
-        std::vector<rv_waypoint> waypoints(const group &group_) {
-            game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
-
-            std::vector<rv_waypoint> waypoints;
-            for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
-            }
-
-            return waypoints;
-        }
-
         //NULAR -- https://github.com/intercept/intercept/issues/13
 
         std::vector<script> diag_active_scripts() {
@@ -5903,16 +5881,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__seteditorobjectscope__control__array__ret__nothing, map_, params_right);
         }
 
-        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_) {
-            game_value param_left;
-            switch (unit_.index()) {
-                case 0: param_left = std::get<0>(unit_); break;
-                case 1: param_left = { std::get<1>(unit_).group, std::get<1>(unit_).index}; break;
-            }
-            
-            host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);
-        }
-
         bool set_feature_type(const object &object_, int type_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setfeaturetype__object__scalar__ret__bool, object_, type_);
         }
@@ -5987,14 +5955,6 @@ namespace intercept {
             if(time_.has_value())
                 host::functions.invoke_raw_binary(__sqf::binary__setmass__object__scalar_array__ret__nothing, object_, { mass_, *time_ });
             host::functions.invoke_raw_binary(__sqf::binary__setmass__object__scalar_array__ret__nothing, object_, mass_);
-        }
-
-        void set_music_effect(const object &trigger_, const std::string &track_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, trigger_, track_);
-        }
-
-        void set_music_effect(const group &group_, int index_, const std::string &track_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, { group_, index_ }, track_);
         }
 
         void set_name(const object &unit_, const std::string &name_, const std::string &first_name_, const std::string &last_name_) {
@@ -6097,14 +6057,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__setslingload__object__object__ret__bool, vehicle_, load_);
         }
 
-        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, trigger, { sound_, voice_, sound_env_, sound_det_ });
-        }
-
-        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, { group, index_ }, { sound_, voice_, sound_env_, sound_det_ });
-        }
-
         void set_speech(const location &location_, const std::string &speech_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeech__location__string__ret__nothing, location_, speech_);
         }
@@ -6128,14 +6080,6 @@ namespace intercept {
 
         void set_text(const location &location_, const std::string &text_) {
             host::functions.invoke_raw_binary(__sqf::binary__settext__location__string__ret__nothing, location_, text_);
-        }
-
-        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, trigger_, { type_, effect_, text_ });
-        }
-
-        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, { group_, index_ }, { type_, effect_, text_ });
         }
 
         void set_type(const location &location_, const std::string &type_) {
@@ -6301,10 +6245,6 @@ namespace intercept {
         
         void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_) {
             host::functions.invoke_raw_binary(__sqf::binary__updatemenuitem__control__array__ret__nothing, map_, { menu_item_index_, text_ , command_ });
-        }
-
-        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
         }
 
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_) {

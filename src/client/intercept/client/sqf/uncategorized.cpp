@@ -2045,10 +2045,6 @@ namespace intercept {
             __helpers::__empty_unary_number(__sqf::unary__settrafficdistance__scalar__ret__nothing, value_);
         }
 
-        bool simulation_enabled(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__simulationenabled__object__ret__bool, value_);
-        }
-
         float size_of(const std::string &value_) {
             return __helpers::__number_unary_string(__sqf::unary__sizeof__string__ret__scalar, value_);
         }
@@ -2269,14 +2265,6 @@ namespace intercept {
 
         void enable_rope_attach(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__enableropeattach__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void enable_simulation(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enablesimulation__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void enable_simulation_global(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enablesimulationglobal__object__bool__ret__nothing, value0_, value1_);
         }
 
         void enable_stamina(const object &value0_, bool value1_) {
@@ -4176,10 +4164,6 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, std::move(params)));
         }
 
-        bool can_trigger_dynamic_simulation(const object &unit_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__cantriggerdynamicsimulation__object__ret__bool, unit_);
-        }
-
         std::vector<std::string> config_source_addon_list(const config &config_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
         }
@@ -4220,10 +4204,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
 
-        void diag_dynamic_simulation_end(const std::string &type_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
-        }
-
         void diag_log_slow_frame(const std::string &section_, float threshold_) {
             game_value params({
                 section_,
@@ -4237,22 +4217,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
-        float dynamic_simulation_distance(const std::string &category_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistance__string__ret__scalar, category_);
-        }
-
-        float dynamic_simulation_distance_coef(const std::string &class_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistancecoef__string__ret__scalar, class_);
-        }
-
-        bool dynamic_simulation_enabled(const object &object_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__object__ret__bool, object_);
-        }
-
-        bool dynamic_simulation_enabled(const group &group_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__group__ret__bool, group_);
-        }
-
         void enable_debriefing_stats(float left_, float top_, float width_, float height_) {
             game_value params({
                 left_,
@@ -4262,10 +4226,6 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
-        }
-
-        void enable_dynamic_simulation_system(bool enable_) {
-            host::functions.invoke_raw_unary(__sqf::unary__enabledynamicsimulationsystem__bool__ret__nothing, enable_);
         }
 
         void enable_weapon_disassembly(bool enable_) {
@@ -4520,10 +4480,6 @@ namespace intercept {
 
         std::vector<script> diag_active_scripts() {
             return __helpers::__convert_to_scripts_vector(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
-        }
-
-        bool dynamic_simulation_system_enabled() {
-            return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
         }
 
         std::pair<bool, bool> forced_map() {
@@ -5025,14 +4981,6 @@ namespace intercept {
 
         void enable_collision_with(const object &object1_, const object &object2_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablecollisionwith__object__object__ret__nothing, object1_, object2_);
-        }
-
-        void enable_dynamic_simulation(const object &object_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__object__bool__ret__nothing, object_, enable_);
-        }
-
-        void enable_dynamic_simulation(const group &group_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__group__bool__ret__nothing, group_, enable_);
         }
 
         void enable_gun_lights(const object &unit_, bool &enable_) {
@@ -5934,10 +5882,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setdriveonpath__object__array__ret__nothing, object_, auto_array<game_value>(points_.begin(), points_.end()));
         }
 
-        void set_dynamic_simulation_distance(const std::string& category_, float distance_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistance__string__scalar__ret__nothing, category_, distance_);
-        }
-
         bool set_feature_type(const object& object_, feature_type type_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setfeaturetype__object__scalar__ret__bool, object_, static_cast<int>(type_));
         }
@@ -6341,10 +6285,6 @@ namespace intercept {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__targetsquery__object__array__ret__array, unit_, { target_ignore_, target_side, target_type_, target_position_, target_max_age_ });
         
             return rv_query_target({ res[0], res[1], res[2], res[3], res[4], res[5] });
-        }
-
-        void trigger_dynamic_simulation(const object &object_, bool trigger_) {
-            host::functions.invoke_raw_binary(__sqf::binary__triggerdynamicsimulation__object__bool__ret__nothing, object_, trigger_);
         }
 
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_) {

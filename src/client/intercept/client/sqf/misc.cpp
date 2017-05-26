@@ -43,5 +43,71 @@ namespace intercept {
             }
             return output;
         }
+
+
+
+
+        //simulation
+        void enable_dynamic_simulation(const object &object_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__object__bool__ret__nothing, object_, enable_);
+        }
+
+        void enable_dynamic_simulation(const group &group_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__group__bool__ret__nothing, group_, enable_);
+        }
+
+        void set_dynamic_simulation_distance(const std::string& category_, float distance_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistance__string__scalar__ret__nothing, category_, distance_);
+        }
+
+        void trigger_dynamic_simulation(const object &object_, bool trigger_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerdynamicsimulation__object__bool__ret__nothing, object_, trigger_);
+        }
+
+        bool simulation_enabled(const object &value_) {
+            return __helpers::__bool_unary_object(__sqf::unary__simulationenabled__object__ret__bool, value_);
+        }
+
+        void enable_simulation(const object &value0_, bool value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enablesimulation__object__bool__ret__nothing, value0_, value1_);
+        }
+
+        void enable_simulation_global(const object &value0_, bool value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enablesimulationglobal__object__bool__ret__nothing, value0_, value1_);
+        }
+
+        bool can_trigger_dynamic_simulation(const object &unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__cantriggerdynamicsimulation__object__ret__bool, unit_);
+        }
+
+        void diag_dynamic_simulation_end(const std::string &type_) {
+            host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
+        }
+
+        float dynamic_simulation_distance(const std::string &category_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistance__string__ret__scalar, category_);
+        }
+
+        float dynamic_simulation_distance_coef(const std::string &class_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistancecoef__string__ret__scalar, class_);
+        }
+
+        bool dynamic_simulation_enabled(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__object__ret__bool, object_);
+        }
+
+        bool dynamic_simulation_enabled(const group &group_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationenabled__group__ret__bool, group_);
+        }
+
+        void enable_dynamic_simulation_system(bool enable_) {
+            host::functions.invoke_raw_unary(__sqf::unary__enabledynamicsimulationsystem__bool__ret__nothing, enable_);
+        }
+        //NULAR -- https://github.com/intercept/intercept/issues/13
+        bool dynamic_simulation_system_enabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
+        }
+
+
     }
 }

@@ -747,7 +747,8 @@ namespace intercept {
         void set_stamina_scheme(const std::string &value_);
         void set_system_of_units(float value_);
         void set_traffic_distance(float value_);
-        bool simulation_enabled(const object &value_);
+        
+
         float size_of(const std::string &value_);
         
         bool some_ammo(const object &value_);
@@ -810,8 +811,7 @@ namespace intercept {
         void enable_mimics(const object &value0_, bool value1_);
         void enable_reload(const object &value0_, bool value1_);
         void enable_rope_attach(const object &value0_, bool value1_);
-        void enable_simulation(const object &value0_, bool value1_);
-        void enable_simulation_global(const object &value0_, bool value1_);
+        
         void enable_stamina(const object &value0_, bool value1_);
         void enable_uavwaypoints(const object &value0_, bool value1_);
         void engine_on(const object &value0_, bool value1_);
@@ -1378,22 +1378,19 @@ namespace intercept {
         //UNARY -- https://github.com/intercept/intercept/issues/13
         std::vector<float> action_ids(const object& entity_);
         std::vector<object> all_simple_objects(const std::vector<std::string> &params_);
-        bool can_trigger_dynamic_simulation(const object &unit_);
         std::vector<std::string> config_source_addon_list(const config &config_);
         object create_simple_object(const std::string &shapename_, const vector3 &positionworld);
         void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
         void diag_capture_frame_to_file(float frame_);
         void diag_capture_slow_frame(const std::string &section_, float threshold_);
         void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);
-        void diag_dynamic_simulation_end(const std::string &type_);
         void diag_log_slow_frame(const std::string &section_, float threshold_);
         float difficulty_option(const std::string &optionname_);
-        float dynamic_simulation_distance(const std::string &category_);
-        float dynamic_simulation_distance_coef(const std::string &class_);
-        bool dynamic_simulation_enabled(const object &object_);
-        bool dynamic_simulation_enabled(const group &group_);
+
+        
+
+
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
-        void enable_dynamic_simulation_system(bool enable_);
         void enable_weapon_disassembly(bool enable_);
         float flag_animation_phase(const object &flag_);
         std::vector<object> get_all_owned_mines(const object &unit_);
@@ -1436,7 +1433,8 @@ namespace intercept {
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
         std::vector<script> diag_active_scripts();
-        bool dynamic_simulation_system_enabled();
+
+        
         std::pair<bool, bool> forced_map();
         std::vector<std::string> get_mission_layers();
         int get_terrain_grid();
@@ -1578,8 +1576,6 @@ namespace intercept {
         void enable_attack(const group &group_, bool enable_);
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
         void enable_collision_with(const object &object1_, const object &object2_);
-        void enable_dynamic_simulation(const object &object_, bool enable_);
-        void enable_dynamic_simulation(const group &group_, bool enable_);
         void enable_gun_lights(const object &unit_, bool &enable_);
         void enable_gun_lights(const group &group_, bool &enable_);
         void enable_ir_lasers(const object &unit_, bool &enable_);
@@ -1707,20 +1703,9 @@ namespace intercept {
         void set_destination(const object& object_, const vector3& position_, const std::string& planning_mode_, bool force_replan);
         //category AI 
         void set_drive_on_path(const object& object_, const std::vector<vector3>& points_);
-        /**
-        * \brief
-        * \param category_ - one of:
+        
 
-        "Group" - Infantry units. Set to a reasonable distance, player should not see disabled infantry units. Default: 500m
-        "Vehicle" - Vehicles with crew. Set to a reasonable distance, player should not see disabled vehicles. Default: 350m
-        "EmptyVehicle" - All vehicles without crew. Separated from Props as Empty Vehicles have often more complex damage states and selective destruction. Their activation distance should by larger that the one used for Props. Default: 250m
-        "Prop" - Static objects. Anything from a small tin can to a building. Default: 50m
-
-        * \param distance_
-        */
-        void set_dynamic_simulation_distance(const std::string& category_, float distance_);
-        //#TODO add BIKI entry and implement 
-        //void set_dynamic_simulation_distance_coef(const std::string&, float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing 
+        
         enum class feature_type {
             disabled = 0,// - Feature disabled 
             visible_object_distance = 1,// - Object is always visible within object view distance 
@@ -1817,7 +1802,7 @@ namespace intercept {
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, const std::string &target_type_, const vector3 &target_position_, float target_max_age_);
-        void trigger_dynamic_simulation(const object &object_, bool trigger_);
+        
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
         int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);

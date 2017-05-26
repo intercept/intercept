@@ -635,19 +635,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createmine__array__ret__object, args));
         }
 
-        object create_sound_source(const std::string &type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/) {
-            auto_array<game_value> markers(markers_.begin(), markers_.end());
-
-            game_value args({
-                type_,
-                pos_,
-                std::move(markers),
-                placement_,
-            });
-
-            return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsource__array__ret__object, args));
-        }
-
+        
         team_member create_team(const std::string &type_, const std::string &name_) {
             game_value args({
                 type_,
@@ -1103,10 +1091,6 @@ namespace intercept {
         
         // TODO std::array<float, 6> mission_start();
 
-        float music_volume() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__musicvolume__ret__scalar);
-        }
-
         float particles_quality() {
             return __helpers::__retrieve_nular_number(__sqf::nular__particlesquality__ret__scalar);
         }
@@ -1159,10 +1143,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__switchableunits__ret__array));
         }
 
-        float sound_volume() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__soundvolume__ret__scalar);
-        }
-
+        
         bool sling_load_assistant_shown() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__slingloadassistantshown__ret__bool);
         }
@@ -1879,10 +1860,7 @@ namespace intercept {
 
 
 
-        std::string name_sound(const object &value_) {
-            return __helpers::__string_unary_object(__sqf::unary__namesound__object__ret__string, value_);
-        }
-
+        
         object nearest_building(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__nearestbuilding__object__ret__object, value_);
         }
@@ -1930,50 +1908,11 @@ namespace intercept {
         
         void pick_weapon_pool(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__pickweaponpool__object__ret__nothing, value_);
-        }
-
-        std::string pitch(const object &value_) {
-            return __helpers::__string_unary_object(__sqf::unary__pitch__object__ret__string, value_);
-        }
-
-        void play_music(const std::string &class_) {
-            __helpers::__empty_unary_string(__sqf::unary__playmusic__string__ret__nothing, class_);
-        }
-
-        void play_music(const std::string &class_, float start_) {
-            game_value params({
-                class_,
-                start_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playmusic__array__ret__nothing, params);
-        }
-
-        void play_sound(const std::string &name_) {
-            __helpers::__empty_unary_string(__sqf::unary__playsound__string__ret__nothing, name_);
-        }
-
-        void play_sound(const std::string &name_, bool force_) {
-            game_value params({
-                name_,
-                force_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound__array__ret__nothing, params);
-        }
-
-        
+        }        
 
         float precision(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__precision__object__ret__scalar, value_);
         }
-
-        bool preload_sound(const std::string &value_) {
-            return __helpers::__bool_unary_string(__sqf::unary__preloadsound__string__ret__bool, value_);
-        }
-
-        
-
 
         void process_diary_link(const std::string &value_) {
             __helpers::__empty_unary_string(__sqf::unary__processdiarylink__string__ret__nothing, value_);
@@ -2037,10 +1976,7 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__removeallmissioneventhandlers__string__ret__nothing, value_);
         }
 
-        void remove_all_music_event_handlers(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__removeallmusiceventhandlers__string__ret__nothing, value_);
-        }
-
+        
         void remove_switchable_unit(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__removeswitchableunit__object__ret__nothing, value_);
         }
@@ -2303,10 +2239,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__diarysubjectexists__object__string__ret__bool, value0_, value1_);
         }
 
-        void direct_say(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__directsay__object__string__ret__nothing, value0_, value1_);
-        }
-
+        
         void disable_ai(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__disableai__object__string__ret__nothing, value0_, value1_);
         }
@@ -2738,10 +2671,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setname__object__string__ret__nothing, value0_, value1_);
         }
 
-        void set_name_sound(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setnamesound__object__string__ret__nothing, value0_, value1_);
-        }
-
+        
         bool set_owner(const object &value0_, float value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setowner__object__scalar__ret__bool, value0_, value1_);
         }
@@ -2756,10 +2686,6 @@ namespace intercept {
 
         void set_pilot_light(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setpilotlight__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void set_pitch(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setpitch__object__scalar__ret__nothing, value0_, value1_);
         }
 
         void set_random_lip(const object &value0_, bool value1_) {
@@ -2778,10 +2704,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_speaker(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setspeaker__object__string__ret__nothing, value0_, value1_);
-        }
-
+        
         void set_stamina(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setstamina__object__scalar__ret__nothing, value0_, value1_);
         }
@@ -2964,10 +2887,6 @@ namespace intercept {
 
         std::string team_type(const team_member &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__teamtype__team_member__ret__string, value_);
-        }
-
-        float radio_volume() {
-            return host::functions.invoke_raw_nular(__sqf::nular__radiovolume__ret__scalar);
         }
 
         void save_game() {
@@ -3426,24 +3345,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
         }
 
-        float add_music_event_handler(const std::string &type_, const code &command_) {
-            game_value params({
-                type_,
-                command_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
-        }
-
-        float add_music_event_handler(const std::string &type_, const std::string &command_) {
-            game_value params({
-                type_,
-                command_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
-        }
-
         void add_weapon_pool(const std::string &weapon_name_, int count_) {
             game_value params({
                 weapon_name_,
@@ -3885,65 +3786,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__playscriptedmission__array__ret__nothing, params);
         }
 
-        void play_sound_3d(const std::string &name_, const object &source_) {
-            game_value params({
-                name_,
-                source_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
-        }
-
-        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_) {
-            game_value params({
-                name_,
-                source_,
-                pos_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
-        }
-
-        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
-        }
-
-        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_,
-                pitch_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
-        }
-
-        void play_sound_3d(const std::string &name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_,
-                pitch_,
-                distance_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
-        }
-
-
-
-
-
         std::vector<std::string> registered_tasks(const team_member &member_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__registeredtasks__team_member__ret__array, member_));
         }
@@ -3961,15 +3803,6 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
-        }
-
-        void remove_music_event_handler(const std::string &type_, float id_) {
-            game_value params({
-                type_,
-                id_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__removemusiceventhandler__array__ret__nothing, params);
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
@@ -4221,15 +4054,6 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__setmouseposition__array__ret__nothing, params);
-        }
-
-        float set_music_event_handler(const std::string& type_, const std::string& command_) {
-            game_value params({
-                type_,
-                command_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__setmusiceventhandler__array__ret__nothing, params);
         }
 
         bool set_stat_value(const std::string& name_, float value_) {
@@ -4489,18 +4313,11 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__flaganimationphase__object__ret__scalar, flag_);
         }
 
-        game_value get_all_env_sound_controllers(const vector3 &position_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getallenvsoundcontrollers__array__ret__array, position_);
-        }
 
         std::vector<object> get_all_owned_mines(const object &unit_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
         }
-
-        game_value get_all_sound_controllers(const object &vehicle_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getallsoundcontrollers__object__ret__array, vehicle_);
-        }
-
+        
         float get_container_max_load(const std::string &containerclass_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getcontainermaxload__string__ret__scalar, containerclass_);
         }
@@ -5416,22 +5233,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__execeditorscript__control__array__ret__any, map_, params_right);
         }
 
-        void fade_music(float time_, float volume_) {
-            host::functions.invoke_raw_binary(__sqf::binary__fademusic__scalar__scalar__ret__nothing, time_, volume_);
-        }
-
-        void fade_radio(float time_, float volume_) {
-            host::functions.invoke_raw_binary(__sqf::binary__faderadio__scalar__scalar__ret__nothing, time_, volume_);
-        }
-
-        void fade_sound(float time_, float volume_) {
-            host::functions.invoke_raw_binary(__sqf::binary__fadesound__scalar__scalar__ret__nothing, time_, volume_);
-        }
-
-        void fade_speech(float time_, float volume_) {
-            host::functions.invoke_raw_binary(__sqf::binary__fadespeech__scalar__scalar__ret__nothing, time_, volume_);
-        }
-
         object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_) {
             auto_array<game_value> params_right({
                 position_,
@@ -5559,10 +5360,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getdir__object_array__object_array__ret__scalar, from, to);
         }
 
-        float get_env_sound_controller(const vector3 &position_, const std::string &controller_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__getenvsoundcontroller__array__string__ret__scalar, position_, controller_);
-        }
-
+        
         rv_group_icon get_group_icon(const group &group_, int &id_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
 
@@ -5586,14 +5384,7 @@ namespace intercept {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__getobjectchildren__control__string__ret__array, map_, object_));
         }
 
-        float get_sound_controller(const object &vehicle_, const std::string &controller_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontroller__object__string__ret__scalar, vehicle_, controller_);
-        }
-
-        float get_sound_controller_result(const object &object_, const config &config_entry_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontrollerresult__object__config__ret__scalar, object_, config_entry_);
-        }
-
+        
         std::variant<bool, float> get_unit_trait(const object &unit_, const std::string &skill_name_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__getunittrait__object__string__ret__bool_scalar, unit_, skill_name_);
         
@@ -6190,54 +5981,6 @@ namespace intercept {
             }
 
             return host::functions.invoke_raw_binary(__sqf::binary__createtask__team_member__array__ret__task, member_, std::move(params));
-        }
-
-        void say(const object& from_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, from_, sound_classname_);
-        }
-
-        void say(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
-        }
-
-        void say(const object& from_, const object& to_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
-        }
-
-        void say(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
-        }
-
-        void say_2d(const object& from_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, from_, sound_classname_);
-        }
-
-        void say_2d(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
-        }
-
-        void say_2d(const object& from_, const object& to_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
-        }
-
-        void say_2d(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
-        }
-
-        void say_3d(const object& from_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, from_, sound_classname_);
-        }
-
-        void say_3d(const object& from_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
-        }
-
-        void say_3d(const object& from_, const object& to_, const std::string& sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
-        }
-
-        void say_3d(const object& from_, const object& to_, const std::string& sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
         }
 
         game_value select_editor_object(const control &map_, const std::string &object_) {

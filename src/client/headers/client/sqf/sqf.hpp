@@ -18,6 +18,8 @@
 #include "inventory.hpp"
 #include "hc.hpp"
 #include "sound.hpp"
+#include "cargo.hpp"
+#include "tasks.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

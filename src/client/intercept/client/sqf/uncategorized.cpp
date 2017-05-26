@@ -500,41 +500,6 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allmissionobjects__string__ret__array, type_));
         }
 
-        std::vector<object> assigned_cargo(const object &veh_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__assignedcargo__object__ret__array, veh_));
-        }
-
-
-
-
-
-        std::vector<object> attached_objects(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__attachedobjects__object__ret__array, obj_));
-        }
-
-        object attached_to(const object &obj_) {
-            return object(host::functions.invoke_raw_unary(__sqf::unary__attachedto__object__ret__array, obj_));
-        }
-
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_) {
-            game_value args({
-                object2_,
-                offset_,
-                memPoint_
-            });
-            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
-        }
-
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_) {
-            game_value args({
-                object2_,
-                offset_
-            });
-            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
-        }
-
-        
-
         
 
 
@@ -624,10 +589,6 @@ namespace intercept {
 
         std::vector<object> crew(const object & _veh) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
-        }
-
-        std::vector<task> current_tasks(const team_member &team_member_) {
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_));
         }
 
         float add_action(const object &object_, const std::string &title_, const std::string &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, const std::string &shortcut_, const std::string &condition_) {
@@ -877,10 +838,6 @@ namespace intercept {
         }
 
         
-        std::string briefing_name() {
-            return __helpers::__retrieve_nular_string(__sqf::nular__briefingname__ret__string);
-        }
-
         bool cadet_mode() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__cadetmode__ret__bool);
         }
@@ -935,12 +892,6 @@ namespace intercept {
         bool difficulty_enabled_rtd() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__difficultyenabledrtd__ret__bool);
         }
-
-        void disable_debriefing_stats() {
-            __helpers::__empty_nular(__sqf::nular__disabledebriefingstats__ret__nothing);
-        }
-
-        
 
         float distribution_region() {
             return __helpers::__retrieve_nular_number(__sqf::nular__distributionregion__ret__scalar);
@@ -1119,10 +1070,6 @@ namespace intercept {
         }
 
         
-        bool sling_load_assistant_shown() {
-            return __helpers::__retrieve_nular_bool(__sqf::nular__slingloadassistantshown__ret__bool);
-        }
-
         void select_no_player() {
             __helpers::__empty_nular(__sqf::nular__selectnoplayer__ret__nothing);
         }
@@ -1301,10 +1248,6 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__deactivatekey__string__ret__nothing, key_);
         }
 
-        float debriefing_text(const std::string & debriefing_) {
-            return __helpers::__number_unary_string(__sqf::unary__debriefingtext__string__ret__scalar, debriefing_);
-        }
-
         void delete_collection(const object & collection_) {
             __helpers::__empty_unary_object(__sqf::unary__deletecollection__object__ret__nothing, collection_);
         }
@@ -1453,10 +1396,6 @@ namespace intercept {
             return __helpers::__object_unary_object(__sqf::unary__formationleader__object__ret__object, value_);
         }
 
-        std::string formation_task(const object &value_) {
-            return __helpers::__string_unary_object(__sqf::unary__formationtask__object__ret__string, value_);
-        }
-
         float fuel(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__fuel__object__ret__scalar, value_);
         }
@@ -1539,10 +1478,6 @@ namespace intercept {
 
         float get_rotor_brake_rtd(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getrotorbrakertd__object__ret__scalar, value_);
-        }
-
-        object get_sling_load(const object &value_) {
-            return __helpers::__object_unary_object(__sqf::unary__getslingload__object__ret__object, value_);
         }
 
         float get_stamina(const object &value_) {
@@ -1851,23 +1786,6 @@ namespace intercept {
             return __helpers::__object_unary_object(__sqf::unary__objectparent__object__ret__object, value_);
         }
 
-        void on_briefing_group(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__onbriefinggroup__string__ret__nothing, value_);
-        }
-
-        void on_briefing_notes(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__onbriefingnotes__string__ret__nothing, value_);
-        }
-
-        void on_briefing_plan(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__onbriefingplan__string__ret__nothing, value_);
-        }
-
-        void on_briefing_team_switch(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__onbriefingteamswitch__string__ret__nothing, value_);
-        }
-
-        
         float owner(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__owner__object__ret__scalar, value_);
         }
@@ -1879,10 +1797,6 @@ namespace intercept {
 
         float precision(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__precision__object__ret__scalar, value_);
-        }
-
-        void process_diary_link(const std::string &value_) {
-            __helpers::__empty_unary_string(__sqf::unary__processdiarylink__string__ret__nothing, value_);
         }
 
         void progress_loading_screen(float value_) {
@@ -1960,27 +1874,6 @@ namespace intercept {
         std::string role_description(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__roledescription__object__ret__string, value_);
         }
-
-        bool rope_attach_enabled(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__ropeattachenabled__object__ret__bool, value_);
-        }
-
-        object rope_attached_to(const object &value_) {
-            return __helpers::__object_unary_object(__sqf::unary__ropeattachedto__object__ret__object, value_);
-        }
-
-        void rope_destroy(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__ropedestroy__object__ret__nothing, value_);
-        }
-
-        float rope_length(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__ropelength__object__ret__scalar, value_);
-        }
-
-        bool rope_unwound(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__ropeunwound__object__ret__bool, value_);
-        }
-
 
         void save_var(const std::string &value_) {
             __helpers::__empty_unary_string(__sqf::unary__savevar__string__ret__nothing, value_);
@@ -2198,11 +2091,6 @@ namespace intercept {
 
         
 
-        bool diary_subject_exists(const object &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__diarysubjectexists__object__string__ret__bool, value0_, value1_);
-        }
-
-        
         void disable_ai(const object &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__disableai__object__string__ret__nothing, value0_, value1_);
         }
@@ -2261,10 +2149,6 @@ namespace intercept {
 
         void enable_reload(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablereload__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void enable_rope_attach(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableropeattach__object__bool__ret__nothing, value0_, value1_);
         }
 
         void enable_stamina(const object &value0_, bool value1_) {
@@ -2445,10 +2329,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__publicvariableclient__scalar__string__ret__nothing, value0_, value1_);
         }
 
-        bool register_task(const team_member &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__registertask__team_member__string__ret__bool, value0_, value1_);
-        }
-
         void remove_action(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeaction__object__scalar__ret__nothing, value0_, value1_);
         }
@@ -2473,10 +2353,6 @@ namespace intercept {
 
         bool save_status(const object &value0_, const std::string& value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__savestatus__object__string__ret__bool, value0_, value1_);
-        }
-
-        void select_diary_subject(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__selectdiarysubject__object__string__ret__nothing, value0_, value1_);
         }
 
         void send_simple_command(const object &value0_, const std::string& value1_) {
@@ -2568,10 +2444,6 @@ namespace intercept {
 
         void set_formation(const team_member &value0_, const std::string& value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
-        }
-
-        void set_formation_task(const object &value0_, const std::string& value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setformationtask__object__string__ret__nothing, value0_, value1_);
         }
 
         void set_from_editor(const team_member &value0_, bool value1_) {
@@ -2759,10 +2631,6 @@ namespace intercept {
 
         
 
-        bool unregister_task(const team_member &value0_, const std::string& value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__unregistertask__team_member__string__ret__bool, value0_, value1_);
-        }
-
         void use_audio_time_for_moves(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__useaudiotimeformoves__object__bool__ret__nothing, value0_, value1_);
         }
@@ -2856,35 +2724,6 @@ namespace intercept {
             host::functions.invoke_raw_nular(__sqf::nular__buldozer_reloadopermap__ret__nothing);
         }
 
-        void cancel_simple_task_destination(task value_) {
-            host::functions.invoke_raw_unary(__sqf::unary__cancelsimpletaskdestination__task__ret__nothing, value_);
-        }
-
-        task current_task(const object &value_) {
-            return task(host::functions.invoke_raw_unary(__sqf::unary__currenttask__object__ret__task, value_));
-        }
-
-
-        float priority(task value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__priority__task__ret__scalar, value_);
-        }
-
-        bool task_completed(task value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__taskcompleted__task__ret__bool, value_);
-        }
-
-        task task_parent(task value_) {
-            return task(host::functions.invoke_raw_unary(__sqf::unary__taskparent__task__ret__task, value_));
-        }
-
-        std::string task_state(task value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__taskstate__task__ret__string, value_);
-        }
-        
-        std::string type(task value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__type__task__ret__string, value_);
-        }
-
         /* Multiplayer */
         bool local(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__local__object__ret__bool, value_);
@@ -2942,14 +2781,6 @@ namespace intercept {
 
         std::vector<object> roads_connected_to(const object &obj_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
-        }
-
-        std::vector<object> rope_attached_objects(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropeattachedobjects__object__ret__array, obj_));
-        }
-
-        std::vector<object> ropes(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropes__object__ret__array, obj_));
         }
 
         vector3 screen_to_world(const vector2 &pos_) {
@@ -3215,10 +3046,7 @@ namespace intercept {
         
 
 
-        bool can_sling_load(const object& vehicle_, const object& cargo_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_);
-        }
-
+        
         
 
         float distance(const object& start_, const object& end_) {
@@ -3323,105 +3151,6 @@ namespace intercept {
 
             return host::functions.invoke_raw_unary(__sqf::unary__composetext__array__ret__text, std::move(texts));
         }
-
-        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_) {
-            game_value params({
-                subject_,
-                object_,
-                text_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__creatediarylink__array__ret__string, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_) {
-            game_value params({
-                subject_,
-                text_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_) {
-            game_value params({
-                subject_,
-                text_,
-                task_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_) {
-            game_value params({
-                subject_,
-                text_,
-                task_,
-                state_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_) {
-            game_value params({
-                subject_,
-                game_value({
-                    title_,
-                    text_
-                })
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_) {
-            game_value params({
-                subject_,
-                game_value({
-                    title_,
-                    text_,
-                }),
-                task_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_) {
-            game_value params({
-                subject_,
-                game_value({
-                    title_,
-                    text_
-                }),
-                task_,
-                state_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
-        }
-
-        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_) {
-            game_value params({
-                subject_,
-                name_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params);
-        }
-
-        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_) {
-            game_value params({
-                subject_,
-                name_,
-                picture_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params);
-        }
-
 
         bool is_on_road(const object &object_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isonroad__object_array__ret__bool, object_);
@@ -3737,10 +3466,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__playscriptedmission__array__ret__nothing, params);
         }
 
-        std::vector<std::string> registered_tasks(const team_member &member_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__registeredtasks__team_member__ret__array, member_));
-        }
-
         void remove_from_remains_collector(const std::vector<object> &remains_) {
             auto_array<game_value> remains(remains_.begin(), remains_.end());
 
@@ -3755,184 +3480,6 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
         }
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_) {
-            game_value params({
-                from_obj_,
-                from_point_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-
-        object rope_create(const object &from_obj_, const vector3 &from_point_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_) {
-            game_value params({
-                from_obj_,
-                from_point_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        object rope_create(const object &from_obj_, const std::string &from_point_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                length_
-            });
-
-            return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
-        }
-
-        void rope_cut(const object &rope_, float distance_) {
-            game_value params({
-                rope_,
-                distance_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__ropecut__array__ret__nothing, params);
-        }
-
-        std::vector<vector3> rope_end_position(const object &rope_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ropeendposition__object__ret__array, rope_);
-
-            std::vector<vector3> end_positions = { __helpers::__convert_to_vector3(ret[0]), __helpers::__convert_to_vector3(ret[1]) };
-            return end_positions;
-        }
-
-        void rope_unwind(const object &rope_, float speed_, float length_) {
-            game_value params({
-                rope_,
-                speed_,
-                length_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__ropeunwind__array__ret__nothing, params);
-        }
-
-        void rope_unwind(const object &rope_, float speed_, float length_, bool relative_) {
-            game_value params({
-                rope_,
-                speed_,
-                length_,
-                relative_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__ropeunwind__array__ret__nothing, params);
-        }
-
-
 
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, const std::string &expression_, float precision_, float max_results_) {
             game_value params({
@@ -4054,10 +3601,6 @@ namespace intercept {
 
         
 
-        std::vector<task> simple_tasks(const object& unit_) {
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__simpletasks__object__ret__array, unit_));
-        }
-
         std::vector<std::string> squad_params(const object &unit_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_));
         }
@@ -4108,16 +3651,6 @@ namespace intercept {
             return rv_uav_control(host::functions.invoke_raw_unary(__sqf::unary__uavcontrol__object__ret__array, uav_));
         }
 
-
-
-
-
-        std::vector<std::string> task_description(const task& task_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__taskdescription__task__ret__array, task_));
-        }
-
-        
-
         rv_expected_destination expected_destination(const object& unit_) {
             return rv_expected_destination(host::functions.invoke_raw_unary(__sqf::unary__expecteddestination__object__ret__array, unit_));
         }
@@ -4138,15 +3671,7 @@ namespace intercept {
 
 
       
-        vector3 task_destination(const task& task_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__taskdestination__task__ret__array, task_);
-
-            if (ret.size() == 0) {
-                return {};
-            }
-            return __helpers::__convert_to_vector3(ret);
-        }
-
+        
         
 
         std::string format(const std::vector<game_value> &params_) {
@@ -4217,17 +3742,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
-        void enable_debriefing_stats(float left_, float top_, float width_, float height_) {
-            game_value params({
-                left_,
-                top_,
-                width_,
-                height_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
-        }
-
         void enable_weapon_disassembly(bool enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
         }
@@ -4258,17 +3772,10 @@ namespace intercept {
             });
         }
 
-        std::vector<object> get_vehicle_cargo(const object &vehicle_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
-        }
-
+        
         
         bool is_simple_object(const object &object_) {
             return host::functions.invoke_raw_unary(__sqf::unary__issimpleobject__object__ret__bool, object_);
-        }
-
-        object is_vehicle_cargo(const object &vehicle_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isvehiclecargo__object__ret__object, vehicle_);
         }
 
         int lnb_add_row(int idc_, const std::vector<std::string> &items_) {
@@ -4411,24 +3918,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__switchcamera__object__ret__nothing, target_);
         }
 
-        bool task_always_visible(const task &task_) {
-           return host::functions.invoke_raw_unary(__sqf::unary__taskalwaysvisible__task__ret__bool, task_);
-        }
-
-        rv_task_custom_data task_custom_data(const task &task_) {
-            game_value res = host::functions.invoke_raw_unary(__sqf::unary__taskcustomdata__task__ret__array, task_);
-        
-            return rv_task_custom_data({ res[0], res[1], res[2] });
-        }
-
-        vector3 task_marker_offset(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__taskmarkeroffset__object__ret__array, unit_));
-        }
-
-        std::string task_type(const task &task_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__tasktype__task__ret__string, task_);
-        }
-
         bool unit_is_uav(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__unitisuav__object__ret__bool, unit_);
         }
@@ -4439,10 +3928,6 @@ namespace intercept {
 
         void use_ai_steering_component(bool use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
-        }
-
-        bool vehicle_cargo_enabled(const object &vehicle_) {
-           return host::functions.invoke_raw_unary(__sqf::unary__vehiclecargoenabled__object__ret__bool, vehicle_);
         }
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
@@ -4654,12 +4139,6 @@ namespace intercept {
 
         
 
-        std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__canvehiclecargo__object__object__ret__array, vehicle_, cargo_);
-
-            return std::pair<bool, bool>({ res [0],res [1]});
-        }
-
         void command_suppressive_fire(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
         }
@@ -4697,12 +4176,6 @@ namespace intercept {
         }
 
         
-
-        task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_) {
-            game_value params_right(parent_task_.has_value() ? game_value{ name_, *parent_task_ } : game_value{ name_ });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__createsimpletask__object__array__ret__task, unit_, params_right);
-        }
 
         object create_site(const std::string &type_, const vector3 &pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__createsite__string__array__ret__object, type_, pos_);
@@ -4986,10 +4459,6 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__enableuavconnectability__object__array__ret__nothing, unit_, params_right);
-        }
-
-        void enable_vehicle_cargo(const object &vehicle_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enablevehiclecargo__object__bool__ret__nothing, vehicle_, enable_);
         }
 
         void enable_weapon_disassembly(const object &unit_, bool enable_) {
@@ -5378,14 +4847,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__leavevehicle__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
-            game_value params_right({
-                object_,
-                offset_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
-        }
+        
 
         //#TODO: Find out if the return type is correct
         std::vector<std::string> list_objects(const control &map_, const std::string &type_) {
@@ -5661,10 +5123,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeownedmine__object__object__ret__nothing, unit_, mine_);
         }
 
-        void remove_simple_task(const object &unit_, const task &task_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removesimpletask__object__task__ret__nothing, unit_, task_);
-        }
-
         void remove_team_member(const team_member &team_, const team_member &member_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
         }
@@ -5700,35 +5158,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__array__ret__nothing, param_left, std::move(targets));
         }
 
-        void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_) {
-            game_value params_left({
-                vehicle_,
-                offset_,
-                rope_end_down_dir_
-            });
-            
-            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__array__object__ret__nothing, params_left, rope_);
-        }
-
-        void rope_detach(const object &vehicle_, const object &rope_) {
-            host::functions.invoke_raw_binary(__sqf::binary__ropedetach__object__object__ret__nothing, vehicle_, rope_);
-        }
-
-
-
-        task create_task(const team_member & member_, const std::string & type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_) {
-            auto_array<game_value> p1{ type_ };
-            if (parent_task_)
-                p1.push_back(*parent_task_);
-            auto_array<game_value> params{ std::move(p1), priority };
-            for (auto& it : name_value_pairs_) {
-                params.push_back(it.first);
-                params.push_back(it.second);
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__createtask__team_member__array__ret__task, member_, std::move(params));
-        }
-
         game_value select_editor_object(const control &map_, const std::string &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selecteditorobject__control__string__ret__any, map_, object_);
         }
@@ -5736,47 +5165,6 @@ namespace intercept {
         void select_weapon_turret(const object & vec_, const std::string & weapon_, const std::vector<int>& turretPath_) {
             auto_array<game_value> turret_path_(turretPath_.begin(), turretPath_.end());
             host::functions.invoke_raw_binary(__sqf::binary__selectweaponturret__object__array__ret__nothing, vec_, { weapon_ , std::move(turret_path_) });
-        }
-
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, float priority_) {
-            game_value params_right({
-                receiver_,
-                { type_ },
-                priority_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
-        }
-
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<rv_task_variables> &variables_) {
-            auto_array<game_value> variables;
-            
-            for (auto &variable : variables_) {
-                variables.push_back(variable.name);
-                variables.push_back(variable.value);
-            }
-            
-            game_value params_right({
-                receiver_,
-                {
-                    type_,
-                    parent_task_
-                },
-                std::move(variables)
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
-        }
-
-        //#TODO: Find out which types state_, result_ and sentence_ are
-        void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_) {
-            game_value params_right({
-                state_,
-                result_,
-                sentence_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__sendtaskresult__task__array__ret__nothing, task_, params_right);
         }
 
         void serverCommand(const std::string &command_, const std::string &password_) {
@@ -5835,14 +5223,6 @@ namespace intercept {
         }
 
         
-        void set_current_task(const object& object_, const task& task_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcurrenttask__object__task__ret__nothing, object_, task_);
-        }
-
-        void set_debriefing_text(const std::string& endType_, const std::string& title_, const std::string& description_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setdebriefingtext__string__array__ret__nothing, endType_, { title_, description_ });
-        }
-
         void set_destination(const object& object_, const vector3& position_, const std::string& planning_mode_, bool force_replan) {
             host::functions.invoke_raw_binary(__sqf::binary__setdestination__object__array__ret__nothing, object_, { position_, planning_mode_, force_replan });
         }
@@ -6021,30 +5401,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setshotparents__object__array__ret__nothing, projectile_, { vehicle_, instigator_ });
         }
         
-        void set_simple_task_always_visible(const task &task_, bool always_visible_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskalwaysvisible__task__bool__ret__nothing, task_, always_visible_);
-        }
-
-        void set_simple_task_custom_data(const task &task_, const std::string &icon_path_, const std::string &tool_tip_, const std::string &description_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskcustomdata__task__array__ret__nothing, task_, {icon_path_, tool_tip_, description_});
-        }
-
-        void set_simple_task_description(const task &task_, const std::string &description_, const std::string &description_short_, const std::string &description_hud_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdescription__task__array__ret__nothing, task_, { description_, description_short_, description_hud_ });
-        }
-
-        void set_simple_task_destination(const object &task_, const vector3 &position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdestination__task__array__ret__nothing, task_, position_);
-        }
-
-        void set_simple_task_target(const task &task_, const object &target_, bool precise_position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktarget__task__array__ret__nothing, task_, { target_, precise_position_ });
-        }
-
-        void set_simple_task_type(const task &task_, const std::string &task_type_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktype__task__string__ret__nothing, task_, task_type_);
-        }
-
         void set_size(const location &location_, float size_x_, float size_y_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsize__location__array__ret__nothing, location_, { size_x_, size_y_ });
         }
@@ -6053,29 +5409,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, vehicle_, skill_);
         }
 
-        bool set_sling_load(const object &vehicle_, const object &load_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__setslingload__object__object__ret__bool, vehicle_, load_);
-        }
-
         void set_speech(const location &location_, const std::string &speech_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeech__location__string__ret__nothing, location_, speech_);
         }
 
         void set_speed_mode(const group &group_, const std::string &speed_mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeedmode__object_group__string__ret__nothing, group_, speed_mode_);
-        }
-
-        void set_task_marker_offset(const object &task_, const vector3 &offset_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settaskmarkeroffset__object__array__ret__nothing, task_, offset_);
-        }
-
-        //#TODO: Find out what the right parameters are
-        void set_task_result(const task &task_, const game_value &params_right) {
-            host::functions.invoke_raw_binary(__sqf::binary__settaskresult__task__array__ret__nothing, task_, params_right);
-        }
-
-        void set_task_state(const task &task_, const std::string &state_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settaskstate__task__string__ret__nothing, task_, state_);
         }
 
         void set_text(const location &location_, const std::string &text_) {
@@ -6130,10 +5469,6 @@ namespace intercept {
          
             
             host::functions.invoke_raw_binary(__sqf::binary__setuseractiontext__object__array__ret__nothing, object_, std::move(params_right));
-        }
-
-        bool set_vehicle_cargo(const object &vehicle_, const object &cargo_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__setvehiclecargo__object__object__ret__bool, vehicle_, cargo_);
         }
 
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, std::vector<std::string> markers_, float placement_radius_, std::optional<std::string> special_) {

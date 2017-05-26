@@ -25,7 +25,7 @@ namespace intercept {
             }
         }
 
-        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
+        bool intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
             game_value params1({
                 obj_,
                 lodname_
@@ -59,7 +59,7 @@ namespace intercept {
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_, int max_results_, const std::string &lod1_, const std::string &lod2_) {
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_, int max_results_, sqf_string_const_ref lod1_, sqf_string_const_ref lod2_) {
             game_value array_input = game_value({
                 begin_pos_asl_,
                 end_pos_asl_,

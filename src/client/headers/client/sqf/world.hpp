@@ -66,7 +66,7 @@ namespace intercept {
         };
 
         float world_size();
-        std::string world_name();
+        sqf_return_string world_name();
         float wind_str();
         float wind_dir();
         void set_wind(float x_, float y_);
@@ -145,7 +145,7 @@ namespace intercept {
 
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
         
-        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_);
+        std::vector<object> entities(sqf_string_list_const_ref typesinclude_, sqf_string_list_const_ref typesexclude_, bool includeCrews_, bool excludeDead_);
     
         void set_horizon_parallax_coef(float value_);
         void set_detail_map_blend_pars(float full_detail_, float no_detail_);

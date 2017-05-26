@@ -50,14 +50,14 @@ namespace intercept {
 
         * \param distance_
         */
-        void set_dynamic_simulation_distance(const std::string& category_, float distance_);
+        void set_dynamic_simulation_distance(sqf_string_const_ref category_, float distance_);
         //#TODO add BIKI entry and implement 
-        //void set_dynamic_simulation_distance_coef(const std::string&, float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing 
+        //void set_dynamic_simulation_distance_coef(sqf_string_const_ref , float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing 
         void enable_dynamic_simulation(const object &object_, bool enable_);
         void enable_dynamic_simulation(const group &group_, bool enable_);
-        void diag_dynamic_simulation_end(const std::string &type_);
-        float dynamic_simulation_distance(const std::string &category_);
-        float dynamic_simulation_distance_coef(const std::string &class_);
+        void diag_dynamic_simulation_end(sqf_string_const_ref type_);
+        float dynamic_simulation_distance(sqf_string_const_ref category_);
+        float dynamic_simulation_distance_coef(sqf_string_const_ref class_);
         bool dynamic_simulation_enabled(const object &object_);
         bool dynamic_simulation_enabled(const group &group_);
         void enable_dynamic_simulation_system(bool enable_);

@@ -12,7 +12,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__attackenabled__object_group__ret__bool, group_);
         }
 
-        void command_artillery_fire(const object& unit_, const vector3& pos_, const std::string& type_, int rounds_) {
+        void command_artillery_fire(const object& unit_, const vector3& pos_, sqf_string_const_ref type_, int rounds_) {
             game_value params({
                 pos_,
                 type_,
@@ -22,7 +22,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
         }
 
-        void command_artillery_fire(const object& unit_, const vector2& pos_, const std::string& type_, int rounds_) {
+        void command_artillery_fire(const object& unit_, const vector2& pos_, sqf_string_const_ref type_, int rounds_) {
             game_value params({
                 pos_,
                 type_,
@@ -32,7 +32,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, unit_, params);
         }
 
-        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_) {
+        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, sqf_string_const_ref type_, int rounds_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
@@ -44,7 +44,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandartilleryfire__object_array__array__ret__nothing, std::move(units), params);
         }
 
-        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_) {
+        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, sqf_string_const_ref type_, int rounds_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
@@ -76,7 +76,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandfollow__object_array__object__ret__nothing, std::move(units), target_);
         }
 
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_) {
+        void command_fsm(const object& unit_, sqf_string_const_ref fsm_, const vector3& pos_, const object& target_) {
             game_value params({
                 fsm_,
                 pos_,
@@ -86,7 +86,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
         }
 
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector2& pos_, const object& target_) {
+        void command_fsm(const object& unit_, sqf_string_const_ref fsm_, const vector2& pos_, const object& target_) {
             game_value params({
                 fsm_,
                 pos_,
@@ -96,7 +96,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, unit_, params);
         }
 
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_) {
+        void command_fsm(const std::vector<object>& units_, sqf_string_const_ref fsm_, const vector3& pos_, const object& target_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
@@ -108,7 +108,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandfsm__object_array__array__ret__nothing, std::move(units), params);
         }
 
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_) {
+        void command_fsm(const std::vector<object>& units_, sqf_string_const_ref fsm_, const vector2& pos_, const object& target_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             game_value params({
@@ -140,11 +140,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__commandmove__object_array__array__ret__nothing, std::move(units), pos_);
         }
 
-        void command_radio(const object& unit_, const std::string& radio_name_) {
+        void command_radio(const object& unit_, sqf_string_const_ref radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, unit_, radio_name_);
         }
 
-        void command_radio(const std::vector<object>& units_, const std::string& radio_name_) {
+        void command_radio(const std::vector<object>& units_, sqf_string_const_ref radio_name_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__commandradio__object_array__string__ret__nothing, std::move(units), radio_name_);
@@ -260,23 +260,23 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assignascargoindex__object__array__ret__nothing, unit_, params);
         }
 
-        bool kb_add_database(const object &value0_, const std::string& value1_) {
+        bool kb_add_database(const object &value0_, sqf_string_const_ref value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__kbadddatabase__object__string__ret__bool, value0_, value1_);
         }
 
-        bool kb_add_database_targets(const object &value0_, const std::string& value1_) {
+        bool kb_add_database_targets(const object &value0_, sqf_string_const_ref value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__kbadddatabasetargets__object__string__ret__bool, value0_, value1_);
         }
 
-        bool kb_has_topic(const object &value0_, const std::string& value1_) {
+        bool kb_has_topic(const object &value0_, sqf_string_const_ref value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__kbhastopic__object__string__ret__bool, value0_, value1_);
         }
 
-        void kb_remove_topic(const object &value0_, const std::string& value1_) {
+        void kb_remove_topic(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__kbremovetopic__object__string__ret__nothing, value0_, value1_);
         }
 
-        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_) {
+        void kb_add_topic(const object &unit_, sqf_string_const_ref topic_name_, sqf_string_const_ref bikb_file_, sqf_string_const_ref fsm_file_, std::variant<std::reference_wrapper<const code>, sqf_string_const_ref_wrapper> event_handler_) {
             auto_array<game_value> params_right({
                 topic_name_,
                 bikb_file_,
@@ -296,7 +296,7 @@ namespace intercept {
             //host::functions.invoke_raw_binary(__sqf::binary__kbreact__object__array__ret__nothing, unit_, std::move(params_right));
         }
 
-        void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_) {
+        void kb_tell(const object &unit_, const object &receiver_, sqf_string_const_ref topic_name_, sqf_string_const_ref sentence_class_, sqf_string_const_ref argument_name_, const code &argument_value_, sqf_string_const_ref argument_text_, sqf_string_list_const_ref argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, sqf_string_const_ref_wrapper> force_radio_) {
             auto_array<game_value> params_right({
                 receiver_,
                 topic_name_,
@@ -316,7 +316,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__kbtell__object__array__ret__nothing, unit_, std::move(params_right));
         }
 
-        bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_) {
+        bool kb_was_said(const object &unit_, const object &receiver_, sqf_string_const_ref topic_, sqf_string_const_ref sentence_id_, int max_age_) {
             game_value params_right({
                 receiver_,
                 topic_,

@@ -113,7 +113,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -125,7 +125,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -138,7 +138,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_) {
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -150,7 +150,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_) {
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -163,7 +163,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -175,7 +175,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -208,7 +208,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_) {
             game_value params({
                 from_obj_,
                 from_point_
@@ -217,7 +217,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-        object rope_create(const object &from_obj_, const std::string &from_point_, float length_) {
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, float length_) {
             game_value params({
                 from_obj_,
                 from_point_,
@@ -287,7 +287,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__attachedto__object__ret__array, obj_));
         }
 
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_) {
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_) {
             game_value args({
                 object2_,
                 offset_,

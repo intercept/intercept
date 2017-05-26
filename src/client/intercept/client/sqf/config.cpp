@@ -28,7 +28,7 @@ namespace intercept {
             _initialized = move_._initialized;
             return *this;
         }
-        config_entry config_entry::operator>>(const std::string & entry_) {
+        config_entry config_entry::operator>>(sqf_string_const_ref entry_) {
             if (!_initialized) {
                 _config_entry = host::functions.invoke_raw_nular(__sqf::nular__configfile__ret__config);
                 _initialized = true;
@@ -48,11 +48,11 @@ namespace intercept {
             return __helpers::__convert_to_configs_vector(output);
         }
 
-        std::string config_name(const config &config_entry_) {
+        sqf_return_string config_name(const config &config_entry_) {
             return host::functions.invoke_raw_unary(__sqf::unary__configname__config__ret__string, config_entry_);
         }
 
-        std::vector<config> config_properties(const config &config_entry, const std::string& condition_, bool inherit) {
+        std::vector<config> config_properties(const config &config_entry, sqf_string_const_ref condition_, bool inherit) {
             game_value array_entry({
                 config_entry,
                 condition_,
@@ -62,11 +62,11 @@ namespace intercept {
             return __helpers::__convert_to_configs_vector(output);
         }
 
-        std::string config_source_mod(const config &config_entry_) {
+        sqf_return_string config_source_mod(const config &config_entry_) {
             return host::functions.invoke_raw_unary(__sqf::unary__configsourcemod__config__ret__string, config_entry_);
         }
 
-        std::vector<std::string> config_source_mod_list(const config &config_entry_) {
+        sqf_return_string_list config_source_mod_list(const config &config_entry_) {
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__configsourcemodlist__config__ret__array, config_entry_);
             return __helpers::__convert_to_strings_vector(output);
         }
@@ -79,7 +79,7 @@ namespace intercept {
         // TODO implement get_array
         //}
 
-        config get_mission_config(const std::string& value_) {
+        config get_mission_config(sqf_string_const_ref value_) {
             return config(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfig__string__ret__config, value_));
         }
 
@@ -87,7 +87,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getnumber__config__ret__scalar, config_entry_);
         }
 
-        std::string get_text(const config &config_entry_) {
+        sqf_return_string get_text(const config &config_entry_) {
             return host::functions.invoke_raw_unary(__sqf::unary__gettext__config__ret__string, config_entry_);
         }
 
@@ -115,7 +115,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__istext__config__ret__bool, config_entry_);
         }
 
-        std::vector<config> config_classes(const std::string &condition_, const config &config_) {
+        std::vector<config> config_classes(sqf_string_const_ref condition_, const config &config_) {
             return __helpers::__convert_to_configs_vector(host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, condition_, config_));
         }
 

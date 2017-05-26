@@ -9,7 +9,7 @@ namespace intercept {
                 host::functions.invoke_raw_nular(fnc_);
             }
 
-            std::string __retrieve_nular_string(nular_function fnc_) {
+            sqf_return_string __retrieve_nular_string(nular_function fnc_) {
                 return host::functions.invoke_raw_nular(fnc_);
             }
 
@@ -69,7 +69,7 @@ namespace intercept {
                 host::functions.invoke_raw_unary(fnc_, vec_);
             }
 
-            void __empty_unary_string(unary_function fnc_, const std::string &str_) {
+            void __empty_unary_string(unary_function fnc_, sqf_string_const_ref str_) {
                 host::functions.invoke_raw_unary(fnc_, str_);
             }
 
@@ -89,7 +89,7 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            bool __bool_unary_string(unary_function fnc_, const std::string &str_) {
+            bool __bool_unary_string(unary_function fnc_, sqf_string_const_ref str_) {
                 return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
@@ -109,7 +109,7 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
-            float __number_unary_string(unary_function fnc_, const std::string &str_) {
+            float __number_unary_string(unary_function fnc_, sqf_string_const_ref str_) {
                 return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
@@ -121,15 +121,15 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            std::string __string_unary_control(unary_function fnc_, const control &ctl_) {
+            sqf_return_string __string_unary_control(unary_function fnc_, const control &ctl_) {
                 return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
-            std::string __string_unary_object(unary_function fnc_, const object &obj_) {
+            sqf_return_string __string_unary_object(unary_function fnc_, const object &obj_) {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            std::string __string_unary_string(unary_function fnc_, const std::string &str_) {
+            sqf_return_string __string_unary_string(unary_function fnc_, sqf_string_const_ref str_) {
                 return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
@@ -161,8 +161,8 @@ namespace intercept {
                 return output;
             }
 
-            std::vector<std::string> __convert_to_strings_vector(game_value input_) {
-                std::vector<std::string> output;
+            sqf_return_string_list __convert_to_strings_vector(game_value input_) {
+                sqf_return_string_list output;
                 if (input_.type() != game_data_array::type_def) return output;
                 const auto& arr = input_.to_array();
                 output.insert(output.end(), arr.begin(), arr.end());

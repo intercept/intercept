@@ -76,7 +76,7 @@ namespace intercept {
         void allow_curator_logic_ignore_areas(const object &value1_, bool value0_) {
             host::functions.invoke_raw_binary(__sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing, value0_, value1_);
         }
-        float curator_coef(const object &value0_, const std::string &value1_) {
+        float curator_coef(const object &value0_, sqf_string_const_ref value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__curatorcoef__object__string__ret__scalar, value0_, value1_);
         }
 
@@ -100,7 +100,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void add_curator_addons(const object & curator_object_, const std::vector<std::string>& addons_) {
+        void add_curator_addons(const object & curator_object_, sqf_string_list_const_ref addons_) {
             auto_array<game_value> addons(addons_.begin(), addons_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, std::move(addons));
@@ -147,7 +147,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoreditingarea__object__array__ret__nothing, curator_object_, args);
         }
 
-        std::vector<std::string> curator_addons(const object &curator_module_) {
+        sqf_return_string_list curator_addons(const object &curator_module_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__curatoraddons__object__ret__array, curator_module_));
         }
 
@@ -162,7 +162,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__objectcurators__object__ret__array, obj_));
         }
 
-        void remove_curator_addons(const object &curator_module_, const std::vector<std::string> &addons_) {
+        void remove_curator_addons(const object &curator_module_, sqf_string_list_const_ref addons_) {
             auto_array<game_value> addons(addons_.begin(), addons_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__removecuratoraddons__object__array__ret__nothing, curator_module_, std::move(addons));
@@ -178,7 +178,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removecuratoreditableobjects__object__array__ret__nothing, curator_module_, params_right);
         }
 
-        void set_curator_coef(const object& curator_, const std::string& action_, std::variant<float, bool> coef_) {
+        void set_curator_coef(const object& curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_) {
             if (coef_.index() == 0)
                 host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<bool>(coef_) }); return;
             host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<float>(coef_) });

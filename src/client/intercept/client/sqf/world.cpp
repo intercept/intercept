@@ -9,7 +9,7 @@ namespace intercept {
             return sqf::__helpers::__retrieve_nular_number(__sqf::nular__worldsize__ret__scalar);
         }
 
-        std::string world_name() {
+        sqf_return_string world_name() {
             return host::functions.invoke_raw_nular(__sqf::nular__worldname__ret__string);
         }
 
@@ -148,7 +148,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__setdate__array__ret__nothing, date);
         }
 
-        std::vector<object> entities(const std::vector<std::string> &typesinclude_, const std::vector<std::string> &typesexclude_, bool includeCrews_, bool excludeDead_) {
+        std::vector<object> entities(sqf_string_list_const_ref typesinclude_, sqf_string_list_const_ref typesexclude_, bool includeCrews_, bool excludeDead_) {
             auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
             auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
 

@@ -48,16 +48,16 @@ namespace intercept {
         std::vector<object> ropes(const object &obj_);
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
-        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_);
-        object rope_create(const object &from_obj_, const std::string &from_point_, const object &to_obj_, const std::string &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_);
+        object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_);
         object rope_create(const object &from_obj_, const vector3 &from_point_);
         object rope_create(const object &from_obj_, const vector3 &from_point_, float length_);
-        object rope_create(const object &from_obj_, const std::string &from_point_);
-        object rope_create(const object &from_obj_, const std::string &from_point_, float length_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_);
+        object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, float length_);
 
         void rope_cut(const object &rope_, float distance_);
 
@@ -71,7 +71,7 @@ namespace intercept {
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
         std::vector<object> attached_objects(const object &obj_);
         object attached_to(const object &obj_);
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, const std::string &memPoint_);
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
 
     }

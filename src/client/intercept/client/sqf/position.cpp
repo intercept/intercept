@@ -226,7 +226,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__vectordirvisual__object__ret__array, obj_);
         }
 
-        vector3 selection_positon(const object & obj_, const std::string & selection_name_) {
+        vector3 selection_positon(const object & obj_, sqf_string_const_ref selection_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_);
         }
 
@@ -273,7 +273,7 @@ namespace intercept {
 
         }
 
-        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_) {
+        vector3 weapon_direction(const object &unit_, sqf_string_const_ref weapon_class_) {
             return host::functions.invoke_raw_binary(__sqf::binary__weapondirection__object__string__ret__array, unit_, weapon_class_);
         }
 

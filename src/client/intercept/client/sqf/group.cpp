@@ -4,11 +4,11 @@
 #include "waypoint.hpp"
 namespace intercept {
     namespace sqf {
-        std::string combat_mode(const group &grp_) {
+        sqf_return_string combat_mode(const group &grp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
-        float add_group_icon(const group& group_, const std::string& icon_, std::optional<vector2> offset_) {
+        float add_group_icon(const group& group_, sqf_string_const_ref icon_, std::optional<vector2> offset_) {
             game_value params(offset_.has_value() ? game_value{ icon_, *offset_ } : game_value{ icon_ });
 
             return host::functions.invoke_raw_binary(__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
@@ -36,11 +36,11 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__deletegroup__group__ret__nothing, value_);
         }
 
-        group group_from_net_id(const std::string& value_) {
+        group group_from_net_id(sqf_string_const_ref value_) {
             return group(host::functions.invoke_raw_unary(__sqf::unary__groupfromnetid__string__ret__group, value_));
         }
 
-        std::string group_id(const group &value_) {
+        sqf_return_string group_id(const group &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__groupid__group__ret__string, value_);
         }
 
@@ -56,7 +56,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__leader__group__ret__object, value_));
         }
 
-        void group_radio(const object & unit_, const std::string& radio_name_) {
+        void group_radio(const object & unit_, sqf_string_const_ref radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__groupradio__object__string__ret__nothing, unit_, radio_name_);
         }
 
@@ -128,7 +128,7 @@ namespace intercept {
         side get_side(const group &group_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__group__ret__side, group_));
         }
-        std::vector<std::string> all_variables(const group &value_) {
+        sqf_return_string_list all_variables(const group &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__group__ret__array, value_));
         }

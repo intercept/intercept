@@ -56,7 +56,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__group__bool__ret__nothing, group_, enable_);
         }
 
-        void set_dynamic_simulation_distance(const std::string& category_, float distance_) {
+        void set_dynamic_simulation_distance(sqf_string_const_ref category_, float distance_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistance__string__scalar__ret__nothing, category_, distance_);
         }
 
@@ -80,15 +80,15 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__cantriggerdynamicsimulation__object__ret__bool, unit_);
         }
 
-        void diag_dynamic_simulation_end(const std::string &type_) {
+        void diag_dynamic_simulation_end(sqf_string_const_ref type_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_dynamicsimulationend__string__ret__nothing, type_);
         }
 
-        float dynamic_simulation_distance(const std::string &category_) {
+        float dynamic_simulation_distance(sqf_string_const_ref category_) {
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistance__string__ret__scalar, category_);
         }
 
-        float dynamic_simulation_distance_coef(const std::string &class_) {
+        float dynamic_simulation_distance_coef(sqf_string_const_ref class_) {
             return host::functions.invoke_raw_unary(__sqf::unary__dynamicsimulationdistancecoef__string__ret__scalar, class_);
         }
 

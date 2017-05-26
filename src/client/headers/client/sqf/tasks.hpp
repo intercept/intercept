@@ -19,19 +19,19 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        void set_formation_task(const object &value0_, const std::string& value1_);
-        std::string formation_task(const object &value_);
+        void set_formation_task(const object &value0_, sqf_string_const_ref value1_);
+        sqf_return_string formation_task(const object &value_);
 
-        bool unregister_task(const team_member &value0_, const std::string& value1_);
+        bool unregister_task(const team_member &value0_, sqf_string_const_ref value1_);
         task current_task(const object &value_);
         float priority(task value_);
         bool task_completed(task value_);
         task task_parent(task value_);
-        std::string task_state(task value_);
-        std::string type(task value_);
-        std::vector<std::string> registered_tasks(const team_member &member_);
+        sqf_return_string task_state(task value_);
+        sqf_return_string type(task value_);
+        sqf_return_string_list registered_tasks(const team_member &member_);
         std::vector<task> simple_tasks(const object& unit_);
-        std::vector<std::string> task_description(const task& task_);
+        sqf_return_string_list task_description(const task& task_);
         vector3 task_destination(const task& task_);
 
 
@@ -44,62 +44,62 @@ namespace intercept {
         bool task_always_visible(const task &task_);
         rv_task_custom_data task_custom_data(const task &task_);
         vector3 task_marker_offset(const object &unit_);
-        std::string task_type(const task &task_);
+        sqf_return_string task_type(const task &task_);
 
         struct rv_task_variables {
             std::string name;
             game_value value;
         };
 
-        task create_simple_task(const object &unit_, const std::string &name_, std::optional<task> parent_task_);
+        task create_simple_task(const object &unit_, sqf_string_const_ref name_, std::optional<task> parent_task_);
         void remove_simple_task(const object &unit_, const task &task_);
-        task create_task(const team_member& member_, const std::string& type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_ = {});
+        task create_task(const team_member& member_, sqf_string_const_ref type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_ = {});
         //#TODO arguments incorrect
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, float priority_);
-        task send_task(const team_member &sender_, const team_member &receiver_, const std::string &type_, const task &parent_task_, float priority_, std::vector<rv_task_variables> &variables_);
+        task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, float priority_);
+        task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, const task &parent_task_, float priority_, std::vector<rv_task_variables> &variables_);
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
         void set_current_task(const object& object_, const task& task_);
         void set_simple_task_always_visible(const task &task_, bool always_visible_);
-        void set_simple_task_custom_data(const task &task_, const std::string &icon_path_, const std::string &tool_tip_, const std::string &description_);
-        void set_simple_task_description(const task &task_, const std::string &description_, const std::string &description_short_, const std::string &description_hud_);
+        void set_simple_task_custom_data(const task &task_, sqf_string_const_ref icon_path_, sqf_string_const_ref tool_tip_, sqf_string_const_ref description_);
+        void set_simple_task_description(const task &task_, sqf_string_const_ref description_, sqf_string_const_ref description_short_, sqf_string_const_ref description_hud_);
         void set_simple_task_destination(const object &task_, const vector3 &position_);
         void set_simple_task_target(const task &task_, const object &target_, bool precise_position_);
-        void set_simple_task_type(const task &task_, const std::string &task_type_);
+        void set_simple_task_type(const task &task_, sqf_string_const_ref task_type_);
         void set_task_marker_offset(const object &task_, const vector3 &offset_);
         void set_task_result(const task &task_, const game_value &params_right);
-        void set_task_state(const task &task_, const std::string &state_);
+        void set_task_state(const task &task_, sqf_string_const_ref state_);
         std::vector<task> current_tasks(const team_member &team_member_);
-        bool register_task(const team_member &value0_, const std::string& value1_);
+        bool register_task(const team_member &value0_, sqf_string_const_ref value1_);
         void cancel_simple_task_destination(task value_);
 
 
 
 
         //diary
-        std::string create_diary_link(const std::string &subject_, const object &object_, const std::string &text_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &text_, const task &task_, const std::string &state_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_);
-        std::string create_diary_record(const object &object_, const std::string &subject_, const std::string &title_, const std::string &text_, const task &task_, const std::string &state_);
-        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_);
-        float create_diary_subject(const object &object_, const std::string &subject_, const std::string &name_, const std::string &picture_);
-        void process_diary_link(const std::string &value_);
-        bool diary_subject_exists(const object &value0_, const std::string& value1_);
-        void select_diary_subject(const object &value0_, const std::string& value1_);
+        sqf_return_string create_diary_link(sqf_string_const_ref subject_, const object &object_, sqf_string_const_ref text_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_, const task &task_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_, const task &task_, sqf_string_const_ref state_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_, const task &task_);
+        sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_, const task &task_, sqf_string_const_ref state_);
+        float create_diary_subject(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref name_);
+        float create_diary_subject(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref name_, sqf_string_const_ref picture_);
+        void process_diary_link(sqf_string_const_ref value_);
+        bool diary_subject_exists(const object &value0_, sqf_string_const_ref value1_);
+        void select_diary_subject(const object &value0_, sqf_string_const_ref value1_);
 
 
         //(de-)briefing
-        void set_debriefing_text(const std::string& endType_, const std::string& title_, const std::string& description_);
+        void set_debriefing_text(sqf_string_const_ref endType_, sqf_string_const_ref title_, sqf_string_const_ref description_);
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
-        std::string briefing_name();
+        sqf_return_string briefing_name();
         void disable_debriefing_stats();
-        float debriefing_text(const std::string & debriefing_);
-        void on_briefing_group(const std::string &value_);
-        void on_briefing_notes(const std::string &value_);
-        void on_briefing_plan(const std::string &value_);
-        void on_briefing_team_switch(const std::string &value_);
+        float debriefing_text(sqf_string_const_ref debriefing_);
+        void on_briefing_group(sqf_string_const_ref value_);
+        void on_briefing_notes(sqf_string_const_ref value_);
+        void on_briefing_plan(sqf_string_const_ref value_);
+        void on_briefing_team_switch(sqf_string_const_ref value_);
 
     }
 }

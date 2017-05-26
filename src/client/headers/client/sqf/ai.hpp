@@ -21,24 +21,24 @@ namespace intercept {
         /* ai */
         bool attack_enabled(const object &unit_);
         bool attack_enabled(const group &group_);
-        void command_artillery_fire(const object& unit_, const vector3& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const object& unit_, const vector2& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, const std::string& type_, int rounds_);
-        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, const std::string& type_, int rounds_);
+        void command_artillery_fire(const object& unit_, const vector3& pos_, sqf_string_const_ref type_, int rounds_);
+        void command_artillery_fire(const object& unit_, const vector2& pos_, sqf_string_const_ref type_, int rounds_);
+        void command_artillery_fire(const std::vector<object>& units_, const vector3& pos_, sqf_string_const_ref type_, int rounds_);
+        void command_artillery_fire(const std::vector<object>& units_, const vector2& pos_, sqf_string_const_ref type_, int rounds_);
         void command_fire(const object& unit_, const object& target_);
         void command_fire(const std::vector<object>& units_, const object& target_);
         void command_follow(const object& unit_, const object& target_);
         void command_follow(const std::vector<object>& units_, const object& target_);
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector3& pos_, const object& target_);
-        void command_fsm(const object& unit_, const std::string& fsm_, const vector2& pos_, const object& target_);
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector3& pos_, const object& target_);
-        void command_fsm(const std::vector<object>& units_, const std::string& fsm_, const vector2& pos_, const object& target_);
+        void command_fsm(const object& unit_, sqf_string_const_ref fsm_, const vector3& pos_, const object& target_);
+        void command_fsm(const object& unit_, sqf_string_const_ref fsm_, const vector2& pos_, const object& target_);
+        void command_fsm(const std::vector<object>& units_, sqf_string_const_ref fsm_, const vector3& pos_, const object& target_);
+        void command_fsm(const std::vector<object>& units_, sqf_string_const_ref fsm_, const vector2& pos_, const object& target_);
         void command_move(const object& unit_, const vector3& pos_);
         void command_move(const object& unit_, const vector2& pos_);
         void command_move(const std::vector<object>& units_, const vector3& pos_);
         void command_move(const std::vector<object>& units_, const vector2& pos_);
-        void command_radio(const object& unit_, const std::string& radio_name_);
-        void command_radio(const std::vector<object>& units_, const std::string& radio_name_);
+        void command_radio(const object& unit_, sqf_string_const_ref radio_name_);
+        void command_radio(const std::vector<object>& units_, sqf_string_const_ref radio_name_);
         void command_target(const object& unit_, const object& target_);
         void command_target(const std::vector<object>& units_, const object& target_);
         void command_watch(const object& unit_, const vector3& pos_);
@@ -61,14 +61,14 @@ namespace intercept {
         void assign_as_cargo(const object& unit_, const object& vehicle_);
         void assign_as_cargo_index(const object& unit_, const object& vehicle_, int index_);
 
-        void kb_add_topic(const object &unit_, const std::string &topic_name_, const std::string &bikb_file_, const std::string &fsm_file_, std::variant<std::reference_wrapper<const code>, std::reference_wrapper<const std::string>> event_handler_);
+        void kb_add_topic(const object &unit_, sqf_string_const_ref topic_name_, sqf_string_const_ref bikb_file_, sqf_string_const_ref fsm_file_, std::variant<std::reference_wrapper<const code>, sqf_string_const_ref_wrapper> event_handler_);
         void kb_react();
-        void kb_tell(const object &unit_, const object &receiver_, const std::string &topic_name_, const std::string &sentence_class_, const std::string &argument_name_, const code &argument_value_, const std::string &argument_text_, const std::vector<std::string> &argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, std::reference_wrapper<const std::string>> force_radio_);
-        bool kb_was_said(const object &unit_, const object &receiver_, const std::string &topic_, const std::string &sentence_id_, int max_age_);
-        bool kb_add_database(const object &value0_, const std::string& value1_);
-        bool kb_add_database_targets(const object &value0_, const std::string& value1_);
-        bool kb_has_topic(const object &value0_, const std::string& value1_);
-        void kb_remove_topic(const object &value0_, const std::string& value1_);
+        void kb_tell(const object &unit_, const object &receiver_, sqf_string_const_ref topic_name_, sqf_string_const_ref sentence_class_, sqf_string_const_ref argument_name_, const code &argument_value_, sqf_string_const_ref argument_text_, sqf_string_list_const_ref argument_speech_, std::variant<std::reference_wrapper<bool>, std::reference_wrapper<int>, sqf_string_const_ref_wrapper> force_radio_);
+        bool kb_was_said(const object &unit_, const object &receiver_, sqf_string_const_ref topic_, sqf_string_const_ref sentence_id_, int max_age_);
+        bool kb_add_database(const object &value0_, sqf_string_const_ref value1_);
+        bool kb_add_database_targets(const object &value0_, sqf_string_const_ref value1_);
+        bool kb_has_topic(const object &value0_, sqf_string_const_ref value1_);
+        void kb_remove_topic(const object &value0_, sqf_string_const_ref value1_);
 
     }
 }

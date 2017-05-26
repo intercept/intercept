@@ -4,6 +4,7 @@
 
 namespace intercept {
     namespace sqf {
+        //#TODO move to headerfile once inline variables is implemented in MSVC2017
         const std::string waypoint::__speed_lookup[4] = { "UNCHANGED", "LIMITED", "NORMAL", "FULL" };
         const std::string waypoint::__show_lookup[4] = { "NEVER", "EASY", "ALWAYS", "ERROR" };
         const std::string waypoint::__type_lookup[22] = { "MOVE","DESTROY","GETIN","SAD","JOIN","LEADER","GETOUT","CYCLE","LOAD","UNLOAD","TR UNLOAD","HOLD","SENTRY","GUARD","TALK","SCRIPTED","SUPPORT","GETIN NEAREST","DISMISS","LOITER","AND","OR" };
@@ -12,7 +13,7 @@ namespace intercept {
         const std::string waypoint::__formation_lookup[10] = { "NO_CHANGE","COLUMN","STAG_COLUMN","WEDGE","ECH_LEFT","ECH_RIGHT","VEE","LINE","FILE","DIAMOND" };
         const std::string waypoint::__loiter_lookup[2] = { "CIRCLE", "CIRCLE_L" };
 
-        waypoint add_waypoint(group& gp_, const vector3& center_, float radius_, int index_, const std::string& name_) {
+        waypoint add_waypoint(group& gp_, const vector3& center_, float radius_, int index_, sqf_string_const_ref name_) {
             game_value args({
                 center_,
                 radius_,
@@ -23,7 +24,7 @@ namespace intercept {
             return waypoint(game_value(host::functions.invoke_raw_binary(__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
         }
 
-        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_, const std::string & name_) {
+        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_, sqf_string_const_ref name_) {
             game_value args({
                 center_,
                 radius_,
@@ -63,7 +64,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointcompletionradius__array__ret__scalar, wp_);
         }
 
-        std::string waypoint_description(waypoint & wp_) {
+        sqf_return_string waypoint_description(waypoint & wp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointdescription__array__ret__string, wp_);
         }
 
@@ -83,14 +84,14 @@ namespace intercept {
             return waypoint::__parse_loiter_type(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointloitertype__array__ret__string, wp_)));
         }
 
-        std::string waypoint_name(waypoint & wp_) {
+        sqf_return_string waypoint_name(waypoint & wp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointname__array__ret__string, wp_);
         }
         vector3 waypoint_position(waypoint & wp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointposition__array__ret__array, wp_);
         }
 
-        std::string waypoint_script(waypoint & wp_) {
+        sqf_return_string waypoint_script(waypoint & wp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointscript__array__ret__string, wp_);
         }
         waypoint::show waypoint_show(waypoint & wp_) {
@@ -291,7 +292,7 @@ namespace intercept {
             return waypoints;
         }
 
-        void set_effect_condition(std::variant<object, rv_waypoint> unit_, const std::string &statement_) {
+        void set_effect_condition(std::variant<object, rv_waypoint> unit_, sqf_string_const_ref statement_) {
             game_value param_left;
             switch (unit_.index()) {
             case 0: param_left = std::get<0>(unit_); break;
@@ -332,11 +333,11 @@ namespace intercept {
         void trigger_attach_object(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);
         }
-        void set_trigger_text(const object &value0_, const std::string& value1_) {
+        void set_trigger_text(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggertext__object__string__ret__nothing, value0_, value1_);
         }
 
-        void set_trigger_type(const object &value0_, const std::string& value1_) {
+        void set_trigger_type(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggertype__object__string__ret__nothing, value0_, value1_);
         }
         bool trigger_activated(const object &value_) {
@@ -347,7 +348,7 @@ namespace intercept {
             return __helpers::__object_unary_object(__sqf::unary__triggerattachedvehicle__object__ret__object, value_);
         }
 
-        std::string trigger_text(const object &value_) {
+        sqf_return_string trigger_text(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__triggertext__object__ret__string, value_);
         }
 
@@ -355,10 +356,10 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__triggertimeoutcurrent__object__ret__scalar, value_);
         }
 
-        std::string trigger_type(const object &value_) {
+        sqf_return_string trigger_type(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__triggertype__object__ret__string, value_);
         }
-        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_/* = true*/) {
+        object create_trigger(sqf_string_const_ref type_, const vector3 &pos_, bool make_global_/* = true*/) {
             game_value args({
                 type_,
                 pos_,
@@ -368,7 +369,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
 
-        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ /*= true*/) {
+        object create_trigger(sqf_string_const_ref type_, const object &pos_, bool make_global_ /*= true*/) {
             game_value args({
                 type_,
                 pos_,
@@ -378,7 +379,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
 
-        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_) {
+        void set_trigger_activation(const object &trigger_, sqf_string_const_ref by_, sqf_string_const_ref type_, bool repeating_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, { by_, repeating_ });
         }
 
@@ -388,7 +389,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_ });
         }
 
-        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_) {
+        void set_trigger_statements(const object &trigger_, sqf_string_const_ref condition_, sqf_string_const_ref activation_, sqf_string_const_ref deactivation_) {
             host::functions.invoke_raw_binary(__sqf::binary__settriggerstatements__object__array__ret__nothing, trigger_, { condition_, activation_, deactivation_ });
         }
 
@@ -409,27 +410,27 @@ namespace intercept {
 
 
         //both
-        void set_music_effect(const object &trigger_, const std::string &track_) {
+        void set_music_effect(const object &trigger_, sqf_string_const_ref track_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, trigger_, track_);
         }
 
-        void set_music_effect(const group &group_, int index_, const std::string &track_) {
+        void set_music_effect(const group &group_, int index_, sqf_string_const_ref track_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmusiceffect__object_array__string__ret__nothing, { group_, index_ }, track_);
         }
 
-        void set_sound_effect(const object &trigger, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+        void set_sound_effect(const object &trigger, sqf_string_const_ref sound_, sqf_string_const_ref voice_, sqf_string_const_ref sound_env_, sqf_string_const_ref sound_det_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, trigger, { sound_, voice_, sound_env_, sound_det_ });
         }
 
-        void set_sound_effect(const group &group, int index_, const std::string &sound_, const std::string &voice_, const std::string &sound_env_, const std::string &sound_det_) {
+        void set_sound_effect(const group &group, int index_, sqf_string_const_ref sound_, sqf_string_const_ref voice_, sqf_string_const_ref sound_env_, sqf_string_const_ref sound_det_) {
             host::functions.invoke_raw_binary(__sqf::binary__setsoundeffect__object_array__array__ret__nothing, { group, index_ }, { sound_, voice_, sound_env_, sound_det_ });
         }
 
-        void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_) {
+        void set_title_effect(const object &trigger_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_) {
             host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, trigger_, { type_, effect_, text_ });
         }
 
-        void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_) {
+        void set_title_effect(const group &group_, int index_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_) {
             host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, { group_, index_ }, { type_, effect_, text_ });
         }
 

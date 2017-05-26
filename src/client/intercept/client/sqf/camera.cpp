@@ -55,11 +55,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
         }
 
-        object cam_create(const std::string & type_, const vector3 & position_) {
+        object cam_create(sqf_string_const_ref type_, const vector3 & position_) {
             return host::functions.invoke_raw_binary(__sqf::binary__camcreate__string__array__ret__object, type_, position_);
         }
 
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_) {
+        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_) {
             game_value args({
                 name_,
                 position_
@@ -67,7 +67,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_, const std::string & rtt_) {
+        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_, sqf_string_const_ref rtt_) {
             game_value args({
                 name_,
                 position_,
@@ -140,7 +140,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
         }
 
-        void cam_command(const object &value0_, const std::string& value1_) {
+        void cam_command(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__camcommand__object__string__ret__nothing, value0_, value1_);
         }
 
@@ -240,13 +240,13 @@ namespace intercept {
         vector3 get_camera_view_direction(const object & obj_) {
             return __helpers::get_pos_obj(__sqf::unary__getcameraviewdirection__object__ret__array, obj_);
         }
-        void switch_camera(const object &value0_, const std::string& value1_) {
+        void switch_camera(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__switchcamera__object__string__ret__nothing, value0_, value1_);
         }
         void set_camera_interest(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcamerainterest__object__scalar__ret__nothing, value0_, value1_);
         }
-        std::string camera_view() {
+        sqf_return_string camera_view() {
             return __helpers::__retrieve_nular_string(__sqf::nular__cameraview__ret__string);
         }
 
@@ -263,7 +263,7 @@ namespace intercept {
 
         //post processing effects
 
-        float pp_effect_create(const std::string& name_, const float& priority_) {
+        float pp_effect_create(sqf_string_const_ref name_, const float& priority_) {
             game_value params({
                 name_,
                 priority_
@@ -280,7 +280,7 @@ namespace intercept {
             return __helpers::__convert_to_numbers_vector(ret);
         }
 
-        bool pp_effect_committed(const std::string &value_) {
+        bool pp_effect_committed(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__ppeffectcommitted__string__ret__bool, value_);
         }
 
@@ -295,11 +295,11 @@ namespace intercept {
         bool pp_effect_enabled(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__ppeffectenabled__scalar__ret__bool, value_);
         }
-        void pp_effect_commit(float value0_, const std::string& value1_) {
+        void pp_effect_commit(float value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__string__scalar__ret__nothing, value0_, value1_);
         }
 
-        void pp_effect_enable(bool value0_, const std::string& value1_) {
+        void pp_effect_enable(bool value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__string__bool__ret__nothing, value0_, value1_);
         }
 

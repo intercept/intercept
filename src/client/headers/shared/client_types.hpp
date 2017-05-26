@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "shared.hpp"
 #include "types.hpp"
-
+#include <variant>
 namespace intercept {
     namespace types {
 
@@ -106,12 +106,37 @@ namespace intercept {
                 alpha(alpha_) {}
         };
 
-        typedef std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> > t_sqf_in_area_position;
-
+        
         struct rv_waypoint {
             group group;
             int index;
             //#TODO add to game_value conversion
         };
+
+
+        using sqf_string = std::string;
+        using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<std::string>;
+        using sqf_string_list_const_ref = const std::vector<std::string>&;
+        using sqf_string_const_ref = const std::string&;
+        using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
+
+
+
+        using t_sqf_in_area_position = std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> >;
+
+
     }
 }
+
+//custom conversion from std::string& to const std::string& inside reference_wrapper
+namespace std {
+    template<>
+    class reference_wrapper<const std::string>
+        : public reference_wrapper<std::string> {
+    public:
+        reference_wrapper(string& _Val) noexcept
+            : reference_wrapper<std::string>(_Val) {};
+    };
+}
+

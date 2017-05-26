@@ -21,8 +21,8 @@ namespace intercept {
     namespace sqf {
         class waypoint;
 
-        std::string combat_mode(const group &loc_);
-        float add_group_icon(const group& group_, const std::string& icon_, std::optional<vector2> offset_ = std::optional<vector2>());
+        sqf_return_string combat_mode(const group &loc_);
+        float add_group_icon(const group& group_, sqf_string_const_ref icon_, std::optional<vector2> offset_ = std::optional<vector2>());
 
 
 
@@ -34,13 +34,13 @@ namespace intercept {
         group create_group(const side &value_, bool delete_when_empty_ = false);
         void delete_group(const group &value_);
 
-        group group_from_net_id(const std::string &value_);
-        std::string group_id(const group &value_);
+        group group_from_net_id(sqf_string_const_ref value_);
+        sqf_return_string group_id(const group &value_);
         float group_owner(const group &value_);
         bool set_group_owner(const group & group_, int client_id_);
 
         object leader(const group &value_);
-        void group_radio(const object & unit_, const std::string& radio_name_);
+        void group_radio(const object & unit_, sqf_string_const_ref radio_name_);
         void remove_group_icon(const group & group_, int icon_id_);
         void select_leader(const group & group_, const object & unit_);
         float current_waypoint(const group & group_);
@@ -72,7 +72,7 @@ namespace intercept {
 
         std::vector<object> units(const group& gp_);
         side get_side(const group &group_);
-        std::vector<std::string> all_variables(const group &value_);
+        sqf_return_string_list all_variables(const group &value_);
         bool is_null(const group &value_);
 
         bool is_group_deleted_when_empty(const group &group_);

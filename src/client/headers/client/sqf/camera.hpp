@@ -33,9 +33,9 @@ namespace intercept {
         void camera_effect_enable_hud(bool enable_hud_);
         float camera_interest(const object &entity_);
         void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius, float max_above_land_);
-        object cam_create(const std::string &type_, const vector3 &position_);
-        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_);
-        void camera_effect(const object &camera_, const std::string &name_, const std::string &position_, const std::string &rtt_);
+        object cam_create(sqf_string_const_ref type_, const vector3 &position_);
+        void camera_effect(const object &camera_, sqf_string_const_ref name_, sqf_string_const_ref position_);
+        void camera_effect(const object &camera_, sqf_string_const_ref name_, sqf_string_const_ref position_, sqf_string_const_ref rtt_);
         void cam_prepare_focus(const object &camera_, float distance_, float blur_);
         void cam_prepare_fov_range(const object &camera_, float min_, float max_);
         void cam_prepare_pos(const object &camera_, const vector3 &position_);
@@ -50,7 +50,7 @@ namespace intercept {
         void cam_set_target(const object &camera_, const object &target_);
         void cam_set_target(const object &camera_, const vector3 &target_);
 
-        void cam_command(const object &value0_, const std::string& value1_);
+        void cam_command(const object &value0_, sqf_string_const_ref value1_);
         void cam_commit(const object &value0_, float value1_);
         void cam_commit_prepared(const object &value0_, float value1_);
         void cam_preload(const object &value0_, float value1_);
@@ -85,9 +85,9 @@ namespace intercept {
         void set_default_camera(const vector3 &pos_, const vector3 &dir_);
 
         vector3 get_camera_view_direction(const object & obj_);
-        void switch_camera(const object &value0_, const std::string& value1_);
+        void switch_camera(const object &value0_, sqf_string_const_ref value1_);
         void set_camera_interest(const object &value0_, float value1_);
-        std::string camera_view();
+        sqf_return_string camera_view();
 
 
         //postprocessing effects
@@ -112,16 +112,16 @@ namespace intercept {
             }
         };
 
-        float pp_effect_create(const std::string& name_, const float& priority_);
+        float pp_effect_create(sqf_string_const_ref name_, const float& priority_);
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_);
 
-        bool pp_effect_committed(const std::string &value_);
+        bool pp_effect_committed(sqf_string_const_ref value_);
         bool pp_effect_committed(float value_);
         void pp_effect_destroy(float value_);
         bool pp_effect_enabled(float value_);
 
-        void pp_effect_commit(float value0_, const std::string& value1_);
-        void pp_effect_enable(bool value0_, const std::string& value1_);
+        void pp_effect_commit(float value0_, sqf_string_const_ref value1_);
+        void pp_effect_enable(bool value0_, sqf_string_const_ref value1_);
         void pp_effect_enable(float value0_, bool value1_);
         void pp_effect_force_in_nvg(float value0_, bool value1_);
 

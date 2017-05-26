@@ -17,6 +17,7 @@
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "hc.hpp"
+#include "sound.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

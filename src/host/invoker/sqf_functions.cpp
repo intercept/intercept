@@ -162,7 +162,16 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!operators) {//Name already exists
-        operators = static_cast<game_operators*>(gs->_scriptOperators.get_table_for_key(lowerName.c_str())->push_back(game_operators(lowerName.c_str())));
+        auto table = gs->_scriptOperators.get_table_for_key(lowerName.c_str());
+        auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+        if (found == _keeper.end()) {
+            //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
+            auto_array<game_operators> backup(table->begin(), table->end());
+            _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+            *table = std::move(backup);
+        }
+
+        operators = static_cast<game_operators*>(table->push_back(game_operators(lowerName.c_str())));
         operators->copyPH(test);
     } else {
         if (findBinary(name, left_arg_type, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
@@ -187,11 +196,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //insertBinary(_registerFuncs._gameState, op);
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
-    //std::stringstream stream;
-    //stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
-    //    << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-    //    << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
-    //OutputDebugStringA(stream.str().c_str());
+    std::stringstream stream;
+    stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
+        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
+        << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+    OutputDebugStringA(stream.str().c_str());
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -242,7 +251,16 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!functions) {
-        functions = static_cast<game_functions*>(gs->_scriptFunctions.get_table_for_key(lowerName.c_str())->push_back(game_functions(lowerName.c_str())));
+        auto table = gs->_scriptFunctions.get_table_for_key(lowerName.c_str());
+        auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+        if (found == _keeper.end()) {
+            //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
+            auto_array<game_functions> backup(table->begin(), table->end());
+            _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+            *table = std::move(backup);
+        }
+
+        functions = static_cast<game_functions*>(table->push_back(game_functions(lowerName.c_str())));
         functions->copyPH(test);
     } else { //Name already exists
         if (findUnary(name, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
@@ -303,7 +321,17 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._operator->return_type = retType;
     op._category = "intercept";
 
-    auto inserted = static_cast<__internal::gsNular*>(gs->_scriptNulars.get_table_for_key(lowerName.c_str())->push_back(op));
+
+    auto table = gs->_scriptNulars.get_table_for_key(lowerName.c_str());
+    auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+    if (found == _keeper.end()) {
+        //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
+        auto_array<gsNular> backup(table->begin(), table->end());
+        _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+        *table = std::move(backup);
+    }
+
+    auto inserted = static_cast<__internal::gsNular*>(table->push_back(op));
 
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value

@@ -50,7 +50,7 @@ intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };
 
-intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame [];}";
+intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame;}";
 
 intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
 

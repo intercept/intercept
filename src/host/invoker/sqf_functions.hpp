@@ -114,6 +114,7 @@ namespace intercept {
         __internal::game_operators* findOperators(std::string name) const;
         __internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;
+        std::map<uintptr_t, auto_array<char>> _keeper;
         /**
          * \brief If true then we can carelessly modify the script command tables
          */

@@ -16,8 +16,6 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
-#include <variant> //#TODO move that into shared
-#include <optional>
 
 using namespace intercept::types;
 

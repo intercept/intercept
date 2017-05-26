@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // This is a warning normally for returning references to local/stack allocated variables
 // It is so dangerous though that we need to force it as a warning because it can break
@@ -22,6 +22,8 @@
 #include <cstdint>
 #include <streambuf>
 #include <istream>
+#include <variant>
+#include <optional>
 
 #ifdef _DEBUG
 #define ZERO_OUTPUT()    { memset(output, 0x00, outputSize); }

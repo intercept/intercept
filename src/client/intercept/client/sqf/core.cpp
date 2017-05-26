@@ -529,7 +529,8 @@ namespace intercept {
         }
 
 
-
-
+        std::string to_fixed(float number_, int decimals_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
+        }
     }
 }

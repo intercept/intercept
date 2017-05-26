@@ -119,5 +119,8 @@ namespace intercept {
         * Find list of objects intersected by given line from begin_position_ to end_position_
         */
         std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
+
+        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
+
     }
 }

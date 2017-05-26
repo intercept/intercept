@@ -1422,7 +1422,6 @@ namespace intercept {
         rv_task_custom_data task_custom_data(const task &task_);
         vector3 task_marker_offset(const object &unit_);
         std::string task_type(const task &task_);
-        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
         bool unit_is_uav(const object &unit_);
         void use_ai_oper_map_obstruction_test(bool use_);
         void use_ai_steering_component(bool use_);

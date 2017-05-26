@@ -200,5 +200,14 @@ namespace intercept {
             }
             return output;
         }
+
+        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_) {
+            game_value params({
+                pos1_,
+                pos2_
+            });
+
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
+        }
     }
 }

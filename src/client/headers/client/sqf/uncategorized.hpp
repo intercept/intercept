@@ -21,10 +21,7 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        struct rv_bounding_box {
-            vector3 min;
-            vector3 max;
-        };
+        
 
         struct rv_destination {
             vector3 pos;
@@ -73,25 +70,12 @@ namespace intercept {
             }
         };
 
-
-        
-        
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(const std::string &texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, const std::string &text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, const std::string &font_ = "TahomaB");
-
-        vector3 vector_dir(const object & obj_);
-        vector3 vector_dir_visual(const object & obj_);
-        vector3 selection_positon(const object & obj_, const std::string & selection_name_);
-
         
-
-
         std::vector<object> near_entities(const vector3 &pos_agl_, const std::vector<std::string> &types_, float range_);
 
-
         object create_vehicle_local(const std::string &type_, const vector3 &pos_atl_);
-
-
 
         /* potential namespace: */
         std::vector<std::string> action_keys(const std::string &user_action_);
@@ -133,11 +117,7 @@ namespace intercept {
         /* potential namespace: cargo */
         bool can_sling_load(const object& vehicle_, const object& cargo_);
 
-        /* potential namespace: misc, model, position? */
-        rv_bounding_box bounding_box(const object &model_);
-        rv_bounding_box bounding_box_real(const object &model_);
-        vector3 bounding_center(const object &obj_);
-
+        
         /* potential namespace: ai, group, unit */
         std::string combat_mode(const object &loc_);
 
@@ -609,8 +589,6 @@ namespace intercept {
         float get_custom_aim_coef(const object &value_);
         float get_dlcusage_time(float value_);
         float get_dammage(const object &value_);
-        float get_dir(const object &value_);
-        float get_dir_visual(const object &value_);
         float get_fatigue(const object &value_);
         float get_fuel_cargo(const object &value_);
 
@@ -916,7 +894,6 @@ namespace intercept {
         void set_custom_weight_rtd(const object &value0_, float value1_);
         void set_damage(const object &value0_, float value1_, bool use_effects_ = true);
         void set_dammage(const object &value0_, float value1_);
-        void set_dir(const object &value0_, float value1_);
         void set_drop_interval(const object &value0_, float value1_);
 
         void set_face(const object &value0_, const std::string& value1_);
@@ -1449,8 +1426,6 @@ namespace intercept {
         vector3 task_marker_offset(const object &unit_);
         std::string task_type(const task &task_);
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
-        vector3 unit_aim_position(const object &unit_);
-        vector3 unit_aim_position_visual(const object &unit_);
         bool unit_is_uav(const object &unit_);
         void use_ai_oper_map_obstruction_test(bool use_);
         void use_ai_steering_component(bool use_);
@@ -1628,8 +1603,6 @@ namespace intercept {
         void force_follow_road(const object &vehicle_, bool follow_);
         void force_weapon_fire(const object &unit_, const std::string &muzzle_, const std::string &fire_mode_);
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, const std::string &magazine_type_);
-        typedef std::variant<std::reference_wrapper<const object> , std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> t_sqf_in_area_position;
-        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
         rv_group_icon get_group_icon(const group &group_, int &id_);
         vector3 get_hide_from(const object &unit_, const object &enemy_);
         std::string get_object_argument(const control &map_, const object &object_, const std::string &argument_);
@@ -1733,7 +1706,6 @@ namespace intercept {
         void set_debriefing_text(const std::string& endType_, const std::string& title_, const std::string& description_);
         //#TODO Enum for planningMode 
         void set_destination(const object& object_, const vector3& position_, const std::string& planning_mode_, bool force_replan);
-        void set_direction(const location& location_, float direction_);
         //category AI 
         void set_drive_on_path(const object& object_, const std::vector<vector3>& points_);
         /**
@@ -1830,8 +1802,6 @@ namespace intercept {
         bool set_vehicle_cargo(const object &vehicle_, const object &cargo_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, std::vector<std::string> markers_, float placement_radius_, std::optional<std::string> special_);
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
-        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
-        void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_);
         void set_waves(float time_, float waves_value_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, const std::string &muzzle_class_, float reload_time_);
@@ -1859,7 +1829,6 @@ namespace intercept {
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
-        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_);
         std::vector<std::string> weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
     }
 }

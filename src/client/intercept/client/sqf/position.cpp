@@ -217,6 +217,81 @@ namespace intercept {
         float direction(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__direction__object__ret__scalar, value_);
         }
+
+        vector3 vector_dir(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vectordir__object__ret__array, obj_);
+        }
+
+        vector3 vector_dir_visual(const object & obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vectordirvisual__object__ret__array, obj_);
+        }
+
+        vector3 selection_positon(const object & obj_, const std::string & selection_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_);
+        }
+
+        rv_bounding_box bounding_box(const object &model_) {
+            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
+            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
+        }
+
+        rv_bounding_box bounding_box_real(const object &model_) {
+            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
+            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
+        }
+
+        vector3 bounding_center(const object &obj_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__boundingcenter__object__ret__array, obj_));
+        }
+
+        float get_dir(const object &value_) {
+            return __helpers::__number_unary_object(__sqf::unary__getdir__object__ret__scalar, value_);
+        }
+
+        float get_dir_visual(const object &value_) {
+            return __helpers::__number_unary_object(__sqf::unary__getdirvisual__object__ret__scalar, value_);
+        }
+
+        void set_dir(const object &value0_, float value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdir__object__scalar__ret__nothing, value0_, value1_);
+        }
+
+        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_) {
+            game_value from;
+            game_value to;
+
+            if (from_.index() == 0) from = std::get<0>(from_).get();
+            if (from_.index() == 1) from = std::get<1>(from_).get();
+            if (to_.index() == 0) to = std::get<0>(to_).get();
+            if (to_.index() == 1) to = std::get<1>(to_).get();
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getdir__object_array__object_array__ret__scalar, from, to);
+        }
+
+        void set_direction(const location& location_, float direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
+
+        }
+
+        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__weapondirection__object__string__ret__array, unit_, weapon_class_);
+        }
+
+        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvelocitymodelspace__object__array__ret__nothing, vehicle_, relative_direction_);
+        }
+
+        void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvelocitytransformation__object__array__ret__nothing, object_, { position1_, position2_, velocity1_, velocity2_, direction1_, direction2_, up1_, up2_, time_ });
+        }
+
+        vector3 unit_aim_position(const object &unit_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_));
+        }
+
+        vector3 unit_aim_position_visual(const object &unit_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_));
+        }
     }
 }
 

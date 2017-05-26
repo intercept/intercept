@@ -402,18 +402,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
-        vector3 vector_dir(const object &obj_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__vectordir__object__ret__array, obj_);
-        }
-
-        vector3 vector_dir_visual(const object & obj_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__vectordirvisual__object__ret__array, obj_);
-        }
-
-        vector3 selection_positon(const object & obj_, const std::string & selection_name_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_);
-        }
-
         std::vector<object> near_entities(const vector3 & pos_agl_, const std::vector<std::string>& types_, float range_) {
             auto_array<game_value> types(types_.begin(), types_.end());
   
@@ -547,20 +535,7 @@ namespace intercept {
 
         
 
-        rv_bounding_box bounding_box(const object &model_) {
-            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
-            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
-        }
-
-        rv_bounding_box bounding_box_real(const object &model_) {
-            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
-            return rv_bounding_box({ vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2]) });
-        }
-
-        vector3 bounding_center(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__boundingcenter__object__ret__array, obj_));
-        }
-
+        
 
 
 
@@ -1528,14 +1503,6 @@ namespace intercept {
 
         float get_dammage(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getdammage__object__ret__scalar, value_);
-        }
-
-        float get_dir(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getdir__object__ret__scalar, value_);
-        }
-
-        float get_dir_visual(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getdirvisual__object__ret__scalar, value_);
         }
 
         float get_fatigue(const object &value_) {
@@ -2584,10 +2551,6 @@ namespace intercept {
 
         void set_dammage(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdammage__object__scalar__ret__nothing, value0_, value1_);
-        }
-
-        void set_dir(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setdir__object__scalar__ret__nothing, value0_, value1_);
         }
 
         void set_drop_interval(const object &value0_, float value1_) {
@@ -4515,14 +4478,6 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
         }
 
-        vector3 unit_aim_position(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_));
-        }
-
-        vector3 unit_aim_position_visual(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_));
-        }
-
         bool unit_is_uav(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__unitisuav__object__ret__bool, unit_);
         }
@@ -5259,19 +5214,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
         }
 
-        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_) {
-            game_value from;
-            game_value to;
-
-            if (from_.index() == 0) from = std::get<0>(from_).get();
-            if (from_.index() == 1) from = std::get<1>(from_).get();
-            if (to_.index() == 0) to = std::get<0>(to_).get();
-            if (to_.index() == 1) to = std::get<1>(to_).get();
-
-            return host::functions.invoke_raw_binary(__sqf::binary__getdir__object_array__object_array__ret__scalar, from, to);
-        }
-
-        
         rv_group_icon get_group_icon(const group &group_, int &id_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
 
@@ -5994,11 +5936,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setdestination__object__array__ret__nothing, object_, { position_, planning_mode_, force_replan });
         }
 
-        void set_direction(const location& location_, float direction_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
-
-        }
-
         void set_drive_on_path(const object& object_, const std::vector<vector3>& points_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdriveonpath__object__array__ret__nothing, object_, auto_array<game_value>(points_.begin(), points_.end()));
         }
@@ -6348,14 +6285,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvehicletipars__object__array__ret__nothing, vehicle_, params_right_);
         }
 
-        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvelocitymodelspace__object__array__ret__nothing, vehicle_, relative_direction_);
-        }
-
-        void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvelocitytransformation__object__array__ret__nothing, object_, {position1_, position2_, velocity1_, velocity2_, direction1_, direction2_, up1_, up2_, time_});
-        }
-
         void set_visible_if_tree_collapsed(const control &map_, const std::string &object_, bool visible_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvisibleiftreecollapsed__control__array__ret__nothing, map_, { object_, visible_ });
         }
@@ -6463,10 +6392,6 @@ namespace intercept {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessoriescargo__object__array__ret__array, container_, { weapon_id_, creator_id_ });
 
             return rv_weapon_accessories({ res[0], res[1], res[2], res[3] });
-        }
-
-        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__weapondirection__object__string__ret__array, unit_, weapon_class_);
         }
 
         std::vector<std::string> weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_) {

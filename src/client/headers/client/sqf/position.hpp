@@ -93,5 +93,30 @@ namespace intercept {
         void set_velocity(const object &obj_, const vector3 &vel_);
         vector3 velocity(const object &obj_);
         float direction(const object &value_);
+
+        vector3 vector_dir(const object & obj_);
+        vector3 vector_dir_visual(const object & obj_);
+        vector3 selection_positon(const object & obj_, const std::string & selection_name_);
+
+        struct rv_bounding_box {
+            vector3 min;
+            vector3 max;
+        };
+
+        rv_bounding_box bounding_box(const object &model_);
+        rv_bounding_box bounding_box_real(const object &model_);
+        vector3 bounding_center(const object &obj_);
+        void set_dir(const object &value0_, float value1_);
+        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
+        void set_direction(const location& location_, float direction_);
+        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
+        void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
+        vector3 weapon_direction(const object &unit_, const std::string &weapon_class_);
+        float get_dir(const object &value_);
+        float get_dir_visual(const object &value_);
+        vector3 unit_aim_position(const object &unit_);
+        vector3 unit_aim_position_visual(const object &unit_);
+
+
     }
 }

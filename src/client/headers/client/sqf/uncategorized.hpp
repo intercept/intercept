@@ -1599,12 +1599,6 @@ namespace intercept {
         void do_watch(const std::vector<object> &units_, const vector3 &position_);
         void do_watch(const object &unit_, const object &target_);
         void do_watch(const std::vector<object> &units_, const object &target_);
-        void draw_arrow(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
-        void draw_ellipse(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> center_, const vector2 &radius_, float angle_, const rv_color &color_, const std::string &fill_texture);
-        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
-        void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const std::string &param_type_, const std::string &line_type_, rv_color &color_);
-        void draw_location(const control &map_, const location &location_);
-        void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
         game_value edit_object(const control &map_, const std::string &object_);
         void editor_set_event_handler(const control &map_, const std::string &event_type_, std::string &event_function_);
         void enable_attack(const group &group_, bool enable_);
@@ -1691,8 +1685,6 @@ namespace intercept {
         game_value remote_exec_call(const game_value &params_, const std::string &function_, std::variant<int, object, std::reference_wrapper<const std::string>, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<std::reference_wrapper<const std::string>, bool, object, group>> jip_);
         
         
-        void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
-        void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
         void remove_event_handler(const object &object_, const std::string &event_, int index_);
         void remove_mp_event_handler(const object &object_, const std::string &event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
@@ -1742,7 +1734,6 @@ namespace intercept {
         //#TODO Enum for planningMode 
         void set_destination(const object& object_, const vector3& position_, const std::string& planning_mode_, bool force_replan);
         void set_direction(const location& location_, float direction_);
-        void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_);
         //category AI 
         void set_drive_on_path(const object& object_, const std::vector<vector3>& points_);
         /**
@@ -1832,10 +1823,6 @@ namespace intercept {
         void set_text(const location &location_, const std::string &text_);
         void set_title_effect(const object &trigger_, const std::string &type_, const std::string &effect_, const std::string &text_);
         void set_title_effect(const group &group_, int index_, const std::string &type_, const std::string &effect_, const std::string &text_);
-        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
-        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
-        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
-        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
         void set_type(const location &location_, const std::string &type_);
         void set_unit_trait(const object &unit_, const std::string &skill_name_, std::variant<bool, float> value_, bool is_custom_);
         void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
@@ -1858,11 +1845,9 @@ namespace intercept {
         void swim_in_depth(const object &unit_, float depth_);
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
-        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, const std::string &target_type_, const vector3 &target_position_, float target_max_age_);
-        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
         void trigger_dynamic_simulation(const object &object_, bool trigger_);
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
         int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
@@ -1870,7 +1855,6 @@ namespace intercept {
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
-        void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_);
         void update_menu_item(const control &map_, int menu_item_index_, const std::string &text_, const std::string &command_);
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
         rv_weapon_accessories weapon_accessories(const object &unit_, const std::string &weapon_class_);

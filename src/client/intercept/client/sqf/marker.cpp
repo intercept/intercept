@@ -560,6 +560,168 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
 
+        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, { by_, repeating_ });
+        }
+
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            if (radius_z_.has_value())
+                host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_, *radius_z_ }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_ });
+        }
+
+        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerstatements__object__array__ret__nothing, trigger_, { condition_, activation_, deactivation_ });
+        }
+
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggertimeout__object__array__ret__nothing, trigger_, { min_, mid_, max_, interruptable_ });
+        }
+
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_) {
+            auto_array<game_value> waypoints;
+            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group, waypoint.index });
+
+            host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
+        }
+
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {
+            host::functions.invoke_raw_binary(__sqf::binary__triggerattachvehicle__object__array__ret__nothing, trigger_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
+        }
+
+
+        //draw/icon
+        void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__updatedrawicon__control__array__ret__nothing, map_, { object_, string_identifier_ , color_, offset_, width_, height_, maintain_size_, angle_, shadow_ });
+        }
+
+        void draw_arrow(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_) {
+            auto_array<game_value> params_right;
+
+            switch (from_.index()) {
+            case 0: params_right.push_back(std::get<0>(from_).get()); break;
+            case 1: params_right.push_back(std::get<1>(from_).get()); break;
+            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+            }
+            switch (to_.index()) {
+            case 0: params_right.push_back(std::get<0>(to_).get()); break;
+            case 1: params_right.push_back(std::get<1>(to_).get()); break;
+            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+            }
+            params_right.push_back(color_);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawarrow__control__array__ret__nothing, map_, std::move(params_right));
+        }
+
+        void draw_ellipse(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> center_, const vector2 &radius_, float angle_, const rv_color &color_, const std::string &fill_texture) {
+            auto_array<game_value> params_right;
+
+            switch (center_.index()) {
+            case 0: params_right.push_back(std::get<0>(center_).get()); break;
+            case 1: params_right.push_back(std::get<1>(center_).get()); break;
+            case 2: params_right.push_back(std::get<2>(center_).get()); break;
+            }
+
+            params_right.push_back(radius_.x);
+            params_right.push_back(radius_.y);
+            params_right.push_back(angle_);
+            params_right.push_back(color_);
+            params_right.push_back(fill_texture);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawellipse__control__array__ret__nothing, map_, std::move(params_right));
+        }
+
+        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_) {
+            auto_array<game_value> params_right;
+
+            switch (from_.index()) {
+            case 0: params_right.push_back(std::get<0>(from_).get()); break;
+            case 1: params_right.push_back(std::get<1>(from_).get()); break;
+            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+            }
+            switch (to_.index()) {
+            case 0: params_right.push_back(std::get<0>(to_).get()); break;
+            case 1: params_right.push_back(std::get<1>(to_).get()); break;
+            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+            }
+            params_right.push_back(color_);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawline__control__array__ret__nothing, map_, std::move(params_right));
+        }
+
+        void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const std::string &param_type_, const std::string &line_type_, rv_color &color_) {
+            auto_array<game_value> params_right;
+
+            switch (from_.index()) {
+            case 0: params_right.push_back(std::get<0>(from_).get()); break;
+            case 1: params_right.push_back(std::get<1>(from_).get()); break;
+            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+            }
+            switch (to_.index()) {
+            case 0: params_right.push_back(std::get<0>(to_).get()); break;
+            case 1: params_right.push_back(std::get<1>(to_).get()); break;
+            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+            }
+            params_right.push_back(param_type_);
+            params_right.push_back(line_type_);
+            params_right.push_back(color_);
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawlink__control__array__ret__nothing, map_, std::move(params_right));
+        }
+
+        void draw_location(const control &map_, const location &location_) {
+            host::functions.invoke_raw_binary(__sqf::binary__drawlocation__control__location__ret__nothing, map_, location_);
+        }
+
+        void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_) {
+            auto_array<game_value> polygon(polygon_.begin(), polygon_.end());
+
+            game_value params_right({
+                std::move(polygon),
+                color_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__drawpolygon__control__array__ret__nothing, map_, params_right);
+        }
+
+        void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier) {
+            game_value params_right({
+                object_,
+                string_identifier
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removedrawicon__control__array__ret__nothing, map_, params_right);
+        }
+
+        void  remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier) {
+            game_value params_right({
+                object_,
+                string_identifier
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removedrawlinks__control__array__ret__nothing, map_, params_right);
+        }
+
+        void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_) {
+            game_value params_right({
+                object_,
+                texture_,
+                color_,
+                offset_,
+                width_,
+                height_,
+                size_,
+                angle_,
+                identifier_,
+                shadow_,
+                is_3d_,
+                draw_line_,
+                priority_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setdrawicon__control__array__ret__nothing, map_, params_right);
+        }
+
 
     }
 }

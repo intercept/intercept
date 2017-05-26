@@ -179,6 +179,25 @@ namespace intercept {
         object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
         object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
 
+        void set_trigger_activation(const object &trigger_, const std::string &by_, const std::string &type_, bool repeating_);
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        void set_trigger_statements(const object &trigger_, const std::string &condition_, const std::string &activation_, const std::string &deactivation_);
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
+
+
+        //icons/draw
+        void remove_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier);
+        void remove_draw_links(const control &map_, const std::string &object_, const std::string &string_identifier);
+        void set_draw_icon(const control &map_, const object &object_, const std::string &texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, const std::string &identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_);
+        void update_draw_icon(const control &map_, const std::string &object_, const std::string &string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_);
+        void draw_arrow(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
+        void draw_ellipse(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> center_, const vector2 &radius_, float angle_, const rv_color &color_, const std::string &fill_texture);
+        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
+        void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const std::string &param_type_, const std::string &line_type_, rv_color &color_);
+        void draw_location(const control &map_, const location &location_);
+        void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
 
     }
 }

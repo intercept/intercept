@@ -4526,12 +4526,6 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
         }
 
-        std::pair<bool, bool> environment_enabled() {
-            game_value res = host::functions.invoke_raw_nular(__sqf::nular__environmentenabled__ret__array);
-
-            return std::pair<bool,bool>({ res[0], res[1] });
-        }
-
         std::pair<bool, bool> forced_map() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__forcedmap__ret__array);
 

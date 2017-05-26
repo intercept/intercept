@@ -1437,7 +1437,6 @@ namespace intercept {
         //NULAR -- https://github.com/intercept/intercept/issues/13
         std::vector<script> diag_active_scripts();
         bool dynamic_simulation_system_enabled();
-        std::pair<bool, bool> environment_enabled();
         std::pair<bool, bool> forced_map();
         std::vector<std::string> get_mission_layers();
         int get_terrain_grid();

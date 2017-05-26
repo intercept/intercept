@@ -300,5 +300,11 @@ namespace intercept {
         void simul_weather_sync() {
             __helpers::__empty_nular(__sqf::nular__simulweathersync__ret__nothing);
         }
+
+        std::pair<bool, bool> environment_enabled() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__environmentenabled__ret__array);
+
+            return std::pair<bool, bool>({ res[0], res[1] });
+        }
     }
 }

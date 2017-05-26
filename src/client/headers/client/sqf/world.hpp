@@ -178,5 +178,7 @@ namespace intercept {
         float get_shadow_distance();
         void init_ambient_life();
         void simul_weather_sync();
+
+        std::pair<bool, bool> environment_enabled();
     }
 }

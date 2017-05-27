@@ -357,29 +357,9 @@ namespace intercept {
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
 
-        float server_time();
-        sqf_return_string server_name();
-
-        
-
-        
-
         sqf_return_string_list all_turrets(const object &vehicle_, bool person_turrets_);
 
         sqf_return_string_list all_turrets(const object &vehicle_);
-
-        
-
-
-
-        /* Multiplayer */
-        bool local(const object &value_);
-        bool local(const group &value_);
-        bool is_server();
-        bool is_multiplayer();
-        bool is_dedicated();
-        bool did_jip();
-
 
         object agent(const team_member &value_);
         sqf_return_string_list activated_addons();
@@ -404,7 +384,6 @@ namespace intercept {
         void clear_item_pool();
         void clear_magazine_pool();
         void clear_weapon_pool();
-        float client_owner();
         sqf_return_string commanding_menu();
         object cursor_target();
         
@@ -413,20 +392,17 @@ namespace intercept {
         float difficulty();
         bool difficulty_enabled_rtd();
         float distribution_region();
-        float estimated_end_server_time();
         void finish_mission_init();
 
         void force_end();
         bool free_look();
-        sqf_return_string getclientstate();
         float getelevationoffset();
         bool get_remote_sensors_disabled();
         
         float get_total_dlc_usage_time();
 
         void halt();
-        bool has_interface();
-
+        
         bool is_autotest();
         bool is_filepatching_enabled();
         bool is_instructor_figure_enabled();
@@ -514,7 +490,7 @@ namespace intercept {
         void delete_site(const object &value_);
         bool delete_status(sqf_string_const_ref value_);
         void detach(const object &value_);
-        bool did_jipowner(const object &value_);
+        
         bool difficulty_enabled(sqf_string_const_ref value_);
 
         void disable_remote_sensors(bool value_);
@@ -538,7 +514,8 @@ namespace intercept {
         void enable_team_switch(bool value_);
         void end_mission(sqf_string_const_ref value_);
         void estimated_time_left(float value_);
-        void export_jipmessages(sqf_string_const_ref value_);
+        
+        
         sqf_return_string face(const object &value_);
         sqf_return_string faction(const object &value_);
         void fail_mission(sqf_string_const_ref value_);
@@ -631,10 +608,7 @@ namespace intercept {
         sqf_return_string land_result(const object &value_);
         object laser_target(const object &value_);
         object leader(const object &value_);
-        bool leaderboard_de_init(sqf_string_const_ref value_);
-        bool leaderboard_init(sqf_string_const_ref value_);
-        bool leaderboard_request_rows_friends(sqf_string_const_ref value_);
-        float leaderboard_state(sqf_string_const_ref value_);
+
         sqf_return_string life_state(const object &value_);
         void light_detach_object(const object &value_);
         sqf_return_string light_is_on(const object &value_);
@@ -654,23 +628,19 @@ namespace intercept {
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
         float need_reload(const object &value_);
-        sqf_return_string net_id(const object &value_);
-        sqf_return_string net_id(const group &value_);
+        
+        
         float number_of_engines_rtd(const object &value_);
-        object object_from_net_id(sqf_string_const_ref value_);
         object object_parent(const object &value_);
-        float owner(const object &value_);
+        
+        
         void pick_weapon_pool(const object &value_);
         float playable_slots_number(const side &value_);
         float players_number(const side &value_);
 
 
         float precision(const object &value_);
-        
-        
         void progress_loading_screen(float value_);
-        void public_variable(sqf_string_const_ref value_);
-        void public_variable_server(sqf_string_const_ref value_);
         void put_weapon_pool(const object &value_);
         float query_items_pool(sqf_string_const_ref value_);
         float query_magazine_pool(sqf_string_const_ref value_);
@@ -698,10 +668,9 @@ namespace intercept {
         float scud_state(const object &value_);
 
         void select_player(const object &value_);
-        bool server_command(sqf_string_const_ref value_);
-        bool server_command_available(sqf_string_const_ref value_);
-        bool server_command_executable(sqf_string_const_ref value_);
+        
 
+        
         void set_armory_points(float value_);
 
         void set_playable(const object &value_);
@@ -830,7 +799,6 @@ namespace intercept {
         void play_move_now(const object &value0_, sqf_string_const_ref value1_);
 
 
-        void public_variable_client(float value0_, sqf_string_const_ref value1_);
         void remove_action(const object &value0_, float value1_);
         void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_);
         void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_);
@@ -876,7 +844,6 @@ namespace intercept {
 
         void set_mimic(const object &value0_, sqf_string_const_ref value1_);
         void set_name(const object &value0_, sqf_string_const_ref value1_);
-        bool set_owner(const object &value0_, float value1_);
         void set_oxygen_remaining(const object &value0_, float value1_);
         void set_pilot_light(const object &value0_, bool value1_);
         void set_random_lip(const object &value0_, bool value1_);
@@ -1200,9 +1167,8 @@ namespace intercept {
         std::vector<object> synchronized_objects(const object& obj_);
 
         object cursor_object();
-        float get_client_state_number();
-
-
+        
+        
 
         bool unit_ready(const object& unit_);
         sqf_return_string_list unit_addons(sqf_string_const_ref class_);
@@ -1250,13 +1216,6 @@ namespace intercept {
         rv_model_info get_model_info(const object& object_);
 
 
-
-        void log_network_terminate(float handle_);
-
-
-
-
-
         sqf_return_string format(const std::vector<game_value> &params_);
         
 
@@ -1292,12 +1251,6 @@ namespace intercept {
         game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_);
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
         
-        game_value remote_exec(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_);
-        game_value remote_exec(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_);
-        game_value remote_exec(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_);
-        game_value remote_exec_call(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_);
-        game_value remote_exec_call(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_);
-        game_value remote_exec_call(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_);
         void remove_all_owned_mines(const object &unit_);
         object road_at(const object &object_);
         object road_at(const vector3 &position_);
@@ -1319,9 +1272,8 @@ namespace intercept {
         std::pair<bool, bool> forced_map();
         sqf_return_string_list get_mission_layers();
         int get_terrain_grid();
-        bool is_multiplayer_solo();
-        bool is_remote_executed();
-        bool is_remote_executed_jip();
+        
+        
         
         
         bool user_input_disabled();
@@ -1385,12 +1337,11 @@ namespace intercept {
         int add_menu(const control &map_, sqf_string_const_ref text_, float priority_);
         int add_menu_item(const control &map_, sqf_string_const_ref menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_);
         int add_menu_item(const control &map_, int menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_);
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_);
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_);
+        
+
+        
         void add_owned_mine(const object &unit_, const object &mine_);
         void add_player_scores(const object &unit_, int kills_infantry_, int kills_soft_, int kills_armor_, int kills_air_, int killed_);
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
         void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
         void add_team_member(const team_member &team_, const team_member &member_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
@@ -1522,12 +1473,10 @@ namespace intercept {
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
         bool preload_object(float distance_, const object &object_);
         bool preload_object(float distance_, sqf_string_const_ref class_name_);
-        game_value remote_exec(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
-        game_value remote_exec_call(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
+
         
         
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
-        void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
         void remove_team_member(const team_member &team_, const team_member &member_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
@@ -1540,8 +1489,6 @@ namespace intercept {
         
         game_value select_editor_object(const control& map_, sqf_string_const_ref object_);
         void select_weapon_turret(const object&, sqf_string_const_ref weapon_, const std::vector<int>& turretPath_);
-        //Server/Headless Client only! 
-        void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_);
         
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
         //#TODO take Enum as behaviour 
@@ -1646,8 +1593,7 @@ namespace intercept {
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, sqf_string_const_ref target_type_, const vector3 &target_position_, float target_max_age_);
         
-        bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
-        int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
+        
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const group &group_, float height_);

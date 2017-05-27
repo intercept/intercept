@@ -339,6 +339,7 @@ namespace intercept {
         
         float get_total_dlc_usage_time();
 
+        //#categorize whereever assert and diag_log are
         void halt();
         
         bool is_autotest();
@@ -357,6 +358,7 @@ namespace intercept {
         bool mark_as_finished_on_steam();
         float mission_difficulty();
         
+        //Seriously? Either remove this or just return PI instead of calling into Arma
         float pi();
         std::vector<object> playable_units();
         object player();
@@ -459,7 +461,8 @@ namespace intercept {
         
         sqf_return_string localize(sqf_string_const_ref value_);
         
-        
+
+        //#categorize world/pos
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
         
@@ -477,6 +480,7 @@ namespace intercept {
 
 
 
+        //#categorize core
         void remove_all_mission_event_handlers(sqf_string_const_ref value_);
         
         bool required_version(sqf_string_const_ref value_);
@@ -552,6 +556,7 @@ namespace intercept {
 
 
 
+        //#categorize core
         void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_);
         void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_);
 
@@ -595,6 +600,7 @@ namespace intercept {
         
         
 
+        //#categorize world
         std::vector<object> near_objects(const vector3 &pos_, float radius_);
         std::vector<object> near_objects(const object &object_, float radius_);
         std::vector<object> near_objects(const vector3 &pos_, sqf_string_const_ref type_, float radius_);
@@ -603,7 +609,8 @@ namespace intercept {
         
 
         std::vector<object> roads_connected_to(const object &obj_);
-        
+
+        //#categorize pos
         vector3 screen_to_world(const vector2 &pos_);
 
 
@@ -661,12 +668,13 @@ namespace intercept {
 
         float count_side(const side &side_, std::vector<object> &objects_);
 
+        //#categorize world
         float get_friend(const side &side1_, const side &side2_);
         void set_friend(const side &side1_, const side &side2_, float value_);
 
+
+        //#categorize world
         std::vector<object> entities(sqf_string_const_ref type_);
-
-
         std::vector<object> units(const object& unit_);
 
         
@@ -682,7 +690,7 @@ namespace intercept {
 
 
         bool in(const object &unit_, const object &vehicle_);
-
+        //#categorize core
         float add_mission_event_handler(sqf_string_const_ref type_, const code &command_);
         float add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
         
@@ -697,7 +705,7 @@ namespace intercept {
         sqf_return_string compose_text(sqf_string_list_const_ref texts_);
         
 
-        
+        //#categorize pos/world
         bool is_on_road(const object &object_);
         bool is_on_road(const vector3 &position_);
 
@@ -710,7 +718,7 @@ namespace intercept {
         
 
         std::vector<object> detected_mines(const side &side_);
-
+        //#categorize core
         void diag_log(sqf_string_const_ref text_);
 
         std::vector<bool> engines_is_on_rtd(const object &heli_);
@@ -770,7 +778,7 @@ namespace intercept {
 
 
 
-
+        //#categorize world
         object nearest_object(const vector3 &pos_);
         object nearest_object(const vector3 &pos_, sqf_string_const_ref type_);
         object nearest_object(const object &obj_, sqf_string_const_ref type_);
@@ -800,7 +808,7 @@ namespace intercept {
 
 
         void remove_from_remains_collector(const std::vector<object> &remains_);
-
+        //#categorize all eventhandlers go to core
         void remove_mission_event_handler(sqf_string_const_ref type_, float index_);
         
         
@@ -810,7 +818,7 @@ namespace intercept {
             vector2 pos;
             float result;
         };
-
+        //#categorize world/position
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
 
@@ -826,12 +834,15 @@ namespace intercept {
         void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
         void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
         void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
-
+        //#categorize core
         sqf_return_string_list support_info(sqf_string_const_ref mask_);
+        //#categorize world
         bool surface_is_water(const vector3& pos_);
         vector3 surface_normal(const vector3& pos_);
         sqf_return_string surface_type(const vector3& pos_);
 
+
+        //#categorize core/world
         object cursor_object();
         
         
@@ -885,14 +896,17 @@ namespace intercept {
         
         object road_at(const object &object_);
         object road_at(const vector3 &position_);
+        //#categorize core
         bool screen_shot(sqf_string_const_ref filename_);
+        //#categorize ctrl
         void show_score_table(int force_);
         
         
 
         
-        
+        //#categorize world or core
         bool user_input_disabled();
+        //#categorize ctrl
         bool visible_score_table();
 
         //BINARY -- https://github.com/intercept/intercept/issues/13
@@ -976,13 +990,15 @@ namespace intercept {
         
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
         
-        
+        //#categorize AI
         void look_at_pos(const control &map_, const vector3 &position_);
         
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
+        //#categorize all eventhandler stuff goes into one file. Probably core
         game_value on_double_click(const control &map_, sqf_string_const_ref command_);
         void on_map_single_click(const game_value &params_, std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<const code>> command_);
         game_value on_show_new_object(const object &control_, sqf_string_const_ref command_);
+
         void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
         void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
@@ -990,7 +1006,7 @@ namespace intercept {
         bool preload_object(float distance_, sqf_string_const_ref class_name_);
 
         
-        
+        //#categorize all eventhandler stuff goes into one file. Probably core
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
         void reveal(std::variant<object, group> &unit_, const object &target_);
@@ -1001,7 +1017,7 @@ namespace intercept {
 
         
         
-        //doenst work in A3 (comment from KK)
+        //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
         
 
@@ -1045,7 +1061,7 @@ namespace intercept {
         
         
 
-        //is this supposed to be here?
+        //is this supposed to be here? - Probably need to be renamed? to correct name?
         void binary__sideradio__object_array__string__ret__nothing(const object &unit_, sqf_string_const_ref radio_name_);
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
         
@@ -1088,7 +1104,7 @@ namespace intercept {
         object driver(const object &value_);
         object effective_commander(const object &value_);
 
-        void fill_weapons_from_pool(const object &value_);
+        void fill_weapons_from_pool(const object &value_);//#categorize inventory? to the other weapon pool stuff
 
         object flag(const object &value_);
         object flag_owner(const object &value_);
@@ -1125,7 +1141,7 @@ namespace intercept {
         float scud_state(const object &value_);
         float size_of(sqf_string_const_ref value_);
         float speed(const object &value_);
-        sqf_return_string type_of(const object &value_);
+        sqf_return_string type_of(const object &value_);//#categorize config
         object vehicle(const object &value_);
         sqf_return_string vehicle_var_name(const object &value_);
         void allow_crew_in_immobile(const object &value0_, bool value1_);
@@ -1386,7 +1402,7 @@ namespace intercept {
         bool weapon_lowered(const object &value_);
         void add_rating(const object &value0_, float value1_);
         void add_score(const object &value0_, float value1_);
-        void assign_team(const object &value0_, sqf_string_const_ref value1_);
+        void assign_team(const object &value0_, sqf_string_const_ref value1_);//#TODO Enum argument
         void disable_conversation(const object &value0_, bool value1_);
         void enable_aim_precision(const object &value0_, bool value1_);
         void enable_fatigue(const object &value0_, bool value1_);
@@ -1499,6 +1515,10 @@ namespace intercept {
         float view_distance();
         void enable_caustics(bool value_);
         void set_lightnings(float time_, float lightnings_value_);
+        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<rv_target> near_targets(const object &unit_, float radius_);
 
 
 
@@ -1546,10 +1566,6 @@ namespace intercept {
 
         //position
         vector3 model_to_world(const object &object_, const vector3 &offset_);
-        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<rv_target> near_targets(const object &unit_, float radius_);
         bool in_area(t_sqf_in_area_position position_, const object &trigger_);
         bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_);
         bool in_area(t_sqf_in_area_position position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);

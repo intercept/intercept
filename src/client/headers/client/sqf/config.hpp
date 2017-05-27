@@ -60,6 +60,8 @@ namespace intercept {
         config mission_config_file();
         game_value get_array(const config config_);
 
+        game_value get_mission_config_value(sqf_string_const_ref attribute_);
+        game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_);
 
 
     }

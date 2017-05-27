@@ -304,6 +304,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
         }
 
+        void detach(const object &value_) {
+            __helpers::__empty_unary_object(__sqf::unary__detach__object__ret__nothing, value_);
+        }
+        
+        void light_detach_object(const object &value_) {
+            __helpers::__empty_unary_object(__sqf::unary__lightdetachobject__object__ret__nothing, value_);
+        }
+        
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
             game_value params_right({
                 object_,

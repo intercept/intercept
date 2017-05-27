@@ -69,10 +69,13 @@ namespace intercept {
 
         //attach
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
+        void light_detach_object(const object &value_);
+
         std::vector<object> attached_objects(const object &obj_);
         object attached_to(const object &obj_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
+        void detach(const object &value_);
 
     }
 }

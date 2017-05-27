@@ -1240,10 +1240,6 @@ namespace intercept {
             return __helpers::__bool_unary_string(__sqf::unary__deletestatus__string__ret__bool, value_);
         }
 
-        void detach(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__detach__object__ret__nothing, value_);
-        }
-
         bool difficulty_enabled(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__difficultyenabled__string__ret__bool, value_);
         }
@@ -1654,10 +1650,6 @@ namespace intercept {
 
         sqf_return_string life_state(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__lifestate__object__ret__string, value_);
-        }
-
-        void light_detach_object(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__lightdetachobject__object__ret__nothing, value_);
         }
 
         sqf_return_string light_is_on(const object &value_) {
@@ -2681,15 +2673,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__speedmode__object_group__ret__string, grp_);
         }
 
-        game_value get_mission_config_value(sqf_string_const_ref attribute_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, attribute_);
-        }
-
-        game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_) {
-            return game_value(
-                host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, {attribute_,default_value_})
-            );
-        }
 
         void move(const object& unit_, const vector3& pos_) {
             host::functions.invoke_raw_binary(__sqf::binary__move__object_group__array__ret__nothing, unit_, pos_);

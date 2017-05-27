@@ -75,14 +75,10 @@ namespace intercept {
         void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, sqf_string_const_ref font_ = "TahomaB");
         
         
-        object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_atl_);
 
         /* potential namespace: misc, missions */
         void activate_addons(sqf_string_list_const_ref addons_);
 
-
-        /* potential namespace: core, misc, world */
-        void add_to_remains_collector(const std::vector<object> & objects_);
 
         /* potential namespace: medical, misc, unit */
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
@@ -101,15 +97,6 @@ namespace intercept {
         float add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_);
         float add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_);
 
-        /* potential namespace: vehicle */
-        std::vector<rv_crew_member> full_crew(const object &veh_);
-        std::vector<rv_crew_member> full_crew(const object &veh_, sqf_string_const_ref filter_, bool include_empty_ = false);
-        std::vector<object> crew(const object & _veh);
-        float aimed_at_target(const object& vehicle_, const object& target_);
-        float aimed_at_target(const object& vehicle_, const object& target_, sqf_string_const_ref weapon_);
-        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_);
-        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_, bool instant_);
-        void animate_door(const object& obj_, sqf_string_const_ref door_name_, float phase_, bool now_);
 
         /* potential namespace: misc */
         void enable_saving(bool enable_);
@@ -117,7 +104,6 @@ namespace intercept {
 
 
         /* potential namespace: physics, physx, core */
-        vector3 get_center_of_mass(const object &obj_);
 
         /* potential namespace: misc */
         std::vector<float> get_dlcs(float filter_);
@@ -310,14 +296,12 @@ namespace intercept {
         std::vector<object> all_units();
         std::vector<object> all_units_uav();
 
-        object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_);
-        object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
-        void delete_vehicle(const object &obj_);
-
-
-        sqf_return_string_list all_turrets(const object &vehicle_, bool person_turrets_);
-
-        sqf_return_string_list all_turrets(const object &vehicle_);
+        void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
+        void diag_capture_frame_to_file(float frame_);
+        void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_);
+        void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);
+        void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_);
+        std::vector<script> diag_active_scripts();
 
         sqf_return_string_list activated_addons();
         
@@ -398,11 +382,6 @@ namespace intercept {
         float air_density_rtd(float altitude_);
         void airport_side(int id_);
         void airport_side(const object & target_);
-        bool alive(const object & obj_);
-        object assigned_commander(const object & veh_);
-        object assigned_driver(const object & veh_);
-        object assigned_gunner(const object & veh_);
-        object assigned_target(const object & veh_);
         
 
 
@@ -414,11 +393,8 @@ namespace intercept {
 
 
         float collective_rtd(const object & helicopter_);
-        object commander(const object & veh_);
         side create_center(const side & side_);
-        void create_vehicle_crew(const object & veh_);
 
-        float damage(const object & object_);
         void de_activate_key(sqf_string_const_ref key_);
         void delete_center(const side & side_);
         void delete_collection(const object & collection_);
@@ -432,10 +408,8 @@ namespace intercept {
         void disable_remote_sensors(bool value_);
         void disable_user_input(bool value_);
         void dissolve_team(sqf_string_const_ref value_);
-        object driver(const object &value_);
         void echo(sqf_string_const_ref value_);
         // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
-        object effective_commander(const object &value_);
 
         void enable_diag_legend(bool value_);
         void enable_engine_artillery(bool value_);
@@ -450,27 +424,17 @@ namespace intercept {
         void end_mission(sqf_string_const_ref value_);
         void estimated_time_left(float value_);
         
-        
+
+
+
         void fail_mission(sqf_string_const_ref value_);
-        void fill_weapons_from_pool(const object &value_);
-        
-        object flag(const object &value_);
-        object flag_owner(const object &value_);
-        side flag_side(const object &value_);
-        sqf_return_string flag_texture(const object &value_);
-        
-        float fuel(const object &value_);
         
         object get_connected_uav(const object &value_);
         float get_custom_aim_coef(const object &value_);
         float get_dlcusage_time(float value_);
-        float get_dammage(const object &value_);
         
         
 
-        float get_mass(const object &value_);
-        float get_object_dlc(const object &value_);
-        float get_object_type(const object &value_);
         float get_repair_cargo(const object &value_);
         float get_rotor_brake_rtd(const object &value_);
         float get_wings_orientation_rtd(const object &value_);
@@ -479,49 +443,28 @@ namespace intercept {
 
         
         
-        void hide_object(const object &value_);
-        void hide_object_global(const object &value_);
         sqf_return_string image(sqf_string_const_ref value_);
-        bool inflamed(const object &value_);
-        bool is_auto_hover_on(const object &value_);
         bool is_auto_trim_on_rtd(const object &value_);
-        bool is_autonomous(const object &value_);
-        bool is_burning(const object &value_);
         bool is_collision_light_on(const object &value_);
-        bool is_copilot_enabled(const object &value_);
         bool is_dlcavailable(float value_);
-        bool is_engine_on(const object &value_);
-        bool is_hidden(const object &value_);
-        bool is_in_remains_collector(const object &value_);
         bool is_key_active(sqf_string_const_ref value_);
-        bool is_light_on(const object &value_);
         bool is_localized(sqf_string_const_ref value_);
-        bool is_manual_fire(const object &value_);
-        bool is_marked_for_collection(const object &value_);
 
-        bool is_object_hidden(const object &value_);
         bool is_object_rtd(const object &value_);
-        bool is_touching_ground(const object &value_);
         
-        object laser_target(const object &value_);
 
 
         
-        sqf_return_string light_is_on(const object &value_);
 
         
         sqf_return_string localize(sqf_string_const_ref value_);
-        float locked(const object &value_);
-        bool mine_active(const object &value_);
         
-        bool locked_driver(const object &value_);
         
         object nearest_building(const object &value_);
         object nearest_building(const vector3 &value_);
         
         
         float number_of_engines_rtd(const object &value_);
-        object object_parent(const object &value_);
         
         
         
@@ -540,10 +483,8 @@ namespace intercept {
         sqf_return_string role_description(const object &value_);
         void save_var(sqf_string_const_ref value_);
         void scope_name(sqf_string_const_ref value_);
-        float score(const object &value_);
         float score_side(const side &value_);
         void script_name(sqf_string_const_ref value_);
-        float scud_state(const object &value_);
 
         
 
@@ -557,31 +498,27 @@ namespace intercept {
         void set_traffic_distance(float value_);
         
 
-        float size_of(sqf_string_const_ref value_);
         
-        float speed(const object &value_);
         void stop_engine_rtd(const object &value_);
         sqf_return_string text(sqf_string_const_ref value_);
         
 
-        sqf_return_string type_of(const object &value_);
         void unassign_team(const object &value_);
         void unassign_vehicle(const object &value_);
         bool underwater(const object &value_);
 
         bool unlock_achievement(sqf_string_const_ref value_);
 
-        object vehicle(const object &value_);
-        sqf_return_string vehicle_var_name(const object &value_);
+
+
+
+
         bool verify_signature(sqf_string_const_ref value_);
 
         void add_live_stats(const object &value0_, float value1_);
         void add_score_side(const side &value0_, float value1_);
         void add_vehicle(const group &value0_, const object &value1_);
 
-        void allow_crew_in_immobile(const object &value0_, bool value1_);
-        void allow_damage(const object &value0_, bool value1_);
-        void allow_dammage(const object &value0_, bool value1_);
 
         void allow_sprint(const object &value0_, bool value1_);
         float animation_phase(const object &value0_, sqf_string_const_ref value1_);
@@ -591,26 +528,14 @@ namespace intercept {
 
 
 
-        void disable_nvgequipment(const object &value0_, bool value1_);
-        void disable_tiequipment(const object &value0_, bool value1_);
-        float door_phase(const object &value0_, sqf_string_const_ref value1_);
-        float empty_positions(const object &value0_, sqf_string_const_ref value1_);
         void enable_auto_start_up_rtd(const object &value0_, bool value1_);
         bool enable_auto_trim_rtd(const object &value0_, bool value1_);
         void enable_copilot(const object &value0_, bool value1_);
         
-        void engine_on(const object &value0_, bool value1_);
 
-        float get_hit(const object &value0_, sqf_string_const_ref value1_);
-        float get_hit_index(const object &value0_, float value1_);
-        float get_hit_point_damage(const object &value0_, sqf_string_const_ref value1_);
 
-        float get_speed(const object &value0_, sqf_string_const_ref value1_);
         
-        void hide_object(const object &value0_, bool value1_);
-        void hide_object_global(const object &value0_, bool value1_);
         
-        void inflame(const object &value0_, bool value1_);
         bool is_kind_of(const object &obj_, sqf_string_const_ref type_);
         bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_);
         bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
@@ -618,15 +543,9 @@ namespace intercept {
 
 
 
-        void limit_speed(const object &value0_, float value1_);
 
         bool load_identity(const object &value0_, sqf_string_const_ref value1_);
         bool load_status(const object &value0_, sqf_string_const_ref value1_);
-        void lock(const object &value0_, bool value1_);
-        void lock(const object &value0_, float value1_);
-        void lock_cargo(const object &value0_, bool value1_);
-        void lock_driver(const object &value0_, bool value1_);
-        bool locked_cargo(const object &value0_, float value1_);
 
 
         bool mine_detected_by(const object &value0_, const side &value1_);
@@ -642,18 +561,12 @@ namespace intercept {
         void set_actual_collective_rtd(const object &value0_, float value1_);
         void set_airport_side(float value0_, const side &value1_);
         void set_airport_side(const object & target_, const side &value1_);
-        void set_autonomous(const object &value0_, bool value1_);
 
 
         void set_collision_light(const object &value0_, bool value1_);
         void set_custom_aim_coef(const object &value0_, float value1_);
         void set_custom_weight_rtd(const object &value0_, float value1_);
-        void set_damage(const object &value0_, float value1_, bool use_effects_ = true);
-        void set_dammage(const object &value0_, float value1_);
         
-        void set_flag_side(const object &value0_, const side &value1_);
-        void set_flag_texture(const object &value0_, sqf_string_const_ref value1_);
-        void set_fuel(const object &value0_, float value1_);
         
         
         
@@ -666,14 +579,9 @@ namespace intercept {
 
         void set_pilot_light(const object &value0_, bool value1_);
         void set_rotor_brake_rtd(const object &value0_, float value1_);
-        void set_vehicle_armor(const object &value0_, float value1_);
-        void set_vehicle_id(const object &value0_, float value1_);
-        void set_vehicle_lock(const object &value0_, sqf_string_const_ref value1_);
-        void set_vehicle_var_name(const object &value0_, sqf_string_const_ref value1_);
 
 
 
-        void switch_light(const object &value0_, sqf_string_const_ref value1_);
 
 
 
@@ -768,9 +676,6 @@ namespace intercept {
 
 
 
-        void set_hit(const object &object_, sqf_string_const_ref part_, float damage_);
-        void set_hit_index(const object &object_, int part_index_, float damage_);
-        void set_hit_point_damage(const object &object_, sqf_string_const_ref hit_point_, float damage_);
 
 
 
@@ -818,7 +723,6 @@ namespace intercept {
             std::vector<float> damages;
         };
 
-        rv_hit_points_damage get_all_hit_points_damage(const object &veh_);
 
         struct rv_forces_rtd {
             float roll;
@@ -858,13 +762,10 @@ namespace intercept {
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
 
 
-        int get_cargo_index(const object &vehicle_, const object &unit_);
 
 
 
 
-        sqf_return_string_list get_object_materials(const object &object_);
-        sqf_return_string_list get_object_textures(const object &object_);
 
 
 
@@ -893,6 +794,7 @@ namespace intercept {
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_);
 
         
+
 
 
 
@@ -929,7 +831,6 @@ namespace intercept {
         bool surface_is_water(const vector3& pos_);
         vector3 surface_normal(const vector3& pos_);
         sqf_return_string surface_type(const vector3& pos_);
-        std::vector<object> synchronized_objects(const object& obj_);
 
         object cursor_object();
         
@@ -963,7 +864,6 @@ namespace intercept {
                 skeleton(ret_game_value_[2]) {}
         };
 
-        rv_model_info get_model_info(const object& object_);
 
 
         sqf_return_string format(const std::vector<game_value> &params_);
@@ -975,42 +875,21 @@ namespace intercept {
             object instigator;
         };
         
-        //UNARY -- https://github.com/intercept/intercept/issues/13
-        std::vector<object> all_simple_objects(sqf_string_list_const_ref params_);
-        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld);
-        void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
-        void diag_capture_frame_to_file(float frame_);
-        void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_);
-        void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);
-        void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_);
-        float difficulty_option(sqf_string_const_ref optionname_);
-
         
-
+        
+        float difficulty_option(sqf_string_const_ref optionname_);
 
         void enable_weapon_disassembly(bool enable_);
         float flag_animation_phase(const object &flag_);
-        float get_container_max_load(sqf_string_const_ref containerclass_);
         sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
-        rv_shot_parents get_shot_parents(const object &projectile_);
-        bool is_simple_object(const object &object_);
         
         object road_at(const object &object_);
         object road_at(const vector3 &position_);
         bool screen_shot(sqf_string_const_ref filename_);
-        sqf_return_string_list selection_names(const object &object_);
         void show_score_table(int force_);
         
-        void switch_camera(const object &target_);
         
 
-        
-        //NULAR -- https://github.com/intercept/intercept/issues/13
-        std::vector<script> diag_active_scripts();
-
-        
-        
-        
         
         
         bool user_input_disabled();
@@ -1073,9 +952,6 @@ namespace intercept {
         
         
         
-        void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
-        void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, float speed_);
-        float animation_source_phase(const object &object_, sqf_string_const_ref source_);
         vector3 building_exit(const object &building_, int index_);
         vector3 building_pos(const object &building_, int index_);
         int count_enemy(const object &unit_, const std::vector<object> &units_);
@@ -1085,29 +961,20 @@ namespace intercept {
         object create_site(sqf_string_const_ref type_, const vector3 &pos_);
 
         
-        void delete_vehicle_crew(const object &vehicle_, const object &unit_);
-        void disable_collision_with(const object &object1_, const object &object2_);
         
         
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
-        void enable_collision_with(const object &object1_, const object &object2_);
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_);
         rv_group_icon get_group_icon(const group &group_, int &id_);
 
 
         void group_select_unit(const object &player_, const object &unit_, bool select_);
-        void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
         
         bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_);
         
         
         
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
-        void lock_camera_to(const object &vehicle_, const object &target_, const std::vector<int> &turret_path_);
-        void lock_cargo(const object &vehicle_, int index_, bool lock_);
-        bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
-        
         
         
         void look_at_pos(const control &map_, const vector3 &position_);
@@ -1126,101 +993,236 @@ namespace intercept {
         
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void remove_owned_mine(const object &unit_, const object &mine_);
-        void respawn_vehicle(const object &vehicle_, float delay_, int count_);
         void reveal(std::variant<object, group> &unit_, const object &target_);
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
         
         
         
 
-        void select_weapon_turret(const object&, sqf_string_const_ref weapon_, const std::vector<int>& turretPath_);
         
         
         //doenst work in A3 (comment from KK)
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
         
 
-        void set_center_of_mass(const object& object_, const vector3& offset_, float time_ = 0.f);
 
         
 
         
-        enum class feature_type {
-            disabled = 0,// - Feature disabled 
-            visible_object_distance = 1,// - Object is always visible within object view distance 
-            visible_terrain_distance = 2// - Object is always visible within terrain view distance 
-        };
-        bool set_feature_type(const object& object_, feature_type type_);
 
-        float set_flag_animation_phase(const object& object_, float phase);
-        void set_flag_owner(const object& flag_, const object& owner_);
+
+
+        
+        
         
         void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
-
-
-        
-        
-        bool set_feature_type(const object &object_, int type_);
-        void set_flag_animation_phase(const object &flag_, float &animation_phase_);
         void set_formation(const group &group_, sqf_string_const_ref formation_);
         void set_form_dir(const group &group_, float heading_);
         void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_);
         void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_);
         void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
         void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
-        void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
+        
         void set_light_ambient(const object &light_, float r_, float g_, float b_);
         void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_);
         void set_light_color(const object &light_, float r_, float g_, float b_);
-        void set_lightnings(float time_, float lightnings_value_);
-        void set_mass(const object &object_, float mass_, std::optional<float> time_);
+        
+        
 
         
-        void set_name(const location &location_, sqf_string_const_ref name_);
-        void set_object_material(const object &object_, int index_, sqf_string_const_ref material_);
-        void set_object_material_global(const object &object_, int index_, sqf_string_const_ref material_);
-        
-        
-        void set_object_texture(const object &object_, int index_, sqf_string_const_ref texture_);
-        void set_object_texture_global(const object &object_, int index_, sqf_string_const_ref texture_);
-        void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
-        void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
-        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         
         //#TODO typo should be set_pip_effects
         void set_pipe_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
-        void set_rectangular(const location &location_, bool rectangular_);
-        void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
-        void set_size(const location &location_, float size_x_, float size_y_);
         
+        
+        void set_rectangular(const location &location_, bool rectangular_);
+        void set_size(const location &location_, float size_x_, float size_y_);
+        void set_name(const location &location_, sqf_string_const_ref name_);
         void set_speech(const location &location_, sqf_string_const_ref speech_);
         void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
         void set_text(const location &location_, sqf_string_const_ref text_);
         void set_type(const location &location_, sqf_string_const_ref type_);
         
-        void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
-        void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);
         
 
         //is this supposed to be here?
         void binary__sideradio__object_array__string__ret__nothing(const object &unit_, sqf_string_const_ref radio_name_);
         void binary__sideradio__object_array__string__ret__nothing(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
         
-        void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
-        void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
-        rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
-        game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
-        rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, sqf_string_const_ref target_type_, const vector3 &target_position_, float target_max_age_);
         
         
-        object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
         
-        sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
     
+        //vehicles - new cat
+        float set_flag_animation_phase(const object& object_, float phase);
+        void set_flag_owner(const object& flag_, const object& owner_);
+        void set_flag_animation_phase(const object &flag_, float &animation_phase_);
+        object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_atl_);
+        void add_to_remains_collector(const std::vector<object> & objects_);
+        std::vector<rv_crew_member> full_crew(const object &veh_);
+        std::vector<rv_crew_member> full_crew(const object &veh_, sqf_string_const_ref filter_, bool include_empty_ = false);
+        std::vector<object> crew(const object & _veh);
+        float aimed_at_target(const object& vehicle_, const object& target_);
+        float aimed_at_target(const object& vehicle_, const object& target_, sqf_string_const_ref weapon_);
+        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_);
+        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_, bool instant_);
+        void animate_door(const object& obj_, sqf_string_const_ref door_name_, float phase_, bool now_);
+        vector3 get_center_of_mass(const object &obj_);
+        object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_);
+        object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
+        void delete_vehicle(const object &obj_);
+        sqf_return_string_list all_turrets(const object &vehicle_, bool person_turrets_);
+
+        sqf_return_string_list all_turrets(const object &vehicle_);
+        bool alive(const object & obj_);
+        object assigned_commander(const object & veh_);
+        object assigned_driver(const object & veh_);
+        object assigned_gunner(const object & veh_);
+        object assigned_target(const object & veh_);
+        object commander(const object & veh_);
+        void create_vehicle_crew(const object & veh_);
+        float damage(const object & object_);
+        object driver(const object &value_);
+        object effective_commander(const object &value_);
+
+        void fill_weapons_from_pool(const object &value_);
+
+        object flag(const object &value_);
+        object flag_owner(const object &value_);
+        side flag_side(const object &value_);
+        sqf_return_string flag_texture(const object &value_);
+
+        float fuel(const object &value_);
+        float get_dammage(const object &value_);
+        float get_mass(const object &value_);
+        float get_object_dlc(const object &value_);
+        float get_object_type(const object &value_);
+        void hide_object(const object &value_);
+        void hide_object_global(const object &value_);
+        bool inflamed(const object &value_);
+        bool is_auto_hover_on(const object &value_);
+        bool is_autonomous(const object &value_);
+        bool is_burning(const object &value_);
+        bool is_copilot_enabled(const object &value_);
+        bool is_engine_on(const object &value_);
+        bool is_hidden(const object &value_);
+        bool is_in_remains_collector(const object &value_);
+        bool is_light_on(const object &value_);
+        bool is_manual_fire(const object &value_);
+        bool is_marked_for_collection(const object &value_);
+        bool is_object_hidden(const object &value_);
+        bool is_touching_ground(const object &value_);
+        object laser_target(const object &value_);
+        sqf_return_string light_is_on(const object &value_);
+        float locked(const object &value_);
+        bool mine_active(const object &value_);
+        bool locked_driver(const object &value_);
+        object object_parent(const object &value_);
+        float score(const object &value_);
+        float scud_state(const object &value_);
+        float size_of(sqf_string_const_ref value_);
+        float speed(const object &value_);
+        sqf_return_string type_of(const object &value_);
+        object vehicle(const object &value_);
+        sqf_return_string vehicle_var_name(const object &value_);
+        void allow_crew_in_immobile(const object &value0_, bool value1_);
+        void allow_damage(const object &value0_, bool value1_);
+        void allow_dammage(const object &value0_, bool value1_);
+        void disable_nvgequipment(const object &value0_, bool value1_);
+        void disable_tiequipment(const object &value0_, bool value1_);
+        float door_phase(const object &value0_, sqf_string_const_ref value1_);
+        float empty_positions(const object &value0_, sqf_string_const_ref value1_);
+        void engine_on(const object &value0_, bool value1_);
+        float get_hit(const object &value0_, sqf_string_const_ref value1_);
+        float get_hit_index(const object &value0_, float value1_);
+        float get_hit_point_damage(const object &value0_, sqf_string_const_ref value1_);
+        float get_speed(const object &value0_, sqf_string_const_ref value1_);
+        void hide_object(const object &value0_, bool value1_);
+        void hide_object_global(const object &value0_, bool value1_);
+        void inflame(const object &value0_, bool value1_);
+        void limit_speed(const object &value0_, float value1_);
+        void lock(const object &value0_, bool value1_);
+        void lock(const object &value0_, float value1_);
+        void lock_cargo(const object &value0_, bool value1_);
+        void lock_driver(const object &value0_, bool value1_);
+        bool locked_cargo(const object &value0_, float value1_);
+        void set_autonomous(const object &value0_, bool value1_);
+        void set_damage(const object &value0_, float value1_, bool use_effects_ = true);
+        void set_dammage(const object &value0_, float value1_);
+        void set_flag_side(const object &value0_, const side &value1_);
+        void set_flag_texture(const object &value0_, sqf_string_const_ref value1_);
+        void set_fuel(const object &value0_, float value1_);
+        void set_vehicle_armor(const object &value0_, float value1_);
+        void set_vehicle_id(const object &value0_, float value1_);
+        void set_vehicle_lock(const object &value0_, sqf_string_const_ref value1_);
+        void set_vehicle_var_name(const object &value0_, sqf_string_const_ref value1_);
+        void switch_light(const object &value0_, sqf_string_const_ref value1_);
+        void set_hit(const object &object_, sqf_string_const_ref part_, float damage_);
+        void set_hit_index(const object &object_, int part_index_, float damage_);
+        void set_hit_point_damage(const object &object_, sqf_string_const_ref hit_point_, float damage_);
+        rv_hit_points_damage get_all_hit_points_damage(const object &veh_);
+        int get_cargo_index(const object &vehicle_, const object &unit_);
+        sqf_return_string_list get_object_materials(const object &object_);
+        sqf_return_string_list get_object_textures(const object &object_);
+        std::vector<object> synchronized_objects(const object& obj_);
+        rv_model_info get_model_info(const object& object_);
+        std::vector<object> all_simple_objects(sqf_string_list_const_ref params_);
+        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld);
+        float get_container_max_load(sqf_string_const_ref containerclass_);
+        rv_shot_parents get_shot_parents(const object &projectile_);
+        bool is_simple_object(const object &object_);
+        sqf_return_string_list selection_names(const object &object_);
+        void switch_camera(const object &target_);
+        void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
+        void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, float speed_);
+        float animation_source_phase(const object &object_, sqf_string_const_ref source_);
+        void delete_vehicle_crew(const object &vehicle_, const object &unit_);
+        void disable_collision_with(const object &object1_, const object &object2_);
+        void enable_collision_with(const object &object1_, const object &object2_);
+        void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
+        void lock_camera_to(const object &vehicle_, const object &target_, const std::vector<int> &turret_path_);
+        void lock_cargo(const object &vehicle_, int index_, bool lock_);
+        bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
+        void respawn_vehicle(const object &vehicle_, float delay_, int count_);
+        void select_weapon_turret(const object&, sqf_string_const_ref weapon_, const std::vector<int>& turretPath_);
+        void set_center_of_mass(const object& object_, const vector3& offset_, float time_ = 0.f);
+        enum class feature_type {
+            disabled = 0,// - Feature disabled 
+            visible_object_distance = 1,// - Object is always visible within object view distance 
+            visible_terrain_distance = 2// - Object is always visible within terrain view distance 
+        };
+        bool set_feature_type(const object& object_, feature_type type_);
+        bool set_feature_type(const object &object_, int type_);
+        void set_mass(const object &object_, float mass_, std::optional<float> time_);
+        void set_object_material(const object &object_, int index_, sqf_string_const_ref material_);
+        void set_object_material_global(const object &object_, int index_, sqf_string_const_ref material_);
+
+
+        void set_object_texture(const object &object_, int index_, sqf_string_const_ref texture_);
+        void set_object_texture_global(const object &object_, int index_, sqf_string_const_ref texture_);
+        void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
+        void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
+        void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
+        void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
+        void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);
+        void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
+        void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
+        object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
+        sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+
+
         //units - new cat
+        void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
+
+        rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
+        game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
+        rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, sqf_string_const_ref target_type_, const vector3 &target_position_, float target_max_age_);
+
         void action(const object &unit_, const std::vector<game_value> &action_array_);
 
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
@@ -1228,7 +1230,6 @@ namespace intercept {
         sqf_return_string animation_state(const object & unit_);
         sqf_return_string assigned_team(const object & unit_);
         object assigned_vehicle(const object & unit_);
-
 
         bool can_fire(const object & unit_);
         bool can_move(const object & unit_);
@@ -1298,8 +1299,6 @@ namespace intercept {
         void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_);
         void enable_uav_connect_ability(const object &unit_, const object &uav_, bool check_all_items_);
         void enable_weapon_disassembly(const object &unit_, bool enable_);
-
-
 
         //#TODO use t_in_area typedef for position
         object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_);
@@ -1499,6 +1498,8 @@ namespace intercept {
         int get_terrain_grid();
         float view_distance();
         void enable_caustics(bool value_);
+        void set_lightnings(float time_, float lightnings_value_);
+
 
 
         //inventory
@@ -1581,6 +1582,8 @@ namespace intercept {
         float distance(const vector3& start_, const vector3& end_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
 
+
+
         /* potential namespace: actions */
         sqf_return_string_list action_keys(sqf_string_const_ref user_action_);
 
@@ -1595,9 +1598,7 @@ namespace intercept {
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_);
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_);
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_, sqf_string_const_ref input_device_priority_);
-
-
-
+        
         //TODO: arguments default value is nil
         float add_action(const object &object_, sqf_string_const_ref title_, sqf_string_const_ref script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, sqf_string_const_ref shortcut_ = "", sqf_string_const_ref condition_ = "true");
         float add_action(const object &object_, sqf_string_const_ref title_, const code &script_, const std::vector<game_value> &arguments_, float priority_ = 1.5f, bool show_window_ = true, bool hide_on_use_ = true, sqf_string_const_ref shortcut_ = "", sqf_string_const_ref condition_ = "true");

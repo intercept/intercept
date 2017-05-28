@@ -752,7 +752,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__loadmagazine__object__array__ret__nothing, obj_, params);
         }
         rv_weapon_state weapon_state(const object &unit_) {
-            return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object_array__ret__array, unit_));
+            return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object__ret__array, unit_));
         }
 
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_) {
@@ -765,7 +765,7 @@ namespace intercept {
                 std::move(turret_path)
             });
 
-            return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object_array__ret__array, params));
+            return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, params));
         }
         rv_unit_description get_description(const object& unit_) {
             return rv_unit_description(host::functions.invoke_raw_unary(__sqf::unary__getdescription__object__ret__array, unit_));

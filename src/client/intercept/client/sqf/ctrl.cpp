@@ -1821,7 +1821,7 @@ namespace intercept {
         }
 
         void lb_sort(const control &control_) {
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__scalar, control_);
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
         }
 
         void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
@@ -1830,7 +1830,7 @@ namespace intercept {
                 sort_order_
             });
 
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__scalar, args);
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, args);
         }
 
         sqf_return_string lb_text(int control_id_, int index_) {
@@ -1994,7 +1994,7 @@ namespace intercept {
         }
 
         float lb_sort_by_value(const control &value_) {
-            return __helpers::__number_unary_control(__sqf::unary__lbsortbyvalue__control__ret__scalar, value_);
+            return __helpers::__number_unary_control(__sqf::unary__lbsortbyvalue__control__ret__nothing, value_);
         }
 
         float next_menu_item_index(const control &value_) {

@@ -5265,5 +5265,105 @@ namespace intercept {
         sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end()))));
         }
+
+
+
+
+        int admin(int owner_id_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__admin__scalar__ret__scalar, owner_id_);
+        }
+
+        int airplane_throttle(const object &airplane_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__airplanethrottle__object__ret__scalar, airplane_);
+        }
+
+        rv_ct_list ct_add_header(const control &control_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddheader__control__ret__array, control_);
+
+            return rv_ct_list({res[0], __helpers::__convert_to_controls_vector(res[1])});
+        }
+
+        rv_ct_list ct_add_row(const control &control_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddrow__control__ret__array, control_);
+
+            return rv_ct_list({ res[0], __helpers::__convert_to_controls_vector(res[1]) });
+        }
+
+        void ct_clear(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__ctclear__control__ret__nothing, control_);
+        }
+
+        int ct_cur_sel(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctcursel__control__ret__scalar, control_);
+        }
+
+        int ct_header_count(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctheadercount__control__ret__scalar, control_);
+        }
+
+        int ct_row_count(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrowcount__control__ret__scalar, control_);
+        }
+
+        sqf_return_string get_forced_flag_texture(const object &flag_pole_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getforcedflagtexture__object__ret__string, flag_pole_);
+        }
+
+        sqf_return_string_list get_pylon_magazines(const object &vehicle_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getpylonmagazines__object__ret__array, vehicle_));
+        }
+
+        bool is_damage_allowed(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isdamageallowed__object__ret__bool, object_);
+        }
+
+        void lb_sort(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
+        }
+
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });
+        }
+
+        void lb_sort(int control_, sqf_string_const_ref sort_order_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });
+        }
+
+        void lb_sort(int control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__scalar__ret__nothing, control_);
+        }
+
+        void lb_sort_by_value(const control control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__control__ret__nothing, control_);
+        }
+
+        void lb_sort_by_value(int control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__scalar__ret__nothing, control_);
+        }
+
+        bool vehicle_receive_remote_targets(const object &vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vehiclereceiveremotetargets__object__ret__bool, vehicle_);
+        }
+
+        bool vehicle_report_own_position(const object &vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vehiclereportownposition__object__ret__bool, vehicle_);
+        }
+
+        bool vehicle_report_remote_targets(const object &vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vehiclereportremotetargets__object__ret__bool, vehicle_);
+        }
+
+        rv_weapon_state weapon_state(const object &unit_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object__ret__array, unit_);
+
+            return rv_weapon_state({ res[0],res[1],res[2],res[3],res[4] });
+        }
+
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, const std::string &weapon_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, { vehicle_, auto_array<game_value>(turret_path_.begin(), turret_path_.end()),weapon_ });
+
+            return rv_weapon_state({ res[0],res[1],res[2],res[3],res[4] });
+        }
+
     }
 }

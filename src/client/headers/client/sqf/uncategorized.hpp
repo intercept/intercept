@@ -1587,5 +1587,42 @@ namespace intercept {
         void set_leader(const team_member &team_, const team_member &leader_);
 
 
+        struct rv_ct_list
+        {
+            int header_index;
+            std::vector<control> controls;
+        };
+
+        struct rv_weapon_state
+        {
+            std::string weapon;
+            std::string muzzle;
+            std::string firemode;
+            std::string magazine;
+            int ammo_count;
+        };
+
+        int admin(int owner_id_);
+        int airplane_throttle(const object &airplane_);
+        rv_ct_list ct_add_header(const control &control_);
+        rv_ct_list ct_add_row(const control &control_);
+        void ct_clear(const control &control_);
+        int ct_cur_sel(const control &control_);
+        int ct_header_count(const control &control_);
+        int ct_row_count(const control &control_);
+        sqf_return_string get_forced_flag_texture(const object &flag_pole_);
+        sqf_return_string_list get_pylon_magazines(const object &vehicle_);
+        bool is_damage_allowed(const object &object_);
+        void lb_sort(const control &control_);
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_);
+        void lb_sort_by_value(const control control_);
+        void lb_sort_by_value(int control_);
+        bool vehicle_receive_remote_targets(const object &vehicle_);
+        bool vehicle_report_own_position(const object &vehicle_);
+        bool vehicle_report_remote_targets(const object &vehicle_);
+        rv_weapon_state weapon_state(const object &unit_);
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, const std::string &weapon_);
     }
 }

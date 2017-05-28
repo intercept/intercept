@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -15,7 +15,7 @@ https://github.com/NouberNou/intercept
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 #include <unordered_set>
 
 using namespace intercept::types;
@@ -273,7 +273,7 @@ namespace intercept {
                 //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
             }
         private:
-            std::array<size_t, 
+            std::array<size_t,
             #if _WIN64 || __X86_64__
             10
             #else

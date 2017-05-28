@@ -5365,5 +5365,194 @@ namespace intercept {
             return rv_weapon_state({ res[0],res[1],res[2],res[3],res[4] });
         }
 
+        int ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ammoonpylon__object__string_scalar__ret__scalar, vehicle_, pylon_name_);
+        }
+
+        int ammo_on_pylon(const object &vehicle_, int pylon_index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ammoonpylon__object__string_scalar__ret__scalar, vehicle_, pylon_index_);
+        }
+
+        void animate_bay(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__animatebay__object__array__ret__nothing, vehicle_, { pylon_name_, anim_phase_ });
+        }
+
+        void animate_bay(const object &vehicle_, int pylon_index_, float anim_phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__animatebay__object__array__ret__nothing, vehicle_, { pylon_index_, anim_phase_ });
+        }
+
+        void animate_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__animatepylon__object__array__ret__nothing, vehicle_, { pylon_name_, anim_phase_ });
+        }
+
+        void animate_pylon(const object &vehicle_, int pylon_index_, float anim_phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__animatepylon__object__array__ret__nothing, vehicle_, { pylon_index_, anim_phase_ });
+        }
+
+        void confirm_sensor_target(const object &vehicle_, const side &side_, bool is_confirmed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__confirmsensortarget__object__array__ret__nothing, vehicle_, { side_, is_confirmed_ });
+        }
+
+        sqf_return_string ct_data(const control &control_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctdata__control__scalar__ret__string, control_, index_);
+        }
+
+        //#TODO: Find out about the return type
+        std::vector<game_value> ct_find_header_rows(const control &control_, int index_) {
+            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
+        }
+
+        int ct_find_row_header(const control &control_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctfindrowheader__control__scalar__ret__scalar, control_, index_);
+        }
+
+        std::vector<control> ct_header_controls(const control &control_, int index_) {
+            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctheadercontrols__control__scalar__ret__array, control_, index_));
+        }
+
+        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctremoveheaders__control__array__ret__nothing, control_, auto_array<game_value>(header_indexes_.begin(), header_indexes_.end()));
+        }
+
+        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctremoverows__control__array__ret__nothing, control_, auto_array<game_value>(row_indexes_.begin(), row_indexes_.end()));
+        }
+
+        std::vector<control> ct_row_controls(const control &control_, int index_) {
+            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctrowcontrols__control__scalar__ret__array, control_, index_));
+        }
+
+        void ct_set_cur_sel(const control &control_, int index_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetcursel__control__scalar__ret__nothing, control_, index_);
+        }
+
+        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetdata__control__array__ret__nothing, control_, { index_, data_ });
+        }
+
+        void ct_set_header_template(const control &control_, const config &config_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetheadertemplate__control__config__ret__nothing, control_, config_);
+        }
+
+        void ct_set_row_template(const control &control_, const config &config_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetrowtemplate__control__config__ret__nothing, control_, config_);
+        }
+
+        void ct_set_value(const control &control_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetvalue__control__array__ret__nothing, control_, value_);
+        }
+
+        float ct_value(const control &control_, float index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctvalue__control__scalar__ret__scalar, control_, index_);
+        }
+
+        void force_flag_texture(const object &object_, sqf_string_const_ref texture_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forceflagtexture__object__string__ret__nothing, object_, texture_);
+        }
+
+        void forget_target(const object &unit_, const object target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, unit_, target_);
+        }
+
+        void forget_target(const group &group_, const object target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, group_, target_);
+        }
+
+        bool is_sensor_target_confirmed(const object &object_, const side &side_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__issensortargetconfirmed__object__side__ret__bool, object_, side_);
+        }
+
+        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_));
+        }
+
+        vector3 model_to_world_world(const object &object_, const vector3 model_pos_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_));
+        }
+
+        void report_remote_target(const side &side_, const object &target_, float time_) {
+            host::functions.invoke_raw_binary(__sqf::binary__reportremotetarget__side__array__ret__nothing, side_, { target_, time_ });
+        }
+
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__set3denlogictype__array__string__ret__nothing, auto_array<game_value>(objects_.begin(), objects_.end()), class_name_);
+        }
+
+        void set_air_plane_throttle(const object &airplane_, float throttle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setairplanethrottle__object__scalar__ret__nothing, airplane_, throttle_);
+        }
+
+        void set_ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, int ammo_count_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setammoonpylon__object__array__ret__nothing, vehicle_, { pylon_name_, ammo_count_ });
+        }
+
+        void set_ammo_on_pylon(const object &vehicle_, int pylon_index_, int ammo_count_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setammoonpylon__object__array__ret__nothing, vehicle_, { pylon_index_, ammo_count_ });
+        }
+
+        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing, class_, multiplayer_);
+        }
+
+        //#TODO: Find out what the right parameter is
+        bool set_pylon_loadout(const object &object_, game_value param_right) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setpylonloadout__object__array__ret__bool, object_, param_right);
+        }
+
+        void set_pylons_priority(const object &object_, const std::vector<int> &priorities_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpylonspriority__object__array__ret__nothing, object_, auto_array<game_value>(priorities_.begin(), priorities_.end()));
+        }
+
+        void set_user_mfd_value(const object &object_, int index_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setusermfdvalue__object__array__ret__nothing, object_, { index_, value_ });
+        }
+
+        void set_vehicle_radar(const object &vehicle_, int rules_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehicleradar__object__scalar__ret__nothing, vehicle_, rules_);
+        }
+
+        void set_vehicle_receive_remote_targets(const object &vehicle_, bool receive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehiclereceiveremotetargets__object__bool__ret__nothing, vehicle_, receive_);
+        }
+
+        void set_vehicle_report_own_position(const object &vehicle_, bool report_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehiclereportownposition__object__bool__ret__nothing, vehicle_, report_);
+        }
+
+        void set_vehicle_report_remote_targets(const object &vehicle_, bool report_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehiclereportremotetargets__object__bool__ret__nothing, vehicle_, report_);
+        }
+
+        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_) {
+            auto_array<game_value> params_right;
+            
+            if (enemy_only_.has_value()) params_right.push_back(*enemy_only_); else params_right.push_back(game_value());
+            if (max_distance_.has_value()) params_right.push_back(*max_distance_); else params_right.push_back(game_value());
+            if (sides_.has_value()) params_right.push_back(auto_array<game_value>((*sides_).begin(), (*sides_).end())); else params_right.push_back(game_value());
+            if (max_age_.has_value()) params_right.push_back(*max_age_); else params_right.push_back(game_value());
+            if (alternate_center_.has_value()) {
+                if ((*alternate_center_).index() == 0) 
+                    params_right.push_back(std::get<0>(*alternate_center_).get());
+                else
+                    params_right.push_back(std::get<1>(*alternate_center_).get());
+            }
+            else params_right.push_back(game_value());
+
+            host::functions.invoke_raw_binary(__sqf::binary__targets__object__array__ret__array, unit_, std::move(params_right));
+        }
+
+        sqf_return_string endl() {
+            return host::functions.invoke_raw_nular(__sqf::nular__endl__ret__string);
+        }
+
+        rv_cursor_object_params get_cursor_object_params() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__getcursorobjectparams__ret__array);
+
+            return rv_cursor_object_params({ res[0], res[1], res[2] });
+        }
+
+        int remote_executed_owner() {
+            return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
+        }
     }
 }

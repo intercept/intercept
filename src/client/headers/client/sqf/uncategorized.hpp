@@ -1624,5 +1624,58 @@ namespace intercept {
         bool vehicle_report_remote_targets(const object &vehicle_);
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_);
+        
+        int ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_);
+        int ammo_on_pylon(const object &vehicle_, int pylon_index_);
+        void animate_bay(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
+        void animate_bay(const object &vehicle_, int pylon_index_, float anim_phase_);
+        void animate_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
+        void animate_pylon(const object &vehicle_, int pylon_index_, float anim_phase_);
+        void confirm_sensor_target(const object &vehicle_, const side &side_, bool is_confirmed_);
+        sqf_return_string ct_data(const control &control_, int index_);
+        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
+        int ct_find_row_header(const control &control_, int index_);
+        std::vector<control> ct_header_controls(const control &control_, int index_);
+        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
+        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_);
+        std::vector<control> ct_row_controls(const control &control_, int index_);
+        void ct_set_cur_sel(const control &control_, int index_);
+        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_);
+        void ct_set_header_template(const control &control_, const config &config_);
+        void ct_set_row_template(const control &control_, const config &config_);
+        void ct_set_value(const control &control_, float value_);
+        float ct_value(const control &control_, float index_);
+        void force_flag_texture(const object &object_, sqf_string_const_ref texture_);
+        void forget_target(const object &unit_, const object target_);
+        void forget_target(const group &group_, const object target_);
+        bool is_sensor_target_confirmed(const object &object_, const side &side_);
+        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
+        vector3 model_to_world_world(const object &object_, const vector3 model_pos_);
+        void report_remote_target(const side &side_, const object &target_, float time_);
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
+        void set_air_plane_throttle(const object &airplane_, float throttle_);
+        void set_ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, int ammo_count_);
+        void set_ammo_on_pylon(const object &vehicle_, int pylon_index_, int ammo_count_);
+        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_);
+        bool set_pylon_loadout(const object &object_, game_value param_right);
+        void set_pylons_priority(const object &object_, const std::vector<int> &priorities_);
+        void set_skill(const object &object_, float skill_);
+        void set_user_mfd_value(const object &object_, int index_, float value_);
+        void set_vehicle_radar(const object &object_, int rules_);
+        void set_vehicle_receive_remote_targets(const object &vehicle_, bool receive_);
+        void set_vehicle_report_own_position(const object &vehicle_, bool report_);
+        void set_vehicle_report_remote_targets(const object &vehicle_, bool report_);
+        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
+
+        struct rv_cursor_object_params
+        {
+            object cursor_object;
+            std::string cursor_object_named_sel;
+            float distance;
+        };
+
+        sqf_return_string endl();
+        rv_cursor_object_params get_cursor_object_params();
+        int remote_executed_owner();
     }
 }

@@ -74,7 +74,11 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
 
     if (command == "init_patch") {
+    #if _WIN64 || __X86_64__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970-0x2800);
+    #else
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
+    #endif
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
     }

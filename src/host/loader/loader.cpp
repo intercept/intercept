@@ -189,13 +189,20 @@ namespace intercept {
                 if (found)
                     return base + i + offset;
             }
-            return 0x0u;
+            return static_cast<uintptr_t>(0x0u);
         };
 
         auto getRTTIName = [](uintptr_t vtable) -> const char* {
-            uintptr_t typeBase = *reinterpret_cast<uintptr_t*>(vtable - 4);
-            uintptr_t type = *reinterpret_cast<uintptr_t*>(typeBase + 0xC);
-            return reinterpret_cast<char*>(type + 9);
+            class v1 {
+                virtual void doStuff() {}
+            };
+            class v2 : public v1 {
+                virtual void doStuff() {}
+            };
+            v2* v = (v2*) vtable;
+            auto& typex = typeid(*v);
+            auto test = typex.raw_name();
+            return test;
         };
 
         //Shamelessly copied from Dedmen's Hack :3
@@ -232,9 +239,15 @@ namespace intercept {
         //auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
 
         //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
+        
+        
+    #if _WIN64 || __X86_64__
+        auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x40\x53\x48\x83\xEC\x20\xFF\x41\x60\x48\x8B\x41\x08\x48\x8B\xD9\x48\x3B\xC1\x74\x0B\x48\x85\xC0\x74\x06\x48\x83\xC0\xE0\x75\x2B\x48\x8D\x41\x18\x48\x8B\x49\x20\x48\x3B\xC8\x74\x0E\x48\x85\xC9\x74\x09\x48\x8D\x41\xE0\x48\x85\xC0\x75\x10\x48\x8B\xCB\xE8\x00\x00\x00\x00\x84\xC0\x0F\x84\x00\x00\x00\x00\x4C\x8B\x43\x08\x32\xC9\x45\x33\xD2\x4C\x3B\xC3\x74\x0B\x4D\x85\xC0\x74\x06\x49\x83\xC0\xE0\x75\x2A\x4C\x8B\x43\x20\x48\x8D\x43\x18\x4C\x3B\xC0", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
+        auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
+    #else
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
-
+    #endif
 
 
 
@@ -285,7 +298,7 @@ namespace intercept {
 
         //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
         uintptr_t stringOffset = future_stringOffset.get();
-        auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - 4); });
+        auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - sizeof(uintptr_t)); });
 
         /*
         Nular Hashmap
@@ -333,8 +346,14 @@ namespace intercept {
         //Game Types
         for (auto& entry : game_state->_scriptTypes) {
             if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
+        #if _WIN64 || __X86_64__
+            auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + 0xB;
+            auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x7);
+            uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer+ offset);
+        #else
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
+        #endif
             LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc;
             OutputDebugStringA(entry->_name.data());
             OutputDebugStringA("\n");
@@ -362,8 +381,8 @@ namespace intercept {
         _sqf_register_funcs._gameState = state_addr_;
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
-        const char* test = getRTTIName(*reinterpret_cast<uintptr_t*>(allocatorVtablePtr));
-        assert(strcmp(test, "?AVMemTableFunctions@@") == 0);
+        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
+        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
         _allocator.genericAllocBase = allocatorVtablePtr;
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();

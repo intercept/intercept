@@ -658,7 +658,6 @@ namespace intercept {
                 return reinterpret_cast<game_data_rv_namespace*>(data.getRef())->hash();
             if (_type == game_data_code::type_def)
                 return reinterpret_cast<game_data_code*>(data.getRef())->hash();
-            __debugbreak(); //#TODO remove when done testing
             return 0;
         };
 

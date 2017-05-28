@@ -1623,6 +1623,6 @@ namespace intercept {
         bool vehicle_report_own_position(const object &vehicle_);
         bool vehicle_report_remote_targets(const object &vehicle_);
         rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, const std::string &weapon_);
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_);
     }
 }

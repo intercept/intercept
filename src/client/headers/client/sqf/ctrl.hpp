@@ -261,7 +261,7 @@ namespace intercept {
         float lb_cur_sel(float value_);
         float lb_size(const control &value_);
         float lb_size(float value_);
-        float lb_sort_by_value(const control &value_);
+        void lb_sort_by_value(const control &value_);
         sqf_return_string lb_data(int control_id_, int index_);
         sqf_return_string lb_data(const control &control_, int index_);
         sqf_return_string lb_picture(int control_id_, int index_);

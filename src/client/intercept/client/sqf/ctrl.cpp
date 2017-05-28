@@ -1993,8 +1993,8 @@ namespace intercept {
             return __helpers::__number_unary_number(__sqf::unary__lbsize__scalar__ret__scalar, value_);
         }
 
-        float lb_sort_by_value(const control &value_) {
-            return __helpers::__number_unary_control(__sqf::unary__lbsortbyvalue__control__ret__nothing, value_);
+        void lb_sort_by_value(const control &value_) {
+            __sqf::unary__lbsortbyvalue__control__ret__nothing, value_;
         }
 
         float next_menu_item_index(const control &value_) {

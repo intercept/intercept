@@ -5359,7 +5359,7 @@ namespace intercept {
             return rv_weapon_state({ res[0],res[1],res[2],res[3],res[4] });
         }
 
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, const std::string &weapon_) {
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, { vehicle_, auto_array<game_value>(turret_path_.begin(), turret_path_.end()),weapon_ });
 
             return rv_weapon_state({ res[0],res[1],res[2],res[3],res[4] });

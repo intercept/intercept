@@ -554,7 +554,7 @@ namespace intercept {
             };
         };
 
-        template<class Type, unsigned int growthFactor = 32>
+        template<class Type, size_t growthFactor = 32>
         class auto_array : public rv_array<Type> {
             typedef rv_array<Type> base;
         protected:
@@ -1399,7 +1399,7 @@ namespace intercept {
                     vector3 _acceleration;
                 };
 
-                visState1* s1 = reinterpret_cast<visState1*>(vbase + 4);
+                visState1* s1 = reinterpret_cast<visState1*>(vbase + sizeof(uintptr_t));
                 visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
 
                 return visualState{
@@ -1418,9 +1418,14 @@ namespace intercept {
             }
 
             visual_head_pos get_head_pos() {
-                if (!object || !object->object) return visual_head_pos();
-                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
 
+
+                if (!object || !object->object) return visual_head_pos();
+            #if _WIN64 || __X86_64__
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xD0);
+            #else
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+            #endif
                 class v1 {
                     virtual void doStuff() {}
                 };
@@ -1431,9 +1436,21 @@ namespace intercept {
                 auto& typex = typeid(*v);
                 auto test = typex.raw_name();
                 auto hash = typex.hash_code();
-                if (hash != 0x6d4f3e40 && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
-                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase + 0x114);
-
+                if (hash !=
+                #if _WIN64 || __X86_64__
+                    0xb57aedbe2fc8b61e
+                #else
+                    0x6d4f3e40
+                #endif
+                    && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
+                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase +
+                #if _WIN64 || __X86_64__
+                    0x168
+                #else
+                    0x114
+                #endif
+                    );
+                return  visual_head_pos();
                 return visual_head_pos{
                     true,
                     { s3->_cameraPositionWorld.x,s3->_cameraPositionWorld.z,s3->_cameraPositionWorld.y },
@@ -1540,7 +1557,7 @@ namespace intercept {
                 }
                 */
             }
-        };
+            };
     #endif
 
         namespace __internal {

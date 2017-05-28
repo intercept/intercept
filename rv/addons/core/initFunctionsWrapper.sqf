@@ -9,4 +9,8 @@ if (!call (uiNamespace getVariable ["INTERCEPT_BOOT_DONE",{false}])) then {
 //	#include "\A3\functions_f\initFunctions.sqf";
 //};
 //call compile (_code select [1, count _code-2]);
-_this call compile preProcessFileLineNumbers "\A3\functions_f\initFunctions.sqf";
+if (!isNil {_this}) then  {
+	_this call compile preProcessFileLineNumbers "\A3\functions_f\initFunctions.sqf";
+} else {
+	call compile preProcessFileLineNumbers "\A3\functions_f\initFunctions.sqf";
+};

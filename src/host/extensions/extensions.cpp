@@ -33,8 +33,7 @@ namespace intercept {
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {
             do_reload = true;
-        }
-        else {
+        } else {
             do_reload = false;
         }
     }
@@ -89,7 +88,12 @@ namespace intercept {
         std::string full_path = "";
 
         for (auto folder : _mod_folders) {
+        #if _WIN64 || __X86_64__
+            std::string test_path = folder + "\\intercept\\" + path + "_x64.dll";
+        #else
             std::string test_path = folder + "\\intercept\\" + path + ".dll";
+        #endif
+
             LOG(DEBUG) << "Mod: " << test_path;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
@@ -103,8 +107,8 @@ namespace intercept {
         }
 
 
-        
-        
+
+
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file.";
             char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
@@ -151,7 +155,7 @@ namespace intercept {
         new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GetProcAddress(dllHandle, "pre_start"));
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GetProcAddress(dllHandle, "mission_stopped"));
 
-#define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
+    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
 
         EH_PROC_DEF(anim_changed);
         EH_PROC_DEF(anim_done);
@@ -259,8 +263,7 @@ namespace intercept {
         return false;
     }
 
-    std::unordered_map<std::string, module::entry>& extensions::modules()
-    {
+    std::unordered_map<std::string, module::entry>& extensions::modules() {
         return _modules;
     }
 

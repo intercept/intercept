@@ -5069,7 +5069,7 @@ namespace intercept {
         }
 
         //#TODO: Find out, which commands this command really takes (not documented)
-        void set_pipe_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left) {
+        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left) {
             host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);
         }
 
@@ -5192,11 +5192,11 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__showneweditorobject__control__array__ret__any, map_, params_right_);
         }
 
-        void binary__sideradio__object_array__string__ret__nothing(const object &unit_, sqf_string_const_ref radio_name_) {
+        void sideradio(const object &unit_, sqf_string_const_ref radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, unit_, radio_name_);
         }
 
-        void binary__sideradio__object_array__string__ret__nothing(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_) {
+        void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, { side_, identity_ }, radio_name_);
         }
 

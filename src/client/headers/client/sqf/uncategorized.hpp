@@ -394,34 +394,34 @@ namespace intercept {
             vector2 offset;
         };
 
+        struct rv_ct_list
+        {
+            int header_index;
+            std::vector<control> controls;
+        };
 
+        struct rv_weapon_state
+        {
+            std::string weapon;
+            std::string muzzle;
+            std::string firemode;
+            std::string magazine;
+            int ammo_count;
+        };
+
+        struct rv_cursor_object_params
+        {
+            object cursor_object;
+            std::string cursor_object_named_sel;
+            float distance;
+        };
+
+
+
+        //these 3 into one category like post process?
+        //3D stuff
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, sqf_string_const_ref font_ = "TahomaB");
-        
-        
-
-        /* potential namespace: misc, missions */
-        void activate_addons(sqf_string_list_const_ref addons_);
-
-
-        
-        
-        /* potential namespace: core, create */
-        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
-        object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
-        
-
-        
-        
-        /* potential namespace: misc */
-        void enable_saving(bool enable_);
-        void enable_saving(bool enable_, bool autosave_);
-
-
-        /* potential namespace: physics, physx, core */
-
-        /* potential namespace: misc */
-        std::vector<float> get_dlcs(float filter_);
         
         /* potential namespace: particles */
         void set_particle_params(const object &particle_source_, const rv_particle_array &particle_array_);
@@ -434,414 +434,165 @@ namespace intercept {
         float particles_quality();
         void set_drop_interval(const object &value0_, float value1_);
 
+        //ppeffects
+        void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
+        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
+        void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
+        
+        
+        
+
+        // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
+        
+
+        
+        //rtd simulation from take on helicopters
+        float get_rotor_brake_rtd(const object &value_);
+        float get_wings_orientation_rtd(const object &value_);
+        float get_wings_position_rtd(const object &value_);
+        bool is_auto_trim_on_rtd(const object &value_);
+        bool is_object_rtd(const object &value_);
+        float number_of_engines_rtd(const object &value_);
+        void stop_engine_rtd(const object &value_);
+        void enable_auto_start_up_rtd(const object &value0_, bool value1_);
+        bool enable_auto_trim_rtd(const object &value0_, bool value1_);
+        std::vector<bool> engines_is_on_rtd(const object &heli_);
+        std::vector<float> engines_rpm_rtd(const object &heli_);
+        std::vector<float> engines_torque_rtd(const object &heli_);
+        void set_rotor_brake_rtd(const object &value0_, float value1_);
+        void set_actual_collective_rtd(const object &value0_, float value1_);
+        void set_custom_weight_rtd(const object &value0_, float value1_);
+        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_);
+        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_);
+        std::vector<float> rotors_rpm_rtd(const object &heli_);
+        rv_weight_rtd weight_rtd(const object &heli_);
+        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
+        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
+        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
+        bool difficulty_enabled_rtd();
+        void clear_forces_rtd();
+        float air_density_rtd(float altitude_);
+        float collective_rtd(const object & helicopter_);
+
+        //TOH traffic - needs to be tested, probably not working
+        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
+        void enable_traffic(bool value_);
+        void set_traffic_distance(float value_);
 
 
+        //A2 artillary - did this ever work?
+        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_);
+        float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_);
+        void enable_engine_artillery(bool value_);
+        rv_artillery_computer_settings get_artillery_computer_settings();
+
+        
+        //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
+        
+        
+        //mp
+        int admin(int owner_id_);
+        int remote_executed_owner();
+
+                
+        //misc
+
+        //#TODO some diags are in misc -> move them to core
+
+        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_);
+        void activate_addons(sqf_string_list_const_ref addons_);
+        void enable_saving(bool enable_);
+        void enable_saving(bool enable_, bool autosave_);
+        std::vector<float> get_dlcs(float filter_);
         float armory_points();
         float benchmark();
         bool cadet_mode();
-        object camera_on();
-
         bool cheats_enabled();
-        void clear_forces_rtd();
-
-        
-
-        
         float difficulty();
-        bool difficulty_enabled_rtd();
         float distribution_region();
         void finish_mission_init();
-
         void force_end();
         bool free_look();
-        float getelevationoffset();
-        bool get_remote_sensors_disabled();
-        
         float get_total_dlc_usage_time();
-
-        
         bool is_autotest();
         bool is_filepatching_enabled();
         bool is_instructor_figure_enabled();
-        bool is_pip_enabled();
         bool is_steam_mission();
         bool is_stream_friendly_ui_enabled();
         bool is_stress_damage_enabled();
         sqf_return_string language();
         std::vector<rv_credit> library_credits();
         sqf_return_string_list library_disclaimers();
-
         void load_game();
         void log_entities();
         bool mark_as_finished_on_steam();
         float mission_difficulty();
-        
-        //Seriously? Either remove this or just return PI instead of calling into Arma
-        float pi();
-        std::vector<object> playable_units();
-        object player();
-        float player_respawn_time();
-        side player_side();
-        
-        
-        
-        bool reversed_mouse_y();
         void run_init_script();
+        bool reversed_mouse_y();
         bool team_switch_enabled();
         void team_switch();
-
         float system_of_units();
-
         void select_no_player();
         bool saving_enabled();
-        
-        std::vector<object> switchable_units();
-
+        bool difficulty_enabled(sqf_string_const_ref value_);
         void activate_key(sqf_string_const_ref keyname_);
-        void add_switchable_unit(const object & unit_);
-        float air_density_rtd(float altitude_);
-        void airport_side(int id_);
-        void airport_side(const object & target_);
-        
-
-
-
-
-        bool can_unload_in_combat(const object & unit_);
-        
-
-
-
-        float collective_rtd(const object & helicopter_);
-        side create_center(const side & side_); //not used in A3
-
         void de_activate_key(sqf_string_const_ref key_);
-        void delete_center(const side & side_);
-        void delete_collection(const object & collection_);
+        bool is_key_active(sqf_string_const_ref value_);
+        void delete_collection(const object & collection_); //deprecated
         bool delete_identity(sqf_string_const_ref identity_);
-
         void delete_site(const object &value_);
         bool delete_status(sqf_string_const_ref value_);
-        
-        bool difficulty_enabled(sqf_string_const_ref value_);
-
-        void disable_remote_sensors(bool value_);
-        void disable_user_input(bool value_);
-        void dissolve_team(sqf_string_const_ref value_);
-        void echo(sqf_string_const_ref value_);
-        // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
-
-        void enable_diag_legend(bool value_);
-        void enable_engine_artillery(bool value_);
-        
-
-        
-        
-        void enable_traffic(bool value_);
         void enable_sentences(bool value_);
         void enable_stress_damage(bool value_);
         void enable_team_switch(bool value_);
-        void end_mission(sqf_string_const_ref value_);
-        void estimated_time_left(float value_);
-        
-
-
-
-        void fail_mission(sqf_string_const_ref value_);
-        
-        object get_connected_uav(const object &value_);
-        float get_custom_aim_coef(const object &value_);
         float get_dlcusage_time(float value_);
-        
-        
-
-        float get_repair_cargo(const object &value_);
-        float get_rotor_brake_rtd(const object &value_);
-        float get_wings_orientation_rtd(const object &value_);
-        float get_wings_position_rtd(const object &value_);
-
-
-        
-        
-        sqf_return_string image(sqf_string_const_ref value_);
-        bool is_auto_trim_on_rtd(const object &value_);
-        bool is_collision_light_on(const object &value_);
+        void dissolve_team(sqf_string_const_ref value_);
         bool is_dlcavailable(float value_);
-        bool is_key_active(sqf_string_const_ref value_);
-        bool is_localized(sqf_string_const_ref value_);
-
-        bool is_object_rtd(const object &value_);
-        
-
-
-        
-
-        
-        sqf_return_string localize(sqf_string_const_ref value_);
-        
-                
-        float number_of_engines_rtd(const object &value_);
-        
-        
-        float playable_slots_number(const side &value_);
-        float players_number(const side &value_);
-
-        bool required_version(sqf_string_const_ref value_);
-        sqf_return_string role_description(const object &value_);
-        void save_var(sqf_string_const_ref value_);
-        void scope_name(sqf_string_const_ref value_);
-        float score_side(const side &value_);
-        void script_name(sqf_string_const_ref value_);
-
-        
         void set_armory_points(float value_);
-
-         
         void set_system_of_units(float value_);
-        void set_traffic_distance(float value_);
-        
-
-        
-        void stop_engine_rtd(const object &value_);
-        sqf_return_string text(sqf_string_const_ref value_);
-        
-
-        void unassign_team(const object &value_);
-        void unassign_vehicle(const object &value_);
-        bool underwater(const object &value_);
-
         bool unlock_achievement(sqf_string_const_ref value_);
-
-
-
-
-
-        bool verify_signature(sqf_string_const_ref value_);
-
-        void add_live_stats(const object &value0_, float value1_);
-        void add_score_side(const side &value0_, float value1_);
-        void add_vehicle(const group &value0_, const object &value1_);
-
-
-        void allow_sprint(const object &value0_, bool value1_);
-        float animation_phase(const object &value0_, sqf_string_const_ref value1_);
-        void assign_to_airport(const object &value0_, float value1_);
-        void assign_to_airport(const object &value0_, const object &target_);
-
-
-
-
-        void enable_auto_start_up_rtd(const object &value0_, bool value1_);
-        bool enable_auto_trim_rtd(const object &value0_, bool value1_);
-        void enable_copilot(const object &value0_, bool value1_);
-        
-
-
-        
-        
-        bool is_kind_of(const object &obj_, sqf_string_const_ref type_);
-        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_);
-        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
-
-
-
-
-
+        void add_live_stats(const object &value0_, float value1_); //Xbox stuff
         bool load_identity(const object &value0_, sqf_string_const_ref value1_);
         bool load_status(const object &value0_, sqf_string_const_ref value1_);
-
-
-        bool mine_detected_by(const object &value0_, const side &value1_);
-
-
-
-        
-        void reveal_mine(const object &value0_, const side &value1_);
         bool save_status(const object &value0_, sqf_string_const_ref value1_);
-        void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
-        void set_actual_collective_rtd(const object &value0_, float value1_);
-        void set_airport_side(float value0_, const side &value1_);
-        void set_airport_side(const object & target_, const side &value1_);
-
-
-        void set_collision_light(const object &value0_, bool value1_);
-        void set_custom_aim_coef(const object &value0_, float value1_);
-        void set_custom_weight_rtd(const object &value0_, float value1_);
-        
-        
-        
-        
-        void set_light_brightness(const object &value0_, float value1_);
-        void set_light_day_light(const object &value0_, bool value1_);
-        void set_light_flare_max_distance(const object &value0_, float value1_);
-        void set_light_flare_size(const object &value0_, float value1_);
-        void set_light_intensity(const object &value0_, float value1_);
-        void set_light_use_flare(const object &value0_, bool value1_);
-
-        void set_pilot_light(const object &value0_, bool value1_);
-        void set_rotor_brake_rtd(const object &value0_, float value1_);
-
         void save_game();
         void save_joysticks();
-
-        
-
-        std::vector<object> roads_connected_to(const object &obj_);
-
-        //#categorize pos
-        vector3 screen_to_world(const vector2 &pos_);
-
-
-        sqf_return_string speed_mode(const object &obj_);
-        sqf_return_string speed_mode(const group &grp_);
-
-        rv_resolution get_resolution();
-
-        std::vector<object> vehicles();
-
-        
-
-
-
-        rv_artillery_computer_settings get_artillery_computer_settings();
+        sqf_return_string role_description(const object &value_);
+        float score_side(const side &value_);
         rv_product_version product_version();
-
-        // originally "side", but is already a type
-        side get_side(const object &object_);
-
-
-        sqf_return_string wf_side_text(const object &object_);
-        sqf_return_string wf_side_text(const group &group_);
-        sqf_return_string wf_side_text(const side &side_);
-
-        float count_side(const side &side_, std::vector<object> &objects_);
-
-
-        bool in(const object &unit_, const object &vehicle_);
-        
-
-
-        sqf_return_string compose_text(sqf_string_list_const_ref texts_);
-        
-
+        bool set_stat_value(sqf_string_const_ref name_, float value_);
         void host_mission(const config &config_, const display &display_);
-        std::vector<object> detected_mines(const side &side_);
-        
-        std::vector<bool> engines_is_on_rtd(const object &heli_);
-        std::vector<float> engines_rpm_rtd(const object &heli_);
-        std::vector<float> engines_torque_rtd(const object &heli_);
-
-        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_);
-        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_);
-
-        std::vector<float> rotors_rpm_rtd(const object &heli_);
-
-        rv_weight_rtd weight_rtd(const object &heli_);
-
-        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
-        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
-        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
-
-
-        void on_command_mode_changed(const code &command_);
-        void on_command_mode_changed(sqf_string_const_ref command_);
-
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_);
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_, bool skip_briefing_);
         void play_mission(sqf_string_const_ref campaign_, const config &mission_);
         void play_mission(sqf_string_const_ref campaign_, const config &mission_, bool skip_briefing_);
-
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_);
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_);
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_);
-
-
-        void remove_from_remains_collector(const std::vector<object> &remains_);
-        
-        void set_group_icons_visible(bool map_, bool hud_);
-        std::vector<bool> group_icons_visible();
-        void set_local_wind_params(float strength_, float diameter_);
-        void set_mouse_position(float x_, float y_);
-        bool set_stat_value(sqf_string_const_ref name_, float value_);
-        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
-
-
-        rv_uav_control uav_control(const object& uav_);
-        sqf_return_string format(const std::vector<game_value> &params_);
-        
-        
-        
         float difficulty_option(sqf_string_const_ref optionname_);
-
         void enable_weapon_disassembly(bool enable_);
-        float flag_animation_phase(const object &flag_);
-        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
-        
-        object road_at(const object &object_);
-        object road_at(const vector3 &position_);
-        //#categorize ctrl
-        void show_score_table(int force_);
-        
-        
-
-        
-
-        
-        
-        //#categorize ctrl
-        bool visible_score_table();
-
-        //BINARY -- https://github.com/intercept/intercept/issues/13
-        
-        
-        vector3 building_exit(const object &building_, int index_);
-        vector3 building_pos(const object &building_, int index_);
-        int count_enemy(const object &unit_, const std::vector<object> &units_);
-        int count_friendly(const object &unit_, const std::vector<object> &units_);
-        int count_type(sqf_string_const_ref type_, const std::vector<object> &objects_);
-        int count_unknown(const object &unit_, const std::vector<object> &units_);
         object create_site(sqf_string_const_ref type_, const vector3 &pos_);
 
         
-        
-        
+        //chat
+        void sideradio(const object &unit_, sqf_string_const_ref radio_name_);
+        void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
-        float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_);
-        rv_group_icon get_group_icon(const group &group_, int &id_);
+        
 
-
-        void group_select_unit(const object &player_, const object &unit_, bool select_);
-        
-        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_);
-        
-        
-        
-        bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
-        
-        
+        //tasks / briefing
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
-        
 
 
-
-        void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
-        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
-        void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
-        bool preload_object(float distance_, const object &object_);
-        bool preload_object(float distance_, sqf_string_const_ref class_name_);
-
-        
-        void remove_owned_mine(const object &unit_, const object &mine_);
-        void reveal(std::variant<object, group> &unit_, const object &target_);
-        void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
-        
-        
-        //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
-        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
-        
-        
+        //group
+        void add_vehicle(const group &value0_, const object &value1_);
+        void set_group_icons_visible(bool map_, bool hud_);
+        std::vector<bool> group_icons_visible();
+        rv_group_icon get_group_icon(const group &group_, int &id_);
+        void group_select_unit(const object &player_, const object &unit_, bool select_);
         void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
         void set_formation(const group &group_, sqf_string_const_ref formation_);
         void set_form_dir(const group &group_, float heading_);
@@ -849,36 +600,49 @@ namespace intercept {
         void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_);
         void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
         void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
-        
-        void set_light_ambient(const object &light_, float r_, float g_, float b_);
-        void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_);
-        void set_light_color(const object &light_, float r_, float g_, float b_);
-        
-        
-        //#TODO typo should be set_pip_effects
-        void set_pipe_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
-        
-        
-        void set_rectangular(const location &location_, bool rectangular_);
-        void set_size(const location &location_, float size_x_, float size_y_);
-        void set_name(const location &location_, sqf_string_const_ref name_);
-        void set_speech(const location &location_, sqf_string_const_ref speech_);
-        void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
-        void set_text(const location &location_, sqf_string_const_ref text_);
-        void set_type(const location &location_, sqf_string_const_ref type_);
-        
-        
 
-        //is this supposed to be here? - Probably need to be renamed? to correct name?
-        void binary__sideradio__object_array__string__ret__nothing(const object &unit_, sqf_string_const_ref radio_name_);
-        void binary__sideradio__object_array__string__ret__nothing(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
-        
+
         //vehicles - new cat
+        int airplane_throttle(const object &airplane_);
+        sqf_return_string_list get_pylon_magazines(const object &vehicle_);
+        sqf_return_string get_forced_flag_texture(const object &flag_pole_);
+        bool is_damage_allowed(const object &object_);
+
+        bool vehicle_receive_remote_targets(const object &vehicle_);
+        bool vehicle_report_own_position(const object &vehicle_);
+        bool vehicle_report_remote_targets(const object &vehicle_);
+
+        int ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_);
+        int ammo_on_pylon(const object &vehicle_, int pylon_index_);
+        void animate_bay(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
+        void animate_bay(const object &vehicle_, int pylon_index_, float anim_phase_);
+        void animate_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
+        void animate_pylon(const object &vehicle_, int pylon_index_, float anim_phase_);
+        void confirm_sensor_target(const object &vehicle_, const side &side_, bool is_confirmed_);
+
+        void force_flag_texture(const object &object_, sqf_string_const_ref texture_);
+        bool is_sensor_target_confirmed(const object &object_, const side &side_);
+        void report_remote_target(const side &side_, const object &target_, float time_);
+        void set_air_plane_throttle(const object &airplane_, float throttle_);
+        void set_ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, int ammo_count_);
+        void set_ammo_on_pylon(const object &vehicle_, int pylon_index_, int ammo_count_);
+        bool set_pylon_loadout(const object &object_, game_value param_right);
+        void set_pylons_priority(const object &object_, const std::vector<int> &priorities_);
+        void set_vehicle_radar(const object &object_, int rules_);
+        void set_vehicle_receive_remote_targets(const object &vehicle_, bool receive_);
+        void set_vehicle_report_own_position(const object &vehicle_, bool report_);
+        void set_vehicle_report_remote_targets(const object &vehicle_, bool report_);
+        
+        bool is_collision_light_on(const object &value_);
+        void enable_copilot(const object &value0_, bool value1_);
+        void set_pilot_light(const object &value0_, bool value1_);
+        void set_collision_light(const object &value0_, bool value1_);
         float set_flag_animation_phase(const object& object_, float phase);
         void set_flag_owner(const object& flag_, const object& owner_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
         object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_atl_);
         void add_to_remains_collector(const std::vector<object> & objects_);
+        void remove_from_remains_collector(const std::vector<object> &remains_);
         std::vector<rv_crew_member> full_crew(const object &veh_);
         std::vector<rv_crew_member> full_crew(const object &veh_, sqf_string_const_ref filter_, bool include_empty_ = false);
         std::vector<object> crew(const object & _veh);
@@ -1030,12 +794,49 @@ namespace intercept {
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
         object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
         sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        float flag_animation_phase(const object &flag_);
+        object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
+        float get_repair_cargo(const object &value_);
+
+        void unassign_vehicle(const object &value_);
+
+        void assign_to_airport(const object &value0_, float value1_);
+        void assign_to_airport(const object &value0_, const object &target_);
+
+        void set_light_brightness(const object &value0_, float value1_);
+        void set_light_day_light(const object &value0_, bool value1_);
+        void set_light_flare_max_distance(const object &value0_, float value1_);
+        void set_light_flare_size(const object &value0_, float value1_);
+        void set_light_intensity(const object &value0_, float value1_);
+        void set_light_use_flare(const object &value0_, bool value1_);
+        void set_light_ambient(const object &light_, float r_, float g_, float b_);
+        void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_);
+        void set_light_color(const object &light_, float r_, float g_, float b_);
+
+        std::vector<object> roads_connected_to(const object &obj_);
+
+        // originally "side", but is already a type
+        side get_side(const object &object_);
+        sqf_return_string wf_side_text(const object &object_); //https://community.bistudio.com/wiki/WFSideText
+        sqf_return_string wf_side_text(const group &group_);
+        sqf_return_string wf_side_text(const side &side_);
+        rv_uav_control uav_control(const object& uav_);
 
 
         //units - new cat
+        void set_user_mfd_value(const object &object_, int index_, float value_);
+        void forget_target(const object &unit_, const object target_);
+        void forget_target(const group &group_, const object target_);
+        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
+        
+        bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
+        object camera_on();
+        bool can_unload_in_combat(const object & unit_);
+
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
 
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_);
+        bool in(const object &unit_, const object &vehicle_);
 
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_);
         game_value targets_aggregate(const object &speaker_, const side &side_, const object &unit_, const vector3 &place_, float time_, game_value &candidates_);
@@ -1216,10 +1017,24 @@ namespace intercept {
         void force_walk(const object &value0_, bool value1_);
         bool is_flashlight_on(const object &value0_, sqf_string_const_ref value1_);
         bool is_irlaser_on(const object &value0_, sqf_string_const_ref value1_);
+        void set_custom_aim_coef(const object &value0_, float value1_);
+        void allow_sprint(const object &value0_, bool value1_);
+        float animation_phase(const object &value0_, sqf_string_const_ref value1_);
+        void unassign_team(const object &value_);
+        object get_connected_uav(const object &value_);
+        float get_custom_aim_coef(const object &value_);
+        void remove_owned_mine(const object &unit_, const object &mine_);
+        void reveal(std::variant<object, group> &unit_, const object &target_);
+        void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
 
 
 
         //ai
+        void set_skill(const object &object_, float skill_);
+        void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
+        sqf_return_string speed_mode(const object &obj_);
+        sqf_return_string speed_mode(const group &grp_);
+        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
         void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
         void do_fire(const object &unit_, const object &target_);
@@ -1294,19 +1109,60 @@ namespace intercept {
         bool buldozer(sqf_string_const_ref value_);
 
         //ctrl
+        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
+
         void slider_set_speed(const control &slider_, float line_, int page_);
         int lnb_add_row(int idc_, sqf_string_list_const_ref items_);
         std::pair<bool, bool> forced_map();
         void progress_loading_screen(float value_);
         void look_at_pos(const control &map_, const vector3 &position_);
+        rv_ct_list ct_add_header(const control &control_);
+        rv_ct_list ct_add_row(const control &control_);
+        void ct_clear(const control &control_);
+        int ct_cur_sel(const control &control_);
+        int ct_header_count(const control &control_);
+        int ct_row_count(const control &control_);
+        void lb_sort(const control &control_);
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_);
+        void lb_sort_by_value(const control control_);
+        void lb_sort_by_value(int control_);
+
+        sqf_return_string ct_data(const control &control_, int index_);
+        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
+        int ct_find_row_header(const control &control_, int index_);
+        std::vector<control> ct_header_controls(const control &control_, int index_);
+        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
+        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_);
+        std::vector<control> ct_row_controls(const control &control_, int index_);
+        void ct_set_cur_sel(const control &control_, int index_);
+        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_);
+        void ct_set_header_template(const control &control_, const config &config_);
+        void ct_set_row_template(const control &control_, const config &config_);
+        void ct_set_value(const control &control_, float value_);
+        float ct_value(const control &control_, float index_);
+
+        bool visible_score_table();
+        void show_score_table(int force_);
+        rv_resolution get_resolution();
+        bool is_pip_enabled();
+        void set_mouse_position(float x_, float y_);
+
 
         
         //eden
         sqf_return_string_list get_mission_layers();
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
+        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
 
 
 
         //config
+        bool is_kind_of(const object &obj_, sqf_string_const_ref type_);
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_);
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
+
         sqf_return_string_list config_source_addon_list(const config &config_);
         game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_);
         sqf_return_string type_of(const object &value_);
@@ -1315,6 +1171,8 @@ namespace intercept {
 
         //core
         //onEvent
+        void on_command_mode_changed(const code &command_);
+        void on_command_mode_changed(sqf_string_const_ref command_);
         game_value on_double_click(const control &map_, sqf_string_const_ref command_);
         void on_map_single_click(const game_value &params_, std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<const code>> command_);
         game_value on_show_new_object(const object &control_, sqf_string_const_ref command_);
@@ -1333,7 +1191,6 @@ namespace intercept {
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
-
         bool user_input_disabled();
         bool screen_shot(sqf_string_const_ref filename_);
         object cursor_object();
@@ -1354,6 +1211,42 @@ namespace intercept {
         std::vector<object> all_units_uav();
         sqf_return_string_list activated_addons();
 
+        sqf_return_string image(sqf_string_const_ref value_);
+        bool is_localized(sqf_string_const_ref value_);
+        sqf_return_string localize(sqf_string_const_ref value_);
+        sqf_return_string text(sqf_string_const_ref value_);
+        sqf_return_string format(const std::vector<game_value> &params_);
+        sqf_return_string compose_text(sqf_string_list_const_ref texts_);
+        sqf_return_string endl();
+        bool verify_signature(sqf_string_const_ref value_);
+        void script_name(sqf_string_const_ref value_);
+        bool required_version(sqf_string_const_ref value_);
+        void save_var(sqf_string_const_ref value_);
+        void scope_name(sqf_string_const_ref value_);
+        float playable_slots_number(const side &value_);
+        float players_number(const side &value_);
+        //Seriously? Either remove this or just return PI instead of calling into Arma
+        float pi();
+        std::vector<object> playable_units();
+        object player();
+        float player_respawn_time();
+        side player_side();
+        std::vector<object> switchable_units();
+        void add_switchable_unit(const object & unit_);
+        side create_center(const side & side_); //not used in A3
+        void delete_center(const side & side_);
+        void disable_user_input(bool value_);
+        void echo(sqf_string_const_ref value_);
+        void end_mission(sqf_string_const_ref value_);
+        void estimated_time_left(float value_);
+        void fail_mission(sqf_string_const_ref value_);
+        int count_enemy(const object &unit_, const std::vector<object> &units_);
+        int count_friendly(const object &unit_, const std::vector<object> &units_);
+        int count_type(sqf_string_const_ref type_, const std::vector<object> &objects_);
+        int count_unknown(const object &unit_, const std::vector<object> &units_);
+        rv_cursor_object_params get_cursor_object_params();
+
+
         //diag
         void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
         void diag_capture_frame_to_file(float frame_);
@@ -1362,9 +1255,19 @@ namespace intercept {
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_);
         std::vector<script> diag_active_scripts();
         void diag_log(sqf_string_const_ref text_);
+        void enable_diag_legend(bool value_);
         void halt(); //only in dev version - at least wiki says so
 
 
+        //marker
+        //location
+        void set_rectangular(const location &location_, bool rectangular_);
+        void set_size(const location &location_, float size_x_, float size_y_);
+        void set_name(const location &location_, sqf_string_const_ref name_);
+        void set_speech(const location &location_, sqf_string_const_ref speech_);
+        void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
+        void set_text(const location &location_, sqf_string_const_ref text_);
+        void set_type(const location &location_, sqf_string_const_ref type_);
 
 
 
@@ -1410,8 +1313,15 @@ namespace intercept {
 
         std::vector<object> entities(sqf_string_const_ref type_);
         std::vector<object> units(const object& unit_);
-
-
+        bool preload_object(float distance_, const object &object_);
+        bool preload_object(float distance_, sqf_string_const_ref class_name_);
+        object road_at(const object &object_);
+        object road_at(const vector3 &position_);
+        bool get_remote_sensors_disabled();
+        void disable_remote_sensors(bool value_);
+        bool underwater(const object &value_);
+        std::vector<object> vehicles();
+        void set_local_wind_params(float strength_, float diameter_);
 
         //inventory
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);
@@ -1454,8 +1364,16 @@ namespace intercept {
         sqf_return_string headgear(const object &value_);
         sqf_return_string hmd(const object &value_);
 
+        rv_weapon_state weapon_state(const object &unit_);
+        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_);
+
+
 
         //position
+        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
+        vector3 model_to_world_world(const object &object_, const vector3 model_pos_);
+
+        vector3 screen_to_world(const vector2 &pos_);
         vector3 model_to_world(const object &object_, const vector3 &offset_);
         bool in_area(t_sqf_in_area_position position_, const object &trigger_);
         bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_);
@@ -1488,6 +1406,8 @@ namespace intercept {
         float distance(const object& start_, const vector3& end_);
         float distance(const vector3& start_, const vector3& end_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
+        vector3 building_exit(const object &building_, int index_);
+        vector3 building_pos(const object &building_, int index_);
 
 
 
@@ -1524,6 +1444,17 @@ namespace intercept {
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         
 
+
+        //potential new cat: side
+        std::vector<object> detected_mines(const side &side_);
+        float count_side(const side &side_, std::vector<object> &objects_);
+        void set_airport_side(float value0_, const side &value1_);
+        void set_airport_side(const object & target_, const side &value1_);
+        void reveal_mine(const object &value0_, const side &value1_);
+        bool mine_detected_by(const object &value0_, const side &value1_);
+        void add_score_side(const side &value0_, float value1_);
+        void airport_side(int id_);
+        void airport_side(const object & target_);
 
 
         //2d editor commands (probably unneeded)
@@ -1587,95 +1518,6 @@ namespace intercept {
         void set_leader(const team_member &team_, const team_member &leader_);
 
 
-        struct rv_ct_list
-        {
-            int header_index;
-            std::vector<control> controls;
-        };
-
-        struct rv_weapon_state
-        {
-            std::string weapon;
-            std::string muzzle;
-            std::string firemode;
-            std::string magazine;
-            int ammo_count;
-        };
-
-        int admin(int owner_id_);
-        int airplane_throttle(const object &airplane_);
-        rv_ct_list ct_add_header(const control &control_);
-        rv_ct_list ct_add_row(const control &control_);
-        void ct_clear(const control &control_);
-        int ct_cur_sel(const control &control_);
-        int ct_header_count(const control &control_);
-        int ct_row_count(const control &control_);
-        sqf_return_string get_forced_flag_texture(const object &flag_pole_);
-        sqf_return_string_list get_pylon_magazines(const object &vehicle_);
-        bool is_damage_allowed(const object &object_);
-        void lb_sort(const control &control_);
-        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
-        void lb_sort(int control_, sqf_string_const_ref sort_order_);
-        void lb_sort(int control_);
-        void lb_sort_by_value(const control control_);
-        void lb_sort_by_value(int control_);
-        bool vehicle_receive_remote_targets(const object &vehicle_);
-        bool vehicle_report_own_position(const object &vehicle_);
-        bool vehicle_report_remote_targets(const object &vehicle_);
-        rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_);
         
-        int ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_);
-        int ammo_on_pylon(const object &vehicle_, int pylon_index_);
-        void animate_bay(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
-        void animate_bay(const object &vehicle_, int pylon_index_, float anim_phase_);
-        void animate_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, float anim_phase_);
-        void animate_pylon(const object &vehicle_, int pylon_index_, float anim_phase_);
-        void confirm_sensor_target(const object &vehicle_, const side &side_, bool is_confirmed_);
-        sqf_return_string ct_data(const control &control_, int index_);
-        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
-        int ct_find_row_header(const control &control_, int index_);
-        std::vector<control> ct_header_controls(const control &control_, int index_);
-        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
-        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_);
-        std::vector<control> ct_row_controls(const control &control_, int index_);
-        void ct_set_cur_sel(const control &control_, int index_);
-        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_);
-        void ct_set_header_template(const control &control_, const config &config_);
-        void ct_set_row_template(const control &control_, const config &config_);
-        void ct_set_value(const control &control_, float value_);
-        float ct_value(const control &control_, float index_);
-        void force_flag_texture(const object &object_, sqf_string_const_ref texture_);
-        void forget_target(const object &unit_, const object target_);
-        void forget_target(const group &group_, const object target_);
-        bool is_sensor_target_confirmed(const object &object_, const side &side_);
-        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
-        vector3 model_to_world_world(const object &object_, const vector3 model_pos_);
-        void report_remote_target(const side &side_, const object &target_, float time_);
-        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
-        void set_air_plane_throttle(const object &airplane_, float throttle_);
-        void set_ammo_on_pylon(const object &vehicle_, sqf_string_const_ref pylon_name_, int ammo_count_);
-        void set_ammo_on_pylon(const object &vehicle_, int pylon_index_, int ammo_count_);
-        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_);
-        bool set_pylon_loadout(const object &object_, game_value param_right);
-        void set_pylons_priority(const object &object_, const std::vector<int> &priorities_);
-        void set_skill(const object &object_, float skill_);
-        void set_user_mfd_value(const object &object_, int index_, float value_);
-        void set_vehicle_radar(const object &object_, int rules_);
-        void set_vehicle_receive_remote_targets(const object &vehicle_, bool receive_);
-        void set_vehicle_report_own_position(const object &vehicle_, bool report_);
-        void set_vehicle_report_remote_targets(const object &vehicle_, bool report_);
-        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
-
-        struct rv_cursor_object_params
-        {
-            object cursor_object;
-            std::string cursor_object_named_sel;
-            float distance;
-        };
-
-        sqf_return_string endl();
-        rv_cursor_object_params get_cursor_object_params();
-        int remote_executed_owner();
     }
 }

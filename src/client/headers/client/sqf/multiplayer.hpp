@@ -68,14 +68,8 @@ namespace intercept {
         bool is_remote_executed();
         bool is_remote_executed_jip();
 
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_);
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_);
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
-
         game_value remote_exec(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
         game_value remote_exec_call(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
-        void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
 
         void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_);
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);

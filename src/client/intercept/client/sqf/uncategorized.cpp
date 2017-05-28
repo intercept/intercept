@@ -1785,6 +1785,50 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__removeallmissioneventhandlers__string__ret__nothing, value_);
         }
 
+
+        void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
+            game_value params_right({
+                event_,
+                index_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
+        }
+
+
+        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, code_);
+        }
+
+        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_) {
+            game_value params_right({
+                target_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, params_right);
+        }
+
+
+
+        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+        }
+
+        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+        }
+
         
         void remove_switchable_unit(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__removeswitchableunit__object__ret__nothing, value_);

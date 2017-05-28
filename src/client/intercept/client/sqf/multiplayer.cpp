@@ -140,15 +140,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
 
-        void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
-            game_value params_right({
-                event_,
-                index_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
-        }
-
+        
         void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_) {
             host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
         }
@@ -217,19 +209,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__publicvariableclient__scalar__string__ret__nothing, value0_, value1_);
         }
 
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_) {
-            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, code_);
-        }
-
-        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_) {
-            game_value params_right({
-                target_,
-                code_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, params_right);
-        }
-
         void log_network_terminate(float handle_) {
             host::functions.invoke_raw_unary(__sqf::unary__lognetworkterminate__scalar__ret__nothing, handle_);
         }
@@ -292,24 +271,6 @@ namespace intercept {
 
         object object_from_net_id(sqf_string_const_ref value_) {
             return object(host::functions.invoke_raw_unary(__sqf::unary__objectfromnetid__string__ret__object, value_));
-        }
-
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_) {
-            game_value params_right({
-                type_,
-                expression_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
-        }
-
-        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_) {
-            game_value params_right({
-                type_,
-                expression_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
         }
     }
 }

@@ -369,7 +369,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
                 return fnc._name2 == name;
             });
             if (found != table.end()) {
-                table.erase(found); //#TODO remove table if empty now
+                table.erase(found);
                 return true;
             }
             return false;
@@ -381,7 +381,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
                 return fnc._name2 == name;
             });
             if (found != table.end()) {
-                table.erase(found); //#TODO remove table if empty now
+                table.erase(found);
                 return true;
             }
             return false;

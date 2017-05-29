@@ -48,7 +48,7 @@ namespace intercept {
     bool invoker::invoker_begin_register(const arguments & args_, std::string & result_) {
 
         sqf_functions::get().initialize();
-        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes", "", userFunctionWrapper<_intercept_registerTypes>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::NAMESPACE);
+        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes", "", userFunctionWrapper_ref<_intercept_registerTypes>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::NAMESPACE);
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::STRING, types::__internal::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame", "", userFunctionWrapper<_intercept_do_invoke_period>, types::__internal::GameDataType::BOOL);
         _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal", "", userFunctionWrapper<_intercept_signal>, types::__internal::GameDataType::BOOL, types::__internal::GameDataType::ARRAY, types::__internal::GameDataType::ARRAY);

@@ -90,5 +90,8 @@ namespace intercept {
         registered_sqf_function register_sqf_function_nular(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
         }
+        std::pair<types::__internal::GameDataType, sqf_script_type> register_sqf_type(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf) {
+            return sqf_functions::get().registerType(name, localizedName,description, typeName, cf);
+        }
     }
 }

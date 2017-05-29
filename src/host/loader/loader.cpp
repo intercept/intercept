@@ -361,7 +361,7 @@ namespace intercept {
             auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::__internal::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
-                _sqf_register_funcs._types[static_cast<size_t>(type)] = const_cast<__internal::gsTypeInfo*>(entry);
+                _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }
         }
 

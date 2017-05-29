@@ -21,6 +21,7 @@ namespace intercept {
         functions.register_sqf_function = client_function_defs::register_sqf_function;
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
+        functions.register_sqf_type = client_function_defs::register_sqf_type;
         for (auto file : _searcher.active_pbo_list()) {
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);

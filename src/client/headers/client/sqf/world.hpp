@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -88,6 +88,8 @@ namespace intercept {
         float sun_or_moon(); // BUT WHICH ONE IS IT!?!?!??!!?
         bool fog();
         float fog_forecast();
+        void set_fog(float time_, float fog_);
+        void set_fog(float time_, float fog_, float fog_decay_, float fog_base_);
 
         float time();
 

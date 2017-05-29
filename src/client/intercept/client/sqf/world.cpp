@@ -1,4 +1,4 @@
-﻿#include "client\pointers.hpp"
+#include "client\pointers.hpp"
 #include "common_helpers.hpp"
 #include "world.hpp"
 
@@ -20,6 +20,7 @@ namespace intercept {
         float wind_dir() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__winddir__ret__scalar);
         }
+
         void set_wind(float x_, float y_) {
             std::vector<game_value> params{
                 x_,
@@ -28,7 +29,6 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(client::__sqf::unary__setwind__array__ret__nothing, params);
         }
-
         void set_wind(float x_, float y_, bool force_) {
             std::vector<game_value> params{
                 x_,
@@ -92,6 +92,19 @@ namespace intercept {
 
         float fog_forecast() {
             return __helpers::__retrieve_nular_number(client::__sqf::nular__fogforecast__ret__scalar);
+        }
+
+        void set_fog(float time_, float fog_) {
+            host::functions.invoke_raw_binary(client::__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_);
+        }
+        void set_fog(float time_, float fog_, float fog_decay_, float fog_base_) {
+            std::vector<game_value> params{
+                fog_,
+                fog_decay_,
+                fog_base_
+            };
+
+            host::functions.invoke_raw_binary(client::__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, params);
         }
 
         float time() {

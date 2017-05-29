@@ -44,7 +44,7 @@ namespace intercept {
             game_data_bool::data_type_def = data_type_def;
             game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(types::__internal::GameDataType::BOOL)];
 
-            
+
             host::functions.get_type_structure("CODE", type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
@@ -88,7 +88,7 @@ namespace intercept {
             host::functions.get_type_structure("NAMESPACE", type_def, data_type_def);
             game_data_rv_namespace::type_def = type_def;
             game_data_rv_namespace::data_type_def = data_type_def;
-            
+
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
@@ -119,7 +119,7 @@ namespace intercept {
                 _locked = true;
             }
         }
-            
+
         host::mem_watcher::mem_watcher() {
         }
 
@@ -165,7 +165,7 @@ namespace intercept {
             }
             */
         }
-       
+
 
 }
 }

@@ -27,17 +27,17 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<unary_entry>> unary_map;
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
-        struct gsTypeInfo;
-    };
+
     struct sqf_register_functions {
+        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {
+        }
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
         uintptr_t _type_vtable;
-        std::array<__internal::gsTypeInfo *, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {nullptr};
+        std::vector<const script_type_info *> _types;
     };
 
     /*!
@@ -323,12 +323,8 @@ namespace intercept {
             r_string _category; //0x4d
             uint32_t placeholder11;//0x50
             const char *get_map_key() const { return _name2.data(); }
-        };
-        struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;            //#TODO this is same as value_type
-            using createFunc = game_data* (*)(void* _null);
-            createFunc _createFunction{ nullptr };
-        };
+        };                                                  //#TODO this is same as value_type
+
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
             game_functions(std::string name) : _name(name.c_str()) {}
@@ -347,7 +343,7 @@ namespace intercept {
         };
         class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
         public:
-            auto_array<const gsTypeInfo *> _scriptTypes;
+            auto_array<const script_type_info *> _scriptTypes;
             map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;

@@ -5554,5 +5554,9 @@ namespace intercept {
         int remote_executed_owner() {
             return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
         }
+
+        void throw_exception(const game_value exception_) {
+            host::functions.invoke_raw_unary(__sqf::unary__throw__any__ret__nothing, exception_);
+        }
     }
 }

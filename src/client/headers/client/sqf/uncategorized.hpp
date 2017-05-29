@@ -1518,6 +1518,6 @@ namespace intercept {
         void set_leader(const team_member &team_, const team_member &leader_);
 
 
-        
+        void throw_exception(const game_value exception_);
     }
 }

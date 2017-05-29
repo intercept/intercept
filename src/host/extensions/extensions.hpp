@@ -18,6 +18,13 @@ https://github.com/NouberNou/intercept
 
 #include "search.hpp"
 
+#if __linux__
+#define DLL_HANDLE void*
+#else
+#define DLL_HANDLE HMODULE
+#endif
+
+
 namespace intercept {
     /*!
     @namespace module
@@ -30,16 +37,16 @@ namespace intercept {
         /*!@{
         @brief Function definitions.
         */
-        typedef int(__cdecl *api_version_func)();
-        typedef void(__cdecl *assign_functions_func)(const struct client_functions funcs);
-        typedef void(__cdecl *handle_unload_func)();
-        typedef void(__cdecl *pre_start_func)();
-        typedef void(__cdecl *pre_init_func)();
-        typedef void(__cdecl *post_init_func)();
-        typedef void(__cdecl *mission_end_func)();
-        typedef void(__cdecl *mission_stopped_func)();
-        typedef void(__cdecl *on_frame_func)();
-        typedef void(__cdecl *on_signal_func)(game_value &this_);
+        typedef int(CDECL *api_version_func)();
+        typedef void(CDECL *assign_functions_func)(const struct client_functions funcs);
+        typedef void(CDECL *handle_unload_func)();
+        typedef void(CDECL *pre_start_func)();
+        typedef void(CDECL *pre_init_func)();
+        typedef void(CDECL *post_init_func)();
+        typedef void(CDECL *mission_end_func)();
+        typedef void(CDECL *mission_stopped_func)();
+        typedef void(CDECL *on_frame_func)();
+        typedef void(CDECL *on_signal_func)(game_value &this_);
 
         //!@}
 
@@ -65,7 +72,7 @@ namespace intercept {
 
 
 
-#define EH(x) typedef void(__cdecl *x##_func)
+#define EH(x) typedef void(CDECL *x##_func)
 
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
@@ -167,7 +174,7 @@ namespace intercept {
         class entry {
         public:
             entry() : name(""), handle(nullptr) {}
-            entry(const std::string & name_, HMODULE handle_) : name(name_), handle(handle_) {}
+            entry(const std::string & name_, DLL_HANDLE handle_) : name(name_), handle(handle_) {}
             /*!
             @brief The name of the module
             */
@@ -198,7 +205,7 @@ namespace intercept {
             /*!
             @brief A handle to the plugin dynamic library.
             */
-            HMODULE     handle;
+            DLL_HANDLE     handle;
         };
     }
 

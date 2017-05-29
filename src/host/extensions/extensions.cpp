@@ -134,7 +134,7 @@ namespace intercept {
         }
 
 
-
+        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
         HMODULE dllHandle = LoadLibrary(full_path.c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
@@ -143,7 +143,7 @@ namespace intercept {
 
 
         auto new_module = module::entry(full_path, dllHandle);
-
+        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlsym.html
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GetProcAddress(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GetProcAddress(dllHandle, "assign_functions"));
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GetProcAddress(dllHandle, "handle_unload"));
@@ -235,7 +235,7 @@ namespace intercept {
         if (module->second.functions.handle_unload) {
             module->second.functions.handle_unload();
         }
-
+        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlclose.html
         if (!FreeLibrary(module->second.handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
             return false;

@@ -8,7 +8,7 @@ namespace intercept {
         client_functions host::functions;
 
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
-        void __cdecl assign_functions(const struct client_functions funcs) {
+        void CDECL assign_functions(const struct client_functions funcs) {
             host::functions = funcs;
 
             __sqf::__initialize();
@@ -93,7 +93,7 @@ namespace intercept {
             game_value::__vptr_def = type_def;
         }
 
-        void __cdecl handle_unload() {
+        void CDECL handle_unload() {
 
         }
 

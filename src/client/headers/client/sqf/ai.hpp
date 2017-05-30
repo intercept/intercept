@@ -70,5 +70,94 @@ namespace intercept {
         bool kb_has_topic(const object &value0_, sqf_string_const_ref value1_);
         void kb_remove_topic(const object &value0_, sqf_string_const_ref value1_);
 
+
+
+        //ai
+        void set_skill(const object &object_, float skill_);
+        //#TODO isn't this misc?
+        void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
+        sqf_return_string speed_mode(const object &obj_);
+        sqf_return_string speed_mode(const group &grp_);
+        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
+        void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
+        void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
+        void do_fire(const object &unit_, const object &target_);
+        void do_fire(const std::vector<object> &units_, const object &target_);
+        void do_follow(const object &unit_, const object &target_);
+        void do_follow(const std::vector<object> &units_, const object &target_);
+        void do_fsm(const object &unit_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_);
+        void do_fsm(const std::vector<object> &units_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_);
+        void do_move(const object &unit_, const vector3 &position_);
+        void do_move(const std::vector<object> &units_, const vector3 &position_);
+        void do_suppressive_fire(const object &unit_, const object &target_);
+        void do_suppressive_fire(const object &unit_, const vector3 &position_);
+        void do_suppressive_fire(const std::vector<object> &units_, const object &target_);
+        void do_suppressive_fire(const std::vector<object> &units_, const vector3 &position_);
+        void do_target(const object &unit_, const object &target_);
+        void do_target(const std::vector<object> &units_, const object &target_);
+        void do_watch(const object &unit_, const vector3 &position_);
+        void do_watch(const std::vector<object> &units_, const vector3 &position_);
+        void do_watch(const object &unit_, const object &target_);
+        void do_watch(const std::vector<object> &units_, const object &target_);
+        void enable_attack(const group &group_, bool enable_);
+        sqf_return_string combat_mode(const object &loc_);
+        sqf_return_string formation(const object &leader_);
+        sqf_return_string formation(const group &group_);
+        std::vector<object> formation_members(const object &unit_);
+        vector3 formation_position(const object &unit_);
+        sqf_return_string behaviour(const object & unit_);
+        bool check_aifeature(sqf_string_const_ref feature_);
+        bool fleeing(const object &value_);
+        float skill(const object &value_);
+        sqf_return_string land_result(const object &value_);
+        bool move_to_completed(const object &value_);
+        bool move_to_failed(const object &value_);
+        void disable_ai(const object &value0_, sqf_string_const_ref value1_); //#TODO take enum
+        void enable_ai(const object &value0_, sqf_string_const_ref value1_); //#TODO take enum
+        void enable_aifeature(bool value0_, sqf_string_const_ref value1_); //#TODO take enum?
+        void fly_in_height(const object &value0_, float value1_);
+        float knows_about(const object &source_, const object &target_);
+        float knows_about(const group &source_, const object &target_);
+        float knows_about(const side &side_, const object &target_);
+        void land(const object &value0_, sqf_string_const_ref value1_);
+        void land_at(const object &value0_, float value1_);
+        void land_at(const object &value0_, const object & helipad_);
+        float skill(const object &value0_, sqf_string_const_ref value1_);
+        float skill_final(const object &value0_, sqf_string_const_ref value1_);
+        void stop(const object &value0_, bool value1_);
+        void suppress_for(const object &value0_, float value1_);
+        void move_to(const object &unit_, const vector3 &pos_);
+        struct rv_expected_destination {
+            vector3 position;
+            std::string planning_mode;
+            bool force;
+
+            rv_expected_destination(const game_value &ret_game_value_) :
+                position(ret_game_value_[0]),
+                planning_mode(ret_game_value_[1]),
+                force(ret_game_value_[2]) {}
+        };
+
+        rv_expected_destination expected_destination(const object& unit_);
+
+        void use_ai_oper_map_obstruction_test(bool use_);
+        void use_ai_steering_component(bool use_);
+        void command_suppressive_fire(const object &unit_, const object &target_);
+        void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

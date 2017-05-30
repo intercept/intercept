@@ -320,5 +320,8 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
         }
+        int get_cargo_index(const object &vehicle_, const object &unit_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getcargoindex__object__object__ret__scalar, vehicle_, unit_);
+        }
     }
 }

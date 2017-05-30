@@ -236,45 +236,12 @@ namespace intercept {
             }
         };
 
-        struct rv_credit {
-            std::string library_name;
-            std::string credits;
-
-            rv_credit(const game_value &rv_game_value_)
-                : library_name(rv_game_value_[0]),
-                credits(rv_game_value_[1]) {}
-        };
-
-        struct rv_artillery_computer_settings {
-            std::string name;
-            std::string ammo;
-            int mode; // TODO investigate what this actually is
-
-            rv_artillery_computer_settings(const game_value &rv_game_value_)
-                : name(rv_game_value_[0]),
-                ammo(rv_game_value_[1]),
-                mode(rv_game_value_[2]) {}
-        };
 
 
-        struct rv_product_version {
-            std::string name;
-            std::string name_short;
-            float version;
-            float build;
-            std::string branch;
-            bool mods;
-            std::string platform;
 
-            rv_product_version(const game_value &rv_game_value_)
-                : name(rv_game_value_[0]),
-                name_short(rv_game_value_[1]),
-                version(rv_game_value_[2]),
-                build(rv_game_value_[3]),
-                branch(rv_game_value_[4]),
-                mods(rv_game_value_[5]),
-                platform(rv_game_value_[6]) {}
-        };
+
+
+        
         struct rv_vehicle_role {
             std::string role;
             std::vector<int> turret_path;
@@ -287,32 +254,10 @@ namespace intercept {
         };
 
 
-        struct rv_forces_rtd {
-            float roll;
-            float pitch;
-            float collective;
-        };
 
 
-        struct rv_weight_rtd {
-            float fuselage;
-            float crew;
-            float fuel;
-            float custom;
-            float weapons;
 
-            rv_weight_rtd(float fuselage_, float crew_, float fuel_, float custom_, float weapons_) {
-                fuselage = fuselage_;
-                crew = crew_;
-                fuel = fuel_;
-                custom = custom_;
-                weapons = weapons_;
-            }
-
-            static rv_weight_rtd from_vector(const std::vector<float> &weight_vector_) {
-                return rv_weight_rtd(weight_vector_[0], weight_vector_[1], weight_vector_[2], weight_vector_[3], weight_vector_[4]);
-            }
-        };
+        
 
         struct rv_best_place {
             vector2 pos;
@@ -420,58 +365,8 @@ namespace intercept {
 
         // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
         
-
-        
-        //rtd simulation from take on helicopters
-        float get_rotor_brake_rtd(const object &value_);
-        float get_wings_orientation_rtd(const object &value_);
-        float get_wings_position_rtd(const object &value_);
-        bool is_auto_trim_on_rtd(const object &value_);
-        bool is_object_rtd(const object &value_);
-        float number_of_engines_rtd(const object &value_);
-        void stop_engine_rtd(const object &value_);
-        void enable_auto_start_up_rtd(const object &value0_, bool value1_);
-        bool enable_auto_trim_rtd(const object &value0_, bool value1_);
-        std::vector<bool> engines_is_on_rtd(const object &heli_);
-        std::vector<float> engines_rpm_rtd(const object &heli_);
-        std::vector<float> engines_torque_rtd(const object &heli_);
-        void set_rotor_brake_rtd(const object &value0_, float value1_);
-        void set_actual_collective_rtd(const object &value0_, float value1_);
-        void set_custom_weight_rtd(const object &value0_, float value1_);
-        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_);
-        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_);
-        std::vector<float> rotors_rpm_rtd(const object &heli_);
-        rv_weight_rtd weight_rtd(const object &heli_);
-        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_);
-        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_);
-        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_);
-        bool difficulty_enabled_rtd();
-        void clear_forces_rtd();
-        float air_density_rtd(float altitude_);
-        float collective_rtd(const object & helicopter_);
-
-        //TOH traffic - needs to be tested, probably not working
-        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_);
-        void enable_traffic(bool value_);
-        void set_traffic_distance(float value_);
-
-
-        //A2 artillary - did this ever work?
-        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_);
-        float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_);
-        void enable_engine_artillery(bool value_);
-        rv_artillery_computer_settings get_artillery_computer_settings();
-
-        
         //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
-        
-        
-        //mp
-        int admin(int owner_id_);
-        int remote_executed_owner();
 
                 
         //misc
@@ -484,7 +379,6 @@ namespace intercept {
         void enable_saving(bool enable_, bool autosave_);
         std::vector<float> get_dlcs(float filter_);
         float armory_points();
-        float benchmark();
         bool cadet_mode();
         bool cheats_enabled();
         float difficulty();
@@ -498,10 +392,7 @@ namespace intercept {
         bool is_instructor_figure_enabled();
         bool is_steam_mission();
         bool is_stream_friendly_ui_enabled();
-        bool is_stress_damage_enabled();
-        sqf_return_string language();
-        std::vector<rv_credit> library_credits();
-        sqf_return_string_list library_disclaimers();
+
         void load_game();
         void log_entities();
         bool mark_as_finished_on_steam();
@@ -538,7 +429,7 @@ namespace intercept {
         void save_joysticks();
         sqf_return_string role_description(const object &value_);
         float score_side(const side &value_);
-        rv_product_version product_version();
+
         bool set_stat_value(sqf_string_const_ref name_, float value_);
         void host_mission(const config &config_, const display &display_);
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_);
@@ -698,7 +589,7 @@ namespace intercept {
         void set_hit_index(const object &object_, int part_index_, float damage_);
         void set_hit_point_damage(const object &object_, sqf_string_const_ref hit_point_, float damage_);
         rv_hit_points_damage get_all_hit_points_damage(const object &veh_);
-        int get_cargo_index(const object &vehicle_, const object &unit_);
+
         sqf_return_string_list get_object_materials(const object &object_);
         sqf_return_string_list get_object_textures(const object &object_);
         std::vector<object> synchronized_objects(const object& obj_);
@@ -1265,8 +1156,7 @@ namespace intercept {
         void delete_editor_object(const control &map_, sqf_string_const_ref object_);
         sqf_return_string add_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &values_, sqf_string_const_ref subtype_class_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
-        void set_from_editor(const team_member &value0_, bool value1_);
-        bool from_editor(const team_member &value_);
+
 
         void editor_set_event_handler(const control &map_, sqf_string_const_ref event_type_, sqf_string_const_ref event_function_);
         game_value eval_object_argument(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref argument_);
@@ -1296,31 +1186,9 @@ namespace intercept {
         game_value set_object_arguments(const control &map_, sqf_string_const_ref object_, sqf_string_list_const_ref values_);
         void set_object_proxy(const control &map_, sqf_string_const_ref object_, const object &proxy_object_);
 
-        /* potential namespace: teams */
-        team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_);
-
-        object agent(const team_member &value_);
-        std::vector<team_member> agents();
-
-        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_);
-        void set_formation(const team_member &value0_, sqf_string_const_ref value1_);
-
-        void delete_team(const team_member &value_);
-        sqf_return_string formation(const team_member &value_);
-
-        bool is_agent(const team_member &value_);
-        team_member leader(const team_member &value_);
-        sqf_return_string team_name(const team_member &value_);
-        sqf_return_string team_type(const team_member &value_);
-
-        std::vector<object> members(const team_member &team_);
-        void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
-        void add_team_member(const team_member &team_, const team_member &member_);
-        void delete_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
-        void remove_team_member(const team_member &team_, const team_member &member_);
-        void set_leader(const team_member &team_, const team_member &leader_);
 
 
-        void throw_exception(const game_value exception_);
+
+
     }
 }

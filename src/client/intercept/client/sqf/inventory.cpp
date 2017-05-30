@@ -929,7 +929,9 @@ namespace intercept {
         float get_fuel_cargo(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getfuelcargo__object__ret__scalar, value_);
         }
-
+        float get_repair_cargo(const object &value_) {
+            return __helpers::__number_unary_object(__sqf::unary__getrepaircargo__object__ret__scalar, value_);
+        }
         sqf_return_string goggles(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__goggles__object__ret__string, value_);
         }

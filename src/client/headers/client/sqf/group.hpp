@@ -103,5 +103,45 @@ namespace intercept {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Teams
+        /* potential namespace: teams */
+        team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_);
+
+        object agent(const team_member &value_);
+        std::vector<team_member> agents();
+
+        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_);
+        void set_formation(const team_member &value0_, sqf_string_const_ref value1_);
+
+        void delete_team(const team_member &value_);
+        sqf_return_string formation(const team_member &value_);
+        void set_from_editor(const team_member &value0_, bool value1_);
+        bool from_editor(const team_member &value_);
+        bool is_agent(const team_member &value_);
+        team_member leader(const team_member &value_);
+        sqf_return_string team_name(const team_member &value_);
+        sqf_return_string team_type(const team_member &value_);
+
+        std::vector<object> members(const team_member &team_);
+        void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
+        void add_team_member(const team_member &team_, const team_member &member_);
+        void delete_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
+        void remove_team_member(const team_member &team_, const team_member &member_);
+        void set_leader(const team_member &team_, const team_member &leader_);
+
     }
 }

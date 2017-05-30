@@ -74,7 +74,9 @@ namespace intercept {
         void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_);
         bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
         int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
-
+        //mp
+        int admin(int owner_id_);
+        int remote_executed_owner();
 
     }
 }

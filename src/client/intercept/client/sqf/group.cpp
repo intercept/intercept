@@ -205,5 +205,109 @@ namespace intercept {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Teams
+        team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_) {
+            game_value args({
+                type_,
+                name_,
+            });
+
+            return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
+        }
+        object agent(const team_member &value_) {
+            return object(host::functions.invoke_raw_unary(__sqf::unary__agent__team_member__ret__object, value_));
+        }
+        std::vector<team_member> agents() {
+            return __helpers::__convert_to_team_members_vector(host::functions.invoke_raw_nular(__sqf::nular__agents__ret__array));
+        }
+
+        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
+        }
+        void set_formation(const team_member &value0_, sqf_string_const_ref value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
+        }
+        void delete_team(const team_member &value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__deleteteam__team_member__ret__nothing, value_);
+        }
+        sqf_return_string formation(const team_member &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__formation__team_member__ret__string, value_);
+        }
+        void set_from_editor(const team_member &value0_, bool value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value0_, value1_);
+        }
+        bool from_editor(const team_member &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__fromeditor__team_member__ret__bool, value_);
+        }
+        bool is_agent(const team_member &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isagent__team_member__ret__bool, value_);
+        }
+        team_member leader(const team_member &value_) {
+            return team_member(host::functions.invoke_raw_unary(__sqf::unary__leader__team_member__ret__team_member, value_));
+        }
+
+        sqf_return_string team_name(const team_member &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__teamname__team_member__ret__string, value_);
+        }
+
+        sqf_return_string team_type(const team_member &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__teamtype__team_member__ret__string, value_);
+        }
+        std::vector<object> members(const team_member &team_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__members__team_member__ret__array, team_));
+        }
+
+        void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_) {
+            auto_array<game_value> resources(resources_.begin(), resources_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__addresources__team_member__array__ret__nothing, team_member_, std::move(resources));
+        }
+
+        void add_team_member(const team_member &team_, const team_member &member_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addteammember__team_member__team_member__ret__nothing, team_, member_);
+        }
+        void delete_resources(const team_member &team_member_, sqf_string_list_const_ref resources_) {
+            auto_array<game_value> resources(resources_.begin(), resources_.end());
+
+            host::functions.invoke_raw_binary(__sqf::binary__deleteresources__team_member__array__ret__nothing, team_member_, std::move(resources));
+        }
+        void remove_team_member(const team_member &team_, const team_member &member_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
+        }
+        void set_leader(const team_member &team_, const team_member &leader_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setleader__team_member__team_member__ret__nothing, team_, leader_);
+        }
+
     }
 }

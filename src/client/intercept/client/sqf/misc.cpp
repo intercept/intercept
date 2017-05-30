@@ -1,101 +1,11 @@
-﻿#include "chat.hpp"
+﻿#include "misc.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include <memory>
 
 namespace intercept {
     namespace sqf {
-        float diag_fps() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__diag_fps__ret__scalar);
-        }
-        float diag_fpsmin() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__diag_fpsmin__ret__scalar);
-        }
-        float diag_frameno() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__diag_frameno__ret__scalar);
-        }
-        float diag_ticktime() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__diag_ticktime__ret__scalar);
-        }
-        std::vector<script> diag_active_mission_fsms() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activemissionfsms__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
 
-        std::vector<script> diag_active_sqf_scripts() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqfscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
-
-        std::vector<script> diag_active_sqs_scripts() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqsscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
-        }
-
-        std::vector<script> diag_active_scripts() {
-            return __helpers::__convert_to_scripts_vector(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
-        }
-
-        void diag_capture_frame(float frame_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
-        }
-
-        void diag_capture_frame_to_file(float frame_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
-        }
-
-        void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
-        }
-
-        void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_) {
-            game_value params({
-                code_,
-                arguments_,
-                cycles_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
-        }
-        void diag_log(sqf_string_const_ref text_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
-
-        void diag_log(const game_value &text_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
-        void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_logslowframe__array__ret__nothing, params);
-        }
-
-        void enable_diag_legend(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enablediaglegend__bool__ret__nothing, value_);
-        }
-        void halt() {
-            __helpers::__empty_nular(__sqf::nular__halt__ret__nothing);
-        }
 
 
 
@@ -159,6 +69,97 @@ namespace intercept {
         bool dynamic_simulation_system_enabled() {
             return host::functions.invoke_raw_nular(__sqf::nular__dynamicsimulationsystemenabled__ret__bool);
         }
+
+        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            game_value params({
+                density_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__settrafficdensity__array__ret__nothing, params);
+        }
+
+        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            game_value params({
+                gap_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__settrafficgap__array__ret__nothing, params);
+        }
+
+        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_) {
+            game_value params({
+                speed_,
+                x_min_,
+                x_max_,
+                z_min_,
+                z_max_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__settrafficspeed__array__ret__nothing, params);
+        }
+
+        void enable_traffic(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__enabletraffic__bool__ret__nothing, value_);
+        }
+        void set_traffic_distance(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__settrafficdistance__scalar__ret__nothing, value_);
+        }
+        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_) {
+            auto_array<game_value> units({ units_.begin(), units_.end() });
+
+            game_value params_right({
+                std::move(units),
+                magazine_type_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inrangeofartillery__array__array__ret__bool, position_, params_right);
+        }
+        float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_) {
+            game_value params_right({
+                target_position_,
+                magazine_type_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
+        }
+        void enable_engine_artillery(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
+        }
+
+        rv_artillery_computer_settings get_artillery_computer_settings() {
+            return rv_artillery_computer_settings(host::functions.invoke_raw_nular(__sqf::nular__getartillerycomputersettings__ret__array));
+        }
+
+        sqf_return_string language() {
+            return __helpers::__retrieve_nular_string(__sqf::nular__language__ret__string);
+        }
+
+        std::vector<rv_credit> library_credits() {
+            game_value input = host::functions.invoke_raw_nular(__sqf::nular__librarycredits__ret__array);
+
+            std::vector<rv_credit> output;
+            for (uint32_t i = 0; i < input.size(); ++i) {
+                output.push_back(input[i]);
+            }
+            return output;
+        }
+
+        sqf_return_string_list library_disclaimers() {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__librarydisclaimers__ret__array));
+        }
+        rv_product_version product_version() {
+            return rv_product_version(host::functions.invoke_raw_nular(__sqf::nular__productversion__ret__array));
+        }
+
+
 
 
     }

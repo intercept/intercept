@@ -372,6 +372,7 @@ namespace intercept {
 
         /* deprecated?*/
         // binary__seteditorobjectscope__control__array__ret__nothing 
+        // nular__benchmark__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
@@ -496,26 +497,10 @@ namespace intercept {
 
 
 
-        sqf_return_string combat_mode(const object &unit_) {
-            return __helpers::__string_unary_object(__sqf::unary__combatmode__object_group__ret__string, unit_);
-        }
+
 
         
 
-        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /*= 0.0f*/, sqf_string_const_ref special_ /*= "NONE"*/) {
-            auto_array<game_value> markers(markers_.begin(), markers_.end());
-
-            game_value args({
-                type_,
-                pos_,
-                std::move(markers),
-                placement_,
-                special_
-            });
-
-            return object(host::functions.invoke_raw_unary(__sqf::unary__createagent__array__ret__object, args));
-
-        }
 
         
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_) {
@@ -567,14 +552,7 @@ namespace intercept {
         }
 
         
-        team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_) {
-            game_value args({
-                type_,
-                name_,
-            });
 
-            return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
-        }
 
         
 
@@ -625,21 +603,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
         }
 
-        sqf_return_string formation(const object &leader_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, leader_);
-        }
 
-        sqf_return_string formation(const group &group_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__formation__object_group__ret__string, group_);
-        }
-
-        std::vector<object> formation_members(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
-        }
-
-        vector3 formation_position(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
-        }
 
         std::vector<rv_crew_member> full_crew(const object &veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__object__ret__array, veh_);
@@ -792,26 +756,16 @@ namespace intercept {
 
         /* Misc */
 
-        object agent(const team_member &value_) {
-            return object(host::functions.invoke_raw_unary(__sqf::unary__agent__team_member__ret__object, value_));
-        }
-
+        
         sqf_return_string_list activated_addons() {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__activatedaddons__ret__array));
         }
 
-        std::vector<team_member> agents() {
-            return __helpers::__convert_to_team_members_vector(host::functions.invoke_raw_nular(__sqf::nular__agents__ret__array));
-        }
+  
 
         float armory_points() {
             return __helpers::__retrieve_nular_number(__sqf::nular__armorypoints__ret__scalar);
         }
-
-        float benchmark() {
-            return __helpers::__retrieve_nular_number(__sqf::nular__benchmark__ret__scalar);
-        }
-
         
         bool cadet_mode() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__cadetmode__ret__bool);
@@ -831,9 +785,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_side(__sqf::nular__civilian__ret__side);
         }
 
-        void clear_forces_rtd() {
-            __helpers::__empty_nular(__sqf::nular__clearforcesrtd__ret__nothing);
-        }
+
 
 
 
@@ -850,9 +802,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__difficulty__ret__scalar);
         }
 
-        bool difficulty_enabled_rtd() {
-            return __helpers::__retrieve_nular_bool(__sqf::nular__difficultyenabledrtd__ret__bool);
-        }
+
 
         float distribution_region() {
             return __helpers::__retrieve_nular_number(__sqf::nular__distributionregion__ret__scalar);
@@ -924,27 +874,9 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__isstreamfriendlyuienabled__ret__bool);
         }
 
-        bool is_stress_damage_enabled() {
-            return __helpers::__retrieve_nular_bool(__sqf::nular__isstressdamageenabled__ret__bool);
-        }
 
-        sqf_return_string language() {
-            return __helpers::__retrieve_nular_string(__sqf::nular__language__ret__string);
-        }
 
-        std::vector<rv_credit> library_credits() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__librarycredits__ret__array);
 
-            std::vector<rv_credit> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(input[i]);
-            }
-            return output;
-        }
-
-        sqf_return_string_list library_disclaimers() {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__librarydisclaimers__ret__array));
-        }
 
         
         void load_game() {
@@ -1043,9 +975,7 @@ namespace intercept {
             __helpers::__empty_unary_object(__sqf::unary__addswitchableunit__object__ret__nothing, unit_);
         }
 
-        float air_density_rtd(float altitude_) {
-            return __helpers::__number_unary_number(__sqf::unary__airdensityrtd__scalar__ret__scalar, altitude_);
-        }
+
 
         void airport_side(int id_) {
             __helpers::__empty_unary_number(__sqf::unary__airportside__object_scalar__ret__nothing, static_cast<float>(id_));
@@ -1088,17 +1018,15 @@ namespace intercept {
 
 
 
-        sqf_return_string behaviour(const object & unit_) {
-            return __helpers::__string_unary_object(__sqf::unary__behaviour__object__ret__string, unit_);
-        }
 
 
 
-        void buldozer(bool value_) {
+
+        void buldozer_enable_road_diag(bool value_) {
             __helpers::__empty_unary_bool(__sqf::unary__buldozer_enableroaddiag__bool__ret__nothing, value_);
         }
 
-        bool buldozer(sqf_string_const_ref value_) {
+        bool buldozer_load_new_roads(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__buldozer_loadnewroads__string__ret__bool, value_);
         }
 
@@ -1157,13 +1085,9 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__captivenum__object__ret__scalar, unit_);
         }
 
-        bool check_aifeature(sqf_string_const_ref feature_) {
-            return __helpers::__bool_unary_string(__sqf::unary__checkaifeature__string__ret__bool, feature_);
-        }
 
-        float collective_rtd(const object & helicopter_) {
-            return __helpers::__number_unary_object(__sqf::unary__collectivertd__object__ret__scalar, helicopter_);
-        }
+
+
 
         object commander(const object & veh_) {
             return __helpers::__object_unary_object(__sqf::unary__commander__object__ret__object, veh_);
@@ -1252,9 +1176,6 @@ namespace intercept {
 
 
 
-        void enable_engine_artillery(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
-        }
 
         void enable_sentences(bool value_) {
             __helpers::__empty_unary_bool(__sqf::unary__enablesentences__bool__ret__nothing, value_);
@@ -1268,9 +1189,7 @@ namespace intercept {
             __helpers::__empty_unary_bool(__sqf::unary__enableteamswitch__bool__ret__nothing, value_);
         }
 
-        void enable_traffic(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enabletraffic__bool__ret__nothing, value_);
-        }
+
 
         void end_mission(sqf_string_const_ref value_) {
             __helpers::__empty_unary_string(__sqf::unary__endmission__string__ret__nothing, value_);
@@ -1311,9 +1230,7 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__flagtexture__object__ret__string, value_);
         }
 
-        bool fleeing(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__fleeing__object__ret__bool, value_);
-        }
+
 
         void force_respawn(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__forcerespawn__object__ret__nothing, value_);
@@ -1401,13 +1318,9 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__getplayeruid__object__ret__string, value_);
         }
 
-        float get_repair_cargo(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getrepaircargo__object__ret__scalar, value_);
-        }
 
-        float get_rotor_brake_rtd(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getrotorbrakertd__object__ret__scalar, value_);
-        }
+
+
 
         float get_stamina(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getstamina__object__ret__scalar, value_);
@@ -1425,13 +1338,7 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__getweaponsway__object__ret__scalar, value_);
         }
 
-        float get_wings_orientation_rtd(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getwingsorientationrtd__object__ret__scalar, value_);
-        }
 
-        float get_wings_position_rtd(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__getwingspositionrtd__object__ret__scalar, value_);
-        }
 
 
 
@@ -1482,9 +1389,7 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__isautohoveron__object__ret__bool, value_);
         }
 
-        bool is_auto_trim_on_rtd(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__isautotrimonrtd__object__ret__bool, value_);
-        }
+
 
         bool is_autonomous(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__isautonomous__object__ret__bool, value_);
@@ -1554,9 +1459,7 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__isobjecthidden__object__ret__bool, value_);
         }
 
-        bool is_object_rtd(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__isobjectrtd__object__ret__bool, value_);
-        }
+
 
         bool is_player(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__isplayer__object__ret__bool, value_);
@@ -1594,9 +1497,7 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__isweaponrested__object__ret__bool, value_);
         }
 
-        sqf_return_string land_result(const object &value_) {
-            return __helpers::__string_unary_object(__sqf::unary__landresult__object__ret__string, value_);
-        }
+
 
         object laser_target(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__lasertarget__object__ret__object, value_);
@@ -1650,13 +1551,7 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__movetime__object__ret__scalar, value_);
         }
 
-        bool move_to_completed(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__movetocompleted__object__ret__bool, value_);
-        }
 
-        bool move_to_failed(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__movetofailed__object__ret__bool, value_);
-        }
 
         sqf_return_string name(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__name__object__ret__string, value_);
@@ -1677,9 +1572,7 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__needreload__object__ret__scalar, value_);
         }
 
-        float number_of_engines_rtd(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__numberofenginesrtd__object__ret__scalar, value_);
-        }
+
 
         object object_parent(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__objectparent__object__ret__object, value_);
@@ -1834,17 +1727,13 @@ namespace intercept {
             __helpers::__empty_unary_number(__sqf::unary__setsystemofunits__scalar__ret__nothing, value_);
         }
 
-        void set_traffic_distance(float value_) {
-            __helpers::__empty_unary_number(__sqf::unary__settrafficdistance__scalar__ret__nothing, value_);
-        }
+
 
         float size_of(sqf_string_const_ref value_) {
             return __helpers::__number_unary_string(__sqf::unary__sizeof__string__ret__scalar, value_);
         }
 
-        float skill(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__skill__object__ret__scalar, value_);
-        }
+
 
         
 
@@ -1864,9 +1753,7 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__stance__object__ret__string, value_);
         }
 
-        void stop_engine_rtd(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__stopenginertd__object__ret__nothing, value_);
-        }
+
 
         bool stopped(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__stopped__object__ret__bool, value_);
@@ -1985,9 +1872,7 @@ namespace intercept {
 
         
 
-        void disable_ai(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__disableai__object__string__ret__nothing, value0_, value1_);
-        }
+
 
         void disable_conversation(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__disableconversation__object__bool__ret__nothing, value0_, value1_);
@@ -2009,25 +1894,13 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__emptypositions__object__string__ret__scalar, value0_, value1_);
         }
 
-        void enable_ai(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableai__object__string__ret__nothing, value0_, value1_);
-        }
 
-        void enable_aifeature(bool value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableaifeature__string__bool__ret__nothing, value0_, value1_);
-        }
 
         void enable_aim_precision(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__enableaimprecision__object__bool__ret__nothing, value0_, value1_);
         }
 
-        void enable_auto_start_up_rtd(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableautostartuprtd__object__bool__ret__nothing, value0_, value1_);
-        }
 
-        bool enable_auto_trim_rtd(const object &value0_, bool value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__enableautotrimrtd__object__bool__ret__bool, value0_, value1_);
-        }
 
         void enable_copilot(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablecopilot__object__bool__ret__nothing, value0_, value1_);
@@ -2057,9 +1930,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__fire__object__string__ret__nothing, value0_, value1_);
         }
 
-        void fly_in_height(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__flyinheight__object__scalar__ret__nothing, value0_, value1_);
-        }
+
 
 
 
@@ -2113,29 +1984,9 @@ namespace intercept {
 
       
 
-        float knows_about(const object &source_, const object &target_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_);
-        }
 
-        float knows_about(const group &source_, const object &target_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_);
-        }
 
-        float knows_about(const side &side_, const object &target_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__knowsabout__side__object__ret__scalar, side_, target_);
-        }
 
-        void land(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__land__object__string__ret__nothing, value0_, value1_);
-        }
-
-        void land_at(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, value1_);
-        }
-
-        void land_at(const object &value0_, const object & helipad_) {
-            host::functions.invoke_raw_binary(__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, helipad_);
-        }
 
         void leave_vehicle(const object &value0_, const group &value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__leavevehicle__group__object__ret__nothing, value0_, value1_);
@@ -2228,13 +2079,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__savestatus__object__string__ret__bool, value0_, value1_);
         }
 
-        void send_simple_command(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__sendsimplecommand__object__string__ret__nothing, value0_, value1_);
-        }
 
-        void set_actual_collective_rtd(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setactualcollectivertd__object__scalar__ret__nothing, value0_, value1_);
-        }
 
         void set_airport_side(float value0_, const side &value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setairportside__object_scalar__side__ret__nothing, value0_, value1_);
@@ -2265,17 +2110,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setcollisionlight__object__bool__ret__nothing, value0_, value1_);
         }
 
-        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
-        }
+
 
         void set_custom_aim_coef(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcustomaimcoef__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void set_custom_weight_rtd(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcustomweightrtd__object__scalar__ret__nothing, value0_, value1_);
-        }
+
 
         void set_damage(const object &value0_, float value1_, bool use_effects_) {
             if (use_effects_)
@@ -2313,13 +2154,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setflagtexture__object__string__ret__nothing, value0_, value1_);
         }
 
-        void set_formation(const team_member &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
-        }
 
-        void set_from_editor(const team_member &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfromeditor__team_member__bool__ret__nothing, value0_, value1_);
-        }
+
+
 
         void set_fuel(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setfuel__object__scalar__ret__nothing, value0_, value1_);
@@ -2386,9 +2223,7 @@ namespace intercept {
 
 
 
-        void set_rotor_brake_rtd(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value0_, value1_);
-        }
+
 
         
         void set_stamina(const object &value0_, float value1_) {
@@ -2448,23 +2283,7 @@ namespace intercept {
         }
 
 
-        float skill(const object &value0_, sqf_string_const_ref value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__skill__object__string__ret__scalar, value0_, value1_);
-        }
-
-        float skill_final(const object &value0_, sqf_string_const_ref value1_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__skillfinal__object__string__ret__scalar, value0_, value1_);
-        }
-
-
-
-        void stop(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__stop__object__bool__ret__nothing, value0_, value1_);
-        }
-
-        void suppress_for(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__suppressfor__object__scalar__ret__nothing, value0_, value1_);
-        }
+        
 
         void switch_action(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__switchaction__object__string__ret__nothing, value0_, value1_);
@@ -2500,29 +2319,18 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__deletecenter__side__ret__nothing, side_);
         }
 
-        void delete_team(const team_member &value_) {
-            host::functions.invoke_raw_unary(__sqf::unary__deleteteam__team_member__ret__nothing, value_);
-        }
+
 
         side flag_side(const object &value_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__flagside__object__ret__side, value_));
         }
 
-        sqf_return_string formation(const team_member &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__formation__team_member__ret__string, value_);
-        }
-
-        bool from_editor(const team_member &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__fromeditor__team_member__ret__bool, value_);
-        }
-
+      
         sqf_return_string image(sqf_string_const_ref value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__image__string__ret__text, value_);
         }
 
-        bool is_agent(const team_member &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isagent__team_member__ret__bool, value_);
-        }
+
 
         sqf_return_string key_image(float value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__keyimage__scalar__ret__text, value_);
@@ -2532,9 +2340,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__keyname__scalar__ret__string, value_);
         }
 
-        team_member leader(const team_member &value_) {
-            return team_member(host::functions.invoke_raw_unary(__sqf::unary__leader__team_member__ret__team_member, value_));
-        }
+
 
         
 
@@ -2550,13 +2356,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__scoreside__side__ret__scalar, value_);
         }
 
-        sqf_return_string team_name(const team_member &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__teamname__team_member__ret__string, value_);
-        }
 
-        sqf_return_string team_type(const team_member &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__teamtype__team_member__ret__string, value_);
-        }
 
         void save_game() {
             host::functions.invoke_raw_nular(__sqf::nular__savegame__ret__nothing);
@@ -2611,13 +2411,7 @@ namespace intercept {
 
 
 
-        sqf_return_string speed_mode(const object &obj_) {
-            return __helpers::__string_unary_object(__sqf::unary__speedmode__object_group__ret__string, obj_);
-        }
 
-        sqf_return_string speed_mode(const group &grp_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__speedmode__object_group__ret__string, grp_);
-        }
 
 
         void move(const object& unit_, const vector3& pos_) {
@@ -2671,9 +2465,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
         }
 
-        void move_to(const object& unit_, const vector3& pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__moveto__object__array__ret__nothing, unit_, pos_);
-        }
+
 
 
 
@@ -2690,14 +2482,6 @@ namespace intercept {
         }
 
 
-
-        rv_artillery_computer_settings get_artillery_computer_settings() {
-            return rv_artillery_computer_settings(host::functions.invoke_raw_nular(__sqf::nular__getartillerycomputersettings__ret__array));
-        }
-
-        rv_product_version product_version() {
-            return rv_product_version(host::functions.invoke_raw_nular(__sqf::nular__productversion__ret__array));
-        }
 
         side get_side(const object &object_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__object__ret__side, object_));
@@ -2948,17 +2732,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__detectedmines__side__ret__array, side_));
         }
 
-        std::vector<bool> engines_is_on_rtd(const object &heli_) {
-            return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesisonrtd__object__ret__array, heli_));
-        }
 
-        std::vector<float> engines_rpm_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesrpmrtd__object__ret__array, heli_));
-        }
-
-        std::vector<float> engines_torque_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__enginestorquertd__object__ret__array, heli_));
-        }
 
         rv_hit_points_damage get_all_hit_points_damage(const object &veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getallhitpointsdamage__object__ret__array, veh_);
@@ -2970,69 +2744,15 @@ namespace intercept {
             return rv_hit_points_damage({ hit_points, hit_selections, damages });
         }
 
-        std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__rotorsforcesrtd__object__ret__array, heli_);
+        
 
-            std::vector<rv_forces_rtd> rotors_forces;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                rotors_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
-            }
 
-            return rotors_forces;
-        }
-
-        std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__wingsforcesrtd__object__ret__array, heli_);
-
-            std::vector<rv_forces_rtd> wings_forces;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                wings_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
-            }
-
-            return wings_forces;
-        }
-
-        std::vector<float> rotors_rpm_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__rotorsrpmrtd__object__ret__array, heli_));
-        }
-
-        rv_weight_rtd weight_rtd(const object &heli_) {
-            return rv_weight_rtd::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__weightrtd__object__ret__array, heli_)));
-        }
-
-        void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_) {
-            game_value params({
-                amount_,
-                static_cast<float>(wheel_index_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__setbrakesrtd__object__array__ret__nothing, heli_, params);
-        }
-
-        void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_) {
-            game_value params({
-                rpms_,
-                static_cast<float>(engine_index_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__setenginerpmrtd__object__array__ret__nothing, heli_, params);
-        }
-
-        void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_) {
-            game_value params({
-                rpms_,
-                time_,
-                static_cast<float>(engine_index_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__setwantedrpmrtd__object__array__ret__nothing, heli_, params);
-        }
 
         
 
-        int get_cargo_index(const object &vehicle_, const object &unit_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__getcargoindex__object__object__ret__scalar, vehicle_, unit_);
-        }
+        
+
+
 
 
 
@@ -3054,9 +2774,6 @@ namespace intercept {
 
 
 
-        std::vector<object> members(const team_member &team_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__members__team_member__ret__array, team_));
-        }
 
         
 
@@ -3297,42 +3014,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__setstatvalue__array__ret__bool, params);
         }
 
-        void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({
-                density_,
-                x_min_,
-                x_max_,
-                z_min_,
-                z_max_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__settrafficdensity__array__ret__nothing, params);
-        }
-
-        void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({
-                gap_,
-                x_min_,
-                x_max_,
-                z_min_,
-                z_max_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__settrafficgap__array__ret__nothing, params);
-        }
-
-        void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({
-                speed_,
-                x_min_,
-                x_max_,
-                z_min_,
-                z_max_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__settrafficspeed__array__ret__nothing, params);
-        }
-
+        
         
 
         sqf_return_string_list squad_params(const object &unit_) {
@@ -3382,9 +3064,7 @@ namespace intercept {
             return rv_uav_control(host::functions.invoke_raw_unary(__sqf::unary__uavcontrol__object__ret__array, uav_));
         }
 
-        rv_expected_destination expected_destination(const object& unit_) {
-            return rv_expected_destination(host::functions.invoke_raw_unary(__sqf::unary__expecteddestination__object__ret__array, unit_));
-        }
+
 
 
 
@@ -3529,13 +3209,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__unitisuav__object__ret__bool, unit_);
         }
 
-        void use_ai_oper_map_obstruction_test(bool use_) {
-            host::functions.invoke_raw_unary(__sqf::unary__useaiopermapobstructiontest__bool__ret__nothing, use_);
-        }
 
-        void use_ai_steering_component(bool use_) {
-            host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
-        }
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
 
@@ -3642,15 +3316,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addplayerscores__object__array__ret__nothing, unit_, params_right);
         }
 
-        void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_) {
-            auto_array<game_value> resources(resources_.begin(), resources_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__addresources__team_member__array__ret__nothing, team_member_, std::move(resources));
-        }
-
-        void add_team_member(const team_member &team_, const team_member &member_) {
-            host::functions.invoke_raw_binary(__sqf::binary__addteammember__team_member__team_member__ret__nothing, team_, member_);
-        }
+       
 
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_) {
             game_value params_right({
@@ -3687,23 +3353,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assignasturret__object__array__ret__nothing, unit_, params_right);
         }
 
-        vector3 building_exit(const object &building_, int index_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingexit__object__scalar__ret__array, building_, index_));
-        }
 
-        vector3 building_pos(const object &building_, int index_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, index_));
-        }
 
         
 
-        void command_suppressive_fire(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
-        }
 
-        void command_suppressive_fire(const object &unit_, const vector3 &target_position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_position_);
-        }
 
         bool connect_terminal_to_uav(const object &unit_, const object &uav_) {
             return host::functions.invoke_raw_binary(__sqf::binary__connectterminaltouav__object__object__ret__bool, unit_, uav_);
@@ -3745,11 +3399,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__deleteeditorobject__control__string__ret__any, map_, object_);
         }
 
-        void delete_resources(const team_member &team_member_, sqf_string_list_const_ref resources_) {
-            auto_array<game_value> resources(resources_.begin(), resources_.end());
-            
-            host::functions.invoke_raw_binary(__sqf::binary__deleteresources__team_member__array__ret__nothing, team_member_, std::move(resources));
-        }
+
 
         void delete_vehicle_crew(const object &vehicle_, const object &unit_) {
             host::functions.invoke_raw_binary(__sqf::binary__deletevehiclecrew__object__object__ret__nothing, vehicle_, unit_);
@@ -3771,129 +3421,7 @@ namespace intercept {
         
         
 
-        void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_) {
-            game_value params_right({
-                position_,
-                radius_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__doartilleryfire__object_array__array__ret__nothing, unit_, params_right);
-        }
-
-        void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-            
-            game_value params_right({
-                position_,
-                radius_,
-                static_cast<float>(rounds_)
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__doartilleryfire__object_array__array__ret__nothing, std::move(units), params_right);
-        }
-
-        void do_fire(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dofire__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void do_fire(const std::vector<object> &units_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dofire__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void do_follow(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dofollow__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void do_follow(const std::vector<object> &units_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dofollow__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void do_fsm(const object &unit_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_) {
-            game_value params_right({
-                fsm_name_,
-                position_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__dofsm__object_array__array__ret__nothing, unit_, params_right);
-        }
-
-        void do_fsm(const std::vector<object> &units_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-            
-            game_value params_right({
-                fsm_name_,
-                position_,
-                target_
-            });
-
-            host::functions.invoke_raw_binary(__sqf::binary__dofsm__object_array__array__ret__nothing, std::move(units), params_right);
-        }
-
-        void do_move(const object &unit_, const vector3 &position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__domove__object_array__array__ret__nothing, unit_, position_);
-        }
-
-        void do_move(const std::vector<object> &units_, const vector3 &position_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__domove__object_array__array__ret__nothing, std::move(units), position_);
-        }
-
-        void do_suppressive_fire(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dosuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
-        }
-
-        void do_suppressive_fire(const object &unit_, const vector3 &position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dosuppressivefire__object_array__object_array__ret__nothing, unit_, position_);
-        }
-
-        void do_suppressive_fire(const std::vector<object> &units_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dosuppressivefire__object_array__object_array__ret__nothing, std::move(units), target_);
-        }
-
-        void do_suppressive_fire(const std::vector<object> &units_, const vector3 &position_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dosuppressivefire__object_array__object_array__ret__nothing, std::move(units), position_);
-        }
-
-        void do_target(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dotarget__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void do_target(const std::vector<object> &units_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dotarget__object_array__object__ret__nothing, std::move(units), target_);
-        }
-
-        void do_watch(const object &unit_, const vector3 &position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dowatch__object_array__array__ret__nothing, unit_, position_);
-        }
-
-        void do_watch(const std::vector<object> &units_, const vector3 &position_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dowatch__object_array__array__ret__nothing, std::move(units), position_);
-        }
-
-        void do_watch(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__dowatch__object_array__object__ret__nothing, unit_, target_);
-        }
-
-        void do_watch(const std::vector<object> &units_, const object &target_) {
-            auto_array<game_value> units(units_.begin(), units_.end());
-
-            host::functions.invoke_raw_binary(__sqf::binary__dowatch__object_array__object__ret__nothing, std::move(units), target_);
-        }
+        
 
         game_value edit_object(const control &map_, sqf_string_const_ref object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__editobject__control__string__ret__any, map_, object_);
@@ -3908,9 +3436,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__editorseteventhandler__control__array__ret__nothing, map_, params_right);
         }
 
-        void enable_attack(const group &group_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableattack__object_group__bool__ret__nothing, group_, enable_);
-        }
+
 
 
 
@@ -4068,14 +3594,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__forceweaponfire__object__array__ret__nothing, unit_, params_right);
         }
 
-        float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_) {
-            game_value params_right({
-                target_position_,
-                magazine_type_
-            });
 
-            return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
-        }
 
 
 
@@ -4145,16 +3664,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
         }
 
-        bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_) {
-            auto_array<game_value> units({ units_.begin(), units_.end() });
-            
-            game_value params_right({
-                std::move(units),
-                magazine_type_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inrangeofartillery__array__array__ret__bool, position_, params_right);
-        }
+        
 
         sqf_return_string insert_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &value_, sqf_string_list_const_ref values_, sqf_string_const_ref sub_type_) {
             game_value params_right({
@@ -4376,9 +3886,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeownedmine__object__object__ret__nothing, unit_, mine_);
         }
 
-        void remove_team_member(const team_member &team_, const team_member &member_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removeteammember__team_member__team_member__ret__nothing, team_, member_);
-        }
+
 
         void respawn_vehicle(const object &vehicle_, float delay_, int count_) {
             game_value params_right({
@@ -4531,9 +4039,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__sethidebehind__object__array__ret__nothing, unit_, { object_where_hide_,hide_position_ });
         }
 
-        void set_leader(const team_member &team_, const team_member &leader_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setleader__team_member__team_member__ret__nothing, team_, leader_);
-        }
+
 
         void set_light_ambient(const object &light_, float r_, float g_, float b_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightambient__object__array__ret__nothing, light_, { r_,g_,b_ });
@@ -4617,9 +4123,7 @@ namespace intercept {
         
        
 
-        void set_skill(const object &vehicle_, float skill_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, vehicle_, skill_);
-        }
+
 
 
 
@@ -4757,9 +4261,7 @@ namespace intercept {
 
 
 
-        int admin(int owner_id_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__admin__scalar__ret__scalar, owner_id_);
-        }
+
 
         int airplane_throttle(const object &airplane_) {
             return host::functions.invoke_raw_unary(__sqf::unary__airplanethrottle__object__ret__scalar, airplane_);
@@ -4930,12 +4432,5 @@ namespace intercept {
             return rv_cursor_object_params({ res[0], res[1], res[2] });
         }
 
-        int remote_executed_owner() {
-            return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
-        }
-
-        void throw_exception(const game_value exception_) {
-            host::functions.invoke_raw_unary(__sqf::unary__throw__any__ret__nothing, exception_);
-        }
     }
 }

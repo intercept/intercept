@@ -20,6 +20,8 @@
 #include "sound.hpp"
 #include "cargo.hpp"
 #include "tasks.hpp"
+#include "debug.hpp"
+#include "rotorlib.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

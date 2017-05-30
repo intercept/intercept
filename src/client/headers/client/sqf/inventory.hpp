@@ -510,7 +510,7 @@ namespace intercept {
         float get_ammo_cargo(const object &value_);
 
         float get_fuel_cargo(const object &value_);
-
+        float get_repair_cargo(const object &value_);
         sqf_return_string goggles(const object &value_);
         sqf_return_string headgear(const object &value_);
         sqf_return_string hmd(const object &value_);

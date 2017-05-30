@@ -272,5 +272,11 @@ namespace intercept {
         object object_from_net_id(sqf_string_const_ref value_) {
             return object(host::functions.invoke_raw_unary(__sqf::unary__objectfromnetid__string__ret__object, value_));
         }
+        int admin(int owner_id_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__admin__scalar__ret__scalar, owner_id_);
+        }
+        int remote_executed_owner() {
+            return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
+        }
     }
 }

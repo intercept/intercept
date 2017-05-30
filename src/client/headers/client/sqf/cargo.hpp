@@ -76,6 +76,6 @@ namespace intercept {
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
         void detach(const object &value_);
-
+        int get_cargo_index(const object &vehicle_, const object &unit_);
     }
 }

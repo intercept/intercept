@@ -916,9 +916,7 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__gettotaldlcusagetime__ret__scalar);
         }
 
-        void halt() {
-            __helpers::__empty_nular(__sqf::nular__halt__ret__nothing);
-        }
+
 
         bool has_interface() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__hasinterface__ret__bool);
@@ -1277,9 +1275,7 @@ namespace intercept {
             __helpers::__empty_unary_bool(__sqf::unary__enablecaustics__bool__ret__nothing, value_);
         }
 
-        void enable_diag_legend(bool value_) {
-            __helpers::__empty_unary_bool(__sqf::unary__enablediaglegend__bool__ret__nothing, value_);
-        }
+
 
         void enable_engine_artillery(bool value_) {
             __helpers::__empty_unary_bool(__sqf::unary__enableengineartillery__bool__ret__nothing, value_);
@@ -3067,14 +3063,6 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__detectedmines__side__ret__array, side_));
         }
 
-        void diag_log(sqf_string_const_ref text_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
-
-        void diag_log(const game_value &text_) {
-            host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
-
         std::vector<bool> engines_is_on_rtd(const object &heli_) {
             return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesisonrtd__object__ret__array, heli_));
         }
@@ -3568,41 +3556,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
         }
 
-        void diag_capture_frame(float frame_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
-        }
-
-        void diag_capture_frame_to_file(float frame_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
-        }
-
-        void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
-        }
-
-        void diag_code_performance(const code &code_,const game_value &arguments_, float cycles_) {
-            game_value params({
-                code_,
-                arguments_,
-                cycles_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
-        }
-
-        void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__diag_logslowframe__array__ret__nothing, params);
-        }
+        
 
         float difficulty_option(sqf_string_const_ref optionname_) {
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
@@ -3731,9 +3685,7 @@ namespace intercept {
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
 
-        std::vector<script> diag_active_scripts() {
-            return __helpers::__convert_to_scripts_vector(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
-        }
+
 
         std::pair<bool, bool> forced_map() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__forcedmap__ret__array);

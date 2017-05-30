@@ -402,16 +402,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
-        std::vector<object> near_entities(const vector3 & pos_agl_, sqf_string_list_const_ref types_, float range_) {
-            auto_array<game_value> types(types_.begin(), types_.end());
-  
-            game_value args({
-                std::move(types),
-                range_
-            });
 
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
-        }
 
 
 
@@ -2617,9 +2608,6 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
         }
 
-        vector3 screen_to_world(const vector2 &pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__screentoworld__array__ret__array, pos_);
-        }
 
 
 
@@ -2831,21 +2819,7 @@ namespace intercept {
         
         
 
-        float distance(const object& start_, const object& end_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        }
-
-        float distance(const vector3& start_, const object& end_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        }
-
-        float distance(const object& start_, const vector3& end_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        }
-
-        float distance(const vector3& start_, const vector3& end_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        }
+        
 
         void remote_control(const object &controller_, const object &controlled_) {
             host::functions.invoke_raw_binary(__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
@@ -3795,49 +3769,7 @@ namespace intercept {
         }
 
         
-        float distance_2d(const object &object1_, const object &object2_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, object1_, object2_);
-        }
-
-        float distance_2d(const vector3 &position1_, const vector3 &position2_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, position1_, position2_);
-        }
-
-        float distance_2d(const object &object_, const vector3 &position_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, object_, position_);
-        }
-
-        float distance_2d(const vector3 &position_, const object &object_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, position_, object_);
-        }
-
-        float distance_sqr(const object &object1_, const object &object2_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, object1_, object2_);
-        }
-
-        float distance_sqr(const vector3 &position1_, const vector3 &position2_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, position1_, position2_);
-        }
-
-        float distance_sqr(const object &object_, const vector3 &position_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, object_, position_);
-        }
-
-        float distance_sqr(const vector3 &position_, const object &object_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, position_, object_);
-        }
-
-        float distance_sqr(const location &location1_, const location &location2_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__location__ret__scalar, location1_, location2_);
-        }
-
-        float distance_sqr(const location &location_, const vector3 &position_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__array__ret__scalar, location_, position_);
-        }
-
-        float distance_sqr(const vector3 &position_, const location &location_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__array__location__ret__scalar, position_, location_);
-        }
+        
 
         void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_) {
             game_value params_right({
@@ -4078,17 +4010,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
         }
 
-        bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
-            game_value params_right({
-                radius_,
-                max_distance_
-            });
 
-            if (center_.index() == 0) {
-                return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), params_right);
-            }
-            return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<1>(center_).get(), params_right);
-        }
 
         object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_) {
             if (position_.index() == 0) {
@@ -4215,133 +4137,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__hideselection__object__array__ret__nothing, object_, params_right);
         }
 
-        bool in_area(t_sqf_in_area_position position_, const object &trigger_) {
-            game_value param_left;
-
-            switch (position_.index()) {
-                case 0: param_left = std::get<0>(position_).get();break;
-                case 1: param_left = std::get<1>(position_).get();break;
-                case 2: param_left = std::get<2>(position_).get();break;
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__object__ret__bool, param_left, trigger_);
-        }
-
-        bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_) {
-            game_value param_left;
-
-            switch (position_.index()) {
-                case 0: param_left = std::get<0>(position_).get(); break;
-                case 1: param_left = std::get<1>(position_).get(); break;
-                case 2: param_left = std::get<2>(position_).get(); break;
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__string__ret__bool, param_left, marker_);
-        }
-
-        bool in_area(t_sqf_in_area_position position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
-            game_value param_left;
-            auto_array<game_value> params_right;
-
-            switch (position_.index()) {
-                case 0: param_left = std::get<0>(position_).get();break;
-                case 1: param_left = std::get<1>(position_).get();break;
-                case 2: param_left = std::get<2>(position_).get();break;
-            }
-
-            switch (center_.index()) {
-                case 0: params_right.push_back(std::get<0>(center_).get()); break;
-                case 1: params_right.push_back(std::get<1>(center_).get()); break;
-                case 2: params_right.push_back(std::get<2>(center_).get()); break;
-            }
-
-            params_right.push_back(radius_x_);
-            params_right.push_back(radius_y_);
-            params_right.push_back(angle_);
-            params_right.push_back(is_rectangle_);
-
-            if (radius_z_.has_value()) params_right.push_back(*radius_z_);
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object_array__array__ret__bool, param_left, std::move(params_right));
-        }
-
-        bool in_area(const object &object_, const location &location_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__object__location__ret__bool, object_, location_);
-        }
-
-        bool in_area(t_sqf_in_area_position position_, const location &location_) {
-            game_value param_left;
-
-            switch (position_.index())
-            {
-                case 0: param_left = std::get<0>(position_).get(); break;
-                case 1: param_left = std::get<1>(position_).get(); break;
-            }
-            
-            return host::functions.invoke_raw_binary(__sqf::binary__inarea__array__location__ret__bool, param_left, location_);
-        }
-
-        bool in_area_array(t_sqf_in_area_position_array position_, const object &trigger_) {
-            game_value param_left;
-
-            switch (position_.index()) {
-                case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() })); break;
-                case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() })); break;
-                case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() })); break;
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__object__ret__array, param_left, trigger_);
-        }
-
-        bool in_area_array(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_) {
-            game_value param_left;
-
-            switch (position_.index()) {
-                case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));break;
-                case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));break;
-                case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));break;
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__string__ret__array, param_left, marker_);
-        }
-
-        bool in_area_array(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
-            game_value param_left;
-            auto_array<game_value> params_right;
-
-            switch (position_.index()) {
-                case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() }));break;
-                case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() }));break;
-                case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() }));break;
-            }
-
-            switch (center_.index()) {
-                case 0: params_right.push_back(std::get<0>(center_).get()); break;
-                case 1: params_right.push_back(std::get<1>(center_).get()); break;
-                case 2: params_right.push_back(std::get<2>(center_).get()); break;
-            }
-
-            params_right.push_back(radius_x_);
-            params_right.push_back(radius_y_);
-            params_right.push_back(angle_);
-            params_right.push_back(is_rectangle_);
-
-            if (radius_z_.has_value()) params_right.push_back(*radius_z_);
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__array__ret__array, param_left, std::move(params_right));
-        }
-
-        bool in_area_array(t_sqf_in_area_position_array position_, const location &location_) {
-            game_value param_left;
-
-            switch (position_.index()) {
-                case 0: param_left = std::move(auto_array<game_value>({ std::get<0>(position_).get().begin(),  std::get<0>(position_).get().end() })); break;
-                case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(position_).get().begin(),  std::get<1>(position_).get().end() })); break;
-                case 2: param_left = std::move(auto_array<game_value>({ std::get<2>(position_).get().begin(),  std::get<2>(position_).get().end() })); break;
-            }
-
-            return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__location__ret__array, param_left, location_);
-        }
+        
 
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {
             auto_array<game_value> polygon({ polygon_.begin(), polygon_.end() });
@@ -4371,18 +4167,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__inserteditorobject__control__array__ret__string, map_, params_right);
         }
 
-        std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water_, bool shore_line_, const object &ignore_object_) {
-            game_value params_right({
-                min_distance_,
-                max_gradient_,
-                max_gradient_radius_,
-                over_land_or_water_,
-                shore_line_,
-                ignore_object_
-            });
-            
-            return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
-        }
+
 
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_) {
             game_value params_right({
@@ -4460,9 +4245,7 @@ namespace intercept {
 
 
 
-        vector3 model_to_world(const object &object_, const vector3 &offset_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworld__object__array__ret__array, object_, offset_));
-        }
+
         
         bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
             game_value param_left;
@@ -4890,22 +4673,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setuseractiontext__object__array__ret__nothing, object_, std::move(params_right));
         }
 
-        bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_) {
-            auto_array<game_value> params_right;
 
-            switch (position_.index()) {
-            case 0: params_right.push_back(std::move(std::get<0>(position_).get())); break;
-            case 1: params_right.push_back(std::move(std::get<1>(position_).get())); break;
-            case 2: params_right.push_back(std::move(std::get<2>(position_))); break;
-            }
-            
-            params_right.push_back(std::move(auto_array<game_value>(markers_.begin(), markers_.end())));
-            params_right.push_back(placement_radius_);
-
-            if (special_.has_value()) params_right.push_back(*special_);
-
-            return host::functions.invoke_raw_binary(__sqf::binary__setvehicleposition__object__array__ret__bool, object_, std::move(params_right));
-        }
 
         //#TODO: Find out which params are to the right
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_) {
@@ -5079,13 +4847,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__issensortargetconfirmed__object__side__ret__bool, object_, side_);
         }
 
-        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_));
-        }
 
-        vector3 model_to_world_world(const object &object_, const vector3 model_pos_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_));
-        }
 
         void report_remote_target(const side &side_, const object &target_, float time_) {
             host::functions.invoke_raw_binary(__sqf::binary__reportremotetarget__side__array__ret__nothing, side_, { target_, time_ });

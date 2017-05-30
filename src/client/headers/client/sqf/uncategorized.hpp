@@ -1210,45 +1210,7 @@ namespace intercept {
 
 
         float get_aiming_coef(const object &value_);
-        //position
-        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
-        vector3 model_to_world_world(const object &object_, const vector3 model_pos_);
 
-        vector3 screen_to_world(const vector2 &pos_);
-        vector3 model_to_world(const object &object_, const vector3 &offset_);
-        bool in_area(t_sqf_in_area_position position_, const object &trigger_);
-        bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_);
-        bool in_area(t_sqf_in_area_position position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
-        bool in_area(const object &object_, const location &location_);
-        bool in_area(t_sqf_in_area_position position_, const location &location_);
-        typedef std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> t_sqf_in_area_position_array;
-        bool in_area_array(t_sqf_in_area_position_array position_, const object &trigger_);
-        bool in_area_array(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_);
-        bool in_area_array(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
-        bool in_area_array(t_sqf_in_area_position_array position_, const location &location_);
-        std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
-        bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
-        vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
-        bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);
-        float distance_2d(const object &object1_, const object &object2_);
-        float distance_2d(const vector3 &position1_, const vector3 &position2_);
-        float distance_2d(const object &object_, const vector3 &position_);
-        float distance_2d(const vector3 &position_, const object &object_);
-        float distance_sqr(const object &object1_, const object &object2_);
-        float distance_sqr(const vector3 &position1_, const vector3 &position2_);
-        float distance_sqr(const object &object_, const vector3 &position_);
-        float distance_sqr(const vector3 &position_, const object &object_);
-        float distance_sqr(const location &location1_, const location &location2_);
-        float distance_sqr(const location &location_, const vector3 &position_);
-        float distance_sqr(const vector3 &position_, const location &location_);
-        std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_);
-        float distance(const object& start_, const object& end_);
-        float distance(const vector3& start_, const object& end_);
-        float distance(const object& start_, const vector3& end_);
-        float distance(const vector3& start_, const vector3& end_);
-        bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
-        vector3 building_exit(const object &building_, int index_);
-        vector3 building_pos(const object &building_, int index_);
 
 
 

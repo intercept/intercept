@@ -1759,8 +1759,8 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__stopped__object__ret__bool, value_);
         }
 
-        sqf_return_string text(sqf_string_const_ref value_) {
-            return __helpers::__string_unary_string(__sqf::unary__text__location__ret__string, value_);
+        game_value text(sqf_string_const_ref value_) {
+            return  host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
         }
 
 
@@ -2471,9 +2471,7 @@ namespace intercept {
 
 
 
-        rv_resolution get_resolution() {
-            return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
-        }
+
 
 
 

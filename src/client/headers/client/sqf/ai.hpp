@@ -130,12 +130,12 @@ namespace intercept {
         struct rv_expected_destination {
             vector3 position;
             std::string planning_mode;
-            bool force;
+            bool force_replan;
 
             rv_expected_destination(const game_value &ret_game_value_) :
                 position(ret_game_value_[0]),
                 planning_mode(ret_game_value_[1]),
-                force(ret_game_value_[2]) {}
+                force_replan(ret_game_value_[2]) {}
         };
 
         rv_expected_destination expected_destination(const object& unit_);

@@ -66,6 +66,32 @@ namespace intercept {
             int header_index;
             std::vector<control> controls;
         };
+
+        struct rv_resolution {
+            vector2 resolution;
+            vector2 viewport;
+            float aspect_ratio;
+            float ui_scale;
+
+            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
+                resolution = resolution_;
+                viewport = viewport_;
+                aspect_ratio = aspect_ratio_;
+                ui_scale = ui_scale_;
+            }
+
+            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
+                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
+                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
+                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
+            }
+
+            std::vector<float> to_vector() const {
+                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
+                return ret_val;
+            }
+        };
+
         /*ctrl_ */
 
         control ctrl_create(const display& display_, sqf_string_const_ref class_, int idc_);
@@ -608,7 +634,7 @@ namespace intercept {
         void ct_set_row_template(const control &control_, const config &config_);
         void ct_set_value(const control &control_, float value_);
         float ct_value(const control &control_, float index_);
-
+        rv_resolution get_resolution();
 
     }
 }

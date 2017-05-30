@@ -2876,7 +2876,9 @@ namespace intercept {
         float ct_value(const control &control_, float index_) {
             return host::functions.invoke_raw_binary(__sqf::binary__ctvalue__control__scalar__ret__scalar, control_, index_);
         }
-
+        rv_resolution get_resolution() {
+            return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
+        }
 
 
     }

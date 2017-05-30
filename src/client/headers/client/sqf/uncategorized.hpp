@@ -21,13 +21,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        
-
-        struct rv_destination {
-            vector3 pos;
-            std::string planning_mode;
-            bool force_replan;
-        };
 
         struct rv_crew_member {
             object unit;
@@ -46,30 +39,7 @@ namespace intercept {
         };
         
         
-        struct rv_resolution {
-            vector2 resolution;
-            vector2 viewport;
-            float aspect_ratio;
-            float ui_scale;
-
-            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
-                resolution = resolution_;
-                viewport = viewport_;
-                aspect_ratio = aspect_ratio_;
-                ui_scale = ui_scale_;
-            }
-
-            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
-                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
-                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
-                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
-            }
-
-            std::vector<float> to_vector() const {
-                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
-                return ret_val;
-            }
-        };
+        
 
         struct rv_particle_shape {
             std::string file;
@@ -429,7 +399,6 @@ namespace intercept {
         void save_joysticks();
         sqf_return_string role_description(const object &value_);
         float score_side(const side &value_);
-
         bool set_stat_value(sqf_string_const_ref name_, float value_);
         void host_mission(const config &config_, const display &display_);
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_);
@@ -641,7 +610,7 @@ namespace intercept {
         sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         float flag_animation_phase(const object &flag_);
         object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
-        float get_repair_cargo(const object &value_);
+
 
         void unassign_vehicle(const object &value_);
 
@@ -873,89 +842,18 @@ namespace intercept {
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
 
 
-        //ai
-        void set_skill(const object &object_, float skill_);
-        void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
-        sqf_return_string speed_mode(const object &obj_);
-        sqf_return_string speed_mode(const group &grp_);
-        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
-        void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
-        void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
-        void do_fire(const object &unit_, const object &target_);
-        void do_fire(const std::vector<object> &units_, const object &target_);
-        void do_follow(const object &unit_, const object &target_);
-        void do_follow(const std::vector<object> &units_, const object &target_);
-        void do_fsm(const object &unit_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_);
-        void do_fsm(const std::vector<object> &units_, sqf_string_const_ref fsm_name_, const vector3 &position_, const object &target_);
-        void do_move(const object &unit_, const vector3 &position_);
-        void do_move(const std::vector<object> &units_, const vector3 &position_);
-        void do_suppressive_fire(const object &unit_, const object &target_);
-        void do_suppressive_fire(const object &unit_, const vector3 &position_);
-        void do_suppressive_fire(const std::vector<object> &units_, const object &target_);
-        void do_suppressive_fire(const std::vector<object> &units_, const vector3 &position_);
-        void do_target(const object &unit_, const object &target_);
-        void do_target(const std::vector<object> &units_, const object &target_);
-        void do_watch(const object &unit_, const vector3 &position_);
-        void do_watch(const std::vector<object> &units_, const vector3 &position_);
-        void do_watch(const object &unit_, const object &target_);
-        void do_watch(const std::vector<object> &units_, const object &target_);
-        void enable_attack(const group &group_, bool enable_);
-        sqf_return_string combat_mode(const object &loc_);
-        sqf_return_string formation(const object &leader_);
-        sqf_return_string formation(const group &group_);
-        std::vector<object> formation_members(const object &unit_);
-        vector3 formation_position(const object &unit_);
-        sqf_return_string behaviour(const object & unit_);
-        bool check_aifeature(sqf_string_const_ref feature_);
-        bool fleeing(const object &value_);
-        float skill(const object &value_);
-        sqf_return_string land_result(const object &value_);
-        bool move_to_completed(const object &value_);
-        bool move_to_failed(const object &value_);
-        void disable_ai(const object &value0_, sqf_string_const_ref value1_);
-        void enable_ai(const object &value0_, sqf_string_const_ref value1_);
-        void enable_aifeature(bool value0_, sqf_string_const_ref value1_);
-        void fly_in_height(const object &value0_, float value1_);
-        float knows_about(const object &source_, const object &target_);
-        float knows_about(const group &source_, const object &target_);
-        float knows_about(const side &side_, const object &target_);
-        void land(const object &value0_, sqf_string_const_ref value1_);
-        void land_at(const object &value0_, float value1_);
-        void land_at(const object &value0_, const object & helipad_);
-        float skill(const object &value0_, sqf_string_const_ref value1_);
-        float skill_final(const object &value0_, sqf_string_const_ref value1_);
-        void stop(const object &value0_, bool value1_);
-        void suppress_for(const object &value0_, float value1_);
-        void move_to(const object &unit_, const vector3 &pos_);
-        struct rv_expected_destination {
-            vector3 position;
-            std::string planning_mode;
-            bool force;
-
-            rv_expected_destination(const game_value &ret_game_value_) :
-                position(ret_game_value_[0]),
-                planning_mode(ret_game_value_[1]),
-                force(ret_game_value_[2]) {}
-        };
-
-        rv_expected_destination expected_destination(const object& unit_);
-
-        void use_ai_oper_map_obstruction_test(bool use_);
-        void use_ai_steering_component(bool use_);
-        void command_suppressive_fire(const object &unit_, const object &target_);
-        void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
+        
 
 
         //buldozer
         bool buldozer_is_enabled_road_diag();
         void buldozer_reload_oper_map();
-        void buldozer(bool value_);
-        bool buldozer(sqf_string_const_ref value_);
+        void buldozer_enable_road_diag(bool value_);
+        bool buldozer_load_new_roads(sqf_string_const_ref value_);
 
 
         bool visible_score_table();
         void show_score_table(int force_);
-        rv_resolution get_resolution();
         bool is_pip_enabled();
         void set_mouse_position(float x_, float y_);
 
@@ -1012,7 +910,7 @@ namespace intercept {
         sqf_return_string image(sqf_string_const_ref value_);
         bool is_localized(sqf_string_const_ref value_);
         sqf_return_string localize(sqf_string_const_ref value_);
-        sqf_return_string text(sqf_string_const_ref value_);
+        game_value text(sqf_string_const_ref value_);
         sqf_return_string format(const std::vector<game_value> &params_);
         sqf_return_string compose_text(sqf_string_list_const_ref texts_);
         sqf_return_string endl();

@@ -27,17 +27,17 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<unary_entry>> unary_map;
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
-        struct gsTypeInfo;
-    };
+
     struct sqf_register_functions {
+        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {
+        }
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
         uintptr_t _type_vtable;
-        std::array<__internal::gsTypeInfo *, static_cast<size_t>(types::__internal::GameDataType::end)+1> _types {nullptr};
+        std::vector<const script_type_info *> _types;
     };
 
     /*!
@@ -269,47 +269,35 @@ namespace intercept {
         public:
             r_string _name;
             void copyPH(gsFuncBase* other) {
-                    placeholder1 = other->placeholder1;
-                    placeholder2 = other->placeholder2;
-                    placeholder3 = other->placeholder3;
-                    placeholder4 = other->placeholder4;
-                    placeholder5 = other->placeholder5;
-                    placeholder6 = other->placeholder6;
-                    placeholder7 = other->placeholder7;
-                    placeholder8 = other->placeholder8;
-                    placeholder9 = other->placeholder9;
-                    placeholder10 = other->placeholder10;
-                    placeholder11 = other->placeholder11;
+                securityStuff = other->securityStuff;
+                //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
             }
         private:
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
-            uint32_t placeholder9;//0x24
-            uint32_t placeholder10;//0x28
-            uint32_t placeholder11;//0x2C
+            std::array<size_t, 
+            #if _WIN64 || __X86_64__
+            10
+            #else
+            11
+            #endif
+            > securityStuff;  //Will scale with x64
+            //size_t securityStuff[11];
         };
         class gsFunction : public gsFuncBase {
-            uint32_t placeholder12;//0x30
+            void* placeholder12;//0x30  //jni function
         public:
             r_string _name2;//0x34 this is (tolower name)
             unary_operator * _operator;//0x38
-            uint32_t placeholder_10 {0};//0x3c RString to something
+            r_string something;//0x3c RString to something
             r_string _description;//0x38
             r_string _example;
             r_string _example2;
-            r_string placeholder_11;
-            r_string placeholder_12;
+            r_string placeholder_11{};
+            r_string placeholder_12{};
             r_string _category{ "intercept" }; //0x48
                                         //const rv_string* placeholder13;
         };
         class gsOperator : public gsFuncBase {
-            uint32_t placeholder12;//0x30  JNI function
+            void* placeholder12;//0x30  JNI function
         public:
             r_string _name2;//0x34 this is (tolower name)
             int32_t placeholder_10 { 4 }; //0x38 Small int 0-5  priority
@@ -318,9 +306,9 @@ namespace intercept {
             r_string _rightType;//0x44 Description of right hand side parameter
             r_string _description;//0x48
             r_string _example;//0x4c
-            r_string placeholder_11;//0x60
+            r_string placeholder_11{};//0x60
             r_string _version;//0x64 some version number
-            r_string placeholder_12;//0x68
+            r_string placeholder_12{};//0x68
             r_string _category{ "intercept" }; //0x6c
         };
         class gsNular : public gsFuncBase {
@@ -335,12 +323,8 @@ namespace intercept {
             r_string _category; //0x4d
             uint32_t placeholder11;//0x50
             const char *get_map_key() const { return _name2.data(); }
-        };
-        struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;            //#TODO this is same as value_type
-            using createFunc = game_data* (*)(void* _null);
-            createFunc _createFunction{ nullptr };
-        };
+        };                                                  //#TODO this is same as value_type
+
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
             game_functions(std::string name) : _name(name.c_str()) {}
@@ -359,7 +343,7 @@ namespace intercept {
         };
         class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
         public:
-            auto_array<const gsTypeInfo *> _scriptTypes;
+            auto_array<const script_type_info *> _scriptTypes;
             map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;

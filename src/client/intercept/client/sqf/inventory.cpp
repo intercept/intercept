@@ -817,6 +817,13 @@ namespace intercept {
         }
 
 
+        rv_unit_loadout get_unit_loadout(const object& obj_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__object_array__ret__array, obj_);
+            return rv_unit_loadout(ret);
+        }
+        void set_unit_loadout(const object& obj_, const rv_unit_loadout& loadout_, bool rearm_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, { static_cast<game_value>(loadout_),rearm_ });
+        }
     }
 }
 

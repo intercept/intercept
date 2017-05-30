@@ -41,10 +41,10 @@ namespace intercept {
                 return true;
             //#TODO pointer games = forbidden
             uintptr_t datax = reinterpret_cast<uintptr_t>(data.getRef());
-            uintptr_t data_1 = datax + 12;
+            uintptr_t data_1 = datax + sizeof(uintptr_t)*3;
             uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
             if (data_2) {
-                uintptr_t data_3 = data_2 + 4;
+                uintptr_t data_3 = data_2 + sizeof(uintptr_t);
                 uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
                 return !val;
             }

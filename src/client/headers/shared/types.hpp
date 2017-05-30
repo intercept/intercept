@@ -315,6 +315,11 @@ namespace intercept {
 
                 return _strcmpi(data(), other) == 0;
             }
+            //#Test yet untested
+            bool operator < (const r_string& other) const {
+                if (!data()) return false; //empty?
+                return strcmp(data(), other.data()) <0;
+            }
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
@@ -554,7 +559,7 @@ namespace intercept {
             };
         };
 
-        template<class Type, unsigned int growthFactor = 32>
+        template<class Type, size_t growthFactor = 32>
         class auto_array : public rv_array<Type> {
             typedef rv_array<Type> base;
         protected:
@@ -929,17 +934,25 @@ namespace intercept {
 
 
 
-
-        struct value_entry {
-            r_string type_name;
+        class game_data;
+        struct script_type_info {  //Donated from ArmaDebugEngine
+            r_string _name;           // SCALAR
+            using createFunc = game_data* (*)(void* _null);
+            createFunc _createFunction{ nullptr };
+            r_string _localizedName; //@STR_EVAL_TYPESCALAR
+            r_string _readableName; //Number
+            r_string _description; //A real number.
+            r_string _category; //Default
+            r_string _typeName; //float/NativeObject
+            r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
         };
 
         struct compound_value_pair {
-            value_entry *first;
-            value_entry *second;
+            script_type_info *first;
+            script_type_info *second;
         };
 
-        struct compound_value_entry {
+        struct compound_script_type_info {
             uintptr_t           v_table;
             compound_value_pair *types;
         };
@@ -947,8 +960,8 @@ namespace intercept {
         class sqf_script_type {
         public:
             uintptr_t               v_table;
-            value_entry             *single_type;
-            compound_value_entry    *compound_type;
+            const script_type_info             *single_type;
+            compound_script_type_info    *compound_type;
             value_types type() const;
             std::string type_str() const;
             bool operator==(const sqf_script_type& other) const {
@@ -1006,7 +1019,7 @@ namespace intercept {
             friend class game_value;
             friend class invoker;
         public:
-            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_value_entry by some better name
+            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
             virtual ~game_data() {}
 
         protected:
@@ -1024,6 +1037,8 @@ namespace intercept {
             virtual bool equals(const game_data *) const { return false; };
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
+            virtual void placeholder() const {};
+            virtual bool can_serialize() { return false; }
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
@@ -1101,6 +1116,7 @@ namespace intercept {
 
 
             //Conversions
+            game_value(game_data* val_);
             game_value(float val_);
             game_value(int val_);
             game_value(bool val_);
@@ -1398,7 +1414,7 @@ namespace intercept {
                     vector3 _acceleration;
                 };
 
-                visState1* s1 = reinterpret_cast<visState1*>(vbase + 4);
+                visState1* s1 = reinterpret_cast<visState1*>(vbase + sizeof(uintptr_t));
                 visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
 
                 return visualState{
@@ -1417,9 +1433,14 @@ namespace intercept {
             }
 
             visual_head_pos get_head_pos() {
-                if (!object || !object->object) return visual_head_pos();
-                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
 
+
+                if (!object || !object->object) return visual_head_pos();
+            #if _WIN64 || __X86_64__
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xD0);
+            #else
+                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+            #endif
                 class v1 {
                     virtual void doStuff() {}
                 };
@@ -1430,9 +1451,21 @@ namespace intercept {
                 auto& typex = typeid(*v);
                 auto test = typex.raw_name();
                 auto hash = typex.hash_code();
-                if (hash != 0x6d4f3e40 && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
-                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase + 0x114);
-
+                if (hash !=
+                #if _WIN64 || __X86_64__
+                    0xb57aedbe2fc8b61e
+                #else
+                    0x6d4f3e40
+                #endif
+                    && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
+                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase +
+                #if _WIN64 || __X86_64__
+                    0x168
+                #else
+                    0x114
+                #endif
+                    );
+                return  visual_head_pos();
                 return visual_head_pos{
                     true,
                     { s3->_cameraPositionWorld.x,s3->_cameraPositionWorld.z,s3->_cameraPositionWorld.y },
@@ -1539,7 +1572,7 @@ namespace intercept {
                 }
                 */
             }
-        };
+            };
     #endif
 
         namespace __internal {
@@ -1572,6 +1605,8 @@ namespace intercept {
             };
             GameDataType game_datatype_from_string(const r_string& name);
             std::string to_string(GameDataType type);
+            //Not public API!
+            void add_game_datatype(r_string name, GameDataType type);
 
             struct allocatorInfo {
                 uintptr_t genericAllocBase;
@@ -1607,7 +1642,7 @@ namespace intercept {
         }
 
         template <game_value(*T)(const game_value&)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
             return sqf_this_;

@@ -1026,6 +1026,7 @@ namespace intercept {
         void remove_owned_mine(const object &unit_, const object &mine_);
         void reveal(std::variant<object, group> &unit_, const object &target_);
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
+        void diag_log(const game_value &text_);
 
 
 

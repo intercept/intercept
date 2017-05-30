@@ -4560,6 +4560,10 @@ void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color &
             host::functions.invoke_raw_unary(__sqf::unary__diag_log__any__ret__nothing, text_);
         }
 
+        void diag_log(const game_value &text_) {
+            host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
+        }
+
         std::vector<bool> engines_is_on_rtd(const object &heli_) {
             return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesisonrtd__object__ret__array, heli_));
         }

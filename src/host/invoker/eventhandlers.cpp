@@ -135,8 +135,7 @@ namespace intercept {
 
     void eventhandlers::get_in(game_value & args_)
     {
-        std::vector<int> turret_path;
-        turret_path.insert(turret_path.end(), args_[3].to_array().begin(), args_[3].to_array().end());
+        auto_array<int> turret_path(args_[3].to_array().begin(), args_[3].to_array().end());
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
@@ -149,8 +148,7 @@ namespace intercept {
 
     void eventhandlers::get_out(game_value & args_)
     {
-        std::vector<int> turret_path;
-        turret_path.insert(turret_path.end(), args_[3].to_array().begin(), args_[3].to_array().end());
+        auto_array<int> turret_path(args_[3].to_array().begin(), args_[3].to_array().end());
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {

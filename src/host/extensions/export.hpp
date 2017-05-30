@@ -92,6 +92,7 @@ namespace intercept {
         /*!
         @brief Registers SQF Function
         */
+        //#TODO need to keep interface C-like. use rstring's instead of std::string
         types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
         types::registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
         types::registered_sqf_function register_sqf_function_nular(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);

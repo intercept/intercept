@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.1)
 project (Intercept)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
@@ -14,9 +14,21 @@ else()
 	set(INTERCEPT_LINK_TYPE "dynamic")
 endif()
 
+if("${CMAKE_GENERATOR}" MATCHES "Visual Studio 15 2017")
+	set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /std:c++latest" )
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+	message(FATAL_ERROR "ERROR: You need a C++17 compatible compiler")
+endif()
+
 message("GENERATOR USED: '${CMAKE_GENERATOR}'")
+message("COMPILER USED: '${CMAKE_CXX_COMPILER_ID}'")
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/win32/")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON) 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

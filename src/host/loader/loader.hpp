@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -28,6 +28,18 @@ namespace intercept {
     //! Binary functon map.
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
+    struct sqf_register_functions {
+        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {
+        }
+        uintptr_t _gameState;
+        uintptr_t _operator_construct;
+        uintptr_t _operator_insert;
+        uintptr_t _unary_construct;
+        uintptr_t _unary_insert;
+        uintptr_t _type_vtable;
+        std::vector<const script_type_info *> _types;
+    };
+
     /*!
     @brief The loader class, memory searcher and patching functionality to the RV engine.
 
@@ -36,8 +48,7 @@ namespace intercept {
     find and catalog the SQF function pointers and store them.
     */
     class loader
-        : public singleton<loader>
-    {
+        : public singleton<loader> {
     public:
         loader();
         ~loader();
@@ -50,15 +61,15 @@ namespace intercept {
         actual function and stores them.
         */
         void do_function_walk(uintptr_t state_addr_);
-        
+
         /*!
         @brief Returns a unary SQF function from the loaders library of found SQF functions.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        
+
         @return true if function is found, false if function is not found.
 
         @todo Throw exception if overloads are found so that unexpected results
@@ -72,16 +83,16 @@ namespace intercept {
         bool get_function(std::string function_name_, unary_function &function_);
 
         /*!
-        @brief Returns a unary SQF function from the loaders library of found 
+        @brief Returns a unary SQF function from the loaders library of found
         SQF functions with argument signature.
-        
+
         Returns a unary SQF function from the loaders library of found SQF functions
-        but also takes a argument type in case there are overloaded versions of 
+        but also takes a argument type in case there are overloaded versions of
         this SQF command available.
 
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the unary function.
-        @param [in] arg_signature_ The type of variable in SQF that the right 
+        @param [in] arg_signature_ The type of variable in SQF that the right
         argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -116,7 +127,7 @@ namespace intercept {
         bool get_function(std::string function_name_, binary_function &function_);
 
         /*!
-        @brief Returns a binary SQF function from the loaders library of found 
+        @brief Returns a binary SQF function from the loaders library of found
         SQF functions with argument signature.
 
         Returns a binary SQF function from the loaders library of found SQF functions
@@ -126,10 +137,10 @@ namespace intercept {
         @param [in] function_name_ The name of the function, all in lowercase.
         @param [out] function_ A reference variable to the binary function.
         @param [in] arg1_signature_ The type of variable in SQF that the left
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
         @param [in] arg2_signature_ The type of variable in SQF that the right
-        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT", 
+        argument is. Must be in all caps, "ARRAY", "SCALAR", "BOOL", "OBJECT",
         etc.
 
         @return `true` if function is found, `false` if function is not found.
@@ -169,12 +180,12 @@ namespace intercept {
         Hooks a function so that when it is executed in SQF the hooked function
         will execute in its place instead.
 
-        @warning Warning, this will only hook the first function (and in the future 
+        @warning Warning, this will only hook the first function (and in the future
         raise an exception if there is an overload of this function).
 
-        @param [in] function_name_ The name of the function to hook. 
+        @param [in] function_name_ The name of the function to hook.
         @param [in] hook_ A void pointer to the function to call instead.
-        @param [out] trampoline_ A reference to the trampoline that stores the 
+        @param [out] trampoline_ A reference to the trampoline that stores the
         original function call.
 
         @return `true` if the hook succeded, `false` if the hook failed.
@@ -183,11 +194,11 @@ namespace intercept {
         bool hook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
         bool hook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
         //!@}
-        
+
         /*!@{
         @brief Unhook a unary function.
 
-        Unhooks an already hooked functon. You must pass in the name, original 
+        Unhooks an already hooked functon. You must pass in the name, original
         hooked function (the `hook_` parameter that was passed in) and the trampoline
         that was assigned by the hook function.
 
@@ -211,6 +222,19 @@ namespace intercept {
         const nular_map & nular() const;
         //!@}
 
+        /*!
+        @brief Returns the pointer to the engines allocator functions.
+        */
+        const types::__internal::allocatorInfo* get_allocator() const;
+
+        /*!
+        @brief Returns function Pointers needed to register SQF Functions
+        */
+        const sqf_register_functions& get_register_sqf_info() const;
+
+
+
+
     protected:
         /*!
         @name Function Maps
@@ -222,19 +246,113 @@ namespace intercept {
         //!@}
 
         /*!
-        @name Initial Hook Functionality
-        */
-        //!@{
-        static int __cdecl _initial_patch(char *a_, int b_, int c_);
-        static unary_function _initial_trampoline;
-        //!@}
-
-        /*!
         @brief Stores the hooked functions.
         */
         std::unordered_set<uint32_t> _hooked_functions;
 
+        /*!
+        @brief Stores the data about the engines allocators.
+        */
+        types::__internal::allocatorInfo _allocator;
+
+        /*!
+        @brief Stores the data about the Functions needed to register SQF Functions.
+        */
+        sqf_register_functions _sqf_register_funcs;
+
         bool _attached;
         bool _patched;
     };
+
+    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+        class gsFuncBase {
+        public:
+            r_string _name;
+            void copyPH(gsFuncBase* other) {
+                securityStuff = other->securityStuff;
+                //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
+            }
+        private:
+            std::array<size_t, 
+            #if _WIN64 || __X86_64__
+            10
+            #else
+            11
+            #endif
+            > securityStuff;  //Will scale with x64
+            //size_t securityStuff[11];
+        };
+        class gsFunction : public gsFuncBase {
+            void* placeholder12;//0x30  //jni function
+        public:
+            r_string _name2;//0x34 this is (tolower name)
+            unary_operator * _operator;//0x38
+            r_string something;//0x3c RString to something
+            r_string _description;//0x38
+            r_string _example;
+            r_string _example2;
+            r_string placeholder_11{};
+            r_string placeholder_12{};
+            r_string _category{ "intercept" }; //0x48
+                                        //const rv_string* placeholder13;
+        };
+        class gsOperator : public gsFuncBase {
+            void* placeholder12;//0x30  JNI function
+        public:
+            r_string _name2;//0x34 this is (tolower name)
+            int32_t placeholder_10 { 4 }; //0x38 Small int 0-5  priority
+            binary_operator * _operator;//0x3c
+            r_string _leftType;//0x40 Description of left hand side parameter
+            r_string _rightType;//0x44 Description of right hand side parameter
+            r_string _description;//0x48
+            r_string _example;//0x4c
+            r_string placeholder_11{};//0x60
+            r_string _version;//0x64 some version number
+            r_string placeholder_12{};//0x68
+            r_string _category{ "intercept" }; //0x6c
+        };
+        class gsNular : public gsFuncBase {
+        public:
+            r_string _name2;//0x30 this is (tolower name)
+            nular_operator * _operator;//0x34
+            r_string _description;//0x38
+            r_string _example;
+            r_string _example2;
+            r_string _version;//0x44 some version number
+            r_string placeholder_10;
+            r_string _category; //0x4d
+            uint32_t placeholder11;//0x50
+            const char *get_map_key() const { return _name2.data(); }
+        };                                                  //#TODO this is same as value_type
+
+        struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
+        public:
+            game_functions(std::string name) : _name(name.c_str()) {}
+            r_string _name;
+            game_functions() {}
+            const char *get_map_key() const { return _name.data(); }
+        };
+
+        struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
+        public:
+            game_operators(std::string name) : _name(name.c_str()) {}
+            r_string _name;
+            int32_t placeholder10{4}; //0x2C Small int 0-5  priority
+            game_operators() {}
+            const char *get_map_key() const { return _name.data(); }
+        };
+        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
+        public:
+            auto_array<const script_type_info *> _scriptTypes;
+            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
+            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
+            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
+        };
+        template class rv_allocator<gsFunction>;
+        template class rv_allocator<gsOperator>;
+        template class rv_allocator<gsNular>;
+        template class rv_allocator<game_functions>;
+        template class rv_allocator<game_operators>;
+    }
+
 }

@@ -1,6 +1,7 @@
 branches:
   only:
   - master
+  - develop
 language: python
 python:
 - '3.4'

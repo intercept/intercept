@@ -1,4 +1,4 @@
-#include "extensions.hpp"
+﻿#include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
 
@@ -7,9 +7,6 @@ namespace intercept {
 
     extensions::extensions() {
         functions.get_type_structure = client_function_defs::get_type_structure;
-        functions.free_value = client_function_defs::free_value;
-        functions.allocate_string = client_function_defs::allocate_string;
-        functions.free_string = client_function_defs::free_string;
         functions.get_binary_function = client_function_defs::get_binary_function;
         functions.get_binary_function_typed = client_function_defs::get_binary_function_typed;
         functions.get_nular_function = client_function_defs::get_nular_function;
@@ -20,6 +17,11 @@ namespace intercept {
         functions.invoke_raw_unary = client_function_defs::invoke_raw_unary_nolock;
         functions.invoker_lock = client_function_defs::invoker_lock;
         functions.invoker_unlock = client_function_defs::invoker_unlock;
+        functions.get_engine_allocator = client_function_defs::get_engine_allocator;
+        functions.register_sqf_function = client_function_defs::register_sqf_function;
+        functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
+        functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
+        functions.register_sqf_type = client_function_defs::register_sqf_type;
         for (auto file : _searcher.active_pbo_list()) {
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);
@@ -32,8 +34,7 @@ namespace intercept {
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {
             do_reload = true;
-        }
-        else {
+        } else {
             do_reload = false;
         }
     }
@@ -52,7 +53,7 @@ namespace intercept {
         controller::get().add("unload_extension", std::bind(&extensions::unload, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    bool extensions::load(const arguments & args_, std::string & result) {
+    bool extensions::load(const arguments & args_, std::string &) {
         return do_load(args_.as_string(0));
     }
 
@@ -68,7 +69,6 @@ namespace intercept {
     }
 
     bool extensions::do_load(const std::string &path_) {
-        HMODULE dllHandle;
         std::string path = path_;
         LOG(INFO) << "Load requested [" << path_ << "]";
 
@@ -89,7 +89,12 @@ namespace intercept {
         std::string full_path = "";
 
         for (auto folder : _mod_folders) {
+        #if _WIN64 || __X86_64__
+            std::string test_path = folder + "\\intercept\\" + path + "_x64.dll";
+        #else
             std::string test_path = folder + "\\intercept\\" + path + ".dll";
+        #endif
+
             LOG(DEBUG) << "Mod: " << test_path;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
@@ -103,8 +108,8 @@ namespace intercept {
         }
 
 
-        
-        
+
+
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file.";
             char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
@@ -131,7 +136,7 @@ namespace intercept {
 
 
 
-        dllHandle = LoadLibrary(full_path.c_str());
+        HMODULE dllHandle = LoadLibrary(full_path.c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
             return false;
@@ -140,17 +145,18 @@ namespace intercept {
 
         auto new_module = module::entry(full_path, dllHandle);
 
-        new_module.functions.api_version = (module::api_version_func)GetProcAddress(dllHandle, "api_version");
-        new_module.functions.assign_functions = (module::assign_functions_func)GetProcAddress(dllHandle, "assign_functions");
-        new_module.functions.handle_unload = (module::handle_unload_func)GetProcAddress(dllHandle, "handle_unload");
-        new_module.functions.mission_end = (module::mission_end_func)GetProcAddress(dllHandle, "mission_end");
-        new_module.functions.on_frame = (module::on_frame_func)GetProcAddress(dllHandle, "on_frame");
-        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal");
-        new_module.functions.post_init = (module::post_init_func)GetProcAddress(dllHandle, "post_init");
-        new_module.functions.pre_init = (module::pre_init_func)GetProcAddress(dllHandle, "pre_init");
-        new_module.functions.mission_stopped = (module::mission_stopped_func)GetProcAddress(dllHandle, "mission_stopped");
+        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GetProcAddress(dllHandle, "api_version"));
+        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GetProcAddress(dllHandle, "assign_functions"));
+        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GetProcAddress(dllHandle, "handle_unload"));
+        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GetProcAddress(dllHandle, "mission_end"));
+        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GetProcAddress(dllHandle, "on_frame"));
+        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
+        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GetProcAddress(dllHandle, "post_init"));
+        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GetProcAddress(dllHandle, "pre_init"));
+        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GetProcAddress(dllHandle, "pre_start"));
+        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GetProcAddress(dllHandle, "mission_stopped"));
 
-#define EH_PROC_DEF(x) new_module.eventhandlers.##x = (module::##x##_func)GetProcAddress(dllHandle, #x)
+    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
 
         EH_PROC_DEF(anim_changed);
         EH_PROC_DEF(anim_done);
@@ -215,7 +221,7 @@ namespace intercept {
         return false;
     }
 
-    bool extensions::unload(const arguments & args_, std::string & result) {
+    bool extensions::unload(const arguments & args_, std::string &) {
         return do_unload(args_.as_string(0));
     }
 
@@ -243,7 +249,7 @@ namespace intercept {
         return true;
     }
 
-    bool extensions::list(const arguments & args_, std::string & result) {
+    bool extensions::list(const arguments &, std::string & result) {
 
         LOG(INFO) << "Listing loaded modules";
         std::string res;
@@ -258,8 +264,7 @@ namespace intercept {
         return false;
     }
 
-    std::unordered_map<std::string, module::entry>& extensions::modules()
-    {
+    std::unordered_map<std::string, module::entry>& extensions::modules() {
         return _modules;
     }
 

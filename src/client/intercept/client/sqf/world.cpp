@@ -1,8 +1,151 @@
-#include "client\pointers.hpp"
+﻿#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "world.hpp"
 
 namespace intercept {
     namespace sqf {
+        /* World */
+        float world_size() {
+            return sqf::__helpers::__retrieve_nular_number(__sqf::nular__worldsize__ret__scalar);
+        }
+
+        std::string world_name() {
+            return host::functions.invoke_raw_nular(__sqf::nular__worldname__ret__string);
+        }
+
+        float wind_str() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__windstr__ret__scalar);
+        }
+
+        float wind_dir() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__winddir__ret__scalar);
+        }
+        void set_wind(float x_, float y_) {
+            game_value params({
+                x_,
+                y_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setwind__array__ret__nothing, params);
+        }
+
+        void set_wind(float x_, float y_, bool force_) {
+            game_value params({
+                x_,
+                y_,
+                force_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setwind__array__ret__nothing, params);
+        }
+        vector3 wind() {
+            return __helpers::__retrieve_nular_vector3(__sqf::nular__wind__ret__array);
+        }
+
+        float gusts() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__gusts__ret__scalar);
+        }
+
+        float humidity() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__humidity__ret__scalar);
+        }
+
+        float waves() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__waves__ret__scalar);
+        }
+
+        float lightnings() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__lightnings__ret__scalar);
+        }
+
+        float moon_intensity() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__moonintensity__ret__scalar);
+        }
+
+        float next_weather_change() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__nextweatherchange__ret__scalar);
+        }
+
+        float overcast() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__overcast__ret__scalar);
+        }
+
+        float overcast_forecast() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__overcastforecast__ret__scalar);
+        }
+
+        float rain() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__rain__ret__scalar);
+        }
+
+        float rainbow() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__rainbow__ret__scalar);
+        }
+
+        float sun_or_moon() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__sunormoon__ret__scalar);
+        }
+
+        bool fog() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__fog__ret__scalar);
+        }
+
+        float fog_forecast() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__fogforecast__ret__scalar);
+        }
+
+        float time() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__time__ret__scalar);
+        }
+
+        float time_multiplier() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__timemultiplier__ret__scalar);
+        }
+
+        float date_to_number(int year_, int month_, int day_, int hour_, float minute_) {
+            game_value date({
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
+                minute_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__datetonumber__array__ret__scalar, date);
+        }
+
+        rv_date number_to_date(int year_, float time_) {
+            game_value params({
+                static_cast<float>(year_),
+                time_
+            });
+
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__numbertodate__array__ret__array, params)));
+        }
+        rv_date date() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__date__ret__array)));
+        }
+        rv_date mission_start() {
+            return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__missionstart__ret__array)));
+        }
+
+        rv_fog_parameters fog_params() {
+            return rv_fog_parameters::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__fogparams__ret__array)));
+        }
+
+        rv_rendering_distances get_object_view_distance() {
+            return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
+        }
+        void set_date(int year_, int month_, int day_, int hour_, float minute_) {
+            game_value date({
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
+                minute_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setdate__array__ret__nothing, date);
+        }
     }
 }

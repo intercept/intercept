@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -13,8 +13,8 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 
 using namespace intercept::types;
 
@@ -35,7 +35,7 @@ namespace intercept {
         /**
         * Finds named selections in object which are in specified LOD, intersected by given section of a line
         */
-        bool intersect(const vector3 &begin_pos_, const vector3 &end_pos_, const object& obj_, const std::string &lodname_);
+        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
 
         /**
         * Returns list of intersections with surfaces from begPosASL to endPosASL.

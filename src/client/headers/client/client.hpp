@@ -1,14 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "../shared.hpp"
-#include "shared\functions.hpp"
-#include <chrono>
-#include <regex>
+#include "shared/functions.hpp"
 
 #define DLLEXPORT __declspec(dllexport)
 
 
-
-using namespace std::literals;
 
 namespace intercept {
     namespace client {
@@ -23,27 +19,12 @@ namespace intercept {
         class host {
         public:
             static client_functions functions;
-        protected:
-            class mem_watcher {
-            public:
-                mem_watcher();
-                ~mem_watcher();
-                void clean();
-                void add_watch(game_value &data_);
-            protected:
-                void _add(game_value &data_);
-                std::list<game_value> _watch_data;
-            };
-
-
-        public:
-            static mem_watcher memory_watcher;
         };
 
 
         
         extern "C" {
-            DLLEXPORT void __cdecl assign_functions(const struct intercept::client_functions funcs);
+            DLLEXPORT void __cdecl assign_functions(const struct client_functions funcs);
             DLLEXPORT void __cdecl handle_unload();
         }
 
@@ -51,7 +32,7 @@ namespace intercept {
 
         class invoker_lock {
         public:
-            invoker_lock(bool delayed_ = false);
+            explicit invoker_lock(bool delayed_ = false);
             invoker_lock(const invoker_lock &) = delete;
             invoker_lock(invoker_lock &&) = delete;
             invoker_lock & operator=(const invoker_lock &) = delete;

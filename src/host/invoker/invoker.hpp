@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -12,11 +12,12 @@ https://github.com/NouberNou/intercept
 #include "logging.hpp"
 #include "arguments.hpp"
 #include "loader.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 #include <mutex>
 #include <condition_variable>
 #include <queue>
 #include "eventhandlers.hpp"
+#include "sqf_functions.hpp"
 
 
 using namespace intercept::types;
@@ -65,8 +66,8 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const nular_function function_);
-        rv_game_value invoke_raw(const std::string &function_name_);
+        static game_value invoke_raw_nolock(const nular_function function_);
+        game_value invoke_raw(const std::string &function_name_) const;
         //!@}
 
         /*!@{
@@ -80,9 +81,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_);
+        static game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
+        game_value invoke_raw(const std::string &function_name_, const game_value &right_) const;
+        game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const;
         //!@}
 
         /*!@{
@@ -96,9 +97,9 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        rv_game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_);
-        rv_game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_);
+        static game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
+        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const;
+        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const;
         //!@}
         //!@}
 
@@ -110,52 +111,13 @@ namespace intercept {
         @brief Returns the numerical type id. This is the vtable ptr of the data
         type.
         */
-        uintptr_t get_type(const game_value &value_) const;
+        static uintptr_t get_type(const game_value &value_);
 
         /*!
         @brief Returns the string representation of the data type. IE: "ARRAY",
         "STRING", "SCALAR", etc.
         */
-        const std::string get_type_str(const game_value &value_) const;
-        //!@}
-
-        /*!
-        @name Memory Functions
-        */
-        //!@{
-        /*!
-        @brief Releases a value that was obtained from the RV Engine.
-
-        This function releases the data of a value obtained from inside the RV
-        Engine. Data obtained in the RV Engine must be released in the RV Engine
-        and as such we need to have a method of doing this.
-
-        The way that Intercept handles this is by defining a global array in SQF
-        and populating tha array with values that need to be freed. When the array
-        reaches a certain size, it is resized to 0 and this invokes SQF to release
-        the variable memory (depending on the internal ref-count, which can be
-        manipulated both in Intercept and inside the RV Engine itself via SQF.
-
-        @param value_ A pointer to the value that is to be freed.
-        @param immediate_ If this value should be released immediately. If set 
-        to true, this will also free any other variables waiting to be freed.
-
-        @return `true` if the value was added to the collection array, `false`
-        if the value was not released (due to it not being properly owned by the
-        RV Engine).
-        */
-        bool release_value(game_value &value_, bool immediate_ = true);
-
-        /*!
-        @brief Actually resizes the collection array to 0 and back to its normal
-        size of 100.
-
-        This function is separate from the release_value function for organizational
-        reasons. It invokes an atomic lock that ensures that the array is resized
-        to 0 and back to its normal size in one step and that no other variables
-        might accidently race and be added to a 0 size array.
-        */
-        void invoke_delete();
+        const std::string& get_type_str(const game_value &value_) const;
         //!@}
 
         /*!
@@ -204,17 +166,19 @@ namespace intercept {
         function call that each client plugin can define for guaranteed per-frame
         execution.
         */
-        bool do_invoke_period(const arguments & args_, std::string & result_);
+        bool do_invoke_period();
 
         /*!
         @brief Consume an event from the RV Engine and dispatches it.
         */
-        bool rv_event(const arguments & args_, std::string & result_);
+        bool rv_event(const std::string& event_name_, game_value& params_);
         
+
+        static game_value _intercept_signal(game_value left_arg_, game_value right_arg_);
         /*!
         @brief Get signal from sqf code dispatch it.
         */
-        bool signal(const arguments & args_, std::string & result_);
+        bool signal(const std::string& extension_name, const std::string& signal_name, game_value args);
         //!@}
 
         /*!
@@ -228,7 +192,7 @@ namespace intercept {
 
         @return Returns `true` if it was bound, `false` if it was not.
         */
-        bool add_eventhandler(const std::string & name_, std::function<void(const std::string &, game_value &)> func_);
+        bool add_eventhandler(const std::string & name_, std::function<void(game_value &)> func_);
 
         /*!
         @brief A map of vtable ptrs to string stypes.
@@ -244,9 +208,8 @@ namespace intercept {
 
         void unlock();
 
-        static game_data_string_pool<> string_pool;
+        //static game_data_string_pool<> string_pool;
         static uintptr_t sqf_game_state;
-        static char *sqf_this;
 
         static bool invoker_accessible;
         static bool invoker_accessible_all;
@@ -254,13 +217,22 @@ namespace intercept {
 
 
 
-        std::atomic_uint32_t _thread_count;
+        std::atomic<uint32_t> _thread_count;
+
+        /*!
+        @brief The interceptEvent SQF Function that's used to get events with arguments
+        */
+        static game_value _intercept_event(game_value left_arg_, game_value right_arg_);
+        registered_sqf_function _intercept_event_function;
+        static game_value _intercept_do_invoke_period();
+        registered_sqf_function _intercept_do_invoke_period_function;
+        registered_sqf_function _intercept_signal_function;
 
         /*!
         @brief The hook function for getting type information. Hooked via intercept::invoker_begin_register.
         */
-        static int __cdecl _register_hook(char *sqf_this_, uintptr_t sqf_game_state_, uintptr_t right_arg_);
-
+        static game_value _intercept_registerTypes(const game_value& left_arg_);
+        registered_sqf_function _intercept_registerTypes_function;
         /*!
         @brief The trampoline for `str` that is used as the type registration function.
         */
@@ -274,42 +246,12 @@ namespace intercept {
         /*!
         @brief The mission namespace, used for getting variables.
         */
-        game_value _mission_namespace;
+        //game_value _mission_namespace;
 
-        /*!
-        @brief The delete array for collecting values.
-        */
-        game_value _delete_array_ptr;
+        //game_value _eh_params;
+        //game_value _signal_params;
 
-        /*!
-        @brief The scalar game_value for resizing the delete array to 0.
-        */
-        game_value _delete_size_zero;
-
-        /*!
-        @brief The scalar game_value for resizing the delete array back to its 
-        max size.
-        */
-        game_value _delete_size_max;
-
-        game_value _eh_params;
-        game_value _signal_params;
-
-        game_value _eh_params_name;
-
-        /*!
-        @brief The index counter for the delete array.
-        */
-        uint32_t _delete_index;
-
-        /*!
-        @brief This is actually null. Really it should just be exchanged with a
-        null literal where it is used.
-
-        This is a pointless `__thiscall` convention `this` pointer. It is never
-        used by any SQF function because they are not member functions.
-        */
-        char *_sqf_this;
+        //game_value _eh_params_name;
 
         /*!
         @brief The address of the game state object.
@@ -324,7 +266,6 @@ namespace intercept {
         */
         std::recursive_mutex _invoke_mutex;
         std::mutex _state_mutex;
-        std::mutex _delete_mutex;
         std::condition_variable _invoke_condition;
         //!@}
 
@@ -337,7 +278,7 @@ namespace intercept {
         @brief A collection of bound functions for processing event handlers in
         the client plugins.
         */
-        std::unordered_map < std::string, std::function<void(const std::string &, game_value &)> > _eventhandlers;
+        std::unordered_map < std::string, std::function<void(game_value &)> > _eventhandlers;
 
         bool _patched;
         bool _attached;

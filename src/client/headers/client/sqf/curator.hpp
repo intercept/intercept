@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -12,13 +12,47 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 
 using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        /* Curator */
+        object curator_camera();
+        object curator_mouse_over();
+        std::vector<object> curator_selected();
+        void open_curator_interface();
+        bool shown_curatorcompass();
+        float curator_camera_area_ceiling(const object &value_);
+        bool curator_editing_area_type(const object &value_);
+        float curator_points(const object &value_);
+        float curator_waypoint_cost(const object &value_);
+        object get_assigned_curator_logic(const object &value_);
+        object get_assigned_curator_unit(const object &value_);
+        void remove_all_curator_addons(const object &value_);
+        void remove_all_curator_camera_areas(const object &value_);
+        void remove_all_curator_editing_areas(const object &value_);
+        void show_curator_compass(bool value_);
+        void unassign_curator(const object &value_);
+        void add_curator_points(const object &value0_, float value1_);
+        void allow_curator_logic_ignore_areas(const object &value0_, bool value1_);
+        float curator_coef(const object &value0_, const std::string &value1_);
+        void remove_curator_camera_area(const object &value0_, float value1_);
+        void remove_curator_editing_area(const object &value0_, float value1_);
+        void set_curator_camera_area_ceiling(const object &value0_, float value1_);
+        void set_curator_editing_area_type(const object &value0_, bool value1_);
+        void set_curator_waypoint_cost(const object &value0_, float value1_);
+        void add_curator_addons(const object &curator_object_, const std::vector<std::string> &addons_);
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
+        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
+        void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
 
+        std::vector<std::string> curator_addons(const object &curator_module_);
+        std::vector<object> curator_editable_objects(const object &curator_module_);
+        std::vector<object> curator_registered_objects(const object &curator_);
+        std::vector<object> object_curators(const object &obj_);
     }
 }

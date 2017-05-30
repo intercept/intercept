@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -13,11 +13,14 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 
 using namespace intercept::types;
 
 namespace intercept {
+    using WrapperFunctionBinary = game_value*(*)(game_value*, uintptr_t, uintptr_t, uintptr_t);
+    using WrapperFunctionUnary = game_value*(*)(game_value*, uintptr_t, uintptr_t);
+    using WrapperFunctionNular = game_value*(*)(game_value*, uintptr_t);
 
     namespace client_function_defs {
         /*!
@@ -27,7 +30,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_nular_nolock(const nular_function function_);
+        game_value invoke_raw_nular_nolock(const nular_function function_);
 
         /*!
         @brief Invokes a raw unary SQF function from a unary function pointer.
@@ -37,7 +40,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_unary_nolock(const unary_function function_, const game_value &right_arg_);
+        game_value invoke_raw_unary_nolock(const unary_function function_, const game_value &right_arg_);
 
         /*!
         @brief Invokes a raw binary SQF function from a binary function pointer.
@@ -48,7 +51,7 @@ namespace intercept {
 
         @return rv_game_value The raw returned data from the function.
         */
-        rv_game_value invoke_raw_binary_nolock(const binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
+        game_value invoke_raw_binary_nolock(const binary_function function_, const game_value &left_arg_, const game_value &right_arg_);
 
         /*!
         @brief Returns type definitions for a given type string.
@@ -59,36 +62,6 @@ namespace intercept {
         type address.
         */
         void get_type_structure(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_);
-
-        /*!
-        @brief Allocate a RV internal string.
-
-        Allocates an RV internal string type of the given size.
-
-        @param size_ The size/length of the string.
-
-        @return rv_string A pointer to the allocated string.
-        */
-        rv_string * allocate_string(size_t size_);
-
-        /*!
-        @brief Frees an allocated string.
-
-        This frees an allocated string from allocate_string.
-
-        @param value_ A pointer to the string data to free.
-        */
-        void free_string(rv_string *value_);
-
-        /*!
-        @brief Frees an engine allocated value.
-
-        This frees an allocated game_value that came from inside the RV Engine
-        and as such needs to be released inside the RV Engine.
-
-        @param value_ A pointer to the game_value to free.
-        */
-        void free_value(game_value *value_);
 
         /*!@{
         @brief Returns a function pointer of the type named based on the function name
@@ -106,5 +79,22 @@ namespace intercept {
         void invoker_lock();
 
         void invoker_unlock();
+
+        /*!
+        @brief Get's a pointer to Arma's memory allocator
+
+        This returns a pointer to Arma's internal memory allocator for use by rv_allocator
+
+        @return A pointer to the allocator
+        */
+        const types::__internal::allocatorInfo* get_engine_allocator();
+
+        /*!
+        @brief Registers SQF Function
+        */
+        types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        types::registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
+        types::registered_sqf_function register_sqf_function_nular(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
+        std::pair<types::__internal::GameDataType, sqf_script_type> register_sqf_type(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf);
     }
 }

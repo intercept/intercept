@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "chat.hpp"
 #include "core.hpp"
@@ -13,8 +13,11 @@
 #include "group.hpp"
 #include "multiplayer.hpp"
 #include "config.hpp"
+#include "camera.hpp"
+#include "inventory.hpp"
 
 #include "uncategorized.hpp"
+#include <regex>
 
 #define __XXXSQF_QUOTE(...) #__VA_ARGS__
 #define __XXXSQF_EXPAND_AND_QUOTE(str) __XXXSQF_QUOTE(str)
@@ -32,7 +35,7 @@ class __inline_sqf_helper_launcher {
 protected:
     class __inline_sqf_helper {
     public:
-        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false) {
+        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false), _capture_return(nullptr) {
             _capture_args = game_value();
         }
 
@@ -42,9 +45,7 @@ protected:
             code sqf_fnc = intercept::sqf::compile(_sqf);
             if (_do_return) {
                 *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
-            }
-            else
-            {
+            } else {
                 intercept::sqf::call(sqf_fnc, _capture_args);
             }
         }

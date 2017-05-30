@@ -153,5 +153,41 @@ namespace intercept {
             );
         }
 
+        bool is_kind_of(const object &obj_, sqf_string_const_ref type_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__iskindof__object__string__ret__bool, obj_, type_);
+        }
+
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__string__ret__bool, type1_, type2_);
+        }
+
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_) {
+            game_value params({
+                type2_,
+                target_config_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__array__ret__bool, type1_, params);
+        }
+        sqf_return_string_list config_source_addon_list(const config &config_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
+        }
+        //#TODO take enum of options_?
+        game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_) {
+            auto_array<game_value> options(options_.begin(), options_.end());
+
+            game_value params({
+                mod_class_,
+                std::move(options)
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params);
+        }
+        sqf_return_string type_of(const object &value_) {
+            return __helpers::__string_unary_object(__sqf::unary__typeof__object__ret__string, value_);
+        }
+
+
+
     }
 }

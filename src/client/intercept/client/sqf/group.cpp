@@ -144,5 +144,66 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__deletegroupwhenempty__group__bool__ret__nothing, group_, delete_);
         }
 
+        void add_vehicle(const group &value0_, const object &value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addvehicle__group__object__ret__nothing, value0_, value1_);
+        }
+        void set_group_icons_visible(bool map_, bool hud_) {
+            game_value params({
+                map_,
+                hud_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setgroupiconsvisible__array__ret__nothing, params);
+        }
+
+        std::vector<bool> group_icons_visible() {
+            return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_nular(__sqf::nular__groupiconsvisible__ret__array));
+        }
+        rv_group_icon get_group_icon(const group &group_, int &id_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
+
+            return rv_group_icon({ res[0], vector2(res[1][0], res[1][0]) });
+        }
+        void group_select_unit(const object &player_, const object &unit_, bool select_) {
+            game_value params_right({
+                unit_,
+                select_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
+        }
+
+        void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, { icon_id, icon_path_, offset_ });
+        }
+        void set_formation(const group &group_, sqf_string_const_ref formation_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, group_, formation_);
+        }
+
+        void set_form_dir(const group &group_, float heading_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, group_, heading_);
+        }
+
+        void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, { id_,icon_,offset_ });
+        }
+
+        void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupiconparams__group__array__ret__nothing, group_, { color_, text_,scale_,visible_ });
+        }
+
+        void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupid__object_group__array__ret__nothing, group_, { name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end())) });
+        }
+
+        void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, { name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end())) });
+        }
+        void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setspeedmode__object_group__string__ret__nothing, group_, speed_mode_);
+        }
+
+
+
     }
 }

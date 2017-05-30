@@ -63,6 +63,13 @@ namespace intercept {
         game_value get_mission_config_value(sqf_string_const_ref attribute_);
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_);
 
+        //config
+        bool is_kind_of(const object &obj_, sqf_string_const_ref type_);
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_);
+        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
 
+        sqf_return_string_list config_source_addon_list(const config &config_);
+        game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_);
+        sqf_return_string type_of(const object &value_);
     }
 }

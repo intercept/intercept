@@ -37,11 +37,11 @@ namespace intercept {
         void radio_channel_set_label(float value0_, sqf_string_const_ref value1_);
         float radio_channel_create(const rv_color &color_, sqf_string_const_ref label_, sqf_string_const_ref callsign_, const std::vector<object> &units_);
         float radio_channel_create(const rv_color &color_, sqf_string_const_ref label_, sqf_string_const_ref callsign_, const std::vector<object> &units_, bool quote_);
-        float current_channel();  
+        float current_channel();
         /**
          * \brief channel_enabled
          * \see https://community.bistudio.com/wiki/channelEnabled
-         * \param channel_ 
+         * \param channel_
          * \return [chat enabled, VoN enabled]
          */
         std::pair<bool, bool> channel_enabled(float channel_);
@@ -57,7 +57,10 @@ namespace intercept {
         void vehicle_radio(const object &value0_, sqf_string_const_ref value1_);
         void custom_radio(const object &unit_, int channel_, sqf_string_const_ref message_);
 
-
+        //chat
+        void sideradio(const object &unit_, sqf_string_const_ref radio_name_);
+        void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
+        void enable_channel(int channel_, bool chat_, bool voice_over_net_);
 
     }
 }

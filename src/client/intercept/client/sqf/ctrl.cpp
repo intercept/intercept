@@ -1820,18 +1820,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lbsetvalue__control__array__ret__nothing, control_, args);
         }
 
-        void lb_sort(const control &control_) {
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
-        }
 
-        void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
-            game_value args({
-                control_,
-                sort_order_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, args);
-        }
 
         sqf_return_string lb_text(int control_id_, int index_) {
             game_value args({
@@ -2465,8 +2454,7 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__hintsilent__text_string__ret__nothing, text_);
         }
 
-        void hintc(sqf_string_const_ref title_, sqf_string_list_const_ref content_)
-        {
+        void hintc(sqf_string_const_ref title_, sqf_string_list_const_ref content_) {
             auto_array<game_value> ga_content(content_.begin(), content_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__hintc__string__array__ret__nothing, title_, std::move(ga_content));
@@ -2752,5 +2740,144 @@ namespace intercept {
         display display_parent(const display &display_) {
             return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
         }
+        //#TODO: Find out, which commands this command really takes (not documented)
+        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);
+        }
+
+        void slider_set_speed(const control &slider_, float line_, int page_) {
+            host::functions.invoke_raw_binary(__sqf::binary__slidersetspeed__control__array__ret__nothing, slider_, { line_, page_ });
+        }
+        int lnb_add_row(int idc_, sqf_string_list_const_ref items_) {
+            auto_array<game_value> items(items_.begin(), items_.end());
+
+            game_value params({
+                static_cast<float>(idc_),
+                std::move(items)
+            });
+
+            return static_cast<int>(host::functions.invoke_raw_unary(__sqf::unary__lnbaddrow__array__ret__scalar, params));
+        }
+        std::pair<bool, bool> forced_map() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__forcedmap__ret__array);
+
+            return std::pair<bool, bool>({ res[0], res[1] });
+        }
+        void progress_loading_screen(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__progressloadingscreen__scalar__ret__nothing, value_);
+        }
+        void look_at_pos(const control &map_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lookatpos__control__array__ret__nothing, map_, position_);
+        }
+        rv_ct_list ct_add_header(const control &control_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddheader__control__ret__array, control_);
+
+            return rv_ct_list({ res[0], __helpers::__convert_to_controls_vector(res[1]) });
+        }
+
+        rv_ct_list ct_add_row(const control &control_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddrow__control__ret__array, control_);
+
+            return rv_ct_list({ res[0], __helpers::__convert_to_controls_vector(res[1]) });
+        }
+
+        void ct_clear(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__ctclear__control__ret__nothing, control_);
+        }
+
+        int ct_cur_sel(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctcursel__control__ret__scalar, control_);
+        }
+
+        int ct_header_count(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctheadercount__control__ret__scalar, control_);
+        }
+
+        int ct_row_count(const control &control_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrowcount__control__ret__scalar, control_);
+        }
+        void lb_sort(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
+        }
+
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
+            game_value args({
+                control_,
+                sort_order_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, args);
+        }
+
+        void lb_sort(int control_, sqf_string_const_ref sort_order_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });
+        }
+
+        void lb_sort(int control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__scalar__ret__nothing, control_);
+        }
+
+        void lb_sort_by_value(const control control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__control__ret__nothing, control_);
+        }
+
+        void lb_sort_by_value(int control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__scalar__ret__nothing, control_);
+        }
+        sqf_return_string ct_data(const control &control_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctdata__control__scalar__ret__string, control_, index_);
+        }
+
+        //#TODO: Find out about the return type
+        std::vector<game_value> ct_find_header_rows(const control &control_, int index_) {
+            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
+        }
+
+        int ct_find_row_header(const control &control_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctfindrowheader__control__scalar__ret__scalar, control_, index_);
+        }
+
+        std::vector<control> ct_header_controls(const control &control_, int index_) {
+            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctheadercontrols__control__scalar__ret__array, control_, index_));
+        }
+
+        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctremoveheaders__control__array__ret__nothing, control_, auto_array<game_value>(header_indexes_.begin(), header_indexes_.end()));
+        }
+
+        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctremoverows__control__array__ret__nothing, control_, auto_array<game_value>(row_indexes_.begin(), row_indexes_.end()));
+        }
+
+        std::vector<control> ct_row_controls(const control &control_, int index_) {
+            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctrowcontrols__control__scalar__ret__array, control_, index_));
+        }
+
+        void ct_set_cur_sel(const control &control_, int index_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetcursel__control__scalar__ret__nothing, control_, index_);
+        }
+
+        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetdata__control__array__ret__nothing, control_, { index_, data_ });
+        }
+
+        void ct_set_header_template(const control &control_, const config &config_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetheadertemplate__control__config__ret__nothing, control_, config_);
+        }
+
+        void ct_set_row_template(const control &control_, const config &config_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetrowtemplate__control__config__ret__nothing, control_, config_);
+        }
+
+        void ct_set_value(const control &control_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctsetvalue__control__array__ret__nothing, control_, value_);
+        }
+
+        float ct_value(const control &control_, float index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctvalue__control__scalar__ret__scalar, control_, index_);
+        }
+
+
+
     }
 }

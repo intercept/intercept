@@ -121,9 +121,12 @@ namespace intercept {
         location create_location(sqf_string_const_ref classname_, const object &obj_, float size_x_, float size_y_);
         location location_null();
 
-
-
-
+        void set_rectangular(const location &location_, bool rectangular_);
+        void set_size(const location &location_, float size_x_, float size_y_);
+        void set_name(const location &location_, sqf_string_const_ref name_);
+        void set_speech(const location &location_, sqf_string_const_ref speech_);
+        void set_text(const location &location_, sqf_string_const_ref text_);
+        void set_type(const location &location_, sqf_string_const_ref type_);
 
 
 

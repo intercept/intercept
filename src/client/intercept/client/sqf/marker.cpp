@@ -477,9 +477,25 @@ namespace intercept {
             return __helpers::__retrieve_nular_location(__sqf::nular__locationnull__ret__location);
         }
 
+        void set_rectangular(const location &location_, bool rectangular_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setrectangular__location__bool__ret__nothing, location_, rectangular_);
+        }
+        void set_size(const location &location_, float size_x_, float size_y_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setsize__location__array__ret__nothing, location_, { size_x_, size_y_ });
+        }
+        void set_name(const location &location_, sqf_string_const_ref name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setname__location__string__ret__nothing, location_, name_);
+        }
+        void set_speech(const location &location_, sqf_string_const_ref speech_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setspeech__location__string__ret__nothing, location_, speech_);
+        }
+        void set_text(const location &location_, sqf_string_const_ref text_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settext__location__string__ret__nothing, location_, text_);
+        }
 
-
-
+        void set_type(const location &location_, sqf_string_const_ref type_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settype__location__string__ret__nothing, location_, type_);
+        }
 
 
 
@@ -497,14 +513,14 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(color_);
 
@@ -515,9 +531,9 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (center_.index()) {
-            case 0: params_right.push_back(std::get<0>(center_).get()); break;
-            case 1: params_right.push_back(std::get<1>(center_).get()); break;
-            case 2: params_right.push_back(std::get<2>(center_).get()); break;
+                case 0: params_right.push_back(std::get<0>(center_).get()); break;
+                case 1: params_right.push_back(std::get<1>(center_).get()); break;
+                case 2: params_right.push_back(std::get<2>(center_).get()); break;
             }
 
             params_right.push_back(radius_.x);
@@ -533,14 +549,14 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(color_);
 
@@ -551,14 +567,14 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (from_.index()) {
-            case 0: params_right.push_back(std::get<0>(from_).get()); break;
-            case 1: params_right.push_back(std::get<1>(from_).get()); break;
-            case 2: params_right.push_back(std::get<2>(from_).get()); break;
+                case 0: params_right.push_back(std::get<0>(from_).get()); break;
+                case 1: params_right.push_back(std::get<1>(from_).get()); break;
+                case 2: params_right.push_back(std::get<2>(from_).get()); break;
             }
             switch (to_.index()) {
-            case 0: params_right.push_back(std::get<0>(to_).get()); break;
-            case 1: params_right.push_back(std::get<1>(to_).get()); break;
-            case 2: params_right.push_back(std::get<2>(to_).get()); break;
+                case 0: params_right.push_back(std::get<0>(to_).get()); break;
+                case 1: params_right.push_back(std::get<1>(to_).get()); break;
+                case 2: params_right.push_back(std::get<2>(to_).get()); break;
             }
             params_right.push_back(param_type_);
             params_right.push_back(line_type_);

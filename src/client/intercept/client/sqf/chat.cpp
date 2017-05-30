@@ -35,7 +35,7 @@ namespace intercept {
         }
 
         void custom_chat(const object & obj_, uint32_t channel_id_, sqf_string_const_ref message_) {
-            game_value args({ static_cast<float>( channel_id_), message_ });
+            game_value args({ static_cast<float>(channel_id_), message_ });
             host::functions.invoke_raw_binary(__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
         }
 
@@ -142,6 +142,21 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_binary(__sqf::binary__customradio__object__array__ret__nothing, unit_, params_right);
+        }
+        void sideradio(const object &unit_, sqf_string_const_ref radio_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, unit_, radio_name_);
+        }
+
+        void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, { side_, identity_ }, radio_name_);
+        }
+        void enable_channel(int channel_, bool chat_, bool voice_over_net_) {
+            game_value params_right({
+                chat_,
+                voice_over_net_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__enablechannel__scalar__array__ret__nothing, channel_, params_right);
         }
     }
 }

@@ -62,6 +62,10 @@ namespace intercept {
             }
         };
 
+        struct rv_ct_list {
+            int header_index;
+            std::vector<control> controls;
+        };
         /*ctrl_ */
 
         control ctrl_create(const display& display_, sqf_string_const_ref class_, int idc_);
@@ -160,7 +164,7 @@ namespace intercept {
         control ctrl_parent_controls_group(const control &value_);
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
 
-        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::variant<vector2,vector3> &position_);
+        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::variant<vector2, vector3> &position_);
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
 
 
@@ -327,7 +331,7 @@ namespace intercept {
         //std::string tv_tooltip(const control &value0_, float value1_);
         std::vector<int> tv_cursel(int idc_);
         std::vector<int> tv_cursel(const control& ctrl_);
-        
+
         void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
@@ -563,5 +567,48 @@ namespace intercept {
 
         game_value get_variable(const control & ctrl_, sqf_string_const_ref var_name_, game_value default_value_);
         display display_parent(const display &display_);
+
+
+
+
+
+
+
+        //ctrl
+        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
+
+        void slider_set_speed(const control &slider_, float line_, int page_);
+        int lnb_add_row(int idc_, sqf_string_list_const_ref items_);
+        std::pair<bool, bool> forced_map();
+        void progress_loading_screen(float value_);
+        void look_at_pos(const control &map_, const vector3 &position_);
+        rv_ct_list ct_add_header(const control &control_);
+        rv_ct_list ct_add_row(const control &control_);
+        void ct_clear(const control &control_);
+        int ct_cur_sel(const control &control_);
+        int ct_header_count(const control &control_);
+        int ct_row_count(const control &control_);
+        void lb_sort(const control &control_);
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_, sqf_string_const_ref sort_order_);
+        void lb_sort(int control_);
+        void lb_sort_by_value(const control control_);
+        void lb_sort_by_value(int control_);
+
+        sqf_return_string ct_data(const control &control_, int index_);
+        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
+        int ct_find_row_header(const control &control_, int index_);
+        std::vector<control> ct_header_controls(const control &control_, int index_);
+        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
+        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_);
+        std::vector<control> ct_row_controls(const control &control_, int index_);
+        void ct_set_cur_sel(const control &control_, int index_);
+        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_);
+        void ct_set_header_template(const control &control_, const config &config_);
+        void ct_set_row_template(const control &control_, const config &config_);
+        void ct_set_value(const control &control_, float value_);
+        float ct_value(const control &control_, float index_);
+
+
     }
 }

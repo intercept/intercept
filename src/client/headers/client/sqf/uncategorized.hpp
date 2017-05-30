@@ -383,31 +383,7 @@ namespace intercept {
             vector2 target_position;
             float target_age;
         };
-        struct rv_weapon_accessories {
-            std::string silencer;
-            std::string flashlight_laserpointer;
-            std::string optics;
-            std::string bipod;
-        };
-        struct rv_group_icon {
-            std::string icon;
-            vector2 offset;
-        };
 
-        struct rv_ct_list
-        {
-            int header_index;
-            std::vector<control> controls;
-        };
-
-        struct rv_weapon_state
-        {
-            std::string weapon;
-            std::string muzzle;
-            std::string firemode;
-            std::string magazine;
-            int ammo_count;
-        };
 
         struct rv_cursor_object_params
         {
@@ -576,31 +552,9 @@ namespace intercept {
         void enable_weapon_disassembly(bool enable_);
         object create_site(sqf_string_const_ref type_, const vector3 &pos_);
 
-        
-        //chat
-        void sideradio(const object &unit_, sqf_string_const_ref radio_name_);
-        void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
-        void enable_channel(int channel_, bool chat_, bool voice_over_net_);
-        
 
         //tasks / briefing
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
-
-
-        //group
-        void add_vehicle(const group &value0_, const object &value1_);
-        void set_group_icons_visible(bool map_, bool hud_);
-        std::vector<bool> group_icons_visible();
-        rv_group_icon get_group_icon(const group &group_, int &id_);
-        void group_select_unit(const object &player_, const object &unit_, bool select_);
-        void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
-        void set_formation(const group &group_, sqf_string_const_ref formation_);
-        void set_form_dir(const group &group_, float heading_);
-        void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_);
-        void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_);
-        void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
-        void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
-
 
         //vehicles - new cat
         int airplane_throttle(const object &airplane_);
@@ -1107,40 +1061,6 @@ namespace intercept {
         void buldozer(bool value_);
         bool buldozer(sqf_string_const_ref value_);
 
-        //ctrl
-        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
-
-        void slider_set_speed(const control &slider_, float line_, int page_);
-        int lnb_add_row(int idc_, sqf_string_list_const_ref items_);
-        std::pair<bool, bool> forced_map();
-        void progress_loading_screen(float value_);
-        void look_at_pos(const control &map_, const vector3 &position_);
-        rv_ct_list ct_add_header(const control &control_);
-        rv_ct_list ct_add_row(const control &control_);
-        void ct_clear(const control &control_);
-        int ct_cur_sel(const control &control_);
-        int ct_header_count(const control &control_);
-        int ct_row_count(const control &control_);
-        void lb_sort(const control &control_);
-        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
-        void lb_sort(int control_, sqf_string_const_ref sort_order_);
-        void lb_sort(int control_);
-        void lb_sort_by_value(const control control_);
-        void lb_sort_by_value(int control_);
-
-        sqf_return_string ct_data(const control &control_, int index_);
-        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
-        int ct_find_row_header(const control &control_, int index_);
-        std::vector<control> ct_header_controls(const control &control_, int index_);
-        void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
-        void ct_remove_rows(const control &control_, const std::vector<int> &row_indexes_);
-        std::vector<control> ct_row_controls(const control &control_, int index_);
-        void ct_set_cur_sel(const control &control_, int index_);
-        void ct_set_data(const control &control_, int index_, sqf_string_const_ref data_);
-        void ct_set_header_template(const control &control_, const config &config_);
-        void ct_set_row_template(const control &control_, const config &config_);
-        void ct_set_value(const control &control_, float value_);
-        float ct_value(const control &control_, float index_);
 
         bool visible_score_table();
         void show_score_table(int force_);
@@ -1154,18 +1074,6 @@ namespace intercept {
         sqf_return_string_list get_mission_layers();
         void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
         sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
-
-
-
-        //config
-        bool is_kind_of(const object &obj_, sqf_string_const_ref type_);
-        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_);
-        bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
-
-        sqf_return_string_list config_source_addon_list(const config &config_);
-        game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_);
-        sqf_return_string type_of(const object &value_);
-
 
 
         //core
@@ -1245,17 +1153,6 @@ namespace intercept {
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
 
-        //marker
-        //location
-        void set_rectangular(const location &location_, bool rectangular_);
-        void set_size(const location &location_, float size_x_, float size_y_);
-        void set_name(const location &location_, sqf_string_const_ref name_);
-        void set_speech(const location &location_, sqf_string_const_ref speech_);
-        void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
-        void set_text(const location &location_, sqf_string_const_ref text_);
-        void set_type(const location &location_, sqf_string_const_ref type_);
-
-
 
         //world
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
@@ -1309,52 +1206,10 @@ namespace intercept {
         std::vector<object> vehicles();
         void set_local_wind_params(float strength_, float diameter_);
 
-        //inventory
-        rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);
-        rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
-        sqf_return_string_list magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, const std::vector<int> &turret_path_);
-        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, const std::vector<int> &turret_path_);
-        void set_vehicle_ammo(const object &value0_, float value1_);
-        void set_vehicle_ammo_def(const object &value0_, float value1_);
 
-        void set_fuel_cargo(const object &value0_, float value1_);
-        void set_repair_cargo(const object &value0_, float value1_);
-        void pick_weapon_pool(const object &value_);
-        void put_weapon_pool(const object &value_);
-        float query_items_pool(sqf_string_const_ref value_);
-        float query_magazine_pool(sqf_string_const_ref value_);
-        float query_weapon_pool(sqf_string_const_ref value_);
-        float ammo(const object &value0_, sqf_string_const_ref value1_);
-        void force_add_uniform(const object &value0_, sqf_string_const_ref value1_);
-        void set_ammo_cargo(const object &value0_, float value1_);
-        void add_weapon_pool(sqf_string_const_ref weapon_name_, int count_);
-        sqf_return_string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string_list get_artillery_ammo(const std::vector<object> &units_);
 
-        void clear_item_pool();
-        void clear_magazine_pool();
-        void clear_weapon_pool();
 
-        sqf_return_string binocular(const object & unit_);
-
-        float gear_idcammo_count(float value_);
         float get_aiming_coef(const object &value_);
-        float get_ammo_cargo(const object &value_);
-
-        float get_fuel_cargo(const object &value_);
-
-        sqf_return_string goggles(const object &value_);
-        sqf_return_string headgear(const object &value_);
-        sqf_return_string hmd(const object &value_);
-
-        rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_);
-
-
-
         //position
         vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
         vector3 model_to_world_world(const object &object_, const vector3 model_pos_);

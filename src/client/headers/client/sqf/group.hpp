@@ -20,7 +20,10 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         class waypoint;
-
+        struct rv_group_icon {
+            std::string icon;
+            vector2 offset;
+        };
         sqf_return_string combat_mode(const group &loc_);
         float add_group_icon(const group& group_, sqf_string_const_ref icon_, std::optional<vector2> offset_ = std::optional<vector2>());
 
@@ -77,6 +80,28 @@ namespace intercept {
 
         bool is_group_deleted_when_empty(const group &group_);
         void delete_group_when_empty(const group &group_, bool delete_);
+
+
+
+        //group
+        void add_vehicle(const group &value0_, const object &value1_);
+        void set_group_icons_visible(bool map_, bool hud_);
+        std::vector<bool> group_icons_visible();
+        rv_group_icon get_group_icon(const group &group_, int &id_);
+        void group_select_unit(const object &player_, const object &unit_, bool select_);
+        void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
+        void set_formation(const group &group_, sqf_string_const_ref formation_);
+        void set_form_dir(const group &group_, float heading_);
+        void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_);
+        void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_);
+        void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
+        void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
+
+
+        void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
+
+
+
 
     }
 }

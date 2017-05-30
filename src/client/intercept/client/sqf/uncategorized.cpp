@@ -3843,25 +3843,7 @@ namespace intercept {
         }
 
         //#TODO: Replace &settings_ with the right pp_effect_parameters
-        void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_) {
-            switch (effect_.index())
-            {
-            case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__string__array__ret__nothing, std::get<0>(effect_).get(), settings_);
-            case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__scalar__array__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), settings_);
-            }
-        }
-
-        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_) {
-            switch (effect_.index())
-            {
-            case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__scalar__scalar__ret__nothing, std::move(auto_array<game_value>({ std::get<0>(effect_).get().begin(),std::get<0>(effect_).get().end() })), duration_);
-            case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__array__scalar__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), duration_);
-            }
-        }
-
-        void pp_effect_enable(const std::vector<int> &effets_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_);
-        }
+        
 
         bool preload_object(float distance_, const object &object_) {
             return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, object_);

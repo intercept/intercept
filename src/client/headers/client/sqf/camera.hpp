@@ -127,6 +127,12 @@ namespace intercept {
 
         void pp_effect_destroy(std::vector<float> effect_handles_);
 
+        void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
+        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
+        void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
+
+
+
         struct rv_camera_target {
             bool is_tracking;
             vector3 target_position;

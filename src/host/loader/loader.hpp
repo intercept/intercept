@@ -287,7 +287,7 @@ namespace intercept {
         public:
             r_string _name2;//0x34 this is (tolower name)
             unary_operator * _operator;//0x38
-            r_string something;//0x3c RString to something
+            r_string _rightType;//0x3c RString to something
             r_string _description;//0x38
             r_string _example;
             r_string _example2;

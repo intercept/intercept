@@ -53,7 +53,7 @@ namespace intercept {
         /*!
         @brief Holds the addresses of exported functions from client plugins.
         */
-        struct functions {
+        struct functions_list {
             /*!@{
             @brief Addresses of exported functions.
             */
@@ -121,7 +121,7 @@ namespace intercept {
 
 #define EH_STRUCT_DEF(x) x##_func x
 
-        struct eventhandlers {
+        struct eventhandlers_list {
             EH_STRUCT_DEF(anim_changed);
             EH_STRUCT_DEF(anim_done);
             EH_STRUCT_DEF(anim_state_changed);
@@ -189,13 +189,13 @@ namespace intercept {
             @brief A intercept::module::functions struct containing pointers to
             plugin exported functions.
             */
-            functions functions;
+            functions_list functions;
 
             /*!
             @brief A intercept::module::eventhandlers struct containing pointers to
             plugin exported event handler functions.
             */
-            eventhandlers eventhandlers;
+            eventhandlers_list eventhandlers;
 
             /*!
             @brief A list of exported functions called by the signal ability.

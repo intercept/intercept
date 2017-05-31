@@ -315,7 +315,7 @@ namespace intercept {
                 if (!data())  return (!other || !*other); //empty?
                 //#TODO compare performance of new equality thingy
                 //cross platform way
-            #ifdef __GNUCC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -330,7 +330,7 @@ namespace intercept {
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
-            #ifdef __GNUCC__ 
+            #ifdef __GNUC__ 
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -340,7 +340,7 @@ namespace intercept {
 
             //!= is case insensitive just like scripting
             bool operator != (const char *other) const {
-            #ifdef __GNUCC__
+            #ifdef __GNUC__
                 return !std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -354,7 +354,7 @@ namespace intercept {
             }
 
             bool compare_case_sensitive(const char *other) const {
-            #ifdef __GNUCC__
+            #ifdef __GNUC__
                 return !std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r; });
             #else
@@ -388,7 +388,7 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
-            #if __GNUCC__
+            #if __GNUC__
                 std::copy_n(str, len, string->data());
             #else
                 strncpy_s(string->data(), string->size(), str, len);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
@@ -615,7 +615,7 @@ namespace intercept {
                 //#TODO I disabled this. Check if this causes any harm
                 //memset(newData, 0, size * sizeof(Type));
                 if (base::_data) {
-                #ifdef __GNUCC__
+                #ifdef __GNUC__
                     memmove(newData, base::_data, base::_n * sizeof(Type));
                 #else
                     memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
@@ -817,7 +817,7 @@ namespace intercept {
             }
 
             static bool compare_keys(const char * k1, const char * k2) {
-            #ifdef __GNUCC__
+            #ifdef __GNUC__
                 return std::equal(k1, k1 + strlen(k1),
                     k2, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -1488,7 +1488,7 @@ namespace intercept {
                 };
                 v2* v = (v2*) vbase;
                 auto& typex = typeid(*v);
-            #ifdef __GNUCC__
+            #ifdef __GNUC__
                 auto test = typex.__name();
             #else
                 auto test = typex.raw_name();

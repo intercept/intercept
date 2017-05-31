@@ -30,7 +30,7 @@ namespace intercept {
             _mod_folders.push_back(path);
         }
         _mod_folders.unique();
-        std::string arg_line = GetCommandLineA();
+        std::string arg_line = _searcher.getCommandLine();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {
             do_reload = true;

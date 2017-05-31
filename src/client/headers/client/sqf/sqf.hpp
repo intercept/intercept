@@ -22,6 +22,8 @@
 #include "tasks.hpp"
 #include "debug.hpp"
 #include "rotorlib.hpp"
+#include "units.hpp"
+#include "vehicles.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

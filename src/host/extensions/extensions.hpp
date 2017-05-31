@@ -205,7 +205,7 @@ namespace intercept {
             /*!
             @brief A handle to the plugin dynamic library.
             */
-            DLL_HANDLE     handle;
+            DLL_HANDLE handle;
         };
     }
 

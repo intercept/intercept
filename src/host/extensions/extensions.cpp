@@ -109,7 +109,7 @@ namespace intercept {
 
 
 
-
+    #ifndef __linux__ //Lazyness
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file.";
             char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
@@ -133,30 +133,43 @@ namespace intercept {
             }
             full_path = temp_filename;
         }
-
+    #endif
 
         //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
-        HMODULE dllHandle = LoadLibrary(full_path.c_str());
+    #ifdef __linux__
+        auto dllHandle = dlopen(full_path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+        if (!dllHandle) {
+            LOG(ERROR) << "LoadLibrary() failed, e=" << dlerror() << " [" << full_path << "]";
+            return false;
+        }
+    #else
+        auto dllHandle = LoadLibrary(full_path.c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
             return false;
         }
-
+    #endif
 
         auto new_module = module::entry(full_path, dllHandle);
-        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlsym.html
-        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GetProcAddress(dllHandle, "api_version"));
-        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GetProcAddress(dllHandle, "assign_functions"));
-        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GetProcAddress(dllHandle, "handle_unload"));
-        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GetProcAddress(dllHandle, "mission_end"));
-        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GetProcAddress(dllHandle, "on_frame"));
-        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
-        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GetProcAddress(dllHandle, "post_init"));
-        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GetProcAddress(dllHandle, "pre_init"));
-        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GetProcAddress(dllHandle, "pre_start"));
-        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GetProcAddress(dllHandle, "mission_stopped"));
 
-    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
+    #ifdef __linux__
+    #define GET_PROC_ADDR dlsym
+    #else
+    #define GET_PROC_ADDR GetProcAddress
+    #endif
+
+        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
+        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
+        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
+        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GET_PROC_ADDR(dllHandle, "mission_end"));
+        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GET_PROC_ADDR(dllHandle, "on_frame"));
+        //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
+        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GET_PROC_ADDR(dllHandle, "post_init"));
+        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GET_PROC_ADDR(dllHandle, "pre_init"));
+        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
+        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
+
+    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GET_PROC_ADDR(dllHandle, #x)
 
         EH_PROC_DEF(anim_changed);
         EH_PROC_DEF(anim_done);
@@ -219,7 +232,7 @@ namespace intercept {
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
         return false;
-    }
+}
 
     bool extensions::unload(const arguments & args_, std::string &) {
         return do_unload(args_.as_string(0));
@@ -237,8 +250,13 @@ namespace intercept {
             module->second.functions.handle_unload();
         }
         //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlclose.html
+    #ifdef __linux
+        if (dlclose(module->second.handle)) {//returms 0 on success
+            LOG(INFO) << "dlclose() failed during unload, e=" << dlerror();
+        #else
         if (!FreeLibrary(module->second.handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
+        #endif
             return false;
         }
 
@@ -247,7 +265,7 @@ namespace intercept {
         LOG(INFO) << "Unload complete [" << path_ << "]";
 
         return true;
-    }
+        }
 
     bool extensions::list(const arguments &, std::string & result) {
 
@@ -268,4 +286,4 @@ namespace intercept {
         return _modules;
     }
 
-}
+    }

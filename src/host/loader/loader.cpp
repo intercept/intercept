@@ -161,6 +161,7 @@ namespace intercept {
         link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
         uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
         uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
+        //#TODO parse cat /proc/self/maps ?
     #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);

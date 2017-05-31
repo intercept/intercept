@@ -1063,7 +1063,7 @@ namespace intercept {
         class game_value;
         class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
-            friend class invoker;
+            friend class intercept::invoker;
         public:
             virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
             virtual ~game_data() {}
@@ -1088,6 +1088,9 @@ namespace intercept {
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
+        #ifdef __linux__
+        public:
+        #endif
             uintptr_t get_vtable() const {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
@@ -1150,7 +1153,7 @@ namespace intercept {
 
         class game_value {
             uintptr_t __vptr;
-            friend class invoker;
+            friend class intercept::invoker;
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
@@ -1224,7 +1227,9 @@ namespace intercept {
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
+        #ifndef __linux__
         protected:
+        #endif
             uintptr_t get_vtable() const;
             void set_vtable(uintptr_t vt);
 

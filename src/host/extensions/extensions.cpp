@@ -22,14 +22,15 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
-        for (auto file : _searcher.active_pbo_list()) {
-            size_t last_index = file.find_last_of("\\/");
-            std::string path = file.substr(0, last_index);
-            last_index = path.find_last_of("\\/");
-            path = path.substr(0, last_index);
-            _mod_folders.push_back(path);
-        }
-        _mod_folders.unique();
+        //#BUG //#FIXME reenable this by implementing searcher like wanted
+        //for (auto file : _searcher.active_pbo_list()) {
+        //    size_t last_index = file.find_last_of("\\/");
+        //    std::string path = file.substr(0, last_index);
+        //    last_index = path.find_last_of("\\/");
+        //    path = path.substr(0, last_index);
+        //    _mod_folders.push_back(path);
+        //}
+        //_mod_folders.unique();
         std::string arg_line = _searcher.getCommandLine();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {

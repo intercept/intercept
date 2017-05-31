@@ -2,6 +2,10 @@
 #include "controller.hpp"
 #include "extensions.hpp"
 #include "shared/client_types.hpp"
+#ifdef __linux__
+#include <dlfcn.h>
+#include <link.h>
+#endif
 
 namespace intercept {
     //game_data_string_pool<> invoker::string_pool;

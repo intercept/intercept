@@ -266,7 +266,7 @@ namespace intercept {
         */
         std::unordered_map<std::string, module::entry> _modules;
 
-        pbo::search _searcher;
+        search::plugin_searcher _searcher;
 
         std::list<std::string> _mod_folders;
     };

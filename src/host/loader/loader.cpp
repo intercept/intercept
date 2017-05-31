@@ -4,6 +4,7 @@
 #include <future>
 #ifdef __linux__
 #include <dlfcn.h>
+#include <link.h>
 #else
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
@@ -157,7 +158,7 @@ namespace intercept {
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
     #ifdef __linux__
-        struct link_map *lm = (struct link_map*) dlopen(0, RTLD_NOW);
+        link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
         uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
         uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
     #else
@@ -168,7 +169,7 @@ namespace intercept {
         uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
     #endif
 
-        auto findInMemory = [baseAddress, moduleSize](char* pattern, size_t patternLength) ->uintptr_t {
+        auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
             uintptr_t base = baseAddress;
             uintptr_t size = moduleSize;
             for (uintptr_t i = 0; i < size - patternLength; i++) {

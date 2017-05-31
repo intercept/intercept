@@ -747,7 +747,11 @@ namespace intercept {
                 if (index > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
-                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            #ifdef __GNUC__
+                memmove((*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            #else
+                memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
+            #endif
                 --base::_n;
             }
             //This is sooo not threadsafe!

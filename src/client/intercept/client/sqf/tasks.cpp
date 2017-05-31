@@ -357,7 +357,8 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
         }
 
-
-
+        void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_) {
+            host::functions.invoke_raw_binary(__sqf::binary__objstatus__string__string__ret__nothing, objective_number_, status_);
+        }
     }
 }

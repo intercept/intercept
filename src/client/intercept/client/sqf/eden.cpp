@@ -468,6 +468,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, std::move(objects), classname_);
         }
 
+        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
+        }
 
+        sqf_return_string_list get_mission_layers() { //#TODO: Find out if this really returns sqf_return_string_list
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__getmissionlayers__ret__array));
+        }
+
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_) {
+            host::functions.invoke_raw_binary(__sqf::binary__set3denlogictype__array__string__ret__nothing, auto_array<game_value>(objects_.begin(), objects_.end()), class_name_);
+        }
     }
 }

@@ -22,291 +22,8 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
 
-        struct rv_crew_member {
-            object unit;
-            std::string role;
-            float cargo_index;
-            std::vector<int> turret_path;
-            bool person_turret;
-
-            rv_crew_member(const object &unit_, sqf_string_const_ref role_, float cargo_index_, const std::vector<int> &turret_path_, bool person_turret_) {
-                unit = unit_;
-                role = role_;
-                cargo_index = cargo_index_;
-                turret_path = turret_path_;
-                person_turret = person_turret_;
-            }
-        };
         
-        
-        
-
-        struct rv_particle_shape {
-            std::string file;
-            int ntieth = 16; //this param is a const internally
-            int row;
-            int column;
-            int loop;
-
-            operator game_value() {
-                return game_value(std::vector<game_value>({
-                    file,
-                    16.0f,
-                    static_cast<float>(row),
-                    static_cast<float>(column),
-                    static_cast<float>(loop)
-                }));
-            }
-
-            operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    file,
-                    16.0f,
-                    static_cast<float>(row),
-                    static_cast<float>(column),
-                    static_cast<float>(loop)
-                }));
-            }
-        };
-        struct rv_particle_array {
-            rv_particle_shape shape;
-            std::string animation_name;
-            std::string type;
-            float timer_period;
-            float lifetime;
-            vector3 position;
-            vector3 move_velocity;
-            float rotation_velocity;
-            float weight;
-            float volume;
-            float rubbing;
-            float size;
-            std::vector<rv_color> color;
-            float animation_phase;
-            float rand_dir_period;
-            float rand_dir_intensity;
-            std::string on_timer;
-            std::string before_destroy;
-            object follow;
-            float angle;
-            bool on_surface;
-            float bounce_on_surface;
-            std::vector<rv_color> emissive_color;
-
-            operator game_value() {
-                std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
-                    color_gv.push_back(c);
-                }
-                for (rv_color ec : emissive_color) {
-                    emissive_color_gv.push_back(ec);
-                }
-                return game_value(std::vector<game_value>({
-                    shape,
-                    animation_name,
-                    type,
-                    timer_period,
-                    lifetime,
-                    position,
-                    move_velocity,
-                    rotation_velocity,
-                    weight,
-                    volume,
-                    rubbing,
-                    size,
-                    color_gv,
-                    animation_phase,
-                    rand_dir_period,
-                    rand_dir_intensity,
-                    on_timer,
-                    before_destroy,
-                    follow,
-                    angle,
-                    on_surface,
-                    bounce_on_surface,
-                    emissive_color_gv
-                }));
-            }
-
-            operator game_value() const {
-                std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
-                    color_gv.push_back(c);
-                }
-                for (rv_color ec : emissive_color) {
-                    emissive_color_gv.push_back(ec);
-                }
-                return game_value(std::vector<game_value>({
-                    shape,
-                    animation_name,
-                    type,
-                    timer_period,
-                    lifetime,
-                    position,
-                    move_velocity,
-                    rotation_velocity,
-                    weight,
-                    volume,
-                    rubbing,
-                    size,
-                    color_gv,
-                    animation_phase,
-                    rand_dir_period,
-                    rand_dir_intensity,
-                    on_timer,
-                    before_destroy,
-                    follow,
-                    angle,
-                    on_surface,
-                    bounce_on_surface,
-                    emissive_color_gv
-                }));
-            }
-        };
-        struct rv_particle_random {
-            float lifetime;
-            vector3 position;
-            vector3 move_velocity;
-            float rotation_velocity;
-            float size;
-            rv_color color;
-            float random_direction_period;
-            float random_direction_intensity;
-            float angle;
-            float bounce_on_surface;
-
-            operator game_value() {
-                return game_value(std::vector<game_value>({
-                    lifetime,
-                    position,
-                    move_velocity,
-                    rotation_velocity,
-                    size,
-                    color,
-                    random_direction_period,
-                    random_direction_intensity,
-                    angle,
-                    bounce_on_surface
-                }));
-            }
-
-            operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    lifetime,
-                    position,
-                    move_velocity,
-                    rotation_velocity,
-                    size,
-                    color,
-                    random_direction_period,
-                    random_direction_intensity,
-                    angle,
-                    bounce_on_surface
-                }));
-            }
-        };
-
-
-
-
-
-
-        
-        struct rv_vehicle_role {
-            std::string role;
-            std::vector<int> turret_path;
-        };
-
-        struct rv_hit_points_damage {
-            sqf_return_string_list hit_points;
-            sqf_return_string_list hit_selections;
-            std::vector<float> damages;
-        };
-
-
-
-
-
-        
-
-        struct rv_best_place {
-            vector2 pos;
-            float result;
-        };
-        struct rv_uav_control {
-            object unit;
-            std::string position;
-
-            rv_uav_control(const game_value &ret_game_value_) :
-                unit(ret_game_value_[0]),
-                position(ret_game_value_[1]) {}
-        };
-
-        struct rv_model_info {
-            std::string name;
-            std::string path;
-            bool skeleton;
-
-            rv_model_info(const game_value &ret_game_value_) :
-                name(ret_game_value_[0]),
-                path(ret_game_value_[1]),
-                skeleton(ret_game_value_[2]) {}
-        };
-
-        struct rv_shot_parents {
-            object vehicle;
-            object instigator;
-        };
-        struct rv_action_params {
-            std::string title;
-            std::string script;
-            game_value arguments;
-            float priority;
-            bool show_window;
-            bool hide_on_use;
-            std::string shortcut;
-            std::string condition;
-            float radius;
-            bool unconscious;
-            std::string text_window_background;
-            std::string text_window_foreground;
-            std::string selection;
-        };
-        struct rv_target {
-            vector3 position;
-            std::string type;
-            side side;
-            float subjective_cost;
-            object object_;
-            float position_accuracy;
-        };
-        //#TODO: Verify the correctness of this struct
-        struct rv_target_knowledge {
-            bool known_by_group;
-            bool known_by_unit;
-            float last_seen_by_unit;
-            float last_endangered_by_unit;
-            side target_side;
-            bool position_error;
-            vector3 target_position;
-        };
-        struct rv_query_target {
-            float accuracy;
-            object target;
-            side target_side;
-            std::string target_type;
-            vector2 target_position;
-            float target_age;
-        };
-
-
-        struct rv_cursor_object_params
-        {
-            object cursor_object;
-            std::string cursor_object_named_sel;
-            float distance;
-        };
-
+        // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
 
 
         //these 3 into one category like post process?
@@ -327,89 +44,9 @@ namespace intercept {
        
         
 
-        // TODO void edit(sqf_string_const_ref value_); // Are we sure this is a valid sqf script command?
         
-        //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
-        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
-
+        
                 
-        //misc
-
-        //#TODO some diags are in misc -> move them to core
-
-        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_);
-        void activate_addons(sqf_string_list_const_ref addons_);
-        void enable_saving(bool enable_);
-        void enable_saving(bool enable_, bool autosave_);
-        std::vector<float> get_dlcs(float filter_);
-        float armory_points();
-        bool cadet_mode();
-        bool cheats_enabled();
-        float difficulty();
-        float distribution_region();
-        void finish_mission_init();
-        void force_end();
-        bool free_look();
-        float get_total_dlc_usage_time();
-        bool is_autotest();
-        bool is_filepatching_enabled();
-        bool is_instructor_figure_enabled();
-        bool is_steam_mission();
-        bool is_stream_friendly_ui_enabled();
-
-        void load_game();
-        void log_entities();
-        bool mark_as_finished_on_steam();
-        float mission_difficulty();
-        void run_init_script();
-        bool reversed_mouse_y();
-        bool team_switch_enabled();
-        void team_switch();
-        float system_of_units();
-        void select_no_player();
-        bool saving_enabled();
-        bool difficulty_enabled(sqf_string_const_ref value_);
-        void activate_key(sqf_string_const_ref keyname_);
-        void de_activate_key(sqf_string_const_ref key_);
-        bool is_key_active(sqf_string_const_ref value_);
-        void delete_collection(const object & collection_); //deprecated
-        bool delete_identity(sqf_string_const_ref identity_);
-        void delete_site(const object &value_);
-        bool delete_status(sqf_string_const_ref value_);
-        void enable_sentences(bool value_);
-        void enable_stress_damage(bool value_);
-        void enable_team_switch(bool value_);
-        float get_dlcusage_time(float value_);
-        void dissolve_team(sqf_string_const_ref value_);
-        bool is_dlcavailable(float value_);
-        void set_armory_points(float value_);
-        void set_system_of_units(float value_);
-        bool unlock_achievement(sqf_string_const_ref value_);
-        void add_live_stats(const object &value0_, float value1_); //Xbox stuff
-        bool load_identity(const object &value0_, sqf_string_const_ref value1_);
-        bool load_status(const object &value0_, sqf_string_const_ref value1_);
-        bool save_status(const object &value0_, sqf_string_const_ref value1_);
-        void save_game();
-        void save_joysticks();
-        sqf_return_string role_description(const object &value_);
-        float score_side(const side &value_);
-        bool set_stat_value(sqf_string_const_ref name_, float value_);
-        void host_mission(const config &config_, const display &display_);
-        void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_);
-        void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_, bool skip_briefing_);
-        void play_mission(sqf_string_const_ref campaign_, const config &mission_);
-        void play_mission(sqf_string_const_ref campaign_, const config &mission_, bool skip_briefing_);
-        void play_scripted_mission(sqf_string_const_ref world_, const code &command_);
-        void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_);
-        void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_);
-        float difficulty_option(sqf_string_const_ref optionname_);
-        void enable_weapon_disassembly(bool enable_);
-        object create_site(sqf_string_const_ref type_, const vector3 &pos_);
-
-
-        //tasks / briefing
-        void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
-
         //vehicles - new cat
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
@@ -834,31 +471,9 @@ namespace intercept {
         void remove_owned_mine(const object &unit_, const object &mine_);
         void reveal(std::variant<object, group> &unit_, const object &target_);
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
-
-
-        
-
-
-        //buldozer
-        bool buldozer_is_enabled_road_diag();
-        void buldozer_reload_oper_map();
-        void buldozer_enable_road_diag(bool value_);
-        bool buldozer_load_new_roads(sqf_string_const_ref value_);
-
-
-        bool visible_score_table();
-        void show_score_table(int force_);
-        bool is_pip_enabled();
-        void set_mouse_position(float x_, float y_);
-
+        float get_aiming_coef(const object &value_);
 
         
-        //eden
-        sqf_return_string_list get_mission_layers();
-        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
-        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
-
-
         //core
         //onEvent
         void on_command_mode_changed(const code &command_);
@@ -935,67 +550,7 @@ namespace intercept {
         int count_type(sqf_string_const_ref type_, const std::vector<object> &objects_);
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
-
-
-        //world
-        float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
-        void set_waves(float time_, float waves_value_);
-        void set_fog(float time_, float fog_);
-        void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_);
-        int get_terrain_grid();
-        float view_distance();
-        void enable_caustics(bool value_);
-        void set_lightnings(float time_, float lightnings_value_);
-        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
-        std::vector<rv_target> near_targets(const object &unit_, float radius_);
-        object nearest_object(const vector3 &pos_);
-        object nearest_object(const vector3 &pos_, sqf_string_const_ref type_);
-        object nearest_object(const object &obj_, sqf_string_const_ref type_);
-        object nearest_object(const vector3 &pos_, float id_);
-        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> units_below_height(const group &group_, float height_);
-        std::vector<object> units_below_height(const group &group_, float height_);
-        std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
-        bool surface_is_water(const vector3& pos_);
-        vector3 surface_normal(const vector3& pos_);
-        sqf_return_string surface_type(const vector3& pos_);
-        std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
-        std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
-        bool is_on_road(const object &object_);
-        bool is_on_road(const vector3 &position_);
-        float get_friend(const side &side1_, const side &side2_);
-        void set_friend(const side &side1_, const side &side2_, float value_);
-        std::vector<object> near_objects(const vector3 &pos_, float radius_);
-        std::vector<object> near_objects(const object &object_, float radius_);
-        std::vector<object> near_objects(const vector3 &pos_, sqf_string_const_ref type_, float radius_);
-        std::vector<object> near_objects(const object &object_, sqf_string_const_ref type_, float radius_);
-        object nearest_building(const object &value_);
-        object nearest_building(const vector3 &value_);
-
-        std::vector<object> entities(sqf_string_const_ref type_);
-        std::vector<object> units(const object& unit_);
-        bool preload_object(float distance_, const object &object_);
-        bool preload_object(float distance_, sqf_string_const_ref class_name_);
-        object road_at(const object &object_);
-        object road_at(const vector3 &position_);
-        bool get_remote_sensors_disabled();
-        void disable_remote_sensors(bool value_);
-        bool underwater(const object &value_);
-        std::vector<object> vehicles();
-        void set_local_wind_params(float strength_, float diameter_);
-
-
-
-
-        float get_aiming_coef(const object &value_);
-
-
-
+        
 
         /* potential namespace: actions */
         sqf_return_string_list action_keys(sqf_string_const_ref user_action_);
@@ -1026,11 +581,7 @@ namespace intercept {
         void set_user_action_text(const object &object_, int action_index_, std::variant<const std::string, const rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_);
     
 
-        //waypoints
-        void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
         
-
-
         //potential new cat: side
         std::vector<object> detected_mines(const side &side_);
         float count_side(const side &side_, std::vector<object> &objects_);
@@ -1041,6 +592,7 @@ namespace intercept {
         void add_score_side(const side &value0_, float value1_);
         void airport_side(int id_);
         void airport_side(const object & target_);
+        float score_side(const side &value_);
 
 
         //2d editor commands (probably unneeded)
@@ -1048,39 +600,33 @@ namespace intercept {
         void delete_editor_object(const control &map_, sqf_string_const_ref object_);
         sqf_return_string add_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &values_, sqf_string_const_ref subtype_class_);
         game_value shown_editor_object(const control &map_, const game_value &params_right_);
-
-
         void editor_set_event_handler(const control &map_, sqf_string_const_ref event_type_, sqf_string_const_ref event_function_);
         game_value eval_object_argument(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref argument_);
         game_value exec_editor_script(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref script_);
         sqf_return_string get_object_argument(const control &map_, const object &object_, sqf_string_const_ref argument_);
         sqf_return_string_list get_object_children(const control &map_, sqf_string_const_ref object_);
-
         sqf_return_string insert_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &value_, sqf_string_list_const_ref values_, sqf_string_const_ref sub_type_);
-
         game_value select_editor_object(const control& map_, sqf_string_const_ref object_);
-
         void set_editor_object_scope(const control &map_, sqf_string_list_const_ref objects_, sqf_string_const_ref editor_type_, sqf_string_const_ref condition_, sqf_string_const_ref scope_, bool sub_ordinates_also_);
-
         void set_visible_if_tree_collapsed(const control &map_, sqf_string_const_ref object_, bool visible_);
         int add_menu(const control &map_, sqf_string_const_ref text_, float priority_);
         int add_menu_item(const control &map_, sqf_string_const_ref menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_);
         int add_menu_item(const control &map_, int menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_);
-
         int nmenu_items(const control &map_, sqf_string_const_ref menu_name_);
         int nmenu_items(const control &map_, int index_);
-
         void update_menu_item(const control &map_, int menu_item_index_, sqf_string_const_ref text_, sqf_string_const_ref command_);
-
         game_value edit_object(const control &map_, sqf_string_const_ref object_);
-
         sqf_return_string_list list_objects(const control &map_, sqf_string_const_ref type_);
         game_value set_object_arguments(const control &map_, sqf_string_const_ref object_, sqf_string_list_const_ref values_);
         void set_object_proxy(const control &map_, sqf_string_const_ref object_, const object &proxy_object_);
+        
 
-
-
-
-
+        //doesn't work in A3 (comment from KK) - Should probably check if that's true tho
+        rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_);
+        //buldozer
+        bool buldozer_is_enabled_road_diag();
+        void buldozer_reload_oper_map();
+        void buldozer_enable_road_diag(bool value_);
+        bool buldozer_load_new_roads(sqf_string_const_ref value_);
     }
 }

@@ -100,6 +100,7 @@ namespace intercept {
         void on_briefing_notes(sqf_string_const_ref value_);
         void on_briefing_plan(sqf_string_const_ref value_);
         void on_briefing_team_switch(sqf_string_const_ref value_);
+        void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
 
     }
 }

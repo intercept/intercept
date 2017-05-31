@@ -306,5 +306,332 @@ namespace intercept {
 
             return std::pair<bool, bool>({ res[0], res[1] });
         }
+
+        float moon_phase(int year_, int month_, int day_, int hour_, float minute_) {
+            game_value date({
+                static_cast<float>(year_),
+                static_cast<float>(month_),
+                static_cast<float>(day_),
+                static_cast<float>(hour_),
+                minute_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__moonphase__array__ret__scalar, date);
+        }
+
+        void set_waves(float time_, float waves_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaves__scalar__scalar__ret__nothing, time_, waves_value_);
+        }
+
+        void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_) {
+            if (fog_decay_.has_value() && fog_base_.has_value())
+                host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_, *fog_decay_, *fog_base_ }); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_value_);
+        }
+
+        int get_terrain_grid() {
+            return static_cast<int>(host::functions.invoke_raw_nular(__sqf::nular__getterraingrid__ret__scalar));
+        }
+
+        float view_distance() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__viewdistance__ret__scalar);
+        }
+
+        void enable_caustics(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__enablecaustics__bool__ret__nothing, value_);
+        }
+
+        void set_lightnings(float time_, float lightnings_value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightnings__scalar__scalar__ret__nothing, time_, lightnings_value_);
+        }
+
+        std::vector<object> near_objects(const vector3 &pos_, float radius_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, radius_));
+        }
+
+        std::vector<object> near_objects(const object &object_, float radius_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, radius_));
+        }
+
+        std::vector<object> near_objects(const vector3 &pos_, sqf_string_const_ref type_, float radius_) {
+            game_value args({
+                type_,
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args));
+        }
+
+        std::vector<object> near_objects(const object &object_, sqf_string_const_ref type_, float radius_) {
+            game_value args({
+                type_,
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, args));
+        }
+
+        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
+            game_value param_left;
+            switch (position_.index()) {
+            case 0: param_left = std::get<0>(position_).get(); break;
+            case 1: param_left = std::get<1>(position_).get(); break;
+            case 2: param_left = std::get<2>(position_).get(); break;
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__nearobjectsready__object_array__scalar__ret__bool, param_left, radius_);
+        }
+
+        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
+            game_value param_left;
+            switch (position_.index()) {
+            case 0: param_left = std::get<0>(position_).get(); break;
+            case 1: param_left = std::get<1>(position_).get(); break;
+            case 2: param_left = std::get<2>(position_).get(); break;
+            }
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearroads__object_array__scalar__ret__array, param_left, radius_));
+        }
+
+        std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
+            game_value param_left;
+            switch (position_.index()) {
+            case 0: param_left = std::get<0>(position_).get(); break;
+            case 1: param_left = std::get<1>(position_).get(); break;
+            case 2: param_left = std::get<2>(position_).get(); break;
+            }
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearsupplies__object_array__scalar_array__ret__array, param_left, radius_));
+        }
+
+        std::vector<rv_target> near_targets(const object &unit_, float radius_) {
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__neartargets__object__scalar__ret__array, unit_, radius_);
+
+            std::vector<rv_target> targets;
+            for (size_t i = 0; i < res.size(); i++) {
+                targets.push_back(rv_target({  //#TODO make rv_target converting constructor
+                    __helpers::__convert_to_vector3(res[i][0]),
+                    res[i][1],
+                    res[i][2],
+                    res[i][3],
+                    res[i][4],
+                    res[i][5],
+                }));
+            }
+
+            return targets;
+        }
+
+        object nearest_object(const vector3 &pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, pos_);
+        }
+
+        object nearest_object(const vector3 &pos_, sqf_string_const_ref type_) {
+            game_value params({
+                pos_,
+                type_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
+            // Same as: position nearObjects filter (where position is vector3 and filter is string) - binary__nearestobject__array__string__ret__object
+        }
+
+        object nearest_object(const object &obj_, sqf_string_const_ref type_) {
+            game_value params({
+                obj_,
+                type_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
+        }
+
+        object nearest_object(const vector3 &pos_, float id_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__nearestobject__array__scalar__ret__object, pos_, id_);
+        }
+
+        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({
+                pos_,
+                std::move(types),
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
+        }
+
+        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({
+                obj_,
+                std::move(types),
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
+        }
+
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({
+                pos_,
+                std::move(types),
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+        }
+
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({
+                obj_,
+                std::move(types),
+                radius_
+            });
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+        }
+
+        std::vector<object> units_below_height(const group &group_, float height_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__group__scalar__ret__array, group_, height_));
+        }
+
+        std::vector<object> units_below_height(const std::vector<object> &units_, float height_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__array__scalar__ret__array, std::move(auto_array<game_value>(units_.begin(), units_.end())), height_));
+        }
+
+        bool surface_is_water(const vector3& pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfaceiswater__array__ret__bool, pos_);
+        }
+
+        vector3 surface_normal(const vector3& pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacenormal__array__ret__array, pos_);
+        }
+
+        sqf_return_string surface_type(const vector3& pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, pos_);
+        }
+
+        std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
+            game_value params({
+                obj_,
+                radius_,
+                expression_,
+                precision_,
+                max_results_
+            });
+
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
+
+            std::vector<rv_best_place> best_places;
+            for (uint32_t i = 0; i < ret.size(); ++i)
+                best_places.push_back(rv_best_place({ ret[i] }));
+
+            return best_places;
+        }
+
+        std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
+            game_value params({
+                pos_,
+                radius_,
+                expression_,
+                precision_,
+                max_results_
+            });
+
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
+
+            std::vector<rv_best_place> best_places;
+            for (uint32_t i = 0; i < ret.size(); ++i)
+                best_places.push_back(rv_best_place({ ret[i] }));
+
+            return best_places;
+        }
+
+        bool is_on_road(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isonroad__object_array__ret__bool, object_);
+        }
+
+        bool is_on_road(const vector3 &position_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isonroad__object_array__ret__bool, position_);
+        }
+
+        float get_friend(const side &side1_, const side &side2_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getfriend__side__side__ret__scalar, side1_, side2_);
+        }
+
+        void set_friend(const side &side1_, const side &side2_, float value_) {
+            game_value args({
+                side2_,
+                value_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__setfriend__side__array__ret__nothing, side1_, args);
+        }
+
+        std::vector<object> entities(sqf_string_const_ref type_)
+        {
+            return __helpers::__convert_to_objects_vector(game_value(host::functions.invoke_raw_unary(__sqf::unary__entities__string__ret__array, type_)));
+        }
+
+
+        std::vector<object> units(const object& unit_)
+        {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__units__object__ret__array, unit_));
+        }
+
+        object nearest_building(const object &value_) {
+            return __helpers::__object_unary_object(__sqf::unary__nearestbuilding__object__ret__object, value_);
+        }
+
+        object nearest_building(const vector3 &value_) {
+            return object(host::functions.invoke_raw_unary(__sqf::unary__nearestbuilding__array__ret__object, value_));
+        }
+
+        bool preload_object(float distance_, const object &object_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, object_);
+        }
+
+        bool preload_object(float distance_, sqf_string_const_ref class_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__preloadobject__scalar__object_string__ret__bool, distance_, class_name_);
+        }
+
+        object road_at(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__roadat__object_array__ret__object, object_);
+        }
+
+        object road_at(const vector3 &position_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__roadat__object_array__ret__object, position_);
+        }
+
+        bool get_remote_sensors_disabled() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__getremotesensorsdisabled__ret__bool);
+        }
+
+        void disable_remote_sensors(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__disableremotesensors__bool__ret__nothing, value_);
+        }
+
+        bool underwater(const object &value_) {
+            return __helpers::__bool_unary_object(__sqf::unary__underwater__object__ret__bool, value_);
+        }
+
+        std::vector<object> vehicles() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__vehicles__ret__array));
+        }
+
+        void set_local_wind_params(float strength_, float diameter_) {
+            game_value params({
+                strength_,
+                diameter_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setlocalwindparams__array__ret__nothing, params);
+        }
     }
 }

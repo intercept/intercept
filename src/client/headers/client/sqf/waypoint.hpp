@@ -483,6 +483,7 @@ namespace intercept {
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
         void enable_uavwaypoints(const object &value0_, bool value1_);
 
+        void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
 
 
 

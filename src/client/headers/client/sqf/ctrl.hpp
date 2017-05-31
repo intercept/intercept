@@ -594,13 +594,11 @@ namespace intercept {
         game_value get_variable(const control & ctrl_, sqf_string_const_ref var_name_, game_value default_value_);
         display display_parent(const display &display_);
 
+        bool visible_score_table();
+        void show_score_table(int force_);
+        bool is_pip_enabled();
+        void set_mouse_position(float x_, float y_);
 
-
-
-
-
-
-        //ctrl
         void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left);
 
         void slider_set_speed(const control &slider_, float line_, int page_);

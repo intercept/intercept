@@ -306,13 +306,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
         }
 
+        void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_) {
+            game_value params({
+                side_,
+                pos_,
+                idstatic_,
+                veh_
+            });
 
-
-
-
-
-
-
+            host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
+        }
 
         //Trigger
 

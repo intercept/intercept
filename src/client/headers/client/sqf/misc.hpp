@@ -21,10 +21,12 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        //#TODO some diags are in misc -> move them to core
+        
         struct rv_artillery_computer_settings {
             std::string name;
             std::string ammo;
-            int mode; // TODO investigate what this actually is
+            int mode; //#TODO investigate what this actually is
 
             rv_artillery_computer_settings(const game_value &rv_game_value_)
                 : name(rv_game_value_[0]),
@@ -87,7 +89,74 @@ namespace intercept {
         bool dynamic_simulation_enabled(const group &group_);
         void enable_dynamic_simulation_system(bool enable_);
         bool dynamic_simulation_system_enabled();
+        void set_dynamic_simulation_distance_coef(sqf_string_const_ref class_, float multiplayer_);
 
+        void activate_addons(sqf_string_list_const_ref addons_);
+        void enable_saving(bool enable_);
+        void enable_saving(bool enable_, bool autosave_);
+        std::vector<float> get_dlcs(float filter_);
+        float armory_points();
+        bool cadet_mode();
+        bool cheats_enabled();
+        float difficulty();
+        float distribution_region();
+        void finish_mission_init();
+        void force_end();
+        bool free_look();
+        float get_total_dlc_usage_time();
+        bool is_autotest();
+        bool is_filepatching_enabled();
+        bool is_instructor_figure_enabled();
+        bool is_steam_mission();
+        bool is_stream_friendly_ui_enabled();
+
+        void load_game();
+        void log_entities();
+        bool mark_as_finished_on_steam();
+        float mission_difficulty();
+        void run_init_script();
+        bool reversed_mouse_y();
+        bool team_switch_enabled();
+        void team_switch();
+        float system_of_units();
+        void select_no_player();
+        bool saving_enabled();
+        bool difficulty_enabled(sqf_string_const_ref value_);
+        void activate_key(sqf_string_const_ref keyname_);
+        void de_activate_key(sqf_string_const_ref key_);
+        bool is_key_active(sqf_string_const_ref value_);
+        void delete_collection(const object & collection_); //deprecated
+        bool delete_identity(sqf_string_const_ref identity_);
+        void delete_site(const object &value_);
+        bool delete_status(sqf_string_const_ref value_);
+        void enable_sentences(bool value_);
+        void enable_stress_damage(bool value_);
+        void enable_team_switch(bool value_);
+        float get_dlcusage_time(float value_);
+        void dissolve_team(sqf_string_const_ref value_);
+        bool is_dlcavailable(float value_);
+        void set_armory_points(float value_);
+        void set_system_of_units(float value_);
+        bool unlock_achievement(sqf_string_const_ref value_);
+        void add_live_stats(const object &value0_, float value1_); //Xbox stuff
+        bool load_identity(const object &value0_, sqf_string_const_ref value1_);
+        bool load_status(const object &value0_, sqf_string_const_ref value1_);
+        bool save_status(const object &value0_, sqf_string_const_ref value1_);
+        void save_game();
+        void save_joysticks();
+        sqf_return_string role_description(const object &value_);
+        bool set_stat_value(sqf_string_const_ref name_, float value_);
+        void host_mission(const config &config_, const display &display_);
+        void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_);
+        void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_, bool skip_briefing_);
+        void play_mission(sqf_string_const_ref campaign_, const config &mission_);
+        void play_mission(sqf_string_const_ref campaign_, const config &mission_, bool skip_briefing_);
+        void play_scripted_mission(sqf_string_const_ref world_, const code &command_);
+        void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_);
+        void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_);
+        float difficulty_option(sqf_string_const_ref optionname_);
+        void enable_weapon_disassembly(bool enable_);
+        object create_site(sqf_string_const_ref type_, const vector3 &pos_);
 
 
 

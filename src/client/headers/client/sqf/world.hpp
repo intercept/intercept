@@ -180,5 +180,57 @@ namespace intercept {
         void simul_weather_sync();
 
         std::pair<bool, bool> environment_enabled();
+
+
+        float moon_phase(int year_, int month_, int day_, int hour_, float minute_);
+        void set_waves(float time_, float waves_value_);
+        void set_fog(float time_, float fog_);
+        void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_);
+        int get_terrain_grid();
+        float view_distance();
+        void enable_caustics(bool value_);
+        void set_lightnings(float time_, float lightnings_value_);
+        bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
+        std::vector<rv_target> near_targets(const object &unit_, float radius_);
+        object nearest_object(const vector3 &pos_);
+        object nearest_object(const vector3 &pos_, sqf_string_const_ref type_);
+        object nearest_object(const object &obj_, sqf_string_const_ref type_);
+        object nearest_object(const vector3 &pos_, float id_);
+        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
+        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
+        std::vector<object> units_below_height(const group &group_, float height_);
+        std::vector<object> units_below_height(const group &group_, float height_);
+        std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
+        bool surface_is_water(const vector3& pos_);
+        vector3 surface_normal(const vector3& pos_);
+        sqf_return_string surface_type(const vector3& pos_);
+        std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
+        std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
+        bool is_on_road(const object &object_);
+        bool is_on_road(const vector3 &position_);
+        float get_friend(const side &side1_, const side &side2_);
+        void set_friend(const side &side1_, const side &side2_, float value_);
+        std::vector<object> near_objects(const vector3 &pos_, float radius_);
+        std::vector<object> near_objects(const object &object_, float radius_);
+        std::vector<object> near_objects(const vector3 &pos_, sqf_string_const_ref type_, float radius_);
+        std::vector<object> near_objects(const object &object_, sqf_string_const_ref type_, float radius_);
+        object nearest_building(const object &value_);
+        object nearest_building(const vector3 &value_);
+
+        std::vector<object> entities(sqf_string_const_ref type_);
+        std::vector<object> units(const object& unit_);
+        bool preload_object(float distance_, const object &object_);
+        bool preload_object(float distance_, sqf_string_const_ref class_name_);
+        object road_at(const object &object_);
+        object road_at(const vector3 &position_);
+        bool get_remote_sensors_disabled();
+        void disable_remote_sensors(bool value_);
+        bool underwater(const object &value_);
+        std::vector<object> vehicles();
+        void set_local_wind_params(float strength_, float diameter_);
     }
 }

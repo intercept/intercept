@@ -2740,6 +2740,28 @@ namespace intercept {
         display display_parent(const display &display_) {
             return host::functions.invoke_raw_unary(__sqf::unary__displayparent__display__ret__display, display_);
         }
+
+        bool visible_score_table() {
+            return host::functions.invoke_raw_nular(__sqf::nular__visiblescoretable__ret__bool);
+        }
+
+        void show_score_table(int force_) {
+            host::functions.invoke_raw_unary(__sqf::unary__showscoretable__scalar__ret__nothing, static_cast<float>(force_));
+        }
+
+        bool is_pip_enabled() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__ispipenabled__ret__bool);
+        }
+
+        void set_mouse_position(float x_, float y_) {
+            game_value params({
+                x_,
+                y_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__setmouseposition__array__ret__nothing, params);
+        }
+
         //#TODO: Find out, which commands this command really takes (not documented)
         void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left) {
             host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);

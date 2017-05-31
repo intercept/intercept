@@ -111,5 +111,9 @@ namespace intercept {
 
         void set_3den_selected(const std::vector<object> &entites_);
 
+        sqf_return_string_list get_mission_layers();
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
+        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
+
     }
 }

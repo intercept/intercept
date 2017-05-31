@@ -186,7 +186,11 @@ namespace intercept {
         }
 
         inline void * game_data_number::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_number));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         inline void game_data_number::operator delete(void * ptr_, std::size_t) {
@@ -234,7 +238,11 @@ namespace intercept {
         }
 
         inline void * game_data_bool::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_bool));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         inline void game_data_bool::operator delete(void * ptr_, std::size_t) {
@@ -290,7 +298,11 @@ namespace intercept {
         game_data_string::~game_data_string() {}
 
         void * game_data_string::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_string));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         void game_data_string::operator delete(void * ptr_, std::size_t) {
@@ -352,7 +364,11 @@ namespace intercept {
         game_data_array::~game_data_array() {}
 
         void * game_data_array::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_array));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         void game_data_array::operator delete(void * ptr_, std::size_t) {
@@ -694,7 +710,15 @@ namespace intercept {
             virtual void *HeapDelete(void *mem, size_t size) = 0;
             virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
 
+        #ifdef __linux__
+            virtual int something1(void* mem, size_t unknown) = 0; //memalign alloc and memmove
+            virtual int something2(void* mem, size_t unknown) = 0; //redirect to something1
+            virtual int something3(void* mem, size_t unknown) = 0; //ret 0
+        #endif
+
             virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
+            //In Linux binary this calls malloc_usable_size(unknown)
+            //In Linux binary this allocates aligned memory and moves memory. But on linux it also takes 4 args
 
             virtual size_t GetPageRecommendedSize() = 0;
 
@@ -774,18 +798,26 @@ namespace intercept {
         //}
 
         void* rv_pool_allocator::allocate(size_t count) {
+        #ifdef __linux__
+            __internal::rv_allocator_allocate_generic(count);
+        #else
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t count);
+            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t /*count*/);
             allocFunc alloc = reinterpret_cast<allocFunc>(allocatorBase->poolFuncAlloc);
             auto allocation = alloc(this, count);
             return allocation;
+        #endif
         }
 
         void rv_pool_allocator::deallocate(void* data) {
+        #ifdef __linux__
+            __internal::rv_allocator_deallocate_generic(data);
+        #else
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* data);
+            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* /*data*/);
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
             dealloc(this, data);
+        #endif
         }
 
         static std::map<std::string, types::__internal::GameDataType> additionalTypes;

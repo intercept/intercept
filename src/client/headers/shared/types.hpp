@@ -322,6 +322,11 @@ namespace intercept {
                 return _strcmpi(data(), other) == 0;
             #endif
             }
+            //#Test yet untested
+            bool operator < (const r_string& other) const {
+                if (!data()) return false; //empty?
+                return strcmp(data(), other.data()) <0;
+            }
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
@@ -969,17 +974,25 @@ namespace intercept {
 
 
 
-
-        struct value_entry {
-            r_string type_name;
+        class game_data;
+        struct script_type_info {  //Donated from ArmaDebugEngine
+            r_string _name;           // SCALAR
+            using createFunc = game_data* (*)(void* _null);
+            createFunc _createFunction{ nullptr };
+            r_string _localizedName; //@STR_EVAL_TYPESCALAR
+            r_string _readableName; //Number
+            r_string _description; //A real number.
+            r_string _category; //Default
+            r_string _typeName; //float/NativeObject
+            r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
         };
 
         struct compound_value_pair {
-            value_entry *first;
-            value_entry *second;
+            script_type_info *first;
+            script_type_info *second;
         };
 
-        struct compound_value_entry {
+        struct compound_script_type_info {
             uintptr_t           v_table;
             compound_value_pair *types;
         };
@@ -987,8 +1000,8 @@ namespace intercept {
         class sqf_script_type {
         public:
             uintptr_t               v_table;
-            value_entry             *single_type;
-            compound_value_entry    *compound_type;
+            const script_type_info             *single_type;
+            compound_script_type_info    *compound_type;
             value_types type() const;
             std::string type_str() const;
             bool operator==(const sqf_script_type& other) const {
@@ -1046,7 +1059,7 @@ namespace intercept {
             friend class game_value;
             friend class invoker;
         public:
-            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_value_entry by some better name
+            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
             virtual ~game_data() {}
 
         protected:
@@ -1064,6 +1077,8 @@ namespace intercept {
             virtual bool equals(const game_data *) const { return false; };
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
+            virtual void placeholder() const {};
+            virtual bool can_serialize() { return false; }
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
@@ -1141,9 +1156,8 @@ namespace intercept {
 
 
             //Conversions
+            game_value(game_data* val_);
             game_value(float val_);
-
-
             game_value(bool val_);
             game_value(const std::string &val_);
             game_value(const r_string &val_);
@@ -1635,6 +1649,8 @@ namespace intercept {
             };
             GameDataType game_datatype_from_string(const r_string& name);
             std::string to_string(GameDataType type);
+            //Not public API!
+            void add_game_datatype(r_string name, GameDataType type);
 
             struct allocatorInfo {
                 uintptr_t genericAllocBase;
@@ -1670,7 +1686,7 @@ namespace intercept {
         }
 
         template <game_value(*T)(const game_value&)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
+        static game_value* userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
             return sqf_this_;

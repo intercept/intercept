@@ -106,6 +106,17 @@ namespace intercept {
 
         bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
 
+        r_string _name;           // SCALAR
+        using createFunc = game_data* (*)(void* _null);
+        createFunc _createFunction{ nullptr };
+        r_string _localizedName; //@STR_EVAL_TYPESCALAR
+        r_string _readableName; //Number
+        r_string _description; //A real number.
+        r_string _category; //Default
+        r_string _typeName; //float/NativeObject
+        r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
+
+        std::pair<types::__internal::GameDataType, sqf_script_type> registerType(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf);
 
     private:
         __internal::gsNular* findNular(std::string name) const;

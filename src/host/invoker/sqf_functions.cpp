@@ -133,7 +133,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
     //
-    //typedef int(__thiscall *f_construct_binary)(__internal::gsOperator* op, const op_value_entry& returnType, const char* name, int priority, binary_function f, const op_value_entry& lType, const op_value_entry& rType,
+    //typedef int(__thiscall *f_construct_binary)(__internal::gsOperator* op, const op_script_type_info& returnType, const char* name, int priority, binary_function f, const op_script_type_info& lType, const op_script_type_info& rType,
     //    const char* lArgDesc, const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
     //    uintptr_t jFunc);
     //
@@ -144,9 +144,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //if (_registerFuncs._types[static_cast<size_t>(left_arg_type)] == 0) __debugbreak();
     //if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
-    sqf_script_type leftType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),nullptr };
-    sqf_script_type rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
+    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    sqf_script_type leftType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
+    sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
 
     std::string lowerName(name);
@@ -161,7 +161,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     auto operators = findOperators(name);
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
-    if (!operators) {//Name already exists
+    if (!operators) {
         auto table = gs->_scriptOperators.get_table_for_key(lowerName.c_str());
         auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
         if (found == _keeper.end()) {
@@ -173,7 +173,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
         operators = static_cast<game_operators*>(table->push_back(game_operators(lowerName.c_str())));
         operators->copyPH(test);
-    } else {
+    } else {  //Name already exists
         if (findBinary(name, left_arg_type, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
     }
 
@@ -211,7 +211,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
     //
-    //typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, const op_value_entry& returnType, const char* name, unary_function f, const op_value_entry& rType,
+    //typedef int(__thiscall *f_construct_unary)(__internal::gsFunction* op, const op_script_type_info& returnType, const char* name, unary_function f, const op_script_type_info& rType,
     //    const char* rArgDesc, const char* desc, const char* example, const char* exampleReturn, const char* unk1, const char* unk2, const char* def,
     //    uintptr_t jFunc);
     //
@@ -222,8 +222,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
     //if (_registerFuncs._types[static_cast<size_t>(right_arg_type)] == 0) __debugbreak();
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
-    sqf_script_type rightype{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),nullptr };
+    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
     //constructUnary(&op, retType, name.c_str(), function_,
     //    rightype,
@@ -295,15 +295,16 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
+    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,reinterpret_cast<value_entry*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),nullptr };
+
+    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
 
     auto test = findNular("player");
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
     auto alreadyExists = findNular(name);
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (alreadyExists) {//Name already exists
         return registered_sqf_function{ nullptr };
@@ -390,6 +391,21 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
     return false;
 }
 
+
+std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf) {
+    if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
+    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
+    auto newType = new script_type_info{
+        name,cf,localizedName,localizedName,description,"intercept",typeName,"none"
+    };
+    gs->_scriptTypes.emplace_back(newType);
+    auto newIndex = _registerFuncs._types.size();
+    _registerFuncs._types.emplace_back(newType);
+    types::__internal::add_game_datatype(name, static_cast<types::__internal::GameDataType>(newIndex));
+    return { static_cast<types::__internal::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr }};
+}
+
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -429,8 +445,8 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
     for (auto& it : *operators) {
         auto left_types = it._operator->arg1_type.type();
         if (left_types.find(left_argTypeString) != left_types.end()) {
-            auto right_types = it._operator->arg1_type.type();
-            if (right_types.find(left_argTypeString) != right_types.end()) {
+            auto right_types = it._operator->arg2_type.type();
+            if (right_types.find(right_argTypeString) != right_types.end()) {
                 return &it;
             }
         }

@@ -126,22 +126,22 @@ namespace intercept {
 
         value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
-                return{ static_cast<std::string>(single_type->type_name) };
+                return{ static_cast<std::string>(single_type->_name) };
             } else {
                 return{
-                    static_cast<std::string>(compound_type->types->first->type_name),
-                    static_cast<std::string>(compound_type->types->second->type_name)
+                    static_cast<std::string>(compound_type->types->first->_name),
+                    static_cast<std::string>(compound_type->types->second->_name)
                 };
             }
         }
 
         std::string sqf_script_type::type_str() const {
             if (single_type != nullptr) {
-                return static_cast<std::string>(single_type->type_name);
+                return static_cast<std::string>(single_type->_name);
             } else {
                 return
-                    static_cast<std::string>(compound_type->types->first->type_name) + "_" +
-                    static_cast<std::string>(compound_type->types->second->type_name);
+                    static_cast<std::string>(compound_type->types->first->_name) + "_" +
+                    static_cast<std::string>(compound_type->types->second->_name);
             }
         }
 
@@ -387,6 +387,11 @@ namespace intercept {
 
         game_value::~game_value() {
             data = nullptr;
+        }
+
+        game_value::game_value(game_data* val_) {
+            set_vtable(__vptr_def);
+            data = val_;
         }
 
         game_value::game_value(float val_) {
@@ -783,7 +788,7 @@ namespace intercept {
             return dealloc(this, data);
         }
 
-
+        static std::map<std::string, types::__internal::GameDataType> additionalTypes;
         types::__internal::GameDataType __internal::game_datatype_from_string(const r_string& name) {
             //I know this is ugly. Feel free to make it better
             if (name == "SCALAR") return types::__internal::GameDataType::SCALAR;
@@ -810,6 +815,9 @@ namespace intercept {
             if (name == "TASK") return types::__internal::GameDataType::TASK;
             if (name == "DIARY_RECORD") return types::__internal::GameDataType::DIARY_RECORD;
             if (name == "LOCATION") return types::__internal::GameDataType::LOCATION;
+            auto found = additionalTypes.find(static_cast<std::string>(name));
+            if (found != additionalTypes.end())
+                return found->second;
             return types::__internal::GameDataType::end;
         }
 
@@ -840,8 +848,16 @@ namespace intercept {
                 case GameDataType::LOCATION: return "LOCATION";
                 default: ;
             }
+            for (auto& it : additionalTypes) {
+                if (it.second == type)
+                    return it.first;
+            }
             return "";
         }
+
+        void __internal::add_game_datatype(r_string name, GameDataType type) {
+            additionalTypes[static_cast<std::string>(name)] = type;
+        };
 
     }
 }

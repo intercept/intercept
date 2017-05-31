@@ -1325,6 +1325,7 @@ namespace intercept {
         std::vector<object> detected_mines(const side &side_);
 
         void diag_log(const std::string &text_);
+        void diag_log(const game_value &text_);
 
         std::vector<bool> engines_is_on_rtd(const object &heli_);
         std::vector<float> engines_rpm_rtd(const object &heli_);

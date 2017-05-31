@@ -1489,7 +1489,7 @@ namespace intercept {
                 v2* v = (v2*) vbase;
                 auto& typex = typeid(*v);
             #ifdef __GNUC__
-                auto test = typex.__name();
+                auto test = typex.name();
             #else
                 auto test = typex.raw_name();
             #endif

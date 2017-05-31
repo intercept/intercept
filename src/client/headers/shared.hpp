@@ -37,7 +37,7 @@
 #define INTERCEPT_ASSERT intercept::runtime_assert()
 #endif
 
-# ifdef __GNUC__
+#ifdef __GNUC__
 #define CDECL __attribute__ ((__cdecl__))
 #else
 #define CDECL __cdecl

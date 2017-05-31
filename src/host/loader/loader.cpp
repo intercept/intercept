@@ -2,9 +2,11 @@
 #include "controller.hpp"
 #include <thread>
 #include <future>
+#ifndef __linux__
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 #pragma comment (lib, "version.lib") //GetFileVersionInfoSize
+#endif
 template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
 template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
 template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
@@ -152,14 +154,21 @@ namespace intercept {
         uintptr_t types_array = state_addr_;
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
-
+    #ifdef __linux__
+        struct link_map *lm = (struct link_map*) dlopen(0, RTLD_NOW);
+        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(link_map->l_addr);
+        uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
+    #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
         GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+        uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+    #endif
 
-        auto findInMemory = [&modInfo](char* pattern, size_t patternLength) ->uintptr_t {
-            uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-            uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
+        auto findInMemory = [baseAddress, moduleSize](char* pattern, size_t patternLength) ->uintptr_t {
+            uintptr_t base = baseAddress;
+            uintptr_t size = moduleSize;
             for (DWORD i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (DWORD j = 0; j < patternLength; j++) {
@@ -173,9 +182,9 @@ namespace intercept {
             return 0;
         };
 
-        auto findInMemoryPattern = [&modInfo](const char* pattern, const char* mask, uintptr_t offset = 0) {
-            uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-            uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
+        auto findInMemoryPattern = [baseAddress, moduleSize](const char* pattern, const char* mask, uintptr_t offset = 0) {
+            uintptr_t base = baseAddress;
+            uintptr_t size = moduleSize;
 
             uintptr_t patternLength = static_cast<DWORD>(strlen(mask));
 

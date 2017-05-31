@@ -5,9 +5,10 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
-#include <utility> //std::hash
+//#include <utility>
 #include "vector.hpp"
-#include "pool.hpp"
+//#include "pool.hpp"
+#include "shared.hpp"
 #include <string_view>
 
 namespace intercept {

@@ -2,16 +2,18 @@
 #include "controller.hpp"
 #include <thread>
 #include <future>
-#ifndef __linux__
+#ifdef __linux__
+#include <dlfcn.h>
+#else
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 #pragma comment (lib, "version.lib") //GetFileVersionInfoSize
 #endif
-template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
-template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
-template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
-template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
-template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
+//template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
+//template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
+//template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
+//template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
+//template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
 
 namespace intercept {
     loader::loader() : _attached(false), _patched(false) {}
@@ -169,7 +171,7 @@ namespace intercept {
         auto findInMemory = [baseAddress, moduleSize](char* pattern, size_t patternLength) ->uintptr_t {
             uintptr_t base = baseAddress;
             uintptr_t size = moduleSize;
-            for (DWORD i = 0; i < size - patternLength; i++) {
+            for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (DWORD j = 0; j < patternLength; j++) {
                     found &= pattern[j] == *reinterpret_cast<char*>(base + i + j);
@@ -186,7 +188,7 @@ namespace intercept {
             uintptr_t base = baseAddress;
             uintptr_t size = moduleSize;
 
-            uintptr_t patternLength = static_cast<DWORD>(strlen(mask));
+            uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
 
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
@@ -214,6 +216,8 @@ namespace intercept {
             return test;
         };
 
+        //This can be used to detect game version in case we already fix something for next release
+        /*
         //Shamelessly copied from Dedmen's Hack :3
         CHAR fileName[_MAX_PATH];
         DWORD size = GetModuleFileName(nullptr, fileName, _MAX_PATH);
@@ -232,7 +236,7 @@ namespace intercept {
         short version2 = HIWORD(vsfi->dwFileVersionMS);// 1
         short version3 = LOWORD(vsfi->dwFileVersionMS);// 48
         delete[] versionInfo;
-
+        */
 
 
 
@@ -364,8 +368,8 @@ namespace intercept {
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
             LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc;
-            OutputDebugStringA(entry->_name.data());
-            OutputDebugStringA("\n");
+            //OutputDebugStringA(entry->_name.data());
+            //OutputDebugStringA("\n");
 
             auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::__internal::GameDataType::end) {

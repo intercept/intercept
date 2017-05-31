@@ -744,13 +744,13 @@ namespace intercept {
             void erase(const_iterator element) {
                 if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
                 size_t index = std::distance(base::cbegin(), element);
-                if (index > base::_n) return;
+                if (static_cast<int>(index) > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
             #ifdef __GNUC__
-                memmove((*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+                memmove(&(*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
             #else
-                memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
             #endif
                 --base::_n;
             }

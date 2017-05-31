@@ -1,5 +1,4 @@
-﻿#include <Windows.h>
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -17,10 +16,10 @@
 #include "shared/functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP
-
+           
 extern "C"
 {
-    __declspec(dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
+    DLLEXPORT void __stdcall RVExtension(char *output, int outputSize, const char *function);
 }
 
 
@@ -38,8 +37,11 @@ std::string get_command(const std::string & input) {
 }
 
 std::atomic_bool _threaded(false);
-
+#ifdef __linux__
+void RVExtension(char *output, int outputSize, const char *function) {
+#else
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
+#endif
     ZERO_OUTPUT();
     
     // Get the command, then the command args
@@ -118,7 +120,7 @@ void Cleanup() {
 
 }
 
-
+#ifndef __linux__
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
     LPVOID lpReserved
@@ -137,3 +139,4 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     }
     return TRUE;
 }
+#endif

@@ -1,7 +1,10 @@
 ﻿#include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
-
+#ifdef __linux__
+#include <dlfcn.h>
+#include <link.h>
+#endif
 
 namespace intercept {
 

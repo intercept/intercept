@@ -11,6 +11,11 @@
 #include "shared.hpp"
 #include <string_view>
 
+//GNUC somehow can't do it if it's inside shared.hpp.
+#ifdef __GNUC__
+#define CDECL __attribute__ ((__cdecl__))
+#endif
+
 namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;

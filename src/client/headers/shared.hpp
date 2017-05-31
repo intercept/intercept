@@ -42,3 +42,9 @@
 #else
 #define CDECL __cdecl
 #endif
+
+#ifdef __GNUC__
+#define DLLEXPORT __attribute__((visibility("default")))
+#else
+#define DLLEXPORT __declspec(dllexport)
+#endif

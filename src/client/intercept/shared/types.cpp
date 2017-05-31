@@ -16,7 +16,7 @@
 
 namespace intercept {
     namespace __internal {
-
+        /*
         class mem_leak_watcher {
         public:
             mem_leak_watcher() {
@@ -61,10 +61,10 @@ namespace intercept {
             std::map<game_data_number*, std::chrono::system_clock::time_point> _allocs;
             std::mutex _mut;
         };
-
+        */
 
     }
-
+    
 
     namespace types {
         uintptr_t game_data_string::type_def;
@@ -713,7 +713,7 @@ namespace intercept {
                                        //Synchronization for Multithreaded access
             virtual void Lock() = 0;
             virtual void Unlock() = 0;
-            char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
+            const char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
         };
 
         void* __internal::rv_allocator_allocate_generic(size_t size) {
@@ -785,7 +785,7 @@ namespace intercept {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
             typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* data);
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
-            return dealloc(this, data);
+            dealloc(this, data);
         }
 
         static std::map<std::string, types::__internal::GameDataType> additionalTypes;

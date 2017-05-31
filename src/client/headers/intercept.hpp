@@ -5,8 +5,6 @@
 #include "client/sqf/sqf.hpp"
 #include "shared/client_types.hpp"
 
-#define DLLEXPORT __declspec(dllexport)
-
 namespace intercept {
     extern "C" {
         DLLEXPORT int  CDECL api_version();

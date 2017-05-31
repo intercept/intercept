@@ -2,10 +2,6 @@
 #include "../shared.hpp"
 #include "shared/functions.hpp"
 
-#define DLLEXPORT __declspec(dllexport)
-
-
-
 namespace intercept {
     namespace client {
 

@@ -271,7 +271,8 @@ namespace intercept {
             return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - sizeof(uintptr_t));
         #else
             uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
-            return (findInMemory(reinterpret_cast<char*>(&vtableStart), 4));
+            return vtableStart;
+            //return (findInMemory(reinterpret_cast<char*>(&vtableStart), 4));
         #endif
 
         });
@@ -433,8 +434,13 @@ namespace intercept {
         _sqf_register_funcs._gameState = state_addr_;
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
-    #ifndef __linux__
+    #ifdef __linux__
+        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        std::cout << "typename " << test << "\n";
+        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+    #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
+        std::cout << "typename " << test << "\n";
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
     #endif
         _allocator.genericAllocBase = allocatorVtablePtr;

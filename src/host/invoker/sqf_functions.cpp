@@ -180,7 +180,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     __internal::gsOperator op;
     op._name = name;
     op._name2 = lowerName;
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<binary_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;
@@ -271,7 +273,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     __internal::gsFunction op;
     op._name = name;
     op._name2 = lowerName;
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<unary_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;
@@ -316,8 +320,10 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     __internal::gsNular op;
     op._name = name;
-    op._name2 = lowerName;
+    op._name2 = lowerName; //#TODO move this into a constructor. for all types
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<nular_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;

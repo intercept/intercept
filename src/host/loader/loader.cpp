@@ -345,7 +345,7 @@ namespace intercept {
                     "(" << new_entry.op->arg1_type.type_str() << ")" <<
                     new_entry.name <<
                     "(" << new_entry.op->arg2_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr;
+                    " @ " << new_entry.op->procedure_addr << "\n";
                 std::string name = std::string(new_entry.name);
                 std::transform(name.begin(), name.end(), name.begin(), ::tolower);
                 _binary_operators[name].push_back(new_entry);
@@ -361,7 +361,7 @@ namespace intercept {
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
             std::cout /*LOG(INFO)*/ << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
-                << new_entry.name << " @ " << new_entry.op->procedure_addr;
+                << new_entry.name << " @ " << new_entry.op->procedure_addr << "\n";
             std::string name = std::string(new_entry.name);
             std::transform(name.begin(), name.end(), name.begin(), ::tolower);
             _nular_operators[name].push_back(new_entry);
@@ -406,7 +406,7 @@ namespace intercept {
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
-            std::cout /*LOG(INFO)*/ << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc;
+            std::cout /*LOG(INFO)*/ << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc << "\n";
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
@@ -433,8 +433,10 @@ namespace intercept {
         _sqf_register_funcs._gameState = state_addr_;
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+    #ifndef __linux__
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+    #endif
         _allocator.genericAllocBase = allocatorVtablePtr;
     #ifndef __linux__
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();

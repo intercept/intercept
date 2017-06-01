@@ -158,10 +158,16 @@ namespace intercept {
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
     #ifdef __linux__
-        link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
-        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
-        uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
-        //#TODO parse cat /proc/self/maps ?
+        std::ifstream maps("/proc/self/maps");
+        uintptr_t start;
+        uintptr_t end;
+        char placeholder;
+        maps >> std::hex >> start >> placeholder >> end;
+        //link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
+        //uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
+        //uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
+        uintptr_t baseAddress = start;
+        uintptr_t moduleSize = end-start;
     #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
@@ -169,7 +175,7 @@ namespace intercept {
         uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
         uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
     #endif
-        std::cout << "base - size" << std::hex << baseAddress << baseAddress << "\n";
+        std::cout << "base - size" << std::hex << baseAddress << moduleSize << "\n";
         auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
             uintptr_t base = baseAddress;
             uintptr_t size = moduleSize;

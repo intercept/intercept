@@ -310,11 +310,11 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO) << "Found unary operator: " <<
+                std::cout /*LOG(INFO)*/ << "Found unary operator: " <<
                     new_entry.op->return_type.type_str() << " " <<
                     new_entry.name <<
                     "(" << new_entry.op->arg_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr;
+                    " @ " << new_entry.op->procedure_addr << "\n";
                 std::string name = std::string(new_entry.name);
                 std::transform(name.begin(), name.end(), name.begin(), ::tolower);
                 _unary_operators[name].push_back(new_entry);

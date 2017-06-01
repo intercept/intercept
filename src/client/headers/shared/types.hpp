@@ -10,6 +10,8 @@
 //#include "pool.hpp"
 #include "shared.hpp"
 #include <string_view>
+#include <string.h>
+#include <algorithm>
 
 //GNUC somehow can't do it if it's inside shared.hpp.
 #ifdef __GNUC__

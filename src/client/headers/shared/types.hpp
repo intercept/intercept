@@ -25,9 +25,9 @@ namespace intercept {
     namespace types {
         class game_value;
     #ifdef __linux__
-        using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
-        using unary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t);
-        using binary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t);
+        using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t);
+        using unary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t);
+        using binary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t, uintptr_t);
     #else
         using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
         using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);

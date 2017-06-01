@@ -184,7 +184,7 @@ namespace intercept {
 
 
 #ifdef __linux__
-#define GAME_STATE_INVOKE_PARAM
+#define GAME_STATE_INVOKE_PARAM , invoker::sqf_game_state
 #else
 #define GAME_STATE_INVOKE_PARAM , invoker::sqf_game_state
 #endif

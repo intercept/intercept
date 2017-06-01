@@ -366,7 +366,7 @@ namespace intercept {
         invoker::get().type_structures["NAMESPACE"] = structure;
         game_data_rv_namespace::type_def = structure.first;
         game_data_rv_namespace::data_type_def = structure.second;
-
+        LOG(INFO) << "invoker::_intercept_registerTypes done\n";
         return true;
     }
 

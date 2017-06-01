@@ -230,7 +230,7 @@ namespace intercept {
         auto left = reinterpret_cast<uintptr_t>(&left_arg_);
         auto right = reinterpret_cast<uintptr_t>(&right_arg_);
     #ifdef __linux
-        rezurn function_(invoker::sqf_game_state, left, right);
+        return function_(invoker::sqf_game_state, left, right);
     #else
         game_value ret;
         function_(&ret, invoker::sqf_game_state, left, right); return ret;

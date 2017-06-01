@@ -17,20 +17,27 @@ namespace intercept::search {
             file_contents += line;
             file_contents.push_back('\n'); //#TODO can linux even have more than one line?
         }
+        std::cout << "cmdLine " << cmdline << "\n";
         return file_contents;
     #else
         return GetCommandLineA();
     #endif
-
-
     }
 
 }
 
-
 #if __linux__
 intercept::search::plugin_searcher::plugin_searcher() {
-
+    std::experimental::filesystem::recursive_directory_iterator end_itr; // default construction yields past-the-end
+    std::experimental::filesystem::recursive_directory_iterator x("/proc/self/fd");
+    for (;
+        x != end_itr;
+        ++x) {
+        if (std::experimental::filesystem::is_regular_file(x->status())) {
+            x->path().extension() == ".pbo";
+            std::cout << "pbo found " << x->path() << "\n";
+        }
+    }
 }
 #else
 

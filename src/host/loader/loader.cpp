@@ -437,7 +437,7 @@ namespace intercept {
     #ifdef __linux__
         const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
         std::cout << "typename " << test << "\n";
-        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+        assert(strcmp(test, "12MemFunctions") == 0);
     #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
         std::cout << "typename " << test << "\n";

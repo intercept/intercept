@@ -64,7 +64,7 @@ namespace intercept {
         */
 
     }
-    
+
 
     namespace types {
         uintptr_t game_data_string::type_def;
@@ -330,7 +330,7 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
-        game_data_array::game_data_array(const std::vector<game_value> &init_) : data(init_.begin(),init_.end()) {
+        game_data_array::game_data_array(const std::vector<game_value> &init_) : data(init_.begin(), init_.end()) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
@@ -742,8 +742,11 @@ namespace intercept {
 
         void* __internal::rv_allocator_allocate_generic(size_t size) {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             return alloc->New(size);
         }
 
@@ -751,7 +754,11 @@ namespace intercept {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             alloc->Delete(_Ptr);
         }
 
@@ -759,7 +766,11 @@ namespace intercept {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             return alloc->Realloc(_Ptr, _size);
         }
 
@@ -878,7 +889,7 @@ namespace intercept {
                 case GameDataType::TASK: return "TASK";
                 case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
                 case GameDataType::LOCATION: return "LOCATION";
-                default: ;
+                default:;
             }
             for (auto& it : additionalTypes) {
                 if (it.second == type)

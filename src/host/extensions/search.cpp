@@ -17,7 +17,7 @@ namespace intercept::search {
             file_contents += line;
             file_contents.push_back('\n'); //#TODO can linux even have more than one line?
         }
-        std::cout << "cmdLine " << cmdline << "\n";
+        std::cout << "cmdLine " << file_contents << "\n";
         return file_contents;
     #else
         return GetCommandLineA();
@@ -27,17 +27,42 @@ namespace intercept::search {
 }
 
 #if __linux__
+#include <string.h>
+#include <stdio.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/resource.h>
 intercept::search::plugin_searcher::plugin_searcher() {
-    std::experimental::filesystem::recursive_directory_iterator end_itr; // default construction yields past-the-end
-    std::experimental::filesystem::recursive_directory_iterator x("/proc/self/fd");
-    for (;
-        x != end_itr;
-        ++x) {
-        if (std::experimental::filesystem::is_regular_file(x->status())) {
-            x->path().extension() == ".pbo";
-            std::cout << "pbo found " << x->path() << "\n";
+    //std::experimental::filesystem::directory_iterator end_itr; // default construction yields past-the-end
+    //std::error_code err;
+    //std::experimental::filesystem::directory_iterator x("/proc/self", err);
+    //
+    //for (;
+    //    x != end_itr;
+    //    ++x) {
+    //    if (std::experimental::filesystem::is_regular_file(x->status())) {
+    //        //x->path().extension() == ".pbo";
+    //        std::cout << "pbo found " << x->path() << "\n";
+    //    }
+    //}
+
+
+
+    char buff[PATH_MAX];
+    
+    struct dirent *dp;
+    DIR *dir = opendir("/proc/self/fd");
+    while ((dp = readdir(dir)) != NULL) {
+
+        ssize_t len = ::readlink((std::string("/proc/self/fd/")+ dp->d_name).c_str(), buff, sizeof(buff) - 1);
+        if (len != -1) {
+            buff[len] = '\0';
+            std::cout << "found " << std::string(buff) << "\n";
         }
     }
+    closedir(dir);
 }
 #else
 

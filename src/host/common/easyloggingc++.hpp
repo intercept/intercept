@@ -15,6 +15,11 @@
 //
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
+
+#ifdef __linux__
+#include <iostream>
+#endif
+
 // Compilers and C++0x/C++11 Evaluation
 #if (defined(__GNUC__))
 #  define ELPP_COMPILER_GCC 1
@@ -6594,7 +6599,11 @@ CVERBOSE_N_TIMES(el::base::Writer, n, vlevel, el::base::DispatchAction::NormalLo
 #undef ELPP_TRACE
 #define ELPP_TRACE CLOG(TRACE, ELPP_CURR_FILE_LOGGER_ID)
    // Normal logs
+#ifdef __linux__
+#define LOG(LEVEL) std::cout
+#else
 #define LOG(LEVEL) CLOG(LEVEL, ELPP_CURR_FILE_LOGGER_ID)
+#endif
 #define VLOG(vlevel) CVLOG(vlevel, ELPP_CURR_FILE_LOGGER_ID)
    // Conditional logs
 #define LOG_IF(condition, LEVEL) CLOG_IF(condition, LEVEL, ELPP_CURR_FILE_LOGGER_ID)

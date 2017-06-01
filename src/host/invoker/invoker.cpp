@@ -205,8 +205,7 @@ namespace intercept {
 
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
         game_value ret;
-        function_(&ret GAME_STATE_INVOKE_PARAM, reinterpret_cast<uintptr_t>(&right_arg_));
-        return ret;
+        return  function_(invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const {

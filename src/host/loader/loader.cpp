@@ -169,7 +169,7 @@ namespace intercept {
         uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
         uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
     #endif
-
+        std::cout << "base - size" << std::hex << baseAddress << baseAddress << "\n";
         auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
             uintptr_t base = baseAddress;
             uintptr_t size = moduleSize;
@@ -248,7 +248,11 @@ namespace intercept {
 
         //Start them async before doing the other stuff so they are done when we are done parsing the script functions
     #ifdef __linux__
-        auto future_stringOffset = std::async([&]() {return findInMemory("12MemFunction", 13); });
+        auto future_stringOffset = std::async([&]() {
+            auto offs = findInMemory("12MemFunction", 13);
+            std::cout << "future_stringOffset" << std::hex << offs << "\n";
+            return offs;
+        });
     #else
         auto future_stringOffset = std::async([&]() {return findInMemory("tbb4malloc_bi", 13); });
     #endif

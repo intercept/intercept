@@ -66,20 +66,21 @@ switch (_returnType) { \
 }
 
 void registered_sqf_func_wrapper::setUnused() {
-    switch (_type) {
-        case functionType::sqf_nular:
-            if (_nular && _nular->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_nular, unusedNular);
-            break;
-        case functionType::sqf_function:
-            if (_func && _func->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_func, unusedFunction);
-            break;
-        case functionType::sqf_operator:
-            if (_op && _op->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_op, unusedOperator);
-            break;
-    }
+    return;
+    //switch (_type) {
+    //    case functionType::sqf_nular:
+    //        if (_nular && _nular->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_nular, unusedNular);
+    //        break;
+    //    case functionType::sqf_function:
+    //        if (_func && _func->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_func, unusedFunction);
+    //        break;
+    //    case functionType::sqf_operator:
+    //        if (_op && _op->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_op, unusedOperator);
+    //        break;
+    //}
 }
 
 intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {

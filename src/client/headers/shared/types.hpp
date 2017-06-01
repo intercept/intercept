@@ -1696,7 +1696,7 @@ namespace intercept {
         };
     #ifdef __linux__
         template <game_value(*T)(game_value, game_value)>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*l, *r));
@@ -1704,21 +1704,21 @@ namespace intercept {
         }
 
         template <game_value(*T)(game_value)>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t right_arg_) {
+        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
             return sqf_this_;
         }
 
         template <game_value(*T)(const game_value&)>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t right_arg_) {
+        static game_value* __attribute__((__stdcall__)) userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             ::new (sqf_this_) game_value(T(*r));
             return sqf_this_;
         }
 
         template <game_value(*T)()>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_) {
+        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }

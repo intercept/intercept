@@ -321,7 +321,7 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                std::cout /*LOG(INFO)*/ << "Found unary operator: " <<
+                LOG(INFO) << "Found unary operator: " <<
                     new_entry.op->return_type.type_str() << " " <<
                     new_entry.name <<
                     "(" << new_entry.op->arg_type.type_str() << ")" <<
@@ -341,7 +341,7 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                std::cout /*LOG(INFO)*/ << "Found binary operator: " <<
+                LOG(INFO) << "Found binary operator: " <<
                     new_entry.op->return_type.type_str() << " " <<
                     "(" << new_entry.op->arg1_type.type_str() << ")" <<
                     new_entry.name <<
@@ -361,7 +361,7 @@ namespace intercept {
             new_entry.op = entry._operator;
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
-            std::cout /*LOG(INFO)*/ << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
+            LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
                 << new_entry.name << " @ " << new_entry.op->procedure_addr << "\n";
             std::string name = std::string(new_entry.name);
             std::transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -407,7 +407,7 @@ namespace intercept {
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
-            std::cout /*LOG(INFO)*/ << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc << "\n";
+            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc << "\n";
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
@@ -436,11 +436,9 @@ namespace intercept {
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
     #ifdef __linux__
         const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
-        std::cout << "typename " << test << "\n";
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
-        std::cout << "typename " << test << "\n";
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
     #endif
         _allocator.genericAllocBase = allocatorVtablePtr;

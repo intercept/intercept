@@ -27,8 +27,8 @@ namespace intercept {
     #ifdef __linux__
         //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
         using nular_function = game_value(*) (const void *state);
-        using unary_function = game_value(*) (const void * state, uintptr_t);
-        using binary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t, uintptr_t);
+        using unary_function = game_value(*) (const void *state, uintptr_t);
+        using binary_function = game_value(*) (const void *state, uintptr_t, uintptr_t);
     #else
         using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
         using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);
@@ -1697,21 +1697,20 @@ namespace intercept {
         };
     #ifdef __linux__
         template <game_value(*T)(game_value, game_value)>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value  userFunctionWrapper(const void* gs, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*l, *r));
-            return sqf_this_;
+            return game_value(T(*l, *r));
         }
 
         template <game_value(*T)(game_value)>
-        static game_value* userFunctionWrapper(const void* gs, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper(const void* gs, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*r));
         }
 
         template <game_value(*T)(const game_value&)>
-        static game_value* userFunctionWrapper_ref(const void* gs, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper_ref(const void* gs, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*r));
         }

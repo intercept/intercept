@@ -182,17 +182,14 @@ namespace intercept {
         return true;
     }
 
-
-#ifdef __linux__
-#define GAME_STATE_INVOKE_PARAM , invoker::sqf_game_state
-#else
-#define GAME_STATE_INVOKE_PARAM , invoker::sqf_game_state
-#endif
-
     game_value invoker::invoke_raw_nolock(nular_function function_) {
-        //game_value ret;
         //;  //#TODO change nular_function definition to take game_value*
+    #ifdef __linux
         return function_(invoker::sqf_game_state);
+    #else
+        game_value ret;
+        function_(&ret, invoker::sqf_game_state); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_) const {
@@ -204,8 +201,12 @@ namespace intercept {
     }
 
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
+    #ifdef __linux
+        return function_(invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
+    #else
         game_value ret;
-        return  function_(invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
+        function_(&ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_)); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const {
@@ -228,9 +229,12 @@ namespace intercept {
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
         auto left = reinterpret_cast<uintptr_t>(&left_arg_);
         auto right = reinterpret_cast<uintptr_t>(&right_arg_);
+    #ifdef __linux
+        rezurn function_(invoker::sqf_game_state, left, right);
+    #else
         game_value ret;
-        function_(&ret GAME_STATE_INVOKE_PARAM, left, right);
-        return ret;
+        function_(&ret, invoker::sqf_game_state, left, right); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const {

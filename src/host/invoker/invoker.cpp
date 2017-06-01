@@ -190,9 +190,9 @@ namespace intercept {
 #endif
 
     game_value invoker::invoke_raw_nolock(nular_function function_) {
-        game_value ret;
-        function_(&ret GAME_STATE_INVOKE_PARAM);  //#TODO change nular_function definition to take game_value*
-        return ret;
+        //game_value ret;
+        //;  //#TODO change nular_function definition to take game_value*
+        return function_(invoker::sqf_game_state);
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_) const {

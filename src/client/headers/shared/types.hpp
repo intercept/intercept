@@ -25,7 +25,8 @@ namespace intercept {
     namespace types {
         class game_value;
     #ifdef __linux__
-        using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t);
+        //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
+        using nular_function = game_value(*) (const void *state);
         using unary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t);
         using binary_function = game_value*(__attribute__((__stdcall__))*) (game_value *, uintptr_t, uintptr_t, uintptr_t);
     #else
@@ -1718,9 +1719,9 @@ namespace intercept {
         }
 
         template <game_value(*T)()>
-        static game_value* __attribute__((__stdcall__)) userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
-            ::new (sqf_this_) game_value(T());
-            return sqf_this_;
+        static game_value userFunctionWrapper(const void* gs) {
+            return game_value(T());
+            //return sqf_this_;
         }
     #else
         template <game_value(*T)(game_value, game_value)>

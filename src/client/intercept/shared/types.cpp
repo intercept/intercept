@@ -743,7 +743,7 @@ namespace intercept {
         void* __internal::rv_allocator_allocate_generic(size_t size) {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
         #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
         #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
         #endif
@@ -755,7 +755,7 @@ namespace intercept {
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
         #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
         #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
         #endif
@@ -767,7 +767,7 @@ namespace intercept {
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
         #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(&(allocatorBase->genericAllocBase));
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
         #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
         #endif

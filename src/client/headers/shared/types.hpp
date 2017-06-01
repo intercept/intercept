@@ -24,9 +24,15 @@ namespace intercept {
     class invoker;
     namespace types {
         class game_value;
+    #ifdef __linux__
+        using nular_function = game_value*(*) (game_value *);
+        using unary_function = game_value*(*) (game_value *, uintptr_t);
+        using binary_function = game_value*(*) (game_value *, uintptr_t, uintptr_t);
+    #else
         using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
         using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);
         using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
+    #endif
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -1688,7 +1694,35 @@ namespace intercept {
         private:
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
+    #ifdef __linux__
+        template <game_value(*T)(game_value, game_value)>
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t left_arg_, uintptr_t right_arg_) {
+            game_value* l = reinterpret_cast<game_value*>(left_arg_);
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*l, *r));
+            return sqf_this_;
+        }
 
+        template <game_value(*T)(game_value)>
+        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return sqf_this_;
+        }
+
+        template <game_value(*T)(const game_value&)>
+        static game_value* userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            ::new (sqf_this_) game_value(T(*r));
+            return sqf_this_;
+        }
+
+        template <game_value(*T)()>
+        static game_value* userFunctionWrapper(game_value* sqf_this_) {
+            ::new (sqf_this_) game_value(T());
+            return sqf_this_;
+        }
+    #else
         template <game_value(*T)(game_value, game_value)>
         static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
@@ -1716,6 +1750,8 @@ namespace intercept {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }
+    #endif
+
     }
 }
 

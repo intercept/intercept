@@ -330,7 +330,7 @@ namespace intercept {
             r_string placeholder_10;
             r_string _category; //0x4d
         #endif
-            uint32_t placeholder11;//0x50
+            void* placeholder11{ nullptr };//0x50 JNI probably
             const char *get_map_key() const { return _name2.data(); }
         };                                                  //#TODO this is same as value_type
 

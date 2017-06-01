@@ -404,10 +404,14 @@ namespace intercept {
             auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x7);
             uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer + offset);
         #else
+        #ifdef __linux__
+            uintptr_t poolAlloc = 0;
+        #else
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
-            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc << "\n";
+        #endif
+            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << std::hex << entry->_createFunction << " pool@ " << poolAlloc << "\n";
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 

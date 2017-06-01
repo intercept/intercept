@@ -324,8 +324,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._operator->ref_count = 1;
     op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
     op._operator->return_type = retType;
+#ifndef __linux__
     op._category = "intercept";
-
+#endif
 
     auto table = gs->_scriptNulars.get_table_for_key(lowerName.c_str());
     auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
@@ -402,8 +403,13 @@ std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_func
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
+
     auto newType = new script_type_info{
+    #ifdef __linux__
+        name,cf,localizedName,localizedName,r_string("none")
+    #else
         name,cf,localizedName,localizedName,description,r_string("intercept"),typeName,r_string("none")
+    #endif
     };
     gs->_scriptTypes.emplace_back(newType);
     auto newIndex = _registerFuncs._types.size();

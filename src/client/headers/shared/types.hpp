@@ -993,9 +993,11 @@ namespace intercept {
             createFunc _createFunction{ nullptr };
             r_string _localizedName; //@STR_EVAL_TYPESCALAR
             r_string _readableName; //Number
+        #ifndef __linux__
             r_string _description; //A real number.
             r_string _category; //Default
             r_string _typeName; //float/NativeObject
+        #endif
             r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
         };
 

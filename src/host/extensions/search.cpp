@@ -9,13 +9,17 @@
 namespace intercept::search {
     plugin_searcher::plugin_searcher() {
         auto pboList = generate_pbo_list();
+        std::cout << "pbolist " << pboList.size() << "\n";
         for (auto& file : pboList) {
+            std::cout << "mod " << file << "\n";
             size_t last_index = file.find_last_of("\\/");
             std::string path = file.substr(0, last_index);
+            std::cout << "path " << path << "\n";
             last_index = path.find_last_of("\\/");
             path = path.substr(0, last_index);
-            std::cout << "modfolder " << path;
-            active_mod_folder_list.emplace_back(std::move(path));
+            std::cout << "modfolder " << path << "\n";
+            if (std::find(active_mod_folder_list.begin(), active_mod_folder_list.end(), path) == active_mod_folder_list.end())
+                active_mod_folder_list.emplace_back(std::move(path));
         }
     }
 
@@ -56,8 +60,8 @@ namespace intercept::search {
         }
         LOG(ERROR) << "Client plugin: " << name << " was not found.";
         return std::optional<std::string>();
+        }
     }
-}
 
 
 
@@ -88,6 +92,7 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
         }
     }
     closedir(dir);
+    std::cout << "gen pbolist done\n";
 }
 
 #else

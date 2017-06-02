@@ -21,49 +21,49 @@ namespace intercept {
     namespace sqf {
         /* - Markers - */
 
-        std::string create_marker(const std::string &name_, const vector3 &pos_);
-        std::string create_marker(const std::string &name_, const vector2 &pos_);
-        std::string create_marker(const std::string &name_, const object &pos_);
-        std::string create_marker_local(const std::string &name_, const vector3 &pos_);
-        std::string create_marker_local(const std::string &name_, const vector2 &pos_);
-        std::string create_marker_local(const std::string &name_, const object &pos_);
+        sqf_return_string create_marker(sqf_string_const_ref name_, const vector3 &pos_);
+        sqf_return_string create_marker(sqf_string_const_ref name_, const vector2 &pos_);
+        sqf_return_string create_marker(sqf_string_const_ref name_, const object &pos_);
+        sqf_return_string create_marker_local(sqf_string_const_ref name_, const vector3 &pos_);
+        sqf_return_string create_marker_local(sqf_string_const_ref name_, const vector2 &pos_);
+        sqf_return_string create_marker_local(sqf_string_const_ref name_, const object &pos_);
 
-        void delete_marker(const std::string& value_);
-        void delete_marker_local(const std::string& value_);
+        void delete_marker(sqf_string_const_ref value_);
+        void delete_marker_local(sqf_string_const_ref value_);
 
-        void set_marker_size(const std::string& marker_, const vector2& size_);
-        void set_marker_size_local(const std::string& marker_, const vector2& size_);
-        void set_marker_type(const std::string& marker_, const std::string& type_);
-        void set_marker_type_local(const std::string& marker_, const std::string& type_);
-        void set_marker_text(const std::string& marker_, const std::string& text_);
-        void set_marker_text_local(const std::string& marker_, const std::string& text_);
-        void set_marker_shape(const std::string& marker_, const std::string& shape_);
-        void set_marker_shape_local(const std::string& marker_, const std::string& shape_);
-        void set_marker_pos(const std::string& marker_, const vector3& pos_);
-        void set_marker_pos_local(const std::string& marker_, const vector3& pos_);
-        void set_marker_pos(const std::string& marker_, const vector2& pos_);
-        void set_marker_pos_local(const std::string& marker_, const vector2& pos_);
-        void set_marker_brush(const std::string& marker_, const std::string& brush_);
-        void set_marker_brush_local(const std::string& marker_, const std::string& brush_);
-        void set_marker_color(const std::string& marker_, const std::string& color_);
-        void set_marker_color_local(const std::string& marker_, const std::string& color_);
-        void set_marker_alpha(const std::string& marker_, float alpha_);
-        void set_marker_alpha_local(const std::string& marker_, float alpha_);
-        void set_marker_dir(const std::string& marker_, float dir_);
-        void set_marker_dir_local(const std::string& marker_, float dir_);
+        void set_marker_size(sqf_string_const_ref marker_, const vector2& size_);
+        void set_marker_size_local(sqf_string_const_ref marker_, const vector2& size_);
+        void set_marker_type(sqf_string_const_ref marker_, sqf_string_const_ref type_);
+        void set_marker_type_local(sqf_string_const_ref marker_, sqf_string_const_ref type_);
+        void set_marker_text(sqf_string_const_ref marker_, sqf_string_const_ref text_);
+        void set_marker_text_local(sqf_string_const_ref marker_, sqf_string_const_ref text_);
+        void set_marker_shape(sqf_string_const_ref marker_, sqf_string_const_ref shape_);
+        void set_marker_shape_local(sqf_string_const_ref marker_, sqf_string_const_ref shape_);
+        void set_marker_pos(sqf_string_const_ref marker_, const vector3& pos_);
+        void set_marker_pos_local(sqf_string_const_ref marker_, const vector3& pos_);
+        void set_marker_pos(sqf_string_const_ref marker_, const vector2& pos_);
+        void set_marker_pos_local(sqf_string_const_ref marker_, const vector2& pos_);
+        void set_marker_brush(sqf_string_const_ref marker_, sqf_string_const_ref brush_);
+        void set_marker_brush_local(sqf_string_const_ref marker_, sqf_string_const_ref brush_);
+        void set_marker_color(sqf_string_const_ref marker_, sqf_string_const_ref color_);
+        void set_marker_color_local(sqf_string_const_ref marker_, sqf_string_const_ref color_);
+        void set_marker_alpha(sqf_string_const_ref marker_, float alpha_);
+        void set_marker_alpha_local(sqf_string_const_ref marker_, float alpha_);
+        void set_marker_dir(sqf_string_const_ref marker_, float dir_);
+        void set_marker_dir_local(sqf_string_const_ref marker_, float dir_);
 
-        float marker_alpha(const std::string& value_);
-        float marker_dir(const std::string& value_);
-        std::string marker_brush(const std::string& value_);
-        std::string marker_color(const std::string& value_);
-        std::string marker_shape(const std::string& value_);
-        std::string marker_text(const std::string& value_);
-        std::string marker_type(const std::string& value_);
+        float marker_alpha(sqf_string_const_ref value_);
+        float marker_dir(sqf_string_const_ref value_);
+        sqf_return_string marker_brush(sqf_string_const_ref value_);
+        sqf_return_string marker_color(sqf_string_const_ref value_);
+        sqf_return_string marker_shape(sqf_string_const_ref value_);
+        sqf_return_string marker_text(sqf_string_const_ref value_);
+        sqf_return_string marker_type(sqf_string_const_ref value_);
 
-        std::string get_marker_color(const std::string& value_);
-        std::string get_marker_type(const std::string& value_);
-        vector3 get_marker_pos(const std::string& value_);
-        vector2 get_marker_size(const std::string& value_);
+        sqf_return_string get_marker_color(sqf_string_const_ref value_);
+        sqf_return_string get_marker_type(sqf_string_const_ref value_);
+        vector3 get_marker_pos(sqf_string_const_ref value_);
+        vector2 get_marker_size(sqf_string_const_ref value_);
 
         std::vector<marker> all_map_markers();
 
@@ -94,8 +94,8 @@ namespace intercept {
         float distance(const location& start_, const location& end_);
         float distance(const location& start_, const vector3& end_);
         float distance(const vector3& start_, const location& end_);
-        location nearest_location(const vector3& pos_, const std::string& location_class_);
-        location nearest_location(const object& unit_, const std::string& location_class_);
+        location nearest_location(const vector3& pos_, sqf_string_const_ref location_class_);
+        location nearest_location(const object& unit_, sqf_string_const_ref location_class_);
         location nearest_location_with_dubbing(const vector3 &pos_);
         location nearest_location_with_dubbing(const object &obj_);
         object attached_object(const location &loc_);
@@ -104,81 +104,45 @@ namespace intercept {
         vector2 size(const location &loc_);
         vector3 get_pos(const location & loc_);
         vector2 location_position(const location &loc_);
-        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_);
-        std::vector<location> nearest_locations(const vector3& pos_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
-        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_);
-        std::vector<location> nearest_locations(const object& unit_, std::vector<std::string>& location_types_, float radius_, const vector3& sort_position_);
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_);
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const vector3 &sort_pos_);
-        std::vector<location> nearest_locations(const vector3 pos_, const std::vector<std::string> &loc_types_, float radius_, const object &sort_obj_);
-        std::vector<std::string> all_variables(const location &value_);
-        std::string name(const location &loc_);
-        std::string type(const location& loc_);
-        game_value get_variable(const location & loc_, const std::string & var_name_);
-        std::string class_name(const location &loc_);
-        location create_location(const std::string &classname_, const vector3 &pos_, float size_x_, float size_y_);
-        location create_location(const std::string &classname_, const vector2 & pos_, float size_x_, float size_y_);
-        location create_location(const std::string &classname_, const object &obj_, float size_x_, float size_y_);
+        std::vector<location> nearest_locations(const vector3& pos_, sqf_string_list_const_ref location_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3& pos_, sqf_string_list_const_ref location_types_, float radius_, const vector3& sort_position_);
+        std::vector<location> nearest_locations(const object& unit_, sqf_string_list_const_ref location_types_, float radius_);
+        std::vector<location> nearest_locations(const object& unit_, sqf_string_list_const_ref location_types_, float radius_, const vector3& sort_position_);
+        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_);
+        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const vector3 &sort_pos_);
+        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const object &sort_obj_);
+        sqf_return_string_list all_variables(const location &value_);
+        sqf_return_string name(const location &loc_);
+        sqf_return_string type(const location& loc_);
+        game_value get_variable(const location & loc_, sqf_string_const_ref var_name_);
+        sqf_return_string class_name(const location &loc_);
+        location create_location(sqf_string_const_ref classname_, const vector3 &pos_, float size_x_, float size_y_);
+        location create_location(sqf_string_const_ref classname_, const vector2 & pos_, float size_x_, float size_y_);
+        location create_location(sqf_string_const_ref classname_, const object &obj_, float size_x_, float size_y_);
         location location_null();
 
+        void set_rectangular(const location &location_, bool rectangular_);
+        void set_size(const location &location_, float size_x_, float size_y_);
+        void set_name(const location &location_, sqf_string_const_ref name_);
+        void set_speech(const location &location_, sqf_string_const_ref speech_);
+        void set_text(const location &location_, sqf_string_const_ref text_);
+        void set_type(const location &location_, sqf_string_const_ref type_);
 
 
 
 
 
-
-
-
-
-
-
-
-        //Triggers
-
-        struct rv_trigger_area {
-            float x;
-            float y;
-            float angle;
-            bool rectangle;
-            float z; // since Arma 3 v1.59.135137
-
-            rv_trigger_area(const game_value &ret_game_value_) :
-                x(ret_game_value_[0]),
-                y(ret_game_value_[1]),
-                angle(ret_game_value_[2]),
-                rectangle(ret_game_value_[3]),
-                z(ret_game_value_[4]) {}
-        };
-
-        rv_trigger_area trigger_area(const object& trigger_);
-
-        struct rv_trigger_timeout {
-            float time_min;
-            float time_mid;
-            float time_max;
-            bool interruptable;
-
-            rv_trigger_timeout(const game_value &ret_game_value_) :
-                time_min(ret_game_value_[0]),
-                time_mid(ret_game_value_[1]),
-                time_max(ret_game_value_[2]),
-                interruptable(ret_game_value_[3]) {}
-        };
-
-        rv_trigger_timeout trigger_timeout(const object& trigger_);
-
-        std::vector<object> list(const object& trigger_);
-        void trigger_attach_object(const object &value0_, float value1_);
-        void set_trigger_text(const object &value0_, const std::string& value1_);
-        void set_trigger_type(const object &value0_, const std::string& value1_);
-        bool trigger_activated(const object &value_);
-        object trigger_attached_vehicle(const object &value_);
-        std::string trigger_text(const object &value_);
-        float trigger_timeout_current(const object &value_);
-        std::string trigger_type(const object &value_);
-        object create_trigger(const std::string &type_, const vector3 &pos_, bool make_global_ = true);
-        object create_trigger(const std::string &type_, const object &pos_, bool make_global_ = true);
-
+        //icons/draw
+        void remove_draw_icon(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref string_identifier);
+        void remove_draw_links(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref string_identifier);
+        void set_draw_icon(const control &map_, const object &object_, sqf_string_const_ref texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, sqf_string_const_ref identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_);
+        void update_draw_icon(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref string_identifier_, const rv_color &color_, const vector2 &offset_, float width_, float height_, bool maintain_size_, float angle_, int shadow_);
+        void draw_arrow(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
+        void draw_ellipse(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> center_, const vector2 &radius_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture);
+        void draw_line(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, const rv_color &color_);
+        void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, sqf_string_const_ref param_type_, sqf_string_const_ref line_type_, rv_color &color_);
+        void draw_location(const control &map_, const location &location_);
+        void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
 
     }
 }

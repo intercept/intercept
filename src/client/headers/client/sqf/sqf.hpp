@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "ai.hpp"
 #include "chat.hpp"
 #include "core.hpp"
 #include "position.hpp"
@@ -15,6 +16,14 @@
 #include "config.hpp"
 #include "camera.hpp"
 #include "inventory.hpp"
+#include "hc.hpp"
+#include "sound.hpp"
+#include "cargo.hpp"
+#include "tasks.hpp"
+#include "debug.hpp"
+#include "rotorlib.hpp"
+#include "units.hpp"
+#include "vehicles.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

@@ -22,7 +22,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* eden */
-        std::string current_eden_operation();
+        sqf_return_string current_eden_operation();
         object get_eden_camera();
         // [showScene,showMap]
         std::pair<bool, bool> get_eden_icons_visible();
@@ -31,22 +31,22 @@ namespace intercept {
         // TODO array[] get_eden_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
         bool is_eden();
         bool is_eden_multiplayer();
-        float get_eden_action_state(const std::string &value_);
-        void edit_eden_mission_attributes(const std::string &value_);
-        float add_eden_layer(int parent_layer_id_, const std::string& name_);
+        float get_eden_action_state(sqf_string_const_ref value_);
+        void edit_eden_mission_attributes(sqf_string_const_ref value_);
+        float add_eden_layer(int parent_layer_id_, sqf_string_const_ref name_);
         bool remove_eden_layer(float value_);
-        void remove_all_eden_eventhandlers(const std::string &value_);
-        float add_eden_event_handler(const std::string &type_, const code &code_);
+        void remove_all_eden_eventhandlers(sqf_string_const_ref value_);
+        float add_eden_event_handler(sqf_string_const_ref type_, const code &code_);
         std::vector<game_value> create_3den_composition(const config &config_path_, const vector3 &position_);// TODO add Eden Entity type
-        game_value create_3den_entity(const std::string &mode_, const std::string &class_, const vector3 &position_, bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
+        game_value create_3den_entity(sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty_); // TODO array[] of array[string,Eden entity] and mode can only be  "Object", "Trigger", "Logic", "Waypoint" or "Marker"
         std::vector<game_value> create_3den_connections(const game_value &entity_);
         game_value get_3den_entity(const float &entity_id_);
         std::vector<game_value> get_3den_layer_entities(const float &layer_id_);
-        std::vector<game_value> get_3den_selected(const std::string &type_);
+        std::vector<game_value> get_3den_selected(sqf_string_const_ref type_);
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_);
         std::vector<object> all_eden_entities();
-        void do_eden_action(const std::string& value_);
-        void get_eden_grid(const std::string& value_);
+        void do_eden_action(sqf_string_const_ref value_);
+        void get_eden_grid(sqf_string_const_ref value_);
         struct rv_eden_mouse_over {
             std::string type;
             game_value entity;
@@ -66,30 +66,54 @@ namespace intercept {
         void delete_eden_entities(const vector3 &entity_);
         void delete_eden_entities(const marker &entity_);
 
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<object> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<group> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<vector3> &from_, const marker &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const object &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const group &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const vector3 &to_);
-        bool add_eden_connection(const std::string &type_, const std::vector<marker> &from_, const marker &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<object> &from_, const object &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<object> &from_, const group &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<object> &from_, const vector3 &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<object> &from_, const marker &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<group> &from_, const object &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<group> &from_, const group &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<group> &from_, const vector3 &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<group> &from_, const marker &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<vector3> &from_, const object &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<vector3> &from_, const group &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<vector3> &from_, const vector3 &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<vector3> &from_, const marker &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<marker> &from_, const object &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<marker> &from_, const group &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<marker> &from_, const vector3 &to_);
+        bool add_eden_connection(sqf_string_const_ref type_, const std::vector<marker> &from_, const marker &to_);
 
-        void set_eden_grid(const std::string &type_, float increment_);
+        void set_eden_grid(sqf_string_const_ref type_, float increment_);
         void set_eden_icons_visible(bool map_, bool scene_);
         void set_eden_lines_visible(bool map_, bool scene_);
-        bool set_eden_mission_attributes(const std::string &section_, const std::string &class_, const game_value &value_);
+        bool set_eden_mission_attributes(sqf_string_const_ref section_, sqf_string_const_ref class_, const game_value &value_);
 
-        void remove_eden_event_handler(const std::string &type_, float id_);
+        void remove_eden_event_handler(sqf_string_const_ref type_, float id_);
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
+
+
+        void remove_3den_connection(sqf_string_const_ref type_, const std::vector<object> &from_, sqf_string_const_ref to_); //#TODO: Create class 'rv_eden_entity'
+        void clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_);
+        game_value create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty = false);
+        std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, sqf_string_const_ref_wrapper, std::reference_wrapper<float>> entity_, sqf_string_const_ref attribute_);
+        game_value get_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref class_);
+
+
+        bool set_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref attribute_class_, game_value _attribute_value);
+
+        //#TODO not object but Eden_Entity 
+        //#TODO typedef variant for Eden_Entity 
+        //#TODO use it for https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
+        bool set_3den_attribute(const object& entity_, sqf_string_const_ref attribute_class_, game_value _attribute_value);
+        //#TODO not object but Eden_Entity 
+        bool set_3den_layer(const object& entity_, float layer_);
+        void set_3den_object_type(const std::vector<object> & objects_, sqf_string_const_ref classname_);
+
+        void set_3den_selected(const std::vector<object> &entites_);
+
+        sqf_return_string_list get_mission_layers();
+        void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
+        sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
 
     }
 }

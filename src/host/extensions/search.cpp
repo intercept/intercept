@@ -40,7 +40,7 @@ namespace intercept::search {
     }
 
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
-        LOG(DEBUG) << "Searching for Extension: " << name;
+        LOG(DEBUG) << "Searching for Extension: " << name << "\n";
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
             std::string test_path = folder + "\\intercept\\" + name + "_x64.dll";
@@ -52,13 +52,13 @@ namespace intercept::search {
         #endif
         #endif
 
-            LOG(DEBUG) << "Mod: " << test_path;
+            LOG(DEBUG) << "Mod: " << test_path << "\n";
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 return test_path;
             }
         }
-        LOG(ERROR) << "Client plugin: " << name << " was not found.";
+        LOG(ERROR) << "Client plugin: " << name << " was not found.\n";
         return std::optional<std::string>();
         }
     }
@@ -93,6 +93,7 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
     }
     closedir(dir);
     std::cout << "gen pbolist done\n";
+    return _active_pbo_list;
 }
 
 #else

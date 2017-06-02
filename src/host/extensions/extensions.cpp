@@ -114,7 +114,6 @@ namespace intercept {
         }
     #endif
 
-        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
     #ifdef __linux__
         auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
@@ -147,7 +146,7 @@ namespace intercept {
             return false;
         }
 
-        if (new_module.functions.api_version() <= PLUGIN_MIN_API_VERSION) {
+        if (new_module.functions.api_version() < PLUGIN_MIN_API_VERSION) {
             LOG(ERROR) << "Module " << path << " has invalid API Version. Has: " << new_module.functions.api_version() << " Need: " << PLUGIN_MIN_API_VERSION;
             return false;
         }
@@ -235,7 +234,7 @@ namespace intercept {
         if (module->second.functions.handle_unload) {
             module->second.functions.handle_unload();
         }
-        //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlclose.html
+
     #ifdef __linux
         if (dlclose(module->second.handle)) {//returms 0 on success
             LOG(INFO) << "dlclose() failed during unload, e=" << dlerror();

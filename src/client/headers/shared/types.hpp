@@ -5,10 +5,18 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
-#include <utility> //std::hash
+//#include <utility>
 #include "vector.hpp"
-#include "pool.hpp"
+//#include "pool.hpp"
+#include "shared.hpp"
 #include <string_view>
+#include <string.h>
+#include <algorithm>
+
+//GNUC somehow can't do it if it's inside shared.hpp.
+#ifdef __GNUC__
+#define CDECL __attribute__ ((__cdecl__))
+#endif
 
 namespace intercept {
     class sqf_functions;
@@ -16,9 +24,16 @@ namespace intercept {
     class invoker;
     namespace types {
         class game_value;
-        typedef game_value*(__cdecl *nular_function)(game_value *, uintptr_t);
-        typedef game_value*(__cdecl *unary_function)(game_value *, uintptr_t, uintptr_t);
-        typedef game_value*(__cdecl *binary_function)(game_value *, uintptr_t, uintptr_t, uintptr_t);
+    #ifdef __linux__
+        //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
+        using nular_function = game_value(*) (uintptr_t state);
+        using unary_function = game_value(*) (uintptr_t state, uintptr_t);
+        using binary_function = game_value(*) (uintptr_t state, uintptr_t, uintptr_t);
+    #else
+        using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
+        using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);
+        using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
+    #endif
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -146,7 +161,8 @@ namespace intercept {
             int size() const { return _size; }
             Type *data() { return &_data; }
             const Type *data() const { return &_data; }
-
+            const Type * cbegin() const { return &_data; }
+            const Type * cend() const { return (&_data) + _size; }
 
             //We delete ourselves! After release no one should have a pointer to us anymore!
             int release() const {
@@ -250,7 +266,7 @@ namespace intercept {
                 if (str.length()) _ref = create(str.data(), str.length());
             }
 
-            explicit constexpr r_string(compact_array<char>* dat) : _ref(dat) {}
+            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
             template<std::size_t N>
             //constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
             //constexpr r_string(std::string_view str) {   //https://woboq.com/blog/qstringliteral.html
@@ -312,8 +328,14 @@ namespace intercept {
             //== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?
-
+                //#TODO compare performance of new equality thingy
+                //cross platform way
+            #ifdef __GNUC__
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            #else
                 return _strcmpi(data(), other) == 0;
+            #endif
             }
             //#Test yet untested
             bool operator < (const r_string& other) const {
@@ -323,12 +345,22 @@ namespace intercept {
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
+            #ifdef __GNUC__ 
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            #else
                 return _strcmpi(data(), other.data()) == 0;
+            #endif
             }
 
             //!= is case insensitive just like scripting
             bool operator != (const char *other) const {
+            #ifdef __GNUC__
+                return !std::equal(_ref->cbegin(), _ref->cend(),
+                    other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            #else
                 return _strcmpi(data(), other) != 0;
+            #endif
             }
 
             friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
@@ -337,7 +369,12 @@ namespace intercept {
             }
 
             bool compare_case_sensitive(const char *other) const {
+            #ifdef __GNUC__
+                return !std::equal(_ref->cbegin(), _ref->cend(),
+                    other, [](unsigned char l, unsigned char r) {return l == r; });
+            #else
                 return _stricmp(data(), other) == 0;
+            #endif
             }
 
             size_t find(char ch, size_t start = 0) const {
@@ -366,7 +403,11 @@ namespace intercept {
             static compact_array<char> *create(const char *str, int len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
+            #if __GNUC__
+                std::copy_n(str, len, string->data());
+            #else
                 strncpy_s(string->data(), string->size(), str, len);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            #endif
                 string->data()[len] = 0;
                 return string;
             }
@@ -586,9 +627,14 @@ namespace intercept {
                     return;
                 }
                 newData = rv_allocator<Type>::createUninitializedArray(size);
-                memset(newData, 0, size * sizeof(Type));
+                //#TODO I disabled this. Check if this causes any harm
+                //memset(newData, 0, size * sizeof(Type));
                 if (base::_data) {
+                #ifdef __GNUC__
+                    memmove(newData, base::_data, base::_n * sizeof(Type));
+                #else
                     memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                #endif
                     rv_allocator<Type>::deallocate(base::_data);
                 }
                 base::_data = newData;
@@ -601,6 +647,10 @@ namespace intercept {
                 reallocate(_maxItems + std::max(n, growthFactor));
             }
         public:
+            using base::end;
+            using base::begin;
+            using base::cend;
+            using base::cbegin;
             using iterator = typename base::iterator;
             using const_iterator = typename base::const_iterator;
             auto_array() : rv_array<Type>(), _maxItems(0) {};
@@ -609,10 +659,10 @@ namespace intercept {
             }
             template<class _InIt>
             auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
-                insert(base::end(), _first, _last);
+                insert(end(), _first, _last);
             }
             auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(0) {
-                insert(base::end(), copy_.begin(), copy_.end());
+                insert(end(), copy_.begin(), copy_.end());
             }
             auto_array(auto_array<Type> &&move_) noexcept : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
                 move_._maxItems = 0;
@@ -703,10 +753,14 @@ namespace intercept {
             void erase(const_iterator element) {
                 if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
                 size_t index = std::distance(base::cbegin(), element);
-                if (index > base::_n) return;
+                if (static_cast<int>(index) > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
+            #ifdef __GNUC__
+                memmove(&(*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            #else
                 memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
+            #endif
                 --base::_n;
             }
             //This is sooo not threadsafe!
@@ -771,8 +825,8 @@ namespace intercept {
             static unsigned int hash_key(const char * key) {
                 return rv_map_hash_string_case_sensitive(key);
             }
-            static int compare_keys(const char * k1, const char * k2) {
-                return strcmp(k1, k2);
+            static bool compare_keys(const char * k1, const char * k2) {
+                return strcmp(k1, k2) == 0;
             }
         };
 
@@ -781,8 +835,13 @@ namespace intercept {
                 return rv_map_hash_string_case_insensitive(key);
             }
 
-            static int compare_keys(const char * k1, const char * k2) {
-                return _strcmpi(k1, k2);
+            static bool compare_keys(const char * k1, const char * k2) {
+            #ifdef __GNUC__
+                return std::equal(k1, k1 + strlen(k1),
+                    k2, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            #else
+                return _strcmpi(k1, k2) == 0;
+            #endif
             }
         };
 
@@ -889,7 +948,7 @@ namespace intercept {
                 int hashedKey = hash_key(key);
                 for (int i = 0; i < _table[hashedKey].count(); i++) {
                     const Type &item = _table[hashedKey][i];
-                    if (Traits::compare_keys(item.get_map_key(), key) == 0)
+                    if (Traits::compare_keys(item.get_map_key(), key))
                         return item;
                 }
                 return _null_entry;
@@ -906,7 +965,7 @@ namespace intercept {
                 int hashedKey = hash_key(key);
                 for (size_t i = 0; i < _table[hashedKey].count(); i++) {
                     Type &item = _table[hashedKey][i];
-                    if (Traits::compare_keys(item.get_map_key(), key) == 0)
+                    if (Traits::compare_keys(item.get_map_key(), key))
                         return item;
                 }
                 return _null_entry;
@@ -941,9 +1000,11 @@ namespace intercept {
             createFunc _createFunction{ nullptr };
             r_string _localizedName; //@STR_EVAL_TYPESCALAR
             r_string _readableName; //Number
+        #ifndef __linux__
             r_string _description; //A real number.
             r_string _category; //Default
             r_string _typeName; //float/NativeObject
+        #endif
             r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
         };
 
@@ -1017,7 +1078,7 @@ namespace intercept {
         class game_value;
         class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
-            friend class invoker;
+            friend class intercept::invoker;
         public:
             virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
             virtual ~game_data() {}
@@ -1042,6 +1103,9 @@ namespace intercept {
 
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
+        #ifdef __linux__
+        public:
+        #endif
             uintptr_t get_vtable() const {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
@@ -1059,8 +1123,8 @@ namespace intercept {
             game_data_number(float val_);
             game_data_number(const game_data_number &copy_);
             game_data_number(game_data_number &&move_);
-            game_data_number & game_data_number::operator = (const game_data_number &copy_);
-            game_data_number & game_data_number::operator = (game_data_number &&move_);
+            game_data_number& operator = (const game_data_number &copy_);
+            game_data_number& operator = (game_data_number &&move_);
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
@@ -1080,8 +1144,8 @@ namespace intercept {
             game_data_bool(bool val_);
             game_data_bool(const game_data_bool &copy_);
             game_data_bool(game_data_bool &&move_);
-            game_data_bool & game_data_bool::operator = (const game_data_bool &copy_);
-            game_data_bool & game_data_bool::operator = (game_data_bool &&move_);
+            game_data_bool& operator = (const game_data_bool &copy_);
+            game_data_bool& operator = (game_data_bool &&move_);
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
@@ -1104,7 +1168,7 @@ namespace intercept {
 
         class game_value {
             uintptr_t __vptr;
-            friend class invoker;
+            friend class intercept::invoker;
         public:
             static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
@@ -1178,7 +1242,9 @@ namespace intercept {
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
+        #ifndef __linux__
         protected:
+        #endif
             uintptr_t get_vtable() const;
             void set_vtable(uintptr_t vt);
 
@@ -1196,8 +1262,8 @@ namespace intercept {
             game_data_array(auto_array<game_value> &&init_);
             game_data_array(const game_data_array &copy_);
             game_data_array(game_data_array &&move_);
-            game_data_array & game_data_array::operator = (const game_data_array &copy_);
-            game_data_array & game_data_array::operator = (game_data_array &&move_);
+            game_data_array& operator = (const game_data_array &copy_);
+            game_data_array& operator = (game_data_array &&move_);
             ~game_data_array();
             auto_array<game_value> data;
             auto length() { return data.count(); }
@@ -1216,8 +1282,8 @@ namespace intercept {
             game_data_string(const r_string &str_);
             game_data_string(const game_data_string &copy_);
             game_data_string(game_data_string &&move_);
-            game_data_string & game_data_string::operator = (const game_data_string &copy_);
-            game_data_string & game_data_string::operator = (game_data_string &&move_);
+            game_data_string& operator = (const game_data_string &copy_);
+            game_data_string& operator = (game_data_string &&move_);
             ~game_data_string();
             r_string raw_string;
             size_t hash() const { return __internal::pairhash(type_def, raw_string); };
@@ -1393,6 +1459,8 @@ namespace intercept {
                 vector3 _cameraPositionWorld;
                 vector3 _aimingPositionWorld;
             };
+        #ifndef __linux__
+            //Not compatible yet. Not sure if every will be.
             visualState get_position_matrix() const {
                 if (!object || !object->object) return visualState();
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
@@ -1448,7 +1516,12 @@ namespace intercept {
                 };
                 v2* v = (v2*) vbase;
                 auto& typex = typeid(*v);
+            #ifdef __GNUC__
+                auto test = typex.name();
+            #else
                 auto test = typex.raw_name();
+            #endif
+
                 auto hash = typex.hash_code();
                 if (hash !=
                 #if _WIN64 || __X86_64__
@@ -1472,7 +1545,7 @@ namespace intercept {
                 };
 
             }
-
+        #endif
             struct {
                 uint32_t _x;
                 void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
@@ -1571,7 +1644,7 @@ namespace intercept {
                 }
                 */
             }
-            };
+        };
     #endif
 
         namespace __internal {
@@ -1625,6 +1698,32 @@ namespace intercept {
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
 
+    #ifdef __linux__
+        template <game_value(*T)(game_value, game_value)>
+        static game_value  userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
+            game_value* l = reinterpret_cast<game_value*>(left_arg_);
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            return game_value(T(*l, *r));
+        }
+
+        template <game_value(*T)(game_value)>
+        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            return game_value(T(*r));
+        }
+
+        template <game_value(*T)(const game_value&)>
+        static game_value userFunctionWrapper_ref(uintptr_t gs, uintptr_t right_arg_) {
+            game_value* r = reinterpret_cast<game_value*>(right_arg_);
+            return game_value(T(*r));
+        }
+
+        template <game_value(*T)()>
+        static game_value userFunctionWrapper(uintptr_t gs) {
+            return game_value(T());
+            //return sqf_this_;
+        }
+    #else
         template <game_value(*T)(game_value, game_value)>
         static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
@@ -1652,8 +1751,10 @@ namespace intercept {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }
-        }
+    #endif
+
     }
+}
 
 namespace std {
     template <> struct hash<intercept::types::r_string> {

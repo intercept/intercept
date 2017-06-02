@@ -5,20 +5,18 @@
 #include "client/sqf/sqf.hpp"
 #include "shared/client_types.hpp"
 
-#define DLLEXPORT __declspec(dllexport)
-
 namespace intercept {
     extern "C" {
-        DLLEXPORT int  __cdecl api_version();
-        DLLEXPORT void __cdecl pre_start();
-        DLLEXPORT void __cdecl pre_init();
-        DLLEXPORT void __cdecl post_init();
-        DLLEXPORT void __cdecl mission_end();
-        DLLEXPORT void __cdecl mission_stopped();
-        DLLEXPORT void __cdecl on_frame();
-        DLLEXPORT void __cdecl on_signal(std::string &signal_name_, game_value& value1_);
+        DLLEXPORT int  CDECL api_version();
+        DLLEXPORT void CDECL pre_start();
+        DLLEXPORT void CDECL pre_init();
+        DLLEXPORT void CDECL post_init();
+        DLLEXPORT void CDECL mission_end();
+        DLLEXPORT void CDECL mission_stopped();
+        DLLEXPORT void CDECL on_frame();
+        DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);
 
-#define EH(x) DLLEXPORT void __cdecl x
+#define EH(x) DLLEXPORT void CDECL x
          //#TODO may want r_string& here
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);

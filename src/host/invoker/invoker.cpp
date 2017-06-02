@@ -2,6 +2,10 @@
 #include "controller.hpp"
 #include "extensions.hpp"
 #include "shared/client_types.hpp"
+#ifdef __linux__
+#include <dlfcn.h>
+#include <link.h>
+#endif
 
 namespace intercept {
     //game_data_string_pool<> invoker::string_pool;
@@ -14,7 +18,7 @@ namespace intercept {
     bool invoker::invoker_accessible_all = false;
 
     unary_function invoker::_register_hook_trampoline = nullptr;
-    uintptr_t invoker::sqf_game_state = NULL;
+    uintptr_t invoker::sqf_game_state = 0;
 
     invoker::invoker() : _thread_count(0), _patched(false), _attached(false) {
 
@@ -141,7 +145,11 @@ namespace intercept {
         auto signal_func_it = signal_module->second.signal_funcs.find(signal_name);
         module::on_signal_func signal_func;
         if (signal_func_it == signal_module->second.signal_funcs.end()) {
+        #ifdef __linux__
+            signal_func = reinterpret_cast<module::on_signal_func>(dlsym(signal_module->second.handle, signal_name.c_str()));
+        #else
             signal_func = reinterpret_cast<module::on_signal_func>(GetProcAddress(signal_module->second.handle, signal_name.c_str())); //#TODO why?! The signal module function thingy is commented out.. also has a #TODO with ?! on it
+        #endif
             if (!signal_func)
                 return false;
             else
@@ -175,9 +183,13 @@ namespace intercept {
     }
 
     game_value invoker::invoke_raw_nolock(nular_function function_) {
+        //;  //#TODO change nular_function definition to take game_value*
+    #ifdef __linux
+        return function_(invoker::sqf_game_state);
+    #else
         game_value ret;
-        function_(&ret, invoker::sqf_game_state);  //#TODO change nular_function definition to take game_value*
-        return ret;
+        function_(&ret, invoker::sqf_game_state); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_) const {
@@ -189,9 +201,12 @@ namespace intercept {
     }
 
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
+    #ifdef __linux
+        return function_(invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
+    #else
         game_value ret;
-        function_(&ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
-        return ret;
+        function_(&ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_)); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const {
@@ -214,9 +229,12 @@ namespace intercept {
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
         auto left = reinterpret_cast<uintptr_t>(&left_arg_);
         auto right = reinterpret_cast<uintptr_t>(&right_arg_);
+    #ifdef __linux
+        return function_(invoker::sqf_game_state, left, right);
+    #else
         game_value ret;
-        function_(&ret, invoker::sqf_game_state, left, right);
-        return ret;
+        function_(&ret, invoker::sqf_game_state, left, right); return ret;
+    #endif
     }
 
     game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const {
@@ -358,7 +376,7 @@ namespace intercept {
         invoker::get().type_structures["NAMESPACE"] = structure;
         game_data_rv_namespace::type_def = structure.first;
         game_data_rv_namespace::data_type_def = structure.second;
-
+        LOG(INFO) << "invoker::_intercept_registerTypes done\n";
         return true;
     }
 

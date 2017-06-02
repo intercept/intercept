@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.8)
 project (Intercept)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
@@ -6,7 +6,7 @@ include(${PROJECT_SOURCE_DIR}/CMakeModules/cxx_compiler_functions.cmake)
 
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
-if(USE_STATIC_LINKING) 
+if(USE_STATIC_LINKING)
 	message("WARNING: Linking statically")
 	set(INTERCEPT_LINK_TYPE "static")
 else()
@@ -30,7 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-SET(CMAKE_INCLUDE_CURRENT_DIR ON) 
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_subdirectory(src/host)

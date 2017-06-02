@@ -1,7 +1,12 @@
 ﻿#include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
+#ifdef __linux__
+#include <dlfcn.h>
+#include <link.h>
+#endif
 
+#define PLUGIN_MIN_API_VERSION 1
 
 namespace intercept {
 
@@ -22,15 +27,8 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
-        for (auto file : _searcher.active_pbo_list()) {
-            size_t last_index = file.find_last_of("\\/");
-            std::string path = file.substr(0, last_index);
-            last_index = path.find_last_of("\\/");
-            path = path.substr(0, last_index);
-            _mod_folders.push_back(path);
-        }
-        _mod_folders.unique();
-        std::string arg_line = _searcher.getCommandLine();
+        //#BUG //#FIXME reenable this by implementing searcher like wanted
+        std::string arg_line = _searcher.get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {
             do_reload = true;
@@ -86,30 +84,11 @@ namespace intercept {
             }
         }
 
-        std::string full_path = "";
-
-        for (auto folder : _mod_folders) {
-        #if _WIN64 || __X86_64__
-            std::string test_path = folder + "\\intercept\\" + path + "_x64.dll";
-        #else
-            std::string test_path = folder + "\\intercept\\" + path + ".dll";
-        #endif
-
-            LOG(DEBUG) << "Mod: " << test_path;
-            std::ifstream check_file(test_path);
-            if (check_file.good()) {
-                full_path = test_path;
-                break;
-            }
-        }
-        if (full_path == "") {
-            LOG(ERROR) << "Client plugin: " << path << " was not found.";
+        auto full_path = _searcher.find_extension(path);
+        if (!full_path)
             return false;
-        }
 
-
-
-
+    #ifndef __linux__ //Lazyness
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file.";
             char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
@@ -124,39 +103,69 @@ namespace intercept {
             }
             std::string temp_filename = buffer;
             LOG(INFO) << "Temp file: " << temp_filename;
-            if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+            if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                 DeleteFile(temp_filename.c_str());
-                if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+                if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                     LOG(ERROR) << "CopyFile() , e=" << GetLastError();
                     return false;
                 }
             }
             full_path = temp_filename;
         }
+    #endif
 
-
-
-        HMODULE dllHandle = LoadLibrary(full_path.c_str());
+    #ifdef __linux__
+        auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
+            LOG(ERROR) << "LoadLibrary() failed, e=" << dlerror() << " [" << *full_path << "]";
+            return false;
+        }
+    #else
+        auto dllHandle = LoadLibrary(full_path->c_str());
+        if (!dllHandle) {
+            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << *full_path << "]";
+            return false;
+        }
+    #endif
+
+        auto new_module = module::entry(*full_path, dllHandle);
+
+    #ifdef __linux__
+    #define GET_PROC_ADDR dlsym
+    #else
+    #define GET_PROC_ADDR GetProcAddress
+    #endif
+
+        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
+        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
+
+        //First verify that this is a valid Plugin before we initialize the rest.
+
+        if (!new_module.functions.api_version) {
+            LOG(ERROR) << "Module " << path << " failed to define the api_version function.";
             return false;
         }
 
+        if (new_module.functions.api_version() < PLUGIN_MIN_API_VERSION) {
+            LOG(ERROR) << "Module " << path << " has invalid API Version. Has: " << new_module.functions.api_version() << " Need: " << PLUGIN_MIN_API_VERSION;
+            return false;
+        }
 
-        auto new_module = module::entry(full_path, dllHandle);
+        if (!new_module.functions.assign_functions) {
+            LOG(ERROR) << "Module " << path << " failed to define the assign_functions function.";
+            return false;
+        }
 
-        new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GetProcAddress(dllHandle, "api_version"));
-        new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GetProcAddress(dllHandle, "assign_functions"));
-        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GetProcAddress(dllHandle, "handle_unload"));
-        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GetProcAddress(dllHandle, "mission_end"));
-        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GetProcAddress(dllHandle, "on_frame"));
+        new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
+        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GET_PROC_ADDR(dllHandle, "mission_end"));
+        new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GET_PROC_ADDR(dllHandle, "on_frame"));
         //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
-        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GetProcAddress(dllHandle, "post_init"));
-        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GetProcAddress(dllHandle, "pre_init"));
-        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GetProcAddress(dllHandle, "pre_start"));
-        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GetProcAddress(dllHandle, "mission_stopped"));
+        new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GET_PROC_ADDR(dllHandle, "post_init"));
+        new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GET_PROC_ADDR(dllHandle, "pre_init"));
+        new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
+        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
 
-    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GetProcAddress(dllHandle, #x)
+    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GET_PROC_ADDR(dllHandle, #x)
 
         EH_PROC_DEF(anim_changed);
         EH_PROC_DEF(anim_done);
@@ -203,23 +212,12 @@ namespace intercept {
         EH_PROC_DEF(weapon_deployed);
         EH_PROC_DEF(weapon_rested);
 
-
-        if (!new_module.functions.api_version) {
-            LOG(ERROR) << "Module " << path << " failed to define the api_version function.";
-            return false;
-        }
-
-        if (!new_module.functions.assign_functions) {
-            LOG(ERROR) << "Module " << path << " failed to define the assign_functions function.";
-            return false;
-        }
-
         new_module.functions.assign_functions(functions);
-        new_module.path = full_path;
+        new_module.path = *full_path;
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
         return false;
-    }
+}
 
     bool extensions::unload(const arguments & args_, std::string &) {
         return do_unload(args_.as_string(0));
@@ -237,8 +235,13 @@ namespace intercept {
             module->second.functions.handle_unload();
         }
 
+    #ifdef __linux
+        if (dlclose(module->second.handle)) {//returms 0 on success
+            LOG(INFO) << "dlclose() failed during unload, e=" << dlerror();
+        #else
         if (!FreeLibrary(module->second.handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
+        #endif
             return false;
         }
 
@@ -247,7 +250,7 @@ namespace intercept {
         LOG(INFO) << "Unload complete [" << path_ << "]";
 
         return true;
-    }
+        }
 
     bool extensions::list(const arguments &, std::string & result) {
 
@@ -268,4 +271,4 @@ namespace intercept {
         return _modules;
     }
 
-}
+    }

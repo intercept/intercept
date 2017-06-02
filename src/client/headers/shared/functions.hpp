@@ -19,9 +19,9 @@ using namespace intercept::types;
 
 namespace intercept {
     class registered_sqf_function;
-    using WrapperFunctionBinary = game_value*(*)(game_value*, uintptr_t, uintptr_t, uintptr_t);
-    using WrapperFunctionUnary = game_value*(*)(game_value*, uintptr_t, uintptr_t);
-    using WrapperFunctionNular = game_value*(*)(game_value*, uintptr_t);
+    using WrapperFunctionBinary = intercept::types::binary_function;
+    using WrapperFunctionUnary = intercept::types::unary_function;
+    using WrapperFunctionNular = intercept::types::nular_function;
 
     extern "C" {
         struct client_functions {

@@ -69,9 +69,9 @@ namespace intercept {
         ~sqf_functions();
         void initialize();
         void setDisabled();
-        using WrapperFunctionBinary = game_value*(*)(game_value*, uintptr_t, uintptr_t, uintptr_t);
-        using WrapperFunctionUnary = game_value*(*)(game_value*, uintptr_t, uintptr_t);
-        using WrapperFunctionNular = game_value*(*)(game_value*, uintptr_t);
+        using WrapperFunctionBinary = intercept::types::binary_function;
+        using WrapperFunctionUnary = intercept::types::unary_function;
+        using WrapperFunctionNular = intercept::types::nular_function;
         /**
          * \brief Registers a custom SQF Binary Command
          * \param name 

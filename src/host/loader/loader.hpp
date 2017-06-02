@@ -15,7 +15,7 @@ https://github.com/NouberNou/intercept
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 #include <unordered_set>
 
 using namespace intercept::types;
@@ -29,8 +29,7 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
-        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {
-        }
+        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {}
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;
@@ -273,55 +272,65 @@ namespace intercept {
                 //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
             }
         private:
-            std::array<size_t, 
+            std::array<size_t,
             #if _WIN64 || __X86_64__
-            10
+                10
             #else
-            11
+            #ifdef __linux__
+                8
+            #else
+                11
+            #endif
             #endif
             > securityStuff;  //Will scale with x64
             //size_t securityStuff[11];
         };
         class gsFunction : public gsFuncBase {
-            void* placeholder12;//0x30  //jni function
+            void* placeholder12{ nullptr };//0x30  //jni function
         public:
             r_string _name2;//0x34 this is (tolower name)
             unary_operator * _operator;//0x38
+        #ifndef __linux__
             r_string _rightType;//0x3c RString to something
             r_string _description;//0x38
             r_string _example;
             r_string _example2;
-            r_string placeholder_11{};
-            r_string placeholder_12{};
+            r_string placeholder_11;
+            r_string placeholder_12;
             r_string _category{ "intercept" }; //0x48
+        #endif
                                         //const rv_string* placeholder13;
         };
         class gsOperator : public gsFuncBase {
-            void* placeholder12;//0x30  JNI function
+            void* placeholder12{ nullptr };//0x30  JNI function
         public:
             r_string _name2;//0x34 this is (tolower name)
-            int32_t placeholder_10 { 4 }; //0x38 Small int 0-5  priority
+            int32_t placeholder_10{ 4 }; //0x38 Small int 0-5  priority
             binary_operator * _operator;//0x3c
+        #ifndef __linux__
             r_string _leftType;//0x40 Description of left hand side parameter
             r_string _rightType;//0x44 Description of right hand side parameter
             r_string _description;//0x48
             r_string _example;//0x4c
-            r_string placeholder_11{};//0x60
+            r_string placeholder_11;//0x60
             r_string _version;//0x64 some version number
-            r_string placeholder_12{};//0x68
+            r_string placeholder_12;//0x68
             r_string _category{ "intercept" }; //0x6c
+        #endif
         };
         class gsNular : public gsFuncBase {
         public:
             r_string _name2;//0x30 this is (tolower name)
             nular_operator * _operator;//0x34
+        #ifndef __linux__
             r_string _description;//0x38
             r_string _example;
             r_string _example2;
             r_string _version;//0x44 some version number
             r_string placeholder_10;
             r_string _category; //0x4d
-            uint32_t placeholder11;//0x50
+        #endif
+            void* placeholder11{ nullptr };//0x50 JNI probably
             const char *get_map_key() const { return _name2.data(); }
         };                                                  //#TODO this is same as value_type
 
@@ -337,7 +346,7 @@ namespace intercept {
         public:
             game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
-            int32_t placeholder10{4}; //0x2C Small int 0-5  priority
+            int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
             game_operators() {}
             const char *get_map_key() const { return _name.data(); }
         };
@@ -348,11 +357,13 @@ namespace intercept {
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
         };
-        template class rv_allocator<gsFunction>;
-        template class rv_allocator<gsOperator>;
-        template class rv_allocator<gsNular>;
-        template class rv_allocator<game_functions>;
-        template class rv_allocator<game_operators>;
     }
 
+    namespace types {
+        template class rv_allocator<intercept::__internal::gsFunction>;
+        template class rv_allocator<intercept::__internal::gsOperator>;
+        template class rv_allocator<intercept::__internal::gsNular>;
+        template class rv_allocator<intercept::__internal::game_functions>;
+        template class rv_allocator<intercept::__internal::game_operators>;
+    }
 }

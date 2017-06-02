@@ -2,14 +2,19 @@
 #include "controller.hpp"
 #include <thread>
 #include <future>
+#ifdef __linux__
+#include <dlfcn.h>
+#include <link.h>
+#else
 #include <Psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 #pragma comment (lib, "version.lib") //GetFileVersionInfoSize
-template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
-template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
-template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
-template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
-template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
+#endif
+//template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
+//template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
+//template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
+//template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
+//template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
 
 namespace intercept {
     loader::loader() : _attached(false), _patched(false) {}
@@ -152,17 +157,31 @@ namespace intercept {
         uintptr_t types_array = state_addr_;
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
-
+    #ifdef __linux__
+        std::ifstream maps("/proc/self/maps");
+        uintptr_t start;
+        uintptr_t end;
+        char placeholder;
+        maps >> std::hex >> start >> placeholder >> end;
+        //link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
+        //uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
+        //uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
+        uintptr_t baseAddress = start;
+        uintptr_t moduleSize = end-start;
+    #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
         GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
-
-        auto findInMemory = [&modInfo](char* pattern, size_t patternLength) ->uintptr_t {
-            uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-            uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
-            for (DWORD i = 0; i < size - patternLength; i++) {
+        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+        uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+    #endif
+        //std::cout << "base - size" << std::hex << baseAddress << moduleSize << "\n";
+        auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
+            uintptr_t base = baseAddress;
+            uintptr_t size = moduleSize;
+            for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
-                for (DWORD j = 0; j < patternLength; j++) {
+                for (uintptr_t j = 0; j < patternLength; j++) {
                     found &= pattern[j] == *reinterpret_cast<char*>(base + i + j);
                     if (!found)
                         break;
@@ -173,11 +192,11 @@ namespace intercept {
             return 0;
         };
 
-        auto findInMemoryPattern = [&modInfo](const char* pattern, const char* mask, uintptr_t offset = 0) {
-            uintptr_t base = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-            uintptr_t size = static_cast<uintptr_t>(modInfo.SizeOfImage);
+        auto findInMemoryPattern = [baseAddress, moduleSize](const char* pattern, const char* mask, uintptr_t offset = 0) {
+            uintptr_t base = baseAddress;
+            uintptr_t size = moduleSize;
 
-            uintptr_t patternLength = static_cast<DWORD>(strlen(mask));
+            uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
 
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
@@ -201,10 +220,16 @@ namespace intercept {
             };
             v2* v = (v2*) vtable;
             auto& typex = typeid(*v);
+        #ifdef __GNUC__
+            auto test = typex.name();
+        #else
             auto test = typex.raw_name();
+        #endif
             return test;
         };
 
+        //This can be used to detect game version in case we already fix something for next release
+        /*
         //Shamelessly copied from Dedmen's Hack :3
         CHAR fileName[_MAX_PATH];
         DWORD size = GetModuleFileName(nullptr, fileName, _MAX_PATH);
@@ -223,30 +248,62 @@ namespace intercept {
         short version2 = HIWORD(vsfi->dwFileVersionMS);// 1
         short version3 = LOWORD(vsfi->dwFileVersionMS);// 48
         delete[] versionInfo;
-
+        */
 
 
 
         //Start them async before doing the other stuff so they are done when we are done parsing the script functions
-
+    #ifdef __linux__
+        auto future_stringOffset = std::async([&]() {
+            auto offs = findInMemory("12MemFunction", 13);
+            //std::cout << "future_stringOffset" << std::hex << offs << "\n";
+            return offs;
+        });
+    #else
         auto future_stringOffset = std::async([&]() {return findInMemory("tbb4malloc_bi", 13); });
+    #endif
+
+        //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
+
+        auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&]() {
+            uintptr_t stringOffset = future_stringOffset.get();
+        #ifndef __linux__
+            return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - sizeof(uintptr_t));
+        #else
+            uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
+            return vtableStart;
+            //return (findInMemory(reinterpret_cast<char*>(&vtableStart), 4));
+        #endif
+
+        });
+
+
+
+
         //auto future_unary_construct =std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxx"); });
 
         //auto future_operator_construct = std::async([&]() {return findInMemoryPattern("\x51\x8b\x44\x24\x00\x53\x55\x56\x33\xf6\x89\x74\x24\x00\x57\x8b\xf9\x8d\x5e\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\xf0\x83\xc4\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x89\x74\x24\x00\x85\xf6\x74\x00\x8b\xc3\xf0\x0f\xc1\x06\x6a\x00\x8d\x4f\x00\x89\x37\xe8\x00\x00\x00\x00\x83\xcd\x00\x85\xf6\x74\x00\x8b\xc5\xf0\x0f\xc1\x06\x48\x75\x00\x8b\x0d\x00\x00\x00\x00\x56\x8b\x01\xff\x50\x00\xc7\x44\x24\x00\x00\x00\x00\x00\x8b\x0f\x8b\x44\x24\x00\x89\x47\x00\x85\xc9\x74\x00\x8b\xc3\xf0\x0f\xc1\x01\x8b\x44\x24\x00\x89\x4f\x00\x89\x47\x00\x8b\x44\x24\x00\xc7\x47\x00\x00\x00\x00\x00\xc7\x47\x00\x00\x00\x00\x00\x85\xc0\x74\x00\x50\xe8\x00\x00\x00\x00\x8b\x57\x00\x83\xc4\x00\x85\xc0\x74\x00\x8b\xcb\xf0\x0f\xc1\x08", "xxxx?xxxxxxxx?xxxxx?xxx?xx????xxxx?xxx?xxxxxxxxx?xxx?xxxxxxx?xx?xxx????xx?xxx?xxxxxxxx?xx????xxxxx?xxx?????xxxxx?xx?xxx?xxxxxxxxx?xx?xx?xxx?xx?????xx?????xxx?xx????xx?xx?xxx?xxxxxx"); });
-         
+
         //make sure insert patterns are long enough. they have to include the offset after the target of the first jmp instruction
         //auto future_operator_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x18", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
         //auto future_unary_insert = std::async([&]() {return findInMemoryPattern("\x81\xec\x00\x00\x00\x00\x53\x56\x8b\xb4\x24\x00\x00\x00\x00\x8b\xd9\x57\x56\x8d\x4c\x24\x00\xe8\x00\x00\x00\x00\x8b\x46\x00\x85\xc0\x74\x00\x83\xc0\x00\xeb\x00\xb8\x00\x00\x00\x00\x83\xc3\x0C", "xx????xxxxx????xxxxxxx?x????xx?xxx?xx?x?x????xxx"); });
 
         //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
-        
-        
+
+
     #if _WIN64 || __X86_64__
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x40\x53\x48\x83\xEC\x20\xFF\x41\x60\x48\x8B\x41\x08\x48\x8B\xD9\x48\x3B\xC1\x74\x0B\x48\x85\xC0\x74\x06\x48\x83\xC0\xE0\x75\x2B\x48\x8D\x41\x18\x48\x8B\x49\x20\x48\x3B\xC8\x74\x0E\x48\x85\xC9\x74\x09\x48\x8D\x41\xE0\x48\x85\xC0\x75\x10\x48\x8B\xCB\xE8\x00\x00\x00\x00\x84\xC0\x0F\x84\x00\x00\x00\x00\x4C\x8B\x43\x08\x32\xC9\x45\x33\xD2\x4C\x3B\xC3\x74\x0B\x4D\x85\xC0\x74\x06\x49\x83\xC0\xE0\x75\x2A\x4C\x8B\x43\x20\x48\x8D\x43\x18\x4C\x3B\xC0", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
     #else
+
+    #ifdef __linux__
+        //auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("", ""); });
+        //auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x56\x53\x83\xec\x00\x8b\x44\x24\x00\x8b\x74\x24\x00\x85\xc0\x0f\x84\x00\x00\x00\x00\x8b\x18\x8b\x0b\x85\xc9\x0f\x85\x00\x00\x00\x00\x8b\x53\x00\x89\x10\x89\x43\x00\x89\x58\x00\x83\x6b\x00\x00\x0f\x94\xc0\x85\xd2\x0f\x84\x00\x00\x00\x00\x84\xc0\x74\x00\x8b\x43\x00\x8b\x53\x00\x89\x10\x8b\x53\x00\x89\x42\x00\xc7\x43\x00\x00\x00\x00\x00\x83\x6e\x00\x00\x8b\x56\x00\x8d\x43\x00\x89\x02\x89\x53\x00\x8d\x56\x00\x89\x53\x00\x83\x46\x00\x00\x89\x46", "xxxx?xxx?xxx?xxxx????xxxxxxxx????xx?xxxx?xx?xx??xxxxxxx????xxx?xx?xx?xxxx?xx?xx?????xx??xx?xx?xxxx?xx?xx?xx??xx"); });
+    #else
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
+    #endif
+
     #endif
 
 
@@ -268,7 +325,7 @@ namespace intercept {
                     new_entry.op->return_type.type_str() << " " <<
                     new_entry.name <<
                     "(" << new_entry.op->arg_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr;
+                    " @ " << new_entry.op->procedure_addr << "\n";
                 std::string name = std::string(new_entry.name);
                 std::transform(name.begin(), name.end(), name.begin(), ::tolower);
                 _unary_operators[name].push_back(new_entry);
@@ -289,16 +346,12 @@ namespace intercept {
                     "(" << new_entry.op->arg1_type.type_str() << ")" <<
                     new_entry.name <<
                     "(" << new_entry.op->arg2_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr;
+                    " @ " << new_entry.op->procedure_addr << "\n";
                 std::string name = std::string(new_entry.name);
                 std::transform(name.begin(), name.end(), name.begin(), ::tolower);
                 _binary_operators[name].push_back(new_entry);
             }
         }
-
-        //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
-        uintptr_t stringOffset = future_stringOffset.get();
-        auto future_allocatorVtablePtr = std::async([&]() {return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - sizeof(uintptr_t)); });
 
         /*
         Nular Hashmap
@@ -309,7 +362,7 @@ namespace intercept {
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
             LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
-                << new_entry.name << " @ " << new_entry.op->procedure_addr;
+                << new_entry.name << " @ " << new_entry.op->procedure_addr << "\n";
             std::string name = std::string(new_entry.name);
             std::transform(name.begin(), name.end(), name.begin(), ::tolower);
             _nular_operators[name].push_back(new_entry);
@@ -349,14 +402,19 @@ namespace intercept {
         #if _WIN64 || __X86_64__
             auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + 0xB;
             auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x7);
-            uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer+ offset);
+            uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer + offset);
+        #else
+        #ifdef __linux__
+            uintptr_t poolAlloc = 1;
         #else
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
-            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << entry->_createFunction << " pool@ " << poolAlloc;
-            OutputDebugStringA(entry->_name.data());
-            OutputDebugStringA("\n");
+        #endif
+            LOG(INFO) << entry->_localizedName << entry->_javaFunc << entry->_readableName << "\n";
+            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << std::hex << entry->_createFunction << " pool@ " << poolAlloc << "\n";
+            //OutputDebugStringA(entry->_name.data());
+            //OutputDebugStringA("\n");
 
             auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::__internal::GameDataType::end) {
@@ -381,11 +439,18 @@ namespace intercept {
         _sqf_register_funcs._gameState = state_addr_;
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+    #ifdef __linux__
+        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        assert(strcmp(test, "12MemFunctions") == 0);
+    #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+    #endif
         _allocator.genericAllocBase = allocatorVtablePtr;
+    #ifndef __linux__
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
+    #endif
     }
 
     const unary_map & loader::unary() const {

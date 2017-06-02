@@ -19,7 +19,7 @@ registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_typ
 template <types::__internal::GameDataType returnType>
 class unusedSQFFunction {
 public:
-    static game_value* _cdecl unusedNular(game_value* ret_, uintptr_t gs_) {
+    static game_value* CDECL unusedNular(game_value* ret_, uintptr_t gs_) {
         switch (returnType) {
             case GameDataType::SCALAR:
                 ::new (ret_) game_value("unimplemented");
@@ -39,10 +39,10 @@ public:
         }
         return ret_;
     }
-    static game_value* _cdecl unusedFunction(game_value* ret_, uintptr_t gs_, uintptr_t larg_) {
+    static game_value* CDECL unusedFunction(game_value* ret_, uintptr_t gs_, uintptr_t larg_) {
         return unusedNular(ret_, gs_);
     }
-    static game_value* _cdecl unusedOperator(game_value* ret_, uintptr_t gs_, uintptr_t larg_, uintptr_t rarg_) {
+    static game_value* CDECL unusedOperator(game_value* ret_, uintptr_t gs_, uintptr_t larg_, uintptr_t rarg_) {
         return unusedNular(ret_, gs_);
     }
 };
@@ -66,20 +66,21 @@ switch (_returnType) { \
 }
 
 void registered_sqf_func_wrapper::setUnused() {
-    switch (_type) {
-        case functionType::sqf_nular:
-            if (_nular && _nular->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_nular, unusedNular);
-            break;
-        case functionType::sqf_function:
-            if (_func && _func->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_func, unusedFunction);
-            break;
-        case functionType::sqf_operator:
-            if (_op && _op->_operator)
-                UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_op, unusedOperator);
-            break;
-    }
+    return;
+    //switch (_type) {
+    //    case functionType::sqf_nular:
+    //        if (_nular && _nular->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_nular, unusedNular);
+    //        break;
+    //    case functionType::sqf_function:
+    //        if (_func && _func->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_func, unusedFunction);
+    //        break;
+    //    case functionType::sqf_operator:
+    //        if (_op && _op->_operator)
+    //            UNUSED_FUNC_SWITCH_FOR_GAMETYPES(_op, unusedOperator);
+    //        break;
+    //}
 }
 
 intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
@@ -180,7 +181,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     __internal::gsOperator op;
     op._name = name;
     op._name2 = lowerName;
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<binary_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;
@@ -196,11 +199,13 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //insertBinary(_registerFuncs._gameState, op);
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
-    std::stringstream stream;
-    stream << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
+    //std::stringstream stream;
+    LOG(INFO) << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
         << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
-    OutputDebugStringA(stream.str().c_str());
+#ifndef __linux__
+   // OutputDebugStringA(stream.str().c_str());
+#endif
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -269,7 +274,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     __internal::gsFunction op;
     op._name = name;
     op._name2 = lowerName;
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<unary_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;
@@ -282,11 +289,13 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
-    std::stringstream stream;
-    stream << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type)
+    //std::stringstream stream;
+    LOG(INFO) << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
         << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
-    OutputDebugStringA(stream.str().c_str());
+#ifndef __linux__
+    //OutputDebugStringA(stream.str().c_str());
+#endif
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -312,16 +321,19 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     __internal::gsNular op;
     op._name = name;
-    op._name2 = lowerName;
+    op._name2 = lowerName; //#TODO move this into a constructor. for all types
+#ifndef __linux__
     op._description = description;
+#endif
     op.copyPH(test);
     op._operator = rv_allocator<nular_operator>::createSingle();
     op._operator->v_table = test->_operator->v_table;
     op._operator->ref_count = 1;
     op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
     op._operator->return_type = retType;
+#ifndef __linux__
     op._category = "intercept";
-
+#endif
 
     auto table = gs->_scriptNulars.get_table_for_key(lowerName.c_str());
     auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
@@ -336,11 +348,13 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
-    std::stringstream stream;
-    stream << "sqf_functions::registerFunction nular " << name << " " << to_string(return_arg_type)
+    //std::stringstream stream;
+    LOG(INFO) << "sqf_functions::registerFunction nular " << name << " " << to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
         << " @ " << inserted << "\n";
-    OutputDebugStringA(stream.str().c_str());
+#ifndef __linux__
+    //OutputDebugStringA(stream.str().c_str());
+#endif
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -396,14 +410,20 @@ std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_func
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
+
     auto newType = new script_type_info{
-        name,cf,localizedName,localizedName,description,"intercept",typeName,"none"
+    #ifdef __linux__
+        name,cf,localizedName,localizedName,r_string("none")
+    #else
+        name,cf,localizedName,localizedName,description,r_string("intercept"),typeName,r_string("none")
+    #endif
     };
     gs->_scriptTypes.emplace_back(newType);
     auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
+    LOG(INFO) << "sqf_functions::registerType " << name << localizedName << description << typeName;
     types::__internal::add_game_datatype(name, static_cast<types::__internal::GameDataType>(newIndex));
-    return { static_cast<types::__internal::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr }};
+    return { static_cast<types::__internal::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }
 
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {

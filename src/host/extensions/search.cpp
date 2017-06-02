@@ -7,8 +7,19 @@
 
 
 namespace intercept::search {
+    plugin_searcher::plugin_searcher() {
+        auto pboList = generate_pbo_list();
+        for (auto& file : pboList) {
+            size_t last_index = file.find_last_of("\\/");
+            std::string path = file.substr(0, last_index);
+            last_index = path.find_last_of("\\/");
+            path = path.substr(0, last_index);
+            std::cout << "modfolder " << path;
+            active_mod_folder_list.emplace_back(std::move(path));
+        }
+    }
 
-    std::string plugin_searcher::getCommandLine() {
+    std::string plugin_searcher::get_command_line() {
     #if __linux__
         std::ifstream cmdline("/proc/self/cmdline");
         std::string file_contents;
@@ -24,7 +35,35 @@ namespace intercept::search {
     #endif
     }
 
+    std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
+        LOG(DEBUG) << "Searching for Extension: " << name;
+        for (auto folder : active_mod_folder_list) {
+        #if _WIN64 || __X86_64__
+            std::string test_path = folder + "\\intercept\\" + name + "_x64.dll";
+        #else
+        #ifdef __linux__
+            std::string test_path = folder + "/intercept/" + name + ".so";
+        #else
+            std::string test_path = folder + "\\intercept\\" + name + ".dll";
+        #endif
+        #endif
+
+            LOG(DEBUG) << "Mod: " << test_path;
+            std::ifstream check_file(test_path);
+            if (check_file.good()) {
+                return test_path;
+            }
+        }
+        LOG(ERROR) << "Client plugin: " << name << " was not found.";
+        return std::optional<std::string>();
+    }
 }
+
+
+
+
+
+
 
 #if __linux__
 #include <string.h>
@@ -34,36 +73,23 @@ namespace intercept::search {
 #include <unistd.h>
 #include <errno.h>
 #include <sys/resource.h>
-intercept::search::plugin_searcher::plugin_searcher() {
-    //std::experimental::filesystem::directory_iterator end_itr; // default construction yields past-the-end
-    //std::error_code err;
-    //std::experimental::filesystem::directory_iterator x("/proc/self", err);
-    //
-    //for (;
-    //    x != end_itr;
-    //    ++x) {
-    //    if (std::experimental::filesystem::is_regular_file(x->status())) {
-    //        //x->path().extension() == ".pbo";
-    //        std::cout << "pbo found " << x->path() << "\n";
-    //    }
-    //}
-
-
-
+std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list() {
+    std::vector<std::string> _active_pbo_list;
     char buff[PATH_MAX];
-    
+
     struct dirent *dp;
     DIR *dir = opendir("/proc/self/fd");
     while ((dp = readdir(dir)) != NULL) {
 
-        ssize_t len = ::readlink((std::string("/proc/self/fd/")+ dp->d_name).c_str(), buff, sizeof(buff) - 1);
+        ssize_t len = ::readlink((std::string("/proc/self/fd/") + dp->d_name).c_str(), buff, sizeof(buff) - 1);
         if (len != -1) {
             buff[len] = '\0';
-            std::cout << "found " << std::string(buff) << "\n";
+            _active_pbo_list.emplace_back(buff);
         }
     }
     closedir(dir);
 }
+
 #else
 
 #define NT_SUCCESS(x) ((x) >= 0)
@@ -173,17 +199,6 @@ typedef struct _OBJECT_TYPE_INFORMATION {
 
 PVOID GetLibraryProcAddress(PSTR LibraryName, PSTR ProcName) {
     return GetProcAddress(GetModuleHandleA(LibraryName), ProcName);
-}
-
-intercept::search::plugin_searcher::plugin_searcher() {
-    auto pboList = generate_pbo_list();
-    for (auto& file : pboList) {
-        size_t last_index = file.find_last_of("\\/");
-        std::string path = file.substr(0, last_index);
-        last_index = path.find_last_of("\\/");
-        path = path.substr(0, last_index);
-        active_mod_folder_list.push_back(path);
-    }
 }
 
 std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list() {

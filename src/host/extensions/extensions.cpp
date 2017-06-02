@@ -6,6 +6,8 @@
 #include <link.h>
 #endif
 
+#define PLUGIN_MIN_API_VERSION 1
+
 namespace intercept {
 
     extensions::extensions() {
@@ -26,15 +28,7 @@ namespace intercept {
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
         //#BUG //#FIXME reenable this by implementing searcher like wanted
-        //for (auto file : _searcher.active_pbo_list()) {
-        //    size_t last_index = file.find_last_of("\\/");
-        //    std::string path = file.substr(0, last_index);
-        //    last_index = path.find_last_of("\\/");
-        //    path = path.substr(0, last_index);
-        //    _mod_folders.push_back(path);
-        //}
-        //_mod_folders.unique();
-        std::string arg_line = _searcher.getCommandLine();
+        std::string arg_line = _searcher.get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {
             do_reload = true;
@@ -90,28 +84,9 @@ namespace intercept {
             }
         }
 
-        std::string full_path = "";
-
-        for (auto folder : _mod_folders) {
-        #if _WIN64 || __X86_64__
-            std::string test_path = folder + "\\intercept\\" + path + "_x64.dll";
-        #else
-            std::string test_path = folder + "\\intercept\\" + path + ".dll";
-        #endif
-
-            LOG(DEBUG) << "Mod: " << test_path;
-            std::ifstream check_file(test_path);
-            if (check_file.good()) {
-                full_path = test_path;
-                break;
-            }
-        }
-        if (full_path == "") {
-            LOG(ERROR) << "Client plugin: " << path << " was not found.";
+        auto full_path = _searcher.find_extension(path);
+        if (!full_path)
             return false;
-        }
-
-
 
     #ifndef __linux__ //Lazyness
         if (do_reload) {
@@ -128,9 +103,9 @@ namespace intercept {
             }
             std::string temp_filename = buffer;
             LOG(INFO) << "Temp file: " << temp_filename;
-            if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+            if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                 DeleteFile(temp_filename.c_str());
-                if (!CopyFileA(full_path.c_str(), temp_filename.c_str(), FALSE)) {
+                if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                     LOG(ERROR) << "CopyFile() , e=" << GetLastError();
                     return false;
                 }
@@ -141,20 +116,20 @@ namespace intercept {
 
         //#Linux http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
     #ifdef __linux__
-        auto dllHandle = dlopen(full_path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+        auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e=" << dlerror() << " [" << full_path << "]";
+            LOG(ERROR) << "LoadLibrary() failed, e=" << dlerror() << " [" << *full_path << "]";
             return false;
         }
     #else
-        auto dllHandle = LoadLibrary(full_path.c_str());
+        auto dllHandle = LoadLibrary(full_path->c_str());
         if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << full_path << "]";
+            LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << *full_path << "]";
             return false;
         }
     #endif
 
-        auto new_module = module::entry(full_path, dllHandle);
+        auto new_module = module::entry(*full_path, dllHandle);
 
     #ifdef __linux__
     #define GET_PROC_ADDR dlsym
@@ -164,6 +139,24 @@ namespace intercept {
 
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
+
+        //First verify that this is a valid Plugin before we initialize the rest.
+
+        if (!new_module.functions.api_version) {
+            LOG(ERROR) << "Module " << path << " failed to define the api_version function.";
+            return false;
+        }
+
+        if (new_module.functions.api_version() <= PLUGIN_MIN_API_VERSION) {
+            LOG(ERROR) << "Module " << path << " has invalid API Version. Has: " << new_module.functions.api_version() << " Need: " << PLUGIN_MIN_API_VERSION;
+            return false;
+        }
+
+        if (!new_module.functions.assign_functions) {
+            LOG(ERROR) << "Module " << path << " failed to define the assign_functions function.";
+            return false;
+        }
+
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GET_PROC_ADDR(dllHandle, "mission_end"));
         new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GET_PROC_ADDR(dllHandle, "on_frame"));
@@ -220,19 +213,8 @@ namespace intercept {
         EH_PROC_DEF(weapon_deployed);
         EH_PROC_DEF(weapon_rested);
 
-
-        if (!new_module.functions.api_version) {
-            LOG(ERROR) << "Module " << path << " failed to define the api_version function.";
-            return false;
-        }
-
-        if (!new_module.functions.assign_functions) {
-            LOG(ERROR) << "Module " << path << " failed to define the assign_functions function.";
-            return false;
-        }
-
         new_module.functions.assign_functions(functions);
-        new_module.path = full_path;
+        new_module.path = *full_path;
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
         return false;

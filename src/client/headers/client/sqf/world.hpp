@@ -232,5 +232,7 @@ namespace intercept {
         bool underwater(const object &value_);
         std::vector<object> vehicles();
         void set_local_wind_params(float strength_, float diameter_);
+
+        float getelevationoffset();
     }
 }

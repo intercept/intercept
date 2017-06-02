@@ -278,5 +278,9 @@ namespace intercept {
         int remote_executed_owner() {
             return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
         }
+
+        bool has_interface() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__hasinterface__ret__bool);
+        }
     }
 }

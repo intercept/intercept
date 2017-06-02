@@ -524,6 +524,10 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__sideempty__ret__side);
         }
 
+        side civilian() {
+            return __helpers::__retrieve_nular_side(__sqf::nular__civilian__ret__side);
+        }
+
         rv_namespace current_namespace() {
             return __helpers::__retrieve_nular_namespace(__sqf::nular__currentnamespace__ret__namespace);
         }
@@ -532,5 +536,375 @@ namespace intercept {
         sqf_return_string to_fixed(float number_, int decimals_) {
             return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
         }
+
+        bool user_input_disabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__userinputdisabled__ret__bool);
+        }
+
+        bool screen_shot(sqf_string_const_ref filename_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__screenshot__string__ret__bool, filename_);
+        }
+
+        rv_cursor_object_params get_cursor_object_params() {
+            game_value res = host::functions.invoke_raw_nular(__sqf::nular__getcursorobjectparams__ret__array);
+
+            return rv_cursor_object_params({ res[0], res[1], res[2] });
+        }
+
+        object cursor_target() {
+            return __helpers::__retrieve_nular_object(__sqf::nular__cursortarget__ret__object);
+        }
+
+        object cursor_object() {
+            return game_value(__helpers::__retrieve_nular_object(__sqf::nular__cursorobject__ret__object));
+        }
+
+        sqf_return_string_list support_info(sqf_string_const_ref mask_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__supportinfo__string__ret__array, mask_));
+        }
+
+        std::vector<object> all_simple_objects(sqf_string_list_const_ref params_) {
+            auto_array<game_value> params(params_.begin(), params_.end());
+
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, std::move(params)));
+        }
+
+        std::vector<object> all_mission_objects(sqf_string_const_ref type_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allmissionobjects__string__ret__array, type_));
+        }
+
+        std::vector<object> all_curators() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allcurators__ret__array));
+        }
+
+        std::vector<object> all_dead() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__alldead__ret__array));
+        }
+
+        std::vector<object> all_deadmen() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__alldeadmen__ret__array));
+        }
+
+        std::vector<display> all_displays() {
+            return __helpers::__convert_to_displays_vector(host::functions.invoke_raw_nular(__sqf::nular__alldisplays__ret__array));
+        }
+
+        std::vector<group> all_groups() {
+            return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_nular(__sqf::nular__allgroups__ret__array));
+        }
+
+        std::vector<object> all_mines() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allmines__ret__array));
+        }
+
+        std::vector<object> all_players() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allplayers__ret__array));
+        }
+
+        std::vector<object> all_units() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allunits__ret__array));
+        }
+
+        std::vector<object> all_units_uav() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allunitsuav__ret__array));
+        }
+
+        sqf_return_string_list activated_addons() {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__activatedaddons__ret__array));
+        }
+
+        sqf_return_string image(sqf_string_const_ref value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__image__string__ret__text, value_);
+        }
+
+        bool is_localized(sqf_string_const_ref value_) {
+            return __helpers::__bool_unary_string(__sqf::unary__islocalized__string__ret__bool, value_);
+        }
+
+        sqf_return_string localize(sqf_string_const_ref value_) {
+            return __helpers::__string_unary_string(__sqf::unary__localize__string__ret__string, value_);
+        }
+
+        game_value text(sqf_string_const_ref value_) {
+            return  host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
+        }
+
+        sqf_return_string format(const std::vector<game_value> &params_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__format__array__ret__string, params_);
+        }
+
+        sqf_return_string compose_text(sqf_string_list_const_ref texts_) {
+            auto_array<game_value> texts(texts_.begin(), texts_.end());
+
+            return host::functions.invoke_raw_unary(__sqf::unary__composetext__array__ret__text, std::move(texts));
+        }
+
+        sqf_return_string endl() {
+            return host::functions.invoke_raw_nular(__sqf::nular__endl__ret__string);
+        }
+
+        bool verify_signature(sqf_string_const_ref value_) {
+            return __helpers::__bool_unary_string(__sqf::unary__verifysignature__string__ret__bool, value_);
+        }
+
+        void script_name(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__scriptname__string__ret__nothing, value_);
+        }
+
+        void save_var(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__savevar__string__ret__nothing, value_);
+        }
+
+        void scope_name(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__scopename__string__ret__nothing, value_);
+        }
+
+        bool required_version(sqf_string_const_ref value_) {
+            return __helpers::__bool_unary_string(__sqf::unary__requiredversion__string__ret__bool, value_);
+        }
+
+        float playable_slots_number(const side &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__playableslotsnumber__side__ret__scalar, value_);
+        }
+
+        float players_number(const side &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__playersnumber__side__ret__scalar, value_);
+        }
+
+        float pi() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__pi__ret__scalar);
+        }
+
+        std::vector<object> playable_units() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__playableunits__ret__array));
+        }
+
+        float player_respawn_time() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__playerrespawntime__ret__scalar);
+        }
+
+        side player_side() {
+            return __helpers::__retrieve_nular_side(__sqf::nular__playerside__ret__side);
+        }
+
+        std::vector<object> switchable_units() {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__switchableunits__ret__array));
+        }
+
+        object player() {
+            return object(host::functions.invoke_raw_nular(__sqf::nular__player__ret__object));
+        }
+
+        void add_switchable_unit(const object & unit_) {
+            __helpers::__empty_unary_object(__sqf::unary__addswitchableunit__object__ret__nothing, unit_);
+        }
+
+        side create_center(const side & side_) {
+            return side(host::functions.invoke_raw_unary(__sqf::unary__createcenter__side__ret__side, side_));
+        }
+
+        void delete_center(const side & side_) {
+            host::functions.invoke_raw_unary(__sqf::unary__deletecenter__side__ret__nothing, side_);
+        }
+
+        void disable_user_input(bool value_) {
+            __helpers::__empty_unary_bool(__sqf::unary__disableuserinput__bool__ret__nothing, value_);
+        }
+
+        void echo(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__echo__string__ret__nothing, value_);
+        }
+
+        void end_mission(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__endmission__string__ret__nothing, value_);
+        }
+
+        void estimated_time_left(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__estimatedtimeleft__scalar__ret__nothing, value_);
+        }
+
+        void fail_mission(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__failmission__string__ret__nothing, value_);
+        }
+
+        int count_enemy(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countenemy__object__array__ret__scalar, unit_, std::move(units));
+        }
+
+        int count_friendly(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countfriendly__object__array__ret__scalar, unit_, std::move(units));
+        }
+
+        int count_type(sqf_string_const_ref type_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__counttype__string__array__ret__scalar, type_, std::move(units));
+        }
+
+        int count_unknown(const object &unit_, const std::vector<object> &units_) {
+            auto_array<game_value> units(units_.begin(), units_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countunknown__object__array__ret__scalar, unit_, std::move(units));
+        }
+
+        std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_) {
+            game_value res = host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_);
+
+            std::vector<game_value> result; //#TODO replace by helper function
+            for (size_t i = 0; i < res.size(); i++) {
+                result.push_back(res[i]);
+            }
+
+            return result;
+        }
+
+
+
+
+
+        //on_ events
+        void on_command_mode_changed(const code &command_) {
+            host::functions.invoke_raw_unary(__sqf::unary__oncommandmodechanged__code_string__ret__nothing, command_);
+        }
+
+        void on_command_mode_changed(sqf_string_const_ref command_) {
+            host::functions.invoke_raw_unary(__sqf::unary__oncommandmodechanged__code_string__ret__nothing, command_);
+        }
+
+        game_value on_double_click(const control &map_, sqf_string_const_ref command_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ondoubleclick__control__string__ret__any, map_, command_);
+        }
+
+        void on_map_single_click(const game_value &params_, std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<const code>> command_) {
+            game_value param_right;
+            switch (command_.index()) {
+            case 0: param_right = std::get<0>(command_).get(); break;
+            case 1: param_right = std::get<1>(command_).get(); break;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__onmapsingleclick__any__code_string__ret__nothing, params_, param_right);
+        }
+
+        game_value on_show_new_object(const object &control_, sqf_string_const_ref command_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__onshownewobject__control__string__ret__any, control_, command_);
+        }
+
+
+        //eventhandlers
+        void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
+            game_value params_right({
+                event_,
+                index_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, params_right);
+        }
+
+        float add_event_handler(const object & object_, sqf_string_const_ref type_, const code & command_) {
+            game_value args({
+                type_,
+                command_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
+        }
+
+        float add_event_handler(const object & object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
+            game_value args({
+                type_,
+                command_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
+        }
+
+        void remove_all_mission_event_handlers(sqf_string_const_ref value_) {
+            __helpers::__empty_unary_string(__sqf::unary__removeallmissioneventhandlers__string__ret__nothing, value_);
+        }
+
+
+        void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
+            game_value params_right({
+                event_,
+                index_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
+        }
+
+
+        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, code_);
+        }
+
+        void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_) {
+            game_value params_right({
+                target_,
+                code_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, params_right);
+        }
+
+
+
+        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+        }
+
+        int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_) {
+            game_value params_right({
+                type_,
+                expression_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+        }
+
+        void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removealleventhandlers__object__string__ret__nothing, value0_, value1_);
+        }
+
+        void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeallmpeventhandlers__object__string__ret__nothing, value0_, value1_);
+        }
+
+        float add_mission_event_handler(sqf_string_const_ref type_, const code &command_) {
+            game_value params({
+                type_,
+                command_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
+        }
+
+        float add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
+            game_value params({
+                type_,
+                command_
+            });
+
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
+        }
+
+        void remove_mission_event_handler(sqf_string_const_ref type_, float index_) {
+            game_value params({
+                type_,
+                index_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
+        }
+
+
     }
 }

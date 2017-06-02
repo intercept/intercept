@@ -146,18 +146,30 @@ namespace intercept {
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
 
 
+        void set_behaviour(std::variant<group, object> group_, sqf_string_const_ref behaviour_);
+        void set_combat_mode(std::variant<group, object> group_, sqf_string_const_ref mode_);
+        void set_formation(std::variant<group, object> group_, sqf_string_const_ref mode_);
+        void set_convoy_seperation(const object& object_, float distance_);
+        void set_destination(const object& object_, const vector3& position_, sqf_string_const_ref planning_mode_, bool force_replan);
+        void set_drive_on_path(const object& object_, const std::vector<vector3>& points_);
+        void set_form_dir(std::variant<group, object> group_, float heading_);
 
 
+        void enable_gun_lights(const object &unit_, bool &enable_);
+        void enable_gun_lights(const group &group_, bool &enable_);
+        void enable_ir_lasers(const object &unit_, bool &enable_);
+        void enable_ir_lasers(const group &group_, bool &enable_);
+        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_);
+        object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_);
+        void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
+        void force_follow_road(const object &vehicle_, bool follow_);
+        void force_weapon_fire(const object &unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref fire_mode_);
+        void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
+        void order_get_in(const std::vector<object> &units_, bool order_);
 
 
-
-
-
-
-
-
-
-
-
+        //#TODO: Find out which parameters should be on the right side of the command
+        void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
+        void swim_in_depth(const object &unit_, float depth_);
     }
 }

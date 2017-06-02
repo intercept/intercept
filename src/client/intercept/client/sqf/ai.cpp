@@ -593,24 +593,147 @@ namespace intercept {
         }
 
 
+        void set_behaviour(std::variant<group, object> group_, sqf_string_const_ref behaviour_) {
+            if (group_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<0>(group_), behaviour_); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<1>(group_), behaviour_);
+        }
+
+        void set_combat_mode(std::variant<group, object> group_, sqf_string_const_ref mode_) {
+            if (group_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<0>(group_), mode_); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<1>(group_), mode_);
+        }
+
+        void set_formation(std::variant<group, object> group_, sqf_string_const_ref mode_) {
+            if (group_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, std::get<0>(group_), mode_); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, std::get<1>(group_), mode_);
+        }
+
+        void set_convoy_seperation(const object& object_, float distance_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setconvoyseparation__object__scalar__ret__nothing, object_, distance_);
+        }
+
+
+        void set_destination(const object& object_, const vector3& position_, sqf_string_const_ref planning_mode_, bool force_replan) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdestination__object__array__ret__nothing, object_, { position_, planning_mode_, force_replan });
+        }
+
+        void set_drive_on_path(const object& object_, const std::vector<vector3>& points_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdriveonpath__object__array__ret__nothing, object_, auto_array<game_value>(points_.begin(), points_.end()));
+        }
+
+        void set_form_dir(std::variant<group, object> group_, float heading_) {
+            if (group_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, std::get<0>(group_), heading_); return;
+            host::functions.invoke_raw_binary(__sqf::binary__setformdir__object_group__scalar__ret__nothing, std::get<1>(group_), heading_);
+        }
 
 
 
 
 
 
+        void enable_gun_lights(const object &unit_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enablegunlights__object_group__string__ret__nothing, unit_, enable_);
+        }
 
+        void enable_gun_lights(const group &group_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enablegunlights__object_group__string__ret__nothing, group_, enable_);
+        }
 
+        void enable_ir_lasers(const object &unit_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, unit_, enable_);
+        }
 
+        void enable_ir_lasers(const group &group_, bool &enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, group_, enable_);
+        }
 
+        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_) {
+            auto_array<game_value> turrent_path(turrent_path_.begin(), turrent_path_.end());
 
+            game_value params_right({
+                std::move(turrent_path),
+                enable_
+            });
 
+            host::functions.invoke_raw_binary(__sqf::binary__enablepersonturret__object__array__ret__nothing, vehicle_, params_right);
+        }
 
+        object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_) {
+            auto_array<game_value> params_right({
+                position_,
+                hide_position_,
+                max_dist_
+            });
 
+            if (min_dist_.has_value()) params_right.push_back(*min_dist_);
+            if (visible_position_.has_value()) params_right.push_back(*visible_position_);
+            if (ignore_object_.has_value()) params_right.push_back(*ignore_object_);
 
+            return host::functions.invoke_raw_binary(__sqf::binary__findcover__object__array__ret__object, object_, std::move(params_right));
+        }
 
+        void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_) {
+            game_value params_right({
+                height_careless_safe_aware_,
+                height_combat_,
+                height_stealth_
+            });
 
+            host::functions.invoke_raw_binary(__sqf::binary__flyinheightasl__object__array__ret__nothing, aircraft_, params_right);
+        }
 
+        void force_follow_road(const object &vehicle_, bool follow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forcefollowroad__object__bool__ret__nothing, vehicle_, follow_);
+        }
 
+        void force_weapon_fire(const object &unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref fire_mode_) {
+            game_value params_right({
+                muzzle_,
+                fire_mode_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__forceweaponfire__object__array__ret__nothing, unit_, params_right);
+        }
+
+        void glance_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> unit_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_) {
+            game_value param_left;
+            game_value param_right;
+
+            if (unit_.index() == 0) {
+                param_left = std::get<0>(unit_).get();
+            }
+            else {
+                auto_array<game_value> units({ std::get<1>(unit_).get().begin(), std::get<1>(unit_).get().end() });
+
+                param_left = std::move(units);
+            }
+            if (target_.index() == 0) {
+                param_right = std::get<0>(target_).get();
+            }
+            else {
+                param_right = std::get<1>(target_).get();
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__glanceat__object_array__object_array__ret__nothing, param_left, param_right);
+        }
+
+        void order_get_in(const std::vector<object> &units_, bool order_) {
+            auto_array<game_value> units({ units_.begin(),units_.end() });
+
+            host::functions.invoke_raw_binary(__sqf::binary__ordergetin__array__bool__ret__nothing, std::move(units), order_);
+        }
+
+        //#TODO: Find out which parameters should be on the right side of the command
+        void set_unit_load_in_combat(const object &unit_, const game_value &params_right_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, params_right_);
+        }
+
+        void swim_in_depth(const object &unit_, float depth_) {
+            host::functions.invoke_raw_binary(__sqf::binary__swimindepth__object__scalar__ret__nothing, unit_, depth_);
+        }
     }
 }

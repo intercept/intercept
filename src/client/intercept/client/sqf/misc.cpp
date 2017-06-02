@@ -286,10 +286,6 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__activatekey__string__ret__nothing, keyname_);
         }
 
-        void add_switchable_unit(const object & unit_) {
-            __helpers::__empty_unary_object(__sqf::unary__addswitchableunit__object__ret__nothing, unit_);
-        }
-
         bool difficulty_enabled(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__difficultyenabled__string__ret__bool, value_);
         }
@@ -479,5 +475,138 @@ namespace intercept {
         object create_site(sqf_string_const_ref type_, const vector3 &pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__createsite__string__array__ret__object, type_, pos_);
         }
+
+        //3d Stuff
+        void draw_line_3d(const vector3 & pos1_, const vector3 & pos2_, const rv_color & color_) {
+            game_value args({
+                pos1_,
+                pos2_,
+                color_
+            });
+            host::functions.invoke_raw_unary(__sqf::unary__drawline3d__array__ret__nothing, args);
+        }
+
+        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color & color_, const vector3 & pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_, float shadow_, float text_size_, sqf_string_const_ref font_) {
+            game_value args({
+                texture_,
+                color_,
+                pos_agl_,
+                width_,
+                height_,
+                angle_,
+                text_,
+                shadow_,
+                text_size_,
+                font_
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);
+        }
+
+
+
+        //particles
+        float particles_quality() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__particlesquality__ret__scalar);
+        }
+
+        void set_particle_params(const object & particle_source_, const rv_particle_array & particle_array_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setparticlecircle__object__array__ret__nothing, particle_source_, particle_array_);
+        }
+
+        void set_particle_random(const object & particle_source_, const rv_particle_random & particle_random_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setparticlerandom__object__array__ret__nothing, particle_source_, particle_random_);
+        }
+
+        void set_particle_circle(const object & particle_source_, float radius_, const vector3 & velocity_) {
+            game_value args({
+                radius_,
+                velocity_
+            });
+            host::functions.invoke_raw_binary(__sqf::binary__setparticlecircle__object__array__ret__nothing, particle_source_, args);
+        }
+
+        void set_particle_fire(const object & particle_source_, float core_intensity_, float core_distance_, float damage_time_) {
+            game_value args({
+                core_intensity_,
+                core_distance_,
+                damage_time_
+            });
+            host::functions.invoke_raw_binary(__sqf::binary__setparticlefire__object__array__ret__nothing, particle_source_, args);
+        }
+
+        void drop(const rv_particle_array & particle_array_) {
+            host::functions.invoke_raw_unary(__sqf::unary__drop__array__ret__nothing, particle_array_);
+        }
+
+        void set_particle_class(const object &particle_source_, sqf_string_const_ref particle_class_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setparticleclass__object__string__ret__nothing, particle_source_, particle_class_);
+        }
+
+        //#TODO: Implement with this massive amount of params
+        void set_particle_params() {
+            //host::functions.invoke_raw_binary(__sqf::binary__setparticleparams__object__array__ret__nothing, time_, overcast_value_);
+        }
+
+        void set_drop_interval(const object &value0_, float value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setdropinterval__object__scalar__ret__nothing, value0_, value1_);
+        }
+
+
+
+
+
+        //side
+
+        std::vector<object> detected_mines(const side &side_) {
+            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__detectedmines__side__ret__array, side_));
+        }
+
+        float count_side(const side &side_, std::vector<object> &objects_) {
+            auto_array<game_value> objects(objects_.begin(), objects_.end());
+
+            return host::functions.invoke_raw_binary(__sqf::binary__countside__side__array__ret__scalar, side_, std::move(objects));
+        }
+
+        void reveal_mine(const object &value0_, const side &value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__revealmine__side__object__ret__nothing, value0_, value1_);
+        }
+
+        void set_airport_side(float value0_, const side &value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setairportside__object_scalar__side__ret__nothing, value0_, value1_);
+        }
+
+        void set_airport_side(const object & target_, const side &value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setairportside__object_scalar__side__ret__nothing, target_, value1_);
+        }
+
+        bool mine_detected_by(const object &value0_, const side &value1_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__minedetectedby__object__side__ret__bool, value0_, value1_);
+        }
+
+        void add_score_side(const side &value0_, float value1_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addscoreside__side__scalar__ret__nothing, value0_, value1_);
+        }
+
+        void airport_side(int id_) {
+            __helpers::__empty_unary_number(__sqf::unary__airportside__object_scalar__ret__nothing, static_cast<float>(id_));
+        }
+        void airport_side(const object & target_) {
+            __helpers::__empty_unary_number(__sqf::unary__airportside__object_scalar__ret__nothing, target_);
+        }
+
+        float score_side(const side &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__scoreside__side__ret__scalar, value_);
+        }
+
+        bool is_key_active(sqf_string_const_ref value_) {
+            return __helpers::__bool_unary_string(__sqf::unary__iskeyactive__string__ret__bool, value_);
+        }
+
+        bool reversed_mouse_y() {
+            return __helpers::__retrieve_nular_bool(__sqf::nular__reversedmousey__ret__bool);
+        }
+
+
     }
 }

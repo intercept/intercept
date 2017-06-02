@@ -531,6 +531,11 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, index_));
         }
 
+        bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {
+            auto_array<game_value> polygon({ polygon_.begin(), polygon_.end() });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
+        }
 
 
 

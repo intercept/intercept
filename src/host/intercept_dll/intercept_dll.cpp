@@ -84,7 +84,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
     #endif
     #endif
-        std::cout << "gameState " << std::hex << game_state_addr << "\n";
+        //std::cout << "gameState " << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
     }

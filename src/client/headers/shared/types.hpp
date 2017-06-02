@@ -1459,6 +1459,8 @@ namespace intercept {
                 vector3 _cameraPositionWorld;
                 vector3 _aimingPositionWorld;
             };
+        #ifndef __linux__
+            //Not compatible yet. Not sure if every will be.
             visualState get_position_matrix() const {
                 if (!object || !object->object) return visualState();
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
@@ -1543,7 +1545,7 @@ namespace intercept {
                 };
 
             }
-
+        #endif
             struct {
                 uint32_t _x;
                 void* object; //#TODO this is real object pointer. Other classes are probably also incorrect

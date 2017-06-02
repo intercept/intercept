@@ -21,6 +21,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* Waypoint */
+        //#TODO change this to rv_waypoint
         class waypoint {
         public:
             group wgroup;
@@ -116,7 +117,7 @@ namespace intercept {
             };
 
 
-            static speed __parse_speed(const std::string& subject_) {
+            static speed __parse_speed(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __speed_lookup->length(); i++) {
                     if (subject_ == __speed_lookup[i]) {
                         return static_cast<speed>(i);
@@ -124,7 +125,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static show __parse_show(const std::string& subject_) {
+            static show __parse_show(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __show_lookup->length(); i++) {
                     if (subject_ == __show_lookup[i]) {
                         return static_cast<show>(i);
@@ -132,7 +133,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static type __parse_type(const std::string& subject_) {
+            static type __parse_type(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __type_lookup->length(); i++) {
                     if (subject_ == __type_lookup[i]) {
                         return static_cast<type>(i);
@@ -140,7 +141,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static behaviour __parse_behaviour(const std::string& subject_) {
+            static behaviour __parse_behaviour(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __behaviour_lookup->length(); i++) {
                     if (subject_ == __behaviour_lookup[i]) {
                         return static_cast<behaviour>(i);
@@ -148,7 +149,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static combat_mode __parse_combat_mode(const std::string& subject_) {
+            static combat_mode __parse_combat_mode(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __combat_mode_lookup->length(); i++) {
                     if (subject_ == __combat_mode_lookup[i]) {
                         return static_cast<combat_mode>(i);
@@ -156,7 +157,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static formation __parse_formation(const std::string& subject_) {
+            static formation __parse_formation(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __formation_lookup->length(); i++) {
                     if (subject_ == __formation_lookup[i]) {
                         return static_cast<formation>(i);
@@ -164,7 +165,7 @@ namespace intercept {
                 }
                 throw 712;
             }
-            static loiter_type __parse_loiter_type(const std::string& subject_) {
+            static loiter_type __parse_loiter_type(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __loiter_lookup->length(); i++) {
                     if (subject_ == __loiter_lookup[i]) {
                         return static_cast<loiter_type>(i);
@@ -215,7 +216,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/addWaypoint
         */
-        waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+        waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
 
         /*!
         @brief Adds (or inserts when index is given) a new waypoint to a group.
@@ -232,7 +233,7 @@ namespace intercept {
 
         @sa         https://community.bistudio.com/wiki/addWaypoint
         */
-        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, const std::string & name_ = "");
+        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
 
         /*!
         @brief  Removes the specified waypoint.
@@ -311,7 +312,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointDescription
         */
-        std::string waypoint_description(waypoint & wp_);
+        sqf_return_string waypoint_description(waypoint & wp_);
 
         /*!
         @brief Gets the waypoint description.
@@ -366,7 +367,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointName
         */
-        std::string waypoint_name(waypoint & wp_);
+        sqf_return_string waypoint_name(waypoint & wp_);
 
         /*!
         @brief Get Waypoint's Position.
@@ -388,7 +389,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointScript
         */
-        std::string waypoint_script(waypoint & wp_);
+        sqf_return_string waypoint_script(waypoint & wp_);
 
         /*!
         @brief Gets the waypoint show/hide status.
@@ -463,6 +464,94 @@ namespace intercept {
 
         void waypoint_attach_object(waypoint& wp_, int obj_id_);
         void waypoint_attach_object(waypoint& wp_, object & obj_);
+
+        void show_waypoints(bool enabled_);
+        bool waypoint_force_behaviour(const group &group_, int index_);
+        void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
+        float waypoint_timeout_current(const group &value_);
+        bool waypoints_enabled_uav(const object &value_);
+        void enable_uav_waypoints(object & uav_, bool enable_);
+
+
+        void set_wp_pos(const group &group_, int index_, const vector2 &position_);
+        vector3 get_wp_pos(const group &group_, int index_);
+        void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
+
+        std::vector<rv_waypoint> waypoints(const object &player_);
+        std::vector<rv_waypoint> waypoints(const group &group_);
+        void set_effect_condition(std::variant<object, rv_waypoint> unit_, sqf_string_const_ref statement_);
+        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
+        void enable_uavwaypoints(const object &value0_, bool value1_);
+
+        void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
+
+
+
+
+
+
+        //TRIGGERS
+        //Triggers
+
+        struct rv_trigger_area {
+            float x;
+            float y;
+            float angle;
+            bool rectangle;
+            float z; // since Arma 3 v1.59.135137
+
+            rv_trigger_area(const game_value &ret_game_value_) :
+                x(ret_game_value_[0]),
+                y(ret_game_value_[1]),
+                angle(ret_game_value_[2]),
+                rectangle(ret_game_value_[3]),
+                z(ret_game_value_[4]) {}
+        };
+
+        rv_trigger_area trigger_area(const object& trigger_);
+
+        struct rv_trigger_timeout {
+            float time_min;
+            float time_mid;
+            float time_max;
+            bool interruptable;
+
+            rv_trigger_timeout(const game_value &ret_game_value_) :
+                time_min(ret_game_value_[0]),
+                time_mid(ret_game_value_[1]),
+                time_max(ret_game_value_[2]),
+                interruptable(ret_game_value_[3]) {}
+        };
+
+        rv_trigger_timeout trigger_timeout(const object& trigger_);
+
+        std::vector<object> list(const object& trigger_);
+        void trigger_attach_object(const object &value0_, float value1_);
+        void set_trigger_text(const object &value0_, sqf_string_const_ref value1_);
+        void set_trigger_type(const object &value0_, sqf_string_const_ref value1_);
+        bool trigger_activated(const object &value_);
+        object trigger_attached_vehicle(const object &value_);
+        sqf_return_string trigger_text(const object &value_);
+        float trigger_timeout_current(const object &value_);
+        sqf_return_string trigger_type(const object &value_);
+        object create_trigger(sqf_string_const_ref type_, const vector3 &pos_, bool make_global_ = true);
+        object create_trigger(sqf_string_const_ref type_, const object &pos_, bool make_global_ = true);
+
+        void set_trigger_activation(const object &trigger_, sqf_string_const_ref by_, sqf_string_const_ref type_, bool repeating_);
+        void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        void set_trigger_statements(const object &trigger_, sqf_string_const_ref condition_, sqf_string_const_ref activation_, sqf_string_const_ref deactivation_);
+        void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
+        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
+        void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
+
+
+        //both
+        void set_music_effect(const object &trigger_, sqf_string_const_ref track_);
+        void set_music_effect(const group &group_, int index_, sqf_string_const_ref track_);
+        void set_sound_effect(const object &trigger, sqf_string_const_ref sound_, sqf_string_const_ref voice_, sqf_string_const_ref sound_env_, sqf_string_const_ref sound_det_);
+        void set_sound_effect(const group &group, int index_, sqf_string_const_ref sound_, sqf_string_const_ref voice_, sqf_string_const_ref sound_env_, sqf_string_const_ref sound_det_);
+        void set_title_effect(const object &trigger_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
+        void set_title_effect(const group &group_, int index_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
 
     }
 }

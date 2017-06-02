@@ -9,7 +9,7 @@
 These are used to get and set the position of various objects and other things
 in the game world.
 This includes everything defining an Objects Position in the world (Position, direction, velocity)
-
+<
 https://github.com/NouberNou/intercept
 */
 #pragma once
@@ -93,5 +93,63 @@ namespace intercept {
         void set_velocity(const object &obj_, const vector3 &vel_);
         vector3 velocity(const object &obj_);
         float direction(const object &value_);
+
+        vector3 vector_dir(const object & obj_);
+        vector3 vector_dir_visual(const object & obj_);
+        vector3 selection_positon(const object & obj_, sqf_string_const_ref selection_name_);
+
+        struct rv_bounding_box {
+            vector3 min;
+            vector3 max;
+        };
+
+        rv_bounding_box bounding_box(const object &model_);
+        rv_bounding_box bounding_box_real(const object &model_);
+        vector3 bounding_center(const object &obj_);
+        void set_dir(const object &value0_, float value1_);
+        float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
+        void set_direction(const location& location_, float direction_);
+        void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
+        void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);
+        vector3 weapon_direction(const object &unit_, sqf_string_const_ref weapon_class_);
+        float get_dir(const object &value_);
+        float get_dir_visual(const object &value_);
+        vector3 unit_aim_position(const object &unit_);
+        vector3 unit_aim_position_visual(const object &unit_);
+
+
+        //position
+        vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_);
+        vector3 model_to_world_world(const object &object_, const vector3 model_pos_);
+
+        vector3 screen_to_world(const vector2 &pos_);
+        vector3 model_to_world(const object &object_, const vector3 &offset_);
+        bool in_area(t_sqf_in_area_position position_, const object &trigger_);
+        bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_);
+        bool in_area(t_sqf_in_area_position position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        bool in_area(const object &object_, const location &location_);
+        bool in_area(t_sqf_in_area_position position_, const location &location_);
+        typedef std::variant<std::reference_wrapper<const std::vector<object>>, std::reference_wrapper<const std::vector<vector2>>, std::reference_wrapper<const std::vector<vector3>>> t_sqf_in_area_position_array;
+        bool in_area_array(t_sqf_in_area_position_array position_, const object &trigger_);
+        bool in_area_array(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_);
+        bool in_area_array(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        bool in_area_array(t_sqf_in_area_position_array position_, const location &location_);
+        std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
+        bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
+        //#TODO are these two really position category? Sounds more worldish
+        vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
+        bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);
+        
+        float distance_2d(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
+        float distance_sqr(std::variant<object, vector3, location> start_, std::variant<object, vector3, location> end_);
+        //#TODO is this really position category? Sounds more worldish
+        std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_);
+        float distance(std::variant<object,vector3> start_, std::variant<object, vector3> end_);
+        bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
+        vector3 building_exit(const object &building_, int index_);
+        vector3 building_pos(const object &building_, int index_);
+
+
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿#include "intersects.hpp"
 #include "client/pointers.hpp"
-
+#include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
@@ -25,7 +25,7 @@ namespace intercept {
             }
         }
 
-        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
+        bool intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
             game_value params1({
                 obj_,
                 lodname_
@@ -59,7 +59,7 @@ namespace intercept {
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_, int max_results_, const std::string &lod1_, const std::string &lod2_) {
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object & ignore_obj1_, const object & ignore_obj2_, bool sort_mode_, int max_results_, sqf_string_const_ref lod1_, sqf_string_const_ref lod2_) {
             game_value array_input = game_value({
                 begin_pos_asl_,
                 end_pos_asl_,
@@ -199,6 +199,15 @@ namespace intercept {
                 output.push_back(object(intersects->data[i]));
             }
             return output;
+        }
+
+        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_) {
+            game_value params({
+                pos1_,
+                pos2_
+            });
+
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
         }
     }
 }

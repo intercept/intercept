@@ -55,11 +55,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
         }
 
-        object cam_create(const std::string & type_, const vector3 & position_) {
+        object cam_create(sqf_string_const_ref type_, const vector3 & position_) {
             return host::functions.invoke_raw_binary(__sqf::binary__camcreate__string__array__ret__object, type_, position_);
         }
 
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_) {
+        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_) {
             game_value args({
                 name_,
                 position_
@@ -67,7 +67,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
-        void camera_effect(const object & camera_, const std::string & name_, const std::string & position_, const std::string & rtt_) {
+        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_, sqf_string_const_ref rtt_) {
             game_value args({
                 name_,
                 position_,
@@ -140,7 +140,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
         }
 
-        void cam_command(const object &value0_, const std::string& value1_) {
+        void cam_command(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__camcommand__object__string__ret__nothing, value0_, value1_);
         }
 
@@ -240,13 +240,13 @@ namespace intercept {
         vector3 get_camera_view_direction(const object & obj_) {
             return __helpers::get_pos_obj(__sqf::unary__getcameraviewdirection__object__ret__array, obj_);
         }
-        void switch_camera(const object &value0_, const std::string& value1_) {
+        void switch_camera(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__switchcamera__object__string__ret__nothing, value0_, value1_);
         }
         void set_camera_interest(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcamerainterest__object__scalar__ret__nothing, value0_, value1_);
         }
-        std::string camera_view() {
+        sqf_return_string camera_view() {
             return __helpers::__retrieve_nular_string(__sqf::nular__cameraview__ret__string);
         }
 
@@ -263,7 +263,7 @@ namespace intercept {
 
         //post processing effects
 
-        float pp_effect_create(const std::string& name_, const float& priority_) {
+        float pp_effect_create(sqf_string_const_ref name_, const float& priority_) {
             game_value params({
                 name_,
                 priority_
@@ -273,17 +273,14 @@ namespace intercept {
         }
 
         std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
-            auto_array<game_value> effects;
-            for (rv_pp_effect item : effects_) {
-                effects.push_back(game_value(item));
-            }
+            auto_array<game_value> effects(effects_.begin(), effects_.end());
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, std::move(effects));
 
             return __helpers::__convert_to_numbers_vector(ret);
         }
 
-        bool pp_effect_committed(const std::string &value_) {
+        bool pp_effect_committed(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__ppeffectcommitted__string__ret__bool, value_);
         }
 
@@ -298,11 +295,11 @@ namespace intercept {
         bool pp_effect_enabled(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__ppeffectenabled__scalar__ret__bool, value_);
         }
-        void pp_effect_commit(float value0_, const std::string& value1_) {
+        void pp_effect_commit(float value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__string__scalar__ret__nothing, value0_, value1_);
         }
 
-        void pp_effect_enable(bool value0_, const std::string& value1_) {
+        void pp_effect_enable(bool value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__string__bool__ret__nothing, value0_, value1_);
         }
 
@@ -314,11 +311,55 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ppeffectforceinnvg__scalar__bool__ret__nothing, value0_, value1_);
         }
         void pp_effect_destroy(std::vector<float> effect_handles_) {
-            auto_array<game_value> effect_handles;
-            for (auto effect_handle : effect_handles_)
-                effect_handles.push_back(effect_handle);
+            auto_array<game_value> effect_handles(effect_handles_.begin(), effect_handles_.end());
 
             host::functions.invoke_raw_unary(__sqf::unary__ppeffectdestroy__array__ret__nothing, std::move(effect_handles));
         }
+        void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_) {
+            switch (effect_.index()) {
+                case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__string__array__ret__nothing, std::get<0>(effect_).get(), settings_);
+                case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectadjust__scalar__array__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), settings_);
+            }
+        }
+
+        void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_) {
+            switch (effect_.index()) {
+                case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__scalar__scalar__ret__nothing, std::move(auto_array<game_value>({ std::get<0>(effect_).get().begin(),std::get<0>(effect_).get().end() })), duration_);
+                case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__array__scalar__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), duration_);
+            }
+        }
+
+        void pp_effect_enable(const std::vector<int> &effets_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_);
+        }
+
+
+
+
+        vector3 get_pilot_camera_direction(const object &object_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameradirection__object__ret__array, object_));
+        }
+
+        vector3 get_pilot_camera_position(const object &object_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraposition__object__ret__array, object_));
+        }
+        vector3 get_pilot_camera_rotation(const object &object_) {
+            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_));
+        }
+        rv_camera_target get_pilot_camera_target(const object &object_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
+
+            return rv_camera_target({
+                ret[0],
+                __helpers::__convert_to_vector3(ret[1]),
+                ret[2]
+            });
+        }
+
+        bool has_pilot_camera(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__haspilotcamera__object__ret__bool, object_);
+        }
+
+
     }
 }

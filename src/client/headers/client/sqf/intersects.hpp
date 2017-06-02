@@ -35,7 +35,7 @@ namespace intercept {
         /**
         * Finds named selections in object which are in specified LOD, intersected by given section of a line
         */
-        bool intersect(const object& obj_, const std::string &lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
+        bool intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
 
         /**
         * Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -81,7 +81,7 @@ namespace intercept {
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, const std::string &lod1_ = "VIEW", const std::string &lod2_ = "FIRE");
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, sqf_string_const_ref lod1_ = "VIEW", sqf_string_const_ref lod2_ = "FIRE");
 
         /**
         * Returns objects intersecting with the virtual line from begPos to endPos
@@ -119,5 +119,8 @@ namespace intercept {
         * Find list of objects intersected by given line from begin_position_ to end_position_
         */
         std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
+
+        vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
+
     }
 }

@@ -22,6 +22,8 @@
 #include <cstdint>
 #include <streambuf>
 #include <istream>
+#include <variant>
+#include <optional>
 
 #ifdef _DEBUG
 #define ZERO_OUTPUT()    { memset(output, 0x00, outputSize); }

@@ -201,7 +201,7 @@ namespace intercept {
         void set_object_texture_global(const object &object_, int index_, sqf_string_const_ref texture_);
         void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
         void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
-        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3> > target_);
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);

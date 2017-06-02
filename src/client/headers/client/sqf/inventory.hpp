@@ -303,12 +303,7 @@ namespace intercept {
         sqf_return_string current_weapon_mode(const object & gunner_);
 
         void load_magazine(const object &obj_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
-
-
-
-        rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_);
-
+        
         struct rv_unit_description {
             std::string unit;
             std::string uniform;
@@ -517,11 +512,6 @@ namespace intercept {
 
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
-
-
-
-
-
 
     }
 }

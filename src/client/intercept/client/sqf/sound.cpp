@@ -63,7 +63,7 @@ namespace intercept {
         void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
         }
-
+        
         void play_music(sqf_string_const_ref class_) {
             __helpers::__empty_unary_string(__sqf::unary__playmusic__string__ret__nothing, class_);
         }
@@ -251,18 +251,16 @@ namespace intercept {
                 type_,
                 command_
             });
-
+            
             return host::functions.invoke_raw_unary(__sqf::unary__setmusiceventhandler__array__ret__nothing, params);
         }
-
+        
         float music_volume() {
             return __helpers::__retrieve_nular_number(__sqf::nular__musicvolume__ret__scalar);
         }
-
+        
         float radio_volume() {
             return host::functions.invoke_raw_nular(__sqf::nular__radiovolume__ret__scalar);
         }
-
-
-	}
+    }
 }

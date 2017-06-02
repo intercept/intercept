@@ -836,10 +836,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setpilotcamerarotation__object__array__ret__nothing, vehicle_, { yaw_,pitch_ });
         }
 
-        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, const vector3> target_) {
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_) {
             if (target_.index() == 0)
                 return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<0>(target_));
-            return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_));
+            return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameratarget__object__object_array__ret__bool, vehicle_, std::get<1>(target_).get());
         }
 
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_) {

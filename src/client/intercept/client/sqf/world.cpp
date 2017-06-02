@@ -634,20 +634,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__setlocalwindparams__array__ret__nothing, params);
         }
 
-        vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
-            auto_array<game_value> params_right({
-                min_distance_,
-                max_distance_
-            });
-
-            if (vehicle_type_.has_value()) params_right.push_back(*vehicle_type_);
-
-            if (center_.index() == 0) {
-                return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
-            }
-            return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
-        }
-
         float getelevationoffset() {
             return __helpers::__retrieve_nular_number(__sqf::nular__getelevationoffset__ret__scalar);
         }

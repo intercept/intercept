@@ -273,8 +273,6 @@ namespace intercept {
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
         void lb_set_value(const control &control_, int index_, float val_);
-        void lb_sort(const control &control_);
-        void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
         void lb_set_select_color(int idc_, int index_, const rv_color & color_);
         void lb_set_select_color_right(int idc_, int index_, const rv_color & color_);
         void lb_clear(const control &value_);
@@ -291,7 +289,7 @@ namespace intercept {
         float lb_cur_sel(float value_);
         float lb_size(const control &value_);
         float lb_size(float value_);
-        void lb_sort_by_value(const control &value_);
+        
         sqf_return_string lb_data(int control_id_, int index_);
         sqf_return_string lb_data(const control &control_, int index_);
         sqf_return_string lb_picture(int control_id_, int index_);
@@ -362,7 +360,7 @@ namespace intercept {
         void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
-        void tv_set_picture_color__right_selected(const control &control_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color__right_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_select_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_text(const control &control_, const std::vector<int> &path_, sqf_string_const_ref text_);
         sqf_return_string tv_tooltip(const control &control_, const std::vector<int> &path_);
@@ -618,6 +616,7 @@ namespace intercept {
         void lb_sort(int control_);
         void lb_sort_by_value(const control control_);
         void lb_sort_by_value(int control_);
+        void lb_sort_by_value(const control &value_);
 
         sqf_return_string ct_data(const control &control_, int index_);
         std::vector<game_value> ct_find_header_rows(const control &control_, int index_);

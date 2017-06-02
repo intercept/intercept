@@ -48,7 +48,5 @@ namespace intercept {
         std::vector<group> hc_all_groups(const object &unit_) {
             return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_unary(__sqf::unary__hcallgroups__object__ret__array, unit_));
         }
-
-
-	}
+    }
 }

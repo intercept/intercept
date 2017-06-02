@@ -443,6 +443,21 @@ namespace intercept {
 
             return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
         }
+
+        vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
+            auto_array<game_value> params_right({
+                min_distance_,
+                max_distance_
+            });
+
+            if (vehicle_type_.has_value()) params_right.push_back(*vehicle_type_);
+
+            if (center_.index() == 0) {
+                return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<0>(center_).get(), std::move(params_right));
+            }
+            return host::functions.invoke_raw_binary(__sqf::binary__findemptyposition__array__array__ret__array, std::get<1>(center_).get(), std::move(params_right));
+        }
+
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
             game_value params_right({
                 radius_,

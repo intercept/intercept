@@ -1487,14 +1487,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__buttonsetaction__control__string__ret__nothing, control_, action_);
         }
 
-        void lb_sort(const control &control_) {
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
-        }
-
-        void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
-            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });
-        }
-
         float lb_add(int control_id_, sqf_string_const_ref text_) {
             game_value args({
                 static_cast<float>(control_id_),
@@ -2826,6 +2818,17 @@ namespace intercept {
         int ct_row_count(const control &control_) {
             return host::functions.invoke_raw_unary(__sqf::unary__ctrowcount__control__ret__scalar, control_);
         }
+
+        void lb_sort(const control &control_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
+        }
+
+        void lb_sort(const control &control_, sqf_string_const_ref sort_order_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });
+        }
+
+        //old bodies
+        /* 
         void lb_sort(const control &control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
         }
@@ -2838,6 +2841,7 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, args);
         }
+        */
 
         void lb_sort(int control_, sqf_string_const_ref sort_order_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__array__ret__nothing, { control_, sort_order_ });

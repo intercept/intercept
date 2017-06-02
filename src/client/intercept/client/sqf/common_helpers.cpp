@@ -150,7 +150,13 @@ namespace intercept {
                 std::vector<std::string> output;
                 if (input_.type() != game_data_array::type_def) return output;
                 const auto& arr = input_.to_array();
+            #ifdef __GNUC__  //fails to find conversion to std::string
+                for (auto& it : arr)
+                    output.push_back(it);
+            #else
                 output.insert(output.end(), arr.begin(), arr.end());
+            #endif
+                
                 return output;
             }
 
@@ -203,11 +209,12 @@ namespace intercept {
             }
 
             std::vector<marker> __convert_to_markers_vector(game_value input_) {
-                std::vector<marker> output;
-                if (input_.type() != game_data_array::type_def) return output;
-                const auto& arr = input_.to_array();
-                output.insert(output.end(), arr.begin(), arr.end());
-                return output;
+                return __convert_to_strings_vector(input_);
+                //std::vector<marker> output;
+                //if (input_.type() != game_data_array::type_def) return output;
+                //const auto& arr = input_.to_array();
+                //output.insert(output.end(), arr.begin(), arr.end());
+                //return output;
             }
 
             std::vector<config> __convert_to_configs_vector(game_value input_) {

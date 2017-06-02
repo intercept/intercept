@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "shared.hpp"
 namespace intercept {
     namespace types {

@@ -1,5 +1,4 @@
-﻿#include <Windows.h>
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -18,10 +17,9 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-extern "C"
-{
-    __declspec(dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
-}
+#ifndef __linux__
+extern "C" DLLEXPORT void __stdcall RVExtension(char *output, int outputSize, const char *function);
+#endif
 
 
 static char version[] = "1.0";
@@ -38,8 +36,11 @@ std::string get_command(const std::string & input) {
 }
 
 std::atomic_bool _threaded(false);
-
+#ifdef __linux__
+extern "C" void RVExtension(char *output, int outputSize, const char *function) {
+#else
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
+#endif
     ZERO_OUTPUT();
     
     // Get the command, then the command args
@@ -77,8 +78,13 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     #if _WIN64 || __X86_64__
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970-0x2800);
     #else
+    #if __linux__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x264);
+    #else
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
     #endif
+    #endif
+        //std::cout << "gameState " << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
     }
@@ -86,7 +92,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     intercept::controller::get().call(command, _args, result, _threaded);
 
     if (result.length() > 0) {
-        sprintf_s(output, outputSize, "%s", result.c_str());
+        snprintf(output, outputSize, "%s", result.c_str());
     }
     EXTENSION_RETURN();
 }
@@ -118,7 +124,7 @@ void Cleanup() {
 
 }
 
-
+#ifndef __linux__
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
     LPVOID lpReserved
@@ -137,3 +143,4 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     }
     return TRUE;
 }
+#endif

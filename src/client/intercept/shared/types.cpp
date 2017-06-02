@@ -16,7 +16,7 @@
 
 namespace intercept {
     namespace __internal {
-
+        /*
         class mem_leak_watcher {
         public:
             mem_leak_watcher() {
@@ -61,7 +61,7 @@ namespace intercept {
             std::map<game_data_number*, std::chrono::system_clock::time_point> _allocs;
             std::mutex _mut;
         };
-
+        */
 
     }
 
@@ -186,7 +186,11 @@ namespace intercept {
         }
 
         inline void * game_data_number::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_number));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         inline void game_data_number::operator delete(void * ptr_, std::size_t) {
@@ -234,7 +238,11 @@ namespace intercept {
         }
 
         inline void * game_data_bool::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_bool));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         inline void game_data_bool::operator delete(void * ptr_, std::size_t) {
@@ -290,7 +298,11 @@ namespace intercept {
         game_data_string::~game_data_string() {}
 
         void * game_data_string::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_string));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         void game_data_string::operator delete(void * ptr_, std::size_t) {
@@ -318,7 +330,7 @@ namespace intercept {
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
 
-        game_data_array::game_data_array(const std::vector<game_value> &init_) : data(init_.begin(),init_.end()) {
+        game_data_array::game_data_array(const std::vector<game_value> &init_) : data(init_.begin(), init_.end()) {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
@@ -352,7 +364,11 @@ namespace intercept {
         game_data_array::~game_data_array() {}
 
         void * game_data_array::operator new(std::size_t) {
+        #ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_array));
+        #else
             return pool_alloc_base->allocate(1);
+        #endif
         }
 
         void game_data_array::operator delete(void * ptr_, std::size_t) {
@@ -694,7 +710,15 @@ namespace intercept {
             virtual void *HeapDelete(void *mem, size_t size) = 0;
             virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
 
+        #ifdef __linux__
+            virtual int something1(void* mem, size_t unknown) = 0; //memalign alloc and memmove
+            virtual int something2(void* mem, size_t unknown) = 0; //redirect to something1
+            virtual int something3(void* mem, size_t unknown) = 0; //ret 0
+        #endif
+
             virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
+            //In Linux binary this calls malloc_usable_size(unknown)
+            //In Linux binary this allocates aligned memory and moves memory. But on linux it also takes 4 args
 
             virtual size_t GetPageRecommendedSize() = 0;
 
@@ -713,13 +737,16 @@ namespace intercept {
                                        //Synchronization for Multithreaded access
             virtual void Lock() = 0;
             virtual void Unlock() = 0;
-            char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
+            const char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
         };
 
         void* __internal::rv_allocator_allocate_generic(size_t size) {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             return alloc->New(size);
         }
 
@@ -727,7 +754,11 @@ namespace intercept {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             alloc->Delete(_Ptr);
         }
 
@@ -735,7 +766,11 @@ namespace intercept {
             //#TODO assert when _ptr is not 32/64bit aligned
             // deallocate object at _Ptr
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
+        #ifdef __linux__
+            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
+        #else
             MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
+        #endif
             return alloc->Realloc(_Ptr, _size);
         }
 
@@ -774,18 +809,26 @@ namespace intercept {
         //}
 
         void* rv_pool_allocator::allocate(size_t count) {
+        #ifdef __linux__
+            __internal::rv_allocator_allocate_generic(count);
+        #else
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t count);
+            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t /*count*/);
             allocFunc alloc = reinterpret_cast<allocFunc>(allocatorBase->poolFuncAlloc);
             auto allocation = alloc(this, count);
             return allocation;
+        #endif
         }
 
         void rv_pool_allocator::deallocate(void* data) {
+        #ifdef __linux__
+            __internal::rv_allocator_deallocate_generic(data);
+        #else
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* data);
+            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* /*data*/);
             deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
-            return dealloc(this, data);
+            dealloc(this, data);
+        #endif
         }
 
         static std::map<std::string, types::__internal::GameDataType> additionalTypes;
@@ -846,7 +889,7 @@ namespace intercept {
                 case GameDataType::TASK: return "TASK";
                 case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
                 case GameDataType::LOCATION: return "LOCATION";
-                default: ;
+                default:;
             }
             for (auto& it : additionalTypes) {
                 if (it.second == type)

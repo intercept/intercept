@@ -2,10 +2,6 @@
 #include "../shared.hpp"
 #include "shared/functions.hpp"
 
-#define DLLEXPORT __declspec(dllexport)
-
-
-
 namespace intercept {
     namespace client {
 
@@ -24,8 +20,8 @@ namespace intercept {
 
         
         extern "C" {
-            DLLEXPORT void __cdecl assign_functions(const struct client_functions funcs);
-            DLLEXPORT void __cdecl handle_unload();
+            DLLEXPORT void CDECL assign_functions(const struct client_functions funcs);
+            DLLEXPORT void CDECL handle_unload();
         }
 
         void __initialize();

@@ -8,7 +8,8 @@
 #include "shared.hpp"
 #include "arguments.hpp"
 #include "singleton.hpp"
-
+#include <chrono>
+using namespace std::literals::chrono_literals;
 namespace intercept {
 	class controller_module {
 	public:
@@ -171,7 +172,7 @@ namespace intercept {
                             
                     }
                 }
-                sleep(5);
+                std::this_thread::sleep_for(5ms);
             }
         }
         std::atomic_bool                _stop;

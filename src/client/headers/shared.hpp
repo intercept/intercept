@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // This is a warning normally for returning references to local/stack allocated variables
 // It is so dangerous though that we need to force it as a warning because it can break
@@ -31,14 +31,21 @@
 #define EXTENSION_RETURN() return;
 #endif
 
-#ifdef _WINDOWS
-#define sleep(x) Sleep(x)
-#endif
-
-
-
 #ifdef _DEBUG
 #define INTERCEPT_ASSERT assert()
 #else
 #define INTERCEPT_ASSERT intercept::runtime_assert()
+#endif
+
+#ifdef __GNUC__
+#define CDECL __attribute__ ((__cdecl__))
+#else
+#undef CDECL
+#define CDECL __cdecl
+#endif
+
+#ifdef __GNUC__
+#define DLLEXPORT __attribute__((visibility("default")))
+#else
+#define DLLEXPORT __declspec(dllexport)
 #endif

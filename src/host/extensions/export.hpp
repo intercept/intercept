@@ -18,9 +18,9 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
-    using WrapperFunctionBinary = game_value*(*)(game_value*, uintptr_t, uintptr_t, uintptr_t);
-    using WrapperFunctionUnary = game_value*(*)(game_value*, uintptr_t, uintptr_t);
-    using WrapperFunctionNular = game_value*(*)(game_value*, uintptr_t);
+    using WrapperFunctionBinary = intercept::types::binary_function;
+    using WrapperFunctionUnary = intercept::types::unary_function;
+    using WrapperFunctionNular = intercept::types::nular_function;
 
     namespace client_function_defs {
         /*!

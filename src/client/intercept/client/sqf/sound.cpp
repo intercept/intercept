@@ -43,23 +43,23 @@ namespace intercept {
         void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
         }
-
+        
         void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
             host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
         }
-
+        
         void say_3d(const object& from_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, from_, sound_classname_);
         }
-
+        
         void say_3d(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
         }
-
+        
         void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
         }
-
+        
         void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
         }
@@ -67,7 +67,7 @@ namespace intercept {
         void play_music(sqf_string_const_ref class_) {
             __helpers::__empty_unary_string(__sqf::unary__playmusic__string__ret__nothing, class_);
         }
-
+        
         void play_music(sqf_string_const_ref class_, float start_) {
             game_value params({
                 class_,

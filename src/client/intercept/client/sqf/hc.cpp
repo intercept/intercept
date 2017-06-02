@@ -7,14 +7,14 @@ namespace intercept {
         //#TODO: Find out if this return type is correct
         rv_hc_group_params hc_group_params(const object &unit_, const group &group_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__hcgroupparams__object__group__ret__array, unit_, group_);
-
+            
             return rv_hc_group_params({ res[0],res[1][0], res[1][1], res[1][2], res[1][3] });
         }
         
         //#TODO: Find out about the second argument
         void hc_select_group(const object &unit, const std::vector<game_value> &array_) {
             auto_array<game_value> params_right({ array_.begin(), array_.end() });
-
+            
             host::functions.invoke_raw_binary(__sqf::binary__hcselectgroup__object__array__ret__nothing, unit, std::move(params_right));
         }
         
@@ -25,7 +25,7 @@ namespace intercept {
             });
             if (group_name_.has_value()) params_right.push_back(*group_name_);
             if (team_.has_value()) params_right.push_back(*team_);
-
+            
             host::functions.invoke_raw_binary(__sqf::binary__hcsetgroup__object__array__ret__nothing, unit_, std::move(params_right));
         }
         

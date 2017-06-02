@@ -37,5 +37,5 @@ namespace intercept {
         void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
         object hc_leader(const group &value_);
         void hc_remove_all_groups(const object &value_);
-	}
+    }
 }

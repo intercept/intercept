@@ -188,18 +188,18 @@ namespace intercept {
         float get_env_sound_controller(const vector3 &position_, sqf_string_const_ref controller_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getenvsoundcontroller__array__string__ret__scalar, position_, controller_);
         }
-
+        
         float get_sound_controller(const object &vehicle_, sqf_string_const_ref controller_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontroller__object__string__ret__scalar, vehicle_, controller_);
         }
-
+        
         float get_sound_controller_result(const object &object_, const config &config_entry_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontrollerresult__object__config__ret__scalar, object_, config_entry_);
         }
-
+        
         object create_sound_source(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/) {
             auto_array<game_value> markers(markers_.begin(), markers_.end());
-
+            
             game_value args({
                 type_,
                 pos_,

@@ -74,5 +74,5 @@ namespace intercept {
         void remove_music_event_handler(sqf_string_const_ref type_, float id_);
         float set_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
 
-	}
+    }
 }

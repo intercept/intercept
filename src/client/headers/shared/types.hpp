@@ -1695,28 +1695,29 @@ namespace intercept {
         private:
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
+
     #ifdef __linux__
         template <game_value(*T)(game_value, game_value)>
-        static game_value  userFunctionWrapper(const void* gs, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value  userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*l, *r));
         }
 
         template <game_value(*T)(game_value)>
-        static game_value userFunctionWrapper(const void* gs, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*r));
         }
 
         template <game_value(*T)(const game_value&)>
-        static game_value userFunctionWrapper_ref(const void* gs, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper_ref(uintptr_t gs, uintptr_t right_arg_) {
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*r));
         }
 
         template <game_value(*T)()>
-        static game_value userFunctionWrapper(const void* gs) {
+        static game_value userFunctionWrapper(uintptr_t gs) {
             return game_value(T());
             //return sqf_this_;
         }

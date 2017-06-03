@@ -158,7 +158,7 @@ namespace intercept {
             static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
         public:
 
-            int size() const { return _size; }
+            size_t size() const { return _size; }
             Type *data() { return &_data; }
             const Type *data() const { return &_data; }
             const Type * cbegin() const { return &_data; }
@@ -171,7 +171,7 @@ namespace intercept {
                 return ret;
             }
 
-            static compact_array* create(int number_of_elements_) {
+            static compact_array* create(size_t number_of_elements_) {
                 size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
                 compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
                 new (buffer) compact_array(number_of_elements_);
@@ -320,7 +320,7 @@ namespace intercept {
             operator std::string_view() const { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
             //This calls strlen so O(N) 
-            int length() const {
+            size_t length() const {
                 if (!_ref) return 0;
                 return strlen(_ref->data());
             }
@@ -400,7 +400,7 @@ namespace intercept {
         private:
             ref<compact_array<char>> _ref;
 
-            static compact_array<char> *create(const char *str, int len) {
+            static compact_array<char> *create(const char *str, size_t len) {
                 if (len == 0 || *str == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
             #if __GNUC__
@@ -412,7 +412,7 @@ namespace intercept {
                 return string;
             }
 
-            static compact_array<char> *create(int len) {
+            static compact_array<char> *create(size_t len) {
                 if (len == 0) return nullptr;
                 compact_array<char> *string = compact_array<char>::create(len + 1);
                 string->data()[0] = 0;
@@ -605,12 +605,12 @@ namespace intercept {
             typedef rv_array<Type> base;
         protected:
             int _maxItems;
-            Type *try_realloc(Type *old, int oldN, int &n) {
+            Type *try_realloc(Type *old, size_t n) {
                 Type *ret = rv_allocator<Type>::reallocate(old, n);
                 return ret;
             }
 
-            void reallocate(int size) {
+            void reallocate(size_t size) {
 
                 if (_maxItems == size) return;
 
@@ -619,10 +619,10 @@ namespace intercept {
                     return;//resize calls reallocate and reallocates... Ugly.. I know
                 }
                 Type *newData = nullptr;
-                if (base::_data && size > 0 && ((newData = try_realloc(base::_data, _maxItems, size)))) {
+                if (base::_data && size > 0 && ((newData = try_realloc(base::_data, size)))) {
                     //if (size > _maxItems)//Don't null out new stuff if there is no new stuff
                     //    std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
-                    _maxItems = size;
+                    _maxItems = static_cast<int>(size);
                     base::_data = newData;
                     return;
                 }
@@ -638,7 +638,7 @@ namespace intercept {
                     rv_allocator<Type>::deallocate(base::_data);
                 }
                 base::_data = newData;
-                _maxItems = size;
+                _maxItems = static_cast<int>(size);
 
             }
 

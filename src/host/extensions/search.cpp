@@ -223,7 +223,7 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
         return _active_pbo_list;
 
     HANDLE pid = reinterpret_cast<HANDLE>(GetCurrentProcessId());
-    HANDLE processHandle = static_cast<HANDLE>(GetCurrentProcess());
+    HANDLE processHandle = GetCurrentProcess();
 
     PSYSTEM_HANDLE_INFORMATION_EX handleInfo = static_cast<PSYSTEM_HANDLE_INFORMATION_EX>(malloc(handleInfoSize));
     while ((status = NtQuerySystemInformation(

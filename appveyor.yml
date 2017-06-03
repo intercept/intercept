@@ -12,17 +12,48 @@ only_commits:
     - src/
 
 configuration:
-- Debug
+- RelWithDebInfo
 
-platform: Win32
+environment:
+  matrix:
+    - platform: Win32
+      vcproj_dir: vcproj
+      vcproj_file: vcproj\Intercept.sln
+      cmake_gen: "Visual Studio 15 2017"
+      cmake_args: ""
+
+    - platform: x64
+      vcproj_dir: vcproj64
+      vcproj_file: vcproj64\Intercept.sln
+      cmake_gen: "Visual Studio 15 2017 Win64"
+      cmake_args: "-DUSE_64BIT_BUILD=ON"
+
+matrix:
+  fast_finish: true
 
 before_build:
   - mkdir build
-  - cd vcproj
-  - cmake .. -G "Visual Studio 15 2017"
+  - cd %vcproj_dir%
+  - cmake .. -G "%cmake_gen%" %cmake_args%
   - cd ..
 
 build:
-  project: vcproj\Intercept.sln
   parallel: true
   verbosity: minimal
+
+build_script:
+  - msbuild "%vcproj_file%"
+  
+artifacts:
+- path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib
+  name: win32_client_lib
+- path: build\win32\intercept\RelWithDebInfo\intercept.dll
+  name: win32_host_lib
+- path: build\win32\intercept\RelWithDebInfo\intercept.pdb
+  name: win32_host_pdb
+- path: build\win64\intercept_client\RelWithDebInfo\intercept_client.lib
+  name: win64_client_lib
+- path: build\win64\intercept\RelWithDebInfo\intercept_x64.dll
+  name: win64_host_lib
+- path: build\win64\intercept\RelWithDebInfo\intercept_x64.pdb
+  name: win32_host_pdb

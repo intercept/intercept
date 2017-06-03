@@ -352,7 +352,7 @@ namespace intercept {
 
             rv_magazine_info(const game_value &ret_game_value_) :
                 magazine(ret_game_value_[0]),
-                ammo(ret_game_value_.size() > 2 ? ret_game_value_[1] : -1),
+                ammo(ret_game_value_.size() > 2 ? static_cast<int>(ret_game_value_[1]) : -1),
                 count(ret_game_value_.size() > 2 ? ret_game_value_[2] : ret_game_value_[1]) {}
 
             operator game_value() const {

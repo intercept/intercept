@@ -228,12 +228,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointforcebehaviour__array__bool__ret__nothing, { group_, index_ }, force_);
         }
 
-        
+
 
         float waypoint_timeout_current(const group &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointtimeoutcurrent__group__ret__scalar, value_);
         }
-        
+
         bool waypoints_enabled_uav(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__waypointsenableduav__object__ret__bool, value_);
         }
@@ -250,8 +250,8 @@ namespace intercept {
             game_value param_left;
 
             switch (target_.index()) {
-            case 0: param_left = std::get<0>(target_).get(); break;
-            case 1: param_left = std::get<1>(target_).get(); break;
+                case 0: param_left = std::get<0>(target_).get(); break;
+                case 1: param_left = std::get<1>(target_).get(); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__lockwp__object_group__bool__ret__nothing, param_left, lock_);
@@ -295,8 +295,8 @@ namespace intercept {
         void set_effect_condition(std::variant<object, rv_waypoint> unit_, sqf_string_const_ref statement_) {
             game_value param_left;
             switch (unit_.index()) {
-            case 0: param_left = std::get<0>(unit_); break;
-            case 1: param_left = { std::get<1>(unit_).group_, std::get<1>(unit_).index }; break;
+                case 0: param_left = std::get<0>(unit_); break;
+                case 1: param_left = std::get<1>(unit_); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);

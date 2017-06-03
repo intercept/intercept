@@ -1191,6 +1191,14 @@ namespace intercept {
             game_value(const std::vector<game_value> &list_);
             game_value(const std::initializer_list<game_value> &list_);
             game_value(auto_array<game_value> &&array_);
+            template<class Type>
+            game_value(const auto_array<Type>& array_) : game_value(std::move(auto_array<game_value>(array_.begin(), array_.end()))) {
+                static_assert(std::is_convertible<Type, game_value>::value);
+            }
+            template<class Type>
+            game_value(const std::vector<Type>& array_) : game_value(std::move(auto_array<game_value>(array_.begin(), array_.end()))) {
+                static_assert(std::is_convertible<Type, game_value>::value);
+            }
             game_value(const vector3 &vec_);
             game_value(const vector2 &vec_);
             game_value(const internal_object &internal_);

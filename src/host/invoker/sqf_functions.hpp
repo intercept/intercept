@@ -82,7 +82,7 @@ namespace intercept {
          * \param right_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
         /**
          * \brief Registers a custom SQF Unary Command
          * \param name 
@@ -92,7 +92,7 @@ namespace intercept {
          * \param right_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
         /**
          * \brief Registers a custom SQF Nular Command
          * \param name 
@@ -101,7 +101,7 @@ namespace intercept {
          * \param return_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
 
 
         bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
@@ -116,7 +116,7 @@ namespace intercept {
         r_string _typeName; //float/NativeObject
         r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
 
-        std::pair<types::__internal::GameDataType, sqf_script_type> registerType(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf);
+        std::pair<types::__internal::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
     private:
         __internal::gsNular* findNular(std::string name) const;

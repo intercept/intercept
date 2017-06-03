@@ -129,7 +129,7 @@ void sqf_functions::setDisabled() {
 
 */
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
@@ -159,7 +159,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //    leftType, rightype,
     //    "", "", description.c_str(), "", "", "", "", "Intercept", 0);
 
-    auto operators = findOperators(name);
+    auto operators = findOperators(std::string(name));
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!operators) {
@@ -175,7 +175,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         operators = static_cast<game_operators*>(table->push_back(game_operators(lowerName.c_str())));
         operators->copyPH(test);
     } else {  //Name already exists
-        if (findBinary(name, left_arg_type, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
+        if (findBinary(std::string(name), left_arg_type, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
     }
 
     __internal::gsOperator op;
@@ -211,7 +211,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
@@ -252,7 +252,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //insertUnary(_registerFuncs._gameState, op);
 
 
-    auto functions = findFunctions(name);
+    auto functions = findFunctions(std::string(name));
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     if (!functions) {
@@ -268,7 +268,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         functions = static_cast<game_functions*>(table->push_back(game_functions(lowerName.c_str())));
         functions->copyPH(test);
     } else { //Name already exists
-        if (findUnary(name, right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
+        if (findUnary(std::string(name), right_arg_type)) return registered_sqf_function{ nullptr }; //Function with same arg types already exists
     }
 
     __internal::gsFunction op;
@@ -301,7 +301,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string name, std::string description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
@@ -313,7 +313,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
-    auto alreadyExists = findNular(name);
+    auto alreadyExists = findNular(std::string(name));
 
     if (alreadyExists) {//Name already exists
         return registered_sqf_function{ nullptr };
@@ -406,7 +406,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 }
 
 
-std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(r_string name, r_string localizedName, r_string description, r_string typeName, script_type_info::createFunc cf) {
+std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads

@@ -74,6 +74,19 @@ namespace intercept {
 
         //ai
         void set_skill(const object &object_, float skill_);
+        enum class set_skill_type {
+            aimingAccuracy,
+            aimingShake,
+            aimingSpeed,
+            endurance,
+            spotDistance,
+            spotTime,
+            courage,
+            reloadSpeed,
+            commanding,
+            general
+        };
+        void set_skill(const object &object_, set_skill_type type_, float skill_);
         //#TODO isn't this misc?
         void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
         sqf_return_string speed_mode(const object &obj_);

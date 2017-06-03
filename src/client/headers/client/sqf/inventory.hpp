@@ -464,6 +464,7 @@ namespace intercept {
         };
 
         rv_unit_loadout get_unit_loadout(const object& obj_);
+        rv_unit_loadout get_unit_loadout(const config& cfg_);
         void set_unit_loadout(const object& obj_, const rv_unit_loadout& loadout_, bool rearm_ = false);
 
 

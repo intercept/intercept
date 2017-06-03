@@ -1204,7 +1204,7 @@ namespace intercept {
             game_value(const internal_object &internal_);
 
             game_value & operator = (const game_value &copy_);
-            game_value & operator = (game_value &&move_);
+            game_value & operator = (game_value &&move_) noexcept;
             game_value & operator = (float val_);
             game_value & operator = (bool val_);
             game_value & operator = (const std::string &val_);

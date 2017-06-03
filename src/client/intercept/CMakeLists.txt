@@ -1,10 +1,11 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.8)
 
 set(INTERCEPT_EXAMPLE_NAME "intercept_client")
 
 
 intercept_set_linker_options()
 add_definitions(/DINTERCEPT_NO_THREAD_SAFETY)
+
 set(INTERCEPT_NAME "intercept_client")
 
 file(GLOB INTERCEPT_CLIENT_SOURCES *.c *.cpp)

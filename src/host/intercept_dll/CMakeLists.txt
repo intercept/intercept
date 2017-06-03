@@ -1,6 +1,10 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.8)
 
-set(INTERCEPT_EXTENSION_NAME "intercept")
+if(USE_64BIT_BUILD)
+    set(INTERCEPT_EXTENSION_NAME "intercept_x64")
+else()
+    set(INTERCEPT_EXTENSION_NAME "intercept")
+endif()
 
 file(GLOB_RECURSE INTERCEPT_SOURCES *.h *.hpp *.c *.cpp)
 intercept_set_linker_options()

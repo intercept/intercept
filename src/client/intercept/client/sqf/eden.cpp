@@ -444,7 +444,7 @@ namespace intercept {
             case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
             case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
             }
-
+            return std::vector<game_value>();
             //#TODO: add binary__get3denattribute__array__string__ret__array
         }
 

@@ -296,14 +296,14 @@ namespace intercept {
             game_value param_left;
             switch (unit_.index()) {
             case 0: param_left = std::get<0>(unit_); break;
-            case 1: param_left = { std::get<1>(unit_).group, std::get<1>(unit_).index }; break;
+            case 1: param_left = { std::get<1>(unit_).group_, std::get<1>(unit_).index }; break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);
         }
 
         void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group, waypoint_.index }, vehicle_);
+            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group_, waypoint_.index }, vehicle_);
         }
 
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_) {
@@ -402,7 +402,7 @@ namespace intercept {
 
         void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_) {
             auto_array<game_value> waypoints;
-            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group, waypoint.index });
+            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group_, waypoint.index });
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
         }

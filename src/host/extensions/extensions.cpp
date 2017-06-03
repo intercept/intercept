@@ -27,7 +27,7 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
-        //#BUG //#FIXME reenable this by implementing searcher like wanted
+
         std::string arg_line = _searcher.get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall") != std::string::npos) {

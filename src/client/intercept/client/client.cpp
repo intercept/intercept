@@ -7,6 +7,20 @@ namespace intercept {
     namespace client {
         client_functions host::functions;
 
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
+            return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
+        }
+
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, GameDataType return_arg_type, GameDataType right_arg_type) {
+            return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
+        }
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, GameDataType return_arg_type) {
+            return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
+        }
+        std::pair<GameDataType, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+            return functions.register_sqf_type(name, localizedName, description, typeName, cf);
+        }
+
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void CDECL assign_functions(const struct client_functions funcs) {
             host::functions = funcs;
@@ -20,18 +34,18 @@ namespace intercept {
             auto allocator_info = host::functions.get_engine_allocator();
             game_data_array::type_def = type_def;
             game_data_array::data_type_def = data_type_def;
-            game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(__internal::GameDataType::ARRAY)];
+            game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::ARRAY)];
 
 
             host::functions.get_type_structure("SCALAR", type_def, data_type_def);
             game_data_number::type_def = type_def;
             game_data_number::data_type_def = data_type_def;
-            game_data_number::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(__internal::GameDataType::SCALAR)];
+            game_data_number::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::SCALAR)];
 
             host::functions.get_type_structure("STRING", type_def, data_type_def);
             game_data_string::type_def = type_def;
             game_data_string::data_type_def = data_type_def;
-            game_data_string::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(__internal::GameDataType::STRING)];
+            game_data_string::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::STRING)];
 
             host::functions.get_type_structure("OBJECT", type_def, data_type_def);
             game_data_object::type_def = type_def;
@@ -40,7 +54,7 @@ namespace intercept {
             host::functions.get_type_structure("BOOL", type_def, data_type_def);
             game_data_bool::type_def = type_def;
             game_data_bool::data_type_def = data_type_def;
-            game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(__internal::GameDataType::BOOL)];
+            game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::BOOL)];
 
 
             host::functions.get_type_structure("CODE", type_def, data_type_def);

@@ -833,37 +833,37 @@ namespace intercept {
         #endif
         }
 
-        static std::map<std::string, types::__internal::GameDataType> additionalTypes;
-        types::__internal::GameDataType __internal::game_datatype_from_string(const r_string& name) {
+        static std::map<std::string, types::GameDataType> additionalTypes;
+        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
             //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::__internal::GameDataType::SCALAR;
-            if (name == "BOOL") return types::__internal::GameDataType::BOOL;
-            if (name == "ARRAY") return types::__internal::GameDataType::ARRAY;
-            if (name == "STRING") return types::__internal::GameDataType::STRING;
-            if (name == "NOTHING") return types::__internal::GameDataType::NOTHING;
-            if (name == "ANY") return types::__internal::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::__internal::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::__internal::GameDataType::NaN;
-            if (name == "CODE") return types::__internal::GameDataType::CODE;
-            if (name == "OBJECT") return types::__internal::GameDataType::OBJECT;
-            if (name == "SIDE") return types::__internal::GameDataType::SIDE;
-            if (name == "GROUP") return types::__internal::GameDataType::GROUP;
-            if (name == "TEXT") return types::__internal::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::__internal::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::__internal::GameDataType::TARGET;
-            if (name == "CONFIG") return types::__internal::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::__internal::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::__internal::GameDataType::CONTROL;
-            if (name == "NetObject") return types::__internal::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::__internal::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::__internal::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::__internal::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::__internal::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::__internal::GameDataType::LOCATION;
+            if (name == "SCALAR") return types::GameDataType::SCALAR;
+            if (name == "BOOL") return types::GameDataType::BOOL;
+            if (name == "ARRAY") return types::GameDataType::ARRAY;
+            if (name == "STRING") return types::GameDataType::STRING;
+            if (name == "NOTHING") return types::GameDataType::NOTHING;
+            if (name == "ANY") return types::GameDataType::ANY;
+            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
+            if (name == "NaN") return types::GameDataType::NaN;
+            if (name == "CODE") return types::GameDataType::CODE;
+            if (name == "OBJECT") return types::GameDataType::OBJECT;
+            if (name == "SIDE") return types::GameDataType::SIDE;
+            if (name == "GROUP") return types::GameDataType::GROUP;
+            if (name == "TEXT") return types::GameDataType::TEXT;
+            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
+            if (name == "TARGET") return types::GameDataType::TARGET;
+            if (name == "CONFIG") return types::GameDataType::CONFIG;
+            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
+            if (name == "CONTROL") return types::GameDataType::CONTROL;
+            if (name == "NetObject") return types::GameDataType::NetObject;
+            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK") return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION") return types::GameDataType::LOCATION;
             auto found = additionalTypes.find(static_cast<std::string>(name));
             if (found != additionalTypes.end())
                 return found->second;
-            return types::__internal::GameDataType::end;
+            return types::GameDataType::end;
         }
 
         std::string __internal::to_string(GameDataType type) {

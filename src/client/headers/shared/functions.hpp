@@ -18,13 +18,20 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
-    class registered_sqf_function;
+    class extensions;
+    namespace types {
+        class registered_sqf_function;
+    }
     using WrapperFunctionBinary = intercept::types::binary_function;
     using WrapperFunctionUnary = intercept::types::unary_function;
     using WrapperFunctionNular = intercept::types::nular_function;
-
+    namespace client {
+        class host;
+    }
     extern "C" {
         struct client_functions {
+            friend class client::host;
+            friend class extensions;
             /*!
             @brief Invokes a raw nular SQF function from a nular function pointer.
 
@@ -92,14 +99,14 @@ namespace intercept {
             @param value_ A pointer to the allocator
             */
             const types::__internal::allocatorInfo*(*get_engine_allocator)();
-
+        private:
             /*!
             @brief Registers SQF Function
             */
-            [[nodiscard]] types::registered_sqf_function(*register_sqf_function)(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
-            [[nodiscard]] types::registered_sqf_function(*register_sqf_function_unary)(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
-            [[nodiscard]] types::registered_sqf_function(*register_sqf_function_nular)(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
-            std::pair<types::__internal::GameDataType, sqf_script_type>(*register_sqf_type)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+            types::registered_sqf_function(*register_sqf_function)(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {nullptr};
+            types::registered_sqf_function(*register_sqf_function_unary)(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) { nullptr };
+            types::registered_sqf_function(*register_sqf_function_nular)(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) { nullptr };
+            std::pair<types::GameDataType, sqf_script_type>(*register_sqf_type)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) { nullptr };
         };
     }
 }

@@ -1,10 +1,5 @@
 ﻿#include "pointers.hpp"
 
-#include <string_view>
-constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
-    return { str, len };
-};
-
 namespace intercept {
     namespace client {
 #include "sqf_pointers_definitions.hpp"

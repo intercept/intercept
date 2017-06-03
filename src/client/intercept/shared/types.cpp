@@ -478,7 +478,7 @@ namespace intercept {
             copy(copy_);
             return *this;
         }
-        game_value & game_value::operator = (game_value &&move_) {
+        game_value & game_value::operator = (game_value &&move_) noexcept {
             if (this == &move_)
                 return *this;
             set_vtable(__vptr_def);

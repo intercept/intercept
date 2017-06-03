@@ -328,8 +328,26 @@ namespace intercept {
         }
 
 
-        void set_skill(const object &vehicle_, float skill_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, vehicle_, skill_);
+        void set_skill(const object &object_, float skill_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__scalar__ret__nothing, object_, skill_);
+        }
+
+        void set_skill(const object &object_, set_skill_type type_, float skill_) {
+            game_value type;
+            switch (type_) {
+                case set_skill_type::aimingAccuracy: type = "aimingAccuracy"_sv; break;
+                case set_skill_type::aimingShake: type = "aimingShake"_sv; break;
+                case set_skill_type::aimingSpeed: type = "aimingSpeed"_sv; break;
+                case set_skill_type::endurance: type = "endurance"_sv; break;
+                case set_skill_type::spotDistance: type = "spotDistance"_sv; break;
+                case set_skill_type::spotTime: type = "spotTime"_sv; break;
+                case set_skill_type::courage: type = "courage"_sv; break;
+                case set_skill_type::reloadSpeed: type = "reloadSpeed"_sv; break;
+                case set_skill_type::commanding: type = "commanding"_sv; break;
+                case set_skill_type::general: type = "general"_sv; break;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, object_, { type, skill_ });
         }
 
         void send_simple_command(const object &value0_, sqf_string_const_ref value1_) {

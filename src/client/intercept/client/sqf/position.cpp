@@ -491,10 +491,20 @@ namespace intercept {
                 case 2: from = (std::get<location>(start_)); break;
             }
             switch (end_.index()) {
-                case 0: to = (std::get<object>(start_)); break;
-                case 1: to = (std::get<vector3>(start_)); break;
-                case 2: to = (std::get<location>(start_)); break;
+                case 0: to = (std::get<object>(end_)); break;
+                case 1: to = (std::get<vector3>(end_)); break;
+                case 2: to = (std::get<location>(end_)); break;
             }
+            if (start_.index() == 2 && end_.index() == 2)
+                return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__location__ret__scalar, from, to);
+            else if (start_.index() == 2 && end_.index() == 1)
+                return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__array__ret__scalar, from, to);
+            else if (start_.index() == 1 && end_.index() == 2)
+                return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__array__location__ret__scalar, from, to);
+            else if (start_.index() == 0 && end_.index() == 2) //object->location
+                return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__array__location__ret__scalar, position(std::get<object>(start_)), to);
+            else if (start_.index() == 2 && end_.index() == 0) //location->object
+                return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__location__array__ret__scalar, from, position(std::get<object>(end_)));
             return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, from, to);
         }
 

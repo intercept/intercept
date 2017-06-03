@@ -29,7 +29,7 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
-        sqf_register_functions() : _types(static_cast<size_t>(types::__internal::GameDataType::end)) {}
+        sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;

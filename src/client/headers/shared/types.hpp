@@ -1648,34 +1648,35 @@ namespace intercept {
         };
     #endif
 
+        enum class GameDataType {
+            SCALAR,
+            BOOL,
+            ARRAY,
+            STRING,
+            NOTHING,
+            ANY,
+            NAMESPACE,
+            NaN,
+            CODE,
+            OBJECT,
+            SIDE,
+            GROUP,
+            TEXT,
+            SCRIPT,
+            TARGET,
+            CONFIG,
+            DISPLAY,
+            CONTROL,
+            NetObject,
+            SUBGROUP,
+            TEAM_MEMBER,
+            TASK,
+            DIARY_RECORD,
+            LOCATION,
+            end
+        };
+
         namespace __internal {
-            enum class GameDataType {
-                SCALAR,
-                BOOL,
-                ARRAY,
-                STRING,
-                NOTHING,
-                ANY,
-                NAMESPACE,
-                NaN,
-                CODE,
-                OBJECT,
-                SIDE,
-                GROUP,
-                TEXT,
-                SCRIPT,
-                TARGET,
-                CONFIG,
-                DISPLAY,
-                CONTROL,
-                NetObject,
-                SUBGROUP,
-                TEAM_MEMBER,
-                TASK,
-                DIARY_RECORD,
-                LOCATION,
-                end
-            };
             GameDataType game_datatype_from_string(const r_string& name);
             std::string to_string(GameDataType type);
             //Not public API!

@@ -2,7 +2,6 @@
 
 using namespace intercept;
 using namespace intercept::__internal;
-using GameDataType = types::__internal::GameDataType;
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, gsNular* func_) :
     _type(functionType::sqf_nular), _name(func_->_name2),
@@ -16,7 +15,7 @@ registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_typ
     _type(functionType::sqf_operator), _name(func_->_name2),
     _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_), _returnType(return_type_) {}
 
-template <types::__internal::GameDataType returnType>
+template <types::GameDataType returnType>
 class unusedSQFFunction {
 public:
     static game_value* CDECL unusedNular(game_value* ret_, uintptr_t gs_) {
@@ -129,7 +128,7 @@ void sqf_functions::setDisabled() {
 
 */
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
@@ -200,9 +199,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction binary " << name << " " << to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction binary " << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
 #ifndef __linux__
    // OutputDebugStringA(stream.str().c_str());
 #endif
@@ -211,7 +210,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
@@ -290,9 +289,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction unary " << name << " " << to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction unary " << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
 #ifndef __linux__
     //OutputDebugStringA(stream.str().c_str());
 #endif
@@ -301,7 +300,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
@@ -349,7 +348,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction nular " << name << " " << to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction nular " << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
         << " @ " << inserted << "\n";
 #ifndef __linux__
@@ -406,7 +405,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 }
 
 
-std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
     //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
@@ -422,8 +421,8 @@ std::pair<types::__internal::GameDataType, sqf_script_type>  intercept::sqf_func
     auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
     LOG(INFO) << "sqf_functions::registerType " << name << localizedName << description << typeName;
-    types::__internal::add_game_datatype(name, static_cast<types::__internal::GameDataType>(newIndex));
-    return { static_cast<types::__internal::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
+    types::__internal::add_game_datatype(name, static_cast<types::GameDataType>(newIndex));
+    return { static_cast<types::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }
 
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {
@@ -442,7 +441,7 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     //});
     auto funcs = findFunctions(name);
     if (!funcs) return nullptr;
-    std::string argTypeString = to_string(argument_type);
+    std::string argTypeString = types::__internal::to_string(argument_type);
     for (auto& it : *funcs) {
         auto types = it._operator->arg_type.type();
         if (types.find(argTypeString) != types.end()) {
@@ -452,7 +451,7 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     return nullptr;
 }
 
-intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) const {
+intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::string name, types::GameDataType left_argument_type, types::GameDataType right_argument_type) const {
     //gs->_scriptOperators.get_table_for_key(name.c_str())->for_each([](const game_operators& it) {
     //    OutputDebugStringA(it._name.c_str());
     //    OutputDebugStringA("\n");
@@ -460,8 +459,8 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
 
     auto operators = findOperators(name);
     if (!operators) return nullptr;
-    std::string left_argTypeString = to_string(left_argument_type);
-    std::string right_argTypeString = to_string(right_argument_type);
+    std::string left_argTypeString = types::__internal::to_string(left_argument_type);
+    std::string right_argTypeString = types::__internal::to_string(right_argument_type);
     for (auto& it : *operators) {
         auto left_types = it._operator->arg1_type.type();
         if (left_types.find(left_argTypeString) != left_types.end()) {

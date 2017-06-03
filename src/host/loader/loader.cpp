@@ -369,31 +369,31 @@ namespace intercept {
         }
 
         auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::__internal::GameDataType::SCALAR;
-            if (name == "BOOL") return types::__internal::GameDataType::BOOL;
-            if (name == "ARRAY") return types::__internal::GameDataType::ARRAY;
-            if (name == "STRING") return types::__internal::GameDataType::STRING;
-            if (name == "NOTHING") return types::__internal::GameDataType::NOTHING;
-            if (name == "ANY") return types::__internal::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::__internal::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::__internal::GameDataType::NaN;
-            if (name == "CODE") return types::__internal::GameDataType::CODE;
-            if (name == "OBJECT") return types::__internal::GameDataType::OBJECT;
-            if (name == "SIDE") return types::__internal::GameDataType::SIDE;
-            if (name == "GROUP") return types::__internal::GameDataType::GROUP;
-            if (name == "TEXT") return types::__internal::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::__internal::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::__internal::GameDataType::TARGET;
-            if (name == "CONFIG") return types::__internal::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::__internal::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::__internal::GameDataType::CONTROL;
-            if (name == "NetObject") return types::__internal::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::__internal::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::__internal::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::__internal::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::__internal::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::__internal::GameDataType::LOCATION;
-            return types::__internal::GameDataType::end;
+            if (name == "SCALAR") return types::GameDataType::SCALAR;
+            if (name == "BOOL") return types::GameDataType::BOOL;
+            if (name == "ARRAY") return types::GameDataType::ARRAY;
+            if (name == "STRING") return types::GameDataType::STRING;
+            if (name == "NOTHING") return types::GameDataType::NOTHING;
+            if (name == "ANY") return types::GameDataType::ANY;
+            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
+            if (name == "NaN") return types::GameDataType::NaN;
+            if (name == "CODE") return types::GameDataType::CODE;
+            if (name == "OBJECT") return types::GameDataType::OBJECT;
+            if (name == "SIDE") return types::GameDataType::SIDE;
+            if (name == "GROUP") return types::GameDataType::GROUP;
+            if (name == "TEXT") return types::GameDataType::TEXT;
+            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
+            if (name == "TARGET") return types::GameDataType::TARGET;
+            if (name == "CONFIG") return types::GameDataType::CONFIG;
+            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
+            if (name == "CONTROL") return types::GameDataType::CONTROL;
+            if (name == "NetObject") return types::GameDataType::NetObject;
+            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK") return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION") return types::GameDataType::LOCATION;
+            return types::GameDataType::end;
         };
 
         //Game Types
@@ -417,7 +417,7 @@ namespace intercept {
             //OutputDebugStringA("\n");
 
             auto type = typeToEnum(entry->_name);
-            if (poolAlloc && type != types::__internal::GameDataType::end) {
+            if (poolAlloc && type != types::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }
@@ -425,12 +425,12 @@ namespace intercept {
 
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.v_table;
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::__internal::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
+        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
 
         //_sqf_register_funcs._operator_construct = future_operator_construct.get();
         //_sqf_register_funcs._operator_insert = future_operator_insert.get();

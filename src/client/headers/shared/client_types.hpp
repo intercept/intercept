@@ -108,7 +108,7 @@ namespace intercept {
 
         
         struct rv_waypoint {
-            group group;
+            group group_;
             int index;
             //#TODO add to game_value conversion
         };
@@ -379,7 +379,7 @@ namespace intercept {
         struct rv_target {
             vector3 position;
             std::string type;
-            side side;
+            side side_;
             float subjective_cost;
             object object_;
             float position_accuracy;

@@ -27,7 +27,7 @@ namespace intercept {
         };
 
         class registered_sqf_func_wrapper {
-            using GameDataType = types::__internal::GameDataType;
+            using GameDataType = types::GameDataType;
         public:
             registered_sqf_func_wrapper(GameDataType return_type_, __internal::gsNular* func_);
             registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, __internal::gsFunction* func_);
@@ -41,9 +41,9 @@ namespace intercept {
                 const __internal::gsFunction* _func;
                 const __internal::gsOperator* _op;
             };
-            const types::__internal::GameDataType _lArgType;
-            const types::__internal::GameDataType _rArgType;
-            const types::__internal::GameDataType _returnType;
+            const types::GameDataType _lArgType;
+            const types::GameDataType _rArgType;
+            const types::GameDataType _returnType;
         };
     }
 
@@ -82,7 +82,7 @@ namespace intercept {
          * \param right_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type);
         /**
          * \brief Registers a custom SQF Unary Command
          * \param name 
@@ -92,7 +92,7 @@ namespace intercept {
          * \param right_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
         /**
          * \brief Registers a custom SQF Nular Command
          * \param name 
@@ -101,27 +101,26 @@ namespace intercept {
          * \param return_arg_type 
          * \return A wrapper that should be kept alive as long as the function should be usable
          */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::__internal::GameDataType return_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
 
 
         bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
 
-        r_string _name;           // SCALAR
-        using createFunc = game_data* (*)(void* _null);
-        createFunc _createFunction{ nullptr };
-        r_string _localizedName; //@STR_EVAL_TYPESCALAR
-        r_string _readableName; //Number
-        r_string _description; //A real number.
-        r_string _category; //Default
-        r_string _typeName; //float/NativeObject
-        r_string _javaFunc; //Lcom/bistudio/JNIScripting/NativeObject;
-
-        std::pair<types::__internal::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+        /**
+        * \brief Registers a custom SQF script type
+        * \param name
+        * \param localizedName
+        * \param description
+        * \param typeName
+        * \param cf
+        * \return The resulting GameDataType enum value and a instantiated sqf_script_type
+        */
+        std::pair<types::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
     private:
         __internal::gsNular* findNular(std::string name) const;
-        __internal::gsFunction* findUnary(std::string name, types::__internal::GameDataType argument_type) const;
-        __internal::gsOperator* findBinary(std::string name, types::__internal::GameDataType left_argument_type, types::__internal::GameDataType right_argument_type) const;
+        __internal::gsFunction* findUnary(std::string name, types::GameDataType argument_type) const;
+        __internal::gsOperator* findBinary(std::string name, types::GameDataType left_argument_type, types::GameDataType right_argument_type) const;
         __internal::game_operators* findOperators(std::string name) const;
         __internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;

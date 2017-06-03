@@ -110,6 +110,9 @@ namespace intercept {
         struct rv_waypoint {
             group group_;
             int index;
+            operator game_value() const {
+                return game_value{ group_, index };
+            }
             //#TODO add to game_value conversion
         };
 

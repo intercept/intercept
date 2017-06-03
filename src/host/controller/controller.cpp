@@ -113,7 +113,7 @@ namespace intercept {
                     pointers_def << "unary_function __sqf::" << pointer_name << ";\n";
                     pointers << "static unary_function " << pointer_name << ";\n";
                     //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
-                    assignments << "__sqf::" << pointer_name << " = " << "(unary_function)host::functions.get_unary_function_typed(\"" << op_name << "\", \"" << first_arg_type << "\");\n";
+                    assignments << "__sqf::" << pointer_name << " = " << "(unary_function)host::functions.get_unary_function_typed(\"" << op_name << "\"_sv, \"" << first_arg_type << "\"_sv);\n";
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace intercept {
                     pointers << "static binary_function " << pointer_name << ";\n";
 
                     assignments << "__sqf::" << pointer_name << " = " << "(binary_function)host::functions.get_binary_function_typed(\"" << op_name << 
-                        "\", \"" << first_arg1_type << "\", \"" << first_arg2_type << "\");\n";
+                        "\"_sv, \"" << first_arg1_type << "\"_sv, \"" << first_arg2_type << "\"_sv);\n";
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace intercept {
                     pointers << "static nular_function " << pointer_name << ";\n";
 
                     //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
-                    assignments << "__sqf::" << pointer_name << " = " << "(nular_function)host::functions.get_nular_function(\"" << op_name << "\");\n";
+                    assignments << "__sqf::" << pointer_name << " = " << "(nular_function)host::functions.get_nular_function(\"" << op_name << "\"_sv);\n";
                 }
             }
         }

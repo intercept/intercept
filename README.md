@@ -73,7 +73,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 ## Completion Status
 
-As of now (3/13/16) Intercept is over 82% language feature complete. You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13). Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
+As of now (4/06/17) Intercept is over 99% language feature complete. You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13). Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
 
 ## Contributions
 

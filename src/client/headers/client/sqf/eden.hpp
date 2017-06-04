@@ -91,22 +91,21 @@ namespace intercept {
         void remove_eden_event_handler(sqf_string_const_ref type_, float id_);
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_);
 
-
-        void remove_3den_connection(sqf_string_const_ref type_, const std::vector<object> &from_, sqf_string_const_ref to_); //#TODO: Create class 'rv_eden_entity'
+        using eden_entity = game_value;
+        bool remove_3den_connection(sqf_string_const_ref type_, eden_entity from_, eden_entity to_);
+        //#undocumented
         void clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_);
-        game_value create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty = false);
+        eden_entity create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty = false);
+        //Not fully implemented
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, sqf_string_const_ref_wrapper, std::reference_wrapper<float>> entity_, sqf_string_const_ref attribute_);
         game_value get_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref class_);
 
 
         bool set_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref attribute_class_, game_value _attribute_value);
 
-        //#TODO not object but Eden_Entity 
-        //#TODO typedef variant for Eden_Entity 
-        //#TODO use it for https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
-        bool set_3den_attribute(const object& entity_, sqf_string_const_ref attribute_class_, game_value _attribute_value);
-        //#TODO not object but Eden_Entity 
-        bool set_3den_layer(const object& entity_, float layer_);
+        //#TODO use eden_entity typedef for all https://community.bistudio.com/wiki/Special:WhatLinksHere/Eden_Entity 
+        bool set_3den_attribute(eden_entity entity_, sqf_string_const_ref attribute_class_, game_value _attribute_value);
+        bool set_3den_layer(eden_entity entity_, float layer_);
         void set_3den_object_type(const std::vector<object> & objects_, sqf_string_const_ref classname_);
 
         void set_3den_selected(const std::vector<object> &entites_);

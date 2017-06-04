@@ -28,8 +28,7 @@ namespace intercept {
                     params_right.push_back(std::get<0>(*alternate_center_).get());
                 else
                     params_right.push_back(std::get<1>(*alternate_center_).get());
-            }
-            else params_right.push_back(game_value());
+            } else params_right.push_back(game_value());
 
             host::functions.invoke_raw_binary(__sqf::binary__targets__object__array__ret__array, unit_, std::move(params_right));
         }
@@ -328,12 +327,9 @@ namespace intercept {
         }
 
         void move_in_cargo(const object& unit_, const object& vehicle_, int cargo_index_) {
-            if (cargo_index_ == -1)
-            {
+            if (cargo_index_ == -1) {
                 host::functions.invoke_raw_binary(__sqf::binary__moveincargo__object__object__ret__nothing, unit_, vehicle_);
-            }
-            else
-            {
+            } else {
                 game_value params({
                     vehicle_,
                     static_cast<float>(cargo_index_)
@@ -536,13 +532,13 @@ namespace intercept {
             game_value param_right;
 
             switch (units_.index()) {
-            case 0: param_left = std::get<0>(units_).get(); break;
-            case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(units_).get().begin(),std::get<1>(units_).get().end() })); break;
+                case 0: param_left = std::get<0>(units_).get(); break;
+                case 1: param_left = std::move(auto_array<game_value>({ std::get<1>(units_).get().begin(),std::get<1>(units_).get().end() })); break;
             }
 
             switch (target_.index()) {
-            case 0: param_right = std::get<0>(target_).get(); break;
-            case 1: param_right = std::get<1>(target_).get(); break;
+                case 0: param_right = std::get<0>(target_).get(); break;
+                case 1: param_right = std::get<1>(target_).get(); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__lookat__object_array__object_array__ret__nothing, param_left, param_right);
@@ -797,8 +793,21 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__allowsprint__object__bool__ret__nothing, value0_, value1_);
         }
 
-        void assign_team(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__assignteam__object__string__ret__nothing, value0_, value1_);
+        void assign_team(const object &value0_, team_color team_) {
+            game_value team;
+            switch (team_) {
+                case team_color::MAIN: team = "MAIN"_sv; break;
+                case team_color::RED: team = "RED"_sv; break;
+                case team_color::GREEN: team = "GREEN"_sv; break;
+                case team_color::BLUE: team = "BLUE"_sv; break;
+                case team_color::YELLOW: team = "YELLOW"_sv; break;
+                default: return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__assignteam__object__string__ret__nothing, value0_, std::move(team));
+        }
+
+        void unassign_team(const object &value_) {
+            __helpers::__empty_unary_object(__sqf::unary__unassignteam__object__ret__nothing, value_);
         }
 
         float animation_phase(const object &value0_, sqf_string_const_ref value1_) {
@@ -849,10 +858,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__isirlaseron__object__string__ret__bool, value0_, value1_);
         }
 
-        void unassign_team(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__unassignteam__object__ret__nothing, value_);
-        }
-
         object get_connected_uav(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__getconnecteduav__object__ret__object, value_);
         }
@@ -864,8 +869,8 @@ namespace intercept {
         void reveal(std::variant<object, group> &unit_, const object &target_) {
             game_value param_left;
             switch (unit_.index()) {
-            case 0: param_left = std::move(std::get<0>(unit_)); break;
-            case 1: param_left = std::move(std::get<1>(unit_)); break;
+                case 0: param_left = std::move(std::get<0>(unit_)); break;
+                case 1: param_left = std::move(std::get<1>(unit_)); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__object__ret__nothing, param_left, target_);
@@ -876,8 +881,8 @@ namespace intercept {
 
             game_value param_left;
             switch (unit_.index()) {
-            case 0: param_left = std::move(std::get<0>(unit_)); break;
-            case 1: param_left = std::move(std::get<1>(unit_)); break;
+                case 0: param_left = std::move(std::get<0>(unit_)); break;
+                case 1: param_left = std::move(std::get<1>(unit_)); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__array__ret__nothing, param_left, std::move(targets));

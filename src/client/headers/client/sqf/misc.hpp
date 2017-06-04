@@ -21,8 +21,7 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        //#TODO some diags are in misc -> move them to core
-        
+
         struct rv_artillery_computer_settings {
             std::string name;
             std::string ammo;

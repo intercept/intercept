@@ -106,17 +106,6 @@ namespace intercept {
                 alpha(alpha_) {}
         };
 
-        
-        struct rv_waypoint {
-            group group_;
-            int index;
-            operator game_value() const {
-                return game_value{ group_, index };
-            }
-            //#TODO add to game_value conversion
-        };
-
-
         using sqf_string = std::string;
         using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
         using sqf_return_string_list = std::vector<std::string>;
@@ -127,26 +116,6 @@ namespace intercept {
 
 
         using t_sqf_in_area_position = std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> >;
-
-        //#TODO place them somewhere else if needed
-        struct rv_crew_member {
-            object unit;
-            std::string role;
-            float cargo_index;
-            std::vector<int> turret_path;
-            bool person_turret;
-
-            rv_crew_member(const object &unit_, sqf_string_const_ref role_, float cargo_index_, const std::vector<int> &turret_path_, bool person_turret_) {
-                unit = unit_;
-                role = role_;
-                cargo_index = cargo_index_;
-                turret_path = turret_path_;
-                person_turret = person_turret_;
-            }
-        };
-
-
-
 
         struct rv_particle_shape {
             std::string file;
@@ -387,16 +356,7 @@ namespace intercept {
             object object_;
             float position_accuracy;
         };
-        //#TODO: Verify the correctness of this struct
-        struct rv_target_knowledge {
-            bool known_by_group;
-            bool known_by_unit;
-            float last_seen_by_unit;
-            float last_endangered_by_unit;
-            side target_side;
-            bool position_error;
-            vector3 target_position;
-        };
+
         struct rv_query_target {
             float accuracy;
             object target;

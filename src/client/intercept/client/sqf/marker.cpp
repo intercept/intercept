@@ -435,9 +435,7 @@ namespace intercept {
         sqf_return_string type(const location& loc_) {
             return host::functions.invoke_raw_unary(__sqf::unary__type__location__ret__string, loc_);
         }
-        game_value get_variable(const location & loc_, sqf_string_const_ref var_name_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_);
-        }
+
         // What a confusing command name.
         sqf_return_string class_name(const location &loc_) {
             return host::functions.invoke_raw_unary(__sqf::unary__classname__location__ret__string, loc_);

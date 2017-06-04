@@ -347,11 +347,32 @@ namespace intercept {
                 case set_skill_type::general: type = "general"_sv; break;
             }
 
-            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, object_, { type, skill_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, object_, { std::move(type), skill_ });
         }
 
-        void send_simple_command(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__sendsimplecommand__object__string__ret__nothing, value0_, value1_);
+        void send_simple_command(const object &value0_, simple_command_type command_) {
+            game_value command;
+            switch (command_) {
+                case simple_command_type::FIRE: command = "FIRE"_sv; break;
+                case simple_command_type::CEASE_FIRE: command = "CEASE FIRE"_sv; break;
+                case simple_command_type::MANUAL_FIRE: command = "MANUAL FIRE"_sv; break;
+                case simple_command_type::CANCEL_MANUAL_FIRE: command = "CANCEL MANUAL FIRE"_sv; break;
+                case simple_command_type::KEY_FIRE: command = "KEY FIRE"_sv; break;
+                case simple_command_type::FORWARD: command = "FORWARD"_sv; break;
+                case simple_command_type::STOP: command = "STOP"_sv; break;
+                case simple_command_type::BACK: command = "BACK"_sv; break;
+                case simple_command_type::FAST: command = "FAST"_sv; break;
+                case simple_command_type::KEY_FAST: command = "KEY FAST"_sv; break;
+                case simple_command_type::SLOW: command = "SLOW"_sv; break;
+                case simple_command_type::KEY_SLOW: command = "KEY SLOW"_sv; break;
+                case simple_command_type::LEFT: command = "LEFT"_sv; break;
+                case simple_command_type::RIGHT: command = "RIGHT"_sv; break;
+                case simple_command_type::KEY_UP: command = "KEY UP"_sv; break;
+                case simple_command_type::KEY_DOWN: command = "KEY DOWN"_sv; break;
+                default: return;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__sendsimplecommand__object__string__ret__nothing, value0_, std::move(command));
         }
         sqf_return_string speed_mode(const object &obj_) {
             return __helpers::__string_unary_object(__sqf::unary__speedmode__object_group__ret__string, obj_);
@@ -542,15 +563,59 @@ namespace intercept {
         bool move_to_failed(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__movetofailed__object__ret__bool, value_);
         }
-        void disable_ai(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__disableai__object__string__ret__nothing, value0_, value1_);
+
+        void disable_ai(const object &value0_, ai_behaviour_types type_) {
+            game_value type;
+            switch (type_) {
+                case ai_behaviour_types::TARGET: type = "TARGET"_sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"_sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"_sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"_sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"_sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"_sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"_sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"_sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"_sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"_sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"_sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"_sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"_sv; break;
+                default: return;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__disableai__object__string__ret__nothing, value0_, std::move(type));
         }
-        void enable_ai(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableai__object__string__ret__nothing, value0_, value1_);
+        void enable_ai(const object &value0_, ai_behaviour_types type_) {
+            game_value type;
+            switch (type_) {
+                case ai_behaviour_types::TARGET: type = "TARGET"_sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"_sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"_sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"_sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"_sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"_sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"_sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"_sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"_sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"_sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"_sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"_sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"_sv; break;
+                default: return;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__enableai__object__string__ret__nothing, value0_, std::move(type));
         }
 
-        void enable_aifeature(bool value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__enableaifeature__string__bool__ret__nothing, value0_, value1_);
+        void enable_aifeature(bool value0_, ai_feature_types value1_) {
+            game_value type;
+            switch (value1_) {
+                case ai_feature_types::AwareFormationSoft: type = "AwareFormationSoft"_sv; break;
+                case ai_feature_types::CombatFormationSoft: type = "CombatFormationSoft"_sv; break;
+                default: return;
+            }
+
+            host::functions.invoke_raw_binary(__sqf::binary__enableaifeature__string__bool__ret__nothing, value0_, std::move(type));
         }
         void fly_in_height(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__flyinheight__object__scalar__ret__nothing, value0_, value1_);
@@ -723,16 +788,14 @@ namespace intercept {
 
             if (unit_.index() == 0) {
                 param_left = std::get<0>(unit_).get();
-            }
-            else {
+            } else {
                 auto_array<game_value> units({ std::get<1>(unit_).get().begin(), std::get<1>(unit_).get().end() });
 
                 param_left = std::move(units);
             }
             if (target_.index() == 0) {
                 param_right = std::get<0>(target_).get();
-            }
-            else {
+            } else {
                 param_right = std::get<1>(target_).get();
             }
 
@@ -745,9 +808,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ordergetin__array__bool__ret__nothing, std::move(units), order_);
         }
 
-        //#TODO: Find out which parameters should be on the right side of the command
-        void set_unit_load_in_combat(const object &unit_, const game_value &params_right_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, params_right_);
+        void set_unload_in_combat(const object &unit_, bool allowCargo, bool allowTurrets) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, { allowCargo ,allowTurrets });
         }
 
         void swim_in_depth(const object &unit_, float depth_) {

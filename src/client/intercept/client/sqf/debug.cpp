@@ -48,14 +48,17 @@ namespace intercept {
         }
 
         void diag_capture_frame(float frame_) {
+            if (!__sqf::unary__diag_captureframe__scalar__ret__nothing) return;
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
         }
 
         void diag_capture_frame_to_file(float frame_) {
+            if (!__sqf::unary__diag_captureframetofile__scalar__ret__nothing) return;
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
         }
 
         void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_) {
+            if (!__sqf::unary__diag_captureslowframe__array__ret__nothing) return;
             game_value params({
                 section_,
                 threshold_
@@ -81,6 +84,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
         }
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_) {
+            if (!__sqf::unary__diag_logslowframe__array__ret__nothing) return;
             game_value params({
                 section_,
                 threshold_
@@ -90,6 +94,7 @@ namespace intercept {
         }
 
         void enable_diag_legend(bool value_) {
+            if (!__sqf::unary__enablediaglegend__bool__ret__nothing) return;
             __helpers::__empty_unary_bool(__sqf::unary__enablediaglegend__bool__ret__nothing, value_);
         }
         void halt() {

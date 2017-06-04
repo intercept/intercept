@@ -270,29 +270,29 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params));
         }
 
-        std::vector<rv_waypoint> waypoints(const object &player_) {
+        std::vector<waypoint> waypoints(const object &player_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
 
-            std::vector<rv_waypoint> waypoints;
+            std::vector<waypoint> waypoints;
             for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+                waypoints.push_back(waypoint({ res[i][0], res[i][1] }));
             }
 
             return waypoints;
         }
 
-        std::vector<rv_waypoint> waypoints(const group &group_) {
+        std::vector<waypoint> waypoints(const group &group_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
 
-            std::vector<rv_waypoint> waypoints;
+            std::vector<waypoint> waypoints;
             for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(rv_waypoint({ res[i][0], res[i][1] }));
+                waypoints.push_back(waypoint({ res[i][0], res[i][1] }));
             }
 
             return waypoints;
         }
 
-        void set_effect_condition(std::variant<object, rv_waypoint> unit_, sqf_string_const_ref statement_) {
+        void set_effect_condition(std::variant<object, waypoint> unit_, sqf_string_const_ref statement_) {
             game_value param_left;
             switch (unit_.index()) {
                 case 0: param_left = std::get<0>(unit_); break;
@@ -302,8 +302,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__seteffectcondition__object_array__string__ret__nothing, param_left, statement_);
         }
 
-        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_) {
-            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.group_, waypoint_.index }, vehicle_);
+        void waypoint_attach_vehicle(const waypoint &waypoint_, const object &vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__waypointattachvehicle__array__object__ret__nothing, { waypoint_.wgroup, waypoint_.windex }, vehicle_);
         }
 
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_) {
@@ -388,7 +388,7 @@ namespace intercept {
 
         void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
             if (radius_z_.has_value())
-                host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_, *radius_z_ }); return;
+                host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_, *radius_z_ });
             host::functions.invoke_raw_binary(__sqf::binary__settriggerarea__object__array__ret__nothing, trigger_, { radius_x_, radius_y_, angle_, is_rectangle_ });
         }
 
@@ -400,9 +400,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__settriggertimeout__object__array__ret__nothing, trigger_, { min_, mid_, max_, interruptable_ });
         }
 
-        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_) {
+        void synchronize_trigger(const object &trigger_, const std::vector<waypoint> &waypoints_) {
             auto_array<game_value> waypoints;
-            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.group_, waypoint.index });
+            for (auto &waypoint : waypoints_) waypoints.push_back({ waypoint.wgroup, waypoint.windex });
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
         }

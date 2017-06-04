@@ -19,6 +19,23 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+
+        struct rv_crew_member {
+            object unit;
+            std::string role;
+            float cargo_index;
+            std::vector<int> turret_path;
+            bool person_turret;
+
+            rv_crew_member(object unit_, std::string role_, float cargo_index_, std::vector<int> turret_path_, bool person_turret_) :
+                unit(std::move(unit_)),
+                role(std::move(role_)),
+                cargo_index(cargo_index_),
+                turret_path(std::move(turret_path_)),
+                person_turret(person_turret_) {}
+        };
+
+
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
         sqf_return_string get_forced_flag_texture(const object &flag_pole_);

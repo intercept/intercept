@@ -751,7 +751,7 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(__sqf::binary__loadmagazine__object__array__ret__nothing, obj_, params);
         }
-        
+
         rv_unit_description get_description(const object& unit_) {
             return rv_unit_description(host::functions.invoke_raw_unary(__sqf::unary__getdescription__object__ret__array, unit_));
         }
@@ -810,6 +810,9 @@ namespace intercept {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__config__ret__array, cfg_);
             return rv_unit_loadout(ret);
         }
+        //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
+        //binary__setunitloadout__object__string__ret__nothing
+        //binary__setunitloadout__object__config__ret__nothing
         void set_unit_loadout(const object& obj_, const rv_unit_loadout& loadout_, bool rearm_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, { static_cast<game_value>(loadout_),rearm_ });
         }
@@ -954,7 +957,7 @@ namespace intercept {
             auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
             auto_array<game_value> params{ vehicle_,
                 std::move(turret_path) };
-    
+
             if (weapon_)
                 params.push_back(weapon_.value());
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, std::move(params)));

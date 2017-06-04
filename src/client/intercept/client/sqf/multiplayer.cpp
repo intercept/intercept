@@ -16,11 +16,11 @@ namespace intercept {
         game_value remote_exec(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
             auto_array<game_value> params({ function_name_ });
             switch (target_.index()) {
-            case 0: params.push_back(std::get<0>(target_)); break;
-            case 1: params.push_back(std::get<1>(target_)); break;
-            case 2: params.push_back(std::get<2>(target_)); break;
-            case 3: params.push_back(std::get<3>(target_)); break;
-            case 4: params.push_back(std::get<4>(target_).get()); break;
+                case 0: params.push_back(std::get<0>(target_)); break;
+                case 1: params.push_back(std::get<1>(target_)); break;
+                case 2: params.push_back(std::get<2>(target_)); break;
+                case 3: params.push_back(std::get<3>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_).get()); break;
             }
             params.push_back(jip_id_);
 
@@ -49,11 +49,11 @@ namespace intercept {
         game_value remote_exec_call(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
             auto_array<game_value> params({ function_name_ });
             switch (target_.index()) {
-            case 0: params.push_back(std::get<0>(target_)); break;
-            case 1: params.push_back(std::get<1>(target_)); break;
-            case 2: params.push_back(std::get<2>(target_)); break;
-            case 3: params.push_back(std::get<3>(target_)); break;
-            case 4: params.push_back(std::get<4>(target_).get()); break;
+                case 0: params.push_back(std::get<0>(target_)); break;
+                case 1: params.push_back(std::get<1>(target_)); break;
+                case 2: params.push_back(std::get<2>(target_)); break;
+                case 3: params.push_back(std::get<3>(target_)); break;
+                case 4: params.push_back(std::get<4>(target_).get()); break;
             }
             params.push_back(jip_id_);
 
@@ -86,20 +86,20 @@ namespace intercept {
             game_value targets;
             game_value jip;
             switch (targets_.index()) {
-            case 0: targets = static_cast<float>(std::get<int>(targets_)); break;
-            case 1: targets = std::get<object>(targets_); break;
-            case 2: targets = std::get<2>(targets_).get(); break;
-            case 3: targets = std::get<side>(targets_); break;
-            case 4: targets = std::get<group>(targets_); break;
-            case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
+                case 0: targets = static_cast<float>(std::get<int>(targets_)); break;
+                case 1: targets = std::get<object>(targets_); break;
+                case 2: targets = std::get<2>(targets_).get(); break;
+                case 3: targets = std::get<side>(targets_); break;
+                case 4: targets = std::get<group>(targets_); break;
+                case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
             }
 
             if (jip_.has_value()) {
                 switch ((*jip_).index()) {
-                case 0: jip = std::get<0>(*jip_).get(); break;
-                case 1: jip = std::get<bool>(*jip_); break;
-                case 2: jip = std::get<object>(*jip_); break;
-                case 3: jip = std::get<group>(*jip_); break;
+                    case 0: jip = std::get<0>(*jip_).get(); break;
+                    case 1: jip = std::get<bool>(*jip_); break;
+                    case 2: jip = std::get<object>(*jip_); break;
+                    case 3: jip = std::get<group>(*jip_); break;
                 }
             }
             game_value params_right = game_value({
@@ -115,20 +115,20 @@ namespace intercept {
             game_value targets;
             game_value jip;
             switch (targets_.index()) {
-            case 0: targets = static_cast<float>(std::get<int>(targets_)); break;
-            case 1: targets = std::get<object>(targets_); break;
-            case 2: targets = std::get<2>(targets_).get(); break;
-            case 3: targets = std::get<side>(targets_); break;
-            case 4: targets = std::get<group>(targets_); break;
-            case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
+                case 0: targets = static_cast<float>(std::get<int>(targets_)); break;
+                case 1: targets = std::get<object>(targets_); break;
+                case 2: targets = std::get<2>(targets_).get(); break;
+                case 3: targets = std::get<side>(targets_); break;
+                case 4: targets = std::get<group>(targets_); break;
+                case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
             }
 
             if (jip_.has_value()) {
                 switch ((*jip_).index()) {
-                case 0: jip = std::get<0>(*jip_).get(); break;
-                case 1: jip = std::get<bool>(*jip_); break;
-                case 2: jip = std::get<object>(*jip_); break;
-                case 3: jip = std::get<group>(*jip_); break;
+                    case 0: jip = std::get<0>(*jip_).get(); break;
+                    case 1: jip = std::get<bool>(*jip_); break;
+                    case 2: jip = std::get<object>(*jip_); break;
+                    case 3: jip = std::get<group>(*jip_); break;
                 }
             }
             game_value params_right = game_value({
@@ -140,7 +140,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
 
-        
+
         void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_) {
             host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
         }

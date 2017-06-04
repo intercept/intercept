@@ -4,7 +4,7 @@
 
 namespace intercept {
     namespace sqf {
-        
+
         //cargo
         bool set_vehicle_cargo(const object &vehicle_, const object &cargo_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setvehiclecargo__object__object__ret__bool, vehicle_, cargo_);
@@ -307,11 +307,11 @@ namespace intercept {
         void detach(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__detach__object__ret__nothing, value_);
         }
-        
+
         void light_detach_object(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__lightdetachobject__object__ret__nothing, value_);
         }
-        
+
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
             game_value params_right({
                 object_,

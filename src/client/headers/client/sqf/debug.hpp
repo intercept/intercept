@@ -30,7 +30,7 @@ namespace intercept {
         std::vector<script> diag_active_scripts();
 
         //diag
-        void diag_capture_frame(float frame_);//#TODO make sure these don't call into engine if the funcptr is nullptr
+        void diag_capture_frame(float frame_);
         void diag_capture_frame_to_file(float frame_);
         void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_);
         void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);

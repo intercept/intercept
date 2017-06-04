@@ -39,16 +39,11 @@ namespace intercept {
                 variables.push_back(variable.value);
             }
 
-            game_value params_right({
+            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, {
                 receiver_,
-                {
-                    type_,
-                    parent_task_
-                },
+                { type_, parent_task_ },
                 std::move(variables)
             });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
         }
 
         //#TODO: Find out which types state_, result_ and sentence_ are

@@ -144,9 +144,9 @@ namespace intercept {
         rv_rendering_distances get_object_view_distance();
 
         void set_date(int year_, int month_, int day_, int hour_, float minute_);
-        
+
         std::vector<object> entities(sqf_string_list_const_ref typesinclude_, sqf_string_list_const_ref typesexclude_, bool includeCrews_, bool excludeDead_);
-    
+
         void set_horizon_parallax_coef(float value_);
         void set_detail_map_blend_pars(float full_detail_, float no_detail_);
         void simul_cloud_density(const vector3& pos_);

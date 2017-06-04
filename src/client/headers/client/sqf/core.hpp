@@ -32,7 +32,6 @@ namespace intercept {
         float parse_number(bool value_);
         rv_text parse_text(sqf_string_const_ref value_);
         std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_);
-        //#TODO return game_value or split into vector of game_values? 
         game_value select(game_value array_, const code& code_);
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
@@ -70,13 +69,13 @@ namespace intercept {
 
         sqf_return_string to_fixed(float number_, int decimals_);
 
-        void set_variable(const display &display_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const control &control_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const object &object_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const group &group_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const task &task_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const location &location_, sqf_string_const_ref variable_, const game_value &value_);
+        void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_);
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
@@ -85,13 +84,15 @@ namespace intercept {
         game_value get_variable(const object & obj_, sqf_string_const_ref var_name_);
         game_value get_variable(const object & obj_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const group & group_, sqf_string_const_ref var_name_);
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_, game_value default_value_);//#TODO shouldn't pass game_values by reference. They are refcounted anyway and get copied into a vector anyway. Problem is this prevents automatic type conversion.
+        game_value get_variable(const group & group_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_);
         game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const task & task_, sqf_string_const_ref var_name_);
-        game_value get_variable(const control &control_, sqf_string_const_ref variable_, std::optional<game_value> default_value_);
-        game_value get_variable(const task &task_, sqf_string_const_ref variable_, const game_value &default_value_);
-        game_value get_variable(const location &location_, sqf_string_const_ref variable_, const game_value &default_value_);
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const location & loc_, sqf_string_const_ref var_name_);
+        game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_);
 
         bool is_null(const object &value_);
         bool is_null(const control &value_);
@@ -158,7 +159,7 @@ namespace intercept {
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
-        
+
         bool user_input_disabled();
         bool screen_shot(sqf_string_const_ref filename_);
         object cursor_object();

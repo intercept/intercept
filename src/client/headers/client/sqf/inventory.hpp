@@ -250,7 +250,7 @@ namespace intercept {
             std::string muzzle;
             std::string laser;
             std::string optics;
-            rv_magazine magazine; //#TODO there might be two of these if grenade launcher is loaded - jonpas  | std::optional? - dedmen
+            rv_magazine magazine;
             std::optional<rv_magazine> grenade_launcher_magazine;
             std::string bipod;
 
@@ -303,7 +303,7 @@ namespace intercept {
         sqf_return_string current_weapon_mode(const object & gunner_);
 
         void load_magazine(const object &obj_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
-        
+
         struct rv_unit_description {
             std::string unit;
             std::string uniform;

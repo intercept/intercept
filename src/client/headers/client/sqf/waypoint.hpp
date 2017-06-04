@@ -21,7 +21,6 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* Waypoint */
-        //#TODO change this to rv_waypoint
         class waypoint {
         public:
             group wgroup;
@@ -477,10 +476,10 @@ namespace intercept {
         vector3 get_wp_pos(const group &group_, int index_);
         void lock_wp(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> target_, bool lock_);
 
-        std::vector<rv_waypoint> waypoints(const object &player_);
-        std::vector<rv_waypoint> waypoints(const group &group_);
-        void set_effect_condition(std::variant<object, rv_waypoint> unit_, sqf_string_const_ref statement_);
-        void waypoint_attach_vehicle(const rv_waypoint &waypoint_, const object &vehicle_);
+        std::vector<waypoint> waypoints(const object &player_);
+        std::vector<waypoint> waypoints(const group &group_);
+        void set_effect_condition(std::variant<object, waypoint> unit_, sqf_string_const_ref statement_);
+        void waypoint_attach_vehicle(const waypoint &waypoint_, const object &vehicle_);
         void enable_uavwaypoints(const object &value0_, bool value1_);
 
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
@@ -541,7 +540,7 @@ namespace intercept {
         void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
         void set_trigger_statements(const object &trigger_, sqf_string_const_ref condition_, sqf_string_const_ref activation_, sqf_string_const_ref deactivation_);
         void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
-        void synchronize_trigger(const object &trigger_, const std::vector<rv_waypoint> &waypoints_);
+        void synchronize_trigger(const object &trigger_, const std::vector<waypoint> &waypoints_);
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
 
 

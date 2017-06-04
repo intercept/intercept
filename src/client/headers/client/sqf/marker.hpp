@@ -114,7 +114,6 @@ namespace intercept {
         sqf_return_string_list all_variables(const location &value_);
         sqf_return_string name(const location &loc_);
         sqf_return_string type(const location& loc_);
-        game_value get_variable(const location & loc_, sqf_string_const_ref var_name_);
         sqf_return_string class_name(const location &loc_);
         location create_location(sqf_string_const_ref classname_, const vector3 &pos_, float size_x_, float size_y_);
         location create_location(sqf_string_const_ref classname_, const vector2 & pos_, float size_x_, float size_y_);

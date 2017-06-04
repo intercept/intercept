@@ -39,6 +39,7 @@ namespace intercept {
         typedef uintptr_t value_type;
         class rv_pool_allocator;
         namespace __internal {
+            void set_game_value_vtable(uintptr_t vtable);
             void* rv_allocator_allocate_generic(size_t _size);
             void rv_allocator_deallocate_generic(void* _Ptr);
             void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
@@ -49,7 +50,7 @@ namespace intercept {
                 return _hash;
             }
             class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
-            public:                //#TODO move this into __internal
+            public:
                 I_debug_value() {}
                 virtual ~I_debug_value() {}
                 // IDebugValue
@@ -103,8 +104,6 @@ namespace intercept {
             static Type* reallocate(Type* _Ptr, size_t _count) {
                 return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr, sizeof(Type)*_count));
             }
-
-            //#TODO implement game_data_pool and string pool here
         };
 
         class refcount_base {
@@ -153,6 +152,10 @@ namespace intercept {
             uintptr_t _vtable{ 0 };
         };
 
+        class _refcount_vtable_dummy : public __vtable, public refcount_base {
+
+        };
+
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
             static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
@@ -177,14 +180,19 @@ namespace intercept {
                 new (buffer) compact_array(number_of_elements_);
                 return buffer;
             }
-
+            static compact_array* create(const compact_array &other) {
+                size_t size = other.size();
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+                new (buffer) compact_array(size);
+                std::copy(other.data(), other.data() + other.size(), buffer->data());
+                return buffer;
+            }
             void del() const {
                 this->~compact_array();
                 const void* _thisptr = this;
                 void* _thisptr2 = const_cast<void*>(_thisptr);
                 Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
             }
-            //#TODO copy functions
 
             size_t _size;
             Type _data;
@@ -249,35 +257,27 @@ namespace intercept {
 
 
         //template<std::size_t N>
-        //class r_string_const : public compact_array<char> { // constexpr string
+        //class r_string_const : public refcount_base { // constexpr string
         //private:
         //    const size_t _size;
-        //    char _data[N];
+        //    const char _data[];
         //public:
-        //    constexpr r_string_const(const char a[N]) : _data(a), _size(N - 1), _refcount(2) { add_ref(); }
+        //    constexpr r_string_const(const char a[N]) : _size(N - 1), _data({a[0] ... a[N]}) { add_ref(); }
         //};
 
         class r_string {
-            //friend constexpr const r_string& operator ""_rs(const char*, size_t);
         protected:
         public:
             r_string() {}
             r_string(std::string_view str) {
                 if (str.length()) _ref = create(str.data(), str.length());
             }
-
-            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
-            template<std::size_t N>
-            //constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
-            //constexpr r_string(std::string_view str) {   //https://woboq.com/blog/qstringliteral.html
-            //    _ref = [str]() -> compact_array<char>* {
-            //        static const r_string_const<str.length()> r_string_literal{
-            //        str.data()
-            //    };
-            //    return reinterpret_cast<compact_array<char>>(&r_string_literal);
-            //    }();
+            //template <size_t N>
+            //constexpr r_string(const r_string_const<N>& c) {
+            //    _ref = reinterpret_cast<compact_array<char>*>(&c);
             //}
-            r_string(r_string&& _move) {
+            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
+            r_string(r_string&& _move) noexcept {
                 _ref = _move._ref;
                 _move._ref = nullptr;
             }
@@ -285,23 +285,20 @@ namespace intercept {
                 _ref = _copy._ref;
             }
 
-
-            r_string& operator = (r_string&& _move) {
+            r_string& operator = (r_string&& _move) noexcept {
                 if (this == &_move)
                     return *this;
                 _ref = _move._ref;
                 _move._ref = nullptr;
                 return *this;
             }
+
             r_string& operator = (const r_string& _copy) {
                 _ref = _copy._ref;
                 return *this;
             }
             r_string& operator = (std::string_view _copy) {
-                //if (!_ref || _ref.ref_count() <= 1) {
-                _ref = _copy.length() ? create(_copy.data(), _copy.length()) : nullptr;
-                //}
-                //_ref->assign(_copy.data(), _copy.length());  //#TODO compact_array::assign. Reallocates if already has memory
+                _ref = create(_copy.data(), _copy.length());
                 return *this;
             }
             const char* data() const {
@@ -310,10 +307,11 @@ namespace intercept {
                 return empty;
             }
             const char* c_str() const { return data(); }
-            char* data_mutable() {
-                if (!_ref) return nullptr;
-                make_mutable();
-                return _ref->data();
+            //This will copy the underlying container if we cannot safely modify this r_string
+            void make_mutable() {
+                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
+                    _ref = create(_ref->data());
+                }
             }
 
             explicit operator const char *() const { return data(); }
@@ -328,8 +326,6 @@ namespace intercept {
             //== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?
-                //#TODO compare performance of new equality thingy
-                //cross platform way
             #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
@@ -337,10 +333,10 @@ namespace intercept {
                 return _strcmpi(data(), other) == 0;
             #endif
             }
-            //#Test yet untested
+
             bool operator < (const r_string& other) const {
                 if (!data()) return false; //empty?
-                return strcmp(data(), other.data()) <0;
+                return strcmp(data(), other.data()) < 0;
             }
 
             bool operator == (const r_string& other) const {
@@ -394,7 +390,7 @@ namespace intercept {
                 _ref = nullptr;
             }
             size_t hash() const {
-                return std::hash<const char*>()(data()); //#TODO string_view hash might be better...
+                return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
 
         private:
@@ -422,11 +418,6 @@ namespace intercept {
             static compact_array<char> *create(const char *str) {
                 if (*str == 0) return nullptr;
                 return create(str, strlen(str));
-            }
-            void make_mutable() {
-                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
-                    _ref = create(_ref->data());
-                }
             }
         };
 
@@ -627,7 +618,6 @@ namespace intercept {
                     return;
                 }
                 newData = rv_allocator<Type>::createUninitializedArray(size);
-                //#TODO I disabled this. Check if this causes any harm
                 //memset(newData, 0, size * sizeof(Type));
                 if (base::_data) {
                 #ifdef __GNUC__
@@ -995,8 +985,16 @@ namespace intercept {
 
         class game_data;
         struct script_type_info {  //Donated from ArmaDebugEngine
-            r_string _name;           // SCALAR
             using createFunc = game_data* (*)(void* _null);
+        #ifdef __linux__
+            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName) :
+                _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _javaFunc("none") {}
+        #else
+            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName, r_string description, r_string category, r_string typeName) :
+                _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _javaFunc("none"),
+                _description(std::move(description)), _category(std::move(category)), _typeName(std::move(typeName)) {}
+        #endif
+            r_string _name;           // SCALAR
             createFunc _createFunction{ nullptr };
             r_string _localizedName; //@STR_EVAL_TYPESCALAR
             r_string _readableName; //Number
@@ -1033,9 +1031,7 @@ namespace intercept {
             }
         };
 
-        struct unary_operator {
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct unary_operator : public _refcount_vtable_dummy {
             unary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg_type;
@@ -1047,9 +1043,7 @@ namespace intercept {
             unary_operator *op;
         };
 
-        struct binary_operator {//#TODO rework to correctly use refcount stuff
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct binary_operator : public _refcount_vtable_dummy {
             binary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg1_type;
@@ -1062,9 +1056,7 @@ namespace intercept {
             binary_operator *op;
         };
 
-        struct nular_operator {
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct nular_operator : public _refcount_vtable_dummy {
             nular_function   *procedure_addr;
             sqf_script_type   return_type;
         };
@@ -1080,7 +1072,7 @@ namespace intercept {
             friend class game_value;
             friend class intercept::invoker;
         public:
-            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
+            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }
             virtual ~game_data() {}
 
         protected:
@@ -1154,28 +1146,21 @@ namespace intercept {
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
-        class[[deprecated]] rv_game_value{
-        };
-
         class game_data_array;
         class internal_object;
-
-        class __game_value_vtable_dummy {
-        public:
-            virtual void __dummy_vtable(void) {};
-            __game_value_vtable_dummy();
-        };
 
         class game_value {
             uintptr_t __vptr;
             friend class intercept::invoker;
+            friend void __internal::set_game_value_vtable(uintptr_t);
+        protected:
+            static uintptr_t __vptr_def; //Users should not be able to access this
         public:
-            static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
             ~game_value();
             void copy(const game_value & copy_); //I don't see any use for this.
             game_value(const game_value &copy_);
-            game_value(game_value &&move_);
+            game_value(game_value &&move_) noexcept;
 
 
 
@@ -1370,7 +1355,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, script); };//#TODO might want to hash script string
+            size_t hash() const { return __internal::pairhash(type_def, script); }
             void *script;
         };
 
@@ -1557,7 +1542,7 @@ namespace intercept {
         #endif
             struct {
                 uint32_t _x;
-                void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
+                void* object;
             } *object;
         };
     #if 0
@@ -1763,8 +1748,8 @@ namespace intercept {
         }
     #endif
 
+        }
     }
-}
 
 namespace std {
     template <> struct hash<intercept::types::r_string> {

@@ -87,8 +87,27 @@ namespace intercept {
             general
         };
         void set_skill(const object &object_, set_skill_type type_, float skill_);
-        //#TODO isn't this misc?
-        void send_simple_command(const object &value0_, sqf_string_const_ref value1_);
+        enum class simple_command_type {
+            //Gunner commands
+            FIRE,
+            CEASE_FIRE,
+            MANUAL_FIRE,
+            CANCEL_MANUAL_FIRE,
+            KEY_FIRE,
+            //Driver commands
+            FORWARD,
+            STOP,
+            BACK,
+            FAST,
+            KEY_FAST,
+            SLOW,
+            KEY_SLOW,
+            LEFT,
+            RIGHT,
+            KEY_UP,
+            KEY_DOWN
+        };
+        void send_simple_command(const object &value0_, simple_command_type command_);
         sqf_return_string speed_mode(const object &obj_);
         sqf_return_string speed_mode(const group &grp_);
         object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
@@ -125,9 +144,30 @@ namespace intercept {
         sqf_return_string land_result(const object &value_);
         bool move_to_completed(const object &value_);
         bool move_to_failed(const object &value_);
-        void disable_ai(const object &value0_, sqf_string_const_ref value1_); //#TODO take enum
-        void enable_ai(const object &value0_, sqf_string_const_ref value1_); //#TODO take enum
-        void enable_aifeature(bool value0_, sqf_string_const_ref value1_); //#TODO take enum?
+
+        enum class ai_behaviour_types {
+            TARGET,         // Stop the unit to watch the assigned target / group commander may not assign targets
+            AUTOTARGET,     // Prevent the unit from assigning a target independently and watching unknown objects / no automatic target selection
+            MOVE,           // Disable the AI's movement / do not move
+            ANIM,           // Disable ability of AI to change animation.
+            TEAMSWITCH,     // AI disabled because of Team Switch
+            FSM,            // Disable the execution of AI behavior scripts.
+            AIMINGERROR,    // Prevents AI's aiming from being distracted by its shooting, moving, turning, reloading, hit, injury, fatigue, suppression or concealed/lost target.
+            SUPPRESSION,    // Prevents AI from being suppressed.
+            CHECKVISIBLE,   // Disables visibility raycasts.
+            COVER,          // Disables usage of cover positions by the AI.
+            AUTOCOMBAT,     // Disables autonomous switching to COMBAT when in danger.
+            PATH,           // Stops the AI’s movement but not the target alignment.
+            ALL             // All of the above.
+        };
+
+        void disable_ai(const object &value0_, ai_behaviour_types type_);
+        void enable_ai(const object &value0_, ai_behaviour_types type_);
+        enum class ai_feature_types {
+            AwareFormationSoft,
+            CombatFormationSoft
+        };
+        void enable_aifeature(bool value0_, ai_feature_types value1_);
         void fly_in_height(const object &value0_, float value1_);
         float knows_about(const object &source_, const object &target_);
         float knows_about(const group &source_, const object &target_);
@@ -181,8 +221,7 @@ namespace intercept {
         void order_get_in(const std::vector<object> &units_, bool order_);
 
 
-        //#TODO: Find out which parameters should be on the right side of the command
-        void set_unit_load_in_combat(const object &unit_, const game_value &params_right_);
+        void set_unload_in_combat(const object &unit_, bool allowCargo, bool allowTurrets);
         void swim_in_depth(const object &unit_, float depth_);
     }
 }

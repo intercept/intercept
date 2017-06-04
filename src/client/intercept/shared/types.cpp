@@ -375,10 +375,6 @@ namespace intercept {
             return pool_alloc_base->deallocate(ptr_);
         }
 
-        __game_value_vtable_dummy::__game_value_vtable_dummy() {
-            *reinterpret_cast<uintptr_t*>(this) = game_value::__vptr_def;
-        }
-
         game_value::game_value() {
             set_vtable(__vptr_def);
             data = nullptr;
@@ -395,7 +391,7 @@ namespace intercept {
             copy(copy_);
         }
 
-        game_value::game_value(game_value && move_) {
+        game_value::game_value(game_value && move_) noexcept {
             set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
             data = move_.data;
             move_.data = nullptr;
@@ -741,6 +737,10 @@ namespace intercept {
             virtual void Unlock() = 0;
             const char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
         };
+
+        void __internal::set_game_value_vtable(uintptr_t vtable) {
+            game_value::__vptr_def = vtable;
+        }
 
         void* __internal::rv_allocator_allocate_generic(size_t size) {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;

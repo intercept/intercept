@@ -35,22 +35,19 @@ namespace intercept {
 
             if (text_menu_.index() == 0) {
                 params_right.push_back(std::get<0>(text_menu_));
-            }
-            else {
+            } else {
                 params_right.push_back(std::get<1>(text_menu_));
             }
 
             if (text_window_background_.index() == 0) {
                 params_right.push_back(std::get<0>(text_window_background_));
-            }
-            else {
+            } else {
                 params_right.push_back(std::get<1>(text_window_background_));
             }
 
             if (text_window_foreground_.index() == 0) {
                 params_right.push_back(std::get<0>(text_window_foreground_));
-            }
-            else {
+            } else {
                 params_right.push_back(std::get<1>(text_window_foreground_));
             }
 
@@ -108,7 +105,7 @@ namespace intercept {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
 
-        float add_action(const object &object_, sqf_string_const_ref title_, sqf_string_const_ref script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
+        float add_action(const object &object_, sqf_string_const_ref title_, sqf_string_const_ref script_, game_value arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
             game_value args({
                 title_,
                 script_,
@@ -123,7 +120,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args);
         }
 
-        float add_action(const object &object_, sqf_string_const_ref title_, const code &script_, const std::vector<game_value> &arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
+        float add_action(const object &object_, sqf_string_const_ref title_, const code &script_, game_value arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
             game_value args({
                 title_,
                 script_,

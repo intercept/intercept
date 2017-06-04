@@ -332,7 +332,7 @@ namespace intercept {
         #endif
             void* placeholder11{ nullptr };//0x50 JNI probably
             const char *get_map_key() const { return _name2.data(); }
-        };                                                  //#TODO this is same as value_type
+        };
 
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:

@@ -289,7 +289,7 @@ namespace intercept {
         float lb_cur_sel(float value_);
         float lb_size(const control &value_);
         float lb_size(float value_);
-        
+
         sqf_return_string lb_data(int control_id_, int index_);
         sqf_return_string lb_data(const control &control_, int index_);
         sqf_return_string lb_picture(int control_id_, int index_);
@@ -328,8 +328,8 @@ namespace intercept {
         void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref name_);
         void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_right_color(int idc_, const std::vector<int>& path_, const rv_color& color_);
+        void tv_set_picture_right_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
         void tv_set_tooltip(int idc_, const std::vector<int>& path_, sqf_string_const_ref text_);
         void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref text_);
         void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
@@ -338,6 +338,7 @@ namespace intercept {
         void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
         void tv_clear(float value_);
         void tv_clear(const control &value_);
+        //#TODO typedef for const std::vector<int>
         sqf_return_string tv_data(int idc_, const std::vector<int>& path_);
         sqf_return_string tv_data(const control& ctrl_, const std::vector<int>& path_);
         sqf_return_string tv_picture(int idc_, const std::vector<int>& path_);
@@ -352,7 +353,7 @@ namespace intercept {
         int tv_add(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref text_);
         int tv_count(int idc_, const std::vector<int>& path_);
         int tv_count(const control& ctrl_, const std::vector<int>& path_);
-        //std::string tv_tooltip(const control &value0_, float value1_);
+        
         std::vector<int> tv_cursel(int idc_);
         std::vector<int> tv_cursel(const control& ctrl_);
 
@@ -588,8 +589,6 @@ namespace intercept {
         object get_editor_camera(const control &value_);
         object get_object_proxy(const control &value0_, sqf_string_const_ref value1_);
 
-
-        game_value get_variable(const control & ctrl_, sqf_string_const_ref var_name_, game_value default_value_);
         display display_parent(const display &display_);
 
         bool visible_score_table();

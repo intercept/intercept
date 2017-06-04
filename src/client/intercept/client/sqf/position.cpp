@@ -483,7 +483,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__distance2d__object_array__object_array__ret__scalar, from, to);
         }
 
-        float distance_sqr(std::variant<object, vector3,location> start_, std::variant<object, vector3, location> end_) {
+        float distance_sqr(std::variant<object, vector3, location> start_, std::variant<object, vector3, location> end_) {
             game_value from, to;
             switch (start_.index()) {
                 case 0: from = (std::get<object>(start_)); break;

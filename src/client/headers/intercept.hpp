@@ -17,7 +17,7 @@ namespace intercept {
         DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);
 
 #define EH(x) DLLEXPORT void CDECL x
-         //#TODO may want r_string& here
+
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
         EH(anim_state_changed)(object &unit_, r_string anim_name_);

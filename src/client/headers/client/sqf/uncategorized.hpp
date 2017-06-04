@@ -21,6 +21,6 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        
+
     }
 }

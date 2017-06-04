@@ -185,8 +185,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<binary_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
     op._operator->return_type = retType;
     op._operator->arg1_type = leftType;
@@ -278,8 +277,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<unary_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
     op._operator->return_type = retType;
     op._operator->arg_type = rightype;
@@ -326,8 +324,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<nular_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
     op._operator->return_type = retType;
 #ifndef __linux__
@@ -408,15 +405,14 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
-    //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
 
-    auto newType = new script_type_info{
+    auto newType = rv_allocator<script_type_info>::createSingle(
     #ifdef __linux__
-        name,cf,localizedName,localizedName,r_string("none")
+        name,cf,localizedName,localizedName
     #else
-        name,cf,localizedName,localizedName,description,r_string("intercept"),typeName,r_string("none")
+        name,cf,localizedName,localizedName,description,r_string("intercept"),typeName
     #endif
-    };
+    );
     gs->_scriptTypes.emplace_back(newType);
     auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);

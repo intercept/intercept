@@ -136,15 +136,15 @@ namespace intercept {
         bool in_area_array(t_sqf_in_area_position_array position_, const location &location_);
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
-        //#TODO are these two really position category? Sounds more worldish
+        //#Categorize are these two really position category? Sounds more worldish
         vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);
-        
+
         float distance_2d(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
         float distance_sqr(std::variant<object, vector3, location> start_, std::variant<object, vector3, location> end_);
-        //#TODO is this really position category? Sounds more worldish
+        //#Categorize is this really position category? Sounds more worldish
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_);
-        float distance(std::variant<object,vector3> start_, std::variant<object, vector3> end_);
+        float distance(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
         vector3 building_exit(const object &building_, int index_);
         vector3 building_pos(const object &building_, int index_);

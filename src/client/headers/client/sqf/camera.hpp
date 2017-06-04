@@ -126,7 +126,7 @@ namespace intercept {
         void pp_effect_force_in_nvg(float value0_, bool value1_);
 
         void pp_effect_destroy(std::vector<float> effect_handles_);
-
+        //#TODO: Replace &settings_ with the right pp_effect_parameters
         void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
         void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);

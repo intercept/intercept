@@ -262,8 +262,8 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(__sqf::binary__tvsetpicturecolor__control__array__ret__nothing, ctrl_, params);
         }
-        //#TODO rename https://community.bistudio.com/wiki/tvSetPictureRightColor color and right swapped
-        void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_) {
+
+        void tv_set_picture_right_color(int idc_, const std::vector<int>& path_, const rv_color& color_) {
             auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
@@ -275,7 +275,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__tvsetpicturerightcolor__array__ret__nothing, params);
         }
 
-        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
+        void tv_set_picture_right_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_) {
             auto_array<game_value> path(path_.begin(), path_.end());
 
             game_value params({
@@ -1153,11 +1153,6 @@ namespace intercept {
             __helpers::__empty_unary_control(__sqf::unary__tvclear__control__ret__nothing, value_);
         }
 
-        //#TODO w00t https://community.bistudio.com/wiki/tvTooltip
-        //std::string tv_tooltip(const control &value0_, float value1_) {
-        //    return host::functions.invoke_raw_binary(__sqf::binary__tvtooltip__control__scalar__ret__string, value0_, value1_);
-        //}
-
         void tv_set_text(float idc_, const std::vector<float>& path_, sqf_string_const_ref text_) {
             auto_array<game_value> path(path_.begin(), path_.end());
 
@@ -1180,14 +1175,6 @@ namespace intercept {
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__tvsettext__array__ret__string, params);
-        }
-
-        game_value get_variable(const control & ctrl_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, ctrl_, args);
         }
 
         void ctrl_set_position(const control & ctrl_, float x_, float y_, float width_, float height_) {
@@ -2828,7 +2815,7 @@ namespace intercept {
         }
 
         //old bodies
-        /* 
+        /*
         void lb_sort(const control &control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__control__ret__nothing, control_);
         }

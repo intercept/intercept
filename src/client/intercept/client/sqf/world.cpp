@@ -231,7 +231,7 @@ namespace intercept {
         void set_acc_time(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__setacctime__scalar__ret__nothing, value_);
         }
-        
+
         void set_object_view_distance(float distance_) {
             __helpers::__empty_unary_number(__sqf::unary__setobjectviewdistance__scalar__ret__nothing, distance_);
         }
@@ -374,9 +374,9 @@ namespace intercept {
         bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
             game_value param_left;
             switch (position_.index()) {
-            case 0: param_left = std::get<0>(position_).get(); break;
-            case 1: param_left = std::get<1>(position_).get(); break;
-            case 2: param_left = std::get<2>(position_).get(); break;
+                case 0: param_left = std::get<0>(position_).get(); break;
+                case 1: param_left = std::get<1>(position_).get(); break;
+                case 2: param_left = std::get<2>(position_).get(); break;
             }
 
             return host::functions.invoke_raw_binary(__sqf::binary__nearobjectsready__object_array__scalar__ret__bool, param_left, radius_);
@@ -385,9 +385,9 @@ namespace intercept {
         std::vector<object> near_roads(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
             game_value param_left;
             switch (position_.index()) {
-            case 0: param_left = std::get<0>(position_).get(); break;
-            case 1: param_left = std::get<1>(position_).get(); break;
-            case 2: param_left = std::get<2>(position_).get(); break;
+                case 0: param_left = std::get<0>(position_).get(); break;
+                case 1: param_left = std::get<1>(position_).get(); break;
+                case 2: param_left = std::get<2>(position_).get(); break;
             }
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearroads__object_array__scalar__ret__array, param_left, radius_));
@@ -396,9 +396,9 @@ namespace intercept {
         std::vector<object> near_supplies(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_) {
             game_value param_left;
             switch (position_.index()) {
-            case 0: param_left = std::get<0>(position_).get(); break;
-            case 1: param_left = std::get<1>(position_).get(); break;
-            case 2: param_left = std::get<2>(position_).get(); break;
+                case 0: param_left = std::get<0>(position_).get(); break;
+                case 1: param_left = std::get<1>(position_).get(); break;
+                case 2: param_left = std::get<2>(position_).get(); break;
             }
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearsupplies__object_array__scalar_array__ret__array, param_left, radius_));
@@ -574,14 +574,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setfriend__side__array__ret__nothing, side1_, args);
         }
 
-        std::vector<object> entities(sqf_string_const_ref type_)
-        {
+        std::vector<object> entities(sqf_string_const_ref type_) {
             return __helpers::__convert_to_objects_vector(game_value(host::functions.invoke_raw_unary(__sqf::unary__entities__string__ret__array, type_)));
         }
 
 
-        std::vector<object> units(const object& unit_)
-        {
+        std::vector<object> units(const object& unit_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__units__object__ret__array, unit_));
         }
 

@@ -172,16 +172,32 @@ namespace intercept {
         sqf_return_string_list config_source_addon_list(const config &config_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
         }
-        //#TODO take enum of options_?
-        game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_) {
-            auto_array<game_value> options(options_.begin(), options_.end());
 
-            game_value params({
-                mod_class_,
-                std::move(options)
-            });
+        std::vector<game_value> mod_params(sqf_string_const_ref mod_class_, mod_params_options options_) {
+            auto_array<game_value> options;
 
-            return host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, params);
+            if (options_ & mod_params_options::name) options.push_back("name"_sv);
+            if (options_ & mod_params_options::picture) options.push_back("picture"_sv);
+            if (options_ & mod_params_options::logo) options.push_back("logo"_sv);
+            if (options_ & mod_params_options::logoOver) options.push_back("logoOver"_sv);
+            if (options_ & mod_params_options::logoSmall) options.push_back("logoSmall"_sv);
+            if (options_ & mod_params_options::tooltip) options.push_back("tooltip"_sv);
+            if (options_ & mod_params_options::tooltipOwned) options.push_back("tooltipOwned"_sv);
+            if (options_ & mod_params_options::action) options.push_back("action"_sv);
+            if (options_ & mod_params_options::actionName) options.push_back("actionName"_sv);
+            if (options_ & mod_params_options::overview) options.push_back("overview"_sv);
+            if (options_ & mod_params_options::hidePicture) options.push_back("hidePicture"_sv);
+            if (options_ & mod_params_options::hideName) options.push_back("hideName"_sv);
+            if (options_ & mod_params_options::defaultMod) options.push_back("defaultMod"_sv);
+            if (options_ & mod_params_options::serverOnly) options.push_back("serverOnly"_sv);
+            if (options_ & mod_params_options::active) options.push_back("active"_sv);
+
+            return __helpers::__convert_to_game_value_vector(
+                host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, {
+                    mod_class_,
+                    std::move(options)
+                })
+            );
         }
         sqf_return_string type_of(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__typeof__object__ret__string, value_);

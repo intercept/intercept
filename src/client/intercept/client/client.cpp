@@ -104,7 +104,7 @@ namespace intercept {
 
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
-            game_value::__vptr_def = type_def;
+            intercept::types::__internal::set_game_value_vtable(type_def);
         }
 
         void CDECL handle_unload() {

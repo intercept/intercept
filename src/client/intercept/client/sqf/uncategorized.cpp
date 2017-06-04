@@ -214,7 +214,8 @@ namespace intercept {
         // unary__lbselection__control__ret__array
 
         /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
-            corresponds to how visible a particular unit is from another unit. binary__knowsabout__object_group__object__ret__scalar*/
+        * corresponds to how visible a particular unit is from another unit. binary__knowsabout__object_group__object__ret__scalar
+        */
         // binary__checkvisibility__array__array__ret__scalar
 
         /* No documentation.*/
@@ -376,7 +377,7 @@ namespace intercept {
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
 
-        
+
         // TODO std::vector<float> fog_params();
 
         // TODO std::array<float, 2> get_mouse_position();
@@ -384,19 +385,8 @@ namespace intercept {
 
         // TODO std::array<float, 6> get_resolution();
 
-        
+
         // TODO std::array<float, 6> mission_start();
-
-
-        //#TODO: Replace &settings_ with the right pp_effect_parameters
-        
-
-        
-
-        //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
-        //binary__setunitloadout__object__array__ret__nothing
-        //binary__setunitloadout__object__string__ret__nothing
-        //binary__setunitloadout__object__config__ret__nothing
 
     }
 }

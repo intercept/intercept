@@ -171,7 +171,7 @@ namespace intercept {
             #else
                 output.insert(output.end(), arr.begin(), arr.end());
             #endif
-                
+
                 return output;
             }
 

@@ -19,6 +19,17 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        struct rv_target_knowledge {
+            //example [true,true,0,-2.14748e+006,WEST,0,[4556.26,5862.7,6.22729]]
+            bool known_by_group;
+            bool known_by_unit;
+            float last_seen_by_unit;
+            float last_endangered_by_unit;
+            side target_side;
+            float position_error;
+            vector3 target_position;
+        };
+
         void set_user_mfd_value(const object &object_, int index_, float value_);
         void forget_target(const object &unit_, const object target_);
         void forget_target(const group &group_, const object target_);
@@ -114,7 +125,6 @@ namespace intercept {
         void enable_uav_connect_ability(const object &unit_, const object &uav_, bool check_all_items_);
         void enable_weapon_disassembly(const object &unit_, bool enable_);
 
-        //#TODO use t_in_area typedef for position
         object find_nearest_enemy(const object &unit_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_);
         object find_nearest_enemy(const object &unit_, const object &object_);
         void fire(const object &unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref mode_, sqf_string_const_ref magazine_);
@@ -199,7 +209,17 @@ namespace intercept {
         bool weapon_lowered(const object &value_);
         void add_rating(const object &value0_, float value1_);
         void add_score(const object &value0_, float value1_);
-        void assign_team(const object &value0_, sqf_string_const_ref value1_);//#TODO Enum argument
+
+        enum class team_color {
+            MAIN,   //White
+            RED,    //Red
+            GREEN,  //Green
+            BLUE,   //Blue
+            YELLOW, //Yellow
+        };
+
+        void assign_team(const object &value0_, team_color team_);
+        void unassign_team(const object &value_);
         void disable_conversation(const object &value0_, bool value1_);
         void enable_aim_precision(const object &value0_, bool value1_);
         void enable_fatigue(const object &value0_, bool value1_);
@@ -214,7 +234,6 @@ namespace intercept {
         void set_custom_aim_coef(const object &value0_, float value1_);
         void allow_sprint(const object &value0_, bool value1_);
         float animation_phase(const object &value0_, sqf_string_const_ref value1_);
-        void unassign_team(const object &value_);
         object get_connected_uav(const object &value_);
         float get_custom_aim_coef(const object &value_);
         void remove_owned_mine(const object &unit_, const object &mine_);

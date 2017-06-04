@@ -614,7 +614,7 @@ namespace intercept {
 
                 if (_maxItems == size) return;
 
-                if (base::_n > size) {
+                if (base::_n > static_cast<int>(size)) {
                     resize(size);
                     return;//resize calls reallocate and reallocates... Ugly.. I know
                 }

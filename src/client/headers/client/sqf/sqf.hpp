@@ -24,6 +24,7 @@
 #include "rotorlib.hpp"
 #include "units.hpp"
 #include "vehicles.hpp"
+#include "waypoint.hpp"
 
 #include "uncategorized.hpp"
 #include <regex>

@@ -7,10 +7,6 @@ branches:
   - master
   - develop
 
-only_commits:
-  files:
-    - src/
-
 configuration:
 - Debug
 

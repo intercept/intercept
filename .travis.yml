@@ -13,13 +13,16 @@ matrix:
     ###############################################################################
     - python: 3.5
       before_script:
-      - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
-        == "false" ]; then pip install pygithub; pip install pygithub3; fi
+      - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+          pip install pygithub;
+          pip install pygithub3;
+        fi
 
       script:
-      - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}"
-        == "false" ]; then python3 tools/deploy.py; fi
       - python3 tools/sqf_wrapper_validation.py
+      - if [ -n "${GH_TOKEN}" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+          python3 tools/deploy.py;
+        fi
 
     ###############################################################################
     # Job #2 - Building intercept

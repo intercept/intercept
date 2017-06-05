@@ -76,11 +76,8 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
-        void diag_log(sqf_string_const_ref text_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
 
-        void diag_log(const game_value &text_) {
+        void diag_log(game_value text_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
         }
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_) {

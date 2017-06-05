@@ -167,7 +167,7 @@ namespace intercept {
         //uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
         //uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
         uintptr_t baseAddress = start;
-        uintptr_t moduleSize = end-start;
+        uintptr_t moduleSize = end - start;
     #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
@@ -424,7 +424,7 @@ namespace intercept {
         }
 
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.v_table;
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
@@ -440,7 +440,7 @@ namespace intercept {
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
     #ifdef __linux__
-        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);

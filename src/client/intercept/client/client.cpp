@@ -105,6 +105,10 @@ namespace intercept {
 
             host::functions.get_type_structure("GV", type_def, data_type_def);
             intercept::types::__internal::set_game_value_vtable(type_def);
+
+            host::functions.get_type_structure("SQF_SCRIPT_TYPE", type_def, data_type_def);
+            sqf_script_type::type_def = type_def;
+
         }
 
         void CDECL handle_unload() {

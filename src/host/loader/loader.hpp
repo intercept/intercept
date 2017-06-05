@@ -334,7 +334,7 @@ namespace intercept {
             const char *get_map_key() const { return _name2.data(); }
         };
 
-        struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
+        class game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
             game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
@@ -342,20 +342,13 @@ namespace intercept {
             const char *get_map_key() const { return _name.data(); }
         };
 
-        struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
+        class game_operators : public auto_array<gsOperator>, public gsFuncBase {
         public:
             game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
             int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
             game_operators() {}
             const char *get_map_key() const { return _name.data(); }
-        };
-        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
-        public:
-            auto_array<const script_type_info *> _scriptTypes;
-            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
-            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
-            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
         };
     }
 

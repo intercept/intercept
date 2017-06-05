@@ -122,6 +122,7 @@ namespace intercept {
 
 
         uintptr_t game_value::__vptr_def;
+        uintptr_t sqf_script_type::type_def;
 
 
         value_types sqf_script_type::type() const {
@@ -145,6 +146,7 @@ namespace intercept {
             }
         }
 
+    #pragma region GameData Types
         game_data_number::game_data_number() {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
@@ -374,6 +376,99 @@ namespace intercept {
         void game_data_array::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
+
+        game_data* game_data::createFromSerialized(param_archive& ar) {
+            bool isNil = false;
+            if (ar.serialize(r_string("nil"_sv), isNil, 1, false) != serialization_return::no_error) {
+                return nullptr;
+            }
+
+            sqf_script_type _type;
+            if (ar.serialize(r_string("type"_sv), _type, 1) != serialization_return::no_error) return nullptr;
+
+            if (isNil) {
+                //#TODO create GameDataNil or GameDataNothing
+                return nullptr;
+            }
+
+            auto gs = reinterpret_cast<intercept::__internal::game_state *>(ar._parameters.front());
+            return gs->create_gd_from_type(_type, &ar);
+        }
+
+        static std::map<std::string, types::GameDataType> additionalTypes;
+        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
+            //I know this is ugly. Feel free to make it better
+            if (name == "SCALAR") return types::GameDataType::SCALAR;
+            if (name == "BOOL") return types::GameDataType::BOOL;
+            if (name == "ARRAY") return types::GameDataType::ARRAY;
+            if (name == "STRING") return types::GameDataType::STRING;
+            if (name == "NOTHING") return types::GameDataType::NOTHING;
+            if (name == "ANY") return types::GameDataType::ANY;
+            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
+            if (name == "NaN") return types::GameDataType::NaN;
+            if (name == "CODE") return types::GameDataType::CODE;
+            if (name == "OBJECT") return types::GameDataType::OBJECT;
+            if (name == "SIDE") return types::GameDataType::SIDE;
+            if (name == "GROUP") return types::GameDataType::GROUP;
+            if (name == "TEXT") return types::GameDataType::TEXT;
+            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
+            if (name == "TARGET") return types::GameDataType::TARGET;
+            if (name == "CONFIG") return types::GameDataType::CONFIG;
+            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
+            if (name == "CONTROL") return types::GameDataType::CONTROL;
+            if (name == "NetObject") return types::GameDataType::NetObject;
+            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK") return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION") return types::GameDataType::LOCATION;
+            auto found = additionalTypes.find(static_cast<std::string>(name));
+            if (found != additionalTypes.end())
+                return found->second;
+            return types::GameDataType::end;
+        }
+
+        std::string __internal::to_string(GameDataType type) {
+            switch (type) {
+                case GameDataType::SCALAR: return "SCALAR";
+                case GameDataType::BOOL: return "BOOL";
+                case GameDataType::ARRAY: return "ARRAY";
+                case GameDataType::STRING: return "STRING";
+                case GameDataType::NOTHING: return "NOTHING";
+                case GameDataType::ANY: return "ANY";
+                case GameDataType::NAMESPACE: return "NAMESPACE";
+                case GameDataType::NaN: return "NaN";
+                case GameDataType::CODE: return "CODE";
+                case GameDataType::OBJECT: return "OBJECT";
+                case GameDataType::SIDE: return "SIDE";
+                case GameDataType::GROUP: return "GROUP";
+                case GameDataType::TEXT: return "TEXT";
+                case GameDataType::SCRIPT: return "SCRIPT";
+                case GameDataType::TARGET: return "TARGET";
+                case GameDataType::CONFIG: return "CONFIG";
+                case GameDataType::DISPLAY: return "DISPLAY";
+                case GameDataType::CONTROL: return "CONTROL";
+                case GameDataType::SUBGROUP:  return "SUBGROUP";
+                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
+                case GameDataType::TASK: return "TASK";
+                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
+                case GameDataType::LOCATION: return "LOCATION";
+                default:;
+            }
+            for (auto& it : additionalTypes) {
+                if (it.second == type)
+                    return it.first;
+            }
+            return "";
+        }
+
+        void __internal::add_game_datatype(r_string name, GameDataType type) {
+            additionalTypes[static_cast<std::string>(name)] = type;
+        };
+
+    #pragma endregion
+
+    #pragma region GameValue
 
         game_value::game_value() {
             set_vtable(__vptr_def);
@@ -688,7 +783,9 @@ namespace intercept {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
         }
 
+    #pragma endregion
 
+    #pragma region Allocator
         class MemTableFunctions { //We don't want to expose this in the header. It's only used here
         public:
             virtual void *New(size_t size) = 0;
@@ -832,78 +929,83 @@ namespace intercept {
             dealloc(this, data);
         #endif
         }
+    #pragma endregion
 
-        static std::map<std::string, types::GameDataType> additionalTypes;
-        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
-            //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::GameDataType::SCALAR;
-            if (name == "BOOL") return types::GameDataType::BOOL;
-            if (name == "ARRAY") return types::GameDataType::ARRAY;
-            if (name == "STRING") return types::GameDataType::STRING;
-            if (name == "NOTHING") return types::GameDataType::NOTHING;
-            if (name == "ANY") return types::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::GameDataType::NaN;
-            if (name == "CODE") return types::GameDataType::CODE;
-            if (name == "OBJECT") return types::GameDataType::OBJECT;
-            if (name == "SIDE") return types::GameDataType::SIDE;
-            if (name == "GROUP") return types::GameDataType::GROUP;
-            if (name == "TEXT") return types::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::GameDataType::TARGET;
-            if (name == "CONFIG") return types::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::GameDataType::CONTROL;
-            if (name == "NetObject") return types::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::GameDataType::LOCATION;
-            auto found = additionalTypes.find(static_cast<std::string>(name));
-            if (found != additionalTypes.end())
-                return found->second;
-            return types::GameDataType::end;
+    #pragma region Serialization
+        intercept::types::serialization_return param_archive::serialize(r_string name, serialize_class & value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            param_archive sub_archive;
+            sub_archive._version = _version;
+            sub_archive._p3 = _p3;
+            sub_archive._parameters = _parameters;
+            sub_archive._isExporting = _isExporting;
+            delete sub_archive._p1;
+            if (_isExporting) {
+                sub_archive._p1 = _p1->add_entry_class(name, false);
+            } else {
+                sub_archive._p1 = _p1->get_entry_by_name(name);
+            }
+
+            if (!sub_archive._p1) {
+                return serialization_return::no_entry;
+            }
+
+            auto ret = value.serialize(sub_archive);
+            if (_isExporting) {
+                sub_archive._p1->compress();
+                delete sub_archive._p1;
+                sub_archive._p1 = nullptr;
+            }
+            return ret;
         }
 
-        std::string __internal::to_string(GameDataType type) {
-            switch (type) {
-                case GameDataType::SCALAR: return "SCALAR";
-                case GameDataType::BOOL: return "BOOL";
-                case GameDataType::ARRAY: return "ARRAY";
-                case GameDataType::STRING: return "STRING";
-                case GameDataType::NOTHING: return "NOTHING";
-                case GameDataType::ANY: return "ANY";
-                case GameDataType::NAMESPACE: return "NAMESPACE";
-                case GameDataType::NaN: return "NaN";
-                case GameDataType::CODE: return "CODE";
-                case GameDataType::OBJECT: return "OBJECT";
-                case GameDataType::SIDE: return "SIDE";
-                case GameDataType::GROUP: return "GROUP";
-                case GameDataType::TEXT: return "TEXT";
-                case GameDataType::SCRIPT: return "SCRIPT";
-                case GameDataType::TARGET: return "TARGET";
-                case GameDataType::CONFIG: return "CONFIG";
-                case GameDataType::DISPLAY: return "DISPLAY";
-                case GameDataType::CONTROL: return "CONTROL";
-                case GameDataType::SUBGROUP:  return "SUBGROUP";
-                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
-                case GameDataType::TASK: return "TASK";
-                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
-                case GameDataType::LOCATION: return "LOCATION";
-                default:;
+        serialization_return param_archive::serialize(r_string name, r_string& value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            if (_isExporting) {
+                _p1->add_entry(name, value);
+            } else {
+                auto entry = _p1->get_entry_by_name(name);
+                value = *entry;   //#TODO check if entry actually contains the type that we want
+                return serialization_return::no_error;
             }
-            for (auto& it : additionalTypes) {
-                if (it.second == type)
-                    return it.first;
-            }
-            return "";
+            return serialization_return::no_error;
         }
 
-        void __internal::add_game_datatype(r_string name, GameDataType type) {
-            additionalTypes[static_cast<std::string>(name)] = type;
-        };
+        serialization_return param_archive::serialize(r_string name, bool& value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            if (_isExporting) {
+                _p1->add_entry(name, static_cast<int>(value));//I don't know why.. BI does this..
+            } else {
+                auto entry = _p1->get_entry_by_name(name);
+                value = static_cast<int>(*entry); //#TODO check if entry actually contains the type that we want
+                return serialization_return::no_error;
+            }
+            return serialization_return::no_error;
+        }
 
+        serialization_return param_archive::serialize(r_string name, bool& value, int min_version, bool default_value) {
+            if (_version < min_version) {
+                if (!_isExporting) value = default_value;
+                return serialization_return::no_error;
+            }
+            if (_isExporting && value == default_value) return serialization_return::no_error;
+            serialization_return err = serialize(name, value, min_version);
+            // if the value is not found, load the default one
+            if (err == serialization_return::no_entry) {
+                value = default_value;
+                return serialization_return::no_error;
+            }
+            return err;
+        }
+
+        serialization_return game_value::serialize(param_archive& ar) {
+            if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
+            ar.serialize(r_string("data"_sv), data, 1);
+            //#TODO check if type == game_data_nothing. Can probably just use strcmp
+            //if (data && data->type() == game_data_nothing) data = nullptr;
+            return serialization_return::no_error;
+        }
+    #pragma endregion
     }
 }
 

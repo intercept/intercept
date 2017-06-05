@@ -274,7 +274,6 @@ namespace intercept {
 
         game_value::__vptr_def = left_arg_.get_vtable();
         invoker::get().type_structures["GV"] = { game_value::__vptr_def ,game_value::__vptr_def };
-
         ref<game_data> gd_ar(regInfo._types[static_cast<size_t>(GameDataType::ARRAY)]->_createFunction(nullptr));
         std::pair<value_type, value_type> structure = { gd_ar->get_vtable(), gd_ar->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "ARRAY";
@@ -370,12 +369,21 @@ namespace intercept {
         game_data_team::type_def = structure.first;
         game_data_team::data_type_def = structure.second;
 
+        //#TODO add nothing and Nil
+
+
 
         structure = { left_arg_.data->get_vtable(), left_arg_.data->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "NAMESPACE";
         invoker::get().type_structures["NAMESPACE"] = structure;
         game_data_rv_namespace::type_def = structure.first;
         game_data_rv_namespace::data_type_def = structure.second;
+
+        sqf_script_type::type_def = loader::get().get_register_sqf_info()._type_vtable;
+        structure = { sqf_script_type::type_def, sqf_script_type::type_def };
+        invoker::get().type_map[structure.first] = "SQF_SCRIPT_TYPE";
+        invoker::get().type_structures["SQF_SCRIPT_TYPE"] = structure;
+
         LOG(INFO) << "invoker::_intercept_registerTypes done\n";
         return true;
     }

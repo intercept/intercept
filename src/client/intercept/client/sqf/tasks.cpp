@@ -24,7 +24,7 @@ namespace intercept {
         task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, float priority_) {
             game_value params_right({
                 receiver_,
-                { type_ },
+                std::move(auto_array<game_value>{ type_ }),
                 priority_
             });
 

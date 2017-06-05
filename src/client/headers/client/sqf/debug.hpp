@@ -34,8 +34,7 @@ namespace intercept {
         void diag_capture_frame_to_file(float frame_);
         void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_);
         void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_);
-        void diag_log(sqf_string_const_ref text_);
-        void diag_log(const game_value &text_);
+        void diag_log(game_value text_);
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_);
 
         void enable_diag_legend(bool value_);

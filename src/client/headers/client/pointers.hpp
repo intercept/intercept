@@ -4,10 +4,6 @@
 #include "shared/functions.hpp"
 #include "shared/client_types.hpp"
 
-constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
-    return { str, len };
-};
-
 using namespace intercept::types;
 using namespace intercept::client;
 

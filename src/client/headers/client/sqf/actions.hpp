@@ -43,7 +43,7 @@ namespace intercept {
         void remove_all_actions(const object &value_);
         void remove_action(const object &value0_, float value1_);
         rv_action_params action_params(const object &entity_, int id_);
-        void set_user_action_text(const object &object_, int action_index_, std::variant<sqf_string_const_ref_wrapper, rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_);
+        void set_user_action_text(const object &object_, int action_index_, std::variant<std::string, rv_text> text_menu_, std::variant<const std::string, const rv_text> text_window_background_, std::variant<const std::string, const rv_text> text_window_foreground_);
 
 
     }

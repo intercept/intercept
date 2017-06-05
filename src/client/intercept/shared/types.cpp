@@ -965,7 +965,7 @@ namespace intercept {
                 _p1->add_entry(name, value);
             } else {
                 auto entry = _p1->get_entry_by_name(name);
-                value = *entry;   //#TODO check if entry actually contains the type that we want
+                value = static_cast<r_string>(*entry);   //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
             return serialization_return::no_error;

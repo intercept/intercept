@@ -1081,7 +1081,9 @@ namespace intercept {
             virtual operator float() const { return 0; }
             virtual operator int() const { return 0; }
             virtual operator int64_t() const { return 0; }
+        private:
             virtual operator const r_string() const { return r_string(); }
+        public:
             virtual operator r_string() const { return r_string(); }
             virtual operator bool() const { return false; }
             virtual r_string _placeholder1(uint32_t) const { return r_string(); }

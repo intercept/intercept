@@ -1,22 +1,20 @@
 ﻿#include "export.hpp"
 #include "invoker.hpp"
+#include "extensions.hpp"
 
 
 namespace intercept {
     namespace client_function_defs {
 
-        game_value invoke_raw_nular_nolock(const nular_function function_)
-        {
+        game_value invoke_raw_nular_nolock(const nular_function function_) {
             return invoker::get().invoke_raw_nolock(function_);
         }
 
-        game_value invoke_raw_unary_nolock(const unary_function function_, const game_value & right_arg_)
-        {
+        game_value invoke_raw_unary_nolock(const unary_function function_, const game_value & right_arg_) {
             return invoker::get().invoke_raw_nolock(function_, right_arg_);
         }
 
-        game_value invoke_raw_binary_nolock(const binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
-        {
+        game_value invoke_raw_binary_nolock(const binary_function function_, const game_value & left_arg_, const game_value & right_arg_) {
             return invoker::get().invoke_raw_nolock(function_, left_arg_, right_arg_);
         }
 
@@ -66,13 +64,11 @@ namespace intercept {
             return nullptr;
         }
 
-        void invoker_lock()
-        {
+        void invoker_lock() {
             invoker::get().lock();
         }
 
-        void invoker_unlock()
-        {
+        void invoker_unlock() {
             invoker::get().unlock();
         }
 
@@ -91,7 +87,12 @@ namespace intercept {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
         }
         std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
-            return sqf_functions::get().registerType(name, localizedName,description, typeName, cf);
+            return sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
         }
+
+        register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
+            return extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+        }
+
     }
 }

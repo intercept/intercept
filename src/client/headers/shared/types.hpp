@@ -1082,7 +1082,7 @@ namespace intercept {
             virtual operator int() const { return 0; }
             virtual operator int64_t() const { return 0; }
         private:
-            virtual operator const r_string() const { return r_string(); }
+            explicit virtual operator const r_string() const { return r_string(); }
         public:
             virtual operator r_string() const { return r_string(); }
             virtual operator bool() const { return false; }
@@ -2006,7 +2006,9 @@ namespace intercept {
     #endif
     #pragma endregion
 
-
+        enum class register_plugin_interface_result {
+            success
+        };
 
 
     }

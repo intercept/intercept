@@ -96,5 +96,12 @@ namespace intercept {
         [[nodiscard]] types::registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
         [[nodiscard]] types::registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
         std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+
+
+        register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
+
+
+
+
     }
 }

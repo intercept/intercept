@@ -47,6 +47,7 @@ namespace intercept {
         typedef void(CDECL *mission_stopped_func)();
         typedef void(CDECL *on_frame_func)();
         typedef void(CDECL *on_signal_func)(game_value &this_);
+        typedef void(CDECL *on_interface_unload_func)(r_string name_);
 
         //!@}
 
@@ -67,6 +68,7 @@ namespace intercept {
             mission_stopped_func mission_stopped;
             on_frame_func on_frame;
             on_signal_func on_signal;
+            on_interface_unload_func on_interface_unload;
             //!@}
         };
 
@@ -168,6 +170,42 @@ namespace intercept {
             EH_STRUCT_DEF(weapon_rested);
         };
 
+
+        /*!
+        @brief This contains all information to identify a specific version of a specific plugin interface.
+        */
+        class plugin_interface_identifier {
+        public:
+            plugin_interface_identifier(r_string name_, uint32_t api_version_) : name(name_), api_version(api_version_) {}
+
+            bool operator<(const plugin_interface_identifier& other) const {
+                return name < other.name && api_version < other.api_version;
+            }
+            bool operator==(const plugin_interface_identifier& other) const {
+                return api_version == other.api_version && name == other.name;
+            }
+            const r_string name;
+            const uint32_t api_version;
+        };
+
+        /*!
+        @brief A interface exported by a plugin. Used for inter-plugin communication
+        */
+        class plugin_interface {
+        public:
+            plugin_interface(plugin_interface_identifier identifier_, void* interface_class_) : identifier(identifier_), interface_class(interface_class_){};
+
+
+            const plugin_interface_identifier identifier;
+            const std::string module_name; //name of the module that registered this interface
+            /*!
+            @brief A pointer to the interface class or struct that the plugin exposes
+            */
+            const void* interface_class;
+        };
+
+
+
         /*!
         @brief A client entry. Stores, name handles, function pointers, etc.
         */
@@ -206,6 +244,13 @@ namespace intercept {
             @brief A handle to the plugin dynamic library.
             */
             DLL_HANDLE handle;
+
+            /*!
+            @brief A list of names of exported Plugin Interfaces.
+            @note Used to keep track of exported Interfaces so we can remove them and notify other plugins about the removal then the plugin unloads.
+            @remark Uses r_string as string container because that can easily be passed over the dll boundary.
+            */
+            std::vector<plugin_interface_identifier> exported_interfaces;
         };
     }
 
@@ -256,6 +301,10 @@ namespace intercept {
         bool list(const arguments & args_, std::string & result);
         //!@}
 
+
+        register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
+
+
         /*!
         @brief Returns the map of all loaded modules.
         */
@@ -265,6 +314,13 @@ namespace intercept {
         @brief The struct that contains the functions exported to client plugins.
         */
         client_functions functions;
+
+        /*!
+        @brief A list of exported Plugin Interfaces.
+        @remark Uses r_string as string container because that can easily be passed over the dll boundary.
+        */
+        std::map<module::plugin_interface_identifier, module::plugin_interface> exported_interfaces;
+
 
         bool do_reload;
     protected:

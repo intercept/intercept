@@ -217,7 +217,7 @@ namespace intercept {
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
         return false;
-}
+    }
 
     bool extensions::unload(const arguments & args_, std::string &) {
         return do_unload(args_.as_string(0));
@@ -250,7 +250,7 @@ namespace intercept {
         LOG(INFO) << "Unload complete [" << path_ << "]";
 
         return true;
-        }
+    }
 
     bool extensions::list(const arguments &, std::string & result) {
 
@@ -267,8 +267,17 @@ namespace intercept {
         return false;
     }
 
+    register_plugin_interface_result extensions::register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
+        module::plugin_interface_identifier ident{ name_,api_version_ };
+            //#TODO check if already exists.
+        exported_interfaces.insert({ ident,{ ident , interface_class_} });
+
+
+
+    }
+
     std::unordered_map<std::string, module::entry>& extensions::modules() {
         return _modules;
     }
 
-    }
+}

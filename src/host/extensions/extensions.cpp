@@ -165,6 +165,7 @@ namespace intercept {
         new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GET_PROC_ADDR(dllHandle, "post_init"));
         new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GET_PROC_ADDR(dllHandle, "pre_init"));
         new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
+        new_module.functions.register_interfaces = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
 
     #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GET_PROC_ADDR(dllHandle, #x)
@@ -217,6 +218,10 @@ namespace intercept {
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
         _modules[path] = new_module;
+
+        if (new_module.functions.register_interfaces)
+            new_module.functions.register_interfaces();
+
         LOG(INFO) << "Load completed [" << path << "]";
         return false;
     }
@@ -232,6 +237,21 @@ namespace intercept {
             LOG(INFO) << "Unload failed, module not loaded [" << path_ << "]";
             return true;
         }
+
+        std::vector<r_string> registered_interfaces_names;
+        for (auto& iface : module->second.exported_interfaces)
+            registered_interfaces_names.push_back(iface.name);
+        registered_interfaces_names.erase(std::unique(registered_interfaces_names.begin(), registered_interfaces_names.end()), registered_interfaces_names.end());
+
+        //#TODO keep a list of what modules requested access to what interface
+        for (auto& iface_name : registered_interfaces_names) {
+            for (auto& plugin : modules()) {
+                if (plugin.second.functions.on_interface_unload) {
+                    plugin.second.functions.on_interface_unload(iface_name);
+                }
+            }
+        }
+
 
         if (module->second.functions.handle_unload) {
             module->second.functions.handle_unload();
@@ -301,6 +321,12 @@ namespace intercept {
             }
         }
         return { owning_module,std::move(ret) };
+    }
+
+    void* extensions::request_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_) {
+
+
+        return nullptr;
     }
 
     std::unordered_map<std::string, module::entry>& extensions::modules() {

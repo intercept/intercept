@@ -48,6 +48,7 @@ namespace intercept {
         typedef void(CDECL *on_frame_func)();
         typedef void(CDECL *on_signal_func)(game_value &this_);
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
+        typedef void(CDECL *register_interfaces_func)();
 
         //!@}
 
@@ -69,6 +70,7 @@ namespace intercept {
             on_frame_func on_frame;
             on_signal_func on_signal;
             on_interface_unload_func on_interface_unload;
+            register_interfaces_func register_interfaces;
             //!@}
         };
 
@@ -304,6 +306,7 @@ namespace intercept {
 
         register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
         std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
+        void* request_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_);
 
         /*!
         @brief Returns the map of all loaded modules.

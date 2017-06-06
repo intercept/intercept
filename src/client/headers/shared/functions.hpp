@@ -114,8 +114,7 @@ namespace intercept {
             //only reachable through wrapper that also passes module_name
             register_plugin_interface_result(*register_plugin_interface)(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
             std::pair<r_string, auto_array<uint32_t>>(*list_plugin_interfaces)(std::string_view name_);
-
-
+            void*(*request_plugin_interface)(std::string_view module_name_, std::string_view name_, uint32_t api_version_);
         };
     }
 }

@@ -22,6 +22,21 @@ namespace intercept {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
+        register_plugin_interface_result host::register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_) {
+            if (!interface_class_) return register_plugin_interface_result::invalid_interface_class;
+            auto result = functions.register_plugin_interface(module_name, name_, api_version_, interface_class_);
+            return result;
+        }
+        std::pair<r_string, auto_array<uint32_t>> host::list_plugin_interfaces(std::string_view name_) {
+            return functions.list_plugin_interfaces(name_);
+        }
+        std::optional<void*> host::request_plugin_interface(std::string_view name_, uint32_t api_version_) {
+            auto result = functions.request_plugin_interface(module_name,name_, api_version_);
+            if (result)
+                return result;
+            return {};
+        }
+
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
         void CDECL assign_functions(const struct client_functions funcs, r_string module_name) {
             host::functions = funcs;

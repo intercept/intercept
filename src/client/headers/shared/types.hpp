@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <stdio.h>
 #include <set>
 #include <array>
@@ -373,6 +373,7 @@ namespace intercept {
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
+                if (data() == other.data()) return true;
             #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
@@ -2015,7 +2016,8 @@ namespace intercept {
         enum class register_plugin_interface_result {
             success,
             interface_already_registered,
-            interface_name_occupied_by_other_module //Use list_plugin_interfaces(name_) to find out who registered it 
+            interface_name_occupied_by_other_module, //Use list_plugin_interfaces(name_) to find out who registered it 
+            invalid_interface_class
         };
 
 

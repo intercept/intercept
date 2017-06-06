@@ -97,5 +97,9 @@ namespace intercept {
         std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_) {
             return extensions::get().list_plugin_interfaces(name_);
         }
+
+        void* request_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_) {
+            return extensions::get().request_plugin_interface(module_name_, name_, api_version_);
+        }
     }
 }

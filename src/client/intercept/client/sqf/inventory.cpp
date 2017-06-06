@@ -1,4 +1,4 @@
-﻿#include "inventory.hpp"
+#include "inventory.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 

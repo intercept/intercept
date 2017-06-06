@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <stdio.h>
 #include <set>
 #include <array>
@@ -77,7 +77,7 @@ namespace intercept {
             static void deallocate(Type* _Ptr, size_t = 0) {
                 return __internal::rv_allocator_deallocate_generic(_Ptr);
             }
-            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called! 
+            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
             //use the create* Methods instead
             static Type* allocate(size_t _count) {
                 return reinterpret_cast<Type*>(__internal::rv_allocator_allocate_generic(sizeof(Type)*_count));
@@ -349,7 +349,7 @@ namespace intercept {
             explicit operator const char *() const { return data(); }
             operator std::string_view() const { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
-            //This calls strlen so O(N) 
+            //This calls strlen so O(N)
             size_t length() const {
                 if (!_ref) return 0;
                 return strlen(_ref->data());
@@ -373,7 +373,7 @@ namespace intercept {
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
-            #ifdef __GNUC__ 
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -1235,7 +1235,7 @@ namespace intercept {
             sqf_script_type(const script_type_info* type) {
                 single_type = type; set_vtable(type_def);
             }
-            //#TODO use type_def instead 
+            //#TODO use type_def instead
             sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) :
                 single_type(st), compound_type(ct) {
                 set_vtable(vt);
@@ -1458,7 +1458,7 @@ namespace intercept {
 
         };
 
-    #pragma region GameData Types 
+    #pragma region GameData Types
 
         class game_data_number : public game_data {
         public:

@@ -11,3 +11,4 @@ vcproj/*
 vcproj64/*
 !vcproj/.gitkeep
 .vs
+x64/*

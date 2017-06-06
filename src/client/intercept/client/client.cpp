@@ -6,6 +6,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace client {
         client_functions host::functions;
+        r_string host::module_name;
 
         registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
             return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
@@ -22,8 +23,9 @@ namespace intercept {
         }
 
         // Using __cdecl to prevent name mangling and provide better backwards compatibility
-        void CDECL assign_functions(const struct client_functions funcs) {
+        void CDECL assign_functions(const struct client_functions funcs, r_string module_name) {
             host::functions = funcs;
+            host::module_name = module_name;
 
             __sqf::__initialize();
 
@@ -108,7 +110,6 @@ namespace intercept {
 
             host::functions.get_type_structure("SQF_SCRIPT_TYPE", type_def, data_type_def);
             sqf_script_type::type_def = type_def;
-
         }
 
         void CDECL handle_unload() {

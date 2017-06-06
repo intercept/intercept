@@ -1082,7 +1082,13 @@ namespace intercept {
             virtual operator int() const { return 0; }
             virtual operator int64_t() const { return 0; }
         private:
-            explicit virtual operator const r_string() const { return r_string(); }
+            //https://stackoverflow.com/questions/19356232/why-is-explicit-not-compatible-with-virtual
+            //https://connect.microsoft.com/VisualStudio/feedback/details/805301/explicit-cannot-be-used-with-virtual
+            virtual
+            #ifndef _MSC_VER
+            explicit
+            #endif
+            operator const r_string() const { return r_string(); }
         public:
             virtual operator r_string() const { return r_string(); }
             virtual operator bool() const { return false; }
@@ -2007,7 +2013,9 @@ namespace intercept {
     #pragma endregion
 
         enum class register_plugin_interface_result {
-            success
+            success,
+            interface_already_registered,
+            interface_name_occupied_by_other_module //Use list_plugin_interfaces(name_) to find out who registered it 
         };
 
 

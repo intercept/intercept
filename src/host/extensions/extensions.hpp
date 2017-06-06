@@ -38,7 +38,7 @@ namespace intercept {
         @brief Function definitions.
         */
         typedef int(CDECL *api_version_func)();
-        typedef void(CDECL *assign_functions_func)(const struct client_functions funcs);
+        typedef void(CDECL *assign_functions_func)(const struct client_functions funcs, r_string module_name);
         typedef void(CDECL *handle_unload_func)();
         typedef void(CDECL *pre_start_func)();
         typedef void(CDECL *pre_init_func)();
@@ -184,8 +184,8 @@ namespace intercept {
             bool operator==(const plugin_interface_identifier& other) const {
                 return api_version == other.api_version && name == other.name;
             }
-            const r_string name;
-            const uint32_t api_version;
+            r_string name;
+            uint32_t api_version;
         };
 
         /*!
@@ -303,7 +303,7 @@ namespace intercept {
 
 
         register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
-
+        std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
 
         /*!
         @brief Returns the map of all loaded modules.

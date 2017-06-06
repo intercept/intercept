@@ -27,6 +27,8 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
+        functions.register_plugin_interface = client_function_defs::register_plugin_interface;
+        functions.list_plugin_interfaces = client_function_defs::list_plugin_interfaces;
 
         std::string arg_line = _searcher.get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
@@ -212,7 +214,7 @@ namespace intercept {
         EH_PROC_DEF(weapon_deployed);
         EH_PROC_DEF(weapon_rested);
 
-        new_module.functions.assign_functions(functions);
+        new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
         _modules[path] = new_module;
         LOG(INFO) << "Load completed [" << path << "]";
@@ -269,11 +271,36 @@ namespace intercept {
 
     register_plugin_interface_result extensions::register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
         module::plugin_interface_identifier ident{ name_,api_version_ };
-            //#TODO check if already exists.
+        if (exported_interfaces.find(ident) != exported_interfaces.end())
+            return register_plugin_interface_result::interface_already_registered;
+
+        auto module_with_same_name = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
+            [&module_name_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
+            return item.first.name == module_name_;
+        });
+
+
+        if (module_with_same_name != exported_interfaces.end() && //Already one interface with same name registered
+            module_with_same_name->second.module_name != module_name_ //But by a different plugin!
+            )
+            return register_plugin_interface_result::interface_name_occupied_by_other_module;
+
+        //No duplicates and module owns that interface so.. Insert it
         exported_interfaces.insert({ ident,{ ident , interface_class_} });
 
+        return register_plugin_interface_result::success;
+    }
 
-
+    std::pair<r_string, auto_array<uint32_t>> extensions::list_plugin_interfaces(std::string_view name_) {
+        auto_array<uint32_t> ret;
+        r_string owning_module;
+        for (auto& module : exported_interfaces) {
+            if (module.first.name == name_) {
+                ret.push_back(module.first.api_version);
+                owning_module = module.second.module_name;
+            }
+        }
+        return { owning_module,std::move(ret) };
     }
 
     std::unordered_map<std::string, module::entry>& extensions::modules() {

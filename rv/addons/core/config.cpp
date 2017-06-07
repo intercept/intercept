@@ -1,7 +1,7 @@
 //config.cpp
 class CfgPatches {
     class Intercept_Core {
-        name = "Intercept - Core"
+        name = "Intercept - Core";
         units[] = {};
         weapons[] = {};
         requiredVersion = 1.70;

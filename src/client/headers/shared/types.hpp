@@ -366,6 +366,11 @@ namespace intercept {
             #endif
             }
 
+            //!= is case insensitive just like scripting
+            bool operator != (const char *other) const {
+                return !(*this == other);
+            }
+
             bool operator < (const r_string& other) const {
                 if (!data()) return false; //empty?
                 return strcmp(data(), other.data()) < 0;
@@ -382,14 +387,8 @@ namespace intercept {
             #endif
             }
 
-            //!= is case insensitive just like scripting
-            bool operator != (const char *other) const {
-            #ifdef __GNUC__
-                return !std::equal(_ref->cbegin(), _ref->cend(),
-                    other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other) != 0;
-            #endif
+            bool operator != (const r_string& other) const {
+                return !(*this == other);
             }
 
             friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {

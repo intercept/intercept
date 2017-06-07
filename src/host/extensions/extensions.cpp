@@ -27,8 +27,15 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
-        functions.register_plugin_interface = client_function_defs::register_plugin_interface;
-        functions.list_plugin_interfaces = client_function_defs::list_plugin_interfaces;
+        functions.register_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
+            return extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+        };
+        functions.list_plugin_interfaces = [](std::string_view name_) {
+            return extensions::get().list_plugin_interfaces(name_);
+        };
+        functions.request_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_) {
+            return extensions::get().request_plugin_interface(module_name_, name_, api_version_);
+        };
 
         std::string arg_line = _searcher.get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
@@ -289,19 +296,19 @@ namespace intercept {
         return false;
     }
 
-    register_plugin_interface_result extensions::register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
-        module::plugin_interface_identifier ident{ name_,api_version_ };
+    register_plugin_interface_result extensions::register_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
+        module::plugin_interface_identifier ident{ name_, module_name_, api_version_ };
         if (exported_interfaces.find(ident) != exported_interfaces.end())
             return register_plugin_interface_result::interface_already_registered;
 
         auto module_with_same_name = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
-            [&module_name_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
-            return item.first.name == module_name_;
+            [&name_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
+            return item.first.name == name_;
         });
 
 
         if (module_with_same_name != exported_interfaces.end() && //Already one interface with same name registered
-            module_with_same_name->second.module_name != module_name_ //But by a different plugin!
+            module_with_same_name->first.module_name != module_name_ //But by a different plugin!
             )
             return register_plugin_interface_result::interface_name_occupied_by_other_module;
 
@@ -317,15 +324,20 @@ namespace intercept {
         for (auto& module : exported_interfaces) {
             if (module.first.name == name_) {
                 ret.push_back(module.first.api_version);
-                owning_module = module.second.module_name;
+                owning_module = module.first.module_name;
             }
         }
         return { owning_module,std::move(ret) };
     }
 
-    void* extensions::request_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_) {
-
-
+    void* extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
+        //#TODO store name as hash for faster lookups
+        auto module = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
+            [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
+            return item.first.api_version == api_version_ && item.first.name == name_;//compare cheaper stuff first
+        });
+        if (module != exported_interfaces.end())
+            return ((*module).second.interface_class);
         return nullptr;
     }
 

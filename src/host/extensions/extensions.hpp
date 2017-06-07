@@ -76,7 +76,7 @@ namespace intercept {
 
 
 
-#define EH(x) typedef void(CDECL *x##_func)
+    #define EH(x) typedef void(CDECL *x##_func)
 
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
@@ -123,7 +123,7 @@ namespace intercept {
         EH(weapon_deployed)(object &unit_, bool is_deployed_);
         EH(weapon_rested)(object &unit_, bool is_rested_);
 
-#define EH_STRUCT_DEF(x) x##_func x
+    #define EH_STRUCT_DEF(x) x##_func x
 
         struct eventhandlers_list {
             EH_STRUCT_DEF(anim_changed);
@@ -178,7 +178,8 @@ namespace intercept {
         */
         class plugin_interface_identifier {
         public:
-            plugin_interface_identifier(r_string name_, uint32_t api_version_) : name(name_), api_version(api_version_) {}
+            plugin_interface_identifier(r_string name_, r_string module_name_, uint32_t api_version_) :
+                name(name_), module_name(module_name_), api_version(api_version_) {}
 
             bool operator<(const plugin_interface_identifier& other) const {
                 return name < other.name && api_version < other.api_version;
@@ -187,6 +188,7 @@ namespace intercept {
                 return api_version == other.api_version && name == other.name;
             }
             r_string name;
+            r_string module_name; //name of the module that registered this interface
             uint32_t api_version;
         };
 
@@ -195,15 +197,14 @@ namespace intercept {
         */
         class plugin_interface {
         public:
-            plugin_interface(plugin_interface_identifier identifier_, void* interface_class_) : identifier(identifier_), interface_class(interface_class_){};
+            plugin_interface(plugin_interface_identifier identifier_, void* interface_class_) : identifier(identifier_), interface_class(interface_class_) {}
 
 
             const plugin_interface_identifier identifier;
-            const std::string module_name; //name of the module that registered this interface
             /*!
             @brief A pointer to the interface class or struct that the plugin exposes
             */
-            const void* interface_class;
+            void* const interface_class;
         };
 
 
@@ -304,9 +305,9 @@ namespace intercept {
         //!@}
 
 
-        register_plugin_interface_result register_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
+        register_plugin_interface_result register_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
         std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
-        void* request_plugin_interface(std::string_view module_name_, std::string_view name_, uint32_t api_version_);
+        void* request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_);
 
         /*!
         @brief Returns the map of all loaded modules.
@@ -334,5 +335,5 @@ namespace intercept {
 
         search::plugin_searcher _searcher;
     };
-    
+
 }

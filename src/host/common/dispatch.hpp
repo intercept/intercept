@@ -75,7 +75,7 @@ namespace intercept {
 
     class threaded_dispatcher : public dispatcher {
     public:
-        threaded_dispatcher() : _stop(false), _worker(&intercept::threaded_dispatcher::monitor, this), _message_id(0) {
+        threaded_dispatcher() : _stop(false), _message_id(0) {
  
         }
 
@@ -87,6 +87,7 @@ namespace intercept {
                 return false;
             }
             if (threaded) {
+                if (!_thread_running) start_thread();
                 std::lock_guard<std::mutex> lock(_messages_lock);
                 _messages.push(dispatch_message(name_, args_, _message_id));
                 
@@ -133,9 +134,13 @@ namespace intercept {
 		}
 
     protected:
+        void start_thread() {
+            _worker = std::thread(&intercept::threaded_dispatcher::monitor, this);
+            _thread_running = true;
+        }
         void monitor() {
             _ready = false;
-            while (!_stop) {
+            while (!_stop) {//#TODO rewrite to use condition variable
                 
 				bool empty = false;
 				{
@@ -185,6 +190,8 @@ namespace intercept {
         std::thread                     _worker;
 
         uint64_t                        _message_id;
+
+        bool                            _thread_running{false};
 
 		std::vector<std::shared_ptr<controller_module>> _modules;
     };

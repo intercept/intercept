@@ -7,26 +7,33 @@
 namespace intercept {
     template<typename T>
     class singleton {
+        // Cannot copy Singleton
+        singleton(const singleton&) = delete;
+        singleton(singleton&&) = delete;
+        singleton& operator=(const singleton&) = delete;
+        singleton& operator=(singleton&&) = delete;
     public:
-        static T & get() {
-            
-            if (_singletonInstance == nullptr) {
-                assert(_initialized == false);
-                _initialized = true;
-                _singletonInstance = new T();
-            }
-                
-            return *_singletonInstance;
+        static __forceinline T & get() noexcept {
+            return _singletonInstance;
+            //if (_singletonInstance == nullptr) {
+            //    assert(_initialized == false);
+            //    _initialized = true;
+            //    _singletonInstance = new T();
+            //}
+            //    
+            //return *_singletonInstance;
         }
         static void release() {
-            delete _singletonInstance;
+            //delete _singletonInstance;
         }
     protected:
-        static T *_singletonInstance;
+        // Can only create Singleton via get() function
+        singleton() {}
+        static T /***/_singletonInstance;
         static bool _initialized;
     };
     template<typename T>
-    T* singleton<T>::_singletonInstance = nullptr;
+    T/***/ singleton<T>::_singletonInstance/* = nullptr*/;
     template<typename T>
     bool singleton<T>::_initialized = false;
 }

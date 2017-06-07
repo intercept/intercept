@@ -22,7 +22,6 @@ namespace intercept {
         // unary__breakto__string__ret__nothing
         // unary__case__any__ret__switch
         // unary__comment__string__ret__nothing
-        // unary__compilefinal__string__ret__code
         // unary__count__array__ret__scalar
         // unary__count__string__ret__scalar
         // unary__ceil__scalar_nan__ret__scalar_nan
@@ -34,8 +33,6 @@ namespace intercept {
         // unary__floor__scalar_nan__ret__scalar_nan
         // unary__for__string__ret__for
         // unary__for__array__ret__for
-        // unary__format__array__ret__string
-        // unary__formattext__array__ret__text
         // unary__goto__string__ret__nothing
         // unary__if__bool__ret__if
         // unary__isnil__code_string__ret__bool
@@ -67,9 +64,6 @@ namespace intercept {
         // unary__sqrt__scalar_nan__ret__scalar_nan
         // unary__switch__any__ret__switch
         // unary__tan__scalar_nan__ret__scalar_nan
-        // unary__text__string__ret__text
-        // unary__textlog__any__ret__nothing
-        // unary__textlogformat__array__ret__nothing
         // unary__tg__scalar_nan__ret__scalar_nan
         // unary__throw__any__ret__nothing
         // unary__toarray__string__ret__array
@@ -85,8 +79,6 @@ namespace intercept {
 
         // binary__and__bool__bool__ret__bool
         // binary__and__bool__code__ret__bool
-        // binary__append__array__array__ret__nothing
-        // binary__arrayintersect__array__array__ret__array
         // binary__atan2__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__breakout__any__string__ret__any
         // binary__camsetdir__object__array__ret__nothing
@@ -123,14 +115,11 @@ namespace intercept {
         // binary__or__bool__code__ret__bool
         // binary__param__any__array__ret__any
         // binary__params__any__array__ret__bool
-        // binary__pushback__array__any__ret__scalar
         // binary__resize__array__scalar__ret__nothing
         // binary__select__array__scalar__ret__any
         // binary__select__array__bool__ret__any
         // binary__select__array__array__ret__array
         // binary__select__string__array__ret__string
-        // binary__set__array__array__ret__nothing
-        // binary__sort__array__bool__ret__nothing
         // binary__spawn__any__code__ret__script ------------------------------------------------------------------------
         // binary__splitstring__string__string__ret__array
         // binary__step__for__scalar__ret__for
@@ -182,12 +171,6 @@ namespace intercept {
         // nular__getdlcassetsusage__ret__array
 
         /* No documentation.*/
-        // nular__getmissiondlcs__ret__array
-
-        /* No documentation.*/
-        // nular__getmouseposition__ret__array
-
-        /* No documentation.*/
         // unary__getpersonuseddlcs__object__ret__array
         // unary__getplayerscores__object__ret__array
 
@@ -219,80 +202,7 @@ namespace intercept {
         // binary__checkvisibility__array__array__ret__scalar
 
         /* No documentation.*/
-        // binary__ctrlsetangle__control__array__ret__nothing
-
-        /* No documentation.*/
         // binary__ctrlsettextcolorsecondary__control__array__ret__nothing
-
-        /* Poor documentation.*/
-        // binary__backpackspacefor__object__string__ret__array
-
-        /* No documentation for unary calls. If these are consistent with the other tv_* fuctions, they should take int idc_ as the first argument instead of ctrl and pass it as: ({idc_, ...}) */
-        // unary__tvsort__array__ret__nothing
-        // unary__tvsortbyvalue__array__ret__nothing
-
-        /* No documentation but implemented (?) */
-        // binary__tvtooltip__control__scalar__ret__string
-
-        /* No documentation.*/
-        // unary__tvtooltip__array__ret__string
-
-        /* No documentation for this entire family of commands.*/
-        // binary__menuaction__control__array__ret__string
-        // binary__menuadd__control__array__ret__scalar
-        // binary__menuchecked__control__array__ret__bool
-        // binary__menucollapse__control__array__ret__nothing
-        // binary__menudata__control__array__ret__string
-        // binary__menudelete__control__array__ret__nothing
-        // binary__menuenable__control__array__ret__nothing
-        // binary__menuenabled__control__array__ret__bool
-        // binary__menuexpand__control__array__ret__nothing
-        // binary__menupicture__control__array__ret__string
-        // binary__menusetaction__control__array__ret__nothing
-        // binary__menusetcheck__control__array__ret__nothing
-        // binary__menusetdata__control__array__ret__nothing
-        // binary__menusetpicture__control__array__ret__nothing
-        // binary__menusetvalue__control__array__ret__nothing
-        // binary__menushortcut__control__array__ret__scalar
-        // binary__menushortcuttext__control__array__ret__string
-        // binary__menusize__control__array__ret__scalar
-        // binary__menusort__control__array__ret__nothing
-        // binary__menutext__control__array__ret__string
-        // binary__menuurl__control__array__ret__string
-        // binary__menuvalue__control__array__ret__scalar
-        // unary__menuaction__array__ret__string
-        // unary__menuadd__array__ret__scalar
-        // unary__menuchecked__array__ret__bool
-        // unary__menuclear__control__ret__nothing
-        // unary__menuclear__scalar__ret__nothing
-        // unary__menucollapse__array__ret__nothing
-        // unary__menudata__array__ret__string
-        // unary__menudelete__array__ret__nothing
-        // unary__menuenable__array__ret__nothing
-        // unary__menuenabled__array__ret__bool
-        // unary__menuexpand__array__ret__nothing
-        // unary__menuhover__control__ret__array
-        // unary__menuhover__scalar__ret__array
-        // unary__menupicture__array__ret__string
-        // unary__menusetaction__array__ret__nothing
-        // unary__menusetcheck__array__ret__nothing
-        // unary__menusetdata__array__ret__nothing
-        // unary__menusetpicture__array__ret__nothing
-        // unary__menusetvalue__array__ret__nothing
-        // unary__menushortcut__array__ret__scalar
-        // unary__menushortcuttext__array__ret__string
-        // unary__menusize__array__ret__scalar
-        // unary__menusort__array__ret__nothing
-        // unary__menutext__array__ret__string
-        // unary__menuurl__array__ret__string
-        // unary__menuvalue__array__ret__scalar
-
-        /* No documentation.*/
-        // unary__leaderboardgetrows__string__ret__array
-        // unary__leaderboardrequestrowsglobal__array__ret__bool
-        // unary__leaderboardrequestrowsglobalarounduser__array__ret__bool
-        // unary__leaderboardsrequestuploadscore__array__ret__bool
-        // unary__leaderboardsrequestuploadscorekeepbest__array__ret__bool
 
         /* No documentation.*/
         // unary__enginespowerrtd__object__ret__array
@@ -307,10 +217,6 @@ namespace intercept {
         // unary__setwinddir__array__ret__nothing
 
         /* No documentation.*/
-        // nular__missionversion__ret__scalar
-        // unary__weaponinertia__object__ret__array
-        // unary__animationnames__object__ret__array
-        // unary__animationselectionnames__object__ret__array
         // unary__call__code__ret__any
         // unary__clear3deninventory__array__ret__nothing
         // unary__tvpictureright__array__ret__string
@@ -318,13 +224,7 @@ namespace intercept {
         // unary__getdlcassetsusagebyname__string__ret__array
         // unary__getenginetargetrpmrtd__object__ret__array
         // unary__getfieldmanualstartpage__display__ret__array
-        // unary__getunitloadout__object__ret__array
-        // unary__getunitloadout__string__ret__array
         // unary__lbsettext__array__ret__string
-        // unary__registerremoteexecfunc__string__ret__bool
-        // unary__save3deninventory__array__ret__nothing
-        // unary__set3denmodelsvisible__array__ret__nothing
-        // unary__synchronizedtriggers__array__ret__array
         // binary__lnbcolorright__control__array__ret__array
         // unary__lnbcolorright__array__ret__array
         // unary__lnbpictureright__array__ret__string
@@ -344,22 +244,13 @@ namespace intercept {
         // unary__lnbsettextright__array__ret__nothing
         // binary__lnbsettextright__control__array__ret__nothing
 
-        // unary__lnbsort__array__ret__nothing
-        // binary__lnbsort__control__array__ret__nothing
-        // unary__lnbsortbyvalue__array__ret__nothing
-        // binary__lnbsortbyvalue__control__array__ret__nothing
         // unary__lnbtextright__array__ret__string
         // binary__lnbtextright__control__array__ret__string
 
         /* No documentation for return types. */
         // unary__getgroupicons__group__ret__array
-        // unary__taskchildren__task__ret__array
         // unary__taskresult__task__ret__array
-        // unary__triggeractivation__object__ret__array
-        // unary__triggerstatements__object__ret__array
-        // unary__waypointgetforcebehaviour__array__ret__string
         // unary__waypointstatements__array__ret__array
-        // unary__waypointtimeout__array__ret__array
 
         /* Wrong documentation - seems to take Array instead of String. */
         // unary__lognetwork__array__ret__scalar
@@ -375,18 +266,6 @@ namespace intercept {
         // binary__seteditorobjectscope__control__array__ret__nothing 
         // nular__benchmark__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
-
-
-
-        // TODO std::vector<float> fog_params();
-
-        // TODO std::array<float, 2> get_mouse_position();
-        // TODO std::array<float, 2> get_object_view_distance();
-
-        // TODO std::array<float, 6> get_resolution();
-
-
-        // TODO std::array<float, 6> mission_start();
 
     }
 }

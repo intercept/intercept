@@ -25,6 +25,8 @@ namespace intercept {
         game_value call(const code &code_, game_value args_);
         game_value call(const code & code_);
         code compile(sqf_string_const_ref sqf_);
+        code compile_final(sqf_string_const_ref sqf_);
+        bool is_nil(sqf_string_const_ref var_);
         sqf_return_string preprocess_file(sqf_string_const_ref value_);
         sqf_return_string preprocess_file_line_numbers(sqf_string_const_ref value_);
         sqf_return_string load_file(sqf_string_const_ref value_);

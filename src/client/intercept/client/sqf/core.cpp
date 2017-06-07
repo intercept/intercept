@@ -64,6 +64,14 @@ namespace intercept {
             return code(host::functions.invoke_raw_unary(__sqf::unary__compile__string__ret__code, sqf_));
         }
 
+        code compile_final(sqf_string_const_ref sqf_) {
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__string__ret__code, sqf_));
+        }
+
+        bool is_nil(sqf_string_const_ref var_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isnil__code_string__ret__bool, var_);
+        }
+
         sqf_return_string preprocess_file(sqf_string_const_ref value_) {
             return __helpers::__string_unary_string(__sqf::unary__preprocessfile__string__ret__string, value_);
         }

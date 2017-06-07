@@ -35,7 +35,6 @@ namespace intercept {
         // unary__for__array__ret__for
         // unary__goto__string__ret__nothing
         // unary__if__bool__ret__if
-        // unary__isnil__code_string__ret__bool
         // unary__ln__scalar_nan__ret__scalar_nan
         // unary__log__scalar_nan__ret__scalar_nan
         // unary__not__bool__ret__bool

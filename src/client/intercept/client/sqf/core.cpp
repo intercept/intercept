@@ -31,9 +31,18 @@ namespace intercept {
             isNil is executing the whole code inside it's function and it's done executing when it returns,
             which makes it suitable for us.
             */
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper");
+            if (wrapper.is_nil()) { //Can happen when executed before preInit
+                wrapper = sqf::compile("\
+                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
+                    ");
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper", static_cast<game_value>(wrapper));
+            }
+                
             host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
-                get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
+                wrapper
             );
 
             // Sadly isNil doesn't return anything so we have to grab it from a variable.
@@ -51,13 +60,28 @@ namespace intercept {
             isNil is executing the whole code inside it's function and it's done executing when it returns,
             which makes it suitable for us.
             */
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper");
+            if (wrapper.is_nil()) { //Can happen when executed before preInit
+                wrapper = sqf::compile("\
+                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
+                    ");
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper", static_cast<game_value>(wrapper));
+            }
             host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
-                get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
+                wrapper
             );
 
             // Sadly isNil doesn't return anything so we have to grab it from a variable.
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
+        }
+
+        bool is_nil_code(const code & code_) {
+            return host::functions.invoke_raw_unary(
+                __sqf::unary__isnil__code_string__ret__bool,
+                code_
+            );
         }
 
         code compile(sqf_string_const_ref sqf_) {
@@ -255,6 +279,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__exec__any__string__ret__nothing, argument_, script_);
         }
 
+        sqf_return_string str(game_value data_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__str__any__ret__string, data_);
+        }
+
 
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__display__array__ret__nothing, display_, { variable_, std::move(value_) });
@@ -266,6 +294,10 @@ namespace intercept {
 
         void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, { variable_, std::move(value_) });
+        }
+
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, { variable_, std::move(value_), public_ });
         }
 
         void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_) {

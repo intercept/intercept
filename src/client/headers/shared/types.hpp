@@ -604,7 +604,11 @@ namespace intercept {
                     _hash ^= std::hash<Type>()(it) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
                 }
                 return _hash;
-            };
+            }
+            template<typename FindType>
+            iterator find(const FindType& find_) {
+                return std::find(begin(), end(), find_);
+            }
         };
 
         template<class Type, size_t growthFactor = 32>

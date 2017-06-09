@@ -59,7 +59,6 @@ namespace intercept {
         // unary__round__scalar_nan__ret__scalar_nan
         // unary__selectrandom__array__ret__any
         // unary__sin__scalar_nan__ret__scalar_nan
-        // unary__str__any__ret__string
         // unary__sqrt__scalar_nan__ret__scalar_nan
         // unary__switch__any__ret__switch
         // unary__tan__scalar_nan__ret__scalar_nan

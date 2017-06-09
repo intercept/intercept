@@ -22,8 +22,11 @@ namespace intercept {
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
 
+        //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
         game_value call(const code & code_);
+
+        bool is_nil_code(const code & code_);
         code compile(sqf_string_const_ref sqf_);
         code compile_final(sqf_string_const_ref sqf_);
         bool is_nil(sqf_string_const_ref var_);
@@ -65,7 +68,7 @@ namespace intercept {
         int exec_fsm(const game_value &arguments_, sqf_string_const_ref file_name_);
         script exec_vm(const game_value &arguments_, sqf_string_const_ref file_name_);
         void exec(const game_value &argument_, sqf_string_const_ref script_);
-
+        sqf_return_string str(game_value data_);
 
 
 
@@ -74,6 +77,7 @@ namespace intercept {
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_);
         void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_);

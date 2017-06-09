@@ -36,6 +36,7 @@ namespace intercept {
         }
 
         bool internal_object::is_null() const {
+            //#TODO this is broken for Displays. so.. Just use virtual function
             //#TODO use GameData's isNil virtual function
             if (!data)
                 return true;

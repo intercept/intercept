@@ -186,7 +186,7 @@ namespace intercept {
 
         //3D stuff
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
-        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, sqf_string_const_ref font_ = "TahomaB");
+        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, sqf_string_const_ref font_ = "TahomaB", sqf_string_const_ref text_align_ = "center", bool draw_offscreen_ = false);
 
         /* potential namespace: particles */
         void set_particle_params(const object &particle_source_, const rv_particle_array &particle_array_);

@@ -486,7 +486,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__drawline3d__array__ret__nothing, args);
         }
 
-        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color & color_, const vector3 & pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_, float shadow_, float text_size_, sqf_string_const_ref font_) {
+        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color & color_, const vector3 & pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_, float shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref text_align_, bool draw_offscreen_) {
             game_value args({
                 texture_,
                 color_,
@@ -497,7 +497,9 @@ namespace intercept {
                 text_,
                 shadow_,
                 text_size_,
-                font_
+                font_,
+                text_align_,
+                draw_offscreen_
             });
 
             host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);

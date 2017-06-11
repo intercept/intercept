@@ -122,5 +122,8 @@ namespace intercept {
 
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
 
+        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
+        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const object& ignore2_, const vector3 &begin_pos_, const vector3 &end_pos_);
+
     }
 }

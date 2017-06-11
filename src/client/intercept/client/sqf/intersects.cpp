@@ -209,5 +209,32 @@ namespace intercept {
 
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
         }
+
+        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
+            game_value params1({
+                ignore_,
+                lodname_
+            });
+            game_value params2({
+                begin_pos_,
+                end_pos_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__checkvisibility__array__array__ret__scalar, params1, params2);
+        }
+
+        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const object& ignore2_, const vector3 &begin_pos_, const vector3 &end_pos_) {
+            game_value params1({
+                ignore_,
+                lodname_,
+                ignore2_
+            });
+            game_value params2({
+                begin_pos_,
+                end_pos_
+            });
+
+            return host::functions.invoke_raw_binary(__sqf::binary__checkvisibility__array__array__ret__scalar, params1, params2);
+        }
     }
 }

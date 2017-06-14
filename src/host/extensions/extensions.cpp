@@ -167,6 +167,7 @@ namespace intercept {
         new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GET_PROC_ADDR(dllHandle, "pre_init"));
         new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
         new_module.functions.register_interfaces = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
+        new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
 
     #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GET_PROC_ADDR(dllHandle, #x)

@@ -35,6 +35,8 @@ namespace intercept {
 
         void initialize();
 
+        static game_value client_eventhandler(game_value left_arg, game_value right_arg);
+
         static void pre_init(game_value &args_);
         static void pre_start(game_value &args_);
         static void post_init(game_value &args_);
@@ -90,6 +92,7 @@ namespace intercept {
 
     protected:
         bool _initialized;
+        registered_sqf_function _ehFunc;
     };
 
 }

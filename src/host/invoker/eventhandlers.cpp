@@ -67,7 +67,23 @@ namespace intercept {
             _initialized = true;
         }
     }
+
+    game_value eventhandlers::client_eventhandler(game_value left_arg, game_value right_arg) {
+        r_string moduleName = left_arg[0];
+        int ehType = left_arg[1];
+        uint32_t uid = static_cast<float>(left_arg[2]);
+        uint32_t handle = static_cast<float>(left_arg[3]);
+
+        for (auto& module : extensions::get().modules()) {
+            if (module.second.functions.client_eventhandler && module.second.name == static_cast<std::string_view>(moduleName)) {
+                return module.second.functions.client_eventhandler(ehType, uid, handle, right_arg);
+            }
+        }
+        return {};
+    }
+
     void eventhandlers::pre_start(game_value &) {
+        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"_sv, "Forwarder used to call functions in Intercept Plugins", userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
         LOG(INFO) << "Pre-start";
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) {

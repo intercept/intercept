@@ -110,7 +110,7 @@ namespace intercept {
         using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
         using sqf_return_string_list = std::vector<std::string>;
         using sqf_string_list_const_ref = const std::vector<std::string>&;
-        using sqf_string_const_ref = const std::string&;
+        using sqf_string_const_ref = const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
 
 

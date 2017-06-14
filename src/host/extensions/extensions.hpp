@@ -49,6 +49,7 @@ namespace intercept {
         typedef void(CDECL *on_signal_func)(game_value &this_);
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
         typedef void(CDECL *register_interfaces_func)();
+        typedef game_value(CDECL *client_eventhandler_func)(int ehType, uint32_t uid, float handle,game_value args);
 
         //!@}
 
@@ -71,6 +72,7 @@ namespace intercept {
             on_signal_func on_signal;
             on_interface_unload_func on_interface_unload;
             register_interfaces_func register_interfaces;
+            client_eventhandler_func client_eventhandler;
             //!@}
         };
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "shared.hpp"
 #include "client/client.hpp"
+#include "client/eventhandlers.hpp"
 #include "shared/functions.hpp"
 #include "client/sqf/sqf.hpp"
 #include "shared/client_types.hpp"

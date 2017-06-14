@@ -205,6 +205,8 @@ namespace intercept {
             @brief A pointer to the interface class or struct that the plugin exposes
             */
             void* const interface_class;
+            ///List of Modules that use this Interface
+            std::vector<r_string> modules_using_interface;
         };
 
 
@@ -281,12 +283,9 @@ namespace intercept {
         This handles all the initialization of a client plugin, and storing the
         results in the map of loaded clients.
         */
-        bool load(const arguments & args_, std::string & result);
+        bool load(const std::string & path_);
 
         void reload_all();
-
-        bool do_load(const std::string & path_);
-
 
 
         /*!
@@ -294,9 +293,7 @@ namespace intercept {
 
         Unloads and removes a client plugin.
         */
-        bool unload(const arguments & args_, std::string & result);
-
-        bool do_unload(const std::string & path_);
+        bool unload(const std::string & path_);
 
         /*!
         @brief Returns a list of all loaded modules to SQF.

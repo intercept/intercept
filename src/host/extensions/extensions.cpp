@@ -47,21 +47,15 @@ namespace intercept {
     }
 
     extensions::~extensions() {
-        for (auto & kv : _modules) {
-            arguments temp(kv.first);
-            std::string result_temp;
-            unload(temp, result_temp);
+        for (auto& kv : _modules) {
+            unload(kv.first);
         }
     }
 
     void extensions::attach_controller() {
         controller::get().add("list_extensions", std::bind(&extensions::list, this, std::placeholders::_1, std::placeholders::_2));
-        controller::get().add("load_extension", std::bind(&extensions::load, this, std::placeholders::_1, std::placeholders::_2));
-        controller::get().add("unload_extension", std::bind(&extensions::unload, this, std::placeholders::_1, std::placeholders::_2));
-    }
-
-    bool extensions::load(const arguments & args_, std::string &) {
-        return do_load(args_.as_string(0));
+        controller::get().add("load_extension", [this](const arguments & args_, std::string &) {return load(args_.as_string(0)); });
+        controller::get().add("unload_extension", [this](const arguments & args_, std::string &) {return unload(args_.as_string(0)); });
     }
 
     void extensions::reload_all() {
@@ -70,12 +64,12 @@ namespace intercept {
         LOG(INFO) << "Doing client DLL reload.";
         auto current_modules = _modules;
         for (auto module : current_modules) {
-            do_unload(module.first);
-            do_load(module.first);
+            unload(module.first);
+            load(module.first);
         }
     }
 
-    bool extensions::do_load(const std::string &path_) {
+    bool extensions::load(const std::string &path_) {
         std::string path = path_;
         LOG(INFO) << "Load requested [" << path_ << "]";
 
@@ -233,11 +227,7 @@ namespace intercept {
         return false;
     }
 
-    bool extensions::unload(const arguments & args_, std::string &) {
-        return do_unload(args_.as_string(0));
-    }
-
-    bool extensions::do_unload(const std::string &path_) {
+    bool extensions::unload(const std::string& path_) {
         LOG(INFO) << "Unload requested [" << path_ << "]";
         auto module = _modules.find(path_);
         if (module == _modules.end()) {
@@ -245,15 +235,20 @@ namespace intercept {
             return true;
         }
 
-        std::vector<r_string> registered_interfaces_names;
-        for (auto& iface : module->second.exported_interfaces)
-            registered_interfaces_names.push_back(iface.name);
-        registered_interfaces_names.erase(std::unique(registered_interfaces_names.begin(), registered_interfaces_names.end()), registered_interfaces_names.end());
+        std::map<r_string,std::vector<r_string>> interfaces_to_unload;
+        for (auto& iface : module->second.exported_interfaces) {
+            auto found = exported_interfaces.find(iface);
+            if (found != exported_interfaces.end())
+            interfaces_to_unload.insert({ iface.name, found->second.modules_using_interface });
+        } 
 
-        //#TODO keep a list of what modules requested access to what interface
-        for (auto& iface_name : registered_interfaces_names) {
-            for (auto& plugin : modules()) {
-                if (plugin.second.functions.on_interface_unload) {
+        for (auto& entry : interfaces_to_unload) {
+            auto& iface_name = entry.first;
+            auto& module_list = entry.second;
+            for (auto& plugin : _modules) {
+                if (!plugin.second.functions.on_interface_unload) continue;
+                auto found = std::find(module_list.begin(), module_list.end(), plugin.first);
+                if (found != module_list.end()) {
                     plugin.second.functions.on_interface_unload(iface_name);
                 }
             }
@@ -332,12 +327,14 @@ namespace intercept {
 
     void* extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
         //#TODO store name as hash for faster lookups
-        auto module = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
+        auto iface = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
             [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
             return item.first.api_version == api_version_ && item.first.name == name_;//compare cheaper stuff first
         });
-        if (module != exported_interfaces.end())
-            return ((*module).second.interface_class);
+        if (iface != exported_interfaces.end()) {
+            iface->second.modules_using_interface.push_back(module_name_);
+            return ((*iface).second.interface_class);
+        }
         return nullptr;
     }
 

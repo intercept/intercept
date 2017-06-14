@@ -4,6 +4,10 @@
 
 #pragma once
 
+#ifdef __GNUC__
+#define __forceinline __attribute__((always_inline))
+#endif
+
 namespace intercept {
     template<typename T>
     class singleton {

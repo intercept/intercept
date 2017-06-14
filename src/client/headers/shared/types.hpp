@@ -387,6 +387,16 @@ namespace intercept {
             #endif
             }
 
+            bool operator == (const std::string& other) const {
+                if (!data()) return other.empty(); //empty?
+            #ifdef __GNUC__
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            #else
+                return _strcmpi(data(), other.data()) == 0;
+            #endif
+            }
+
             bool operator != (const r_string& other) const {
                 return !(*this == other);
             }

@@ -1,4 +1,4 @@
-﻿#include "extensions.hpp"
+#include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
 #ifdef __linux__
@@ -54,8 +54,8 @@ namespace intercept {
 
     void extensions::attach_controller() {
         controller::get().add("list_extensions", std::bind(&extensions::list, this, std::placeholders::_1, std::placeholders::_2));
-        controller::get().add("load_extension", [this](const arguments & args_, std::string &) {return load(args_.as_string(0)); });
-        controller::get().add("unload_extension", [this](const arguments & args_, std::string &) {return unload(args_.as_string(0)); });
+        controller::get().add("load_extension", [this](const arguments& args_, std::string&) { return load(args_.as_string(0)); });
+        controller::get().add("unload_extension", [this](const arguments& args_, std::string&) { return unload(args_.as_string(0)); });
     }
 
     void extensions::reload_all() {
@@ -69,7 +69,7 @@ namespace intercept {
         }
     }
 
-    bool extensions::load(const std::string &path_) {
+    bool extensions::load(const std::string& path_) {
         std::string path = path_;
         LOG(INFO) << "Load requested [" << path_ << "]";
 
@@ -91,7 +91,7 @@ namespace intercept {
         if (!full_path)
             return false;
 
-    #ifndef __linux__ //Lazyness
+#ifndef __linux__  //Lazyness
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file.";
             char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
@@ -115,29 +115,29 @@ namespace intercept {
             }
             full_path = temp_filename;
         }
-    #endif
+#endif
 
-    #ifdef __linux__
+#ifdef __linux__
         auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << dlerror() << " [" << *full_path << "]";
             return false;
         }
-    #else
+#else
         auto dllHandle = LoadLibrary(full_path->c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e=" << GetLastError() << " [" << *full_path << "]";
             return false;
         }
-    #endif
+#endif
 
         auto new_module = module::entry(*full_path, dllHandle);
 
-    #ifdef __linux__
-    #define GET_PROC_ADDR dlsym
-    #else
-    #define GET_PROC_ADDR GetProcAddress
-    #endif
+#ifdef __linux__
+#define GET_PROC_ADDR dlsym
+#else
+#define GET_PROC_ADDR GetProcAddress
+#endif
 
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
@@ -170,52 +170,8 @@ namespace intercept {
         new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
 
-    #define EH_PROC_DEF(x) new_module.eventhandlers.x = (module::x##_func)GET_PROC_ADDR(dllHandle, #x)
-
-        EH_PROC_DEF(anim_changed);
-        EH_PROC_DEF(anim_done);
-        EH_PROC_DEF(anim_state_changed);
-        EH_PROC_DEF(container_closed);
-        EH_PROC_DEF(controls_shifted);
-        EH_PROC_DEF(dammaged);
-        EH_PROC_DEF(engine);
-        EH_PROC_DEF(epe_contact);
-        EH_PROC_DEF(epe_contact_end);
-        EH_PROC_DEF(epe_contact_start);
-        EH_PROC_DEF(explosion);
-        EH_PROC_DEF(fired);
-        EH_PROC_DEF(fired_near);
-        EH_PROC_DEF(fuel);
-        EH_PROC_DEF(gear);
-        EH_PROC_DEF(get_in);
-        EH_PROC_DEF(get_out);
-        EH_PROC_DEF(handle_damage);
-        EH_PROC_DEF(handle_heal);
-        EH_PROC_DEF(handle_rating);
-        EH_PROC_DEF(handle_score);
-        EH_PROC_DEF(hit);
-        EH_PROC_DEF(hit_part);
-        EH_PROC_DEF(init);
-        EH_PROC_DEF(incoming_missile);
-        EH_PROC_DEF(inventory_closed);
-        EH_PROC_DEF(inventory_opened);
-        EH_PROC_DEF(killed);
-        EH_PROC_DEF(landed_touch_down);
-        EH_PROC_DEF(landed_stopped);
-        EH_PROC_DEF(local);
-        EH_PROC_DEF(post_reset);
-        EH_PROC_DEF(put);
-        EH_PROC_DEF(respawn);
-        EH_PROC_DEF(rope_attach);
-        EH_PROC_DEF(rope_break);
-        EH_PROC_DEF(seat_switched);
-        EH_PROC_DEF(sound_played);
-        EH_PROC_DEF(take);
-        EH_PROC_DEF(task_set_as_current);
-        EH_PROC_DEF(weapon_assembled);
-        EH_PROC_DEF(weapon_disassembled);
-        EH_PROC_DEF(weapon_deployed);
-        EH_PROC_DEF(weapon_rested);
+#define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
+        EH_LIST(EH_PROC_DEF)
 
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
@@ -236,12 +192,12 @@ namespace intercept {
             return true;
         }
 
-        std::map<r_string,std::vector<r_string>> interfaces_to_unload;
+        std::map<r_string, std::vector<r_string>> interfaces_to_unload;
         for (auto& iface : module->second.exported_interfaces) {
             auto found = exported_interfaces.find(iface);
             if (found != exported_interfaces.end())
-            interfaces_to_unload.insert({ iface.name, found->second.modules_using_interface });
-        } 
+                interfaces_to_unload.insert({iface.name, found->second.modules_using_interface});
+        }
 
         for (auto& entry : interfaces_to_unload) {
             auto& iface_name = entry.first;
@@ -255,18 +211,17 @@ namespace intercept {
             }
         }
 
-
         if (module->second.functions.handle_unload) {
             module->second.functions.handle_unload();
         }
 
-    #ifdef __linux
-        if (dlclose(module->second.handle)) {//returms 0 on success
+#ifdef __linux
+        if (dlclose(module->second.handle)) {  //returms 0 on success
             LOG(INFO) << "dlclose() failed during unload, e=" << dlerror();
-        #else
+#else
         if (!FreeLibrary(module->second.handle)) {
             LOG(INFO) << "FreeLibrary() failed during unload, e=" << GetLastError();
-        #endif
+#endif
             return false;
         }
 
@@ -277,12 +232,11 @@ namespace intercept {
         return true;
     }
 
-    bool extensions::list(const arguments &, std::string & result) {
-
+    bool extensions::list(const arguments&, std::string& result) {
         LOG(INFO) << "Listing loaded modules";
         std::string res;
 
-        for (auto & kv : _modules) {
+        for (auto& kv : _modules) {
             res = res + kv.first + ", ";
             LOG(INFO) << "\t" << kv.first;
         }
@@ -293,23 +247,22 @@ namespace intercept {
     }
 
     register_plugin_interface_result extensions::register_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
-        module::plugin_interface_identifier ident{ name_, module_name_, api_version_ };
+        module::plugin_interface_identifier ident{name_, module_name_, api_version_};
         if (exported_interfaces.find(ident) != exported_interfaces.end())
             return register_plugin_interface_result::interface_already_registered;
 
         auto module_with_same_name = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
-            [&name_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
-            return item.first.name == name_;
-        });
+                                                  [&name_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
+                                                      return item.first.name == name_;
+                                                  });
 
-
-        if (module_with_same_name != exported_interfaces.end() && //Already one interface with same name registered
-            module_with_same_name->first.module_name != module_name_ //But by a different plugin!
-            )
+        if (module_with_same_name != exported_interfaces.end() &&     //Already one interface with same name registered
+            module_with_same_name->first.module_name != module_name_  //But by a different plugin!
+        )
             return register_plugin_interface_result::interface_name_occupied_by_other_module;
 
         //No duplicates and module owns that interface so.. Insert it
-        exported_interfaces.insert({ ident,{ ident , interface_class_} });
+        exported_interfaces.insert({ident, {ident, interface_class_}});
 
         return register_plugin_interface_result::success;
     }
@@ -323,15 +276,15 @@ namespace intercept {
                 owning_module = module.first.module_name;
             }
         }
-        return { owning_module,std::move(ret) };
+        return {owning_module, std::move(ret)};
     }
 
     void* extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
         //#TODO store name as hash for faster lookups
         auto iface = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
-            [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
-            return item.first.api_version == api_version_ && item.first.name == name_;//compare cheaper stuff first
-        });
+                                  [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
+                                      return item.first.api_version == api_version_ && item.first.name == name_;  //compare cheaper stuff first
+                                  });
         if (iface != exported_interfaces.end()) {
             iface->second.modules_using_interface.push_back(module_name_);
             return ((*iface).second.interface_class);
@@ -343,4 +296,4 @@ namespace intercept {
         return _modules;
     }
 
-}
+}  // namespace intercept

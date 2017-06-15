@@ -1,18 +1,18 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <fstream>
-#include <sstream>
 #include <iostream>
-#include <vector>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
-#include "shared.hpp"
-#include "controller.hpp"
-#include "logging.hpp"
-#include "invoker.hpp"
-#include "export.hpp"
 #include "client/client.hpp"
+#include "controller.hpp"
+#include "export.hpp"
 #include "extensions.hpp"
+#include "invoker.hpp"
+#include "logging.hpp"
+#include "shared.hpp"
 #include "shared/functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP
@@ -21,10 +21,9 @@ INITIALIZE_EASYLOGGINGPP
 extern "C" DLLEXPORT void __stdcall RVExtension(char *output, int outputSize, const char *function);
 #endif
 
-
 static char version[] = "1.0";
 
-std::string get_command(const std::string & input) {
+std::string get_command(const std::string &input) {
     std::string command;
 
     size_t cmd_end = input.find(':');
@@ -42,7 +41,7 @@ extern "C" void RVExtension(char *output, int outputSize, const char *function) 
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 #endif
     ZERO_OUTPUT();
-    
+
     // Get the command, then the command args
     std::string input = function;
 
@@ -62,28 +61,25 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
     if (command == "version") {
         result = version;
-    }
-    else if (command == "echo") {
+    } else if (command == "echo") {
         result = function;
-    }
-    else if (command == "async") {
+    } else if (command == "async") {
         _threaded = true;
         result = "0";
-    }
-    else if (command == "stop") {
+    } else if (command == "stop") {
         _threaded = false;
     }
 
     if (command == "init_patch") {
-    #if _WIN64 || __X86_64__
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970-0x2800);
-    #else
-    #if __linux__
+#if _WIN64 || __X86_64__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970 - 0x2800);
+#else
+#if __linux__
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x264);
-    #else
+#else
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
-    #endif
-    #endif
+#endif
+#endif
         //std::cout << "gameState " << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
@@ -97,11 +93,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     EXTENSION_RETURN();
 }
 
-
-
-
 intercept::client_functions intercept::client::host::functions;
-
 
 void Init() {
     intercept::client::host::functions = intercept::extensions::get().functions;
@@ -121,25 +113,21 @@ void Init() {
 }
 
 void Cleanup() {
-
 }
 
 #ifndef __linux__
 BOOL APIENTRY DllMain(HMODULE hModule,
-    DWORD  ul_reason_for_call,
-    LPVOID lpReserved
-    )
-{
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-        Init();
-        break;
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        Cleanup();
-        break;
+                      DWORD ul_reason_for_call,
+                      LPVOID lpReserved) {
+    switch (ul_reason_for_call) {
+        case DLL_PROCESS_ATTACH:
+            Init();
+            break;
+        case DLL_THREAD_ATTACH:
+        case DLL_THREAD_DETACH:
+        case DLL_PROCESS_DETACH:
+            Cleanup();
+            break;
     }
     return TRUE;
 }

@@ -1,20 +1,18 @@
-﻿#include "multiplayer.hpp"
+#include "multiplayer.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
         game_value remote_exec(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_) {
-            game_value params({
-                function_name_,
-                jip_id_
-            });
+            game_value params({function_name_,
+                               jip_id_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
         }
 
         game_value remote_exec(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
-            auto_array<game_value> params({ function_name_ });
+            auto_array<game_value> params({function_name_});
             switch (target_.index()) {
                 case 0: params.push_back(std::get<0>(target_)); break;
                 case 1: params.push_back(std::get<1>(target_)); break;
@@ -28,26 +26,22 @@ namespace intercept {
         }
 
         game_value remote_exec(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
+            game_value params({function_name_,
+                               targets_,
+                               jip_id_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_) {
-            game_value params({
-                function_name_,
-                jip_id_
-            });
+            game_value params({function_name_,
+                               jip_id_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
-            auto_array<game_value> params({ function_name_ });
+            auto_array<game_value> params({function_name_});
             switch (target_.index()) {
                 case 0: params.push_back(std::get<0>(target_)); break;
                 case 1: params.push_back(std::get<1>(target_)); break;
@@ -61,11 +55,9 @@ namespace intercept {
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
-            game_value params({
-                function_name_,
-                targets_,
-                jip_id_
-            });
+            game_value params({function_name_,
+                               targets_,
+                               jip_id_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
         }
@@ -91,7 +83,7 @@ namespace intercept {
                 case 2: targets = std::get<2>(targets_).get(); break;
                 case 3: targets = std::get<side>(targets_); break;
                 case 4: targets = std::get<group>(targets_); break;
-                case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
+                case 5: targets = std::move(auto_array<game_value>({std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end()})); break;
             }
 
             if (jip_.has_value()) {
@@ -102,11 +94,9 @@ namespace intercept {
                     case 3: jip = std::get<group>(*jip_); break;
                 }
             }
-            game_value params_right = game_value({
-                function_,
-                targets,
-                jip
-            });
+            game_value params_right = game_value({function_,
+                                                  targets,
+                                                  jip});
 
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexec__any__array__ret__any, params_, params_right);
         }
@@ -120,7 +110,7 @@ namespace intercept {
                 case 2: targets = std::get<2>(targets_).get(); break;
                 case 3: targets = std::get<side>(targets_); break;
                 case 4: targets = std::get<group>(targets_); break;
-                case 5: targets = std::move(auto_array<game_value>({ std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end() })); break;
+                case 5: targets = std::move(auto_array<game_value>({std::get<5>(targets_).get().begin(), std::get<5>(targets_).get().end()})); break;
             }
 
             if (jip_.has_value()) {
@@ -131,15 +121,12 @@ namespace intercept {
                     case 3: jip = std::get<group>(*jip_); break;
                 }
             }
-            game_value params_right = game_value({
-                function_,
-                targets,
-                jip
-            });
+            game_value params_right = game_value({function_,
+                                                  targets,
+                                                  jip});
 
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
-
 
         void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_) {
             host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
@@ -282,5 +269,5 @@ namespace intercept {
         bool has_interface() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__hasinterface__ret__bool);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

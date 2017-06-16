@@ -63,7 +63,6 @@ namespace intercept {
         float get_client_state_number();
         bool set_owner(const object &value0_, float value1_);
 
-
         bool is_multiplayer_solo();
         bool is_remote_executed();
         bool is_remote_executed_jip();
@@ -78,5 +77,5 @@ namespace intercept {
         int admin(int owner_id_);
         int remote_executed_owner();
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

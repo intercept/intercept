@@ -25,25 +25,24 @@ namespace intercept {
         sqf_return_string name_sound(const object &value_);
         void set_name_sound(const object &value0_, sqf_string_const_ref value1_);
         void set_speaker(const object &value0_, sqf_string_const_ref value1_);
-        void say(const object& from_, sqf_string_const_ref sound_classname_);
+        void say(const object &from_, sqf_string_const_ref sound_classname_);
         sqf_return_string pitch(const object &value_);
         void set_pitch(const object &value0_, float value1_);
 
-        void say(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
-        void say(const object& from_, const object& to_, sqf_string_const_ref sound_classname_);
-        void say(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say(const object &from_, const object &to_, sqf_string_const_ref sound_classname_);
+        void say(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
 
-        void say_2d(const object& from_, sqf_string_const_ref sound_classname_);
-        void say_2d(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
-        void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_);
-        void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_2d(const object &from_, sqf_string_const_ref sound_classname_);
+        void say_2d(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_2d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_);
+        void say_2d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
 
-        void say_3d(const object& from_, sqf_string_const_ref sound_classname_);
-        void say_3d(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
-        void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_);
-        void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_3d(const object &from_, sqf_string_const_ref sound_classname_);
+        void say_3d(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
+        void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_);
+        void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed = 1.f);
         void direct_say(const object &value0_, sqf_string_const_ref value1_);
-
 
         void play_music(sqf_string_const_ref class_);
         void play_music(sqf_string_const_ref class_, float start_);
@@ -74,5 +73,5 @@ namespace intercept {
         void remove_music_event_handler(sqf_string_const_ref type_, float id_);
         float set_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

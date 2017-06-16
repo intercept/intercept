@@ -1,6 +1,6 @@
-﻿#include "client/pointers.hpp"
-#include "common_helpers.hpp"
 #include "world.hpp"
+#include "client/pointers.hpp"
+#include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
@@ -21,20 +21,13 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__winddir__ret__scalar);
         }
         void set_wind(float x_, float y_) {
-            game_value params({
-                x_,
-                y_
-            });
+            game_value params({x_, y_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setwind__array__ret__nothing, params);
         }
 
         void set_wind(float x_, float y_, bool force_) {
-            game_value params({
-                x_,
-                y_,
-                force_
-            });
+            game_value params({x_, y_, force_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setwind__array__ret__nothing, params);
         }
@@ -103,22 +96,18 @@ namespace intercept {
         }
 
         float date_to_number(int year_, int month_, int day_, int hour_, float minute_) {
-            game_value date({
-                static_cast<float>(year_),
-                static_cast<float>(month_),
-                static_cast<float>(day_),
-                static_cast<float>(hour_),
-                minute_
-            });
+            game_value date({static_cast<float>(year_),
+                             static_cast<float>(month_),
+                             static_cast<float>(day_),
+                             static_cast<float>(hour_),
+                             minute_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__datetonumber__array__ret__scalar, date);
         }
 
         rv_date number_to_date(int year_, float time_) {
-            game_value params({
-                static_cast<float>(year_),
-                time_
-            });
+            game_value params({static_cast<float>(year_),
+                               time_});
 
             return rv_date::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__numbertodate__array__ret__array, params)));
         }
@@ -137,13 +126,11 @@ namespace intercept {
             return rv_rendering_distances::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getobjectviewdistance__ret__array)));
         }
         void set_date(int year_, int month_, int day_, int hour_, float minute_) {
-            game_value date({
-                static_cast<float>(year_),
-                static_cast<float>(month_),
-                static_cast<float>(day_),
-                static_cast<float>(hour_),
-                minute_
-            });
+            game_value date({static_cast<float>(year_),
+                             static_cast<float>(month_),
+                             static_cast<float>(day_),
+                             static_cast<float>(hour_),
+                             minute_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setdate__array__ret__nothing, date);
         }
@@ -152,12 +139,10 @@ namespace intercept {
             auto_array<game_value> typesinclude(typesinclude_.begin(), typesinclude_.end());
             auto_array<game_value> typesexclude(typesexclude_.begin(), typesexclude_.end());
 
-            game_value params({
-                std::move(typesinclude),
-                std::move(typesexclude),
-                includeCrews_,
-                excludeDead_
-            });
+            game_value params({std::move(typesinclude),
+                               std::move(typesexclude),
+                               includeCrews_,
+                               excludeDead_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__entities__array__ret__array, params));
         }
@@ -167,28 +152,24 @@ namespace intercept {
         }
 
         void set_detail_map_blend_pars(float full_detail_, float no_detail_) {
-            game_value params({
-                full_detail_,
-                no_detail_
-            });
+            game_value params({full_detail_,
+                               no_detail_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setdetailmapblendpars__array__ret__nothing, params);
         }
 
-        void simul_cloud_density(const vector3& pos_) {
+        void simul_cloud_density(const vector3 &pos_) {
             host::functions.invoke_raw_unary(__sqf::unary__simulclouddensity__array__ret__scalar, pos_);
         }
 
-        void simul_cloud_occlusion(const vector3& pos1_, const vector3& pos2_) {
-            game_value params({
-                pos1_,
-                pos2_
-            });
+        void simul_cloud_occlusion(const vector3 &pos1_, const vector3 &pos2_) {
+            game_value params({pos1_,
+                               pos2_});
 
             host::functions.invoke_raw_unary(__sqf::unary__simulcloudocclusion__array__ret__scalar, params);
         }
 
-        bool simul_in_clouds(const vector3& pos_) {
+        bool simul_in_clouds(const vector3 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__simulinclouds__array__ret__bool, pos_);
         }
 
@@ -197,7 +178,7 @@ namespace intercept {
         }
 
         void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_ ,fog_decay_, fog_base_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, {fog_value_, fog_decay_, fog_base_});
         }
 
         void set_gusts(float time_, float gusts_value_) {
@@ -237,10 +218,8 @@ namespace intercept {
         }
 
         void set_object_view_distance(float object_distance_, float shadow_distance_) {
-            game_value params({
-                object_distance_,
-                shadow_distance_
-            });
+            game_value params({object_distance_,
+                               shadow_distance_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setobjectviewdistance__array__ret__nothing, params);
         }
@@ -270,7 +249,7 @@ namespace intercept {
         }
 
         void enable_environment(bool ambient_life_, bool ambient_sound_) {
-            host::functions.invoke_raw_unary(__sqf::unary__enableenvironment__bool_array__ret__nothing, { ambient_life_, ambient_sound_ });
+            host::functions.invoke_raw_unary(__sqf::unary__enableenvironment__bool_array__ret__nothing, {ambient_life_, ambient_sound_});
         }
 
         void enable_sat_normal_on_detail(bool value_) {
@@ -304,17 +283,15 @@ namespace intercept {
         std::pair<bool, bool> environment_enabled() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__environmentenabled__ret__array);
 
-            return std::pair<bool, bool>({ res[0], res[1] });
+            return std::pair<bool, bool>({res[0], res[1]});
         }
 
         float moon_phase(int year_, int month_, int day_, int hour_, float minute_) {
-            game_value date({
-                static_cast<float>(year_),
-                static_cast<float>(month_),
-                static_cast<float>(day_),
-                static_cast<float>(hour_),
-                minute_
-            });
+            game_value date({static_cast<float>(year_),
+                             static_cast<float>(month_),
+                             static_cast<float>(day_),
+                             static_cast<float>(hour_),
+                             minute_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__moonphase__array__ret__scalar, date);
         }
@@ -325,7 +302,8 @@ namespace intercept {
 
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_) {
             if (fog_decay_.has_value() && fog_base_.has_value())
-                host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, { fog_value_, *fog_decay_, *fog_base_ }); return;
+                host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, {fog_value_, *fog_decay_, *fog_base_});
+            return;
             host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_value_);
         }
 
@@ -354,19 +332,15 @@ namespace intercept {
         }
 
         std::vector<object> near_objects(const vector3 &pos_, sqf_string_const_ref type_, float radius_) {
-            game_value args({
-                type_,
-                radius_
-            });
+            game_value args({type_,
+                             radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, pos_, args));
         }
 
         std::vector<object> near_objects(const object &object_, sqf_string_const_ref type_, float radius_) {
-            game_value args({
-                type_,
-                radius_
-            });
+            game_value args({type_,
+                             radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearobjects__object_array__scalar_array__ret__array, object_, args));
         }
@@ -409,7 +383,8 @@ namespace intercept {
 
             std::vector<rv_target> targets;
             for (size_t i = 0; i < res.size(); i++) {
-                targets.push_back(rv_target({  //#TODO make rv_target converting constructor
+                targets.push_back(rv_target({
+                    //#TODO make rv_target converting constructor
                     __helpers::__convert_to_vector3(res[i][0]),
                     res[i][1],
                     res[i][2],
@@ -427,20 +402,16 @@ namespace intercept {
         }
 
         object nearest_object(const vector3 &pos_, sqf_string_const_ref type_) {
-            game_value params({
-                pos_,
-                type_
-            });
+            game_value params({pos_,
+                               type_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
             // Same as: position nearObjects filter (where position is vector3 and filter is string) - binary__nearestobject__array__string__ret__object
         }
 
         object nearest_object(const object &obj_, sqf_string_const_ref type_) {
-            game_value params({
-                obj_,
-                type_
-            });
+            game_value params({obj_,
+                               type_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
         }
@@ -452,11 +423,9 @@ namespace intercept {
         std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value params({
-                pos_,
-                std::move(types),
-                radius_
-            });
+            game_value params({pos_,
+                               std::move(types),
+                               radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
         }
@@ -464,11 +433,9 @@ namespace intercept {
         std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value params({
-                obj_,
-                std::move(types),
-                radius_
-            });
+            game_value params({obj_,
+                               std::move(types),
+                               radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
         }
@@ -476,11 +443,9 @@ namespace intercept {
         std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value params({
-                pos_,
-                std::move(types),
-                radius_
-            });
+            game_value params({pos_,
+                               std::move(types),
+                               radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
         }
@@ -488,11 +453,9 @@ namespace intercept {
         std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value params({
-                obj_,
-                std::move(types),
-                radius_
-            });
+            game_value params({obj_,
+                               std::move(types),
+                               radius_});
 
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
         }
@@ -505,50 +468,46 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__array__scalar__ret__array, std::move(auto_array<game_value>(units_.begin(), units_.end())), height_));
         }
 
-        bool surface_is_water(const vector3& pos_) {
+        bool surface_is_water(const vector3 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfaceiswater__array__ret__bool, pos_);
         }
 
-        vector3 surface_normal(const vector3& pos_) {
+        vector3 surface_normal(const vector3 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacenormal__array__ret__array, pos_);
         }
 
-        sqf_return_string surface_type(const vector3& pos_) {
+        sqf_return_string surface_type(const vector3 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, pos_);
         }
 
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
-            game_value params({
-                obj_,
-                radius_,
-                expression_,
-                precision_,
-                max_results_
-            });
+            game_value params({obj_,
+                               radius_,
+                               expression_,
+                               precision_,
+                               max_results_});
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
             for (uint32_t i = 0; i < ret.size(); ++i)
-                best_places.push_back(rv_best_place({ ret[i] }));
+                best_places.push_back(rv_best_place({ret[i]}));
 
             return best_places;
         }
 
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
-            game_value params({
-                pos_,
-                radius_,
-                expression_,
-                precision_,
-                max_results_
-            });
+            game_value params({pos_,
+                               radius_,
+                               expression_,
+                               precision_,
+                               max_results_});
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
             for (uint32_t i = 0; i < ret.size(); ++i)
-                best_places.push_back(rv_best_place({ ret[i] }));
+                best_places.push_back(rv_best_place({ret[i]}));
 
             return best_places;
         }
@@ -566,10 +525,8 @@ namespace intercept {
         }
 
         void set_friend(const side &side1_, const side &side2_, float value_) {
-            game_value args({
-                side2_,
-                value_
-            });
+            game_value args({side2_,
+                             value_});
 
             host::functions.invoke_raw_binary(__sqf::binary__setfriend__side__array__ret__nothing, side1_, args);
         }
@@ -578,8 +535,7 @@ namespace intercept {
             return __helpers::__convert_to_objects_vector(game_value(host::functions.invoke_raw_unary(__sqf::unary__entities__string__ret__array, type_)));
         }
 
-
-        std::vector<object> units(const object& unit_) {
+        std::vector<object> units(const object &unit_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__units__object__ret__array, unit_));
         }
 
@@ -624,10 +580,8 @@ namespace intercept {
         }
 
         void set_local_wind_params(float strength_, float diameter_) {
-            game_value params({
-                strength_,
-                diameter_
-            });
+            game_value params({strength_,
+                               diameter_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setlocalwindparams__array__ret__nothing, params);
         }
@@ -636,7 +590,5 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__getelevationoffset__ret__scalar);
         }
 
-
-
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -57,8 +57,8 @@ namespace intercept {
 
         void remove_curator_addons(const object &curator_module_, sqf_string_list_const_ref addons_);
         void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
-        void set_curator_coef(const object& curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_);
-        void assign_curator(const object& player_, const object& curator_module_);
+        void set_curator_coef(const object &curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_);
+        void assign_curator(const object &player_, const object &curator_module_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

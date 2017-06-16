@@ -24,9 +24,9 @@ namespace intercept {
 
         //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
-        game_value call(const code & code_);
+        game_value call(const code &code_);
 
-        bool is_nil_code(const code & code_);
+        bool is_nil_code(const code &code_);
         code compile(sqf_string_const_ref sqf_);
         code compile_final(sqf_string_const_ref sqf_);
         bool is_nil(sqf_string_const_ref var_);
@@ -37,14 +37,14 @@ namespace intercept {
         float parse_number(bool value_);
         rv_text parse_text(sqf_string_const_ref value_);
         std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_);
-        game_value select(game_value array_, const code& code_);
+        game_value select(game_value array_, const code &code_);
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
         int push_back_unique(const std::vector<game_value> &array_, const game_value &element_);
         float random(float seed_, float x_, std::optional<float> y_);
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_);
         bool can_suspend();
-        bool is_equal_to(const object& l_, const object& r_);
+        bool is_equal_to(const object &l_, const object &r_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
         script exec_vm(sqf_string_const_ref value_);
@@ -70,8 +70,6 @@ namespace intercept {
         void exec(const game_value &argument_, sqf_string_const_ref script_);
         sqf_return_string str(game_value data_);
 
-
-
         sqf_return_string to_fixed(float number_, int decimals_);
 
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
@@ -86,18 +84,18 @@ namespace intercept {
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const display & display_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_);
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_);
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_);
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const task & task_, sqf_string_const_ref var_name_);
+        game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_);
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_);
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_);
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_);
         game_value get_variable(const task &task_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const control &control_, sqf_string_const_ref var_name_);
         game_value get_variable(const control &control_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const location & loc_, sqf_string_const_ref var_name_);
+        game_value get_variable(const location &loc_, sqf_string_const_ref var_name_);
         game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_);
 
         bool is_null(const object &value_);
@@ -142,7 +140,6 @@ namespace intercept {
         side side_ambient_life();
         side side_empty();
         sqf_return_string line_break();
-
 
         //onEvent
         void on_command_mode_changed(const code &command_);
@@ -209,9 +206,9 @@ namespace intercept {
         float player_respawn_time();
         side player_side();
         std::vector<object> switchable_units();
-        void add_switchable_unit(const object & unit_);
-        side create_center(const side & side_); //not used in A3
-        void delete_center(const side & side_);
+        void add_switchable_unit(const object &unit_);
+        side create_center(const side &side_);  //not used in A3
+        void delete_center(const side &side_);
         void disable_user_input(bool value_);
         void echo(sqf_string_const_ref value_);
         void end_mission(sqf_string_const_ref value_);
@@ -223,5 +220,5 @@ namespace intercept {
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

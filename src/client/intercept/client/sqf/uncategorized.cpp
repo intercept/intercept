@@ -1,14 +1,12 @@
-﻿#include "uncategorized.hpp"
+#include "uncategorized.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
-#include "position.hpp" //for uses of get_pos_obj. Should be removed once they are sorted
+#include "position.hpp"  //for uses of get_pos_obj. Should be removed once they are sorted
 
 using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-
-
 
         /////////////////////// DO NOT IMPLEMENT THESE FUNCTIONS /////////////////////////
         ///////// They are haram. Discuss on slack prior to removing from list. //////////
@@ -143,7 +141,6 @@ namespace intercept {
         // nular__true__ret__bool
         // unary__isnull__netobject__ret__bool
 
-
         /// INVESTIGATE
         /* No documentation. */
         // binary_dynamicsimulationdistancecoef__string__scalar__ret__nothing
@@ -255,15 +252,13 @@ namespace intercept {
 
         /* Team Member things - apparently useless. */
         // unary__teammember__object__ret__team_member
-        // binary__sendtask__team_member__array__ret__task 
-        // binary__sendtaskresult__task__array__ret__nothing 
-
-
+        // binary__sendtask__team_member__array__ret__task
+        // binary__sendtaskresult__task__array__ret__nothing
 
         /* deprecated?*/
-        // binary__seteditorobjectscope__control__array__ret__nothing 
+        // binary__seteditorobjectscope__control__array__ret__nothing
         // nular__benchmark__ret__scalar
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

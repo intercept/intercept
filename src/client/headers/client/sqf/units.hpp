@@ -37,7 +37,7 @@ namespace intercept {
 
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
         object camera_on();
-        bool can_unload_in_combat(const object & unit_);
+        bool can_unload_in_combat(const object &unit_);
 
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
 
@@ -52,18 +52,18 @@ namespace intercept {
 
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
-        sqf_return_string animation_state(const object & unit_);
-        sqf_return_string assigned_team(const object & unit_);
-        object assigned_vehicle(const object & unit_);
+        sqf_return_string animation_state(const object &unit_);
+        sqf_return_string assigned_team(const object &unit_);
+        object assigned_vehicle(const object &unit_);
 
-        bool can_fire(const object & unit_);
-        bool can_move(const object & unit_);
-        bool can_stand(const object & unit_);
-        bool captive(const object & unit_);
-        float captive_num(const object & unit_);
-        sqf_return_string current_command(const object & veh_);
-        int current_vision_mode(const object & unit_);
-        float current_zeroing(const object & gunner_);
+        bool can_fire(const object &unit_);
+        bool can_move(const object &unit_);
+        bool can_stand(const object &unit_);
+        bool captive(const object &unit_);
+        float captive_num(const object &unit_);
+        sqf_return_string current_command(const object &veh_);
+        int current_vision_mode(const object &unit_);
+        float current_zeroing(const object &gunner_);
         sqf_return_string face(const object &value_);
         sqf_return_string faction(const object &value_);
         void force_respawn(const object &value_);
@@ -109,10 +109,10 @@ namespace intercept {
 
         void remote_control(const object &controller_, const object &controlled_);
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
-        group get_group(const object &unit_); // originally "group", but is already a type
+        group get_group(const object &unit_);  // originally "group", but is already a type
         std::vector<object> group_selected_units(const object &unit_);
-        sqf_return_string_list squad_params(const object& unit_);
-        bool unit_ready(const object& unit_);
+        sqf_return_string_list squad_params(const object &unit_);
+        bool unit_ready(const object &unit_);
         sqf_return_string_list unit_addons(sqf_string_const_ref class_);
         std::vector<object> get_all_owned_mines(const object &unit_);
         void remove_all_owned_mines(const object &unit_);
@@ -131,13 +131,13 @@ namespace intercept {
         bool fire_at_target(const object &unit_, const object &target_, std::optional<std::string> muzzle_);
         vector3 get_hide_from(const object &unit_, const object &enemy_);
         std::variant<bool, float> get_unit_trait(const object &unit_, sqf_string_const_ref skill_name_);
-        void set_captive(const object& object_, bool status);
+        void set_captive(const object &object_, bool status);
         /**
         * \brief Mark a unit as captive. If unit is a vehicle, commander is marked. A captive is neutral to everyone (belong to civilian side), and will not trigger "detected by" conditions for its original side.
         * \param object_
         * \param status Using a number (instead of a boolean) for the status has no further effect on the engine's behavior, but can be used by captiveNum to keep track of the captivity status at a finer resolution (e.g. handcuffed, grouped, etc.). The numbered status syntax was introduced in Arma 2.
         */
-        void set_captive(const object& object_, float status);
+        void set_captive(const object &object_, float status);
         void set_name(const object &unit_, sqf_string_const_ref name_, sqf_string_const_ref first_name_, sqf_string_const_ref last_name_);
         void set_unit_trait(const object &unit_, sqf_string_const_ref skill_name_, std::variant<bool, float> value_, bool is_custom_);
 
@@ -204,18 +204,18 @@ namespace intercept {
         sqf_return_string speaker(const object &value_);
         sqf_return_string stance(const object &value_);
         bool stopped(const object &value_);
-        sqf_return_string unit_pos(const object &value_);//#sort
+        sqf_return_string unit_pos(const object &value_);  //#sort
         float unit_recoil_coefficient(const object &value_);
         bool weapon_lowered(const object &value_);
         void add_rating(const object &value0_, float value1_);
         void add_score(const object &value0_, float value1_);
 
         enum class team_color {
-            MAIN,   //White
-            RED,    //Red
-            GREEN,  //Green
-            BLUE,   //Blue
-            YELLOW, //Yellow
+            MAIN,    //White
+            RED,     //Red
+            GREEN,   //Green
+            BLUE,    //Blue
+            YELLOW,  //Yellow
         };
 
         void assign_team(const object &value0_, team_color team_);
@@ -240,5 +240,5 @@ namespace intercept {
         void reveal(std::variant<object, group> &unit_, const object &target_);
         void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
         float get_aiming_coef(const object &value_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

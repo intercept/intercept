@@ -1,4 +1,4 @@
-﻿#include "client/pointers.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -61,11 +61,11 @@ namespace intercept {
                 return host::functions.invoke_raw_nular(fnc_);
             }
 
-            void __empty_unary_object(unary_function fnc_, const object &obj_) {
+            void __empty_unary_object(unary_function fnc_, const object& obj_) {
                 host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            void __empty_unary_vector(unary_function fnc_, const vector3 &vec_) {
+            void __empty_unary_vector(unary_function fnc_, const vector3& vec_) {
                 host::functions.invoke_raw_unary(fnc_, vec_);
             }
 
@@ -81,11 +81,11 @@ namespace intercept {
                 host::functions.invoke_raw_unary(fnc_, val_);
             }
 
-            void __empty_unary_control(unary_function fnc_, const control &ctrl_) {
+            void __empty_unary_control(unary_function fnc_, const control& ctrl_) {
                 host::functions.invoke_raw_unary(fnc_, ctrl_);
             }
 
-            bool __bool_unary_object(unary_function fnc_, const object &obj_) {
+            bool __bool_unary_object(unary_function fnc_, const object& obj_) {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
@@ -97,7 +97,7 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, val_);
             }
 
-            bool __bool_unary_control(unary_function fnc_, const control &ctl_) {
+            bool __bool_unary_control(unary_function fnc_, const control& ctl_) {
                 return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
@@ -105,7 +105,7 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, val_);
             }
 
-            float __number_unary_control(unary_function fnc_, const control &ctl_) {
+            float __number_unary_control(unary_function fnc_, const control& ctl_) {
                 return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
@@ -113,19 +113,19 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
-            float __number_unary_location(unary_function fnc_, const location &obj_) {
+            float __number_unary_location(unary_function fnc_, const location& obj_) {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            float __number_unary_object(unary_function fnc_, const object &obj_) {
+            float __number_unary_object(unary_function fnc_, const object& obj_) {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
-            sqf_return_string __string_unary_control(unary_function fnc_, const control &ctl_) {
+            sqf_return_string __string_unary_control(unary_function fnc_, const control& ctl_) {
                 return host::functions.invoke_raw_unary(fnc_, ctl_);
             }
 
-            sqf_return_string __string_unary_object(unary_function fnc_, const object &obj_) {
+            sqf_return_string __string_unary_object(unary_function fnc_, const object& obj_) {
                 return host::functions.invoke_raw_unary(fnc_, obj_);
             }
 
@@ -133,12 +133,13 @@ namespace intercept {
                 return host::functions.invoke_raw_unary(fnc_, str_);
             }
 
-            object __object_unary_object(unary_function fnc_, const object &obj_) {
+            object __object_unary_object(unary_function fnc_, const object& obj_) {
                 return object(host::functions.invoke_raw_unary(fnc_, obj_));
             }
 
             std::vector<game_value> __convert_to_game_value_vector(game_value input_) {
                 std::vector<game_value> output;
+                output.reserve(input_.size());
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(object(input_[i]));
                 }
@@ -147,6 +148,7 @@ namespace intercept {
 
             std::vector<vector3> __convert_to_vector3_vector(game_value input_) {
                 std::vector<vector3> output;
+                output.reserve(input_.size());
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(object(input_[i]));
                 }
@@ -155,6 +157,7 @@ namespace intercept {
 
             std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;
+                output.reserve(input_.size());
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(object(input_[i]));
                 }
@@ -165,12 +168,13 @@ namespace intercept {
                 sqf_return_string_list output;
                 if (input_.type() != game_data_array::type_def) return output;
                 const auto& arr = input_.to_array();
-            #ifdef __GNUC__  //fails to find conversion to std::string
+#ifdef __GNUC__  //fails to find conversion to std::string
+                output.reserve(input_.size());
                 for (auto& it : arr)
                     output.push_back(it);
-            #else
+#else
                 output.insert(output.end(), arr.begin(), arr.end());
-            #endif
+#endif
 
                 return output;
             }
@@ -225,6 +229,7 @@ namespace intercept {
 
             std::vector<control> __convert_to_controls_vector(game_value input_) {
                 std::vector<control> output;
+                output.reserve(input_.size());
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(control(input_[i]));
                 }
@@ -275,6 +280,6 @@ namespace intercept {
             vector3 __convert_to_vector3(game_value input_) {
                 return vector3(input_[0], input_[1], input_[2]);
             }
-        }
-    }
-}
+        }  // namespace __helpers
+    }      // namespace sqf
+}  // namespace intercept

@@ -1,4 +1,4 @@
-﻿#include "group.hpp"
+#include "group.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "waypoint.hpp"
@@ -8,8 +8,8 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__combatmode__object_group__ret__string, grp_);
         }
 
-        float add_group_icon(const group& group_, sqf_string_const_ref icon_, std::optional<vector2> offset_) {
-            game_value params(offset_.has_value() ? game_value{ icon_, *offset_ } : game_value{ icon_ });
+        float add_group_icon(const group &group_, sqf_string_const_ref icon_, std::optional<vector2> offset_) {
+            game_value params(offset_.has_value() ? game_value{icon_, *offset_} : game_value{icon_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addgroupicon__group__array__ret__scalar, group_, params);
         }
@@ -28,7 +28,7 @@ namespace intercept {
 
         group create_group(const side &value_, bool delete_when_empty_) {
             if (delete_when_empty_)
-                return group(host::functions.invoke_raw_unary(__sqf::unary__creategroup__side_array__ret__group, { value_ ,delete_when_empty_ }));
+                return group(host::functions.invoke_raw_unary(__sqf::unary__creategroup__side_array__ret__group, {value_, delete_when_empty_}));
             return group(host::functions.invoke_raw_unary(__sqf::unary__creategroup__side_array__ret__group, value_));
         }
 
@@ -48,7 +48,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__groupowner__group__ret__scalar, value_);
         }
 
-        bool set_group_owner(const group & group_, int client_id_) {
+        bool set_group_owner(const group &group_, int client_id_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setgroupowner__group__scalar__ret__bool, static_cast<float>(client_id_), group_);
         }
 
@@ -56,29 +56,29 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__leader__group__ret__object, value_));
         }
 
-        void group_radio(const object & unit_, sqf_string_const_ref radio_name_) {
+        void group_radio(const object &unit_, sqf_string_const_ref radio_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__groupradio__object__string__ret__nothing, unit_, radio_name_);
         }
 
-        void remove_group_icon(const group & group_, int icon_id_) {
+        void remove_group_icon(const group &group_, int icon_id_) {
             host::functions.invoke_raw_binary(__sqf::binary__removegroupicon__group__scalar__ret__nothing, static_cast<float>(icon_id_), group_);
         }
 
-        void select_leader(const group & group_, const object & unit_) {
+        void select_leader(const group &group_, const object &unit_) {
             host::functions.invoke_raw_binary(__sqf::binary__selectleader__group__object__ret__nothing, group_, unit_);
         }
 
-        float current_waypoint(const group & group_) {
+        float current_waypoint(const group &group_) {
             return host::functions.invoke_raw_unary(__sqf::unary__currentwaypoint__group__ret__scalar, group_);
         }
 
         void set_group_icons_selectable(bool val_) {
             __helpers::__empty_unary_bool(__sqf::unary__setgroupiconsselectable__bool__ret__nothing, val_);
         }
-        void set_current_waypoint(group & gp_, waypoint & wp_) {
+        void set_current_waypoint(group &gp_, waypoint &wp_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcurrentwaypoint__group__array__ret__nothing, gp_, wp_);
         }
-        rv_group_icon_params get_group_icon_params(const group& group_) {
+        rv_group_icon_params get_group_icon_params(const group &group_) {
             return rv_group_icon_params(host::functions.invoke_raw_unary(__sqf::unary__getgroupiconparams__group__ret__array, group_));
         }
         void join(const std::vector<object> &units_, const group &group_) {
@@ -106,23 +106,19 @@ namespace intercept {
         }
 
         void join_as(const object &unit_, const group &group_, int pos_id_) {
-            game_value params({
-                group_,
-                static_cast<float>(pos_id_)
-            });
+            game_value params({group_,
+                               static_cast<float>(pos_id_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
         }
 
         void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
-            game_value params({
-                group_,
-                static_cast<float>(pos_id_)
-            });
+            game_value params({group_,
+                               static_cast<float>(pos_id_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
         }
-        std::vector<object> units(const group& gp_) {
+        std::vector<object> units(const group &gp_) {
             return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__units__group__ret__array, gp_));
         }
         side get_side(const group &group_) {
@@ -148,10 +144,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addvehicle__group__object__ret__nothing, value0_, value1_);
         }
         void set_group_icons_visible(bool map_, bool hud_) {
-            game_value params({
-                map_,
-                hud_
-            });
+            game_value params({map_,
+                               hud_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setgroupiconsvisible__array__ret__nothing, params);
         }
@@ -162,19 +156,17 @@ namespace intercept {
         rv_group_icon get_group_icon(const group &group_, int &id_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
 
-            return rv_group_icon({ res[0], vector2(res[1][0], res[1][0]) });
+            return rv_group_icon({res[0], vector2(res[1][0], res[1][0])});
         }
         void group_select_unit(const object &player_, const object &unit_, bool select_) {
-            game_value params_right({
-                unit_,
-                select_
-            });
+            game_value params_right({unit_,
+                                     select_});
 
             host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
         }
 
-        void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, { icon_id, icon_path_, offset_ });
+        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, {icon_id, icon_path_, offset_});
         }
         void set_formation(const group &group_, sqf_string_const_ref formation_) {
             host::functions.invoke_raw_binary(__sqf::binary__setformation__object_group__string__ret__nothing, group_, formation_);
@@ -185,56 +177,23 @@ namespace intercept {
         }
 
         void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, { id_,icon_,offset_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, {id_, icon_, offset_});
         }
 
         void set_group_icon_params(const group &group_, const rv_color &color_, sqf_string_const_ref text_, float scale_, bool visible_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupiconparams__group__array__ret__nothing, group_, { color_, text_,scale_,visible_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupiconparams__group__array__ret__nothing, group_, {color_, text_, scale_, visible_});
         }
 
         void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupid__object_group__array__ret__nothing, group_, { name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end())) });
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupid__object_group__array__ret__nothing, group_, {name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end()))});
         }
 
         void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, { name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end())) });
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, {name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end()))});
         }
         void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeedmode__object_group__string__ret__nothing, group_, speed_mode_);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //Teams
         team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_) {
@@ -309,5 +268,5 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setleader__team_member__team_member__ret__nothing, team_, leader_);
         }
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

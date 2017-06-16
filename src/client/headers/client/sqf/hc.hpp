@@ -28,7 +28,6 @@ namespace intercept {
             float f4;
         };
 
-
         std::vector<group> hc_selected(const object &unit_);
         std::vector<group> hc_all_groups(const object &unit_);
         void hc_remove_group(const object &value0_, const group &value1_);
@@ -37,5 +36,5 @@ namespace intercept {
         void hc_set_group(const object &unit_, const group &group_, std::optional<std::string> group_name_, std::optional<game_value> team_);
         object hc_leader(const group &value_);
         void hc_remove_all_groups(const object &value_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

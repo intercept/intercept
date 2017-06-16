@@ -38,7 +38,7 @@ namespace intercept {
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_);
 
         void enable_diag_legend(bool value_);
-        void halt(); //only in dev version - at least wiki says so
+        void halt();  //only in dev version - at least wiki says so
         void throw_exception(const game_value exception_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

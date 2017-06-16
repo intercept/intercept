@@ -1,27 +1,26 @@
-﻿#include "config.hpp"
+#include "config.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
         config_entry::config_entry() : _initialized(false) {
-
         }
         config_entry::config_entry(config entry_) : _config_entry(entry_), _initialized(true) {}
-        config_entry::config_entry(config_entry const & copy_) {
+        config_entry::config_entry(config_entry const &copy_) {
             _config_entry = copy_._config_entry;
             _initialized = copy_._initialized;
         }
-        config_entry::config_entry(config_entry && move_) noexcept {
+        config_entry::config_entry(config_entry &&move_) noexcept {
             _config_entry = std::move(move_._config_entry);
             _initialized = move_._initialized;
         }
-        config_entry & config_entry::operator=(const config_entry & copy_) {
+        config_entry &config_entry::operator=(const config_entry &copy_) {
             _config_entry = copy_._config_entry;
             _initialized = copy_._initialized;
             return *this;
         }
-        config_entry & config_entry::operator=(config_entry && move_) noexcept {
+        config_entry &config_entry::operator=(config_entry &&move_) noexcept {
             if (this == &move_)
                 return *this;
             _config_entry = std::move(move_._config_entry);
@@ -35,11 +34,9 @@ namespace intercept {
             }
             return config_entry(config(host::functions.invoke_raw_binary(__sqf::binary__configaccessor__config__string__ret__config, _config_entry, entry_)));
         }
-        config_entry::operator config&() {
+        config_entry::operator config &() {
             return _config_entry;
         }
-
-
 
         /* Config */
 
@@ -53,11 +50,9 @@ namespace intercept {
         }
 
         std::vector<config> config_properties(const config &config_entry, sqf_string_const_ref condition_, bool inherit) {
-            game_value array_entry({
-                config_entry,
-                condition_,
-                inherit
-            });
+            game_value array_entry({config_entry,
+                                    condition_,
+                                    inherit});
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__configproperties__array__ret__array, array_entry);
             return __helpers::__convert_to_configs_vector(output);
         }
@@ -149,8 +144,7 @@ namespace intercept {
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_) {
             return game_value(
-                host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, { attribute_,default_value_ })
-            );
+                host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, {attribute_, default_value_}));
         }
 
         bool is_kind_of(const object &obj_, sqf_string_const_ref type_) {
@@ -162,10 +156,8 @@ namespace intercept {
         }
 
         bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_) {
-            game_value params({
-                type2_,
-                target_config_
-            });
+            game_value params({type2_,
+                               target_config_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__array__ret__bool, type1_, params);
         }
@@ -193,17 +185,11 @@ namespace intercept {
             if (options_ & mod_params_options::active) options.push_back("active"_sv);
 
             return __helpers::__convert_to_game_value_vector(
-                host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, {
-                    mod_class_,
-                    std::move(options)
-                })
-            );
+                host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, {mod_class_, std::move(options)}));
         }
         sqf_return_string type_of(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__typeof__object__ret__string, value_);
         }
 
-
-
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

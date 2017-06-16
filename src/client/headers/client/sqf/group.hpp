@@ -25,9 +25,7 @@ namespace intercept {
             vector2 offset;
         };
         sqf_return_string combat_mode(const group &loc_);
-        float add_group_icon(const group& group_, sqf_string_const_ref icon_, std::optional<vector2> offset_ = std::optional<vector2>());
-
-
+        float add_group_icon(const group &group_, sqf_string_const_ref icon_, std::optional<vector2> offset_ = std::optional<vector2>());
 
         /* Group */
         bool group_icon_selectable();
@@ -40,16 +38,16 @@ namespace intercept {
         group group_from_net_id(sqf_string_const_ref value_);
         sqf_return_string group_id(const group &value_);
         float group_owner(const group &value_);
-        bool set_group_owner(const group & group_, int client_id_);
+        bool set_group_owner(const group &group_, int client_id_);
 
         object leader(const group &value_);
-        void group_radio(const object & unit_, sqf_string_const_ref radio_name_);
-        void remove_group_icon(const group & group_, int icon_id_);
-        void select_leader(const group & group_, const object & unit_);
-        float current_waypoint(const group & group_);
+        void group_radio(const object &unit_, sqf_string_const_ref radio_name_);
+        void remove_group_icon(const group &group_, int icon_id_);
+        void select_leader(const group &group_, const object &unit_);
+        float current_waypoint(const group &group_);
         void set_group_icons_selectable(bool val_);
 
-        void set_current_waypoint(group & gp_, waypoint & wp_);
+        void set_current_waypoint(group &gp_, waypoint &wp_);
 
         struct rv_group_icon_params {
             rv_color color;
@@ -57,14 +55,13 @@ namespace intercept {
             float scale;
             bool visible;
 
-            explicit rv_group_icon_params(const game_value &ret_game_value_) :
-                color(ret_game_value_[0]),
-                text(ret_game_value_[1]),
-                scale(ret_game_value_[2]),
-                visible(ret_game_value_[3]) {}
+            explicit rv_group_icon_params(const game_value &ret_game_value_) : color(ret_game_value_[0]),
+                                                                               text(ret_game_value_[1]),
+                                                                               scale(ret_game_value_[2]),
+                                                                               visible(ret_game_value_[3]) {}
         };
 
-        rv_group_icon_params get_group_icon_params(const group& group_);
+        rv_group_icon_params get_group_icon_params(const group &group_);
 
         void join(const std::vector<object> &units_, const group &group_);
         void join(const std::vector<object> &units_, const object &unit_group_);
@@ -73,7 +70,7 @@ namespace intercept {
         void join_as(const object &unit_, const group &group_, int pos_id_);
         void join_as_silent(const object &unit_, const group &group_, int pos_id_);
 
-        std::vector<object> units(const group& gp_);
+        std::vector<object> units(const group &gp_);
         side get_side(const group &group_);
         sqf_return_string_list all_variables(const group &value_);
         bool is_null(const group &value_);
@@ -81,15 +78,13 @@ namespace intercept {
         bool is_group_deleted_when_empty(const group &group_);
         void delete_group_when_empty(const group &group_, bool delete_);
 
-
-
         //group
         void add_vehicle(const group &value0_, const object &value1_);
         void set_group_icons_visible(bool map_, bool hud_);
         std::vector<bool> group_icons_visible();
         rv_group_icon get_group_icon(const group &group_, int &id_);
         void group_select_unit(const object &player_, const object &unit_, bool select_);
-        void set_group_icon(const group& group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
+        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
         void set_formation(const group &group_, sqf_string_const_ref formation_);
         void set_form_dir(const group &group_, float heading_);
         void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_);
@@ -97,25 +92,7 @@ namespace intercept {
         void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
         void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_);
 
-
         void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //Teams
         /* potential namespace: teams */
@@ -143,5 +120,5 @@ namespace intercept {
         void remove_team_member(const team_member &team_, const team_member &member_);
         void set_leader(const team_member &team_, const team_member &leader_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

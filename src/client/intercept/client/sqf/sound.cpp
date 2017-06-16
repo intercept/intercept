@@ -1,4 +1,4 @@
-﻿#include "sound.hpp"
+#include "sound.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -16,52 +16,52 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setspeaker__object__string__ret__nothing, value0_, value1_);
         }
 
-        void say(const object& from_, sqf_string_const_ref sound_classname_) {
+        void say(const object &from_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, from_, sound_classname_);
         }
 
-        void say(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
+        void say(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, from_, {sound_classname_, max_tiles_distance, speed});
         }
 
-        void say(const object& from_, const object& to_, sqf_string_const_ref sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
+        void say(const object &from_, const object &to_, sqf_string_const_ref sound_classname_) {
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__string__ret__nothing, {from_, to_}, sound_classname_);
         }
 
-        void say(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
+        void say(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say__object_array__array__ret__nothing, {from_, to_}, {sound_classname_, max_tiles_distance, speed});
         }
 
-        void say_2d(const object& from_, sqf_string_const_ref sound_classname_) {
+        void say_2d(const object &from_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, from_, sound_classname_);
         }
 
-        void say_2d(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
+        void say_2d(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, from_, {sound_classname_, max_tiles_distance, speed});
         }
 
-        void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
+        void say_2d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_) {
+            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__string__ret__nothing, {from_, to_}, sound_classname_);
         }
 
-        void say_2d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
+        void say_2d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say2d__object_array__array__ret__nothing, {from_, to_}, {sound_classname_, max_tiles_distance, speed});
         }
 
-        void say_3d(const object& from_, sqf_string_const_ref sound_classname_) {
+        void say_3d(const object &from_, sqf_string_const_ref sound_classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, from_, sound_classname_);
         }
 
-        void say_3d(const object& from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, { sound_classname_ ,max_tiles_distance ,speed });
+        void say_3d(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, {sound_classname_, max_tiles_distance, speed});
         }
 
-        void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, { from_, to_ }, sound_classname_);
+        void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_) {
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, {from_, to_}, sound_classname_);
         }
 
-        void say_3d(const object& from_, const object& to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, { from_, to_ }, { sound_classname_ ,max_tiles_distance ,speed });
+        void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, {from_, to_}, {sound_classname_, max_tiles_distance, speed});
         }
 
         void play_music(sqf_string_const_ref class_) {
@@ -69,10 +69,8 @@ namespace intercept {
         }
 
         void play_music(sqf_string_const_ref class_, float start_) {
-            game_value params({
-                class_,
-                start_
-            });
+            game_value params({class_,
+                               start_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playmusic__array__ret__nothing, params);
         }
@@ -82,10 +80,8 @@ namespace intercept {
         }
 
         void play_sound(sqf_string_const_ref name_, bool force_) {
-            game_value params({
-                name_,
-                force_
-            });
+            game_value params({name_,
+                               force_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound__array__ret__nothing, params);
         }
@@ -107,56 +103,46 @@ namespace intercept {
         }
 
         void play_sound_3d(sqf_string_const_ref name_, const object &source_) {
-            game_value params({
-                name_,
-                source_
-            });
+            game_value params({name_,
+                               source_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
         void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_) {
-            game_value params({
-                name_,
-                source_,
-                pos_
-            });
+            game_value params({name_,
+                               source_,
+                               pos_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
         void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_
-            });
+            game_value params({name_,
+                               source_,
+                               pos_,
+                               volume_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
         void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_,
-                pitch_
-            });
+            game_value params({name_,
+                               source_,
+                               pos_,
+                               volume_,
+                               pitch_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
         void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_) {
-            game_value params({
-                name_,
-                source_,
-                pos_,
-                volume_,
-                pitch_,
-                distance_
-            });
+            game_value params({name_,
+                               source_,
+                               pos_,
+                               volume_,
+                               pitch_,
+                               distance_});
 
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
@@ -197,7 +183,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getsoundcontrollerresult__object__config__ret__scalar, object_, config_entry_);
         }
 
-        object create_sound_source(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_/* = {}*/, float placement_/* = 0.0f*/) {
+        object create_sound_source(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /* = 0.0f*/) {
             auto_array<game_value> markers(markers_.begin(), markers_.end());
 
             game_value args({
@@ -219,37 +205,29 @@ namespace intercept {
         }
 
         float add_music_event_handler(sqf_string_const_ref type_, const code &command_) {
-            game_value params({
-                type_,
-                command_
-            });
+            game_value params({type_,
+                               command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
         }
 
         float add_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value params({
-                type_,
-                command_
-            });
+            game_value params({type_,
+                               command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
         }
 
         void remove_music_event_handler(sqf_string_const_ref type_, float id_) {
-            game_value params({
-                type_,
-                id_
-            });
+            game_value params({type_,
+                               id_});
 
             host::functions.invoke_raw_unary(__sqf::unary__removemusiceventhandler__array__ret__nothing, params);
         }
 
         float set_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value params({
-                type_,
-                command_
-            });
+            game_value params({type_,
+                               command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__setmusiceventhandler__array__ret__nothing, params);
         }
@@ -261,5 +239,5 @@ namespace intercept {
         float radio_volume() {
             return host::functions.invoke_raw_nular(__sqf::nular__radiovolume__ret__scalar);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -80,6 +80,6 @@ namespace intercept {
             std::vector<location> __convert_to_locations_vector(game_value input_);
             std::vector<task> __convert_to_tasks_vector(game_value input_);
             vector3 __convert_to_vector3(game_value input_);
-        }
-    }
-}
+        }  // namespace __helpers
+    }      // namespace sqf
+}  // namespace intercept

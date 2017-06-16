@@ -25,7 +25,7 @@ namespace intercept::client {
         display
     };
 
-    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal,int ehType, int32_t uid, float handle, intercept::types::game_value args);
+    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, intercept::types::game_value args);
 
 #pragma region Mission Eventhandlers
 
@@ -53,27 +53,27 @@ namespace intercept::client {
 
 //Name,Function return value, Function Arguments
 
-#define EHDEF_MISSION(XX)                                                           \
-    XX(Draw3D, void, EH_Func_Args_Mission_Draw3D)                                   \
-    XX(Ended, void, EH_Func_Args_Mission_Ended)                                     \
-    XX(Loaded, void, EH_Func_Args_Mission_Loaded)                                   \
-    XX(Map, void, EH_Func_Args_Mission_Map)                                         \
-    XX(HandleDisconnect, std::optional<bool>, EH_Func_Args_Mission_HandleDisconnect)               \
-    XX(EntityRespawned, void, EH_Func_Args_Mission_EntityRespawned)                 \
-    XX(EntityKilled, void, EH_Func_Args_Mission_EntityKilled)                       \
-    XX(EachFrame, void, EH_Func_Args_Mission_EachFrame)                             \
-    XX(MapSingleClick, void, EH_Func_Args_Mission_MapSingleClick)                   \
-    XX(HCGroupSelectionChanged, void, EH_Func_Args_Mission_HCGroupSelectionChanged) \
-    XX(CommandModeChanged, void, EH_Func_Args_Mission_CommandModeChanged)           \
-    XX(GroupIconClick, void, EH_Func_Args_Mission_GroupIconClick)                   \
-    XX(GroupIconOverEnter, void, EH_Func_Args_Mission_GroupIconOverEnter)           \
-    XX(GroupIconOverLeave, void, EH_Func_Args_Mission_GroupIconOverLeave)           \
-    XX(PlayerConnected, void, EH_Func_Args_Mission_PlayerConnected)                 \
-    XX(PlayerDisconnected, void, EH_Func_Args_Mission_PlayerDisconnected)           \
-    XX(TeamSwitch, void, EH_Func_Args_Mission_TeamSwitch)                           \
-    XX(PreloadStarted, void, EH_Func_Args_Mission_PreloadStarted)                   \
-    XX(PreloadFinished, void, EH_Func_Args_Mission_PreloadFinished)                 \
-    XX(PlayerViewChanged, void, EH_Func_Args_Mission_PlayerViewChanged)             \
+#define EHDEF_MISSION(XX)                                                            \
+    XX(Draw3D, void, EH_Func_Args_Mission_Draw3D)                                    \
+    XX(Ended, void, EH_Func_Args_Mission_Ended)                                      \
+    XX(Loaded, void, EH_Func_Args_Mission_Loaded)                                    \
+    XX(Map, void, EH_Func_Args_Mission_Map)                                          \
+    XX(HandleDisconnect, std::optional<bool>, EH_Func_Args_Mission_HandleDisconnect) \
+    XX(EntityRespawned, void, EH_Func_Args_Mission_EntityRespawned)                  \
+    XX(EntityKilled, void, EH_Func_Args_Mission_EntityKilled)                        \
+    XX(EachFrame, void, EH_Func_Args_Mission_EachFrame)                              \
+    XX(MapSingleClick, void, EH_Func_Args_Mission_MapSingleClick)                    \
+    XX(HCGroupSelectionChanged, void, EH_Func_Args_Mission_HCGroupSelectionChanged)  \
+    XX(CommandModeChanged, void, EH_Func_Args_Mission_CommandModeChanged)            \
+    XX(GroupIconClick, void, EH_Func_Args_Mission_GroupIconClick)                    \
+    XX(GroupIconOverEnter, void, EH_Func_Args_Mission_GroupIconOverEnter)            \
+    XX(GroupIconOverLeave, void, EH_Func_Args_Mission_GroupIconOverLeave)            \
+    XX(PlayerConnected, void, EH_Func_Args_Mission_PlayerConnected)                  \
+    XX(PlayerDisconnected, void, EH_Func_Args_Mission_PlayerDisconnected)            \
+    XX(TeamSwitch, void, EH_Func_Args_Mission_TeamSwitch)                            \
+    XX(PreloadStarted, void, EH_Func_Args_Mission_PreloadStarted)                    \
+    XX(PreloadFinished, void, EH_Func_Args_Mission_PreloadFinished)                  \
+    XX(PlayerViewChanged, void, EH_Func_Args_Mission_PlayerViewChanged)              \
     XX(BuildingChanged, void, EH_Func_Args_Mission_BuildingChanged)
 
 #define COMPILETIME_CHECK_ENUM_MISSION(name, retVal, funcArg) static_assert(eventhandlers_mission::name >= eventhandlers_mission::Draw3D);
@@ -82,16 +82,10 @@ namespace intercept::client {
 @brief Mission event handlers are specific EHs that are anchored to the running mission and automatically removed when mission is over.
 */
     enum class eventhandlers_mission {
-        /*
-        @brief Draw3D
-        */
-        Draw3D,
-        /// Ended
-        Ended,
-        /// Game loading from save event
-        Loaded,
-        /// Map open / close event
-        Map,
+        Draw3D,                  ///< Draw3D
+        Ended,                   ///< Ended
+        Loaded,                  ///< Game loading from save event
+        Map,                     ///< Map open / close event
         HandleDisconnect,        /*< Player disconnect in MP event */
         EntityRespawned,         /*< Some entity respawn event */
         EntityKilled,            /*< Some entity death event */
@@ -240,9 +234,9 @@ namespace intercept::client {
 #define EH_Func_Args_Object_FiredNear types::object unit, types::object vehicle, float distance, types::r_string weapon, types::r_string muzzle, types::r_string mode, types::r_string ammo, types::object gunner
 #define EH_Func_Args_Object_Fuel types::object vehicle, bool fuelState
 #define EH_Func_Args_Object_Gear types::object vehicle, bool gearState
-//#TODO correct type for turretPath
+    //#TODO correct type for turretPath
     enum class get_in_position {
-        driver, 
+        driver,
         gunner,
         cargo
     };
@@ -309,62 +303,62 @@ namespace intercept::client {
 #define EH_Func_Args_Object_WeaponRested types::object unit, bool isRested
 
 //Name,Function return value, Function Arguments
-#define EHDEF_OBJECT(XX)                                                 \
-    XX(AnimChanged, void, EH_Func_Args_Object_AnimChanged)               \
-    XX(AnimDone, void, EH_Func_Args_Object_AnimDone)                     \
-    XX(AnimStateChanged, void, EH_Func_Args_Object_AnimStateChanged)     \
-    XX(ContainerClosed, void, EH_Func_Args_Object_ContainerClosed)       \
-    XX(ContainerOpened, void, EH_Func_Args_Object_ContainerOpened)       \
-    XX(ControlsShifted, void, EH_Func_Args_Object_ControlsShifted)       \
-    XX(Dammaged, void, EH_Func_Args_Object_Dammaged)                     \
-    XX(Deleted, void, EH_Func_Args_Object_Deleted)                       \
-    XX(Engine, void, EH_Func_Args_Object_Engine)                         \
-    XX(EpeContact, void, EH_Func_Args_Object_EpeContact)                 \
-    XX(EpeContactEnd, void, EH_Func_Args_Object_EpeContactEnd)           \
-    XX(EpeContactStart, void, EH_Func_Args_Object_EpeContactStart)       \
-    XX(Explosion, void, EH_Func_Args_Object_Explosion)                   \
-    XX(Fired, void, EH_Func_Args_Object_Fired)                           \
-    XX(FiredMan, void, EH_Func_Args_Object_FiredMan)                     \
-    XX(FiredNear, void, EH_Func_Args_Object_FiredNear)                   \
-    XX(Fuel, void, EH_Func_Args_Object_Fuel)                             \
-    XX(Gear, void, EH_Func_Args_Object_Gear)                             \
-    XX(GetIn, void, EH_Func_Args_Object_GetIn)                           \
-    XX(GetInMan, void, EH_Func_Args_Object_GetInMan)                     \
-    XX(GetOut, void, EH_Func_Args_Object_GetOut)                         \
-    XX(GetOutMan, void, EH_Func_Args_Object_GetOutMan)                   \
-    XX(HandleDamage, std::optional<float>, EH_Func_Args_Object_HandleDamage)             \
-    XX(HandleHeal, void, EH_Func_Args_Object_HandleHeal)                 \
-    XX(HandleRating, std::optional<float>, EH_Func_Args_Object_HandleRating)             \
-    XX(HandleScore, std::optional<bool>, EH_Func_Args_Object_HandleScore)               \
-    XX(Hit, void, EH_Func_Args_Object_Hit)                               \
-    XX(HitPart, void, EH_Func_Args_Object_HitPart)                       \
-    XX(Init, void, EH_Func_Args_Object_Init)                             \
-    XX(HandleIdentity, std::optional<bool>, EH_Func_Args_Object_HandleIdentity)         \
-    XX(IncomingMissile, void, EH_Func_Args_Object_IncomingMissile)       \
-    XX(InventoryClosed, void, EH_Func_Args_Object_InventoryClosed)       \
-    XX(InventoryOpened, void, EH_Func_Args_Object_InventoryOpened)       \
-    XX(Killed, void, EH_Func_Args_Object_Killed)                         \
-    XX(LandedTouchDown, void, EH_Func_Args_Object_LandedTouchDown)       \
-    XX(LandedStopped, void, EH_Func_Args_Object_LandedStopped)           \
-    XX(Landing, void, EH_Func_Args_Object_Landing)                       \
-    XX(LandingCanceled, void, EH_Func_Args_Object_LandingCanceled)       \
-    XX(Local, void, EH_Func_Args_Object_Local)                           \
-    XX(PostReset, void, EH_Func_Args_Object_PostReset)                   \
-    XX(Put, void, EH_Func_Args_Object_Put)                               \
-    XX(Reloaded, void, EH_Func_Args_Object_Reloaded)                     \
-    XX(Respawn, void, EH_Func_Args_Object_Respawn)                       \
-    XX(RopeAttach, void, EH_Func_Args_Object_RopeAttach)                 \
-    XX(RopeBreak, void, EH_Func_Args_Object_RopeBreak)                   \
-    XX(SeatSwitched, void, EH_Func_Args_Object_SeatSwitched)             \
-    XX(SeatSwitchedMan, void, EH_Func_Args_Object_SeatSwitchedMan)       \
-    XX(SoundPlayed, void, EH_Func_Args_Object_SoundPlayed)               \
-    XX(Take, void, EH_Func_Args_Object_Take)                             \
-    XX(TaskSetAsCurrent, void, EH_Func_Args_Object_TaskSetAsCurrent)     \
-    XX(TurnIn, void, EH_Func_Args_Object_TurnIn)                         \
-    XX(TurnOut, void, EH_Func_Args_Object_TurnOut)                       \
-    XX(WeaponAssembled, void, EH_Func_Args_Object_WeaponAssembled)       \
-    XX(WeaponDisassembled, void, EH_Func_Args_Object_WeaponDisassembled) \
-    XX(WeaponDeployed, void, EH_Func_Args_Object_WeaponDeployed)         \
+#define EHDEF_OBJECT(XX)                                                        \
+    XX(AnimChanged, void, EH_Func_Args_Object_AnimChanged)                      \
+    XX(AnimDone, void, EH_Func_Args_Object_AnimDone)                            \
+    XX(AnimStateChanged, void, EH_Func_Args_Object_AnimStateChanged)            \
+    XX(ContainerClosed, void, EH_Func_Args_Object_ContainerClosed)              \
+    XX(ContainerOpened, void, EH_Func_Args_Object_ContainerOpened)              \
+    XX(ControlsShifted, void, EH_Func_Args_Object_ControlsShifted)              \
+    XX(Dammaged, void, EH_Func_Args_Object_Dammaged)                            \
+    XX(Deleted, void, EH_Func_Args_Object_Deleted)                              \
+    XX(Engine, void, EH_Func_Args_Object_Engine)                                \
+    XX(EpeContact, void, EH_Func_Args_Object_EpeContact)                        \
+    XX(EpeContactEnd, void, EH_Func_Args_Object_EpeContactEnd)                  \
+    XX(EpeContactStart, void, EH_Func_Args_Object_EpeContactStart)              \
+    XX(Explosion, void, EH_Func_Args_Object_Explosion)                          \
+    XX(Fired, void, EH_Func_Args_Object_Fired)                                  \
+    XX(FiredMan, void, EH_Func_Args_Object_FiredMan)                            \
+    XX(FiredNear, void, EH_Func_Args_Object_FiredNear)                          \
+    XX(Fuel, void, EH_Func_Args_Object_Fuel)                                    \
+    XX(Gear, void, EH_Func_Args_Object_Gear)                                    \
+    XX(GetIn, void, EH_Func_Args_Object_GetIn)                                  \
+    XX(GetInMan, void, EH_Func_Args_Object_GetInMan)                            \
+    XX(GetOut, void, EH_Func_Args_Object_GetOut)                                \
+    XX(GetOutMan, void, EH_Func_Args_Object_GetOutMan)                          \
+    XX(HandleDamage, std::optional<float>, EH_Func_Args_Object_HandleDamage)    \
+    XX(HandleHeal, void, EH_Func_Args_Object_HandleHeal)                        \
+    XX(HandleRating, std::optional<float>, EH_Func_Args_Object_HandleRating)    \
+    XX(HandleScore, std::optional<bool>, EH_Func_Args_Object_HandleScore)       \
+    XX(Hit, void, EH_Func_Args_Object_Hit)                                      \
+    XX(HitPart, void, EH_Func_Args_Object_HitPart)                              \
+    XX(Init, void, EH_Func_Args_Object_Init)                                    \
+    XX(HandleIdentity, std::optional<bool>, EH_Func_Args_Object_HandleIdentity) \
+    XX(IncomingMissile, void, EH_Func_Args_Object_IncomingMissile)              \
+    XX(InventoryClosed, void, EH_Func_Args_Object_InventoryClosed)              \
+    XX(InventoryOpened, void, EH_Func_Args_Object_InventoryOpened)              \
+    XX(Killed, void, EH_Func_Args_Object_Killed)                                \
+    XX(LandedTouchDown, void, EH_Func_Args_Object_LandedTouchDown)              \
+    XX(LandedStopped, void, EH_Func_Args_Object_LandedStopped)                  \
+    XX(Landing, void, EH_Func_Args_Object_Landing)                              \
+    XX(LandingCanceled, void, EH_Func_Args_Object_LandingCanceled)              \
+    XX(Local, void, EH_Func_Args_Object_Local)                                  \
+    XX(PostReset, void, EH_Func_Args_Object_PostReset)                          \
+    XX(Put, void, EH_Func_Args_Object_Put)                                      \
+    XX(Reloaded, void, EH_Func_Args_Object_Reloaded)                            \
+    XX(Respawn, void, EH_Func_Args_Object_Respawn)                              \
+    XX(RopeAttach, void, EH_Func_Args_Object_RopeAttach)                        \
+    XX(RopeBreak, void, EH_Func_Args_Object_RopeBreak)                          \
+    XX(SeatSwitched, void, EH_Func_Args_Object_SeatSwitched)                    \
+    XX(SeatSwitchedMan, void, EH_Func_Args_Object_SeatSwitchedMan)              \
+    XX(SoundPlayed, void, EH_Func_Args_Object_SoundPlayed)                      \
+    XX(Take, void, EH_Func_Args_Object_Take)                                    \
+    XX(TaskSetAsCurrent, void, EH_Func_Args_Object_TaskSetAsCurrent)            \
+    XX(TurnIn, void, EH_Func_Args_Object_TurnIn)                                \
+    XX(TurnOut, void, EH_Func_Args_Object_TurnOut)                              \
+    XX(WeaponAssembled, void, EH_Func_Args_Object_WeaponAssembled)              \
+    XX(WeaponDisassembled, void, EH_Func_Args_Object_WeaponDisassembled)        \
+    XX(WeaponDeployed, void, EH_Func_Args_Object_WeaponDeployed)                \
     XX(WeaponRested, void, EH_Func_Args_Object_WeaponRested)
 
 #define COMPILETIME_CHECK_ENUM_OBJECT(name, retVal, funcArg) static_assert(eventhandlers_object::name >= eventhandlers_object::AnimChanged);
@@ -653,27 +647,26 @@ namespace intercept::client {
     template <eventhandlers_object Type>
     struct __addEventHandler_Impl;
 
-#define EH_Add_Object_definition(name, retVal, fncArg)                                                                                                             \
-    template <>                                                                                                                                                     \
-    struct __addEventHandler_Impl<eventhandlers_object::name> {\
-        using fncType = std::function<retVal(fncArg)>;\
-        [[nodiscard]] static EHIdentifier add(types::object obj, std::function<retVal(fncArg)> function) {                                                                             \
-            auto ident = addScriptEH(obj, eventhandlers_object::name);                                                                                                  \
+#define EH_Add_Object_definition(name, retVal, fncArg)                                                                                                            \
+    template <>                                                                                                                                                   \
+    struct __addEventHandler_Impl<eventhandlers_object::name> {                                                                                                   \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                            \
+        [[nodiscard]] static EHIdentifier add(types::object obj, std::function<retVal(fncArg)> function) {                                                        \
+            auto ident = addScriptEH(obj, eventhandlers_object::name);                                                                                            \
             funcMapObjectEH[ident] = {eventhandlers_object::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
-            return ident;                                                                                                                                           \
-        }                                                                                                                                                           \
+            return ident;                                                                                                                                         \
+        }                                                                                                                                                         \
     };
 
     EHDEF_OBJECT(EH_Add_Object_definition)
 
-#define EH_Add_Object_fnc_definition(name, retVal, fncArg)                                                                                                             \
+#define EH_Add_Object_fnc_definition(name, retVal, fncArg) \
     //template <>                                                                                                                                                     \
     //[[nodiscard]] EHIdentifier addEventHandler<eventhandlers_object::name>(std::function<retVal(fncArg)> fnc) { return __addEventHandler_Impl<eventhandlers_object::name>::add(fnc); };
 
-       
     template <eventhandlers_object Type, typename Func = __addEventHandler_Impl<Type>::fncType>
-    [[nodiscard]] EHIdentifier addEventHandler(types::object obj, Func fnc) { return __addEventHandler_Impl<Type>::add(obj,fnc); };
-    
+    [[nodiscard]] EHIdentifier addEventHandler(types::object obj, Func fnc) { return __addEventHandler_Impl<Type>::add(obj, fnc); };
+
     EHDEF_OBJECT(EH_Add_Object_fnc_definition)
 #pragma endregion
 

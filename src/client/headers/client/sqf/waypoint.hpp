@@ -26,16 +26,16 @@ namespace intercept {
             group wgroup;
             float windex;
 
-            waypoint(const group& rv_game_value, uint32_t windex)
+            waypoint(const group &rv_game_value, uint32_t windex)
                 : wgroup(rv_game_value),
-                windex(static_cast<float>(windex)) {}
+                  windex(static_cast<float>(windex)) {}
 
-            waypoint(const game_value& from_)
+            waypoint(const game_value &from_)
                 : wgroup(group(from_[0])),
-                windex(from_[1]) {}
+                  windex(from_[1]) {}
 
             operator game_value() const {
-                return{ wgroup, windex };
+                return {wgroup, windex};
             }
 
             static const std::string __speed_lookup[4];
@@ -115,7 +115,6 @@ namespace intercept {
                 CIRCLE_L
             };
 
-
             static speed __parse_speed(sqf_string_const_ref subject_) {
                 for (size_t i = 0; i < __speed_lookup->length(); i++) {
                     if (subject_ == __speed_lookup[i]) {
@@ -194,7 +193,6 @@ namespace intercept {
             static std::string __get_enum_as_str(loiter_type subject_) {
                 return __loiter_lookup[static_cast<int>(subject_)];
             }
-
         };
         // It's ficking replaced at compile time anyway, why is this nessecary.................
         /*
@@ -215,7 +213,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/addWaypoint
         */
-        waypoint add_waypoint(group & gp_, const vector3 & center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
+        waypoint add_waypoint(group &gp_, const vector3 &center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
 
         /*!
         @brief Adds (or inserts when index is given) a new waypoint to a group.
@@ -232,7 +230,7 @@ namespace intercept {
 
         @sa         https://community.bistudio.com/wiki/addWaypoint
         */
-        waypoint add_waypoint(group & gp_, const object & center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
+        waypoint add_waypoint(group &gp_, const object &center_, float radius_, int index_ = -1, sqf_string_const_ref name_ = "");
 
         /*!
         @brief  Removes the specified waypoint.
@@ -241,10 +239,9 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/deleteWaypoint
         */
-        void delete_waypoint(waypoint & wp_);
+        void delete_waypoint(waypoint &wp_);
 
-
-        void copy_waypoints(group & to_, group & from_);
+        void copy_waypoints(group &to_, group &from_);
 
         /************************************************  GETTERS   ************************************************/
 
@@ -255,7 +252,7 @@ namespace intercept {
 
         @return Object attached to the waypoint, if any.
         */
-        object waypoint_attached_object(waypoint& wp_);
+        object waypoint_attached_object(waypoint &wp_);
 
         /*!
         @brief Gets the vehicle attached to the waypoint.
@@ -266,7 +263,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointAttachedVehicle
         */
-        object waypoint_attached_vehicle(waypoint & wp_);
+        object waypoint_attached_vehicle(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint behavior.
@@ -277,7 +274,7 @@ namespace intercept {
 
         @sa waypoint::behaviour
         */
-        waypoint::behaviour waypoint_behaviour(waypoint & wp_);
+        waypoint::behaviour waypoint_behaviour(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint combat mode.
@@ -289,7 +286,7 @@ namespace intercept {
         @sa waypoint::combat_mode
         @sa https://community.bistudio.com/wiki/2D_Editor:_Waypoints#Combat_Mode
         */
-        waypoint::combat_mode waypoint_combat_mode(waypoint & wp_);
+        waypoint::combat_mode waypoint_combat_mode(waypoint &wp_);
 
         /*!
         @brief Gets the radius around the waypoint where the waypoint is completed.
@@ -300,7 +297,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointCompletionRadius
         */
-        float waypoint_completeion_radius(waypoint & wp_);
+        float waypoint_completeion_radius(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint description.
@@ -311,7 +308,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointDescription
         */
-        sqf_return_string waypoint_description(waypoint & wp_);
+        sqf_return_string waypoint_description(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint description.
@@ -322,7 +319,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointFormation
         */
-        waypoint::formation waypoint_formation(waypoint & wp_);
+        waypoint::formation waypoint_formation(waypoint &wp_);
 
         /*!
         @brief Gets the house position assigned to the waypoint.
@@ -333,7 +330,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointHousePosition
         */
-        float waypoint_house_position(waypoint & wp_);
+        float waypoint_house_position(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint loiter radius.
@@ -344,7 +341,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointLoiterRadius
         */
-        float waypoint_loiter_radius(waypoint & wp_);
+        float waypoint_loiter_radius(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint loiter type.
@@ -355,7 +352,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointLoiterType
         */
-        waypoint::loiter_type waypoint_loiter_type(waypoint & wp_);
+        waypoint::loiter_type waypoint_loiter_type(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint name.
@@ -366,7 +363,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointName
         */
-        sqf_return_string waypoint_name(waypoint & wp_);
+        sqf_return_string waypoint_name(waypoint &wp_);
 
         /*!
         @brief Get Waypoint's Position.
@@ -377,7 +374,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointPosition
         */
-        vector3 waypoint_position(waypoint & wp_);
+        vector3 waypoint_position(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint script.
@@ -388,7 +385,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointScript
         */
-        sqf_return_string waypoint_script(waypoint & wp_);
+        sqf_return_string waypoint_script(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint show/hide status.
@@ -399,7 +396,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointShow
         */
-        waypoint::show waypoint_show(waypoint & wp_);
+        waypoint::show waypoint_show(waypoint &wp_);
 
         /*!
         @brief Gets the waypoint movement speed.
@@ -410,7 +407,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointSpeed
         */
-        waypoint::speed waypoint_speed(waypoint & wp_);
+        waypoint::speed waypoint_speed(waypoint &wp_);
         // TODO waypoint_statements needs struct for return value
         // TODO waypoint_timeout needs struct for return value
 
@@ -423,7 +420,7 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointType
         */
-        waypoint::type waypoint_type(waypoint & wp_);
+        waypoint::type waypoint_type(waypoint &wp_);
 
         /*!
         @brief Returns the visibility of the waypoint.
@@ -434,43 +431,42 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointVisible
         */
-        bool waypoint_visible(waypoint & wp_);
+        bool waypoint_visible(waypoint &wp_);
 
-        std::vector<waypoint> synchronized_waypoints(waypoint & wp_);
-        std::vector<waypoint> synchronized_waypoints(object & obj_);
+        std::vector<waypoint> synchronized_waypoints(waypoint &wp_);
+        std::vector<waypoint> synchronized_waypoints(object &obj_);
 
-        void set_waypoint_behaviour(waypoint & wp_, waypoint::behaviour mode_);
-        void set_waypoint_combat_mode(waypoint & wp_, waypoint::combat_mode mode_);
-        void set_waypoint_completion_radius(waypoint & wp_, float radius_);
-        void set_waypoint_description(waypoint & wp_, std::string & text_);
-        void set_waypoint_formation(waypoint & wp_, waypoint::formation formation_);
-        void set_waypoint_house_position(waypoint & wp_, float house_pos_);
-        void set_waypoint_loiter_radius(waypoint & wp_, float radius_);
-        void set_waypoint_loiter_type(waypoint & wp_, waypoint::loiter_type type_);
-        void set_waypoint_name(waypoint & wp_, std::string & name_);
-        void set_waypoint_position(waypoint & wp_, vector3 & pos_, float radius_);
-        void set_waypoint_script(waypoint & wp_, std::string & command_);
-        void set_waypoint_speed(waypoint& wp_, waypoint::speed mode_);
-        void set_waypoint_statements(waypoint& wp_, std::string condition_, std::string statement_);
-        void set_waypoint_timeout(waypoint& wp_, float min_, float mid_, float max_);
-        void set_waypoint_type(waypoint& wp_, waypoint::type type_);
-        void set_waypoint_visible(waypoint& wp_, bool visibility_);
+        void set_waypoint_behaviour(waypoint &wp_, waypoint::behaviour mode_);
+        void set_waypoint_combat_mode(waypoint &wp_, waypoint::combat_mode mode_);
+        void set_waypoint_completion_radius(waypoint &wp_, float radius_);
+        void set_waypoint_description(waypoint &wp_, std::string &text_);
+        void set_waypoint_formation(waypoint &wp_, waypoint::formation formation_);
+        void set_waypoint_house_position(waypoint &wp_, float house_pos_);
+        void set_waypoint_loiter_radius(waypoint &wp_, float radius_);
+        void set_waypoint_loiter_type(waypoint &wp_, waypoint::loiter_type type_);
+        void set_waypoint_name(waypoint &wp_, std::string &name_);
+        void set_waypoint_position(waypoint &wp_, vector3 &pos_, float radius_);
+        void set_waypoint_script(waypoint &wp_, std::string &command_);
+        void set_waypoint_speed(waypoint &wp_, waypoint::speed mode_);
+        void set_waypoint_statements(waypoint &wp_, std::string condition_, std::string statement_);
+        void set_waypoint_timeout(waypoint &wp_, float min_, float mid_, float max_);
+        void set_waypoint_type(waypoint &wp_, waypoint::type type_);
+        void set_waypoint_visible(waypoint &wp_, bool visibility_);
 
-        void show_waypoint(waypoint& wp_, std::string & show_);
+        void show_waypoint(waypoint &wp_, std::string &show_);
 
-        void synchronize_waypoint(waypoint& wp_, const std::vector<waypoint> & others_);
-        void synchronize_waypoint(object& trigger_, const std::vector<waypoint> & others_);
+        void synchronize_waypoint(waypoint &wp_, const std::vector<waypoint> &others_);
+        void synchronize_waypoint(object &trigger_, const std::vector<waypoint> &others_);
 
-        void waypoint_attach_object(waypoint& wp_, int obj_id_);
-        void waypoint_attach_object(waypoint& wp_, object & obj_);
+        void waypoint_attach_object(waypoint &wp_, int obj_id_);
+        void waypoint_attach_object(waypoint &wp_, object &obj_);
 
         void show_waypoints(bool enabled_);
         bool waypoint_force_behaviour(const group &group_, int index_);
         void set_waypoint_force_behaviour(const group &group_, int index_, bool force_);
         float waypoint_timeout_current(const group &value_);
         bool waypoints_enabled_uav(const object &value_);
-        void enable_uav_waypoints(object & uav_, bool enable_);
-
+        void enable_uav_waypoints(object &uav_, bool enable_);
 
         void set_wp_pos(const group &group_, int index_, const vector2 &position_);
         vector3 get_wp_pos(const group &group_, int index_);
@@ -484,11 +480,6 @@ namespace intercept {
 
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_);
 
-
-
-
-
-
         //TRIGGERS
         //Triggers
 
@@ -497,17 +488,16 @@ namespace intercept {
             float y;
             float angle;
             bool rectangle;
-            float z; // since Arma 3 v1.59.135137
+            float z;  // since Arma 3 v1.59.135137
 
-            rv_trigger_area(const game_value &ret_game_value_) :
-                x(ret_game_value_[0]),
-                y(ret_game_value_[1]),
-                angle(ret_game_value_[2]),
-                rectangle(ret_game_value_[3]),
-                z(ret_game_value_[4]) {}
+            rv_trigger_area(const game_value &ret_game_value_) : x(ret_game_value_[0]),
+                                                                 y(ret_game_value_[1]),
+                                                                 angle(ret_game_value_[2]),
+                                                                 rectangle(ret_game_value_[3]),
+                                                                 z(ret_game_value_[4]) {}
         };
 
-        rv_trigger_area trigger_area(const object& trigger_);
+        rv_trigger_area trigger_area(const object &trigger_);
 
         struct rv_trigger_timeout {
             float time_min;
@@ -515,16 +505,15 @@ namespace intercept {
             float time_max;
             bool interruptable;
 
-            rv_trigger_timeout(const game_value &ret_game_value_) :
-                time_min(ret_game_value_[0]),
-                time_mid(ret_game_value_[1]),
-                time_max(ret_game_value_[2]),
-                interruptable(ret_game_value_[3]) {}
+            rv_trigger_timeout(const game_value &ret_game_value_) : time_min(ret_game_value_[0]),
+                                                                    time_mid(ret_game_value_[1]),
+                                                                    time_max(ret_game_value_[2]),
+                                                                    interruptable(ret_game_value_[3]) {}
         };
 
-        rv_trigger_timeout trigger_timeout(const object& trigger_);
+        rv_trigger_timeout trigger_timeout(const object &trigger_);
 
-        std::vector<object> list(const object& trigger_);
+        std::vector<object> list(const object &trigger_);
         void trigger_attach_object(const object &value0_, float value1_);
         void set_trigger_text(const object &value0_, sqf_string_const_ref value1_);
         void set_trigger_type(const object &value0_, sqf_string_const_ref value1_);
@@ -543,7 +532,6 @@ namespace intercept {
         void synchronize_trigger(const object &trigger_, const std::vector<waypoint> &waypoints_);
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
 
-
         //both
         void set_music_effect(const object &trigger_, sqf_string_const_ref track_);
         void set_music_effect(const group &group_, int index_, sqf_string_const_ref track_);
@@ -552,5 +540,5 @@ namespace intercept {
         void set_title_effect(const object &trigger_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
         void set_title_effect(const group &group_, int index_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

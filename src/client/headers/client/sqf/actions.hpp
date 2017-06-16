@@ -21,7 +21,7 @@ namespace intercept {
     namespace sqf {
         sqf_return_string_list action_keys(sqf_string_const_ref user_action_);
 
-        std::vector<float> action_ids(const object& entity_);
+        std::vector<float> action_ids(const object &entity_);
         float input_action(sqf_string_const_ref value_);
 
         rv_text action_keys_images(sqf_string_const_ref user_action_);
@@ -45,6 +45,5 @@ namespace intercept {
         rv_action_params action_params(const object &entity_, int id_);
         void set_user_action_text(const object &object_, int action_index_, std::variant<std::string, rv_text> text_menu_, std::variant<std::string, rv_text> text_window_background_, std::variant<std::string, rv_text> text_window_foreground_);
 
-
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -1,5 +1,5 @@
-#include "eventhandlers.hpp"
 #include <random>
+#include "eventhandlers.hpp"
 #include "sqf.hpp"
 
 namespace intercept::client {
@@ -12,11 +12,15 @@ namespace intercept::client {
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::object: {
-                auto found = funcMapObjectEH.find({ uid, handle });
+                auto found = funcMapObjectEH.find({uid, handle});
                 if (found != funcMapObjectEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::display: break;
+            case eventhandler_type::display: {
+                auto found = funcMapCtrlEH.find({ uid, handle });
+                if (found != funcMapCtrlEH.end())
+                    retVal = callEHHandler(found->second.first, args, found->second.second);
+            } break;
             default:;
         }
         return;
@@ -89,10 +93,39 @@ namespace intercept::client {
                               + "_thisEventHandler"
                               + "]"
                               + " InterceptClientEvent _this";
-        float ehid = intercept::sqf::add_event_handler(obj,static_cast<sqf_string>(typeStr), command);
+        float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid};
     }
 #pragma endregion
 
+#pragma region Ctrl Eventhandlers
+    std::unordered_map<EHIdentifier, std::pair<eventhandlers_ctrl, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapCtrlEH;
+    EHIdentifier addScriptEH(types::control ctrl, eventhandlers_ctrl type) {
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+
+        r_string typeStr;
+        //#TODO eachFrame is just redirector to InvokePeriod.
+        switch (type) {
+#define EHCTRL_CASE(name, retVal, args) \
+    case eventhandlers_ctrl::name: typeStr = #name##_sv; break;
+            EHDEF_CTRL(EHCTRL_CASE)
+            default:;
+        }
+
+        auto uid = dist(rng);
+        //#TODO use hash of moduleName as identifier.. That's faster..
+        std::string command = std::string("[\"")
+                              + intercept::client::host::module_name.data() + "\","
+                              + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
+                              + std::to_string(uid) + ","
+                              + "_thisEventHandler"
+                              + "]"
+                              + " InterceptClientEvent _this";
+        float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
+
+        return {uid, ehid};
+    }
+#pragma endregion
 }  // namespace intercept::client

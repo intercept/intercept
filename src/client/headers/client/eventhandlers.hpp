@@ -7,22 +7,46 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include <functional>
-#include <type_traits>
 #include "../shared/client_types.hpp"
+#include <functional>
 namespace intercept::client {
 
     enum class loaded_saveType {
-        save,         /// custom save, achieved by pressing SAVE button in the pause menu
-        autosave,     /// automatic checkpoint, saved using saveGame command
-        continuesave  /// saved when leaving a mission to the main menu
+        save,         ///< custom save, achieved by pressing SAVE button in the pause menu
+        autosave,     ///< automatic checkpoint, saved using saveGame command
+        continuesave  ///< saved when leaving a mission to the main menu
     };
 
     using EHIdentifier = std::pair<int32_t, float>;
+
+    struct EHIdentifier_hasher {
+        size_t operator()(const intercept::client::EHIdentifier& x) const {
+            return intercept::types::__internal::pairhash(x.first, x.second);
+        }
+    };
+
+    class EHIdentifierHandle {
+    public:
+        EHIdentifierHandle(EHIdentifier ident, std::function<void(EHIdentifier&)> onDelete) : handle(std::make_shared<impl>(std::move(ident), std::move(onDelete))) {}
+
+    private:
+        class impl {
+        public:
+            impl(EHIdentifier&& ident_, std::function<void(EHIdentifier&)>&& onDelete_) : ident(ident_), onDelete(onDelete_) {}
+            EHIdentifier ident;
+            std::function<void(EHIdentifier&)> onDelete;
+            ~impl() {
+                onDelete(ident);
+            }
+        };
+        std::shared_ptr<impl> handle;
+    };
+
     enum class eventhandler_type {
         mission,
         object,
-        display
+        display,
+        ctrl
     };
 
     extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, intercept::types::game_value args);
@@ -187,11 +211,6 @@ namespace intercept::client {
 
     EHIdentifier addScriptEH(eventhandlers_mission type);
 
-    struct EHIdentifier_hasher {
-        size_t operator()(const intercept::client::EHIdentifier& x) const {
-            return intercept::types::__internal::pairhash(x.first, x.second);
-        }
-    };
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
 
     template <eventhandlers_mission Type>
@@ -200,6 +219,7 @@ namespace intercept::client {
 #define EH_Add_Mission_definition(name, retVal, fncArg)                                                                                                             \
     template <>                                                                                                                                                     \
     struct __addMissionEventHandler_Impl<eventhandlers_mission::name> {                                                                                             \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                              \
         [[nodiscard]] static EHIdentifier add(std::function<retVal(fncArg)> function) {                                                                             \
             auto ident = addScriptEH(eventhandlers_mission::name);                                                                                                  \
             funcMapMissionEH[ident] = {eventhandlers_mission::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
@@ -209,8 +229,10 @@ namespace intercept::client {
 
     EHDEF_MISSION(EH_Add_Mission_definition)
 
-    template <eventhandlers_mission Type, typename Func>
-    [[nodiscard]] EHIdentifier addMissionEventHandler(Func fnc) { return __addMissionEventHandler_Impl<Type>::add(fnc); };
+    template <eventhandlers_mission Type, typename Func = typename __addMissionEventHandler_Impl<Type>::fncType>
+    [[nodiscard]] EHIdentifierHandle addMissionEventHandler(Func fnc) {
+        return {__addMissionEventHandler_Impl<Type>::add(fnc), [](EHIdentifier& id) { funcMapMissionEH.erase(id); }};
+    }
 
 #pragma endregion
 
@@ -660,14 +682,103 @@ namespace intercept::client {
 
     EHDEF_OBJECT(EH_Add_Object_definition)
 
-#define EH_Add_Object_fnc_definition(name, retVal, fncArg) \
-    //template <>                                                                                                                                                     \
-    //[[nodiscard]] EHIdentifier addEventHandler<eventhandlers_object::name>(std::function<retVal(fncArg)> fnc) { return __addEventHandler_Impl<eventhandlers_object::name>::add(fnc); };
+    template <eventhandlers_object Type, typename Func = typename __addEventHandler_Impl<Type>::fncType>
+    [[nodiscard]] EHIdentifierHandle addEventHandler(types::object obj, Func fnc) {
+        return {__addEventHandler_Impl<Type>::add(obj, fnc), [](EHIdentifier& id) { funcMapObjectEH.erase(id); }};
+    }
 
-    template <eventhandlers_object Type, typename Func = __addEventHandler_Impl<Type>::fncType>
-    [[nodiscard]] EHIdentifier addEventHandler(types::object obj, Func fnc) { return __addEventHandler_Impl<Type>::add(obj, fnc); };
+#pragma endregion
 
-    EHDEF_OBJECT(EH_Add_Object_fnc_definition)
+#pragma region CTRL Eventhandlers
+
+#define EH_Func_Args_Ctrl_Draw types::control map
+#define EH_Func_Args_Ctrl_MouseButtonDown types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonUp types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonClick types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonDblClick types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseMoving types::control map, types::vector2 pos
+#define EH_Func_Args_Ctrl_MouseHolding types::control map, types::vector2 pos
+
+//Name,Function return value, Function Arguments
+#define EHDEF_CTRL(XX)                                                   \
+    XX(Draw, void, EH_Func_Args_Ctrl_Draw)                               \
+    XX(MouseButtonDown, void, EH_Func_Args_Ctrl_MouseButtonDown)         \
+    XX(MouseButtonUp, void, EH_Func_Args_Ctrl_MouseButtonUp)             \
+    XX(MouseButtonClick, void, EH_Func_Args_Ctrl_MouseButtonClick)       \
+    XX(MouseButtonDblClick, void, EH_Func_Args_Ctrl_MouseButtonDblClick) \
+    XX(MouseMoving, void, EH_Func_Args_Ctrl_MouseMoving)                 \
+    XX(MouseHolding, void, EH_Func_Args_Ctrl_MouseHolding)
+
+#define COMPILETIME_CHECK_ENUM_CTRL(name, retVal, funcArg) static_assert(eventhandlers_ctrl::name >= eventhandlers_ctrl::Draw);
+
+    /** @enum eventhandlers_object
+    @brief #TODO
+    */
+    //#TODO doc
+    enum class eventhandlers_ctrl {
+        Draw,
+        MouseButtonDown,
+        MouseButtonUp,
+        MouseButtonClick,
+        MouseButtonDblClick,
+        MouseMoving,
+        MouseHolding
+    };
+
+    EHDEF_CTRL(COMPILETIME_CHECK_ENUM_CTRL)
+
+    inline intercept::types::game_value callEHHandler(eventhandlers_ctrl ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
+        switch (ehType) {
+            case eventhandlers_ctrl::Draw: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseButtonDown: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseButtonUp: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseButtonClick: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseButtonDblClick: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseMoving: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            case eventhandlers_ctrl::MouseHolding: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+            default: assert(false);
+        }
+        return {};
+    }
+
+    EHIdentifier addScriptEH(types::control ctrl, eventhandlers_ctrl type);
+
+    extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_ctrl, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapCtrlEH;
+
+    template <eventhandlers_ctrl Type>
+    struct __ctrlAddEventHandler_Impl;
+
+#define EH_Add_Ctrl_definition(name, retVal, fncArg)                                                                                                          \
+    template <>                                                                                                                                               \
+    struct __ctrlAddEventHandler_Impl<eventhandlers_ctrl::name> {                                                                                             \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                        \
+        [[nodiscard]] static EHIdentifier add(types::control ctrl, std::function<retVal(fncArg)> function) {                                                  \
+            auto ident = addScriptEH(ctrl, eventhandlers_ctrl::name);                                                                                         \
+            funcMapCtrlEH[ident] = {eventhandlers_ctrl::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
+            return ident;                                                                                                                                     \
+        }                                                                                                                                                     \
+    };
+
+    EHDEF_CTRL(EH_Add_Ctrl_definition)
+
+    template <eventhandlers_object Type, typename Func = typename __ctrlAddEventHandler_Impl<Type>::fncType>
+    [[nodiscard]] EHIdentifierHandle ctrlAddEventHandler(types::control ctrl, Func fnc) {
+        return {__ctrlAddEventHandler_Impl<Type>::add(ctrl, fnc), [](EHIdentifier& id) { funcMapCtrlEH.erase(id); }};
+    }
 #pragma endregion
 
 }  // namespace intercept::client

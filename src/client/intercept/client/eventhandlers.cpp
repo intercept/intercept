@@ -4,18 +4,22 @@
 
 namespace intercept::client {
 
-    intercept::types::game_value client_eventhandler(int ehType, uint32_t uid, float handle, game_value args) {
+    void client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, game_value args) {
         switch (static_cast<eventhandler_type>(ehType)) {
             case eventhandler_type::mission: {
                 auto found = funcMapMissionEH.find({uid, handle});
                 if (found != funcMapMissionEH.end())
-                    return callEHHandler(found->second.first, args, found->second.second);
+                    retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::generic: break;
+            case eventhandler_type::object: {
+                auto found = funcMapObjectEH.find({ uid, handle });
+                if (found != funcMapObjectEH.end())
+                    retVal = callEHHandler(found->second.first, args, found->second.second);
+            } break;
             case eventhandler_type::display: break;
             default:;
         }
-        return {};
+        return;
     }
 
 #pragma region Mission Eventhandlers
@@ -23,32 +27,14 @@ namespace intercept::client {
 
     EHIdentifier addScriptEH(eventhandlers_mission type) {
         std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<uint32_t> dist;
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
 
         r_string typeStr;
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
-            case eventhandlers_mission::Draw3D: typeStr = "Draw3D"; break;
-            case eventhandlers_mission::Ended: typeStr = "Ended"; break;
-            case eventhandlers_mission::Loaded: typeStr = "Loaded"; break;
-            case eventhandlers_mission::Map: typeStr = "Map"; break;
-            case eventhandlers_mission::HandleDisconnect: typeStr = "HandleDisconnect"; break;
-            case eventhandlers_mission::EntityRespawned: typeStr = "EntityRespawned"; break;
-            case eventhandlers_mission::EntityKilled: typeStr = "EntityKilled"; break;
-            case eventhandlers_mission::EachFrame: typeStr = "EachFrame"; break;
-            case eventhandlers_mission::MapSingleClick: typeStr = "MapSingleClick"; break;
-            case eventhandlers_mission::HCGroupSelectionChanged: typeStr = "HCGroupSelectionChanged"; break;
-            case eventhandlers_mission::CommandModeChanged: typeStr = "CommandModeChanged"; break;
-            case eventhandlers_mission::GroupIconClick: typeStr = "GroupIconClick"; break;
-            case eventhandlers_mission::GroupIconOverEnter: typeStr = "GroupIconOverEnter"; break;
-            case eventhandlers_mission::GroupIconOverLeave: typeStr = "GroupIconOverLeave"; break;
-            case eventhandlers_mission::PlayerConnected: typeStr = "PlayerConnected"; break;
-            case eventhandlers_mission::PlayerDisconnected: typeStr = "PlayerDisconnected"; break;
-            case eventhandlers_mission::TeamSwitch: typeStr = "TeamSwitch"; break;
-            case eventhandlers_mission::PreloadStarted: typeStr = "PreloadStarted"; break;
-            case eventhandlers_mission::PreloadFinished: typeStr = "PreloadFinished"; break;
-            case eventhandlers_mission::PlayerViewChanged: typeStr = "PlayerViewChanged"; break;
-            case eventhandlers_mission::BuildingChanged: typeStr = "BuildingChanged"; break;
+#define EHMISS_CASE(name, retVal, args) \
+    case eventhandlers_mission::name: typeStr = #name##_sv; break;
+            EHDEF_MISSION(EHMISS_CASE)
             default:;
         }
 
@@ -77,4 +63,36 @@ namespace intercept::client {
 //EHDEF_MISSION(EH_Add_Mission_definition)
 
 #pragma endregion
+
+#pragma region Object Eventhandlers
+
+    std::unordered_map<EHIdentifier, std::pair<eventhandlers_object, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapObjectEH;
+    EHIdentifier addScriptEH(types::object obj, eventhandlers_object type) {
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+
+        r_string typeStr;
+        //#TODO eachFrame is just redirector to InvokePeriod.
+        switch (type) {
+#define EHOBJ_CASE(name, retVal, args) \
+    case eventhandlers_object::name: typeStr = #name##_sv; break;
+            EHDEF_OBJECT(EHOBJ_CASE)
+            default:;
+        }
+
+        auto uid = dist(rng);
+        //#TODO use hash of moduleName as identifier.. That's faster..
+        std::string command = std::string("[\"")
+                              + intercept::client::host::module_name.data() + "\","
+                              + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
+                              + std::to_string(uid) + ","
+                              + "_thisEventHandler"
+                              + "]"
+                              + " InterceptClientEvent _this";
+        float ehid = intercept::sqf::add_event_handler(obj,static_cast<sqf_string>(typeStr), command);
+
+        return {uid, ehid};
+    }
+#pragma endregion
+
 }  // namespace intercept::client

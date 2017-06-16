@@ -71,12 +71,15 @@ namespace intercept {
     game_value eventhandlers::client_eventhandler(game_value left_arg, game_value right_arg) {
         r_string moduleName = left_arg[0];
         int ehType = left_arg[1];
-        uint32_t uid = static_cast<float>(left_arg[2]);
-        uint32_t handle = static_cast<float>(left_arg[3]);
+        float uidf = left_arg[2];
+        int32_t uid = static_cast<int32_t>(uidf);
+        //uint32_t handle = static_cast<uint32_t>(static_cast<float>(left_arg[3]));
 
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.client_eventhandler && module.second.name == static_cast<std::string_view>(moduleName)) {
-                return module.second.functions.client_eventhandler(ehType, uid, handle, right_arg);
+                game_value ret{};
+                module.second.functions.client_eventhandler(ret, ehType, uid, left_arg[3], right_arg);
+                return ret;
             }
         }
         return {};

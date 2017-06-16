@@ -355,6 +355,11 @@ namespace intercept {
                 return strlen(_ref->data());
             }
 
+            size_t capacity() const {
+                if (!_ref) return 0;
+                return _ref->size();
+            }
+
             //== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?

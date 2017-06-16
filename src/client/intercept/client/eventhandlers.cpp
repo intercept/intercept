@@ -17,7 +17,7 @@ namespace intercept::client {
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::display: {
-                auto found = funcMapCtrlEH.find({ uid, handle });
+                auto found = funcMapCtrlEH.find({uid, handle});
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
@@ -54,6 +54,17 @@ namespace intercept::client {
         float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid};
+    }
+
+    void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
+        r_string typeStr;
+        switch (type) {
+#define EHMISS_CASE(name, retVal, args) \
+    case eventhandlers_mission::name: typeStr = #name##_sv; break;
+            EHDEF_MISSION(EHMISS_CASE)
+            default:;
+        }
+        sqf::remove_mission_event_handler(static_cast<sqf_string>(typeStr), handle.second);
     }
 
 //#define EH_Add_Mission_definition(name,retVal,fncArg)\
@@ -97,6 +108,17 @@ namespace intercept::client {
 
         return {uid, ehid};
     }
+
+    void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
+        r_string typeStr;
+        switch (type) {
+#define EHOBJ_CASE(name, retVal, args) \
+    case eventhandlers_object::name: typeStr = #name##_sv; break;
+            EHDEF_OBJECT(EHOBJ_CASE)
+        default:;
+        }
+        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), handle.second);
+    }
 #pragma endregion
 
 #pragma region Ctrl Eventhandlers
@@ -127,5 +149,17 @@ namespace intercept::client {
 
         return {uid, ehid};
     }
+
+    void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
+        r_string typeStr;
+        switch (type) {
+#define EHCTRL_CASE(name, retVal, args) \
+    case eventhandlers_ctrl::name: typeStr = #name##_sv; break;
+            EHDEF_CTRL(EHCTRL_CASE)
+        default:;
+        }
+        sqf::ctrl_remove_event_handler(ctrl,static_cast<sqf_string>(typeStr), handle.second);
+    }
+
 #pragma endregion
 }  // namespace intercept::client

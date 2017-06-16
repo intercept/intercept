@@ -210,6 +210,7 @@ namespace intercept::client {
     }
 
     EHIdentifier addScriptEH(eventhandlers_mission type);
+    void delScriptEH(eventhandlers_mission type, EHIdentifier& handle);
 
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
 
@@ -231,7 +232,7 @@ namespace intercept::client {
 
     template <eventhandlers_mission Type, typename Func = typename __addMissionEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addMissionEventHandler(Func fnc) {
-        return {__addMissionEventHandler_Impl<Type>::add(fnc), [](EHIdentifier& id) { funcMapMissionEH.erase(id); }};
+        return {__addMissionEventHandler_Impl<Type>::add(fnc), [type = Type](EHIdentifier& id) { funcMapMissionEH.erase(id); delScriptEH(type,id); }};
     }
 
 #pragma endregion
@@ -663,6 +664,7 @@ namespace intercept::client {
     }
 
     EHIdentifier addScriptEH(types::object obj, eventhandlers_object type);
+    void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle);
 
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_object, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapObjectEH;
 
@@ -684,7 +686,7 @@ namespace intercept::client {
 
     template <eventhandlers_object Type, typename Func = typename __addEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addEventHandler(types::object obj, Func fnc) {
-        return {__addEventHandler_Impl<Type>::add(obj, fnc), [](EHIdentifier& id) { funcMapObjectEH.erase(id); }};
+        return { __addEventHandler_Impl<Type>::add(obj, fnc), [obj,type = Type](EHIdentifier& id) { funcMapObjectEH.erase(id); delScriptEH(obj,type,id); } };
     }
 
 #pragma endregion
@@ -756,6 +758,7 @@ namespace intercept::client {
     }
 
     EHIdentifier addScriptEH(types::control ctrl, eventhandlers_ctrl type);
+    void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle);
 
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_ctrl, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapCtrlEH;
 
@@ -775,10 +778,10 @@ namespace intercept::client {
 
     EHDEF_CTRL(EH_Add_Ctrl_definition)
 
-    template <eventhandlers_object Type, typename Func = typename __ctrlAddEventHandler_Impl<Type>::fncType>
+    template <eventhandlers_ctrl Type, typename Func = typename __ctrlAddEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle ctrlAddEventHandler(types::control ctrl, Func fnc) {
-        return {__ctrlAddEventHandler_Impl<Type>::add(ctrl, fnc), [](EHIdentifier& id) { funcMapCtrlEH.erase(id); }};
+        return {__ctrlAddEventHandler_Impl<Type>::add(ctrl, fnc), [ctrl,type = Type](EHIdentifier& id) { funcMapCtrlEH.erase(id); delScriptEH(ctrl,type,id); }};
     }
 #pragma endregion
 
-}  // namespace intercept::client
+}  // namespace intercept::client                                                                                    

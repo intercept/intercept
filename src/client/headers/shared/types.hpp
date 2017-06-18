@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <stdio.h>
 #include <set>
 #include <array>
@@ -175,9 +175,10 @@ namespace intercept {
             virtual void lastRefDeleted() const { destruct(); }
             virtual int __dummy_refcount_func() const { return 0; }
         };
-
+        class game_value_static;
         template<class Type>
         class ref {
+            friend class game_value_static; //Overrides _ref to nullptr in destructor when Arma is exiting
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
             Type* _ref;
         public:
@@ -1487,6 +1488,15 @@ namespace intercept {
             uintptr_t get_vtable() const;
             void set_vtable(uintptr_t vt);
 
+        };
+
+        class game_value_static : public game_value {
+        public:
+            ~game_value_static();
+            game_value_static(const game_value& copy) : game_value(copy) {}
+            game_value_static(game_value&& move) : game_value(move) {}
+            game_value_static operator=(const game_value& copy) { data = copy.data;return *this; }
+            operator game_value() { return *this; }
         };
 
     #pragma region GameData Types

@@ -66,6 +66,7 @@ namespace intercept {
             api_version_func api_version;
             assign_functions_func assign_functions;
             handle_unload_func handle_unload;
+            handle_unload_func handle_unload_internal;
             pre_start_func pre_start;
             pre_init_func pre_init;
             post_init_func post_init;

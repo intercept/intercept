@@ -1,4 +1,4 @@
-﻿#include "shared/types.hpp"
+#include "shared/types.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
 #include <assert.h>
@@ -781,6 +781,16 @@ namespace intercept {
 
         void game_value::operator delete(void* ptr_, std::size_t) {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
+        }
+       
+        bool exiting = false;
+
+        extern "C" DLLEXPORT void CDECL handle_unload_internal() {
+            exiting = true;
+        }
+
+        game_value_static::~game_value_static() {
+            if (exiting) data._ref = nullptr;
         }
 
     #pragma endregion

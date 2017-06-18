@@ -160,6 +160,7 @@ namespace intercept {
         }
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
+        new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));
         new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GET_PROC_ADDR(dllHandle, "mission_end"));
         new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GET_PROC_ADDR(dllHandle, "on_frame"));
         //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
@@ -213,6 +214,10 @@ namespace intercept {
 
         if (module->second.functions.handle_unload) {
             module->second.functions.handle_unload();
+        }
+
+        if (module->second.functions.handle_unload_internal) {
+            module->second.functions.handle_unload_internal();
         }
 
 #ifdef __linux

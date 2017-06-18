@@ -1,4 +1,4 @@
-#include "client/pointers.hpp"
+﻿#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -148,6 +148,15 @@ namespace intercept {
 
             std::vector<vector3> __convert_to_vector3_vector(game_value input_) {
                 std::vector<vector3> output;
+                output.reserve(input_.size());
+                for (uint32_t i = 0; i < input_.size(); ++i) {
+                    output.push_back(object(input_[i]));
+                }
+                return output;
+            }
+
+            std::vector<vector2> __convert_to_vector2_vector(game_value input_) {
+                std::vector<vector2> output;
                 output.reserve(input_.size());
                 for (uint32_t i = 0; i < input_.size(); ++i) {
                     output.push_back(object(input_[i]));

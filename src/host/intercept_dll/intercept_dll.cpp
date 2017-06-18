@@ -1,5 +1,4 @@
-#include <Windows.h>
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -12,26 +11,23 @@
 #include "logging.hpp"
 #include "invoker.hpp"
 #include "export.hpp"
-#include "client\client.hpp"
+#include "client/client.hpp"
 #include "extensions.hpp"
-#include "shared\functions.hpp"
+#include "shared/functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
-extern "C"
-{
-    __declspec(dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
-};
-
+#ifndef __linux__
+extern "C" DLLEXPORT void __stdcall RVExtension(char *output, int outputSize, const char *function);
+#endif
 
 
 static char version[] = "1.0";
 
 std::string get_command(const std::string & input) {
-    size_t cmd_end;
     std::string command;
 
-    cmd_end = input.find(':');
+    size_t cmd_end = input.find(':');
     if (cmd_end < 1) {
         return "";
     }
@@ -40,19 +36,21 @@ std::string get_command(const std::string & input) {
 }
 
 std::atomic_bool _threaded(false);
-
+#ifdef __linux__
+extern "C" void RVExtension(char *output, int outputSize, const char *function) {
+#else
 void __stdcall RVExtension(char *output, int outputSize, const char *function) {
+#endif
     ZERO_OUTPUT();
     
     // Get the command, then the command args
     std::string input = function;
 
     std::string command = get_command(input);
-    bool block_execute = false;
 
     std::string argument_str;
     if (command.length() > 1 && input.length() > command.length() + 1) {
-        argument_str = input.substr(command.length() + 1, (input.length() + 1 - command.length()));
+        argument_str = input.substr(command.length() + 1, input.length() + 1 - command.length());
     }
     intercept::arguments _args(argument_str);
 
@@ -77,7 +75,16 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
 
     if (command == "init_patch") {
-        uintptr_t game_state_addr = (uintptr_t)*(uintptr_t *)((uintptr_t)output + outputSize + 8);
+    #if _WIN64 || __X86_64__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970-0x2800);
+    #else
+    #if __linux__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x264);
+    #else
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
+    #endif
+    #endif
+        //std::cout << "gameState " << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
     }
@@ -85,7 +92,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     intercept::controller::get().call(command, _args, result, _threaded);
 
     if (result.length() > 0) {
-        sprintf_s(output, outputSize, "%s", result.c_str());
+        snprintf(output, outputSize, "%s", result.c_str());
     }
     EXTENSION_RETURN();
 }
@@ -96,7 +103,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 intercept::client_functions intercept::client::host::functions;
 
 
-void Init(void) {
+void Init() {
     intercept::client::host::functions = intercept::extensions::get().functions;
     el::Configurations conf;
 
@@ -113,11 +120,11 @@ void Init(void) {
     LOG(INFO) << "Intercept DLL Loaded";
 }
 
-void Cleanup(void) {
+void Cleanup() {
 
 }
 
-
+#ifndef __linux__
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
     LPVOID lpReserved
@@ -136,3 +143,4 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     }
     return TRUE;
 }
+#endif

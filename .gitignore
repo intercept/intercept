@@ -1,12 +1,12 @@
+rv/*
+!rv/addons
 rv/addons/*.pbo
 rv/addons/*.bat
 rv/*.dll
 rv/carma_dll.*
 build
-rv/intercept
-rv/intercept.ilk
-rv/intercept.pdb
 !.gitkeep
 vcproj/*
-!vcproj/.gitkeep
+vcproj64/*
 .vs
+x64/*

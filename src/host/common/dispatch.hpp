@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <thread>
 #include <mutex>
@@ -8,13 +8,15 @@
 #include "shared.hpp"
 #include "arguments.hpp"
 #include "singleton.hpp"
-
+#include <chrono>
+using namespace std::literals::chrono_literals;
 namespace intercept {
 	class controller_module {
 	public:
-		controller_module() : _stopped(false) { };
-		~controller_module() { };
-		void stop() {
+		controller_module() : _stopped(false) { }
+	    ~controller_module() { }
+
+	    void stop() {
 			std::lock_guard<std::mutex> lock(_stop_lock);
 			_stopped = true;
 		}
@@ -76,7 +78,8 @@ namespace intercept {
         threaded_dispatcher() : _stop(false), _worker(&intercept::threaded_dispatcher::monitor, this), _message_id(0) {
  
         }
-        ~threaded_dispatcher() {}
+
+        virtual ~threaded_dispatcher() {}
         
         bool call(const std::string & name_, arguments & args_, std::string & result_, bool threaded) {
             if (_methods.find(name_) == _methods.end()) {
@@ -169,7 +172,7 @@ namespace intercept {
                             
                     }
                 }
-                sleep(5);
+                std::this_thread::sleep_for(5ms);
             }
         }
         std::atomic_bool                _stop;
@@ -186,4 +189,4 @@ namespace intercept {
 		std::vector<std::shared_ptr<controller_module>> _modules;
     };
     class threaded_dispatch : public threaded_dispatcher, public singleton<dispatch> { };
-};
+}

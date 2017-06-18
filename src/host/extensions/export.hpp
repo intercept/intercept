@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -13,13 +13,14 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 
 using namespace intercept::types;
 
 namespace intercept {
-    using WrapperFunctionBinary = uintptr_t(*)(char*, uintptr_t, uintptr_t, uintptr_t);
-    using WrapperFunctionUnary = uintptr_t(*)(char*, uintptr_t, uintptr_t);
+    using WrapperFunctionBinary = intercept::types::binary_function;
+    using WrapperFunctionUnary = intercept::types::unary_function;
+    using WrapperFunctionNular = intercept::types::nular_function;
 
     namespace client_function_defs {
         /*!
@@ -60,49 +61,19 @@ namespace intercept {
         @param [out] data_type_def_ A reference to a uintptr_t to store the data
         type address.
         */
-        void get_type_structure(const char *type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_);
-
-        /*!
-        @brief Allocate a RV internal string.
-
-        Allocates an RV internal string type of the given size.
-
-        @param size_ The size/length of the string.
-
-        @return rv_string A pointer to the allocated string.
-        */
-        rv_string * allocate_string(size_t size_);
-
-        /*!
-        @brief Frees an allocated string.
-
-        This frees an allocated string from allocate_string.
-
-        @param value_ A pointer to the string data to free.
-        */
-        void free_string(rv_string *value_);
-
-        /*!
-        @brief Frees an engine allocated value.
-
-        This frees an allocated game_value that came from inside the RV Engine
-        and as such needs to be released inside the RV Engine.
-
-        @param value_ A pointer to the game_value to free.
-        */
-        void free_value(game_value *value_);
+        void get_type_structure(std::string_view type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_);
 
         /*!@{
         @brief Returns a function pointer of the type named based on the function name
         and argument signatures.
         */
-        nular_function get_nular_function(const char * function_name_);
+        nular_function get_nular_function(std::string_view function_name_);
 
-        unary_function get_unary_function(const char * function_name_);
-        unary_function get_unary_function_typed(const char * function_name_, const char * right_arg_type_);
+        unary_function get_unary_function(std::string_view function_name_);
+        unary_function get_unary_function_typed(std::string_view function_name_, std::string_view right_arg_type_);
 
-        binary_function get_binary_function(const char * function_name_);
-        binary_function get_binary_function_typed(const char * function_name_, const char * left_arg_type_, const char * right_arg_type_);
+        binary_function get_binary_function(std::string_view function_name_);
+        binary_function get_binary_function_typed(std::string_view function_name_, std::string_view left_arg_type_, std::string_view right_arg_type_);
         //!@}
 
         void invoker_lock();
@@ -114,14 +85,16 @@ namespace intercept {
 
         This returns a pointer to Arma's internal memory allocator for use by rv_allocator
 
-        @param value_ A pointer to the allocator
+        @return A pointer to the allocator
         */
         const types::__internal::allocatorInfo* get_engine_allocator();
 
         /*!
         @brief Registers SQF Function
         */
-        types::registered_sqf_function register_sqf_function(std::string name, std::string description, WrapperFunctionBinary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType left_arg_type, types::__internal::GameDataType right_arg_type);
-        types::registered_sqf_function register_sqf_function_unary(std::string name, std::string description, WrapperFunctionUnary function_, types::__internal::GameDataType return_arg_type, types::__internal::GameDataType right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
+        std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
     }
 }

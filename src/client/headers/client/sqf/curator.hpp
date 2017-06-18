@@ -12,8 +12,8 @@ https://github.com/NouberNou/intercept
 */
 #pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\client_types.hpp"
+#include "client/client.hpp"
+#include "shared/client_types.hpp"
 
 using namespace intercept::types;
 
@@ -38,21 +38,27 @@ namespace intercept {
         void unassign_curator(const object &value_);
         void add_curator_points(const object &value0_, float value1_);
         void allow_curator_logic_ignore_areas(const object &value0_, bool value1_);
-        float curator_coef(const object &value0_, const std::string &value1_);
+        float curator_coef(const object &value0_, sqf_string_const_ref value1_);
         void remove_curator_camera_area(const object &value0_, float value1_);
         void remove_curator_editing_area(const object &value0_, float value1_);
         void set_curator_camera_area_ceiling(const object &value0_, float value1_);
         void set_curator_editing_area_type(const object &value0_, bool value1_);
         void set_curator_waypoint_cost(const object &value0_, float value1_);
-        void add_curator_addons(const object &curator_object_, const std::vector<std::string> &addons_);
+        void add_curator_addons(const object &curator_object_, sqf_string_list_const_ref addons_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
         void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
         void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
 
-        std::vector<std::string> curator_addons(const object &curator_module_);
+        sqf_return_string_list curator_addons(const object &curator_module_);
         std::vector<object> curator_editable_objects(const object &curator_module_);
         std::vector<object> curator_registered_objects(const object &curator_);
         std::vector<object> object_curators(const object &obj_);
+
+        void remove_curator_addons(const object &curator_module_, sqf_string_list_const_ref addons_);
+        void remove_curator_editable_objects(const object &curator_module, const std::vector<object> &objects_, bool &remove_crew_);
+        void set_curator_coef(const object& curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_);
+        void assign_curator(const object& player_, const object& curator_module_);
+
     }
 }

@@ -6,9 +6,8 @@ intercept_invoker_ok = false;
 INTERCEPT_DUMMY = [1,2,3];
 
 intercept_fnc_test = {
-    private ["_res"];
     if(isNil "_thisScript") then { // make sure this is NOT being called in the scheduler
-        _res = "intercept" callExtension "test_invoker:";
+        private _res = "intercept" callExtension "test_invoker:";
         if(_res == profileNameSteam) then {
             intercept_invoker_ok = true;
         };
@@ -18,7 +17,7 @@ intercept_fnc_test = {
 };
 
 intercept_fnc_exportOpList = {
-    _version = format["%1 %2.%3 - %4", (productVersion select 0), (productVersion select 2), (productVersion select 3), (productVersion select 4)];
+    private _version = format["%1 %2.%3 - %4", (productVersion select 0), (productVersion select 2), (productVersion select 3), (productVersion select 4)];
     "intercept" callExtension ("export_ptr_list:" + _version);
 };
 
@@ -32,7 +31,7 @@ intercept_fnc_setVariableNamespace = {
 intercept_fnc_callWrapper = {
     scopeName "main";
     params ["_args", "_code"];
-    _res = nil;
+    private _res = nil;
     if(!isNil "_args") then {
         _res = _args call _code;
     } else {
@@ -50,7 +49,10 @@ intercept_fnc__event = {
     params ["_type", "_eventArgs"];
 };
 
-intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame [];}";
+intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame;}";
+
+intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
+
 //{
 //    // _start = diag_tickTime;
 //    "intercept" callExtension "do_invoke_period:";
@@ -69,7 +71,7 @@ intercept_signal_var resize 2;
 str INVOKER_DELETE_ARRAY;
 
 diag_log text "Intercept Invoker SQF handler initializing...";
-_res = "intercept" callExtension "init_invoker:";
+private _res = "intercept" callExtension "init_invoker:";
 
 [] call intercept_fnc_test;
 

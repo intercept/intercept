@@ -15,7 +15,7 @@ https://github.com/NouberNou/intercept
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "shared\types.hpp"
+#include "shared/types.hpp"
 #include <unordered_set>
 
 using namespace intercept::types;
@@ -29,12 +29,14 @@ namespace intercept {
     typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
+        sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
         uintptr_t _gameState;
         uintptr_t _operator_construct;
         uintptr_t _operator_insert;
         uintptr_t _unary_construct;
         uintptr_t _unary_insert;
-        std::array<uintptr_t, static_cast<size_t>(types::__internal::GameDataType::end)> _types {0};
+        uintptr_t _type_vtable;
+        std::vector<const script_type_info *> _types;
     };
 
     /*!
@@ -243,14 +245,6 @@ namespace intercept {
         //!@}
 
         /*!
-        @name Initial Hook Functionality
-        */
-        //!@{
-        static int __cdecl _initial_patch(char *a_, int b_, int c_);
-        static unary_function _initial_trampoline;
-        //!@}
-
-        /*!
         @brief Stores the hooked functions.
         */
         std::unordered_set<uint32_t> _hooked_functions;
@@ -272,83 +266,104 @@ namespace intercept {
     namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
         class gsFuncBase {
         public:
-            const r_string _name;
+            r_string _name;
+            void copyPH(gsFuncBase* other) {
+                securityStuff = other->securityStuff;
+                //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
+            }
         private:
-            uint32_t placeholder1;//0x4
-            uint32_t placeholder2;//0x8 actually a pointer to empty memory
-            uint32_t placeholder3;//0xC
-            uint32_t placeholder4;//0x10
-            uint32_t placeholder5;//0x14
-            uint32_t placeholder6;//0x18
-            uint32_t placeholder7;//0x1C
-            uint32_t placeholder8;//0x20
+            std::array<size_t,
+            #if _WIN64 || __X86_64__
+                10
+            #else
+            #ifdef __linux__
+                8
+            #else
+                11
+            #endif
+            #endif
+            > securityStuff;  //Will scale with x64
+            //size_t securityStuff[11];
         };
-        class gsFunction : public gsFuncBase {	//#TODO shouldn't everything in here be const?
-            uint32_t placeholder9;//0x24
+        class gsFunction : public gsFuncBase {
+            void* placeholder12{ nullptr };//0x30  //jni function
         public:
-            const r_string _name2;//0x28 this is (tolower name)
-            unary_operator * _operator;//0x2C
-            uint32_t placeholder10;//0x30 RString to something
-            const rv_string* _description;//0x34
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* placeholder11;
-            const rv_string* placeholder12;
-            const rv_string* _category; //0x48
+            r_string _name2;//0x34 this is (tolower name)
+            unary_operator * _operator;//0x38
+        #ifndef __linux__
+            r_string _rightType;//0x3c RString to something
+            r_string _description;//0x38
+            r_string _example;
+            r_string _example2;
+            r_string placeholder_11;
+            r_string placeholder_12;
+            r_string _category{ "intercept" }; //0x48
+        #endif
                                         //const rv_string* placeholder13;
         };
         class gsOperator : public gsFuncBase {
-            uint32_t placeholder9;//0x24  JNI function
+            void* placeholder12{ nullptr };//0x30  JNI function
         public:
-            r_string _name2;//0x28 this is (tolower name)
-            int32_t placeholder10; //0x2C Small int 0-5  priority
-            binary_operator * _operator;//0x30
-            r_string _leftType;//0x34 Description of left hand side parameter
-            r_string _rightType;//0x38 Description of right hand side parameter
-            r_string _description;//0x3C
-            r_string _example;//0x40
-            r_string placeholder11;//0x44
-            r_string _version;//0x48 some version number
-            r_string placeholder12;//0x4C
-            r_string _category; //0x50
+            r_string _name2;//0x34 this is (tolower name)
+            int32_t placeholder_10{ 4 }; //0x38 Small int 0-5  priority
+            binary_operator * _operator;//0x3c
+        #ifndef __linux__
+            r_string _leftType;//0x40 Description of left hand side parameter
+            r_string _rightType;//0x44 Description of right hand side parameter
+            r_string _description;//0x48
+            r_string _example;//0x4c
+            r_string placeholder_11;//0x60
+            r_string _version;//0x64 some version number
+            r_string placeholder_12;//0x68
+            r_string _category{ "intercept" }; //0x6c
+        #endif
         };
         class gsNular : public gsFuncBase {
         public:
-            const r_string _name2;//0x24 this is (tolower name)
-            nular_operator * _operator;//0x28
-            const rv_string* _description;//0x2C
-            const rv_string* _example;
-            const rv_string* _example2;
-            const rv_string* _version;//0x38 some version number
-            const rv_string* placeholder10;
-            const rv_string* _category; //0x40
-            uint32_t placeholder11;//0x44
-        };
-        struct gsTypeInfo { //Donated from ArmaDebugEngine
-            const r_string _name;
-            void* _createFunction{ nullptr };
-        };
+            r_string _name2;//0x30 this is (tolower name)
+            nular_operator * _operator;//0x34
+        #ifndef __linux__
+            r_string _description;//0x38
+            r_string _example;
+            r_string _example2;
+            r_string _version;//0x44 some version number
+            r_string placeholder_10;
+            r_string _category; //0x4d
+        #endif
+            void* placeholder11{ nullptr };//0x50 JNI probably
+            const char *get_map_key() const { return _name2.data(); }
+        };                                                  //#TODO this is same as value_type
+
         struct game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
+            game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
             game_functions() {}
-            const char *getMapKey() const { return _name; }
+            const char *get_map_key() const { return _name.data(); }
         };
 
         struct game_operators : public auto_array<gsOperator>, public gsFuncBase {
         public:
+            game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
-            int32_t placeholder10; //0x2C Small int 0-5  priority
+            int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
             game_operators() {}
-            const char *getMapKey() const { return _name; }
+            const char *get_map_key() const { return _name.data(); }
         };
         class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
         public:
-            auto_array<const gsTypeInfo *> _scriptTypes;
+            auto_array<const script_type_info *> _scriptTypes;
             map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
         };
     }
 
+    namespace types {
+        template class rv_allocator<intercept::__internal::gsFunction>;
+        template class rv_allocator<intercept::__internal::gsOperator>;
+        template class rv_allocator<intercept::__internal::gsNular>;
+        template class rv_allocator<intercept::__internal::game_functions>;
+        template class rv_allocator<intercept::__internal::game_operators>;
+    }
 }

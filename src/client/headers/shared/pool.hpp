@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 
 #include <queue>
-
+#if 0 //Disabled as not needed
 namespace intercept {
     template<typename T, std::size_t Size = 1024>
     class game_data_pool {
@@ -37,8 +37,8 @@ namespace intercept {
     protected:
         inline void _buy_entry() {
             void *entry = malloc(sizeof(T));
-            _pool_queue.push((T *)entry);
-            _pool.push_back((T *)entry);
+            _pool_queue.push(reinterpret_cast<T *>(entry));
+            _pool.push_back(reinterpret_cast<T *>(entry));
         }
 
         std::queue<T *> _pool_queue;
@@ -91,16 +91,17 @@ namespace intercept {
         std::vector<char *> _pool;
 
         inline void _buy_entry(std::size_t alloc_count_) {
-            char *entry_data = (char *)malloc((sizeof(T)*alloc_count_) + sizeof(std::size_t));
-            *(std::size_t *)entry_data = alloc_count_;
-            T *entry_addr = (T *)(entry_data + sizeof(std::size_t));
-            for (std::size_t i = 0; i < alloc_count_; ++i)
-                T *entry = new (entry_addr+i) T();
-            _pool_queue.push(entry_addr);
-            _pool.push_back(entry_data);
+            //char *entry_data = (char *)malloc((sizeof(T)*alloc_count_) + sizeof(std::size_t));
+            //*(std::size_t *)entry_data = alloc_count_;
+            //T *entry_addr = (T *)(entry_data + sizeof(std::size_t));
+            //for (std::size_t i = 0; i < alloc_count_; ++i)
+            //    T *entry = new (entry_addr+i) T();
+            //_pool_queue.push(entry_addr);
+            //_pool.push_back(entry_data);
         }
 
     };
 
 
 }
+#endif

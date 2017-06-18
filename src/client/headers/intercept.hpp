@@ -1,24 +1,22 @@
-#pragma once
+﻿#pragma once
 #include "shared.hpp"
-#include "client\client.hpp"
-#include "shared\functions.hpp"
-#include "client\sqf\sqf.hpp"
-#include "shared\client_types.hpp"
-
-#define DLLEXPORT __declspec(dllexport)
+#include "client/client.hpp"
+#include "shared/functions.hpp"
+#include "client/sqf/sqf.hpp"
+#include "shared/client_types.hpp"
 
 namespace intercept {
     extern "C" {
-        DLLEXPORT int  __cdecl api_version();
-        DLLEXPORT void __cdecl pre_start();
-        DLLEXPORT void __cdecl pre_init();
-        DLLEXPORT void __cdecl post_init();
-        DLLEXPORT void __cdecl mission_end();
-        DLLEXPORT void __cdecl mission_stopped();
-        DLLEXPORT void __cdecl on_frame();
-        DLLEXPORT void __cdecl on_signal(std::string &signal_name_, game_value& value1_);
+        DLLEXPORT int  CDECL api_version();
+        DLLEXPORT void CDECL pre_start();
+        DLLEXPORT void CDECL pre_init();
+        DLLEXPORT void CDECL post_init();
+        DLLEXPORT void CDECL mission_end();
+        DLLEXPORT void CDECL mission_stopped();
+        DLLEXPORT void CDECL on_frame();
+        DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);
 
-#define EH(x) DLLEXPORT void __cdecl x
+#define EH(x) DLLEXPORT void CDECL x
          //#TODO may want r_string& here
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
@@ -35,14 +33,14 @@ namespace intercept {
         EH(fired_near)(object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_);
         EH(fuel)(object &vehicle_, bool fuel_state_);
         EH(gear)(object &vehicle_, bool gear_state_);
-        EH(get_in)(object &vehicle_, rv_string position_, object &unit_, rv_list<int> &turret_path);
-        EH(get_out)(object &vehicle_, rv_string position_, object &unit_, rv_list<int> &turret_path);
+        EH(get_in)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
+        EH(get_out)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
         EH(handle_damage)(object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_);
         EH(handle_heal)(object &unit_, object &healder_, bool healer_can_heal_);
         EH(handle_rating)(object &unit_, float rating_);
         EH(handle_score)(object &unit_, object &object_, float score_);
         EH(hit)(object &unit_, object &caused_by_, float damage_);
-        EH(hit_part)(rv_list<hit_part_data> &data_);
+        EH(hit_part)(std::vector<hit_part_data> &data_);
         EH(init)(object &unit_);
         EH(incoming_missile)(object &unit_, r_string ammo_, object &firer_);
         EH(inventory_closed)(object &object_, object &container_);
@@ -52,7 +50,7 @@ namespace intercept {
         EH(landed_stopped)(object &plane_, int airport_id_);
         EH(local)(object &object_, bool local_);
         EH(post_reset)();
-        EH(put)(object &unit_, object &container_, rv_string item_);
+        EH(put)(object &unit_, object &container_, r_string item_);
         EH(respawn)(object &unit_, object &corpse_);
         EH(rope_attach)(object &object1, object &rope_, object &object2_);
         EH(rope_break)(object &object1, object &rope_, object &object2_);

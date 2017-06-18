@@ -20,11 +20,11 @@ namespace intercept {
 		
 		bool init(const arguments &, std::string &);
         bool reset(const arguments &, std::string &);
-        bool get_ready(const arguments &, std::string &);
+        bool get_ready(const arguments &, std::string &) const;
 
         bool fetch_result(const arguments &, std::string &);
 
-        bool export_ptr_list(const arguments & _args, std::string & result);
+        bool export_ptr_list(const arguments & _args, std::string & result) const;
 
 		bool do_stop(const arguments &, std::string &) {
 			stop();

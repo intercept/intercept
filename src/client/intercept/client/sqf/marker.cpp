@@ -1,4 +1,4 @@
-#include "marker.hpp"
+﻿#include "marker.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -315,6 +315,8 @@ namespace intercept {
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
         }
+        
+        /*
         std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_) {
             auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
 
@@ -346,6 +348,7 @@ namespace intercept {
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
         }
+        */
         sqf_return_string_list all_variables(const location &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__location__ret__array, value_));

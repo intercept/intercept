@@ -137,7 +137,13 @@ namespace intercept {
         float distance(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
         vector3 building_exit(const object &building_, int index_);
-        vector3 building_pos(const object &building_, int index_);
+        
+        /*
+            Be aware! This function always returns a vector of positions.
+            This is unlike the documentation in the wiki!
+            if the index given is > -1 is returns a vector with a single position in it
+        */
+        std::vector<vector3> building_pos(const object &building_, int index_);
 
     }  // namespace sqf
 }  // namespace intercept

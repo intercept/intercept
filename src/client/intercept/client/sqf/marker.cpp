@@ -297,7 +297,7 @@ namespace intercept {
         }
 
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
-            auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
+            auto_array<game_value> loc_types(location_types_.begin(), locaction_types_.end());
 
             game_value params({pos_,
                                std::move(loc_types),

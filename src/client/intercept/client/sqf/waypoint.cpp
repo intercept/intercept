@@ -1,4 +1,4 @@
-#include "waypoint.hpp"
+﻿#include "waypoint.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -259,7 +259,7 @@ namespace intercept {
 
             std::vector<waypoint> waypoints;
             for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(waypoint({res[i][0], res[i][1]}));
+                waypoints.push_back(waypoint(res[i]));
             }
 
             return waypoints;
@@ -270,7 +270,7 @@ namespace intercept {
 
             std::vector<waypoint> waypoints;
             for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(waypoint({res[i][0], res[i][1]}));
+                waypoints.push_back(waypoint(res[i]));
             }
 
             return waypoints;

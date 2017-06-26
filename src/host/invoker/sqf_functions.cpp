@@ -129,7 +129,8 @@ void sqf_functions::setDisabled() {
 */
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
     //
@@ -210,7 +211,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
     //
@@ -299,7 +301,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
@@ -404,6 +407,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 
 std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
+    if (name.length() > 128) throw std::length_error("intercept::sqf_functions::registerType name can maximum be 128 chars long");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
     auto newType = rv_allocator<script_type_info>::createSingle(

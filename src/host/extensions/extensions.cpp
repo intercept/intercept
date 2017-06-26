@@ -230,9 +230,9 @@ namespace intercept {
             return false;
         }
 
-        _modules.erase(path_);
+        LOG(INFO) << "Unload complete [" << path_ << "]"; //path_ sometimes becomes corrupted if placed after the erase
 
-        LOG(INFO) << "Unload complete [" << path_ << "]";
+        _modules.erase(path_);
 
         return true;
     }

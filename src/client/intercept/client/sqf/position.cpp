@@ -531,12 +531,12 @@ namespace intercept {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingexit__object__scalar__ret__array, building_, index_));
         }
 
-        vector3 building_pos(const object &building_, unsigned int index_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
-        }
-
-        std::vector<vector3> building_pos_all(const object &building_) {
-            return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, -1.f));
+        std::vector<vector3> building_pos(const object &building_, int index_) {
+            if (index_ > -1) {
+                return std::vector<vector3>({__helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)))});
+            } else { 
+                return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
+            };
         }
 
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {

@@ -140,7 +140,7 @@ namespace intercept {
             std::vector<game_value> __convert_to_game_value_vector(game_value input_) {
                 std::vector<game_value> output;
                 output.reserve(input_.size());
-                for (auto &gv : input_.to_auto_array()) {
+                for (auto &gv : input_.to_array()) {
                     output.push_back(game_value(gv));
                 }
                 return output;
@@ -149,7 +149,7 @@ namespace intercept {
             std::vector<vector3> __convert_to_vector3_vector(game_value input_) {
                 std::vector<vector3> output;
                 output.reserve(input_.size());
-                for (auto &v3 : input_.to_auto_array()) {
+                for (auto &v3 : input_.to_array()) {
                     output.push_back(vector3(v3));
                 }
                 return output;
@@ -158,7 +158,7 @@ namespace intercept {
             std::vector<vector2> __convert_to_vector2_vector(game_value input_) {
                 std::vector<vector2> output;
                 output.reserve(input_.size());
-                for (auto &v2 : input_.to_auto_array()) {
+                for (auto &v2 : input_.to_array()) {
                     output.push_back(vector2(v2));
                 }
                 return output;
@@ -167,7 +167,7 @@ namespace intercept {
             std::vector<object> __convert_to_objects_vector(game_value input_) {
                 std::vector<object> output;
                 output.reserve(input_.size());
-                for (auto &ob : input_.to_auto_array()) {
+                for (auto &ob : input_.to_array()) {
                     output.push_back(object(ob));
                 }
                 return output;

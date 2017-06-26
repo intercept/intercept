@@ -274,6 +274,7 @@ namespace intercept {
         vector2 location_position(const location &loc_) {
             return host::functions.invoke_raw_unary(__sqf::unary__locationposition__location__ret__array, loc_);
         }
+        
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
@@ -293,6 +294,17 @@ namespace intercept {
                              sort_position_});
 
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+        }
+
+        std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
+            auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
+
+            game_value params({pos_,
+                               std::move(loc_types),
+                               radius_,
+                               sort_obj_});
+
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
         }
 
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_) {
@@ -316,39 +328,18 @@ namespace intercept {
             return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
         }
         
-        /*
-        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_) {
-            auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
+        std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
+            auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value params({pos_,
-                               std::move(loc_types),
-                               radius_});
+            game_value args({unit_,
+                             std::move(loctypes),
+                             radius_,
+                             sort_obj_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
         }
-
-        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const vector3 &sort_pos_) {
-            auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
-
-            game_value params({pos_,
-                               std::move(loc_types),
-                               radius_,
-                               sort_pos_});
-
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
-        }
-
-        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const object &sort_obj_) {
-            auto_array<game_value> loc_types(loc_types_.begin(), loc_types_.end());
-
-            game_value params({pos_,
-                               std::move(loc_types),
-                               radius_,
-                               sort_obj_});
-
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
-        }
-        */
+        
+        
         sqf_return_string_list all_variables(const location &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__location__ret__array, value_));

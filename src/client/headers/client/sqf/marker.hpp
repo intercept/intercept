@@ -96,11 +96,10 @@ namespace intercept {
         vector2 location_position(const location &loc_);
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_);
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_);
+        std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_);
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_);
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_);
-        //std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_);
-        //std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const vector3 &sort_pos_);
-        std::vector<location> nearest_locations(const vector3 pos_, sqf_string_list_const_ref loc_types_, float radius_, const object &sort_obj_);
+        std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_);
         sqf_return_string_list all_variables(const location &value_);
         sqf_return_string name(const location &loc_);
         sqf_return_string type(const location &loc_);

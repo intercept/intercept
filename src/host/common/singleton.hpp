@@ -5,6 +5,7 @@
 #pragma once
 
 #ifdef __GNUC__
+#undef __forceinline
 #define __forceinline __attribute__((always_inline))
 #endif
 

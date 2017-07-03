@@ -39,10 +39,10 @@
 #define INTERCEPT_ASSERT intercept::runtime_assert()
 #endif
 
+#undef CDECL
 #ifdef __GNUC__
 #define CDECL __attribute__ ((__cdecl__))
 #else
-#undef CDECL
 #define CDECL __cdecl
 #endif
 

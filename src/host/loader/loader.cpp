@@ -6,7 +6,7 @@
 #include <dlfcn.h>
 #include <link.h>
 #else
-#include <Psapi.h>
+#include <psapi.h>
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 #pragma comment (lib, "version.lib") //GetFileVersionInfoSize
 #endif

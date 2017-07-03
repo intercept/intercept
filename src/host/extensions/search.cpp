@@ -3,7 +3,6 @@
 #include <iterator>
 #include <algorithm>
 #include <regex>
-#include <experimental/filesystem>
 
 
 namespace intercept::search {
@@ -203,8 +202,8 @@ typedef struct _OBJECT_TYPE_INFORMATION {
     ULONG NonPagedPoolUsage;
 } OBJECT_TYPE_INFORMATION, *POBJECT_TYPE_INFORMATION;
 
-PVOID GetLibraryProcAddress(PSTR LibraryName, PSTR ProcName) {
-    return GetProcAddress(GetModuleHandleA(LibraryName), ProcName);
+PVOID GetLibraryProcAddress(const char* LibraryName, const char* ProcName) {
+    return reinterpret_cast<PVOID>(GetProcAddress(GetModuleHandleA(LibraryName), ProcName));
 }
 
 std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list() {
@@ -213,11 +212,11 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
     ULONG handleInfoSize = 0x10000;
 
     _NtQuerySystemInformation NtQuerySystemInformation =
-        static_cast<_NtQuerySystemInformation>(GetLibraryProcAddress("ntdll.dll", "NtQuerySystemInformation"));
+        reinterpret_cast<_NtQuerySystemInformation>(GetLibraryProcAddress("ntdll.dll", "NtQuerySystemInformation"));
     _NtDuplicateObject NtDuplicateObject =
-        static_cast<_NtDuplicateObject>(GetLibraryProcAddress("ntdll.dll", "NtDuplicateObject"));
+        reinterpret_cast<_NtDuplicateObject>(GetLibraryProcAddress("ntdll.dll", "NtDuplicateObject"));
     _NtQueryObject NtQueryObject =
-        static_cast<_NtQueryObject>(GetLibraryProcAddress("ntdll.dll", "NtQueryObject"));
+        reinterpret_cast<_NtQueryObject>(GetLibraryProcAddress("ntdll.dll", "NtQueryObject"));
 
     if (!NtQuerySystemInformation || !NtDuplicateObject || !NtQueryObject)
         return _active_pbo_list;

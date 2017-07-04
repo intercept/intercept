@@ -50,6 +50,118 @@ matrix:
       script:
         - cd vcproj
         - CC=gcc-7 CXX=g++-7 cmake .. && make -j 3
+      
+    ###############################################################################
+    # Job #3 - Cross-compiling intercept 32-bit
+    ###############################################################################
+    - language: cpp
+      addons:
+        apt:
+          packages:
+            # MXE dependencies
+            - autoconf
+            - automake
+            - autopoint
+            - bash
+            - bison
+            - bzip2
+            - flex
+            - gettext
+            - git
+            - g++
+            - gperf
+            - intltool
+            - libffi-dev
+            - libgdk-pixbuf2.0-dev
+            - libtool
+            - libltdl-dev
+            - libssl-dev
+            - libxml-parser-perl
+            - make
+            - openssl
+            - p7zip-full
+            - patch
+            - perl
+            - pkg-config
+            - python
+            - ruby
+            - scons
+            - sed
+            - unzip
+            - wget
+            - xz-utils
+            - g++-multilib
+            - libc6-dev-i386
+            #- libtool-bin # Only on 14.10 or later
+
+      cache:
+        directories:
+          - /opt
+
+      before_install:
+        -  travis_wait 30 tools/travis_install_cross_compiler.sh
+
+      before_script:
+
+      script:
+        - cd vcproj
+        - /opt/mxe/usr/bin/i686-w64-mingw32.static.posix-cmake .. && make -j 3
+
+    ###############################################################################
+    # Job #4 - Cross-compiling intercept 64-bit
+    ###############################################################################
+    - language: cpp
+      addons:
+        apt:
+          packages:
+            # MXE dependencies
+            - autoconf
+            - automake
+            - autopoint
+            - bash
+            - bison
+            - bzip2
+            - flex
+            - gettext
+            - git
+            - g++
+            - gperf
+            - intltool
+            - libffi-dev
+            - libgdk-pixbuf2.0-dev
+            - libtool
+            - libltdl-dev
+            - libssl-dev
+            - libxml-parser-perl
+            - make
+            - openssl
+            - p7zip-full
+            - patch
+            - perl
+            - pkg-config
+            - python
+            - ruby
+            - scons
+            - sed
+            - unzip
+            - wget
+            - xz-utils
+            - g++-multilib
+            - libc6-dev-i386
+            #- libtool-bin # Only on 14.10 or later
+
+      cache:
+        directories:
+          - /opt
+
+      before_install:
+        -  travis_wait 30 tools/travis_install_cross_compiler.sh
+
+      before_script:
+
+      script:
+        - cd vcproj64
+        - /opt/mxe/usr/bin/x86_64-w64-mingw32.static.posix-cmake -DUSE_64BIT_BUILD=ON .. && make -j 3
 
 notifications:
   email:

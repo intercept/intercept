@@ -202,7 +202,7 @@ typedef struct _OBJECT_TYPE_INFORMATION {
     ULONG NonPagedPoolUsage;
 } OBJECT_TYPE_INFORMATION, *POBJECT_TYPE_INFORMATION;
 
-PVOID GetLibraryProcAddress(const char* LibraryName, const char* ProcName) {
+PVOID GetLibraryProcAddress(PCSTR LibraryName, PCSTR ProcName) {
     return reinterpret_cast<PVOID>(GetProcAddress(GetModuleHandleA(LibraryName), ProcName));
 }
 

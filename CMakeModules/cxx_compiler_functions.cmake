@@ -2,7 +2,7 @@ function (intercept_set_linker_options)
 	if(CMAKE_COMPILER_IS_GNUCXX)
 		SET(CMAKE_CXX_FLAGS "-std=c++1z -O2 -s -fPIC -fpermissive")
 		if(NOT USE_64BIT_BUILD)
-			add_compile_options(-m32 -march=i686)
+			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32 -march=i686")
 		endif()
 		
 		if(ACRE_LINK_TYPE STREQUAL "static")

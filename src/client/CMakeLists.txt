@@ -16,7 +16,10 @@ option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive")
+	SET(CMAKE_CXX_FLAGS "-std=c++1z -O2 -s -fPIC -fpermissive")
+	if(NOT USE_64BIT_BUILD)
+		add_compile_options(-m32 -march=i686)
+	endif()
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 else()

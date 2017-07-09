@@ -38,7 +38,7 @@ echo "No cross-compiler found in the cached directory. Building it using MXE. Th
 echo "###################################################################################################";
 
 rm -rf /opt/mxe
-git clone https://github.com/overfl0/mxe /opt/mxe
+git clone https://github.com/mxe/mxe /opt/mxe
 cd /opt/mxe
 
 echo "Building..."

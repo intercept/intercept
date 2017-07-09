@@ -386,5 +386,20 @@ namespace std {
         reference_wrapper(string& _Val) noexcept
             : reference_wrapper<std::string>(_Val) {};
     };
+    
+#define DEFINE_HASH_FUNCTION_FOR_CLASS(type) template <> struct hash<intercept::types::type> { \
+        size_t operator()(const intercept::types::type& x) const { \
+            return x.hash(); \
+        } \
+    }; 
+
+    DEFINE_HASH_FUNCTION_FOR_CLASS(object)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(location)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(group)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(config)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(control)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(display)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(side)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(task)
 }
 

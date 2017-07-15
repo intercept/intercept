@@ -75,6 +75,7 @@ namespace intercept {
         //#TODO move pre_start to here
         _intercept_registerTypes_function.clear(); //#TEST
         sqf_functions::get().setDisabled();
+        init_file_bank_list();
         //#deprecate
         //if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
         //    LOG(INFO) << "Registration function unhooked.";
@@ -106,6 +107,70 @@ namespace intercept {
             }
         }
         return true;
+    }
+
+    void invoker::init_file_bank_list() {
+
+        class file {
+        public:
+            r_string name;
+            uint32_t d1;//0
+            uint32_t d2;//0
+            uint32_t d3;//640138
+            uint32_t d4;//0x595274BE
+            uint32_t d5;//793473
+            uint32_t d6;//0
+            //uint32_t d7; //definetly a pointer to somewhere
+            //uint32_t d8;
+            //uint32_t d9;
+            //uint32_t d10;//ptr
+            //uint32_t d11;
+            //uint32_t d12;
+            //uint32_t d13;//0
+
+        };
+        class bank : public refcount {
+        public:
+            virtual void dummy() = delete;
+            uint32_t _size; //Not sure if this is size. And might be uint64 on x64
+            void* _d1;
+            r_string _name;
+            void* _d2;
+            void* _d3;
+            bool _d4;
+            bool _d5;
+            bool _d6;
+            bool _d7;
+            r_string _prefix;
+            map_string_to_class<file, auto_array<file>> _files;
+            struct property{
+                r_string name;
+                r_string value;
+            };
+            auto_array<property> properties;
+        };
+        class banks {
+        public:
+            auto_array<ref<bank>> banklist;
+        };
+        banks* fbanks = *reinterpret_cast<banks**>(loader::get().get_register_sqf_info()._file_banks);
+        //std::ofstream ofile("P:\\filelist.txt");
+        for (auto& bank : fbanks->banklist) {
+            //ofile << bank->_name << " prefix: " << bank->_prefix << " \nProps:\n";
+            //for (auto& prop : bank->properties)
+            //    ofile << "    " <<prop.name << "=" << prop.value << "\n";
+            //ofile << "\n\n";
+            for (auto& file : bank->_files) {
+                files_in_pbo_banks.emplace_back(file.name);
+                //ofile << bank->_prefix.data() << file.name.data() << "\n";
+                //OutputDebugStringA(bank->_prefix.data());
+                //OutputDebugStringA(file.name.data());
+                //OutputDebugStringA("\n");
+            }
+        }
+            
+
+
     }
 
     game_value invoker::_intercept_event(game_value left_arg_, game_value right_arg_) {

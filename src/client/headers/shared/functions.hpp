@@ -100,7 +100,8 @@ namespace intercept {
             */
             const types::__internal::allocatorInfo*(*get_engine_allocator)();
 
-
+            //#TODO docs
+            const auto_array<r_string> * (*get_pbo_files_list)();
         private:
             /*!
             @brief Registers SQF Function

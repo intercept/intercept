@@ -213,6 +213,10 @@ namespace intercept {
 
         static bool invoker_accessible;
         static bool invoker_accessible_all;
+
+        //#TODO documentation and move to seperate file
+        auto_array<r_string> files_in_pbo_banks;
+        void init_file_bank_list();
     protected:
 
 

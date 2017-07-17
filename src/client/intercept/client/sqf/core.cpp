@@ -1,4 +1,4 @@
-#include "chat.hpp"
+﻿#include "chat.hpp"
 #include "client/pointers.hpp"
 #include "core.hpp"
 #include "common_helpers.hpp"
@@ -611,6 +611,10 @@ namespace intercept {
         }
 
         game_value text(sqf_string_const_ref value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__text__string__ret__text, value_);
+        }
+
+        sqf_return_string text(location &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
         }
 

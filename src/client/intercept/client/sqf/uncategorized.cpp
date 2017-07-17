@@ -191,11 +191,6 @@ namespace intercept {
         /* This function is apparently depreciated but the functionality is different to the command which replaces it.*/
         // unary__lbselection__control__ret__array
 
-        /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
-        * corresponds to how visible a particular unit is from another unit. binary__knowsabout__object_group__object__ret__scalar
-        */
-        // binary__checkvisibility__array__array__ret__scalar
-
         /* No documentation.*/
         // binary__ctrlsettextcolorsecondary__control__array__ret__nothing
 

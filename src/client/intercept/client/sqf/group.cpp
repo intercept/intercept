@@ -1,4 +1,4 @@
-#include "group.hpp"
+﻿#include "group.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "waypoint.hpp"
@@ -211,9 +211,6 @@ namespace intercept {
             return __helpers::__convert_to_team_members_vector(host::functions.invoke_raw_nular(__sqf::nular__agents__ret__array));
         }
 
-        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__team_member__string__ret__nothing, value0_, value1_);
-        }
         void set_formation(const team_member &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setformation__team_member__string__ret__nothing, value0_, value1_);
         }

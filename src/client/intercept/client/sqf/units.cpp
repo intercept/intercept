@@ -380,8 +380,9 @@ namespace intercept {
         std::vector<sqf_return_string_list> squad_params(const object &unit_) {
             std::vector<sqf_return_string_list> _temp;
             game_value _engine_result = host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_);
-            for (unsigned int _k = 0; _k < _engine_result.size(); _k++) {
-                _temp.push_back(std::move(__helpers::__convert_to_strings_vector(_engine_result[_k])));
+            _temp.reserve(_engine_result.size());
+            for (auto &gv : _engine_result.to_array()) {
+                _temp.push_back(std::move(__helpers::__convert_to_strings_vector(gv)));
             }
             return _temp;
         }

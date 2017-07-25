@@ -24,8 +24,8 @@ namespace intercept {
         object curator_camera();
         object curator_mouse_over();
         
-        struct _curator_selected_return {
-            _curator_selected_return(
+        struct curator_selected_return {
+            curator_selected_return(
                 std::vector<object> _objs,
                 std::vector<group> _g,
                 std::vector<intercept::sqf::waypoint> _wps,
@@ -39,7 +39,7 @@ namespace intercept {
             std::vector<marker> _marker;
         };
         
-        _curator_selected_return curator_selected();
+        curator_selected_return curator_selected();
         void open_curator_interface();
         bool shown_curatorcompass();
         float curator_camera_area_ceiling(const object &value_);

@@ -31,7 +31,7 @@ namespace intercept {
                 std::vector<intercept::sqf::waypoint> _wps,
                 std::vector<marker> _m
             ) {
-                _objects = _objects; _groups = g; _waypoints = _wps; _marker = _m;
+                _objects = _objects; _groups = _g; _waypoints = _wps; _marker = _m;
             };
             std::vector<object> _objects;
             std::vector<group> _groups;

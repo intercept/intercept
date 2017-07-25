@@ -1,4 +1,4 @@
-﻿#include "ai.hpp"
+#include "ai.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -648,7 +648,7 @@ namespace intercept {
             if (group_.index() == 0) {
                 host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<0>(group_), mode_);
             }
-            else if (group_.index() == 0) {
+            else if (group_.index() == 1) {
                 host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<1>(group_), mode_);
             }
             else {

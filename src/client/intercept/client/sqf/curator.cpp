@@ -1,4 +1,4 @@
-﻿#include "curator.hpp"
+#include "curator.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 

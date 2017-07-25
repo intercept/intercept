@@ -80,7 +80,9 @@ namespace intercept {
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_);
+        
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_);
+        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_);
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_);

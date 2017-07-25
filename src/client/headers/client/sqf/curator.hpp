@@ -14,6 +14,7 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
+#include "client/sqf/waypoint.hpp"
 
 using namespace intercept::types;
 
@@ -22,7 +23,23 @@ namespace intercept {
         /* Curator */
         object curator_camera();
         object curator_mouse_over();
-        std::vector<object> curator_selected();
+        
+        struct _curator_selected_return {
+            _curator_selected_return(
+                std::vector<object> _objs,
+                std::vector<group> _g,
+                std::vector<intercept::sqf::waypoint> _wps,
+                std::vector<marker> _m
+            ) {
+                _objects = _objects; _groups = g; _waypoints = _wps; _marker = _m;
+            };
+            std::vector<object> _objects;
+            std::vector<group> _groups;
+            std::vector<intercept::sqf::waypoint> _waypoints;
+            std::vector<marker> _marker;
+        };
+        
+        _curator_selected_return curator_selected();
         void open_curator_interface();
         bool shown_curatorcompass();
         float curator_camera_area_ceiling(const object &value_);

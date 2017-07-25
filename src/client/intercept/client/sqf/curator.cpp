@@ -1,4 +1,4 @@
-#include "curator.hpp"
+﻿#include "curator.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -13,8 +13,24 @@ namespace intercept {
             return __helpers::__retrieve_nular_object(__sqf::nular__curatormouseover__ret__object);
         }
 
-        std::vector<object> curator_selected() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+        _curator_selected_return curator_selected() {
+            std::vector<game_value> _raw = __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+            
+
+            std::vector<game_value> _wptemp = __helpers::__convert_to_game_value_vector(_raw[2]);
+            std::vector<intercept::sqf::waypoint> _wps;
+
+            for (auto& _wp : _wptemp) {
+                _wps.push_back(std::move(intercept::sqf::waypoint(_wp)));
+            }
+
+            _curator_selected_return _return = _curator_selected_return(
+                __helpers::__convert_to_objects_vector(_raw[0]),
+                __helpers::__convert_to_groups_vector(_raw[1]),
+                _wps,
+                __helpers::__convert_to_markers_vector(_raw[3])
+            );
+            return  _return;
         }
 
         void open_curator_interface() {

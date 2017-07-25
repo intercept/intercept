@@ -138,7 +138,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
         }
 
-        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_) {
+        void add_curator_editable_objects(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_) {
             auto_array<game_value> objects(objects_.begin(), objects_.end());
 
             game_value args({std::move(objects),

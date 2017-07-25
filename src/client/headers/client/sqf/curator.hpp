@@ -64,7 +64,7 @@ namespace intercept {
         void add_curator_addons(const object &curator_object_, sqf_string_list_const_ref addons_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
-        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
+        void add_curator_editable_objects(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
         void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
 
         sqf_return_string_list curator_addons(const object &curator_module_);

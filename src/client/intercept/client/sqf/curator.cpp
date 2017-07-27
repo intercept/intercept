@@ -1,4 +1,4 @@
-﻿#include "curator.hpp"
+#include "curator.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -25,7 +25,7 @@ namespace intercept {
             curator_selected_return _return = curator_selected_return(
                 __helpers::__convert_to_objects_vector(_raw[0]),
                 __helpers::__convert_to_groups_vector(_raw[1]),
-                _wps,
+                std::move(_wps),
                 __helpers::__convert_to_markers_vector(_raw[3])
             );
             return  _return;

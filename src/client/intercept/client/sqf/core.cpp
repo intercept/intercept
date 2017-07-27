@@ -1,4 +1,4 @@
-﻿#include "chat.hpp"
+#include "chat.hpp"
 #include "client/pointers.hpp"
 #include "core.hpp"
 #include "common_helpers.hpp"

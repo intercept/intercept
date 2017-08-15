@@ -2512,9 +2512,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctdata__control__scalar__ret__string, control_, index_);
         }
 
-        //#TODO: Find out about the return type
         std::vector<float> ct_find_header_rows(const control &control_, int index_) {
-            return __helpers::__convert_to_float_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
         }
 
         int ct_find_row_header(const control &control_, int index_) {

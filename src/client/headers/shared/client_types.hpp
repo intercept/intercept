@@ -358,7 +358,7 @@ namespace intercept {
             rv_target(vector3&& pos, const game_value& from)
             {
                 position = std::move(pos);
-                type = from[1];
+                type = std::string(from[1]);
                 side_ = from[2];
                 subjective_cost = from[3];
                 object_ = from[4];

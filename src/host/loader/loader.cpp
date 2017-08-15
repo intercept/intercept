@@ -1,4 +1,4 @@
-﻿#include "loader.hpp"
+#include "loader.hpp"
 #include "controller.hpp"
 #include <thread>
 #include <future>
@@ -435,8 +435,9 @@ namespace intercept {
 
 
         //File Banks
+#ifndef __linux__
         _sqf_register_funcs._file_banks = future_fileBanks.get();
-
+#endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);

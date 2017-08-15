@@ -1,4 +1,4 @@
-﻿#include "invoker.hpp"
+#include "invoker.hpp"
 #include "controller.hpp"
 #include "extensions.hpp"
 #include "shared/client_types.hpp"
@@ -153,6 +153,7 @@ namespace intercept {
         public:
             auto_array<ref<bank>> banklist;
         };
+        if (!loader::get().get_register_sqf_info()._file_banks) return;
         banks* fbanks = *reinterpret_cast<banks**>(loader::get().get_register_sqf_info()._file_banks);
         //std::ofstream ofile("P:\\filelist.txt");
         for (auto& bank : fbanks->banklist) {

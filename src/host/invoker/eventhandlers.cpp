@@ -86,7 +86,7 @@ namespace intercept {
     }
 
     void eventhandlers::pre_start(game_value &) {
-        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"_sv, "Forwarder used to call functions in Intercept Plugins", userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
+        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins", userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
         LOG(INFO) << "Pre-start";
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) {

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -594,7 +594,7 @@ namespace intercept {
         void lb_sort_by_value(const control &value_);
 
         sqf_return_string ct_data(const control &control_, int index_);
-        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
+        std::vector<float> ct_find_header_rows(const control &control_, int index_);
         int ct_find_row_header(const control &control_, int index_);
         std::vector<control> ct_header_controls(const control &control_, int index_);
         void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);

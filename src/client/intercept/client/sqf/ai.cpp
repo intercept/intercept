@@ -308,16 +308,16 @@ namespace intercept {
         void set_skill(const object &object_, set_skill_type type_, float skill_) {
             game_value type;
             switch (type_) {
-                case set_skill_type::aimingAccuracy: type = "aimingAccuracy"_sv; break;
-                case set_skill_type::aimingShake: type = "aimingShake"_sv; break;
-                case set_skill_type::aimingSpeed: type = "aimingSpeed"_sv; break;
-                case set_skill_type::endurance: type = "endurance"_sv; break;
-                case set_skill_type::spotDistance: type = "spotDistance"_sv; break;
-                case set_skill_type::spotTime: type = "spotTime"_sv; break;
-                case set_skill_type::courage: type = "courage"_sv; break;
-                case set_skill_type::reloadSpeed: type = "reloadSpeed"_sv; break;
-                case set_skill_type::commanding: type = "commanding"_sv; break;
-                case set_skill_type::general: type = "general"_sv; break;
+                case set_skill_type::aimingAccuracy: type = "aimingAccuracy"sv; break;
+                case set_skill_type::aimingShake: type = "aimingShake"sv; break;
+                case set_skill_type::aimingSpeed: type = "aimingSpeed"sv; break;
+                case set_skill_type::endurance: type = "endurance"sv; break;
+                case set_skill_type::spotDistance: type = "spotDistance"sv; break;
+                case set_skill_type::spotTime: type = "spotTime"sv; break;
+                case set_skill_type::courage: type = "courage"sv; break;
+                case set_skill_type::reloadSpeed: type = "reloadSpeed"sv; break;
+                case set_skill_type::commanding: type = "commanding"sv; break;
+                case set_skill_type::general: type = "general"sv; break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__setskill__object__array__ret__nothing, object_, {std::move(type), skill_});
@@ -326,22 +326,22 @@ namespace intercept {
         void send_simple_command(const object &value0_, simple_command_type command_) {
             game_value command;
             switch (command_) {
-                case simple_command_type::FIRE: command = "FIRE"_sv; break;
-                case simple_command_type::CEASE_FIRE: command = "CEASE FIRE"_sv; break;
-                case simple_command_type::MANUAL_FIRE: command = "MANUAL FIRE"_sv; break;
-                case simple_command_type::CANCEL_MANUAL_FIRE: command = "CANCEL MANUAL FIRE"_sv; break;
-                case simple_command_type::KEY_FIRE: command = "KEY FIRE"_sv; break;
-                case simple_command_type::FORWARD: command = "FORWARD"_sv; break;
-                case simple_command_type::STOP: command = "STOP"_sv; break;
-                case simple_command_type::BACK: command = "BACK"_sv; break;
-                case simple_command_type::FAST: command = "FAST"_sv; break;
-                case simple_command_type::KEY_FAST: command = "KEY FAST"_sv; break;
-                case simple_command_type::SLOW: command = "SLOW"_sv; break;
-                case simple_command_type::KEY_SLOW: command = "KEY SLOW"_sv; break;
-                case simple_command_type::LEFT: command = "LEFT"_sv; break;
-                case simple_command_type::RIGHT: command = "RIGHT"_sv; break;
-                case simple_command_type::KEY_UP: command = "KEY UP"_sv; break;
-                case simple_command_type::KEY_DOWN: command = "KEY DOWN"_sv; break;
+                case simple_command_type::FIRE: command = "FIRE"sv; break;
+                case simple_command_type::CEASE_FIRE: command = "CEASE FIRE"sv; break;
+                case simple_command_type::MANUAL_FIRE: command = "MANUAL FIRE"sv; break;
+                case simple_command_type::CANCEL_MANUAL_FIRE: command = "CANCEL MANUAL FIRE"sv; break;
+                case simple_command_type::KEY_FIRE: command = "KEY FIRE"sv; break;
+                case simple_command_type::FORWARD: command = "FORWARD"sv; break;
+                case simple_command_type::STOP: command = "STOP"sv; break;
+                case simple_command_type::BACK: command = "BACK"sv; break;
+                case simple_command_type::FAST: command = "FAST"sv; break;
+                case simple_command_type::KEY_FAST: command = "KEY FAST"sv; break;
+                case simple_command_type::SLOW: command = "SLOW"sv; break;
+                case simple_command_type::KEY_SLOW: command = "KEY SLOW"sv; break;
+                case simple_command_type::LEFT: command = "LEFT"sv; break;
+                case simple_command_type::RIGHT: command = "RIGHT"sv; break;
+                case simple_command_type::KEY_UP: command = "KEY UP"sv; break;
+                case simple_command_type::KEY_DOWN: command = "KEY DOWN"sv; break;
                 default: return;
             }
 
@@ -529,19 +529,19 @@ namespace intercept {
         void disable_ai(const object &value0_, ai_behaviour_types type_) {
             game_value type;
             switch (type_) {
-                case ai_behaviour_types::TARGET: type = "TARGET"_sv; break;
-                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"_sv; break;
-                case ai_behaviour_types::MOVE: type = "MOVE"_sv; break;
-                case ai_behaviour_types::ANIM: type = "ANIM"_sv; break;
-                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"_sv; break;
-                case ai_behaviour_types::FSM: type = "FSM"_sv; break;
-                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"_sv; break;
-                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"_sv; break;
-                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"_sv; break;
-                case ai_behaviour_types::COVER: type = "COVER"_sv; break;
-                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"_sv; break;
-                case ai_behaviour_types::PATH: type = "PATH"_sv; break;
-                case ai_behaviour_types::ALL: type = "ALL"_sv; break;
+                case ai_behaviour_types::TARGET: type = "TARGET"sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"sv; break;
                 default: return;
             }
 
@@ -550,19 +550,19 @@ namespace intercept {
         void enable_ai(const object &value0_, ai_behaviour_types type_) {
             game_value type;
             switch (type_) {
-                case ai_behaviour_types::TARGET: type = "TARGET"_sv; break;
-                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"_sv; break;
-                case ai_behaviour_types::MOVE: type = "MOVE"_sv; break;
-                case ai_behaviour_types::ANIM: type = "ANIM"_sv; break;
-                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"_sv; break;
-                case ai_behaviour_types::FSM: type = "FSM"_sv; break;
-                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"_sv; break;
-                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"_sv; break;
-                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"_sv; break;
-                case ai_behaviour_types::COVER: type = "COVER"_sv; break;
-                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"_sv; break;
-                case ai_behaviour_types::PATH: type = "PATH"_sv; break;
-                case ai_behaviour_types::ALL: type = "ALL"_sv; break;
+                case ai_behaviour_types::TARGET: type = "TARGET"sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"sv; break;
                 default: return;
             }
 
@@ -572,8 +572,8 @@ namespace intercept {
         void enable_aifeature(bool value0_, ai_feature_types value1_) {
             game_value type;
             switch (value1_) {
-                case ai_feature_types::AwareFormationSoft: type = "AwareFormationSoft"_sv; break;
-                case ai_feature_types::CombatFormationSoft: type = "CombatFormationSoft"_sv; break;
+                case ai_feature_types::AwareFormationSoft: type = "AwareFormationSoft"sv; break;
+                case ai_feature_types::CombatFormationSoft: type = "CombatFormationSoft"sv; break;
                 default: return;
             }
 

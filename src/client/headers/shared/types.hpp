@@ -12,13 +12,15 @@
 #include <string_view>
 #include <string.h>
 #include <algorithm>
+#include <memory>
 
 //GNUC somehow can't do it if it's inside shared.hpp.
 #ifdef __GNUC__
 #define CDECL __attribute__ ((__cdecl__))
 #endif
+using namespace std::literals::string_view_literals;
 
-constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
+[[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
     return { str, len };
 };
 
@@ -671,6 +673,7 @@ namespace intercept {
                 #ifdef __GNUC__
                     memmove(newData, base::_data, base::_n * sizeof(Type));
                 #else
+                    //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
                     memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
                 #endif
                     rv_allocator<Type>::deallocate(base::_data);
@@ -1375,7 +1378,7 @@ namespace intercept {
             virtual serialization_return serialize(param_archive& ar) {
                 if (ar._isExporting) {
                     sqf_script_type _type = type();
-                    ar.serialize(r_string("type"_sv), _type, 1);
+                    ar.serialize(r_string("type"sv), _type, 1);
                 }
 
                 return serialization_return::no_error;
@@ -2098,5 +2101,8 @@ namespace std {
         }
     };
 }
+
+
+
 
 

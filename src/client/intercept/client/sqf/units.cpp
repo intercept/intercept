@@ -770,11 +770,11 @@ namespace intercept {
         void assign_team(const object &value0_, team_color team_) {
             game_value team;
             switch (team_) {
-                case team_color::MAIN: team = "MAIN"_sv; break;
-                case team_color::RED: team = "RED"_sv; break;
-                case team_color::GREEN: team = "GREEN"_sv; break;
-                case team_color::BLUE: team = "BLUE"_sv; break;
-                case team_color::YELLOW: team = "YELLOW"_sv; break;
+                case team_color::MAIN: team = "MAIN"sv; break;
+                case team_color::RED: team = "RED"sv; break;
+                case team_color::GREEN: team = "GREEN"sv; break;
+                case team_color::BLUE: team = "BLUE"sv; break;
+                case team_color::YELLOW: team = "YELLOW"sv; break;
                 default: return;
             }
             host::functions.invoke_raw_binary(__sqf::binary__assignteam__object__string__ret__nothing, value0_, std::move(team));

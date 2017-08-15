@@ -379,12 +379,12 @@ namespace intercept {
 
         game_data* game_data::createFromSerialized(param_archive& ar) {
             bool isNil = false;
-            if (ar.serialize(r_string("nil"_sv), isNil, 1, false) != serialization_return::no_error) {
+            if (ar.serialize(r_string("nil"sv), isNil, 1, false) != serialization_return::no_error) {
                 return nullptr;
             }
 
             sqf_script_type _type;
-            if (ar.serialize(r_string("type"_sv), _type, 1) != serialization_return::no_error) return nullptr;
+            if (ar.serialize(r_string("type"sv), _type, 1) != serialization_return::no_error) return nullptr;
 
             if (isNil) {
                 //#TODO create GameDataNil or GameDataNothing
@@ -1010,7 +1010,7 @@ namespace intercept {
 
         serialization_return game_value::serialize(param_archive& ar) {
             if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
-            ar.serialize(r_string("data"_sv), data, 1);
+            ar.serialize(r_string("data"sv), data, 1);
             //#TODO check if type == game_data_nothing. Can probably just use strcmp
             //if (data && data->type() == game_data_nothing) data = nullptr;
             return serialization_return::no_error;

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "shared.hpp"
 #include "types.hpp"
 #include <variant>
@@ -355,6 +355,15 @@ namespace intercept {
             float subjective_cost;
             object object_;
             float position_accuracy;
+            rv_target(vector3&& pos, const game_value& from)
+            {
+                position = std::move(pos);
+                type = from[1];
+                side_ = from[2];
+                subjective_cost = from[3];
+                object_ = from[4];
+                position_accuracy = from[5];
+            }
         };
 
         struct rv_query_target {

@@ -1356,7 +1356,7 @@ namespace intercept {
         protected:
             virtual bool get_as_bool() const { return false; }
             virtual float get_as_number() const { return 0.f; }
-            virtual r_string get_as_string() const { return r_string(); } //Only usable on String and Code! Use to_string instead!
+            virtual r_string get_as_string() const { return r_string(); } ///Only usable on String and Code! Use to_string instead!
             virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; dummy.clear(); return dummy; } //Why would you ever need this?
             virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; dummy.clear(); return dummy; }
             virtual game_data *copy() const { return nullptr; }
@@ -1364,10 +1364,12 @@ namespace intercept {
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
             virtual void set_final(bool) {}; //Only on GameDataCode AFAIK
+        public: 
             virtual r_string to_string() const { return r_string(); }
             virtual bool equals(const game_data *) const { return false; };
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
+        private:
             virtual void placeholder() const {};
             virtual bool can_serialize() { return false; }
 

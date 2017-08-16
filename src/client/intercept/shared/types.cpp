@@ -642,12 +642,6 @@ namespace intercept {
             return false;
         }
 
-        game_value::operator r_string () const {
-            if (data)
-                return data->get_as_string();
-            return {};
-        }
-
         game_value::operator vector3() const {
             if (!data) return {};
             auto& array = data->get_as_array();
@@ -665,8 +659,24 @@ namespace intercept {
         }
 
         game_value::operator std::string() const {
-            if (data)
-                return static_cast<std::string>(data->get_as_string());
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return static_cast<std::string>(data->get_as_string());
+                return static_cast<std::string>(data->to_string());
+            }
+                
+            return {};
+        }
+
+        game_value::operator r_string () const {
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return data->get_as_string();
+                return data->to_string();
+            }
+
             return {};
         }
 

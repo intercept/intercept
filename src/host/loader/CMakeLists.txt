@@ -22,6 +22,11 @@ set_target_properties(loader_static PROPERTIES FOLDER intercept)
 if(CMAKE_COMPILER_IS_GNUCXX)
 	set_target_properties(loader_static PROPERTIES LINK_SEARCH_START_STATIC 1)
 	set_target_properties(loader_static PROPERTIES LINK_SEARCH_END_STATIC 1)
-    set_target_properties(loader_static PROPERTIES LINK_SEARCH_START_STATIC 1)
+	set_target_properties(loader_static PROPERTIES LINK_SEARCH_START_STATIC 1)
 	set_target_properties(loader_static PROPERTIES LINK_SEARCH_END_STATIC 1)
+endif()
+
+if(MINGW)
+	# Here add the libraries required by #pragma comment(lib, "...") in the code
+	target_link_libraries(loader_static "-lpsapi")
 endif()

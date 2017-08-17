@@ -16,6 +16,7 @@
 
 //GNUC somehow can't do it if it's inside shared.hpp.
 #ifdef __GNUC__
+#undef CDECL
 #define CDECL __attribute__ ((__cdecl__))
 #endif
 using namespace std::literals::string_view_literals;

@@ -336,9 +336,7 @@ namespace intercept {
                     new_entry.name <<
                     "(" << new_entry.op->arg_type.type_str() << ")" <<
                     " @ "sv << new_entry.op->procedure_addr << "\n";
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _unary_operators[name].push_back(new_entry);
+                _unary_operators[entry._name2].push_back(new_entry);
             }
         }
 
@@ -357,9 +355,7 @@ namespace intercept {
                     new_entry.name <<
                     "(" << new_entry.op->arg2_type.type_str() << ")" <<
                     " @ "sv << new_entry.op->procedure_addr << "\n";
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _binary_operators[name].push_back(new_entry);
+                _binary_operators[entry._name2].push_back(new_entry);
             }
         }
 
@@ -373,9 +369,7 @@ namespace intercept {
             new_entry.name = entry._name.data();
             LOG(INFO) << "Found nular operator: "sv << new_entry.op->return_type.type_str() << " "
                 << new_entry.name << " @ "sv << new_entry.op->procedure_addr << "\n";
-            std::string name = std::string(new_entry.name);
-            std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-            _nular_operators[name].push_back(new_entry);
+            _nular_operators[entry._name2].push_back(new_entry);
         }
 
         auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better

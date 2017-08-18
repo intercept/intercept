@@ -426,6 +426,17 @@ namespace intercept {
                 return _os;
             }
 
+            friend std::istream& operator >> (std::istream& _in, r_string& _t){
+                char inp;
+                std::string tmp;
+                while (_in.get(inp)) {
+                    if (inp == 0) break;
+                    tmp.push_back(inp);
+                }
+                _t._ref = create(tmp.data(), tmp.length());
+                return _in;
+            }
+
             bool compare_case_sensitive(const char *other) const {
             #ifdef __GNUC__
                 return !std::equal(_ref->cbegin(), _ref->cend(),

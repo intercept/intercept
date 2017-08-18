@@ -1,17 +1,17 @@
-﻿#include "waypoint.hpp"
+#include "waypoint.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
         //#TODO move to headerfile once inline variables is implemented in MSVC2017
-        const std::string waypoint::__speed_lookup[4] = {"UNCHANGED", "LIMITED", "NORMAL", "FULL"};
-        const std::string waypoint::__show_lookup[4] = {"NEVER", "EASY", "ALWAYS", "ERROR"};
-        const std::string waypoint::__type_lookup[22] = {"MOVE", "DESTROY", "GETIN", "SAD", "JOIN", "LEADER", "GETOUT", "CYCLE", "LOAD", "UNLOAD", "TR UNLOAD", "HOLD", "SENTRY", "GUARD", "TALK", "SCRIPTED", "SUPPORT", "GETIN NEAREST", "DISMISS", "LOITER", "AND", "OR"};
-        const std::string waypoint::__behaviour_lookup[6] = {"UNCHANGED", "CARELESS", "SAFE", "AWARE", "COMBAT", "STEALTH"};
-        const std::string waypoint::__combat_mode_lookup[6] = {"NO CHANGE", "BLUE", "GREEN", "WHITE", "YELLOW", "RED"};
-        const std::string waypoint::__formation_lookup[10] = {"NO_CHANGE", "COLUMN", "STAG_COLUMN", "WEDGE", "ECH_LEFT", "ECH_RIGHT", "VEE", "LINE", "FILE", "DIAMOND"};
-        const std::string waypoint::__loiter_lookup[2] = {"CIRCLE", "CIRCLE_L"};
+        const std::string_view waypoint::__speed_lookup[4] = {"UNCHANGED"sv, "LIMITED"sv, "NORMAL"sv, "FULL"sv};
+        const std::string_view waypoint::__show_lookup[4] = {"NEVER"sv, "EASY"sv, "ALWAYS"sv, "ERROR"sv};
+        const std::string_view waypoint::__type_lookup[22] = {"MOVE"sv, "DESTROY"sv, "GETIN"sv, "SAD"sv, "JOIN"sv, "LEADER"sv, "GETOUT"sv, "CYCLE"sv, "LOAD"sv, "UNLOAD"sv, "TR UNLOAD"sv, "HOLD"sv, "SENTRY"sv, "GUARD"sv, "TALK"sv, "SCRIPTED"sv, "SUPPORT"sv, "GETIN NEAREST"sv, "DISMISS"sv, "LOITER"sv, "AND"sv, "OR"sv};
+        const std::string_view waypoint::__behaviour_lookup[6] = {"UNCHANGED"sv, "CARELESS"sv, "SAFE"sv, "AWARE"sv, "COMBAT"sv, "STEALTH"sv};
+        const std::string_view waypoint::__combat_mode_lookup[6] = {"NO CHANGE"sv, "BLUE"sv, "GREEN"sv, "WHITE"sv, "YELLOW"sv, "RED"sv};
+        const std::string_view waypoint::__formation_lookup[10] = {"NO_CHANGE"sv, "COLUMN"sv, "STAG_COLUMN"sv, "WEDGE"sv, "ECH_LEFT"sv, "ECH_RIGHT"sv, "VEE"sv, "LINE"sv, "FILE"sv, "DIAMOND"sv};
+        const std::string_view waypoint::__loiter_lookup[2] = {"CIRCLE"sv, "CIRCLE_L"sv};
 
         waypoint add_waypoint(group &gp_, const vector3 &center_, float radius_, int index_, sqf_string_const_ref name_) {
             game_value args({center_,
@@ -49,11 +49,11 @@ namespace intercept {
         }
 
         waypoint::behaviour waypoint_behaviour(waypoint &wp_) {
-            return waypoint::__parse_behaviour(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointbehaviour__array__ret__string, wp_)));
+            return waypoint::__parse_behaviour(host::functions.invoke_raw_unary(__sqf::unary__waypointbehaviour__array__ret__string, wp_));
         }
 
         waypoint::combat_mode waypoint_combat_mode(waypoint &wp_) {
-            return waypoint::__parse_combat_mode(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointcombatmode__array__ret__string, wp_)));
+            return waypoint::__parse_combat_mode(host::functions.invoke_raw_unary(__sqf::unary__waypointcombatmode__array__ret__string, wp_));
         }
 
         float waypoint_completeion_radius(waypoint &wp_) {
@@ -65,7 +65,7 @@ namespace intercept {
         }
 
         waypoint::formation waypoint_formation(waypoint &wp_) {
-            return waypoint::__parse_formation(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointformation__array__ret__string, wp_)));
+            return waypoint::__parse_formation(host::functions.invoke_raw_unary(__sqf::unary__waypointformation__array__ret__string, wp_));
         }
 
         float waypoint_house_position(waypoint &wp_) {
@@ -77,7 +77,7 @@ namespace intercept {
         }
 
         waypoint::loiter_type waypoint_loiter_type(waypoint &wp_) {
-            return waypoint::__parse_loiter_type(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointloitertype__array__ret__string, wp_)));
+            return waypoint::__parse_loiter_type(host::functions.invoke_raw_unary(__sqf::unary__waypointloitertype__array__ret__string, wp_));
         }
 
         sqf_return_string waypoint_name(waypoint &wp_) {
@@ -91,13 +91,13 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__waypointscript__array__ret__string, wp_);
         }
         waypoint::show waypoint_show(waypoint &wp_) {
-            return waypoint::__parse_show(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointshow__array__ret__string, wp_)));
+            return waypoint::__parse_show(host::functions.invoke_raw_unary(__sqf::unary__waypointshow__array__ret__string, wp_));
         }
         waypoint::speed waypoint_speed(waypoint &wp_) {
-            return waypoint::__parse_speed(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointspeed__array__ret__string, wp_)));
+            return waypoint::__parse_speed(host::functions.invoke_raw_unary(__sqf::unary__waypointspeed__array__ret__string, wp_));
         }
         waypoint::type waypoint_type(waypoint &wp_) {
-            return waypoint::__parse_type(game_value(host::functions.invoke_raw_unary(__sqf::unary__waypointtype__array__ret__string, wp_)));
+            return waypoint::__parse_type(host::functions.invoke_raw_unary(__sqf::unary__waypointtype__array__ret__string, wp_));
         }
         bool waypoint_visible(waypoint &wp_) {
             // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.

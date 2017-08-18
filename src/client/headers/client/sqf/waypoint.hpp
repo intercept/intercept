@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -38,21 +38,21 @@ namespace intercept {
                 return {wgroup, windex};
             }
 
-            static const std::string __speed_lookup[4];
+            static const std::string_view __speed_lookup[4];
             enum class speed {
                 UNCHANGED = 0,
                 LIMITED = 1,
                 NORMAL = 2,
                 FULL = 3
             };
-            static const std::string __show_lookup[4];
+            static const std::string_view __show_lookup[4];
             enum class show {
                 NEVER,
                 EASY,
                 ALWAYS,
                 WAYPOINT_ERROR
             };
-            static const std::string __type_lookup[22];
+            static const std::string_view __type_lookup[22];
             enum class type {
                 MOVE,
                 DESTROY,
@@ -77,7 +77,7 @@ namespace intercept {
                 AND,
                 OR
             };
-            static const std::string __behaviour_lookup[6];
+            static const std::string_view __behaviour_lookup[6];
             enum class behaviour {
                 UNCHANGED,
                 CARELESS,
@@ -86,7 +86,7 @@ namespace intercept {
                 COMBAT,
                 STEALTH
             };
-            static const std::string __combat_mode_lookup[6];
+            static const std::string_view __combat_mode_lookup[6];
             enum class combat_mode {
                 NO_CHANGE,
                 BLUE,
@@ -96,7 +96,7 @@ namespace intercept {
                 RED
 
             };
-            static const std::string __formation_lookup[10];
+            static const std::string_view __formation_lookup[10];
             enum class formation {
                 NO_CHANGE,
                 COLUMN,
@@ -109,7 +109,7 @@ namespace intercept {
                 FILE,
                 DIAMOND
             };
-            static const std::string __loiter_lookup[2];
+            static const std::string_view __loiter_lookup[2];
             enum class loiter_type {
                 CIRCLE,
                 CIRCLE_L
@@ -172,25 +172,25 @@ namespace intercept {
                 throw 712;
             }
 
-            static std::string __get_enum_as_str(speed subject_) {
+            static std::string_view __get_enum_as_str(speed subject_) {
                 return __speed_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(show subject_) {
+            static std::string_view __get_enum_as_str(show subject_) {
                 return __show_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(type subject_) {
+            static std::string_view __get_enum_as_str(type subject_) {
                 return __type_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(behaviour subject_) {
+            static std::string_view __get_enum_as_str(behaviour subject_) {
                 return __behaviour_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(combat_mode subject_) {
+            static std::string_view __get_enum_as_str(combat_mode subject_) {
                 return __combat_mode_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(formation subject_) {
+            static std::string_view __get_enum_as_str(formation subject_) {
                 return __formation_lookup[static_cast<int>(subject_)];
             }
-            static std::string __get_enum_as_str(loiter_type subject_) {
+            static std::string_view __get_enum_as_str(loiter_type subject_) {
                 return __loiter_lookup[static_cast<int>(subject_)];
             }
         };

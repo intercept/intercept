@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -22,11 +22,11 @@ using namespace intercept::types;
 
 namespace intercept {
     //! Nular function map.
-    typedef std::unordered_map<std::string, std::vector<nular_entry>> nular_map;
+    typedef std::unordered_map<std::string_view, std::vector<nular_entry>> nular_map;
     //! Unary function map.
-    typedef std::unordered_map<std::string, std::vector<unary_entry>> unary_map;
+    typedef std::unordered_map<std::string_view, std::vector<unary_entry>> unary_map;
     //! Binary functon map.
-    typedef std::unordered_map<std::string, std::vector<binary_entry>> binary_map;
+    typedef std::unordered_map<std::string_view, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
         sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
@@ -80,7 +80,7 @@ namespace intercept {
         bool found = get_function("canfire", can_fire);
         @endcode
         */
-        bool get_function(std::string function_name_, unary_function &function_);
+        bool get_function(std::string_view function_name_, unary_function &function_);
 
         /*!
         @brief Returns a unary SQF function from the loaders library of found
@@ -104,7 +104,7 @@ namespace intercept {
         bool found2 = get_function("random", random_function2, "ARRAY");
         @endcode
         */
-        bool get_function(std::string function_name_, unary_function & function_, std::string arg_signature_);
+        bool get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_);
 
         /*!
         @brief Returns a binary SQF function from the loaders library of found SQF functions.
@@ -124,7 +124,7 @@ namespace intercept {
         bool found = get_function("setpos", set_pos);
         @endcode
         */
-        bool get_function(std::string function_name_, binary_function &function_);
+        bool get_function(std::string_view function_name_, binary_function &function_);
 
         /*!
         @brief Returns a binary SQF function from the loaders library of found
@@ -152,7 +152,7 @@ namespace intercept {
         bool found2 = get_function("removemenuitem", remove_menu_item2, "CONTROL", "STRING");
         @endcode
         */
-        bool get_function(std::string function_name_, binary_function &function_, std::string arg1_signature_, std::string arg2_signature_);
+        bool get_function(std::string_view function_name_, binary_function &function_, std::string arg1_signature_, std::string arg2_signature_);
 
         /*!
         @brief Returns a nular SQF function from the loaders library of found SQF functions.
@@ -172,7 +172,7 @@ namespace intercept {
         bool found = get_function("player", player);
         @endcode
         */
-        bool get_function(std::string function_name_, nular_function &function_);
+        bool get_function(std::string_view function_name_, nular_function &function_);
 
         /*!@{
         @brief Hook a function.
@@ -190,9 +190,9 @@ namespace intercept {
 
         @return `true` if the hook succeded, `false` if the hook failed.
         */
-        bool hook_function(std::string function_name_, void *hook_, unary_function &trampoline_);
-        bool hook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
-        bool hook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
+        bool hook_function(std::string_view function_name_, void *hook_, unary_function &trampoline_);
+        bool hook_function(std::string_view function_name_, void *hook_, binary_function &trampoline_);
+        bool hook_function(std::string_view function_name_, void *hook_, nular_function &trampoline_);
         //!@}
 
         /*!@{
@@ -298,7 +298,7 @@ namespace intercept {
             r_string _example2;
             r_string placeholder_11;
             r_string placeholder_12;
-            r_string _category{ "intercept" }; //0x48
+            r_string _category{ "intercept"sv }; //0x48
         #endif
                                         //const rv_string* placeholder13;
         };
@@ -316,7 +316,7 @@ namespace intercept {
             r_string placeholder_11;//0x60
             r_string _version;//0x64 some version number
             r_string placeholder_12;//0x68
-            r_string _category{ "intercept" }; //0x6c
+            r_string _category{ "intercept"sv }; //0x6c
         #endif
         };
         class gsNular : public gsFuncBase {

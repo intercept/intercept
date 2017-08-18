@@ -109,7 +109,7 @@ namespace intercept::client {
             EHDEF_OBJECT(EHOBJ_CASE)
         default:;
         }
-        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), handle.second);
+        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), static_cast<int>(handle.second));
     }
 #pragma endregion
 

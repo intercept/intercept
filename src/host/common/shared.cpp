@@ -15,8 +15,33 @@ namespace intercept {
         return elems;
     }
 
+    //http://stackoverflow.com/a/5506223
+    std::vector<std::string_view>& split(std::string_view s, char delim, std::vector<std::string_view>& elems) {
+        std::string::size_type pos, lastPos = 0, length = s.length();
+
+        while (lastPos < length + 1) {
+            pos = s.find_first_of(delim, lastPos);
+            if (pos == std::string::npos) {
+                pos = length;
+            }
+
+            //if (pos != lastPos || !trimEmpty)
+            elems.emplace_back(s.data() + lastPos, pos - lastPos);
+
+            lastPos = pos + 1;
+        }
+
+        return elems;
+    }
+
     std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
+        split(s, delim, elems);
+        return elems;
+    }
+
+    std::vector<std::string_view> split(std::string_view s, char delim) {
+        std::vector<std::string_view> elems;
         split(s, delim, elems);
         return elems;
     }

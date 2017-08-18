@@ -1,10 +1,12 @@
-﻿#include "search.hpp"
+#include "search.hpp"
 #include <sstream>
 #include <iterator>
 #include <algorithm>
 #include <regex>
 #include <experimental/filesystem>
+#include <string_view>
 
+using namespace std::literals::string_view_literals;
 
 namespace intercept::search {
     plugin_searcher::plugin_searcher() {
@@ -40,7 +42,7 @@ namespace intercept::search {
     }
 
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
-        LOG(DEBUG) << "Searching for Extension: " << name << "\n";
+        LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
             std::string test_path = folder + "\\intercept\\" + name + "_x64.dll";
@@ -52,13 +54,13 @@ namespace intercept::search {
         #endif
         #endif
 
-            LOG(DEBUG) << "Mod: " << test_path << "\n";
+            LOG(DEBUG) << "Mod: "sv << test_path << "\n"sv;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 return test_path;
             }
         }
-        LOG(ERROR) << "Client plugin: " << name << " was not found.\n";
+        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
         return std::optional<std::string>();
     }
 }
@@ -325,13 +327,13 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
 
         /* Print the information! */
         if (objectName.Length) {
-            std::wstring tmp_type(objectTypeInfo->Name.Buffer);
-            std::wstring tmp_name(objectName.Buffer);
+            std::wstring_view tmp_type(objectTypeInfo->Name.Buffer);
+            std::wstring_view tmp_name(objectName.Buffer);
 
             std::string object_type(tmp_type.begin(), tmp_type.end());
             std::string object_name(tmp_name.begin(), tmp_name.end());
             //LOG(INFO) << "File: " << object_name;
-            if (object_type == "File" && object_name.find(".pbo") != object_name.npos) {
+            if (object_type == "File"sv && object_name.find(".pbo"sv) != object_name.npos) {
                 char buffer[MAX_PATH];
                 GetFinalPathNameByHandle(dupHandle, buffer, sizeof(buffer), VOLUME_NAME_DOS);
 

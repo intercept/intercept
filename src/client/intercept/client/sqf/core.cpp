@@ -21,7 +21,7 @@ namespace intercept {
         game_value call(const code &code_, game_value args_) {
             game_value args({args_, code_});
 
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
+            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
             Why is this in a wrapper? Because calling the code would only add a new item to the script
             stack. Meaning it will only get executed after we return back to the engine but we want 
@@ -29,14 +29,14 @@ namespace intercept {
             isNil is executing the whole code inside it's function and it's done executing when it returns,
             which makes it suitable for us.
             */
-            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper");
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
             if (wrapper.is_nil()) {  //Can happen when executed before preInit
                 wrapper = sqf::compile(
                     "\
                     (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
                     missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                    ");
-                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper", static_cast<game_value>(wrapper));
+                    "sv);
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
             }
 
             host::functions.invoke_raw_unary(
@@ -44,13 +44,13 @@ namespace intercept {
                 wrapper);
 
             // Sadly isNil doesn't return anything so we have to grab it from a variable.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
+            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
         game_value call(const code &code_) {
             game_value args({game_value(), code_});
 
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
+            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
             Why is this in a wrapper? Because calling the code would only add a new item to the script
             stack. Meaning it will only get executed after we return back to the engine but we want
@@ -58,21 +58,21 @@ namespace intercept {
             isNil is executing the whole code inside it's function and it's done executing when it returns,
             which makes it suitable for us.
             */
-            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper");
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
             if (wrapper.is_nil()) {  //Can happen when executed before preInit
                 wrapper = sqf::compile(
                     "\
                     (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
                     missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                    ");
-                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper", static_cast<game_value>(wrapper));
+                    "sv);
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
             }
             host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
                 wrapper);
 
             // Sadly isNil doesn't return anything so we have to grab it from a variable.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
+            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
         bool is_nil_code(const code &code_) {

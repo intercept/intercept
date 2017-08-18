@@ -149,11 +149,11 @@ namespace intercept::client {
             case eventhandlers_mission::Loaded: {
                 auto type = static_cast<intercept::types::r_string>(args[0]);
                 loaded_saveType type_ = {};
-                if (type == "save")
+                if (type == "save"sv)
                     type_ = loaded_saveType::save;
-                else if (type == "autosave")
+                else if (type == "autosave"sv)
                     type_ = loaded_saveType::autosave;
-                else if (type == "continue")
+                else if (type == "continue"sv)
                     type_ = loaded_saveType::continuesave;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Loaded)>*>(func.get()))(type_);
             } break;

@@ -282,7 +282,7 @@ namespace intercept {
         @brief A collection of bound functions for processing event handlers in
         the client plugins.
         */
-        std::unordered_map < std::string, std::function<void(game_value &)>, std::less<> > _eventhandlers;
+        std::unordered_map < std::string, std::function<void(game_value &)> > _eventhandlers;
 
         bool _patched;
         bool _attached;

@@ -93,7 +93,7 @@ namespace intercept {
                 
                 // @TODO: We should provide an interface for this serialization.
                 std::stringstream ss;
-                ss << "[\"result_id\", "sv << _message_id << "]";
+                ss << "[\"result_id\", " << _message_id << "]";
                 result_ = ss.str();
 
                 _message_id = _message_id + 1;

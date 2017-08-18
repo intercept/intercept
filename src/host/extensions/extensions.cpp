@@ -55,7 +55,7 @@ namespace intercept {
 
     void extensions::attach_controller() {
         controller::get().add("list_extensions"sv, std::bind(&extensions::list, this, std::placeholders::_1, std::placeholders::_2));
-        controller::get().add("load_extension"sv, [this](const arguments& args_, std::string&) { return load(args_.as_string(0)); });
+        controller::get().add("load_extension"sv, [this](const arguments& args_, std::string&) { return load(args_.as_string(0), args_.size() > 1 ? args_.as_string(1) : std::optional<std::string>()); });
         controller::get().add("unload_extension"sv, [this](const arguments& args_, std::string&) { return unload(args_.as_string(0)); });
     }
 
@@ -66,15 +66,20 @@ namespace intercept {
         auto current_modules = _modules;
         for (auto module : current_modules) {
             unload(module.first);
-            load(module.first);
+            load(module.first,{});
         }
     }
 
-    bool extensions::load(const std::string& path_) {
-        std::string path = path_;
+    bool extensions::load(const std::string& path_, std::optional<std::string> certPath) {
+
+        int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
+        std::wstring path;
+        path.resize(length);
+        wchar_t *output_buffer = new wchar_t[length];
+        MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);
         LOG(INFO) << "Load requested ["sv << path_ << "]"sv;
 
-        if (_modules.find(path) != _modules.end()) {
+        if (_modules.find(path_) != _modules.end()) {
             LOG(ERROR) << "Module already loaded ["sv << path << "]"sv;
             return true;
         }
@@ -95,21 +100,21 @@ namespace intercept {
 #ifndef __linux__  //Lazyness
         if (do_reload) {
             LOG(INFO) << "Loading plugin from temp file."sv;
-            char tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
+            wchar_t tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
 
-            if (!GetTempPathA(MAX_PATH, tmpPath)) {
+            if (!GetTempPathW(MAX_PATH, tmpPath)) {
                 LOG(ERROR) << "GetTempPath() failed, e="sv << GetLastError();
                 return false;
             }
-            if (!GetTempFileNameA(tmpPath, "intercept_temp", 0, buffer)) {
+            if (!GetTempFileNameW(tmpPath, L"intercept_temp", 0, buffer)) {
                 LOG(ERROR) << "GetTempFileName() failed, e="sv << GetLastError();
                 return false;
             }
-            std::string temp_filename = buffer;
+            std::wstring temp_filename = buffer;
             LOG(INFO) << "Temp file: "sv << temp_filename;
-            if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
-                DeleteFile(temp_filename.c_str());
-                if (!CopyFileA(full_path->c_str(), temp_filename.c_str(), FALSE)) {
+            if (!CopyFileW(full_path->c_str(), temp_filename.c_str(), FALSE)) {
+                DeleteFileW(temp_filename.c_str());
+                if (!CopyFileW(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                     LOG(ERROR) << "CopyFile() , e="sv << GetLastError();
                     return false;
                 }
@@ -125,14 +130,19 @@ namespace intercept {
             return false;
         }
 #else
-        auto dllHandle = LoadLibrary(full_path->c_str());
+        auto dllHandle = LoadLibraryW(full_path->c_str());
         if (!dllHandle) {
             LOG(ERROR) << "LoadLibrary() failed, e="sv << GetLastError() << " [" << *full_path << "]";
             return false;
         }
 #endif
+        length = WideCharToMultiByte(CP_UTF8, 0, (*full_path).data(), (*full_path).length(), nullptr, 0, nullptr, nullptr);
+        std::string utf8_name;
+        utf8_name.resize(length);
+        WideCharToMultiByte(CP_UTF8, 0, (*full_path).data(), (*full_path).length(), utf8_name.data(), length, nullptr, nullptr);
 
-        auto new_module = module::entry(*full_path, dllHandle);
+
+        auto new_module = module::entry(utf8_name, dllHandle);
 
 #ifdef __linux__
 #define GET_PROC_ADDR dlsym
@@ -175,9 +185,10 @@ namespace intercept {
 #define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
         EH_LIST(EH_PROC_DEF)
 
+
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
-        _modules[path] = new_module;
+        _modules[path_] = new_module;
 
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();

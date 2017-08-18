@@ -14,10 +14,10 @@ namespace intercept::search {
         //std::cout << "pbolist " << pboList.size() << "\n";
         for (auto& file : pboList) {
             //std::cout << "mod " << file << "\n";
-            size_t last_index = file.find_last_of("\\/");
-            std::string path = file.substr(0, last_index);
+            size_t last_index = file.find_last_of(L"\\/");
+            std::wstring path = file.substr(0, last_index);
             //std::cout << "path " << path << "\n";
-            last_index = path.find_last_of("\\/");
+            last_index = path.find_last_of(L"\\/");
             path = path.substr(0, last_index);
             //std::cout << "modfolder " << path << "\n";
             if (std::find(active_mod_folder_list.begin(), active_mod_folder_list.end(), path) == active_mod_folder_list.end())
@@ -41,16 +41,16 @@ namespace intercept::search {
     #endif
     }
 
-    std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
+    std::optional<std::wstring> plugin_searcher::find_extension(const std::wstring& name) {
         LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
-            std::string test_path = folder + "\\intercept\\" + name + "_x64.dll";
+            std::wstring test_path = folder + L"\\intercept\\" + name + L"_x64.dll";
         #else
         #ifdef __linux__
-            std::string test_path = folder + "/intercept/" + name + ".so";
+            std::wstring test_path = folder + L"/intercept/" + name + L".so";
         #else
-            std::string test_path = folder + "\\intercept\\" + name + ".dll";
+            std::wstring test_path = folder + L"\\intercept\\" + name + L".dll";
         #endif
         #endif
 
@@ -61,7 +61,7 @@ namespace intercept::search {
             }
         }
         LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
-        return std::optional<std::string>();
+        return std::optional<std::wstring>();
     }
 }
 
@@ -209,8 +209,8 @@ PVOID GetLibraryProcAddress(PSTR LibraryName, PSTR ProcName) {
     return GetProcAddress(GetModuleHandleA(LibraryName), ProcName);
 }
 
-std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list() {
-    std::vector<std::string> _active_pbo_list;
+std::vector<std::wstring> intercept::search::plugin_searcher::generate_pbo_list() {
+    std::vector<std::wstring> _active_pbo_list;
     NTSTATUS status;
     ULONG handleInfoSize = 0x10000;
 
@@ -330,15 +330,13 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
             std::wstring_view tmp_type(objectTypeInfo->Name.Buffer);
             std::wstring_view tmp_name(objectName.Buffer);
 
-            std::string object_type(tmp_type.begin(), tmp_type.end());
-            std::string object_name(tmp_name.begin(), tmp_name.end());
             //LOG(INFO) << "File: " << object_name;
-            if (object_type == "File"sv && object_name.find(".pbo"sv) != object_name.npos) {
-                char buffer[MAX_PATH];
-                GetFinalPathNameByHandle(dupHandle, buffer, sizeof(buffer), VOLUME_NAME_DOS);
+            if (tmp_type == L"File"sv && tmp_name.find(L".pbo"sv) != std::string::npos) {
+                wchar_t buffer[MAX_PATH];
+                GetFinalPathNameByHandleW(dupHandle, buffer, sizeof(buffer), VOLUME_NAME_DOS);
 
                 //LOG(INFO) << "Pbo: " << buffer;
-                _active_pbo_list.push_back(std::string(buffer));
+                _active_pbo_list.push_back(std::wstring(buffer));
             }
         }
 

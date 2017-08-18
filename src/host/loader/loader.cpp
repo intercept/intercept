@@ -430,7 +430,7 @@ namespace intercept {
 
         //File Banks
 #ifndef __linux__
-        _sqf_register_funcs._file_banks = future_fileBanks.get();
+        //_sqf_register_funcs._file_banks = future_fileBanks.get(); //Broken in 1.74
 #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();

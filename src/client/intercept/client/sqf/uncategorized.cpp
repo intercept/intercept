@@ -1,4 +1,4 @@
-#include "uncategorized.hpp"
+﻿#include "uncategorized.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "position.hpp"  //for uses of get_pos_obj. Should be removed once they are sorted
@@ -185,16 +185,8 @@ namespace intercept {
         // unary__sendaumessage__array__ret__nothing
         // unary__sendudpmessage__array__ret__bool
 
-        /* This function does _something_ to a listbox. No documentation.*/
-        // binary__lbsettextright__control__array__ret__nothing
-
         /* This function is apparently depreciated but the functionality is different to the command which replaces it.*/
         // unary__lbselection__control__ret__array
-
-        /* This undocumented function has the potential to be useful, my guess is it returns a float between 1 and 0 which
-        * corresponds to how visible a particular unit is from another unit. binary__knowsabout__object_group__object__ret__scalar
-        */
-        // binary__checkvisibility__array__array__ret__scalar
 
         /* No documentation.*/
         // binary__ctrlsettextcolorsecondary__control__array__ret__nothing
@@ -219,7 +211,6 @@ namespace intercept {
         // unary__getdlcassetsusagebyname__string__ret__array
         // unary__getenginetargetrpmrtd__object__ret__array
         // unary__getfieldmanualstartpage__display__ret__array
-        // unary__lbsettext__array__ret__string
         // binary__lnbcolorright__control__array__ret__array
         // unary__lnbcolorright__array__ret__array
         // unary__lnbpictureright__array__ret__string

@@ -1,6 +1,8 @@
 #include "extensions.hpp"
 #include "controller.hpp"
 #include "export.hpp"
+#include "invoker.hpp"
+#include "signing.hpp"
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -55,7 +57,7 @@ namespace intercept {
 
     void extensions::attach_controller() {
         controller::get().add("list_extensions"sv, std::bind(&extensions::list, this, std::placeholders::_1, std::placeholders::_2));
-        controller::get().add("load_extension"sv, [this](const arguments& args_, std::string&) { return load(args_.as_string(0), args_.size() > 1 ? args_.as_string(1) : std::optional<std::string>()); });
+        controller::get().add("load_extension"sv, [this](const arguments& args_, std::string&) { return load(args_.as_string(0), args_.size() > 1 ? args_.as_string(1) : ""); });
         controller::get().add("unload_extension"sv, [this](const arguments& args_, std::string&) { return unload(args_.as_string(0)); });
     }
 
@@ -71,11 +73,9 @@ namespace intercept {
     }
 
     bool extensions::load(const std::string& path_, std::optional<std::string> certPath) {
-
         int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
         std::wstring path;
         path.resize(length);
-        wchar_t *output_buffer = new wchar_t[length];
         MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);
         LOG(INFO) << "Load requested ["sv << path_ << "]"sv;
 
@@ -84,7 +84,7 @@ namespace intercept {
             return true;
         }
 
-        std::string_view bad_chars = ".\\/:?\"<>|"sv;
+        std::wstring_view bad_chars = L".\\/:?\"<>|"sv;
         for (auto it = path.begin(); it < path.end(); ++it) {
             bool found = bad_chars.find(*it) != std::string::npos;
             if (found) {
@@ -96,6 +96,26 @@ namespace intercept {
         auto full_path = _searcher.find_extension(path);
         if (!full_path)
             return false;
+
+        //certificate check
+        if (certPath && certPath->length() != 0) {
+            r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
+            if (certData.capacity() != 0) {
+                cert::signing sign_checker(*full_path, certData);
+                if (!sign_checker.verify()) {
+                    LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
 
 #ifndef __linux__  //Lazyness
         if (do_reload) {
@@ -197,7 +217,7 @@ namespace intercept {
         return false;
     }
 
-    bool extensions::unload(const std::string& path_) {
+    bool extensions::unload(std::string path_) {
         LOG(INFO) << "Unload requested ["sv << path_ << "]"sv;
         auto module = _modules.find(path_);
         if (module == _modules.end()) {

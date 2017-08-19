@@ -249,7 +249,7 @@ namespace intercept {
 
         Unloads and removes a client plugin.
         */
-        bool unload(const std::string &path_);
+        bool unload(std::string path_); //the string copy is intentional
 
         /*!
         @brief Returns a list of all loaded modules to SQF.

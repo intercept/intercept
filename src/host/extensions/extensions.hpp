@@ -142,7 +142,7 @@ namespace intercept {
             plugin_interface_identifier(r_string name_, r_string module_name_, uint32_t api_version_) : name(name_), module_name(module_name_), api_version(api_version_) {}
 
             bool operator<(const plugin_interface_identifier &other) const {
-                return name < other.name && api_version < other.api_version;
+                return name < other.name || (name == other.name && api_version < other.api_version);
             }
             bool operator==(const plugin_interface_identifier &other) const {
                 return api_version == other.api_version && name == other.name;

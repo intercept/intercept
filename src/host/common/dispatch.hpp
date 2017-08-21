@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <thread>
 #include <mutex>
@@ -34,7 +34,7 @@ namespace intercept {
     public:
 		dispatcher() : _ready(true) { }
 
-        virtual bool call(const std::string & name_, arguments & args_, std::string & result_) {
+        virtual bool call(const std::string_view name_, arguments & args_, std::string & result_) {
             auto method = _methods.find(name_);
             if (method != _methods.end()) {
                 return method->second(args_, result_);
@@ -42,7 +42,7 @@ namespace intercept {
             return false;
         }
 
-        bool add(const std::string & name_, std::function<bool(arguments &, std::string &)> func_) {
+        bool add(const std::string_view name_, std::function<bool(arguments &, std::string &)> func_) {
             if (_methods.find(name_) != _methods.end()) {
                 // @TODO: Exceptions
                 return false;
@@ -55,20 +55,20 @@ namespace intercept {
         bool ready() const { return _ready;  }
         void ready(bool r) { _ready.exchange(r); }
     protected:
-        std::unordered_map < std::string, std::function<bool(arguments &, std::string &)> > _methods;
+        std::unordered_map < std::string_view, std::function<bool(arguments &, std::string &)> > _methods;
         std::atomic_bool _ready;
     };
     class dispatch : public dispatcher, public singleton<dispatch> { };
 
     struct dispatch_message {
-        dispatch_message(const std::string & command_, const arguments & args_, const uint64_t id_) : command(command_), args(args_), id(id_) {}
+        dispatch_message(std::string_view command_, const arguments & args_, const uint64_t id_) : command(command_), args(args_), id(id_) {}
         std::string command;
         arguments args;
         uint64_t    id;
     };
     struct dispatch_result {
         dispatch_result() {}
-        dispatch_result(const std::string &res, const uint64_t id_) : message(res), id(id_) {}
+        dispatch_result(std::string res, const uint64_t id_) : message(std::move(res)), id(id_) {}
         std::string message;
         uint64_t    id;
     };
@@ -81,7 +81,7 @@ namespace intercept {
 
         virtual ~threaded_dispatcher() {}
         
-        bool call(const std::string & name_, arguments & args_, std::string & result_, bool threaded) {
+        bool call(const std::string_view name_, arguments & args_, std::string & result_, bool threaded) {
             if (_methods.find(name_) == _methods.end()) {
                 // @TODO: Exceptions
                 return false;
@@ -108,7 +108,7 @@ namespace intercept {
 
             return true;
         }
-        bool call(const std::string & name_, arguments & args_, std::string & result_) override {
+        bool call(const std::string_view name_, arguments & args_, std::string & result_) override {
             return call(name_, args_, result_, false);
         }
 

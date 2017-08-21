@@ -37,20 +37,18 @@ namespace intercept::client {
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
 #define EHMISS_CASE(name, retVal, args) \
-    case eventhandlers_mission::name: typeStr = #name##_sv; break;
+    case eventhandlers_mission::name: typeStr = #name##sv; break;
             EHDEF_MISSION(EHMISS_CASE)
             default:;
         }
 
         auto uid = dist(rng);
         //#TODO use hash of moduleName as identifier.. That's faster..
-        std::string command = std::string("[\"")
+        std::string command = std::string("[\""sv)
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler"
-                              + "]"
-                              + " InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent _this";
         float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid};
@@ -59,8 +57,6 @@ namespace intercept::client {
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
         r_string typeStr;
         switch (type) {
-#define EHMISS_CASE(name, retVal, args) \
-    case eventhandlers_mission::name: typeStr = #name##_sv; break;
             EHDEF_MISSION(EHMISS_CASE)
             default:;
         }
@@ -90,7 +86,7 @@ namespace intercept::client {
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
 #define EHOBJ_CASE(name, retVal, args) \
-    case eventhandlers_object::name: typeStr = #name##_sv; break;
+    case eventhandlers_object::name: typeStr = #name##sv; break;
             EHDEF_OBJECT(EHOBJ_CASE)
             default:;
         }
@@ -101,9 +97,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler"
-                              + "]"
-                              + " InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent _this";
         float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid};
@@ -112,12 +106,10 @@ namespace intercept::client {
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
         r_string typeStr;
         switch (type) {
-#define EHOBJ_CASE(name, retVal, args) \
-    case eventhandlers_object::name: typeStr = #name##_sv; break;
             EHDEF_OBJECT(EHOBJ_CASE)
         default:;
         }
-        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), handle.second);
+        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), static_cast<int>(handle.second));
     }
 #pragma endregion
 
@@ -131,7 +123,7 @@ namespace intercept::client {
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
 #define EHCTRL_CASE(name, retVal, args) \
-    case eventhandlers_ctrl::name: typeStr = #name##_sv; break;
+    case eventhandlers_ctrl::name: typeStr = #name##sv; break;
             EHDEF_CTRL(EHCTRL_CASE)
             default:;
         }
@@ -142,9 +134,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler"
-                              + "]"
-                              + " InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent _this";
         float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid};
@@ -153,8 +143,6 @@ namespace intercept::client {
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
         r_string typeStr;
         switch (type) {
-#define EHCTRL_CASE(name, retVal, args) \
-    case eventhandlers_ctrl::name: typeStr = #name##_sv; break;
             EHDEF_CTRL(EHCTRL_CASE)
         default:;
         }

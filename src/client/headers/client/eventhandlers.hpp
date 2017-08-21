@@ -149,11 +149,11 @@ namespace intercept::client {
             case eventhandlers_mission::Loaded: {
                 auto type = static_cast<intercept::types::r_string>(args[0]);
                 loaded_saveType type_ = {};
-                if (type == "save")
+                if (type == "save"sv)
                     type_ = loaded_saveType::save;
-                else if (type == "autosave")
+                else if (type == "autosave"sv)
                     type_ = loaded_saveType::autosave;
-                else if (type == "continue")
+                else if (type == "continue"sv)
                     type_ = loaded_saveType::continuesave;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Loaded)>*>(func.get()))(type_);
             } break;
@@ -510,44 +510,44 @@ namespace intercept::client {
             case eventhandlers_object::GetIn: {
                 types::r_string pos = args[1];
                 get_in_position p{};
-                if (pos == "driver"_sv)
+                if (pos == "driver"sv)
                     p = get_in_position::driver;
-                else if (pos == "gunner"_sv)
+                else if (pos == "gunner"sv)
                     p = get_in_position::gunner;
-                else if (pos == "cargo"_sv)
+                else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetIn)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
             } break;
             case eventhandlers_object::GetInMan: {
                 types::r_string pos = args[1];
                 get_in_position p{};
-                if (pos == "driver"_sv)
+                if (pos == "driver"sv)
                     p = get_in_position::driver;
-                else if (pos == "gunner"_sv)
+                else if (pos == "gunner"sv)
                     p = get_in_position::gunner;
-                else if (pos == "cargo"_sv)
+                else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetInMan)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
             } break;
             case eventhandlers_object::GetOut: {
                 types::r_string pos = args[1];
                 get_in_position p{};
-                if (pos == "driver"_sv)
+                if (pos == "driver"sv)
                     p = get_in_position::driver;
-                else if (pos == "gunner"_sv)
+                else if (pos == "gunner"sv)
                     p = get_in_position::gunner;
-                else if (pos == "cargo"_sv)
+                else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOut)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
             } break;
             case eventhandlers_object::GetOutMan: {
                 types::r_string pos = args[1];
                 get_in_position p{};
-                if (pos == "driver"_sv)
+                if (pos == "driver"sv)
                     p = get_in_position::driver;
-                else if (pos == "gunner"_sv)
+                else if (pos == "gunner"sv)
                     p = get_in_position::gunner;
-                else if (pos == "cargo"_sv)
+                else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOutMan)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
             } break;

@@ -1,4 +1,4 @@
-﻿#include "pointers.hpp"
+#include "pointers.hpp"
 
 namespace intercept {
     namespace client {
@@ -7,7 +7,7 @@ namespace intercept {
         void __sqf::__initialize()
         {
 #include "sqf_assignments.hpp"
-            __sqf::binary__configaccessor__config__string__ret__config = host::functions.get_binary_function_typed(">>", "CONFIG", "STRING");
+            __sqf::binary__configaccessor__config__string__ret__config = host::functions.get_binary_function_typed(">>"sv, "CONFIG"sv, "STRING"sv);
         }
     }
 

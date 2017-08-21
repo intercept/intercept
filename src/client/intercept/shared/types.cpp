@@ -379,12 +379,12 @@ namespace intercept {
 
         game_data* game_data::createFromSerialized(param_archive& ar) {
             bool isNil = false;
-            if (ar.serialize(r_string("nil"_sv), isNil, 1, false) != serialization_return::no_error) {
+            if (ar.serialize(r_string("nil"sv), isNil, 1, false) != serialization_return::no_error) {
                 return nullptr;
             }
 
             sqf_script_type _type;
-            if (ar.serialize(r_string("type"_sv), _type, 1) != serialization_return::no_error) return nullptr;
+            if (ar.serialize(r_string("type"sv), _type, 1) != serialization_return::no_error) return nullptr;
 
             if (isNil) {
                 //#TODO create GameDataNil or GameDataNothing
@@ -398,30 +398,30 @@ namespace intercept {
         static std::map<std::string, types::GameDataType> additionalTypes;
         types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
             //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::GameDataType::SCALAR;
-            if (name == "BOOL") return types::GameDataType::BOOL;
-            if (name == "ARRAY") return types::GameDataType::ARRAY;
-            if (name == "STRING") return types::GameDataType::STRING;
-            if (name == "NOTHING") return types::GameDataType::NOTHING;
-            if (name == "ANY") return types::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::GameDataType::NaN;
-            if (name == "CODE") return types::GameDataType::CODE;
-            if (name == "OBJECT") return types::GameDataType::OBJECT;
-            if (name == "SIDE") return types::GameDataType::SIDE;
-            if (name == "GROUP") return types::GameDataType::GROUP;
-            if (name == "TEXT") return types::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::GameDataType::TARGET;
-            if (name == "CONFIG") return types::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::GameDataType::CONTROL;
-            if (name == "NetObject") return types::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::GameDataType::LOCATION;
+            if (name == "SCALAR"sv) return types::GameDataType::SCALAR;
+            if (name == "BOOL"sv) return types::GameDataType::BOOL;
+            if (name == "ARRAY"sv) return types::GameDataType::ARRAY;
+            if (name == "STRING"sv) return types::GameDataType::STRING;
+            if (name == "NOTHING"sv) return types::GameDataType::NOTHING;
+            if (name == "ANY"sv) return types::GameDataType::ANY;
+            if (name == "NAMESPACE"sv) return types::GameDataType::NAMESPACE;
+            if (name == "NaN"sv) return types::GameDataType::NaN;
+            if (name == "CODE"sv) return types::GameDataType::CODE;
+            if (name == "OBJECT"sv) return types::GameDataType::OBJECT;
+            if (name == "SIDE"sv) return types::GameDataType::SIDE;
+            if (name == "GROUP"sv) return types::GameDataType::GROUP;
+            if (name == "TEXT"sv) return types::GameDataType::TEXT;
+            if (name == "SCRIPT"sv) return types::GameDataType::SCRIPT;
+            if (name == "TARGET"sv) return types::GameDataType::TARGET;
+            if (name == "CONFIG"sv) return types::GameDataType::CONFIG;
+            if (name == "DISPLAY"sv) return types::GameDataType::DISPLAY;
+            if (name == "CONTROL"sv) return types::GameDataType::CONTROL;
+            if (name == "NetObject"sv) return types::GameDataType::NetObject;
+            if (name == "SUBGROUP"sv) return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER"sv) return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK"sv) return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD"sv) return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION"sv) return types::GameDataType::LOCATION;
             auto found = additionalTypes.find(static_cast<std::string>(name));
             if (found != additionalTypes.end())
                 return found->second;
@@ -642,12 +642,6 @@ namespace intercept {
             return false;
         }
 
-        game_value::operator r_string () const {
-            if (data)
-                return data->get_as_string();
-            return {};
-        }
-
         game_value::operator vector3() const {
             if (!data) return {};
             auto& array = data->get_as_array();
@@ -665,8 +659,24 @@ namespace intercept {
         }
 
         game_value::operator std::string() const {
-            if (data)
-                return static_cast<std::string>(data->get_as_string());
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return static_cast<std::string>(data->get_as_string());
+                return static_cast<std::string>(data->to_string());
+            }
+                
+            return {};
+        }
+
+        game_value::operator r_string () const {
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return data->get_as_string();
+                return data->to_string();
+            }
+
             return {};
         }
 
@@ -1010,7 +1020,7 @@ namespace intercept {
 
         serialization_return game_value::serialize(param_archive& ar) {
             if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
-            ar.serialize(r_string("data"_sv), data, 1);
+            ar.serialize(r_string("data"sv), data, 1);
             //#TODO check if type == game_data_nothing. Can probably just use strcmp
             //if (data && data->type() == game_data_nothing) data = nullptr;
             return serialization_return::no_error;

@@ -2414,9 +2414,9 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__setmouseposition__array__ret__nothing, params);
         }
 
-        //#TODO: Find out, which commands this command really takes (not documented)
-        void set_pip_effect(sqf_string_const_ref parameter_left, const game_value &parameters_left) {
-            host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, parameter_left, parameters_left);
+        //#TODO: Do we need a function for each type? To get the right arguments? https://community.bistudio.com/wiki/setPiPEffect
+        void set_pip_effect(sqf_string_const_ref name_, const game_value &parameters) {
+            host::functions.invoke_raw_binary(__sqf::binary__setpipeffect__string__array__ret__nothing, name_, parameters);
         }
 
         void slider_set_speed(const control &slider_, float line_, int page_) {
@@ -2512,9 +2512,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctdata__control__scalar__ret__string, control_, index_);
         }
 
-        //#TODO: Find out about the return type
-        std::vector<game_value> ct_find_header_rows(const control &control_, int index_) {
-            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
+        std::vector<float> ct_find_header_rows(const control &control_, int index_) {
+            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
         }
 
         int ct_find_row_header(const control &control_, int index_) {

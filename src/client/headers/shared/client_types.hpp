@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "shared.hpp"
 #include "types.hpp"
 #include <variant>
@@ -110,7 +110,33 @@ namespace intercept {
         using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
         using sqf_return_string_list = std::vector<std::string>;
         using sqf_string_list_const_ref = const std::vector<std::string>&;
-        using sqf_string_const_ref = const sqf_string&;
+
+        class sqf_string_const_ref {
+        public:
+            sqf_string_const_ref(const std::string& ref) : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(r_string ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const game_value& ref) : _var(r_string(ref)) {}
+            sqf_string_const_ref(std::string_view ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const char* ref) : _var(std::string_view(ref)) {}
+            operator std::string_view() const {
+                if (std::holds_alternative<std::string_view>(_var))
+                    return std::get<std::string_view>(_var);
+                return std::string_view(std::get<r_string>(_var));
+            }
+            operator r_string() const {
+                if (std::holds_alternative<r_string>(_var))
+                    return std::get<r_string>(_var);
+                return r_string(std::get<std::string_view>(_var));
+            }
+            operator game_value() const {
+                if (std::holds_alternative<r_string>(_var))
+                    return std::get<r_string>(_var);
+                return r_string(std::get<std::string_view>(_var));
+            }
+            std::variant<r_string, std::string_view> _var;
+        };
+
+        //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
 
 
@@ -355,6 +381,15 @@ namespace intercept {
             float subjective_cost;
             object object_;
             float position_accuracy;
+            rv_target(vector3&& pos, const game_value& from)
+            {
+                position = std::move(pos);
+                type = std::string(from[1]);
+                side_ = from[2];
+                subjective_cost = from[3];
+                object_ = from[4];
+                position_accuracy = from[5];
+            }
         };
 
         struct rv_query_target {

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -67,7 +67,7 @@ namespace intercept {
         or `group`, etc.
         */
         static game_value invoke_raw_nolock(const nular_function function_);
-        game_value invoke_raw(const std::string &function_name_) const;
+        game_value invoke_raw(std::string_view function_name_) const;
         //!@}
 
         /*!@{
@@ -82,8 +82,8 @@ namespace intercept {
         or `group`, etc.
         */
         static game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
-        game_value invoke_raw(const std::string &function_name_, const game_value &right_) const;
-        game_value invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const;
+        game_value invoke_raw(std::string_view function_name_, const game_value &right_) const;
+        game_value invoke_raw(std::string_view function_name_, const game_value &right_, const std::string &right_type_) const;
         //!@}
 
         /*!@{
@@ -98,8 +98,8 @@ namespace intercept {
         or `group`, etc.
         */
         static game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
-        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const;
-        game_value invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const;
+        game_value invoke_raw(std::string_view function_name_, const game_value &left_, const game_value &right_) const;
+        game_value invoke_raw(std::string_view function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const;
         //!@}
         //!@}
 
@@ -117,7 +117,7 @@ namespace intercept {
         @brief Returns the string representation of the data type. IE: "ARRAY",
         "STRING", "SCALAR", etc.
         */
-        const std::string& get_type_str(const game_value &value_) const;
+        std::string_view get_type_str(const game_value &value_) const;
         //!@}
 
         /*!
@@ -192,17 +192,17 @@ namespace intercept {
 
         @return Returns `true` if it was bound, `false` if it was not.
         */
-        bool add_eventhandler(const std::string & name_, std::function<void(game_value &)> func_);
+        bool add_eventhandler(std::string_view name_, std::function<void(game_value &)> func_);
 
         /*!
         @brief A map of vtable ptrs to string stypes.
         */
-        std::unordered_map<uintptr_t, std::string> type_map;
+        std::unordered_map<uintptr_t, std::string_view> type_map;
 
         /*!
         @brief A map of string type names to their corresponding vtable ptrs.
         */
-        std::unordered_map<std::string, std::pair<uintptr_t, uintptr_t>> type_structures;
+        std::unordered_map<std::string_view, std::pair<uintptr_t, uintptr_t>> type_structures;
 
         void lock();
 

@@ -1,4 +1,4 @@
-﻿#include "invoker.hpp"
+#include "invoker.hpp"
 #include "controller.hpp"
 #include "extensions.hpp"
 #include "shared/client_types.hpp"
@@ -31,18 +31,18 @@ namespace intercept {
     void invoker::attach_controller() {
         if (!_attached) {
             _attached = true;
-            controller::get().add("init_invoker", std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("test_invoker", std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("do_invoke_period", [](const arguments & args_, std::string & result_) {
+            controller::get().add("init_invoker"sv, std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("test_invoker"sv, std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("do_invoke_period"sv, [](const arguments & args_, std::string & result_) {
                 return false; //#deprecate
             });
-            controller::get().add("invoker_begin_register", std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("invoker_register", std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("invoker_end_register", std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("rv_event", [](const arguments & args_, std::string & result_) {
+            controller::get().add("invoker_begin_register"sv, std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("invoker_register"sv, std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("invoker_end_register"sv, std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
+            controller::get().add("rv_event"sv, [](const arguments & args_, std::string & result_) {
                 return false; //#deprecate
             });
-            controller::get().add("signal", [](const arguments & args_, std::string & result_) {
+            controller::get().add("signal"sv, [](const arguments & args_, std::string & result_) {
                 return false; //#deprecate
             });
             eventhandlers::get().initialize();
@@ -52,10 +52,10 @@ namespace intercept {
     bool invoker::invoker_begin_register(const arguments & args_, std::string & result_) {
 
         sqf_functions::get().initialize();
-        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes", "", userFunctionWrapper_ref<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
-        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent", "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
-        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame", "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
-        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal", "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
+        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper_ref<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
+        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
+        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
+        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
         //#deprecate
         //if (loader::get().hook_function("str", _register_hook, _register_hook_trampoline)) {
         //    LOG(INFO) << "Registration function hooked.";
@@ -153,6 +153,7 @@ namespace intercept {
         public:
             auto_array<ref<bank>> banklist;
         };
+        if (!loader::get().get_register_sqf_info()._file_banks) return;
         banks* fbanks = *reinterpret_cast<banks**>(loader::get().get_register_sqf_info()._file_banks);
         //std::ofstream ofile("P:\\filelist.txt");
         for (auto& bank : fbanks->banklist) {
@@ -178,19 +179,19 @@ namespace intercept {
     }
 
     bool invoker::rv_event(const std::string& event_name_, game_value& params_) {
-        LOG(DEBUG) << "EH " << event_name_ << " START";
+        LOG(DEBUG) << "EH "sv << event_name_ << " START"sv;
         auto handler = _eventhandlers.find(event_name_);
         if (handler != _eventhandlers.end()) {
             bool all = false;
             // If we are stopping a mission it is assumed that threads will be
             // stopped and joined here. Deadlocks can occur if we do not open up
             // the invoker to all threads.
-            if (event_name_ == "mission_stopped")
+            if (event_name_ == "mission_stopped"sv)
                 all = true;
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
             handler->second(params_);
-            LOG(DEBUG) << "EH " << event_name_ << " END";
+            LOG(DEBUG) << "EH "sv << event_name_ << " END"sv;
             return true;
         }
         return false;
@@ -201,7 +202,7 @@ namespace intercept {
     }
 
     bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value args) {
-        LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " START";
+        LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " START"sv;
 
         auto signal_module = extensions::get().modules().find(extension_name);
         if (signal_module == extensions::get().modules().end()) {
@@ -224,7 +225,7 @@ namespace intercept {
         }
         _invoker_unlock signal_lock(this);
         signal_func(args);
-        LOG(DEBUG) << "Signal " << extension_name << " : " << signal_name << " END";
+        LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " END"sv;
         return true;
     }
 
@@ -242,7 +243,7 @@ namespace intercept {
     bool invoker::test_invoker(const arguments & args_, std::string & result_) {
         _invoker_unlock test_lock(this);
         result_ = "-1";
-        game_value res = invoke_raw("profilenamesteam");
+        game_value res = invoke_raw("profilenamesteam"sv);
         result_ = static_cast<std::string>(res);
         return true;
     }
@@ -257,7 +258,7 @@ namespace intercept {
     #endif
     }
 
-    game_value invoker::invoke_raw(const std::string &function_name_) const {
+    game_value invoker::invoke_raw(std::string_view function_name_) const {
         nular_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function);
@@ -274,7 +275,7 @@ namespace intercept {
     #endif
     }
 
-    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_, const std::string &right_type_) const {
+    game_value invoker::invoke_raw(std::string_view function_name_, const game_value &right_, const std::string &right_type_) const {
         unary_function function;
         if (loader::get().get_function(function_name_, function, right_type_)) {
             return invoke_raw_nolock(function, right_);
@@ -282,7 +283,7 @@ namespace intercept {
         return game_value();
     }
 
-    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &right_) const {
+    game_value invoker::invoke_raw(std::string_view function_name_, const game_value &right_) const {
         unary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function, right_);
@@ -302,7 +303,7 @@ namespace intercept {
     #endif
     }
 
-    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const game_value &right_) const {
+    game_value invoker::invoke_raw(std::string_view function_name_, const game_value &left_, const game_value &right_) const {
         binary_function function;
         if (loader::get().get_function(function_name_, function)) {
             return invoke_raw_nolock(function, left_, right_);
@@ -310,7 +311,7 @@ namespace intercept {
         return game_value();
     }
 
-    game_value invoker::invoke_raw(const std::string &function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const {
+    game_value invoker::invoke_raw(std::string_view function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const {
         binary_function function;
         if (loader::get().get_function(function_name_, function, left_type_, right_type_)) {
             return invoke_raw_nolock(function, left_, right_);
@@ -322,7 +323,7 @@ namespace intercept {
         return value_.type();
     }
 
-    const std::string& invoker::get_type_str(const game_value &value_) const {
+    std::string_view invoker::get_type_str(const game_value &value_) const {
         auto type = value_.type();
         return type_map.at(type);
     }
@@ -332,105 +333,105 @@ namespace intercept {
 
         auto regInfo = loader::get().get_register_sqf_info();
 
-        LOG(INFO) << "Registration Hook Function Called: " << invoker::get()._registration_type;
+        LOG(INFO) << "Registration Hook Function Called: "sv << invoker::get()._registration_type;
         auto step = invoker::get()._registration_type;
         invoker::get()._sqf_game_state = regInfo._gameState;
         sqf_game_state = regInfo._gameState;
 
         game_value::__vptr_def = left_arg_.get_vtable();
-        invoker::get().type_structures["GV"] = { game_value::__vptr_def ,game_value::__vptr_def };
+        invoker::get().type_structures["GV"sv] = { game_value::__vptr_def ,game_value::__vptr_def };
         ref<game_data> gd_ar(regInfo._types[static_cast<size_t>(GameDataType::ARRAY)]->_createFunction(nullptr));
         std::pair<value_type, value_type> structure = { gd_ar->get_vtable(), gd_ar->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "ARRAY";
-        invoker::get().type_structures["ARRAY"] = structure;
+        invoker::get().type_map[structure.first] = "ARRAY"sv;
+        invoker::get().type_structures["ARRAY"sv] = structure;
         game_data_array::type_def = structure.first;
         game_data_array::data_type_def = structure.second;
         game_data_array::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::ARRAY)];
         ref<game_data> gd_sc(regInfo._types[static_cast<size_t>(GameDataType::SCALAR)]->_createFunction(nullptr));
         structure = { gd_sc->get_vtable(), gd_sc->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "SCALAR";
-        invoker::get().type_structures["SCALAR"] = structure;
+        invoker::get().type_map[structure.first] = "SCALAR"sv;
+        invoker::get().type_structures["SCALAR"sv] = structure;
         game_data_number::type_def = structure.first;
         game_data_number::data_type_def = structure.second;
         game_data_number::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::SCALAR)];
         ref<game_data> gd_bo(regInfo._types[static_cast<size_t>(GameDataType::BOOL)]->_createFunction(nullptr));
         structure = { gd_bo->get_vtable(), gd_bo->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "BOOL";
-        invoker::get().type_structures["BOOL"] = structure;
+        invoker::get().type_map[structure.first] = "BOOL"sv;
+        invoker::get().type_structures["BOOL"sv] = structure;
         game_data_bool::type_def = structure.first;
         game_data_bool::data_type_def = structure.second;
         game_data_bool::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::BOOL)];
         ref<game_data> gd_st(regInfo._types[static_cast<size_t>(GameDataType::STRING)]->_createFunction(nullptr));
         structure = { gd_st->get_vtable(), gd_st->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "STRING";
-        invoker::get().type_structures["STRING"] = structure;
+        invoker::get().type_map[structure.first] = "STRING"sv;
+        invoker::get().type_structures["STRING"sv] = structure;
         game_data_string::type_def = structure.first;
         game_data_string::data_type_def = structure.second;
         game_data_string::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::STRING)];
         ref<game_data> gd_code(regInfo._types[static_cast<size_t>(GameDataType::CODE)]->_createFunction(nullptr));
         structure = { gd_code->get_vtable(), gd_code->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "CODE";
-        invoker::get().type_structures["CODE"] = structure;
+        invoker::get().type_map[structure.first] = "CODE"sv;
+        invoker::get().type_structures["CODE"sv] = structure;
         game_data_code::type_def = structure.first;
         game_data_code::data_type_def = structure.second;
         ref<game_data> gd_ob(regInfo._types[static_cast<size_t>(GameDataType::OBJECT)]->_createFunction(nullptr));
         structure = { gd_ob->get_vtable(), gd_ob->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "OBJECT";
-        invoker::get().type_structures["OBJECT"] = structure;
+        invoker::get().type_map[structure.first] = "OBJECT"sv;
+        invoker::get().type_structures["OBJECT"sv] = structure;
         game_data_object::type_def = structure.first;
         game_data_object::data_type_def = structure.second;
         ref<game_data> gd_gr(regInfo._types[static_cast<size_t>(GameDataType::GROUP)]->_createFunction(nullptr));
         structure = { gd_gr->get_vtable(), gd_gr->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "GROUP";
-        invoker::get().type_structures["GROUP"] = structure;
+        invoker::get().type_map[structure.first] = "GROUP"sv;
+        invoker::get().type_structures["GROUP"sv] = structure;
         game_data_group::type_def = structure.first;
         game_data_group::data_type_def = structure.second;
         ref<game_data> gd_conf(regInfo._types[static_cast<size_t>(GameDataType::CONFIG)]->_createFunction(nullptr));
         structure = { gd_conf->get_vtable(), gd_conf->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "CONFIG";
-        invoker::get().type_structures["CONFIG"] = structure;
+        invoker::get().type_map[structure.first] = "CONFIG"sv;
+        invoker::get().type_structures["CONFIG"sv] = structure;
         game_data_config::type_def = structure.first;
         game_data_config::data_type_def = structure.second;
         ref<game_data> gd_cont(regInfo._types[static_cast<size_t>(GameDataType::CONTROL)]->_createFunction(nullptr));
         structure = { gd_cont->get_vtable(), gd_cont->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "CONTROL";
-        invoker::get().type_structures["CONTROL"] = structure;
+        invoker::get().type_map[structure.first] = "CONTROL"sv;
+        invoker::get().type_structures["CONTROL"sv] = structure;
         game_data_control::type_def = structure.first;
         game_data_control::data_type_def = structure.second;
         ref<game_data> gd_di(regInfo._types[static_cast<size_t>(GameDataType::DISPLAY)]->_createFunction(nullptr));
         structure = { gd_di->get_vtable(), gd_di->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "DISPLAY";
-        invoker::get().type_structures["DISPLAY"] = structure;
+        invoker::get().type_map[structure.first] = "DISPLAY"sv;
+        invoker::get().type_structures["DISPLAY"sv] = structure;
         game_data_display::type_def = structure.first;
         game_data_display::data_type_def = structure.second;
         ref<game_data> gd_loc(regInfo._types[static_cast<size_t>(GameDataType::LOCATION)]->_createFunction(nullptr));
         structure = { gd_loc->get_vtable(), gd_loc->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "LOCATION";
-        invoker::get().type_structures["LOCATION"] = structure;
+        invoker::get().type_map[structure.first] = "LOCATION"sv;
+        invoker::get().type_structures["LOCATION"sv] = structure;
         game_data_location::type_def = structure.first;
         game_data_location::data_type_def = structure.second;
         ref<game_data> gd_scr(regInfo._types[static_cast<size_t>(GameDataType::SCRIPT)]->_createFunction(nullptr));
         structure = { gd_scr->get_vtable(), gd_scr->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "SCRIPT";
-        invoker::get().type_structures["SCRIPT"] = structure;
+        invoker::get().type_map[structure.first] = "SCRIPT"sv;
+        invoker::get().type_structures["SCRIPT"sv] = structure;
         game_data_script::type_def = structure.first;
         game_data_script::data_type_def = structure.second;
         ref<game_data> gd_si(regInfo._types[static_cast<size_t>(GameDataType::SIDE)]->_createFunction(nullptr));
         structure = { gd_si->get_vtable(), gd_si->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "SIDE";
-        invoker::get().type_structures["SIDE"] = structure;
+        invoker::get().type_map[structure.first] = "SIDE"sv;
+        invoker::get().type_structures["SIDE"sv] = structure;
         game_data_side::type_def = structure.first;
         game_data_side::data_type_def = structure.second;
         ref<game_data> gd_te(regInfo._types[static_cast<size_t>(GameDataType::TEXT)]->_createFunction(nullptr));
         structure = { gd_te->get_vtable(), gd_te->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "TEXT";
-        invoker::get().type_structures["TEXT"] = structure;
+        invoker::get().type_map[structure.first] = "TEXT"sv;
+        invoker::get().type_structures["TEXT"sv] = structure;
         game_data_rv_text::type_def = structure.first;
         game_data_rv_text::data_type_def = structure.second;
         ref<game_data> gd_tm(regInfo._types[static_cast<size_t>(GameDataType::TEAM_MEMBER)]->_createFunction(nullptr));
         structure = { gd_tm->get_vtable(), gd_tm->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "TEAM_MEMBER";
-        invoker::get().type_structures["TEAM_MEMBER"] = structure;
+        invoker::get().type_map[structure.first] = "TEAM_MEMBER"sv;
+        invoker::get().type_structures["TEAM_MEMBER"sv] = structure;
         game_data_team::type_def = structure.first;
         game_data_team::data_type_def = structure.second;
 
@@ -439,26 +440,27 @@ namespace intercept {
 
 
         structure = { left_arg_.data->get_vtable(), left_arg_.data->get_secondary_vtable() };
-        invoker::get().type_map[structure.first] = "NAMESPACE";
-        invoker::get().type_structures["NAMESPACE"] = structure;
+        invoker::get().type_map[structure.first] = "NAMESPACE"sv;
+        invoker::get().type_structures["NAMESPACE"sv] = structure;
         game_data_rv_namespace::type_def = structure.first;
         game_data_rv_namespace::data_type_def = structure.second;
 
         sqf_script_type::type_def = loader::get().get_register_sqf_info()._type_vtable;
         structure = { sqf_script_type::type_def, sqf_script_type::type_def };
-        invoker::get().type_map[structure.first] = "SQF_SCRIPT_TYPE";
-        invoker::get().type_structures["SQF_SCRIPT_TYPE"] = structure;
+        invoker::get().type_map[structure.first] = "SQF_SCRIPT_TYPE"sv;
+        invoker::get().type_structures["SQF_SCRIPT_TYPE"sv] = structure;
 
-        LOG(INFO) << "invoker::_intercept_registerTypes done\n";
+        LOG(INFO) << "invoker::_intercept_registerTypes done\n"sv;
         return true;
     }
 
-    bool invoker::add_eventhandler(const std::string & name_, std::function<void(game_value&)> func_) {
-        if (_eventhandlers.find(name_) != _eventhandlers.end()) {
+    bool invoker::add_eventhandler(std::string_view name_, std::function<void(game_value&)> func_) {
+        std::string name(name_);
+        if (_eventhandlers.find(name) != _eventhandlers.end()) {
             // @TODO: Exceptions
             return false;
         }
-        _eventhandlers[name_] = func_;
+        _eventhandlers[name] = func_;
 
         return true;
     }
@@ -469,12 +471,12 @@ namespace intercept {
         _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
         _invoke_mutex.lock();
 
-        LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE";
+        LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
     }
 
     void invoker::unlock() {
         _invoke_mutex.unlock();
-        LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE";
+        LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
         _thread_count = _thread_count - 1;
     }
 
@@ -491,10 +493,10 @@ namespace intercept {
                 std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
                 invoker_accessible = false;
                 invoker_accessible_all = false;
-                LOG(DEBUG) << "LOCKED ALL";
+                LOG(DEBUG) << "LOCKED ALL"sv;
             } else {
                 invoker_accessible = false;
-                LOG(DEBUG) << "LOCKED";
+                LOG(DEBUG) << "LOCKED"sv;
             }
 
         }
@@ -503,7 +505,7 @@ namespace intercept {
     void invoker::_invoker_unlock::unlock() {
         if (!_unlocked) {
             if (_all) {
-                LOG(DEBUG) << "UNLOCKING ALL";
+                LOG(DEBUG) << "UNLOCKING ALL"sv;
                 std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
                     std::lock_guard<std::mutex> lock(_instance->_state_mutex);
@@ -513,7 +515,7 @@ namespace intercept {
                 }
                 _instance->_invoke_condition.notify_all();
             } else {
-                LOG(DEBUG) << "UNLOCKING";
+                LOG(DEBUG) << "UNLOCKING"sv;
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 invoker_accessible = true;
             }

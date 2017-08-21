@@ -383,15 +383,10 @@ namespace intercept {
 
             std::vector<rv_target> targets;
             for (size_t i = 0; i < res.size(); i++) {
-                targets.push_back(rv_target({
-                    //#TODO make rv_target converting constructor
+                targets.push_back(rv_target(
                     __helpers::__convert_to_vector3(res[i][0]),
-                    res[i][1],
-                    res[i][2],
-                    res[i][3],
-                    res[i][4],
-                    res[i][5],
-                }));
+                    res[i]
+                ));
             }
 
             return targets;

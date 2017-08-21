@@ -1,4 +1,4 @@
-﻿#include "export.hpp"
+#include "export.hpp"
 #include "invoker.hpp"
 #include "extensions.hpp"
 
@@ -89,7 +89,7 @@ namespace intercept {
         std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
         }
-        const auto_array<r_string> const* get_pbo_files_list() {
+        const auto_array<r_string>* get_pbo_files_list() {
             return &invoker::get().files_in_pbo_banks;
         }
     }

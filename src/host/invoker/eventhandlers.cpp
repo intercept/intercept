@@ -1,4 +1,4 @@
-﻿#include "eventhandlers.hpp"
+#include "eventhandlers.hpp"
 #include "invoker.hpp"
 #include "extensions.hpp"
 #include "shared/client_types.hpp"
@@ -13,10 +13,10 @@ namespace intercept {
     void eventhandlers::initialize()
     {
         if (!_initialized) {
-            invoker::get().add_eventhandler("pre_start", std::bind(&eventhandlers::pre_start, std::placeholders::_1));
-            invoker::get().add_eventhandler("pre_init", std::bind(&eventhandlers::pre_init, std::placeholders::_1));
-            invoker::get().add_eventhandler("post_init", std::bind(&eventhandlers::post_init, std::placeholders::_1));
-            invoker::get().add_eventhandler("mission_stopped", std::bind(&eventhandlers::mission_stopped, std::placeholders::_1));
+            invoker::get().add_eventhandler("pre_start"sv, std::bind(&eventhandlers::pre_start, std::placeholders::_1));
+            invoker::get().add_eventhandler("pre_init"sv, std::bind(&eventhandlers::pre_init, std::placeholders::_1));
+            invoker::get().add_eventhandler("post_init"sv, std::bind(&eventhandlers::post_init, std::placeholders::_1));
+            invoker::get().add_eventhandler("mission_stopped"sv, std::bind(&eventhandlers::mission_stopped, std::placeholders::_1));
 
 #define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::x, std::placeholders::_1));
 
@@ -86,18 +86,21 @@ namespace intercept {
     }
 
     void eventhandlers::pre_start(game_value &) {
-        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"_sv, "Forwarder used to call functions in Intercept Plugins", userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
-        LOG(INFO) << "Pre-start";
+        static bool preStartCalled = false;
+        if (preStartCalled) throw std::runtime_error("pre_start called twice");
+        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
+        LOG(INFO) << "Pre-start"sv;
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) {
                 module.second.functions.pre_start();
             }
         }
+        preStartCalled = true;
     }
     void eventhandlers::pre_init(game_value &)
     {
         extensions::get().reload_all();
-        LOG(INFO) << "Pre-init";
+        LOG(INFO) << "Pre-init"sv;
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_init) {
                 module.second.functions.pre_init();
@@ -106,7 +109,7 @@ namespace intercept {
     }
     void eventhandlers::post_init(game_value &)
     {
-        LOG(INFO) << "Post-init";
+        LOG(INFO) << "Post-init"sv;
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_init) {
                 module.second.functions.post_init();
@@ -115,7 +118,7 @@ namespace intercept {
     }
     void eventhandlers::mission_stopped(game_value &)
     {
-        LOG(INFO) << "Mission Stopped";
+        LOG(INFO) << "Mission Stopped"sv;
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.mission_stopped) {
                 module.second.functions.mission_stopped();

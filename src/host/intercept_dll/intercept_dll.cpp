@@ -23,12 +23,10 @@ extern "C" DLLEXPORT void __stdcall RVExtension(char *output, int outputSize, co
 
 static char version[] = "1.0";
 
-std::string get_command(const std::string &input) {
-    std::string command;
-
+std::optional<std::string_view> get_command(std::string_view input) {
     size_t cmd_end = input.find(':');
     if (cmd_end < 1) {
-        return "";
+        return {};
     }
 
     return input.substr(0, cmd_end);
@@ -43,9 +41,15 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     ZERO_OUTPUT();
 
     // Get the command, then the command args
-    std::string input = function;
+    std::string_view input = function;
 
-    std::string command = get_command(input);
+    std::optional<std::string_view> cmd = get_command(input);
+    if (!cmd) {
+        output[0] = 0x00;
+        return;
+    }
+
+    std::string_view command = cmd.value();
 
     std::string argument_str;
     if (command.length() > 1 && input.length() > command.length() + 1) {
@@ -55,22 +59,19 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 
     std::string result = "-1";
     _threaded = false;
-    if (command.size() < 1) {
-        output[0] = 0x00;
-        return;
-    }
-    if (command == "version") {
+
+    if (command == "version"sv) {
         result = version;
-    } else if (command == "echo") {
+    } else if (command == "echo"sv) {
         result = function;
-    } else if (command == "async") {
+    } else if (command == "async"sv) {
         _threaded = true;
         result = "0";
-    } else if (command == "stop") {
+    } else if (command == "stop"sv) {
         _threaded = false;
     }
 
-    if (command == "init_patch") {
+    if (command == "init_patch"sv) {
 #if _WIN64 || __X86_64__
         uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x2970 - 0x2800);
 #else

@@ -13,14 +13,19 @@ private _code = str {
 	_intercept_projects = configFile >> "Intercept";
 	for "_i" from 0 to (count _intercept_projects)-1 do {
 		_project = _intercept_projects select _i;
-		if(isClass _project) then {
+		if (isClass _project) then {
 			for "_x" from 0 to (count _project)-1 do {
 				_module = _project select _x;
-				if(isClass _module) then {
+				if (isClass _module) then {
 					_plugin_name = getText(_module >> "pluginName");
-					if(_plugin_name != "") then {
+					if (_plugin_name != "") then {
 						diag_log text format["Intercept Loading Plugin: %1", _plugin_name];
-						"intercept" callExtension ("load_extension:" + _plugin_name);
+						_cert = getText(_module >> "certificate");
+						if (_cert != "") then {	
+							"intercept" callExtension ("load_extension:" + _plugin_name+","+_cert);
+						} else {
+							"intercept" callExtension ("load_extension:" + _plugin_name);
+						};
 					};
 				};
 			};

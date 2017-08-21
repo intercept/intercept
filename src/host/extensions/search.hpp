@@ -9,9 +9,9 @@ namespace intercept::search {
         plugin_searcher();
         //This is here because it's easier to crossplatform n stuff
         static std::string get_command_line();
-        std::optional<std::string> find_extension(const std::string& name);
+        std::optional<std::wstring> find_extension(const std::wstring& name);
     private:
-        static std::vector<std::string> generate_pbo_list();
-        std::vector<std::string> active_mod_folder_list;
+        static std::vector<std::wstring> generate_pbo_list();
+        std::vector<std::wstring> active_mod_folder_list;
     };
 }

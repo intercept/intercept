@@ -757,6 +757,9 @@ namespace intercept {
         //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
         //binary__setunitloadout__object__string__ret__nothing
         //binary__setunitloadout__object__config__ret__nothing
+        void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, { loadout_, rearm_ });
+        }
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, {static_cast<game_value>(loadout_), rearm_});
         }

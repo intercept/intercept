@@ -204,6 +204,10 @@ namespace intercept {
         struct rv_cargo {
             sqf_return_string_list types;
             std::vector<float> amounts;
+
+            explicit operator game_value() const {
+                return game_value({ types, amounts });
+            }
         };
 
         std::vector<rv_cargo> get_backpack_cargo(const object &container_);
@@ -225,6 +229,10 @@ namespace intercept {
 
             rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
                                                              ammo(ret_game_value_[1]) {}
+
+            explicit operator game_value() const {
+                return game_value({ name, ammo });
+            }
         };
 
         struct rv_weapon_items {
@@ -243,6 +251,10 @@ namespace intercept {
                                                                  magazine(ret_game_value_[4]),
                                                                  grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
                                                                  bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
+
+            explicit operator game_value() const {
+                return game_value({ weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod });
+            }
         };
 
         std::vector<rv_weapon_items> weapons_items(const object &obj_);

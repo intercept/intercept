@@ -346,12 +346,10 @@ namespace intercept {
                     return game_value({ magazine,
                                        static_cast<float>(ammo),
                                        static_cast<float>(count) });
-                }
-                else if (count != -1) {
+                } else if (count != -1) {
                     return game_value({ magazine,
                                    static_cast<float>(count) });
-                }
-                else {
+                } else {
                     return game_value({});
                 }
             }
@@ -375,8 +373,7 @@ namespace intercept {
                     primary_muzzle_magazine = ret_game_value_[4];
                     secondary_muzzle_magazine = ret_game_value_[5];
                     bipod = ret_game_value_[6];
-                }
-                else {
+                } else {
                     weapon = "";
                 }
             }
@@ -390,8 +387,7 @@ namespace intercept {
                                    primary_muzzle_magazine,
                                    secondary_muzzle_magazine,
                                    bipod });
-                }
-                else {
+                } else {
                     return game_value({});
                 }
             }
@@ -408,8 +404,7 @@ namespace intercept {
                     items.reserve(arr.count());
                     for (auto &it : arr)
                         items.push_back(it);
-                }
-                else {
+                } else {
                     container = "";
                 }
             }
@@ -418,8 +413,7 @@ namespace intercept {
                 if (container != "") {
                     return game_value({ container,
                                    auto_array<game_value>(items.begin(), items.end()) });
-                }
-                else {
+                } else {
                     return game_value({});
                 }
             }

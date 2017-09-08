@@ -13,8 +13,22 @@ namespace intercept {
             return __helpers::__retrieve_nular_object(__sqf::nular__curatormouseover__ret__object);
         }
 
-        std::vector<object> curator_selected() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+        curator_selected_return curator_selected() {
+            std::vector<game_value> _raw = __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+            
+            std::vector<intercept::sqf::waypoint> _wps;
+            _wps.reserve(_raw[2].size());
+            for (auto &gv : _raw[2].to_array()) {
+                _wps.push_back(game_value(gv));
+            }
+
+            curator_selected_return _return = curator_selected_return(
+                __helpers::__convert_to_objects_vector(_raw[0]),
+                __helpers::__convert_to_groups_vector(_raw[1]),
+                std::move(_wps),
+                __helpers::__convert_to_markers_vector(_raw[3])
+            );
+            return  _return;
         }
 
         void open_curator_interface() {
@@ -122,7 +136,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
         }
 
-        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_) {
+        void add_curator_editable_objects(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_) {
             auto_array<game_value> objects(objects_.begin(), objects_.end());
 
             game_value args({std::move(objects),

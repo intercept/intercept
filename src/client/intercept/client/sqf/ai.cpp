@@ -644,11 +644,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<1>(group_), behaviour_);
         }
 
-        void set_combat_mode(std::variant<group, object> group_, sqf_string_const_ref mode_) {
-            if (group_.index() == 0)
+        void set_combat_mode(std::variant<group, object, team_member> group_, sqf_string_const_ref mode_) {
+            if (group_.index() == 0) {
                 host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<0>(group_), mode_);
-            return;
-            host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<1>(group_), mode_);
+            } else if (group_.index() == 1) {
+                host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__object_group__string__ret__nothing, std::get<1>(group_), mode_);
+            } else {
+                host::functions.invoke_raw_binary(__sqf::binary__setcombatmode__team_member__string__ret__nothing, std::get<2>(group_), mode_);
+            }
         }
 
         void set_formation(std::variant<group, object> group_, sqf_string_const_ref mode_) {

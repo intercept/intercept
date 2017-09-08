@@ -282,7 +282,7 @@ namespace intercept {
                              std::move(loctypes),
                              radius_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
 
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_) {
@@ -293,7 +293,7 @@ namespace intercept {
                              radius_,
                              sort_position_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
 
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
@@ -314,7 +314,7 @@ namespace intercept {
                              std::move(loctypes),
                              radius_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
 
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_) {
@@ -325,7 +325,7 @@ namespace intercept {
                              radius_,
                              sort_position_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
         
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
@@ -336,7 +336,7 @@ namespace intercept {
                              radius_,
                              sort_obj_});
 
-            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
+            return __helpers::__convert_to_locations_vector(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
         
         

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -14,6 +14,7 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
+#include "client/sqf/waypoint.hpp"
 
 using namespace intercept::types;
 
@@ -22,7 +23,23 @@ namespace intercept {
         /* Curator */
         object curator_camera();
         object curator_mouse_over();
-        std::vector<object> curator_selected();
+        
+        struct curator_selected_return {
+            curator_selected_return(
+                std::vector<object> _objs,
+                std::vector<group> _g,
+                std::vector<intercept::sqf::waypoint> _wps,
+                std::vector<marker> _m
+            ) {
+                _objects = _objects; _groups = _g; _waypoints = _wps; _marker = _m;
+            };
+            std::vector<object> _objects;
+            std::vector<group> _groups;
+            std::vector<intercept::sqf::waypoint> _waypoints;
+            std::vector<marker> _marker;
+        };
+        
+        curator_selected_return curator_selected();
         void open_curator_interface();
         bool shown_curatorcompass();
         float curator_camera_area_ceiling(const object &value_);
@@ -47,7 +64,7 @@ namespace intercept {
         void add_curator_addons(const object &curator_object_, sqf_string_list_const_ref addons_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_);
         void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_);
-        void add_curator_editable_object(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
+        void add_curator_editable_objects(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_);
         void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_);
 
         sqf_return_string_list curator_addons(const object &curator_module_);

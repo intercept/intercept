@@ -111,7 +111,7 @@ namespace intercept {
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
         group get_group(const object &unit_);  // originally "group", but is already a type
         std::vector<object> group_selected_units(const object &unit_);
-        sqf_return_string_list squad_params(const object &unit_);
+        std::vector<sqf_return_string_list> squad_params(const object &unit_); //#TODO correct return type
         bool unit_ready(const object &unit_);
         sqf_return_string_list unit_addons(sqf_string_const_ref class_);
         std::vector<object> get_all_owned_mines(const object &unit_);

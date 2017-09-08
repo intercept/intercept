@@ -101,7 +101,6 @@ namespace intercept {
         object agent(const team_member &value_);
         std::vector<team_member> agents();
 
-        void set_combat_mode(const team_member &value0_, sqf_string_const_ref value1_);
         void set_formation(const team_member &value0_, sqf_string_const_ref value1_);
 
         void delete_team(const team_member &value_);

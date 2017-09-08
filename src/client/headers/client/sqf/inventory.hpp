@@ -204,6 +204,10 @@ namespace intercept {
         struct rv_cargo {
             sqf_return_string_list types;
             std::vector<float> amounts;
+
+            explicit operator game_value() const {
+                return game_value({ types, amounts });
+            }
         };
 
         std::vector<rv_cargo> get_backpack_cargo(const object &container_);
@@ -225,6 +229,10 @@ namespace intercept {
 
             rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
                                                              ammo(ret_game_value_[1]) {}
+
+            explicit operator game_value() const {
+                return game_value({ name, ammo });
+            }
         };
 
         struct rv_weapon_items {
@@ -243,6 +251,10 @@ namespace intercept {
                                                                  magazine(ret_game_value_[4]),
                                                                  grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
                                                                  bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
+
+            explicit operator game_value() const {
+                return game_value({ weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod });
+            }
         };
 
         std::vector<rv_weapon_items> weapons_items(const object &obj_);
@@ -321,17 +333,25 @@ namespace intercept {
             int ammo;
             int count;
 
-            rv_magazine_info(const game_value &ret_game_value_) : magazine(ret_game_value_[0]),
+            rv_magazine_info(const game_value &ret_game_value_) : magazine(ret_game_value_.size() > 0 ? ret_game_value_[0] : ""),
                                                                   ammo(ret_game_value_.size() > 2 ? static_cast<int>(ret_game_value_[1]) : -1),
-                                                                  count(ret_game_value_.size() > 2 ? ret_game_value_[2] : ret_game_value_[1]) {}
+                                                                  count(ret_game_value_.size() > 2 ? ret_game_value_[2] : (ret_game_value_.size() > 0 ? ret_game_value_[1] : -1)) {}
+
+            rv_magazine_info() {
+                ammo = count = -1;
+            }
 
             operator game_value() const {
-                if (ammo != -1)
-                    return game_value({magazine,
+                if (ammo != -1) {
+                    return game_value({ magazine,
                                        static_cast<float>(ammo),
-                                       static_cast<float>(count)});
-                return game_value({magazine,
-                                   static_cast<float>(count)});
+                                       static_cast<float>(count) });
+                } else if (count != -1) {
+                    return game_value({ magazine,
+                                   static_cast<float>(count) });
+                } else {
+                    return game_value({});
+                }
             }
         };
 
@@ -344,22 +364,32 @@ namespace intercept {
             rv_magazine_info secondary_muzzle_magazine;
             std::string bipod;
 
-            rv_weapon_info(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
-                                                                silencer(ret_game_value_[1]),
-                                                                laser(ret_game_value_[2]),
-                                                                optics(ret_game_value_[3]),
-                                                                primary_muzzle_magazine(ret_game_value_[4]),
-                                                                secondary_muzzle_magazine({ret_game_value_[5]}),
-                                                                bipod(ret_game_value_[6]) {}
+            rv_weapon_info(const game_value &ret_game_value_) { 
+                if (ret_game_value_.size() > 0) {
+                    weapon = ret_game_value_[0];
+                    silencer = ret_game_value_[1];
+                    laser = ret_game_value_[2];
+                    optics = ret_game_value_[3];
+                    primary_muzzle_magazine = ret_game_value_[4];
+                    secondary_muzzle_magazine = ret_game_value_[5];
+                    bipod = ret_game_value_[6];
+                } else {
+                    weapon = "";
+                }
+            }
 
             explicit operator game_value() const {
-                return game_value({weapon,
+                if (weapon != "") {
+                    return game_value({ weapon,
                                    silencer,
                                    laser,
                                    optics,
                                    primary_muzzle_magazine,
                                    secondary_muzzle_magazine,
-                                   bipod});
+                                   bipod });
+                } else {
+                    return game_value({});
+                }
             }
         };
 
@@ -367,15 +397,25 @@ namespace intercept {
             std::string container;
             std::vector<rv_magazine_info> items;
 
-            rv_container_info(const game_value &ret_game_value_) : container(ret_game_value_[0]) {
-                auto &arr = ret_game_value_[1].to_array();
-                for (auto &it : arr)
-                    items.push_back(it);
+            rv_container_info(const game_value &ret_game_value_) {
+                if (ret_game_value_.size() > 0) {
+                    container = ret_game_value_[0];
+                    auto &arr = ret_game_value_[1].to_array();
+                    items.reserve(arr.count());
+                    for (auto &it : arr)
+                        items.push_back(it);
+                } else {
+                    container = "";
+                }
             }
 
             explicit operator game_value() const {
-                return game_value({container,
-                                   auto_array<game_value>(items.begin(), items.end())});
+                if (container != "") {
+                    return game_value({ container,
+                                   auto_array<game_value>(items.begin(), items.end()) });
+                } else {
+                    return game_value({});
+                }
             }
         };
 
@@ -392,15 +432,17 @@ namespace intercept {
             std::vector<std::string> assigned_items;
 
             rv_unit_loadout(const game_value &ret_game_value_) : primary(ret_game_value_[0]),
-                                                                 secondary({ret_game_value_[1]}),
+                                                                 secondary(ret_game_value_[1]),
                                                                  handgun(ret_game_value_[2]),
                                                                  uniform(ret_game_value_[3]),
                                                                  vest(ret_game_value_[4]),
                                                                  backpack(ret_game_value_[5]),
                                                                  headgear(ret_game_value_[6]),
                                                                  facewear(ret_game_value_[7]),
-                                                                 binocular({ret_game_value_[8]}),
-                                                                 assigned_items({ret_game_value_[9]}) {}
+                                                                 binocular(ret_game_value_[8]) {
+                auto_array<game_value> _tmp = ret_game_value_[9].to_array();
+                assigned_items = std::vector<std::string>(_tmp.begin(), _tmp.end());
+            }
 
             explicit operator game_value() const {
                 return game_value({static_cast<game_value>(primary),
@@ -419,6 +461,7 @@ namespace intercept {
         rv_unit_loadout get_unit_loadout(const object &obj_);
         rv_unit_loadout get_unit_loadout(const config &cfg_);
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_ = false);
+        void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_ = false);
 
         //inventory
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);

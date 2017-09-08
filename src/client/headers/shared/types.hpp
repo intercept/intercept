@@ -1367,7 +1367,7 @@ namespace intercept {
         protected:
             virtual bool get_as_bool() const { return false; }
             virtual float get_as_number() const { return 0.f; }
-            virtual r_string get_as_string() const { return r_string(); } ///Only usable on String and Code! Use to_string instead!
+            virtual const r_string& get_as_string() const { static r_string dummy; dummy.clear(); return dummy; } ///Only usable on String and Code! Use to_string instead!
             virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; dummy.clear(); return dummy; } //Why would you ever need this?
             virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; dummy.clear(); return dummy; }
             virtual game_data *copy() const { return nullptr; }

@@ -1,4 +1,5 @@
 #include "signing.hpp"
+#ifndef __linux__
 #include <wincrypt.h>
 #include <wintrust.h>
 #include <windows.h>
@@ -231,3 +232,4 @@ void intercept::cert::signing::debug_certs_in_store(HCERTSTORE store) {
         CryptUIDlgViewContext(CERT_STORE_CERTIFICATE_CONTEXT, pCertContextx, nullptr, nullptr, 0, nullptr);
     }
 }
+#endif

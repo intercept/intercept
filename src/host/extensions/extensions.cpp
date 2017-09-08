@@ -73,10 +73,22 @@ namespace intercept {
     }
 
     bool extensions::load(const std::string& path_, std::optional<std::string> certPath) {
+
+    #ifndef __linux__
+        using string_type = std::wstring;
+        using string_view_type = std::wstring_view;
+        string_view_type bad_chars = L".\\/:?\"<>|"sv;
         int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
-        std::wstring path;
+        string_type path;
         path.resize(length);
         MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);
+    #else
+        using string_type = std::string;
+        using string_view_type = std::string_view;
+        string_type path = path_;
+        string_view_type bad_chars = ".\\/:?\"<>|"sv;
+    #endif
+
         LOG(INFO) << "Load requested ["sv << path_ << "]"sv;
 
         if (_modules.find(path_) != _modules.end()) {
@@ -84,7 +96,7 @@ namespace intercept {
             return true;
         }
 
-        std::wstring_view bad_chars = L".\\/:?\"<>|"sv;
+        //Filter out bad chars
         for (auto it = path.begin(); it < path.end(); ++it) {
             bool found = bad_chars.find(*it) != std::string::npos;
             if (found) {
@@ -97,6 +109,7 @@ namespace intercept {
         if (!full_path)
             return false;
 
+    #ifndef __linux__
         //certificate check
         if (certPath && certPath->length() != 0) {
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
@@ -107,7 +120,7 @@ namespace intercept {
                 }
             }
         }
-
+    #endif
 
 
 
@@ -156,11 +169,15 @@ namespace intercept {
             return false;
         }
 #endif
+
+    #ifndef __linux__
         length = WideCharToMultiByte(CP_UTF8, 0, (*full_path).data(), (*full_path).length(), nullptr, 0, nullptr, nullptr);
         std::string utf8_name;
         utf8_name.resize(length);
         WideCharToMultiByte(CP_UTF8, 0, (*full_path).data(), (*full_path).length(), utf8_name.data(), length, nullptr, nullptr);
-
+    #else
+        string_type utf8_name = *full_path;
+    #endif
 
         auto new_module = module::entry(utf8_name, dllHandle);
 

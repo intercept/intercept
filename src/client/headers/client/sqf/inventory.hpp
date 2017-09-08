@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -335,7 +335,7 @@ namespace intercept {
 
             rv_magazine_info(const game_value &ret_game_value_) : magazine(ret_game_value_.size() > 0 ? ret_game_value_[0] : ""),
                                                                   ammo(ret_game_value_.size() > 2 ? static_cast<int>(ret_game_value_[1]) : -1),
-                                                                  count(ret_game_value_.size() > 2 ? ret_game_value_[2] : (ret_game_value_.size() > 0 ? ret_game_value_[1] : -1)) {}
+                                                                  count(ret_game_value_.size() > 2 ? static_cast<int>(ret_game_value_[2]) : (ret_game_value_.size() > 0 ? static_cast<int>(ret_game_value_[1]) : -1)) {}
 
             rv_magazine_info() {
                 ammo = count = -1;
@@ -355,10 +355,10 @@ namespace intercept {
             }
         };
 
-        struct rv_weapon_info {
+        struct rv_weapon_info { //#TODO It would be better to store these as r_strings
             std::string weapon;
             std::string silencer = "";
-            std::string laser;
+            std::string laser; 
             std::string optics;
             rv_magazine_info primary_muzzle_magazine;
             rv_magazine_info secondary_muzzle_magazine;
@@ -366,13 +366,13 @@ namespace intercept {
 
             rv_weapon_info(const game_value &ret_game_value_) { 
                 if (ret_game_value_.size() > 0) {
-                    weapon = ret_game_value_[0];
-                    silencer = ret_game_value_[1];
-                    laser = ret_game_value_[2];
-                    optics = ret_game_value_[3];
+                    weapon = static_cast<std::string>(ret_game_value_[0]);
+                    silencer = static_cast<std::string>(ret_game_value_[1]);
+                    laser = static_cast<std::string>(ret_game_value_[2]);
+                    optics = static_cast<std::string>(ret_game_value_[3]);
                     primary_muzzle_magazine = ret_game_value_[4];
                     secondary_muzzle_magazine = ret_game_value_[5];
-                    bipod = ret_game_value_[6];
+                    bipod = static_cast<std::string>(ret_game_value_[6]);
                 } else {
                     weapon = "";
                 }
@@ -399,7 +399,7 @@ namespace intercept {
 
             rv_container_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
-                    container = ret_game_value_[0];
+                    container = static_cast<std::string>(ret_game_value_[0]);
                     auto &arr = ret_game_value_[1].to_array();
                     items.reserve(arr.count());
                     for (auto &it : arr)

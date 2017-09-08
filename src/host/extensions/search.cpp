@@ -14,10 +14,27 @@ namespace intercept::search {
         //std::cout << "pbolist " << pboList.size() << "\n";
         for (auto& file : pboList) {
             //std::cout << "mod " << file << "\n";
-            size_t last_index = file.find_last_of(L"\\/");
-            std::wstring path = file.substr(0, last_index);
+            size_t last_index = file.find_last_of(
+            #ifdef __linux__
+                "\\/"
+            #else
+                L"\\/"
+            #endif
+            );
+        #ifdef __linux__
+            std::string
+        #else
+            std::wstring
+        #endif
+            path = file.substr(0, last_index);
             //std::cout << "path " << path << "\n";
-            last_index = path.find_last_of(L"\\/");
+            last_index = path.find_last_of(
+            #ifdef __linux__
+                "\\/"
+            #else
+                L"\\/"
+            #endif
+            );
             path = path.substr(0, last_index);
             //std::cout << "modfolder " << path << "\n";
             if (std::find(active_mod_folder_list.begin(), active_mod_folder_list.end(), path) == active_mod_folder_list.end())
@@ -40,18 +57,29 @@ namespace intercept::search {
         return GetCommandLineA();
     #endif
     }
+#ifdef __linux__
+    std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
+        LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
+        for (auto folder : active_mod_folder_list) {
+            std::string test_path = folder + "/intercept/" + name + ".so";
 
+            LOG(DEBUG) << "Mod: "sv << test_path << "\n"sv;
+            std::ifstream check_file(test_path);
+            if (check_file.good()) {
+                return test_path;
+            }
+        }
+        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
+        return std::optional<std::string>();
+    }
+#else
     std::optional<std::wstring> plugin_searcher::find_extension(const std::wstring& name) {
         LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
             std::wstring test_path = folder + L"\\intercept\\" + name + L"_x64.dll";
         #else
-        #ifdef __linux__
-            std::wstring test_path = folder + L"/intercept/" + name + L".so";
-        #else
             std::wstring test_path = folder + L"\\intercept\\" + name + L".dll";
-        #endif
         #endif
 
             LOG(DEBUG) << "Mod: "sv << test_path << "\n"sv;
@@ -63,6 +91,7 @@ namespace intercept::search {
         LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
         return std::optional<std::wstring>();
     }
+#endif
 }
 
 

@@ -183,7 +183,12 @@ namespace intercept {
             /*!
             @brief The path of the loaded module
             */
-            std::wstring path;
+        #ifdef __linux
+            std::string
+        #else
+            std::wstring
+        #endif
+            path;
 
             /*!
             @brief A intercept::module::functions struct containing pointers to

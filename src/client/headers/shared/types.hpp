@@ -1409,6 +1409,15 @@ namespace intercept {
             }
         };
 
+        class game_value_conversion_error : public std::runtime_error {
+        public:
+            explicit game_value_conversion_error(const std::string& _Message)
+                : runtime_error(_Message) {}
+
+            explicit game_value_conversion_error(const char* _Message)
+                : runtime_error(_Message) {}
+        };
+
         class game_value : public serialize_class {
             friend class intercept::invoker;
             friend void __internal::set_game_value_vtable(uintptr_t);
@@ -1471,9 +1480,25 @@ namespace intercept {
             operator vector3() const;
             operator vector2() const;
 
+            /**
+            * \brief tries to convert the game_value to an array if possible
+            * \throws game_value_conversion_error {if game_value is not an array}
+            */
             auto_array<game_value>& to_array();
+            /**
+             * \brief tries to convert the game_value to an array if possible
+             * \throw game_value_conversion_error {if game_value is not an array}
+             */
             const auto_array<game_value>& to_array() const;
+            /**
+            * \brief tries to convert the game_value to an array if possible and return the element at given index.
+            * \throw game_value_conversion_error {if game_value is not an array}
+            */
             game_value& operator [](size_t i_);
+            /**
+            * \brief tries to convert the game_value to an array if possible and return the element at given index.
+            * \throw game_value_conversion_error {if game_value is not an array}
+            */
             game_value operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO return GameDataType

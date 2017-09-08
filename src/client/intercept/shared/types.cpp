@@ -682,6 +682,7 @@ namespace intercept {
 
         auto_array<game_value>& game_value::to_array() {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
                 return data->get_as_array();
             }
             static auto_array<game_value> dummy;//else we would return a temporary.
@@ -691,6 +692,7 @@ namespace intercept {
 
         const auto_array<game_value>& game_value::to_array() const {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
                 return data->get_as_const_array();
             }
             static auto_array<game_value> dummy;//else we would return a temporary.
@@ -700,6 +702,7 @@ namespace intercept {
 
         game_value& game_value::operator [](size_t i_) {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
                 auto& array = data->get_as_array();
                 if (array.count() >= i_)
                     return array[i_];
@@ -711,6 +714,7 @@ namespace intercept {
 
         game_value game_value::operator [](size_t i_) const {
             if (!data) return {};
+            if(data->get_vtable() != game_data_array::type_def)throw game_value_conversion_error("Invalid array access");
             auto& array = data->get_as_array();
             if (array.count() >= i_)
                 return array[i_];
@@ -729,6 +733,7 @@ namespace intercept {
 
         size_t game_value::size() const {
             if (!data) return 0;
+            if (data->get_vtable() != game_data_array::type_def) return 0;
             return data->get_as_array().count();
         }
 

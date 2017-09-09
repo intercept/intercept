@@ -7,6 +7,7 @@ import subprocess
 ######## GLOBALS #########
 MAINPREFIX = "z"
 PREFIX = "intercept_"
+SUBPREFIX = "rv"
 ##########################
 
 def mod_time(path):
@@ -72,7 +73,7 @@ def main():
             subprocess.check_output([
                 "makepbo",
                 "-NUP",
-                "-@={}\\{}\\addons\\{}".format(MAINPREFIX,PREFIX.rstrip("_"),p),
+                "-@={}\\{}\\{}\\addons\\{}".format(MAINPREFIX,PREFIX.rstrip("_"),SUBPREFIX,p),
                 p,
                 "{}{}.pbo".format(PREFIX,p)
             ], stderr=subprocess.STDOUT)

@@ -1,4 +1,4 @@
-﻿#include "curator.hpp"
+#include "curator.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -13,8 +13,22 @@ namespace intercept {
             return __helpers::__retrieve_nular_object(__sqf::nular__curatormouseover__ret__object);
         }
 
-        std::vector<object> curator_selected() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+        curator_selected_return curator_selected() {
+            std::vector<game_value> _raw = __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_nular(__sqf::nular__curatorselected__ret__array));
+            
+            std::vector<intercept::sqf::waypoint> _wps;
+            _wps.reserve(_raw[2].size());
+            for (auto &gv : _raw[2].to_array()) {
+                _wps.push_back(game_value(gv));
+            }
+
+            curator_selected_return _return = curator_selected_return(
+                __helpers::__convert_to_objects_vector(_raw[0]),
+                __helpers::__convert_to_groups_vector(_raw[1]),
+                std::move(_wps),
+                __helpers::__convert_to_markers_vector(_raw[3])
+            );
+            return  _return;
         }
 
         void open_curator_interface() {
@@ -100,49 +114,41 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setcuratorwaypointcost__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void add_curator_addons(const object & curator_object_, sqf_string_list_const_ref addons_) {
+        void add_curator_addons(const object &curator_object_, sqf_string_list_const_ref addons_) {
             auto_array<game_value> addons(addons_.begin(), addons_.end());
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoraddons__object__array__ret__nothing, curator_object_, std::move(addons));
         }
 
-        void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector2 & position_, float radius_) {
-            game_value args({
-                static_cast<float>(camera_area_id_),
-                position_,
-                radius_
-            });
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector2 &position_, float radius_) {
+            game_value args({static_cast<float>(camera_area_id_),
+                             position_,
+                             radius_});
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
         }
 
-        void add_curator_camera_area(const object & curator_object_, int camera_area_id_, const vector3 & position_, float radius_) {
-            game_value args({
-                static_cast<float>(camera_area_id_),
-                position_,
-                radius_
-            });
+        void add_curator_camera_area(const object &curator_object_, int camera_area_id_, const vector3 &position_, float radius_) {
+            game_value args({static_cast<float>(camera_area_id_),
+                             position_,
+                             radius_});
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratorcameraarea__object__array__ret__nothing, curator_object_, args);
         }
 
-        void add_curator_editable_object(const object & curator_object_, const std::vector<object>& objects_, bool add_crew_) {
+        void add_curator_editable_objects(const object &curator_object_, const std::vector<object> &objects_, bool add_crew_) {
             auto_array<game_value> objects(objects_.begin(), objects_.end());
 
-            game_value args({
-                std::move(objects),
-                add_crew_
-            });
+            game_value args({std::move(objects),
+                             add_crew_});
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoreditableobjects__object__array__ret__nothing, curator_object_, args);
         }
 
-        void add_curator_editing_area(const object & curator_object_, int edit_area_id_, const vector2 & position_, float radius_) {
-            game_value args({
-                static_cast<float>(edit_area_id_),
-                position_,
-                radius_
-            });
+        void add_curator_editing_area(const object &curator_object_, int edit_area_id_, const vector2 &position_, float radius_) {
+            game_value args({static_cast<float>(edit_area_id_),
+                             position_,
+                             radius_});
 
             host::functions.invoke_raw_binary(__sqf::binary__addcuratoreditingarea__object__array__ret__nothing, curator_object_, args);
         }
@@ -170,23 +176,22 @@ namespace intercept {
 
         void remove_curator_editable_objects(const object &curator_module_, const std::vector<object> &objects_, bool &remove_crew_) {
             auto_array<game_value> objects(objects_.begin(), objects_.end());
-            game_value params_right({
-                std::move(objects),
-                remove_crew_
-            });
+            game_value params_right({std::move(objects),
+                                     remove_crew_});
 
             host::functions.invoke_raw_binary(__sqf::binary__removecuratoreditableobjects__object__array__ret__nothing, curator_module_, params_right);
         }
 
-        void set_curator_coef(const object& curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_) {
+        void set_curator_coef(const object &curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_) {
             if (coef_.index() == 0)
-                host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<bool>(coef_) }); return;
-            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, { action_, std::get<float>(coef_) });
+                host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, {action_, std::get<bool>(coef_)});
+            return;
+            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, {action_, std::get<float>(coef_)});
         }
 
-        void assign_curator(const object& player_, const object& curator_module_) {
+        void assign_curator(const object &player_, const object &curator_module_) {
             host::functions.invoke_raw_binary(__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
         }
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

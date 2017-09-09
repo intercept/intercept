@@ -70,13 +70,13 @@ protected:
             _do_return = true;
         }
 
-
     protected:
         std::string _sqf;
         bool _do_return;
         game_value _capture_args;
         game_value *_capture_return;
     };
+
 public:
     static __inline_sqf_helper generate(std::string sqf_) {
         return __inline_sqf_helper(sqf_);

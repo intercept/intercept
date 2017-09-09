@@ -21,21 +21,21 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         struct intersect_surfaces {
-            vector3 intersect_pos_asl; // the actual position where line intersects 1st surface
-            vector3 surface_normal; // a normal to the intersected surface
-            object intersect_object; // the object the surface belongs to(could be proxy object)
-            object parent_object; // the object proxy object belongs to(not always the same as intersect object)
+            vector3 intersect_pos_asl;  ///< the actual position where line intersects 1st surface
+            vector3 surface_normal;     ///< a normal to the intersected surface
+            object intersect_object;    ///< the object the surface belongs to(could be proxy object)
+            object parent_object;       ///< the object proxy object belongs to(not always the same as intersect object)
         };
         typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 
         namespace __helpers {
-            intersect_surfaces_list __line_intersects_surfaces(const game_value& intersects_value_);
+            intersect_surfaces_list __line_intersects_surfaces(const game_value &intersects_value_);
         }
 
         /**
         * Finds named selections in object which are in specified LOD, intersected by given section of a line
         */
-        bool intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
+        bool intersect(const object &obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
 
         /**
         * Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -62,7 +62,7 @@ namespace intercept {
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_);
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_);
 
         /**
         * Returns list of intersections with surfaces from begPosASL to endPosASL.
@@ -81,14 +81,14 @@ namespace intercept {
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object& ignore_obj1_, const object& ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, sqf_string_const_ref lod1_ = "VIEW", sqf_string_const_ref lod2_ = "FIRE");
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_, const object &ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, sqf_string_const_ref lod1_ = "VIEW", sqf_string_const_ref lod2_ = "FIRE");
 
         /**
         * Returns objects intersecting with the virtual line from begPos to endPos
         */
         std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = true);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object & ignore_obj_one_, const object & ignore_obj_two_);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_, const object &ignore_obj_two_);
 
         /**
         * Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionAGL
@@ -108,22 +108,22 @@ namespace intercept {
         /**
         * Checks for object intersection with a virtual line between two positions. Returns true if intersects with an object.
         */
-        bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object& ignore_obj_one_);
+        bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object &ignore_obj_one_);
 
         /**
         * Checks for object intersection with a virtual line between two positions. Returns true if intersects with an object.
         */
-        bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object& ignore_obj_one_, const object& ignore_obj_two_);
+        bool line_intersects(const vector3 &begin_position_, const vector3 &end_position_, const object &ignore_obj_one_, const object &ignore_obj_two_);
 
         /**
         * Find list of objects intersected by given line from begin_position_ to end_position_
         */
-        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object& with_object_, const object& ignore_obj_, bool sort_by_distance_, int flags_);
+        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_object_, const object &ignore_obj_, bool sort_by_distance_, int flags_);
 
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
 
         float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
-        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const object& ignore2_, const vector3 &begin_pos_, const vector3 &end_pos_);
 
-    }
-}
+        float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const object& ignore2_, const vector3 &begin_pos_, const vector3 &end_pos_);
+    }  // namespace sqf
+}  // namespace intercept

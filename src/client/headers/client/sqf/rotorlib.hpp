@@ -70,8 +70,8 @@ namespace intercept {
         bool difficulty_enabled_rtd();
         void clear_forces_rtd();
         float air_density_rtd(float altitude_);
-        float collective_rtd(const object & helicopter_);
+        float collective_rtd(const object &helicopter_);
         bool is_stress_damage_enabled();
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

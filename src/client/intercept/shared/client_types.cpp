@@ -8,7 +8,7 @@ namespace intercept {
         internal_object::internal_object() : game_value() {}
         //internal_object::internal_object(const rv_game_value &value_) : game_value(value_) {}
         internal_object::internal_object(const game_value & value_) : game_value(value_) {
-            set_vtable(game_value::__vptr_def);//vtable is set after initializers ran... apparently.. wtf..
+            set_vtable(game_value::__vptr_def);
         }
         internal_object::internal_object(const internal_object & copy_) : game_value(copy_) {
             set_vtable(game_value::__vptr_def);
@@ -36,6 +36,7 @@ namespace intercept {
         }
 
         bool internal_object::is_null() const {
+            //#TODO this is broken for Displays. so.. Just use virtual function
             //#TODO use GameData's isNil virtual function
             if (!data)
                 return true;

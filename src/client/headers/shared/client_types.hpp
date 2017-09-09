@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "shared.hpp"
 #include "types.hpp"
 #include <variant>
@@ -106,47 +106,42 @@ namespace intercept {
                 alpha(alpha_) {}
         };
 
-        
-        struct rv_waypoint {
-            group group_;
-            int index;
-            operator game_value() const {
-                return game_value{ group_, index };
-            }
-            //#TODO add to game_value conversion
-        };
-
-
         using sqf_string = std::string;
         using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
         using sqf_return_string_list = std::vector<std::string>;
         using sqf_string_list_const_ref = const std::vector<std::string>&;
-        using sqf_string_const_ref = const std::string&;
+
+        class sqf_string_const_ref {
+        public:
+            sqf_string_const_ref(const std::string& ref) : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(r_string ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const game_value& ref) : _var(r_string(ref)) {}
+            sqf_string_const_ref(std::string_view ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const char* ref) : _var(std::string_view(ref)) {}
+            operator std::string_view() const {
+                if (std::holds_alternative<std::string_view>(_var))
+                    return std::get<std::string_view>(_var);
+                return std::string_view(std::get<r_string>(_var));
+            }
+            operator r_string() const {
+                if (std::holds_alternative<r_string>(_var))
+                    return std::get<r_string>(_var);
+                return r_string(std::get<std::string_view>(_var));
+            }
+            operator game_value() const {
+                if (std::holds_alternative<r_string>(_var))
+                    return std::get<r_string>(_var);
+                return r_string(std::get<std::string_view>(_var));
+            }
+            std::variant<r_string, std::string_view> _var;
+        };
+
+        //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
 
 
 
         using t_sqf_in_area_position = std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> >;
-
-        //#TODO place them somewhere else if needed
-        struct rv_crew_member {
-            object unit;
-            std::string role;
-            float cargo_index;
-            std::vector<int> turret_path;
-            bool person_turret;
-
-            rv_crew_member(const object &unit_, sqf_string_const_ref role_, float cargo_index_, const std::vector<int> &turret_path_, bool person_turret_) {
-                unit = unit_;
-                role = role_;
-                cargo_index = cargo_index_;
-                turret_path = turret_path_;
-                person_turret = person_turret_;
-            }
-        };
-
-
-
 
         struct rv_particle_shape {
             std::string file;
@@ -386,17 +381,17 @@ namespace intercept {
             float subjective_cost;
             object object_;
             float position_accuracy;
+            rv_target(vector3&& pos, const game_value& from)
+            {
+                position = std::move(pos);
+                type = std::string(from[1]);
+                side_ = from[2];
+                subjective_cost = from[3];
+                object_ = from[4];
+                position_accuracy = from[5];
+            }
         };
-        //#TODO: Verify the correctness of this struct
-        struct rv_target_knowledge {
-            bool known_by_group;
-            bool known_by_unit;
-            float last_seen_by_unit;
-            float last_endangered_by_unit;
-            side target_side;
-            bool position_error;
-            vector3 target_position;
-        };
+
         struct rv_query_target {
             float accuracy;
             object target;
@@ -426,5 +421,20 @@ namespace std {
         reference_wrapper(string& _Val) noexcept
             : reference_wrapper<std::string>(_Val) {};
     };
+    
+#define DEFINE_HASH_FUNCTION_FOR_CLASS(type) template <> struct hash<intercept::types::type> { \
+        size_t operator()(const intercept::types::type& x) const { \
+            return x.hash(); \
+        } \
+    }; 
+
+    DEFINE_HASH_FUNCTION_FOR_CLASS(object)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(location)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(group)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(config)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(control)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(display)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(side)
+    DEFINE_HASH_FUNCTION_FOR_CLASS(task)
 }
 

@@ -1,73 +1,96 @@
-﻿#include "chat.hpp"
+#include "chat.hpp"
 #include "client/pointers.hpp"
 #include "core.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
     namespace sqf {
-        sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_)
-        {
+        sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_) {
             return host::functions.invoke_raw_binary(__sqf::binary__callextension__string__string__ret__string, extension_, arguments_);
         }
 
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_) {
             auto_array<game_value> arguments(arguments_.begin(), arguments_.end());
 
-            game_value params_right({
-                function_,
-                std::move(arguments)
-            });
+            game_value params_right({function_,
+                                     std::move(arguments)});
 
             return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
 
-        game_value call(const code & code_, game_value args_)
-        {
-            game_value args({ args_, code_ });
+        game_value call(const code &code_, game_value args_) {
+            game_value args({args_, code_});
 
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
-            //#TODO these notes refer to old way call method.
+            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
-            Why is this in a wrapper? Because code compiled in intercept apparently lacks
-            the proper context in the SQF interpeter, so we need to be aware of that, and
-            the easiest way to stay on top of it is to send the code to call into a wrapper
-            in SQF itself, so the context is achieved.
+            Why is this in a wrapper? Because calling the code would only add a new item to the script
+            stack. Meaning it will only get executed after we return back to the engine but we want 
+            the call to be done after this function returns.
+            isNil is executing the whole code inside it's function and it's done executing when it returns,
+            which makes it suitable for us.
             */
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
+            if (wrapper.is_nil()) {  //Can happen when executed before preInit
+                wrapper = sqf::compile(
+                    "\
+                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
+                    "sv);
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
+            }
+
             host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
-                get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
-            );
+                wrapper);
 
-            // And returns are not handled correctly because of assumingly the SQF stack
-            // implementation so, we just grab it from a gvar.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
+            // Sadly isNil doesn't return anything so we have to grab it from a variable.
+            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
-        game_value call(const code & code_)
-        {
-            game_value args({ game_value(), code_ });
+        game_value call(const code &code_) {
+            game_value args({game_value(), code_});
 
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS", args);
-            //#TODO these notes refer to old way call method.
+            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
-            Why is this in a wrapper? Because code compiled in intercept apparently lacks
-            the proper context in the SQF interpeter, so we need to be aware of that, and
-            the easiest way to stay on top of it is to send the code to call into a wrapper
-            in SQF itself, so the context is achieved.
+            Why is this in a wrapper? Because calling the code would only add a new item to the script
+            stack. Meaning it will only get executed after we return back to the engine but we want
+            the call to be done after this function returns.
+            isNil is executing the whole code inside it's function and it's done executing when it returns,
+            which makes it suitable for us.
             */
+            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
+            if (wrapper.is_nil()) {  //Can happen when executed before preInit
+                wrapper = sqf::compile(
+                    "\
+                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
+                    "sv);
+                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
+            }
             host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
-                get_variable(mission_namespace(), "intercept_fnc_isNilWrapper")
-            );
+                wrapper);
 
-            // And returns are not handled correctly because of assumingly the SQF stack
-            // implementation so, we just grab it from a gvar.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN");
+            // Sadly isNil doesn't return anything so we have to grab it from a variable.
+            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
-        code compile(sqf_string_const_ref sqf_)
-        {
+        bool is_nil_code(const code &code_) {
+            return host::functions.invoke_raw_unary(
+                __sqf::unary__isnil__code_string__ret__bool,
+                code_);
+        }
+
+        code compile(sqf_string_const_ref sqf_) {
             return code(host::functions.invoke_raw_unary(__sqf::unary__compile__string__ret__code, sqf_));
+        }
+
+        code compile_final(sqf_string_const_ref sqf_) {
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__string__ret__code, sqf_));
+        }
+
+        bool is_nil(sqf_string_const_ref var_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isnil__code_string__ret__bool, var_);
         }
 
         sqf_return_string preprocess_file(sqf_string_const_ref value_) {
@@ -102,22 +125,20 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__selectmin__array__ret__any, array_);
         }
 
-        game_value select(game_value array_, const code & code_) {
+        game_value select(game_value array_, const code &code_) {
             return host::functions.invoke_raw_binary(__sqf::binary__select__array__code__ret__array, array_, code_);
         }
 
         int push_back_unique(const std::vector<game_value> &array_, const game_value &element_) {
-            auto_array<game_value> base_array({ array_.begin(), array_.end() });
+            auto_array<game_value> base_array({array_.begin(), array_.end()});
 
             return host::functions.invoke_raw_binary(__sqf::binary__pushbackunique__array__any__ret__scalar, std::move(base_array), element_);
         }
 
         float random(float seed_, float x_, std::optional<float> y_) {
             if (y_.has_value()) {
-                game_value params_right({
-                    x_,
-                    *y_
-                });
+                game_value params_right({x_,
+                                         *y_});
 
                 return host::functions.invoke_raw_binary(__sqf::binary__random__scalar__scalar_array__ret__scalar, seed_, params_right);
             }
@@ -133,31 +154,27 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__cansuspend__ret__bool);
         }
 
-        bool is_equal_to(const object& l_, const object& r_) {
+        bool is_equal_to(const object &l_, const object &r_) {
             return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, l_, r_);
         }
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
-            game_value params({
-                min_,
-                max_,
-                value_,
-                new_min_,
-                new_max_
-            });
+            game_value params({min_,
+                               max_,
+                               value_,
+                               new_min_,
+                               new_max_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__linearconversion__array__ret__scalar, params);
         }
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_) {
-            game_value params({
-                min_,
-                max_,
-                value_,
-                new_min_,
-                new_max_,
-                clamp_
-            });
+            game_value params({min_,
+                               max_,
+                               value_,
+                               new_min_,
+                               new_max_,
+                               clamp_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__linearconversion__array__ret__scalar, params);
         }
@@ -231,10 +248,8 @@ namespace intercept {
 
         game_value get_fsm_variable(int &fsm_handle_, sqf_string_const_ref variable_, std::optional<game_value> default_value_) {
             if (default_value_.has_value()) {
-                game_value params_right({
-                    variable_,
-                    *default_value_
-                });
+                game_value params_right({variable_,
+                                         *default_value_});
 
                 return host::functions.invoke_raw_binary(__sqf::binary__getfsmvariable__scalar__string_array__ret__any, fsm_handle_, params_right);
             }
@@ -242,143 +257,120 @@ namespace intercept {
         }
 
         void set_fsm_variable(float handle_, sqf_string_const_ref name_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, handle_, { name_, value_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, handle_, {name_, value_});
         }
 
         void set_fsm_variable(int fsm_handle_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, { variable_, value_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setfsmvariable__scalar__array__ret__nothing, fsm_handle_, {variable_, value_});
         }
 
         void exec(const game_value &argument_, sqf_string_const_ref script_) {
             host::functions.invoke_raw_binary(__sqf::binary__exec__any__string__ret__nothing, argument_, script_);
         }
 
-
-        void set_variable(const display &display_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__display__array__ret__nothing, display_, { variable_, value_ });
+        sqf_return_string str(game_value data_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__str__any__ret__string, data_);
         }
 
-        void set_variable(const control &control_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__control__array__ret__nothing, control_, { variable_, value_ });
+        void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__display__array__ret__nothing, display_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const object &object_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, { variable_, value_ });
+        void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__control__array__ret__nothing, control_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const group &group_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, { variable_, value_ });
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__team_member__array__ret__nothing, team_member_, { variable_, value_ });
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_), public_});
         }
 
-        void set_variable(const task &task_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__task__array__ret__nothing, task_, { variable_, value_ });
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const location &location_, sqf_string_const_ref variable_, const game_value &value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, { variable_, value_ });
+        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__team_member__array__ret__nothing, team_member_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const rv_namespace & namespace_, sqf_string_const_ref var_name_, game_value value_)
-        {
-            //game_value args = std::vector<game_value>{ namespace_, std::vector<game_value>{ var_name_, value_ } };
-            game_value args = game_value({ var_name_, value_ });
-
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, args);
-            //host::functions.invoke_raw_binary(__sqf::binary__call__any__code__ret__any, args, sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_setVariableNamespace"));
+        void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__task__array__ret__nothing, task_, {variable_, std::move(value_)});
         }
 
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, {variable_, std::move(value_)});
+        }
 
-        game_value get_variable(const rv_namespace & namespace_, sqf_string_const_ref var_name_) {
+        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, {var_name_, std::move(value_)});
+        }
+
+        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_), public_ });
+        }
+
+        game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__namespace__string__ret__any, namespace_, var_name_);
         }
 
-        game_value get_variable(const rv_namespace & namespace_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__namespace__array__ret__any, namespace_, args);
+        game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__namespace__array__ret__any, namespace_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const display & display_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, args);
+        game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_) {
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__object__string__ret__any, obj_, var_name_);
         }
 
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__object__array__ret__any, obj_, args);
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__object__array__ret__any, obj_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_) {
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__group__string__ret__any, group_, var_name_);
         }
 
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__group__array__ret__any, group_, args);
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__group__array__ret__any, group_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_) {
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__team_member__string__ret__any, team_member_, var_name_);
         }
 
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_, game_value default_value_) {
-            game_value args({
-                var_name_,
-                default_value_
-            });
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__team_member__array__ret__any, team_member_, args);
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__team_member__array__ret__any, team_member_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const task & task_, sqf_string_const_ref var_name_) {
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__task__string__ret__any, task_, var_name_);
         }
 
-        game_value get_variable(const control &control_, sqf_string_const_ref variable_, std::optional<game_value> default_value_) {
-            auto_array<game_value> params_right({
-                variable_
-            });
-            if (default_value_.has_value()) params_right.push_back(*default_value_);
-
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__control__string_array__ret__any, control_, std::move(params_right));
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__task__array__ret__any, task_, {var_name_, std::move(default_value_)});
         }
 
-        game_value get_variable(const task &task_, sqf_string_const_ref variable_, const game_value &default_value_) {
-            game_value params_right({
-                variable_,
-                default_value_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__task__array__ret__any, task_, params_right);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__control__string_array__ret__any, control_, var_name_);
         }
 
-        game_value get_variable(const location &location_, sqf_string_const_ref variable_, const game_value &default_value_) {
-            game_value params_right({
-                variable_,
-                default_value_
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, params_right);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__control__string_array__ret__any, control_, {var_name_, std::move(default_value_)});
         }
 
+        game_value get_variable(const location &loc_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__string__ret__any, loc_, var_name_);
+        }
+
+        game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, {var_name_, std::move(default_value_)});
+        }
 
         bool is_null(const object &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isnull__object__ret__bool, value_);
@@ -412,7 +404,6 @@ namespace intercept {
             return rv_namespace(host::functions.invoke_raw_nular(__sqf::nular__uinamespace__ret__namespace));
         }
 
-
         sqf_return_string_list all_variables(const object &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__object__ret__array, value_));
@@ -430,7 +421,6 @@ namespace intercept {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__task__ret__array, value_));
         }
-
 
         sqf_return_string_list all_variables(const control &value_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
@@ -532,7 +522,6 @@ namespace intercept {
             return __helpers::__retrieve_nular_namespace(__sqf::nular__currentnamespace__ret__namespace);
         }
 
-
         sqf_return_string to_fixed(float number_, int decimals_) {
             return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
         }
@@ -548,7 +537,7 @@ namespace intercept {
         rv_cursor_object_params get_cursor_object_params() {
             game_value res = host::functions.invoke_raw_nular(__sqf::nular__getcursorobjectparams__ret__array);
 
-            return rv_cursor_object_params({ res[0], res[1], res[2] });
+            return rv_cursor_object_params({res[0], res[1], res[2]});
         }
 
         object cursor_target() {
@@ -626,7 +615,11 @@ namespace intercept {
         }
 
         game_value text(sqf_string_const_ref value_) {
-            return  host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
+            return host::functions.invoke_raw_unary(__sqf::unary__text__string__ret__text, value_);
+        }
+
+        sqf_return_string text(location &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
         }
 
         sqf_return_string format(const std::vector<game_value> &params_) {
@@ -695,15 +688,15 @@ namespace intercept {
             return object(host::functions.invoke_raw_nular(__sqf::nular__player__ret__object));
         }
 
-        void add_switchable_unit(const object & unit_) {
+        void add_switchable_unit(const object &unit_) {
             __helpers::__empty_unary_object(__sqf::unary__addswitchableunit__object__ret__nothing, unit_);
         }
 
-        side create_center(const side & side_) {
+        side create_center(const side &side_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__createcenter__side__ret__side, side_));
         }
 
-        void delete_center(const side & side_) {
+        void delete_center(const side &side_) {
             host::functions.invoke_raw_unary(__sqf::unary__deletecenter__side__ret__nothing, side_);
         }
 
@@ -752,19 +745,9 @@ namespace intercept {
         }
 
         std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_) {
-            game_value res = host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_);
-
-            std::vector<game_value> result; //#TODO replace by helper function
-            for (size_t i = 0; i < res.size(); i++) {
-                result.push_back(res[i]);
-            }
-
-            return result;
+            return __helpers::__convert_to_game_value_vector(
+                host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_));
         }
-
-
-
-
 
         //on_ events
         void on_command_mode_changed(const code &command_) {
@@ -782,8 +765,8 @@ namespace intercept {
         void on_map_single_click(const game_value &params_, std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<const code>> command_) {
             game_value param_right;
             switch (command_.index()) {
-            case 0: param_right = std::get<0>(command_).get(); break;
-            case 1: param_right = std::get<1>(command_).get(); break;
+                case 0: param_right = std::get<0>(command_).get(); break;
+                case 1: param_right = std::get<1>(command_).get(); break;
             }
 
             host::functions.invoke_raw_binary(__sqf::binary__onmapsingleclick__any__code_string__ret__nothing, params_, param_right);
@@ -793,31 +776,24 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__onshownewobject__control__string__ret__any, control_, command_);
         }
 
-
         //eventhandlers
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
-            game_value params_right({
-                event_,
-                index_
-            });
+            game_value params_right({event_,
+                                     index_});
 
             host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, params_right);
         }
 
-        float add_event_handler(const object & object_, sqf_string_const_ref type_, const code & command_) {
-            game_value args({
-                type_,
-                command_
-            });
+        float add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_) {
+            game_value args({type_,
+                             command_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
         }
 
-        float add_event_handler(const object & object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value args({
-                type_,
-                command_
-            });
+        float add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
+            game_value args({type_,
+                             command_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
         }
@@ -826,46 +802,34 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__removeallmissioneventhandlers__string__ret__nothing, value_);
         }
 
-
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
-            game_value params_right({
-                event_,
-                index_
-            });
+            game_value params_right({event_,
+                                     index_});
 
             host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
         }
-
 
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_) {
             host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__code__ret__nothing, var_name_, code_);
         }
 
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_) {
-            game_value params_right({
-                target_,
-                code_
-            });
+            game_value params_right({target_,
+                                     code_});
 
             host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, params_right);
         }
 
-
-
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_) {
-            game_value params_right({
-                type_,
-                expression_
-            });
+            game_value params_right({type_,
+                                     expression_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
         }
 
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_) {
-            game_value params_right({
-                type_,
-                expression_
-            });
+            game_value params_right({type_,
+                                     expression_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
         }
@@ -879,32 +843,25 @@ namespace intercept {
         }
 
         float add_mission_event_handler(sqf_string_const_ref type_, const code &command_) {
-            game_value params({
-                type_,
-                command_
-            });
+            game_value params({type_,
+                               command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
         }
 
         float add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value params({
-                type_,
-                command_
-            });
+            game_value params({type_,
+                               command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
         }
 
         void remove_mission_event_handler(sqf_string_const_ref type_, float index_) {
-            game_value params({
-                type_,
-                index_
-            });
+            game_value params({type_,
+                               index_});
 
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
         }
 
-
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

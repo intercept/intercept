@@ -28,12 +28,11 @@ namespace intercept {
         bool vehicle_cargo_enabled(const object &vehicle_);
         std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_);
         void enable_vehicle_cargo(const object &vehicle_, bool enable_);
-        
-        bool can_sling_load(const object& vehicle_, const object& cargo_);
+
+        bool can_sling_load(const object &vehicle_, const object &cargo_);
         bool sling_load_assistant_shown();
         bool set_sling_load(const object &vehicle_, const object &load_);
         object get_sling_load(const object &value_);
-
 
         //rope
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
@@ -66,7 +65,6 @@ namespace intercept {
         void rope_unwind(const object &rope_, float speed_, float length_);
         void rope_unwind(const object &rope_, float speed_, float length_, bool relative_);
 
-
         //attach
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_);
         void light_detach_object(const object &value_);
@@ -77,5 +75,5 @@ namespace intercept {
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
         void detach(const object &value_);
         int get_cargo_index(const object &vehicle_, const object &unit_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

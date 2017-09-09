@@ -15,23 +15,22 @@ https://github.com/NouberNou/intercept
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
-#include<vector>
+#include <vector>
 
 using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-        //#TODO some diags are in misc -> move them to core
-        
+
         struct rv_artillery_computer_settings {
             std::string name;
             std::string ammo;
-            int mode; //#TODO investigate what this actually is
+            int mode;  //#TODO investigate what this actually is
 
             rv_artillery_computer_settings(const game_value &rv_game_value_)
                 : name(rv_game_value_[0]),
-                ammo(rv_game_value_[1]),
-                mode(rv_game_value_[2]) {}
+                  ammo(rv_game_value_[1]),
+                  mode(rv_game_value_[2]) {}
         };
         struct rv_credit {
             std::string library_name;
@@ -39,7 +38,7 @@ namespace intercept {
 
             rv_credit(const game_value &rv_game_value_)
                 : library_name(rv_game_value_[0]),
-                credits(rv_game_value_[1]) {}
+                  credits(rv_game_value_[1]) {}
         };
         struct rv_product_version {
             std::string name;
@@ -52,12 +51,12 @@ namespace intercept {
 
             rv_product_version(const game_value &rv_game_value_)
                 : name(rv_game_value_[0]),
-                name_short(rv_game_value_[1]),
-                version(rv_game_value_[2]),
-                build(rv_game_value_[3]),
-                branch(rv_game_value_[4]),
-                mods(rv_game_value_[5]),
-                platform(rv_game_value_[6]) {}
+                  name_short(rv_game_value_[1]),
+                  version(rv_game_value_[2]),
+                  build(rv_game_value_[3]),
+                  branch(rv_game_value_[4]),
+                  mods(rv_game_value_[5]),
+                  platform(rv_game_value_[6]) {}
         };
         //simulation
         //NULAR -- https://github.com/intercept/intercept/issues/13
@@ -78,8 +77,8 @@ namespace intercept {
         * \param distance_
         */
         void set_dynamic_simulation_distance(sqf_string_const_ref category_, float distance_);
-        //#TODO add BIKI entry and implement 
-        //void set_dynamic_simulation_distance_coef(sqf_string_const_ref , float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing 
+        //#TODO add BIKI entry and implement
+        //void set_dynamic_simulation_distance_coef(sqf_string_const_ref , float); //binary__setdynamicsimulationdistancecoef__string__scalar__ret__nothing
         void enable_dynamic_simulation(const object &object_, bool enable_);
         void enable_dynamic_simulation(const group &group_, bool enable_);
         void diag_dynamic_simulation_end(sqf_string_const_ref type_);
@@ -125,7 +124,7 @@ namespace intercept {
         void activate_key(sqf_string_const_ref keyname_);
         void de_activate_key(sqf_string_const_ref key_);
         bool is_key_active(sqf_string_const_ref value_);
-        void delete_collection(const object & collection_); //deprecated
+        void delete_collection(const object &collection_);  //deprecated
         bool delete_identity(sqf_string_const_ref identity_);
         void delete_site(const object &value_);
         bool delete_status(sqf_string_const_ref value_);
@@ -138,7 +137,7 @@ namespace intercept {
         void set_armory_points(float value_);
         void set_system_of_units(float value_);
         bool unlock_achievement(sqf_string_const_ref value_);
-        void add_live_stats(const object &value0_, float value1_); //Xbox stuff
+        void add_live_stats(const object &value0_, float value1_);  //Xbox stuff
         bool load_identity(const object &value0_, sqf_string_const_ref value1_);
         bool load_status(const object &value0_, sqf_string_const_ref value1_);
         bool save_status(const object &value0_, sqf_string_const_ref value1_);
@@ -159,12 +158,6 @@ namespace intercept {
         object create_site(sqf_string_const_ref type_, const vector3 &pos_);
         bool save_identity(const object &value0_, sqf_string_const_ref value1_);
 
-
-
-
-
-
-
         //TOH traffic - needs to be tested, probably not working
         void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_);
         void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_);
@@ -182,7 +175,6 @@ namespace intercept {
         std::vector<rv_credit> library_credits();
         sqf_return_string_list library_disclaimers();
         rv_product_version product_version();
-
 
         //3D stuff
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
@@ -203,12 +195,12 @@ namespace intercept {
         std::vector<object> detected_mines(const side &side_);
         float count_side(const side &side_, std::vector<object> &objects_);
         void set_airport_side(float value0_, const side &value1_);
-        void set_airport_side(const object & target_, const side &value1_);
+        void set_airport_side(const object &target_, const side &value1_);
         void reveal_mine(const object &value0_, const side &value1_);
         bool mine_detected_by(const object &value0_, const side &value1_);
         void add_score_side(const side &value0_, float value1_);
         void airport_side(int id_);
-        void airport_side(const object & target_);
+        void airport_side(const object &target_);
         float score_side(const side &value_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

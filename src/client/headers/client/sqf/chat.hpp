@@ -23,13 +23,13 @@ namespace intercept {
         namespace __helpers {
             void chat_message(binary_function fnc_, const object &obj_, sqf_string_const_ref message_);
         }
-        void side_chat(const object & obj_, sqf_string_const_ref message_);
-        void global_chat(const object & obj_, sqf_string_const_ref message_);
-        void group_chat(const object & obj_, sqf_string_const_ref message_);
-        void vehicle_chat(const object & obj_, sqf_string_const_ref message_);
-        void command_chat(const object & obj_, sqf_string_const_ref message_);
+        void side_chat(const object &obj_, sqf_string_const_ref message_);
+        void global_chat(const object &obj_, sqf_string_const_ref message_);
+        void group_chat(const object &obj_, sqf_string_const_ref message_);
+        void vehicle_chat(const object &obj_, sqf_string_const_ref message_);
+        void command_chat(const object &obj_, sqf_string_const_ref message_);
         void system_chat(sqf_string_const_ref message_);
-        void custom_chat(const object & obj_, uint32_t channel_id_, sqf_string_const_ref message_);
+        void custom_chat(const object &obj_, uint32_t channel_id_, sqf_string_const_ref message_);
         bool shown_chat();
         void show_chat(bool value_);
         void enable_channel(float value0_, bool value1_);
@@ -62,5 +62,5 @@ namespace intercept {
         void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -1,4 +1,4 @@
-﻿#include "sqf_functions.hpp"
+#include "sqf_functions.hpp"
 
 using namespace intercept;
 using namespace intercept::__internal;
@@ -21,7 +21,7 @@ public:
     static game_value* CDECL unusedNular(game_value* ret_, uintptr_t gs_) {
         switch (returnType) {
             case GameDataType::SCALAR:
-                ::new (ret_) game_value("unimplemented");
+                ::new (ret_) game_value("unimplemented"sv);
                 break;
             case GameDataType::BOOL:
                 ::new (ret_) game_value(false);
@@ -30,7 +30,7 @@ public:
                 ::new (ret_) game_value(std::vector<game_value>());
                 break;
             case GameDataType::STRING:
-                ::new (ret_) game_value("unimplemented");
+                ::new (ret_) game_value("unimplemented"sv);
                 break;
             default:
                 ::new (ret_) game_value();
@@ -129,7 +129,8 @@ void sqf_functions::setDisabled() {
 */
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //typedef int(__thiscall *f_insert_binary)(uintptr_t gameState, const __internal::gsOperator &f);
     //f_insert_binary insertBinary = reinterpret_cast<f_insert_binary>(_registerFuncs._operator_insert);
     //
@@ -185,8 +186,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<binary_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
     op._operator->return_type = retType;
     op._operator->arg1_type = leftType;
@@ -199,9 +199,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction binary " << name << " " << types::__internal::to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction binary "sv << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << inserted << "\n";
 #ifndef __linux__
    // OutputDebugStringA(stream.str().c_str());
 #endif
@@ -211,7 +211,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //typedef int(__thiscall *f_insert_unary)(uintptr_t gameState, const __internal::gsFunction &f);
     //f_insert_unary insertUnary = reinterpret_cast<f_insert_unary>(_registerFuncs._unary_insert);
     //
@@ -278,8 +279,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<unary_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
     op._operator->return_type = retType;
     op._operator->arg_type = rightype;
@@ -289,9 +289,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction unary " << name << " " << types::__internal::to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction unary "sv << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ " << inserted << "\n";
+        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << inserted << "\n";
 #ifndef __linux__
     //OutputDebugStringA(stream.str().c_str());
 #endif
@@ -301,7 +301,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 }
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
-    if (!_canRegister) throw std::runtime_error("Can only register SQF Commands on preStart");
+    if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
     //if (_registerFuncs._types[static_cast<size_t>(return_arg_type)] == 0) __debugbreak();
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
@@ -326,12 +327,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 #endif
     op.copyPH(test);
     op._operator = rv_allocator<nular_operator>::createSingle();
-    op._operator->v_table = test->_operator->v_table;
-    op._operator->ref_count = 1;
+    op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
     op._operator->return_type = retType;
 #ifndef __linux__
-    op._category = "intercept";
+    op._category = "intercept"sv;
 #endif
 
     auto table = gs->_scriptNulars.get_table_for_key(lowerName.c_str());
@@ -348,9 +348,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction nular " << name << " " << types::__internal::to_string(return_arg_type)
+    LOG(INFO) << "sqf_functions::registerFunction nular "sv << name << " " << types::__internal::to_string(return_arg_type)
         << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << " @ " << inserted << "\n";
+        << " @ "sv << inserted << "\n";
 #ifndef __linux__
     //OutputDebugStringA(stream.str().c_str());
 #endif
@@ -407,20 +407,20 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 
 std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
+    if (name.length() > 128) throw std::length_error("intercept::sqf_functions::registerType name can maximum be 128 chars long");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
-    //#TODO use arma alloc. Just to make sure it is not deleted when Intercept unloads
 
-    auto newType = new script_type_info{
+    auto newType = rv_allocator<script_type_info>::createSingle(
     #ifdef __linux__
-        name,cf,localizedName,localizedName,r_string("none")
+        name,cf,localizedName,localizedName
     #else
-        name,cf,localizedName,localizedName,description,r_string("intercept"),typeName,r_string("none")
+        name,cf,localizedName,localizedName,description,r_string("intercept"sv),typeName
     #endif
-    };
+    );
     gs->_scriptTypes.emplace_back(newType);
     auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
-    LOG(INFO) << "sqf_functions::registerType " << name << localizedName << description << typeName;
+    LOG(INFO) << "sqf_functions::registerType "sv << name << localizedName << description << typeName;
     types::__internal::add_game_datatype(name, static_cast<types::GameDataType>(newIndex));
     return { static_cast<types::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }

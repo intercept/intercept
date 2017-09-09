@@ -66,6 +66,9 @@ namespace intercept {
             T magnitude() const { return sqrt(x * x + y * y + z * z); }
             T dot(const vector3_base &v) const { return (x * v.x + y * v.y + z * v.z); }
             T distance(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y + dist.z); }
+            T distance_squared(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
+            T distance_2d(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y); }
+            T distance_2d_squared(const vector3_base &v) const { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             vector3_base cross(const vector3_base &v) const { return vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
             vector3_base normalize(void) const { return (*this / abs(magnitude())); };
             bool zero_distance() { return ((x == 0.0f && y == 0.0f && z == 0.0f) ? true : false); }
@@ -141,6 +144,7 @@ namespace intercept {
             T magnitude() const { return sqrt(x * x + y * y); }
             T dot(const vector2_base &v) const { return (x * v.x + y * v.y); }
             T distance(const vector2_base &v) const { vector2_base dist = (*this - v); dist = dist * dist; return sqrt(dist.x + dist.y); }
+            T distance_squared(const vector2_base &v) const { vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             vector2_base cross(const vector2_base &v) const { return vector2_base(v.y, -v.x); }
             vector2_base normalize(void) const { return (*this / abs(magnitude())); };
             bool zero_distance() { return ((x == 0.0f && y == 0.0f) ? true : false); }

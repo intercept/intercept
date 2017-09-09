@@ -20,7 +20,12 @@ private _code = str {
 					private _plugin_name = getText(_module >> "pluginName");
 					if(_plugin_name != "") then {
 						diag_log text format["Intercept Loading Plugin: %1", _plugin_name];
-						"intercept" callExtension ("load_extension:" + _plugin_name);
+						_cert = getText(_module >> "certificate");
+						if (_cert != "") then {	
+							"intercept" callExtension ("load_extension:" + _plugin_name+","+_cert);
+						} else {
+							"intercept" callExtension ("load_extension:" + _plugin_name);
+						};
 					};
 				};
 			};

@@ -1,4 +1,4 @@
-﻿#include "loader.hpp"
+#include "loader.hpp"
 #include "controller.hpp"
 #include <thread>
 #include <future>
@@ -23,7 +23,7 @@ namespace intercept {
 
     }
 
-    bool loader::get_function(std::string function_name_, unary_function & function_, std::string arg_signature_) {
+    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
@@ -37,7 +37,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string function_name_, unary_function & function_) {
+    bool loader::get_function(std::string_view function_name_, unary_function & function_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             function_ = reinterpret_cast<unary_function>(it->second[0].op->procedure_addr);
@@ -46,7 +46,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string function_name_, binary_function & function_) {
+    bool loader::get_function(std::string_view function_name_, binary_function & function_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             function_ = reinterpret_cast<binary_function>(it->second[0].op->procedure_addr);
@@ -55,7 +55,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_) {
+    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
@@ -69,7 +69,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string function_name_, nular_function & function_) {
+    bool loader::get_function(std::string_view function_name_, nular_function & function_) {
         auto it = _nular_operators.find(function_name_);
         if (it != _nular_operators.end()) {
             function_ = reinterpret_cast<nular_function>(it->second[0].op->procedure_addr);
@@ -78,8 +78,8 @@ namespace intercept {
         return false;
     }
 
-    bool loader::hook_function(std::string function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook unary function " << function_name_;
+    bool loader::hook_function(std::string_view function_name_, void * hook_, unary_function & trampoline_) {
+        LOG(DEBUG) << "Attempting to hook unary function "sv << function_name_;
         auto op = _unary_operators.find(function_name_);
         if (op != _unary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -90,8 +90,8 @@ namespace intercept {
         return false;
     }
 
-    bool loader::hook_function(std::string function_name_, void * hook_, binary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook binary function " << function_name_;
+    bool loader::hook_function(std::string_view function_name_, void * hook_, binary_function & trampoline_) {
+        LOG(DEBUG) << "Attempting to hook binary function "sv << function_name_;
         auto op = _binary_operators.find(function_name_);
         if (op != _binary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -102,8 +102,8 @@ namespace intercept {
         return false;
     }
 
-    bool loader::hook_function(std::string function_name_, void * hook_, nular_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook nular function " << function_name_;
+    bool loader::hook_function(std::string_view function_name_, void * hook_, nular_function & trampoline_) {
+        LOG(DEBUG) << "Attempting to hook nular function "sv << function_name_;
         auto op = _nular_operators.find(function_name_);
         if (op != _nular_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -115,7 +115,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook unary function " << function_name_;
+        LOG(DEBUG) << "Attempting to unhook unary function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _unary_operators.find(function_name_);
@@ -128,7 +128,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, binary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook binary function " << function_name_;
+        LOG(DEBUG) << "Attempting to unhook binary function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _binary_operators.find(function_name_);
@@ -141,7 +141,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, nular_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook nular function " << function_name_;
+        LOG(DEBUG) << "Attempting to unhook nular function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _nular_operators.find(function_name_);
@@ -167,7 +167,7 @@ namespace intercept {
         //uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
         //uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
         uintptr_t baseAddress = start;
-        uintptr_t moduleSize = end-start;
+        uintptr_t moduleSize = end - start;
     #else
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
@@ -294,6 +294,11 @@ namespace intercept {
     #if _WIN64 || __X86_64__
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x40\x53\x48\x83\xEC\x20\xFF\x41\x60\x48\x8B\x41\x08\x48\x8B\xD9\x48\x3B\xC1\x74\x0B\x48\x85\xC0\x74\x06\x48\x83\xC0\xE0\x75\x2B\x48\x8D\x41\x18\x48\x8B\x49\x20\x48\x3B\xC8\x74\x0E\x48\x85\xC9\x74\x09\x48\x8D\x41\xE0\x48\x85\xC0\x75\x10\x48\x8B\xCB\xE8\x00\x00\x00\x00\x84\xC0\x0F\x84\x00\x00\x00\x00\x4C\x8B\x43\x08\x32\xC9\x45\x33\xD2\x4C\x3B\xC3\x74\x0B\x4D\x85\xC0\x74\x06\x49\x83\xC0\xE0\x75\x2A\x4C\x8B\x43\x20\x48\x8D\x43\x18\x4C\x3B\xC0", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
+        auto future_fileBanks = std::async([&]() {
+            auto patternFindLoc = findInMemoryPattern("\x41\x55\x41\x56\x41\x57\x48\x83\xEC\x50\x48\x8B\xCA\x4C\x8B\xF2\xE8\x00\x00\x00\x00\x49\x8B\x16\x48\x85\xD2\x74\x1C\x48\x8B\x0D\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x18\x49\xC7\x06\x00\x00\x00\x00\x41\xC7\x46\x00\x00\x00\x00\x00\x4C\x8B\x2D\x00\x00\x00\x00\x45\x33\xFF\x4C\x89\x6C\x24\x00\x45\x39\x7D\x08\x0F\x8E\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x4C\x89\x64\x24\x00\x45\x33\xE4\x66\x90", "xxxxxxxxxxxxxxxxx????xxxxxxxxxxx????xxxxxxxxx????xxx?????xxx????xxxxxxx?xxxxxx????xxxx?xxxx?xxxx?xxxx?xxxx?xxxxx");
+            auto offs =  *reinterpret_cast<uint32_t*>(patternFindLoc + 0x3C);
+            return patternFindLoc + 0x40 + offs;
+        });
     #else
 
     #ifdef __linux__
@@ -302,6 +307,11 @@ namespace intercept {
     #else
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
+        auto future_fileBanks = std::async([&]()
+        {
+            auto patternFindLoc = findInMemoryPattern("\x83\xec\x00\x55\x57\x8b\x7c\x24\x00\x8b\xcf\xe8\x00\x00\x00\x00\x8b\x17\x85\xd2\x74\x00\x8b\x0d\x00\x00\x00\x00\x52\x8b\x01\xff\x50\x00\xc7\x07\x00\x00\x00\x00\xc7\x47\x00\x00\x00\x00\x00\xa1\x00\x00\x00\x00\x33\xed\x89\x44\x24\x00\x39\x68\x00\x0f\x8e\x00\x00\x00\x00\x53\x56\x8b\x00\x68\x00\x00\x00\x00\x8b\x1c\xa8\x89\x5c\x24\x00\xe8\x00\x00\x00\x00", "xx?xxxxx?xxx????xxxxx?xx????xxxxx?xx????xx?????x????xxxxx?xx?xx????xxxxx????xxxxxx?x????");
+            return *reinterpret_cast<uintptr_t*>(patternFindLoc) + 0x30;
+        });
     #endif
 
     #endif
@@ -321,14 +331,12 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO) << "Found unary operator: " <<
+                LOG(INFO) << "Found unary operator: "sv <<
                     new_entry.op->return_type.type_str() << " " <<
                     new_entry.name <<
                     "(" << new_entry.op->arg_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr << "\n";
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _unary_operators[name].push_back(new_entry);
+                    " @ "sv << new_entry.op->procedure_addr << "\n";
+                _unary_operators[entry._name2].push_back(new_entry);
             }
         }
 
@@ -341,15 +349,13 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO) << "Found binary operator: " <<
+                LOG(INFO) << "Found binary operator: "sv <<
                     new_entry.op->return_type.type_str() << " " <<
                     "(" << new_entry.op->arg1_type.type_str() << ")" <<
                     new_entry.name <<
                     "(" << new_entry.op->arg2_type.type_str() << ")" <<
-                    " @ " << new_entry.op->procedure_addr << "\n";
-                std::string name = std::string(new_entry.name);
-                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-                _binary_operators[name].push_back(new_entry);
+                    " @ "sv << new_entry.op->procedure_addr << "\n";
+                _binary_operators[entry._name2].push_back(new_entry);
             }
         }
 
@@ -361,38 +367,36 @@ namespace intercept {
             new_entry.op = entry._operator;
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
-            LOG(INFO) << "Found nular operator: " << new_entry.op->return_type.type_str() << " "
-                << new_entry.name << " @ " << new_entry.op->procedure_addr << "\n";
-            std::string name = std::string(new_entry.name);
-            std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-            _nular_operators[name].push_back(new_entry);
+            LOG(INFO) << "Found nular operator: "sv << new_entry.op->return_type.type_str() << " "
+                << new_entry.name << " @ "sv << new_entry.op->procedure_addr << "\n";
+            _nular_operators[entry._name2].push_back(new_entry);
         }
 
         auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::GameDataType::SCALAR;
-            if (name == "BOOL") return types::GameDataType::BOOL;
-            if (name == "ARRAY") return types::GameDataType::ARRAY;
-            if (name == "STRING") return types::GameDataType::STRING;
-            if (name == "NOTHING") return types::GameDataType::NOTHING;
-            if (name == "ANY") return types::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::GameDataType::NaN;
-            if (name == "CODE") return types::GameDataType::CODE;
-            if (name == "OBJECT") return types::GameDataType::OBJECT;
-            if (name == "SIDE") return types::GameDataType::SIDE;
-            if (name == "GROUP") return types::GameDataType::GROUP;
-            if (name == "TEXT") return types::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::GameDataType::TARGET;
-            if (name == "CONFIG") return types::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::GameDataType::CONTROL;
-            if (name == "NetObject") return types::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::GameDataType::LOCATION;
+            if (name == "SCALAR"sv) return types::GameDataType::SCALAR;
+            if (name == "BOOL"sv) return types::GameDataType::BOOL;
+            if (name == "ARRAY"sv) return types::GameDataType::ARRAY;
+            if (name == "STRING"sv) return types::GameDataType::STRING;
+            if (name == "NOTHING"sv) return types::GameDataType::NOTHING;
+            if (name == "ANY"sv) return types::GameDataType::ANY;
+            if (name == "NAMESPACE"sv) return types::GameDataType::NAMESPACE;
+            if (name == "NaN"sv) return types::GameDataType::NaN;
+            if (name == "CODE"sv) return types::GameDataType::CODE;
+            if (name == "OBJECT"sv) return types::GameDataType::OBJECT;
+            if (name == "SIDE"sv) return types::GameDataType::SIDE;
+            if (name == "GROUP"sv) return types::GameDataType::GROUP;
+            if (name == "TEXT"sv) return types::GameDataType::TEXT;
+            if (name == "SCRIPT"sv) return types::GameDataType::SCRIPT;
+            if (name == "TARGET"sv) return types::GameDataType::TARGET;
+            if (name == "CONFIG"sv) return types::GameDataType::CONFIG;
+            if (name == "DISPLAY"sv) return types::GameDataType::DISPLAY;
+            if (name == "CONTROL"sv) return types::GameDataType::CONTROL;
+            if (name == "NetObject"sv) return types::GameDataType::NetObject;
+            if (name == "SUBGROUP"sv) return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER"sv) return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK"sv) return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD"sv) return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION"sv) return types::GameDataType::LOCATION;
             return types::GameDataType::end;
         };
 
@@ -412,7 +416,7 @@ namespace intercept {
         #endif
         #endif
             LOG(INFO) << entry->_localizedName << entry->_javaFunc << entry->_readableName << "\n";
-            LOG(INFO) << "Found Type operator: " << entry->_name << " create@ " << std::hex << entry->_createFunction << " pool@ " << poolAlloc << "\n";
+            LOG(INFO) << "Found Type operator: "sv << entry->_name << " create@ "sv << std::hex << entry->_createFunction << " pool@ "sv << poolAlloc << "\n";
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
@@ -424,7 +428,12 @@ namespace intercept {
         }
 
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.v_table;
+        //File Banks
+#ifndef __linux__
+        //_sqf_register_funcs._file_banks = future_fileBanks.get(); //Broken in 1.74
+#endif
+
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
@@ -440,7 +449,7 @@ namespace intercept {
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
     #ifdef __linux__
-        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
         const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);

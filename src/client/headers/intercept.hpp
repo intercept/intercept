@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "shared.hpp"
 #include "client/client.hpp"
+#include "client/eventhandlers.hpp"
 #include "shared/functions.hpp"
 #include "client/sqf/sqf.hpp"
 #include "shared/client_types.hpp"
@@ -14,10 +15,12 @@ namespace intercept {
         DLLEXPORT void CDECL mission_end();
         DLLEXPORT void CDECL mission_stopped();
         DLLEXPORT void CDECL on_frame();
-        DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);
+        DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);  //#TODO no C ABI here! use r_string
+        DLLEXPORT void CDECL on_interface_unload(r_string name_);
+        DLLEXPORT void CDECL register_interfaces();
 
 #define EH(x) DLLEXPORT void CDECL x
-         //#TODO may want r_string& here
+
         EH(anim_changed)(object &unit_, r_string anim_name_);
         EH(anim_done)(object &unit_, r_string anim_name_);
         EH(anim_state_changed)(object &unit_, r_string anim_name_);

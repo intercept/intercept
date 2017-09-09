@@ -1,23 +1,21 @@
-﻿#include "export.hpp"
+#include "export.hpp"
 #include "invoker.hpp"
+#include "extensions.hpp"
 
 
 namespace intercept {
     namespace client_function_defs {
 
-        game_value invoke_raw_nular_nolock(const nular_function function_)
-        {
-            return invoker::get().invoke_raw_nolock(function_);
+        game_value invoke_raw_nular_nolock(const nular_function function_) {
+            return invoker::invoke_raw_nolock(function_);
         }
 
-        game_value invoke_raw_unary_nolock(const unary_function function_, const game_value & right_arg_)
-        {
-            return invoker::get().invoke_raw_nolock(function_, right_arg_);
+        game_value invoke_raw_unary_nolock(const unary_function function_, const game_value & right_arg_) {
+            return invoker::invoke_raw_nolock(function_, right_arg_);
         }
 
-        game_value invoke_raw_binary_nolock(const binary_function function_, const game_value & left_arg_, const game_value & right_arg_)
-        {
-            return invoker::get().invoke_raw_nolock(function_, left_arg_, right_arg_);
+        game_value invoke_raw_binary_nolock(const binary_function function_, const game_value & left_arg_, const game_value & right_arg_) {
+            return invoker::invoke_raw_nolock(function_, left_arg_, right_arg_);
         }
 
         void get_type_structure(std::string_view type_name_, uintptr_t &type_def_, uintptr_t &data_type_def_) {
@@ -66,13 +64,11 @@ namespace intercept {
             return nullptr;
         }
 
-        void invoker_lock()
-        {
+        void invoker_lock() {
             invoker::get().lock();
         }
 
-        void invoker_unlock()
-        {
+        void invoker_unlock() {
             invoker::get().unlock();
         }
 
@@ -91,7 +87,10 @@ namespace intercept {
             return sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
         }
         std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
-            return sqf_functions::get().registerType(name, localizedName,description, typeName, cf);
+            return sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
+        }
+        const auto_array<r_string>* get_pbo_files_list() {
+            return &invoker::get().files_in_pbo_banks;
         }
     }
 }

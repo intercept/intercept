@@ -22,9 +22,14 @@ namespace intercept {
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
 
+        //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
-        game_value call(const code & code_);
+        game_value call(const code &code_);
+
+        bool is_nil_code(const code &code_);
         code compile(sqf_string_const_ref sqf_);
+        code compile_final(sqf_string_const_ref sqf_);
+        bool is_nil(sqf_string_const_ref var_);
         sqf_return_string preprocess_file(sqf_string_const_ref value_);
         sqf_return_string preprocess_file_line_numbers(sqf_string_const_ref value_);
         sqf_return_string load_file(sqf_string_const_ref value_);
@@ -32,15 +37,14 @@ namespace intercept {
         float parse_number(bool value_);
         rv_text parse_text(sqf_string_const_ref value_);
         std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_);
-        //#TODO return game_value or split into vector of game_values? 
-        game_value select(game_value array_, const code& code_);
+        game_value select(game_value array_, const code &code_);
         game_value select_max(const game_value &array_);
         game_value select_min(const game_value &array_);
         int push_back_unique(const std::vector<game_value> &array_, const game_value &element_);
         float random(float seed_, float x_, std::optional<float> y_);
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_);
         bool can_suspend();
-        bool is_equal_to(const object& l_, const object& r_);
+        bool is_equal_to(const object &l_, const object &r_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
         script exec_vm(sqf_string_const_ref value_);
@@ -64,34 +68,37 @@ namespace intercept {
         int exec_fsm(const game_value &arguments_, sqf_string_const_ref file_name_);
         script exec_vm(const game_value &arguments_, sqf_string_const_ref file_name_);
         void exec(const game_value &argument_, sqf_string_const_ref script_);
-
-
-
+        sqf_return_string str(game_value data_);
 
         sqf_return_string to_fixed(float number_, int decimals_);
 
-        void set_variable(const display &display_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const control &control_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const object &object_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const group &group_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const task &task_, sqf_string_const_ref variable_, const game_value &value_);
-        void set_variable(const location &location_, sqf_string_const_ref variable_, const game_value &value_);
+        void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_);
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_);
+        
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_);
+        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_);
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const display & display_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_);
-        game_value get_variable(const object & obj_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_);
-        game_value get_variable(const group & group_, sqf_string_const_ref var_name_, game_value default_value_);//#TODO shouldn't pass game_values by reference. They are refcounted anyway and get copied into a vector anyway. Problem is this prevents automatic type conversion.
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_);
-        game_value get_variable(const team_member & team_member_, sqf_string_const_ref var_name_, game_value default_value_);
-        game_value get_variable(const task & task_, sqf_string_const_ref var_name_);
-        game_value get_variable(const control &control_, sqf_string_const_ref variable_, std::optional<game_value> default_value_);
-        game_value get_variable(const task &task_, sqf_string_const_ref variable_, const game_value &default_value_);
-        game_value get_variable(const location &location_, sqf_string_const_ref variable_, const game_value &default_value_);
+        game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_);
+        game_value get_variable(const object &obj_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_);
+        game_value get_variable(const group &group_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_);
+        game_value get_variable(const team_member &team_member_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_);
+        game_value get_variable(const task &task_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_);
+        game_value get_variable(const control &control_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const location &loc_, sqf_string_const_ref var_name_);
+        game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_);
 
         bool is_null(const object &value_);
         bool is_null(const control &value_);
@@ -136,7 +143,6 @@ namespace intercept {
         side side_empty();
         sqf_return_string line_break();
 
-
         //onEvent
         void on_command_mode_changed(const code &command_);
         void on_command_mode_changed(sqf_string_const_ref command_);
@@ -158,7 +164,7 @@ namespace intercept {
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
-        
+
         bool user_input_disabled();
         bool screen_shot(sqf_string_const_ref filename_);
         object cursor_object();
@@ -185,6 +191,7 @@ namespace intercept {
         bool is_localized(sqf_string_const_ref value_);
         sqf_return_string localize(sqf_string_const_ref value_);
         game_value text(sqf_string_const_ref value_);
+        sqf_return_string text(location& value_);
         sqf_return_string format(const std::vector<game_value> &params_);
         sqf_return_string compose_text(sqf_string_list_const_ref texts_);
         sqf_return_string endl();
@@ -202,9 +209,9 @@ namespace intercept {
         float player_respawn_time();
         side player_side();
         std::vector<object> switchable_units();
-        void add_switchable_unit(const object & unit_);
-        side create_center(const side & side_); //not used in A3
-        void delete_center(const side & side_);
+        void add_switchable_unit(const object &unit_);
+        side create_center(const side &side_);  //not used in A3
+        void delete_center(const side &side_);
         void disable_user_input(bool value_);
         void echo(sqf_string_const_ref value_);
         void end_mission(sqf_string_const_ref value_);
@@ -216,5 +223,5 @@ namespace intercept {
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

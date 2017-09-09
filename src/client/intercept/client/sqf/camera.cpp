@@ -7,7 +7,7 @@ namespace intercept {
     namespace sqf {
         /* potential namespace: camera */
         void add_cam_shake(float power_, float duration_, float frequency_) {
-            game_value params{ power_, duration_, frequency_ };
+            game_value params{power_, duration_, frequency_};
 
             host::functions.invoke_raw_unary(__sqf::unary__addcamshake__array__ret__nothing, params);
         }
@@ -46,97 +46,83 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__camerainterest__object__ret__scalar, entity_);
         }
 
-        void cam_constuction_set_params(const object &camera_, const vector3 & position_, float radius_, float max_above_land_) {
-            game_value args({
-                position_,
-                radius_,
-                max_above_land_
-            });
+        void cam_constuction_set_params(const object &camera_, const vector3 &position_, float radius_, float max_above_land_) {
+            game_value args({position_,
+                             radius_,
+                             max_above_land_});
             host::functions.invoke_raw_binary(__sqf::binary__camconstuctionsetparams__object__array__ret__nothing, camera_, args);
         }
 
-        object cam_create(sqf_string_const_ref type_, const vector3 & position_) {
+        object cam_create(sqf_string_const_ref type_, const vector3 &position_) {
             return host::functions.invoke_raw_binary(__sqf::binary__camcreate__string__array__ret__object, type_, position_);
         }
 
-        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_) {
-            game_value args({
-                name_,
-                position_
-            });
+        void camera_effect(const object &camera_, sqf_string_const_ref name_, sqf_string_const_ref position_) {
+            game_value args({name_,
+                             position_});
             host::functions.invoke_raw_binary(__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
-        void camera_effect(const object & camera_, sqf_string_const_ref name_, sqf_string_const_ref position_, sqf_string_const_ref rtt_) {
-            game_value args({
-                name_,
-                position_,
-                rtt_
-            });
+        void camera_effect(const object &camera_, sqf_string_const_ref name_, sqf_string_const_ref position_, sqf_string_const_ref rtt_) {
+            game_value args({name_,
+                             position_,
+                             rtt_});
             host::functions.invoke_raw_binary(__sqf::binary__cameraeffect__object__array__ret__nothing, camera_, args);
         }
 
-        void cam_prepare_focus(const object & camera_, float distance_, float blur_) {
-            game_value args({
-                distance_,
-                blur_
-            });
+        void cam_prepare_focus(const object &camera_, float distance_, float blur_) {
+            game_value args({distance_,
+                             blur_});
             host::functions.invoke_raw_binary(__sqf::binary__campreparefocus__object__array__ret__nothing, camera_, args);
         }
 
-        void cam_prepare_fov_range(const object & camera_, float min_, float max_) {
-            game_value args({
-                min_,
-                max_
-            });
+        void cam_prepare_fov_range(const object &camera_, float min_, float max_) {
+            game_value args({min_,
+                             max_});
             host::functions.invoke_raw_binary(__sqf::binary__campreparefovrange__object__array__ret__nothing, camera_, args);
         }
 
-        void cam_prepare_pos(const object & camera_, const vector3 & position_) {
+        void cam_prepare_pos(const object &camera_, const vector3 &position_) {
             host::functions.invoke_raw_binary(__sqf::binary__campreparepos__object__array__ret__nothing, camera_, position_);
         }
 
-        void cam_prepare_rel_pos(const object & camera_, const vector3 & relative_position_) {
+        void cam_prepare_rel_pos(const object &camera_, const vector3 &relative_position_) {
             host::functions.invoke_raw_binary(__sqf::binary__campreparerelpos__object__array__ret__nothing, camera_, relative_position_);
         }
 
-        void cam_prepare_target(const object & camera_, const object & target_) {
+        void cam_prepare_target(const object &camera_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__campreparetarget__object__object__ret__nothing, camera_, target_);
         }
 
-        void cam_prepare_target(const object & camera_, const vector3 & target_) {
+        void cam_prepare_target(const object &camera_, const vector3 &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__campreparetarget__object__array__ret__nothing, camera_, target_);
         }
 
-        void cam_set_focus(const object & camera_, float distance_, float blur_) {
-            game_value args({
-                distance_,
-                blur_
-            });
+        void cam_set_focus(const object &camera_, float distance_, float blur_) {
+            game_value args({distance_,
+                             blur_});
             host::functions.invoke_raw_binary(__sqf::binary__camsetfocus__object__array__ret__nothing, camera_, args);
         }
 
-        void cam_set_fov_range(const object & camera_, float min_, float max_) {
-            game_value args({
-                min_,
-                max_
-            });
+        void cam_set_fov_range(const object &camera_, float min_, float max_) {
+            game_value args({min_,
+                             max_});
             host::functions.invoke_raw_binary(__sqf::binary__camsetfovrange__object__array__ret__nothing, camera_, args);
         }
 
-        void cam_set_pos(const object & camera_, const vector3 & position_) {
+        void cam_set_pos(const object &camera_, const vector3 &position_) {
             host::functions.invoke_raw_binary(__sqf::binary__camsetpos__object__array__ret__nothing, camera_, position_);
         }
 
-        void cam_set_relative_pos(const object & camera_, const vector3 & relative_position_) {
+        void cam_set_relative_pos(const object &camera_, const vector3 &relative_position_) {
             host::functions.invoke_raw_binary(__sqf::binary__camsetrelpos__object__array__ret__nothing, camera_, relative_position_);
         }
 
-        void cam_set_target(const object & camera_, const object & target_) {
+        void cam_set_target(const object &camera_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__camsettarget__object__object__ret__nothing, camera_, target_);
         }
 
-        void cam_set_target(const object & camera_, const vector3 & target_) {
+        void cam_set_target(const object &camera_, const vector3 &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__camsettarget__object__array__ret__nothing, camera_, target_);
         }
 
@@ -190,26 +176,22 @@ namespace intercept {
             __helpers::__empty_unary_number(__sqf::unary__setaperture__scalar__ret__nothing, value_);
         }
         void set_aperture_new(float min_, float std_, float max_, float std_lum_) {
-            game_value params({
-                min_,
-                std_,
-                max_,
-                std_lum_
-            });
+            game_value params({min_,
+                               std_,
+                               max_,
+                               std_lum_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setaperturenew__array__ret__nothing, params);
         }
 
         void set_cam_shake_def_params(float power_, float duration_, float freq_, float min_speed_, float min_mass_, float caliber_coef_hit_, float vehicle_coef_) {
-            game_value params({
-                power_,
-                duration_,
-                freq_,
-                min_speed_,
-                min_mass_,
-                caliber_coef_hit_,
-                vehicle_coef_
-            });
+            game_value params({power_,
+                               duration_,
+                               freq_,
+                               min_speed_,
+                               min_mass_,
+                               caliber_coef_hit_,
+                               vehicle_coef_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setcamshakedefparams__array__ret__nothing, params);
         }
@@ -220,8 +202,7 @@ namespace intercept {
                 vert_coef_,
                 horz_coef_,
                 bank_coef_,
-                interpolate_
-            };
+                interpolate_};
 
             host::functions.invoke_raw_unary(__sqf::unary__setcamshakeparams__array__ret__nothing, params);
         }
@@ -229,15 +210,13 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__preloadcamera__array__ret__bool, pos_);
         }
 
-        void set_default_camera(const vector3& pos_, const vector3& dir_) {
-            game_value params({
-                pos_,
-                dir_
-            });
+        void set_default_camera(const vector3 &pos_, const vector3 &dir_) {
+            game_value params({pos_,
+                               dir_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setdefaultcamera__array__ret__nothing, params);
         }
-        vector3 get_camera_view_direction(const object & obj_) {
+        vector3 get_camera_view_direction(const object &obj_) {
             return __helpers::get_pos_obj(__sqf::unary__getcameraviewdirection__object__ret__array, obj_);
         }
         void switch_camera(const object &value0_, sqf_string_const_ref value1_) {
@@ -250,29 +229,16 @@ namespace intercept {
             return __helpers::__retrieve_nular_string(__sqf::nular__cameraview__ret__string);
         }
 
-
-
-
-
-
-
-
-
-
-
-
         //post processing effects
 
-        float pp_effect_create(sqf_string_const_ref name_, const float& priority_) {
-            game_value params({
-                name_,
-                priority_
-            });
+        float pp_effect_create(sqf_string_const_ref name_, const float &priority_) {
+            game_value params({name_,
+                               priority_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, params);
         }
 
-        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_) {
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect> &effects_) {
             auto_array<game_value> effects(effects_.begin(), effects_.end());
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, std::move(effects));
@@ -324,17 +290,14 @@ namespace intercept {
 
         void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_) {
             switch (effect_.index()) {
-                case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__scalar__scalar__ret__nothing, std::move(auto_array<game_value>({ std::get<0>(effect_).get().begin(),std::get<0>(effect_).get().end() })), duration_);
+                case 0: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__scalar__scalar__ret__nothing, std::move(auto_array<game_value>({std::get<0>(effect_).get().begin(), std::get<0>(effect_).get().end()})), duration_);
                 case 1: host::functions.invoke_raw_binary(__sqf::binary__ppeffectcommit__array__scalar__ret__nothing, static_cast<float>(std::get<1>(effect_).get()), duration_);
             }
         }
 
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({ effets_.begin(),effets_.end() })), enable_);
+            host::functions.invoke_raw_binary(__sqf::binary__ppeffectenable__array__bool__ret__nothing, std::move(auto_array<game_value>({effets_.begin(), effets_.end()})), enable_);
         }
-
-
-
 
         vector3 get_pilot_camera_direction(const object &object_) {
             return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameradirection__object__ret__array, object_));
@@ -349,17 +312,14 @@ namespace intercept {
         rv_camera_target get_pilot_camera_target(const object &object_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
 
-            return rv_camera_target({
-                ret[0],
-                __helpers::__convert_to_vector3(ret[1]),
-                ret[2]
-            });
+            return rv_camera_target({ret[0],
+                                     __helpers::__convert_to_vector3(ret[1]),
+                                     ret[2]});
         }
 
         bool has_pilot_camera(const object &object_) {
             return host::functions.invoke_raw_unary(__sqf::unary__haspilotcamera__object__ret__bool, object_);
         }
 
-
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -357,12 +357,16 @@ namespace intercept {
 
         struct rv_weapon_info { //#TODO It would be better to store these as r_strings
             std::string weapon;
-            std::string silencer = "";
+            std::string silencer;
             std::string laser; 
             std::string optics;
             rv_magazine_info primary_muzzle_magazine;
             rv_magazine_info secondary_muzzle_magazine;
             std::string bipod;
+
+            rv_weapon_info() {
+                weapon = "";
+            }
 
             rv_weapon_info(const game_value &ret_game_value_) { 
                 if (ret_game_value_.size() > 0) {
@@ -396,6 +400,10 @@ namespace intercept {
         struct rv_container_info {
             std::string container;
             std::vector<rv_magazine_info> items;
+
+            rv_container_info() {
+                container = "";
+            }
 
             rv_container_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
@@ -431,17 +439,20 @@ namespace intercept {
             rv_weapon_info binocular;
             std::vector<std::string> assigned_items;
 
-            rv_unit_loadout(const game_value &ret_game_value_) : primary(ret_game_value_[0]),
-                                                                 secondary(ret_game_value_[1]),
-                                                                 handgun(ret_game_value_[2]),
-                                                                 uniform(ret_game_value_[3]),
-                                                                 vest(ret_game_value_[4]),
-                                                                 backpack(ret_game_value_[5]),
-                                                                 headgear(ret_game_value_[6]),
-                                                                 facewear(ret_game_value_[7]),
-                                                                 binocular(ret_game_value_[8]) {
-                auto_array<game_value> _tmp = ret_game_value_[9].to_array();
-                assigned_items = std::vector<std::string>(_tmp.begin(), _tmp.end());
+            rv_unit_loadout(const game_value &ret_game_value_) {
+                if (ret_game_value_.size() > 0) {
+                    primary = ret_game_value_[0];
+                    secondary = ret_game_value_[1];
+                    handgun = ret_game_value_[2];
+                    uniform = ret_game_value_[3];
+                    vest = ret_game_value_[4];
+                    backpack = ret_game_value_[5];
+                    headgear = ret_game_value_[6];
+                    facewear = ret_game_value_[7];
+                    binocular = ret_game_value_[8];
+                    auto_array<game_value> _tmp = ret_game_value_[9].to_array();
+                    assigned_items = std::vector<std::string>(_tmp.begin(), _tmp.end());
+                }
             }
 
             explicit operator game_value() const {

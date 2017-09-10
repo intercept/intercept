@@ -65,12 +65,12 @@ namespace intercept {
         enum class thermal_modes {
             white_hot = 0,
             black_hot = 1,
-            lightgreen_hot = 2, //Light Green Hot / Darker Green cold
-            black_hot_green_cold = 3, //Black Hot / Darker Green cold
-            red_hot = 4, //Light Red Hot / Darker Red Cold
-            black_hot_red_cold = 5, //Black Hot / Darker Red Cold
-            white_hot_red_cold = 6, //White Hot.Darker Red Cold
-            thermal = 7 //Shade of Red and Green, Bodies are white
+            lightgreen_hot = 2,        ///< Light Green Hot / Darker Green cold
+            black_hot_green_cold = 3,  ///< Black Hot / Darker Green cold
+            red_hot = 4,               ///< Light Red Hot / Darker Red Cold
+            black_hot_red_cold = 5,    ///< Black Hot / Darker Red Cold
+            white_hot_red_cold = 6,    ///< White Hot.Darker Red Cold
+            thermal = 7                ///< Shade of Red and Green, Bodies are white
         };
 
         void set_cam_use_ti(thermal_modes mode_, bool value1_);
@@ -84,36 +84,30 @@ namespace intercept {
 
         void set_default_camera(const vector3 &pos_, const vector3 &dir_);
 
-        vector3 get_camera_view_direction(const object & obj_);
+        vector3 get_camera_view_direction(const object &obj_);
         void switch_camera(const object &value0_, sqf_string_const_ref value1_);
         void set_camera_interest(const object &value0_, float value1_);
         sqf_return_string camera_view();
 
-
         //postprocessing effects
-
 
         struct rv_pp_effect {
             std::string name;
             float priority;
 
             operator game_value() {
-                return game_value(std::vector<game_value>({
-                    name,
-                    priority
-                }));
+                return game_value(std::vector<game_value>({name,
+                                                           priority}));
             }
 
             operator game_value() const {
-                return game_value(std::vector<game_value>({
-                    name,
-                    priority
-                }));
+                return game_value(std::vector<game_value>({name,
+                                                           priority}));
             }
         };
 
-        float pp_effect_create(sqf_string_const_ref name_, const float& priority_);
-        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect>& effects_);
+        float pp_effect_create(sqf_string_const_ref name_, const float &priority_);
+        std::vector<float> pp_effect_create(const std::vector<rv_pp_effect> &effects_);
 
         bool pp_effect_committed(sqf_string_const_ref value_);
         bool pp_effect_committed(float value_);
@@ -126,12 +120,10 @@ namespace intercept {
         void pp_effect_force_in_nvg(float value0_, bool value1_);
 
         void pp_effect_destroy(std::vector<float> effect_handles_);
-
+        //#TODO: Replace &settings_ with the right pp_effect_parameters
         void pp_effect_adjust(std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<int>> effect_, const game_value &settings_);
         void pp_effect_commit(std::variant<std::reference_wrapper<const std::vector<int>>, std::reference_wrapper<int>> effect_, const float &duration_);
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
-
-
 
         struct rv_camera_target {
             bool is_tracking;
@@ -139,12 +131,11 @@ namespace intercept {
             object target_object;
         };
 
-
         vector3 get_pilot_camera_direction(const object &object_);
         vector3 get_pilot_camera_position(const object &object_);
         vector3 get_pilot_camera_rotation(const object &object_);
         rv_camera_target get_pilot_camera_target(const object &object_);
         bool has_pilot_camera(const object &object_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

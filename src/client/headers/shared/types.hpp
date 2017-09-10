@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <stdio.h>
 #include <set>
 #include <array>
@@ -12,11 +12,17 @@
 #include <string_view>
 #include <string.h>
 #include <algorithm>
+#include <memory>
 
 //GNUC somehow can't do it if it's inside shared.hpp.
 #ifdef __GNUC__
 #define CDECL __attribute__ ((__cdecl__))
 #endif
+using namespace std::literals::string_view_literals;
+
+[[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
+    return { str, len };
+};
 
 namespace intercept {
     class sqf_functions;
@@ -24,6 +30,9 @@ namespace intercept {
     class invoker;
     namespace types {
         class game_value;
+        class game_data_array;
+        class internal_object;
+        class game_data;
     #ifdef __linux__
         //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
         using nular_function = game_value(*) (uintptr_t state);
@@ -37,11 +46,8 @@ namespace intercept {
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
-        class rv_pool_allocator;
         namespace __internal {
-            void* rv_allocator_allocate_generic(size_t _size);
-            void rv_allocator_deallocate_generic(void* _Ptr);
-            void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
+            void set_game_value_vtable(uintptr_t vtable);
             template <typename T, typename U>
             std::size_t pairhash(const T& first, const U& second) {
                 size_t _hash = std::hash<T>()(first);
@@ -49,7 +55,7 @@ namespace intercept {
                 return _hash;
             }
             class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
-            public:                //#TODO move this into __internal
+            public:
                 I_debug_value() {}
                 virtual ~I_debug_value() {}
                 // IDebugValue
@@ -58,13 +64,22 @@ namespace intercept {
             };
         }
 
+    #pragma region Allocator
+
+
+        namespace __internal {
+            void* rv_allocator_allocate_generic(size_t _size);
+            void rv_allocator_deallocate_generic(void* _Ptr);
+            void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
+        }
+
         template<class Type>
         class rv_allocator : std::allocator<Type> {
         public:
             static void deallocate(Type* _Ptr, size_t = 0) {
                 return __internal::rv_allocator_deallocate_generic(_Ptr);
             }
-            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called! 
+            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
             //use the create* Methods instead
             static Type* allocate(size_t _count) {
                 return reinterpret_cast<Type*>(__internal::rv_allocator_allocate_generic(sizeof(Type)*_count));
@@ -103,9 +118,27 @@ namespace intercept {
             static Type* reallocate(Type* _Ptr, size_t _count) {
                 return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr, sizeof(Type)*_count));
             }
-
-            //#TODO implement game_data_pool and string pool here
         };
+
+        class rv_pool_allocator {
+            char pad_0x0000[0x24]; //0x0000
+        public:
+            const char* _allocName;
+
+            int _1;
+            int _2;
+            int _3;
+            int _4;
+            int allocated_count;
+
+            void* allocate(size_t count);
+            void deallocate(void* data);
+
+        };
+    #pragma endregion
+
+
+    #pragma region Refcounting
 
         class refcount_base {
         public:
@@ -144,59 +177,10 @@ namespace intercept {
             virtual void lastRefDeleted() const { destruct(); }
             virtual int __dummy_refcount_func() const { return 0; }
         };
-
-        /*
-        This is a placeholder so i can use refcount but still have an accessible vtable pointer
-        */
-        class __vtable {
-        public:
-            uintptr_t _vtable{ 0 };
-        };
-
-        template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
-        class compact_array : public refcount_base {
-            static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
-        public:
-
-            size_t size() const { return _size; }
-            Type *data() { return &_data; }
-            const Type *data() const { return &_data; }
-            const Type * cbegin() const { return &_data; }
-            const Type * cend() const { return (&_data) + _size; }
-
-            //We delete ourselves! After release no one should have a pointer to us anymore!
-            int release() const {
-                int ret = dec_ref();
-                if (!ret) del();
-                return ret;
-            }
-
-            static compact_array* create(size_t number_of_elements_) {
-                size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
-                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-                new (buffer) compact_array(number_of_elements_);
-                return buffer;
-            }
-
-            void del() const {
-                this->~compact_array();
-                const void* _thisptr = this;
-                void* _thisptr2 = const_cast<void*>(_thisptr);
-                Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
-            }
-            //#TODO copy functions
-
-            size_t _size;
-            Type _data;
-        private:
-            explicit compact_array(size_t size_) {
-                _size = size_;
-            }
-        };
-
-
+        class game_value_static;
         template<class Type>
         class ref {
+            friend class game_value_static; //Overrides _ref to nullptr in destructor when Arma is exiting
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
             Type* _ref;
         public:
@@ -247,37 +231,88 @@ namespace intercept {
             size_t ref_count() const { return _ref ? _ref->ref_count() : 0; }
         };
 
+    #pragma endregion
+
+        /*
+        This is a placeholder so i can use refcount but still have an accessible vtable pointer
+        */
+        class __vtable {
+        public:
+            uintptr_t _vtable{ 0 };
+        };
+
+        class _refcount_vtable_dummy : public __vtable, public refcount_base {};
+
+    #pragma region Containers
+        template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
+        class compact_array : public refcount_base {
+            static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
+        public:
+
+            size_t size() const { return _size; }
+            Type *data() { return &_data; }
+            const Type *data() const { return &_data; }
+            const Type * cbegin() const { return &_data; }
+            const Type * cend() const { return (&_data) + _size; }
+
+            //We delete ourselves! After release no one should have a pointer to us anymore!
+            int release() const {
+                int ret = dec_ref();
+                if (!ret) del();
+                return ret;
+            }
+
+            static compact_array* create(size_t number_of_elements_) {
+                size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+                new (buffer) compact_array(number_of_elements_);
+                return buffer;
+            }
+            static compact_array* create(const compact_array &other) {
+                size_t size = other.size();
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+                new (buffer) compact_array(size);
+                std::copy(other.data(), other.data() + other.size(), buffer->data());
+                return buffer;
+            }
+            void del() const {
+                this->~compact_array();
+                const void* _thisptr = this;
+                void* _thisptr2 = const_cast<void*>(_thisptr);
+                Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
+            }
+
+            size_t _size;
+            Type _data;
+        private:
+            explicit compact_array(size_t size_) {
+                _size = size_;
+            }
+        };
+
 
         //template<std::size_t N>
-        //class r_string_const : public compact_array<char> { // constexpr string
+        //class r_string_const : public refcount_base { // constexpr string
         //private:
         //    const size_t _size;
-        //    char _data[N];
+        //    const char _data[];
         //public:
-        //    constexpr r_string_const(const char a[N]) : _data(a), _size(N - 1), _refcount(2) { add_ref(); }
+        //    constexpr r_string_const(const char a[N]) : _size(N - 1), _data({a[0] ... a[N]}) { add_ref(); }
         //};
 
         class r_string {
-            //friend constexpr const r_string& operator ""_rs(const char*, size_t);
         protected:
         public:
             r_string() {}
             r_string(std::string_view str) {
                 if (str.length()) _ref = create(str.data(), str.length());
             }
-
-            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
-            template<std::size_t N>
-            //constexpr r_string(const r_string_const<N>& dat) : _ref(&dat) {}
-            //constexpr r_string(std::string_view str) {   //https://woboq.com/blog/qstringliteral.html
-            //    _ref = [str]() -> compact_array<char>* {
-            //        static const r_string_const<str.length()> r_string_literal{
-            //        str.data()
-            //    };
-            //    return reinterpret_cast<compact_array<char>>(&r_string_literal);
-            //    }();
+            //template <size_t N>
+            //constexpr r_string(const r_string_const<N>& c) {
+            //    _ref = reinterpret_cast<compact_array<char>*>(&c);
             //}
-            r_string(r_string&& _move) {
+            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
+            r_string(r_string&& _move) noexcept {
                 _ref = _move._ref;
                 _move._ref = nullptr;
             }
@@ -285,23 +320,20 @@ namespace intercept {
                 _ref = _copy._ref;
             }
 
-
-            r_string& operator = (r_string&& _move) {
+            r_string& operator = (r_string&& _move) noexcept {
                 if (this == &_move)
                     return *this;
                 _ref = _move._ref;
                 _move._ref = nullptr;
                 return *this;
             }
+
             r_string& operator = (const r_string& _copy) {
                 _ref = _copy._ref;
                 return *this;
             }
             r_string& operator = (std::string_view _copy) {
-                //if (!_ref || _ref.ref_count() <= 1) {
-                _ref = _copy.length() ? create(_copy.data(), _copy.length()) : nullptr;
-                //}
-                //_ref->assign(_copy.data(), _copy.length());  //#TODO compact_array::assign. Reallocates if already has memory
+                _ref = create(_copy.data(), _copy.length());
                 return *this;
             }
             const char* data() const {
@@ -310,26 +342,30 @@ namespace intercept {
                 return empty;
             }
             const char* c_str() const { return data(); }
-            char* data_mutable() {
-                if (!_ref) return nullptr;
-                make_mutable();
-                return _ref->data();
+            //This will copy the underlying container if we cannot safely modify this r_string
+            void make_mutable() {
+                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
+                    _ref = create(_ref->data());
+                }
             }
 
             explicit operator const char *() const { return data(); }
             operator std::string_view() const { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
-            //This calls strlen so O(N) 
+            //This calls strlen so O(N)
             size_t length() const {
                 if (!_ref) return 0;
                 return strlen(_ref->data());
             }
 
+            size_t capacity() const {
+                if (!_ref) return 0;
+                return _ref->size();
+            }
+
             //== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?
-                //#TODO compare performance of new equality thingy
-                //cross platform way
             #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
@@ -337,15 +373,21 @@ namespace intercept {
                 return _strcmpi(data(), other) == 0;
             #endif
             }
-            //#Test yet untested
+
+            //!= is case insensitive just like scripting
+            bool operator != (const char *other) const {
+                return !(*this == other);
+            }
+
             bool operator < (const r_string& other) const {
                 if (!data()) return false; //empty?
-                return strcmp(data(), other.data()) <0;
+                return strcmp(data(), other.data()) < 0;
             }
 
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
-            #ifdef __GNUC__ 
+                if (data() == other.data()) return true;
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
@@ -353,19 +395,46 @@ namespace intercept {
             #endif
             }
 
-            //!= is case insensitive just like scripting
-            bool operator != (const char *other) const {
+            bool operator == (const std::string& other) const {
+                if (!data()) return other.empty(); //empty?
+                if (other.length() > _ref->size()) return false; //There is more data than we can even have
             #ifdef __GNUC__
-                return !std::equal(_ref->cbegin(), _ref->cend(),
-                    other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
             #else
-                return _strcmpi(data(), other) != 0;
+                return _strcmpi(data(), other.data()) == 0;
             #endif
+            }
+
+            bool operator == (const std::string_view& other) const {
+                if (!data()) return other.empty(); //empty?
+                if (other.length() > _ref->size()) return false; //There is more data than we can even have
+#ifdef __GNUC__
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+#else
+                return _strcmpi(data(), other.data()) == 0;
+#endif
+            }
+
+            bool operator != (const r_string& other) const {
+                return !(*this == other);
             }
 
             friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
                 _os << _s.data();
                 return _os;
+            }
+
+            friend std::istream& operator >> (std::istream& _in, r_string& _t){
+                char inp;
+                std::string tmp;
+                while (_in.get(inp)) {
+                    if (inp == 0) break;
+                    tmp.push_back(inp);
+                }
+                _t._ref = create(tmp.data(), tmp.length());
+                return _in;
             }
 
             bool compare_case_sensitive(const char *other) const {
@@ -394,7 +463,7 @@ namespace intercept {
                 _ref = nullptr;
             }
             size_t hash() const {
-                return std::hash<const char*>()(data()); //#TODO string_view hash might be better...
+                return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
 
         private:
@@ -423,11 +492,6 @@ namespace intercept {
                 if (*str == 0) return nullptr;
                 return create(str, strlen(str));
             }
-            void make_mutable() {
-                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
-                    _ref = create(_ref->data());
-                }
-            }
         };
 
         //constexpr r_string tests
@@ -440,22 +504,6 @@ namespace intercept {
         //constexpr const r_string& operator ""_rs(const char* __str, size_t len) {
         //    return r_string_literal(__str);
         //};
-
-        class rv_pool_allocator {
-            char pad_0x0000[0x24]; //0x0000
-        public:
-            const char* _allocName;
-
-            int _1;
-            int _2;
-            int _3;
-            int _4;
-            int allocated_count;
-
-            void* allocate(size_t count);
-            void deallocate(void* data);
-
-        };
 
         //Contributed by ArmaDebugEngine
         class rv_arraytype {};
@@ -597,7 +645,11 @@ namespace intercept {
                     _hash ^= std::hash<Type>()(it) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
                 }
                 return _hash;
-            };
+            }
+            template<typename FindType>
+            iterator find(const FindType& find_) {
+                return std::find(begin(), end(), find_);
+            }
         };
 
         template<class Type, size_t growthFactor = 32>
@@ -627,12 +679,12 @@ namespace intercept {
                     return;
                 }
                 newData = rv_allocator<Type>::createUninitializedArray(size);
-                //#TODO I disabled this. Check if this causes any harm
                 //memset(newData, 0, size * sizeof(Type));
                 if (base::_data) {
                 #ifdef __GNUC__
                     memmove(newData, base::_data, base::_n * sizeof(Type));
                 #else
+                    //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
                     memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
                 #endif
                     rv_allocator<Type>::deallocate(base::_data);
@@ -989,14 +1041,218 @@ namespace intercept {
         Type map_string_to_class<Type, Container, Traits>::_null_entry;
 
 
+    #pragma endregion
 
+    #pragma region Serialization
+        enum class serialization_return {
+            /*
+            int __cdecl sub_108BC00(int a1) {
+            switch ( a1 ) {
+            case 0:
+            result = (int)"No error";
+            break;
+            case 1:
+            case 7:
+            result = (int)"No such file";
+            break;
+            case 2:
+            result = (int)"Bad file (CRC, ...)";
+            break;
+            case 3:
+            result = (int)"Bad file structure";
+            break;
+            case 4:
+            result = (int)"Unsupported format";
+            break;
+            case 5:
+            result = (int)"Version is too new";
+            break;
+            case 6:
+            result = (int)"Version is too old";
+            break;
+            case 8:
+            result = (int)"Access denied";
+            break;
+            case 9:
+            result = (int)"Disk error";
+            break;
+            case 10:
+            result = (int)"No entry";
+            break;
+            default:
+            sub_10E9550("LSError");
+            case 12:
+            result = (int)"Unknown error";
+            break;
+            }
+            return result;
+            }
+            */
+            no_error,
+            no_such_file,
+            bad_file,
+            bad_file_structure,
+            unsupported_format,
+            version_too_new,
+            version_too_old,
+            no_such_file2,
+            access_denied,
+            disk_error,
+            no_entry,
+            unknown_error = 12
+        };
 
+        class param_archive_array_entry {
+        public:
+            virtual ~param_archive_array_entry() {}
 
+            virtual operator float() const { return 0; }
+            virtual operator int() const { return 0; }
+            virtual operator const r_string() const { return r_string(); } //There are two r_string thingies apparently.
+            virtual operator r_string() const { return r_string(); }
+            virtual operator bool() const { return false; }
+        };
 
-        class game_data;
+        class param_archive_entry {
+        public:
+            virtual ~param_archive_entry() {}
+
+            //Generic stuff for all types
+            virtual int entry_count() const { return 0; } //Number of entries. count for array and number of class entries otherwise
+            virtual param_archive_entry *get_entry_by_index(int index_) const { return nullptr; } //Don't know what that's used for.
+            virtual r_string current_entry_name() { return r_string(); } //Dunno exactly what this is. on GameData serialize it returns "data"
+            virtual param_archive_entry *get_entry_by_name(const r_string &name) const { return nullptr; }
+
+            //Normal Entry. Contains a single value of a single type
+            virtual operator float() const { return 0; }
+            virtual operator int() const { return 0; }
+            virtual operator int64_t() const { return 0; }
+        private:
+            //https://stackoverflow.com/questions/19356232/why-is-explicit-not-compatible-with-virtual
+            //https://connect.microsoft.com/VisualStudio/feedback/details/805301/explicit-cannot-be-used-with-virtual
+            virtual
+            #ifndef _MSC_VER
+            explicit
+            #endif
+            operator const r_string() const { return r_string(); }
+        public:
+            virtual operator r_string() const { return r_string(); }
+            virtual operator bool() const { return false; }
+            virtual r_string _placeholder1(uint32_t) const { return r_string(); }
+
+            //Array entry
+            virtual void reserve(int count_) {}//Yes.. This is indeed a signed integer for something that should be unsigned...
+            virtual void add_array_entry(float value_) {}
+            virtual void add_array_entry(int value_) {}
+            virtual void add_array_entry(int64_t value_) {}
+            virtual void add_array_entry(const r_string & value_) {}
+            virtual int count() const { return 0; }
+            virtual param_archive_array_entry *operator [] (int index_) const { return new param_archive_array_entry(); }
+
+            //Class entry (contains named values)
+            virtual param_archive_entry *add_entry_array(const r_string &name_) { return new param_archive_entry; }
+            virtual param_archive_entry *add_entry_class(const r_string &name_, bool unknown_ = false) { return new param_archive_entry; }
+            virtual void add_entry(const r_string &name_, const r_string &value_) {}
+            virtual void add_entry(const r_string &name_, float value_) {}
+            virtual void add_entry(const r_string &name_, int value_) {}
+            virtual void add_entry(const r_string &name_, int64_t value_) {}
+
+            virtual void compress() {}
+            virtual void _placeholder(const r_string &name_) {}
+        };
+        class serialize_class;
+        class param_archive {
+        public:
+            virtual ~param_archive() { if (_p1) delete _p1; }
+            //#TODO add SRef class
+            param_archive_entry* _p1{ new param_archive_entry() }; //pointer to classEntry. vtable something
+            int _version{ 1 }; //version
+            char _p3{ 0 }; //be careful with alignment seems to always be 0 for exporting.
+            auto_array<uintptr_t> _parameters; //parameters? on serializing gameData only element is pointer to gameState
+            bool _isExporting{ true }; //writing data vs loading data
+            serialization_return serialize(r_string name, serialize_class& value, int min_version);
+            serialization_return serialize(r_string name, r_string& value, int min_version);
+            serialization_return serialize(r_string name, bool& value, int min_version);
+            serialization_return serialize(r_string name, bool& value, int min_version, bool default_value);
+            template <class Type>
+            serialization_return serialize(r_string name, ref<Type> &value, int min_version) {
+                if (_version < min_version) return serialization_return::version_too_new;
+                if (_isExporting || _p3 == 2) {
+                    if (!value) return serialization_return::no_error;
+
+                    param_archive sub_archive;
+                    sub_archive._version = _version;
+                    sub_archive._p3 = _p3;
+                    sub_archive._parameters = _parameters;
+                    sub_archive._isExporting = _isExporting;
+                    delete sub_archive._p1;
+                    if (_isExporting) {
+                        sub_archive._p1 = _p1->add_entry_class(name, false);
+                    } else {
+                        sub_archive._p1 = _p1->get_entry_by_name(name);
+                    }
+
+                    if (!sub_archive._p1) {
+                        return serialization_return::no_entry;
+                    }
+
+                    auto ret = value->serialize(sub_archive);
+                    if (_isExporting) {
+                        sub_archive._p1->compress();
+                        delete sub_archive._p1;
+                        sub_archive._p1 = nullptr;
+                    }
+                } else {
+
+                    param_archive sub_archive;
+                    sub_archive._version = _version;
+                    sub_archive._p3 = _p3;
+                    sub_archive._parameters = _parameters;
+                    sub_archive._isExporting = _isExporting;
+                    delete sub_archive._p1;
+                    if (_isExporting) {
+                        sub_archive._p1 = _p1->add_entry_class(name, false);
+                    } else {
+                        sub_archive._p1 = _p1->get_entry_by_name(name);
+                    }
+
+                    if (!sub_archive._p1) {
+                        return serialization_return::no_entry;
+                    }
+                    auto val = Type::createFromSerialized(sub_archive);
+                    if (val) val->serialize(sub_archive);
+                    if (_isExporting) {
+                        sub_archive._p1->compress();
+                        delete sub_archive._p1;
+                        sub_archive._p1 = nullptr;
+                    }
+                }
+                return serialization_return::no_error;
+            }
+
+        };
+
+        class serialize_class {//That's from gameValue RTTI. I'd name it serializable_class but I think keeping it close to engine name is better.
+        public:
+            virtual ~serialize_class() = default;
+            virtual bool _dummy(void*) { return false; }//Probably canSerialize?
+            virtual serialization_return serialize(param_archive &) { return serialization_return::unknown_error; }
+            virtual void _dummy2(void*) {}
+        };
+
+    #pragma endregion
+
         struct script_type_info {  //Donated from ArmaDebugEngine
+            using createFunc = game_data* (*)(param_archive* ar);
+        #ifdef __linux__
+            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName) :
+                _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _javaFunc("none") {}
+        #else
+            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName, r_string description, r_string category, r_string typeName) :
+                _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _description(std::move(description)),
+                _category(std::move(category)), _typeName(std::move(typeName)), _javaFunc("none") {}
+        #endif
             r_string _name;           // SCALAR
-            using createFunc = game_data* (*)(void* _null);
             createFunc _createFunction{ nullptr };
             r_string _localizedName; //@STR_EVAL_TYPESCALAR
             r_string _readableName; //Number
@@ -1018,11 +1274,36 @@ namespace intercept {
             compound_value_pair *types;
         };
 
-        class sqf_script_type {
+        class sqf_script_type : public serialize_class {
         public:
-            uintptr_t               v_table;
-            const script_type_info             *single_type;
-            compound_script_type_info    *compound_type;
+            static uintptr_t type_def; //#TODO should not be accessible
+            sqf_script_type() { set_vtable(type_def); }
+            sqf_script_type(const script_type_info* type) {
+                single_type = type; set_vtable(type_def);
+            }
+            //#TODO use type_def instead
+            sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) :
+                single_type(st), compound_type(ct) {
+                set_vtable(vt);
+            }
+            void set_vtable(uintptr_t v) { *reinterpret_cast<uintptr_t*>(this) = v; }
+            uintptr_t get_vtable() const { return *reinterpret_cast<const uintptr_t*>(this); }
+            sqf_script_type(sqf_script_type&& other) noexcept :
+            single_type(other.single_type), compound_type(other.compound_type) {
+                set_vtable(other.get_vtable());
+            }
+            sqf_script_type(const sqf_script_type& other) :
+                single_type(other.single_type), compound_type(other.compound_type) {
+                set_vtable(other.get_vtable());
+            }
+            sqf_script_type& operator=(const sqf_script_type& other) {
+                single_type = other.single_type;
+                compound_type = other.compound_type;
+                set_vtable(other.get_vtable());
+                return *this;
+            }
+            const script_type_info*     single_type{ nullptr };
+            compound_script_type_info*  compound_type{ nullptr };
             value_types type() const;
             std::string type_str() const;
             bool operator==(const sqf_script_type& other) const {
@@ -1033,9 +1314,7 @@ namespace intercept {
             }
         };
 
-        struct unary_operator {
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct unary_operator : public _refcount_vtable_dummy {
             unary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg_type;
@@ -1047,9 +1326,7 @@ namespace intercept {
             unary_operator *op;
         };
 
-        struct binary_operator {//#TODO rework to correctly use refcount stuff
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct binary_operator : public _refcount_vtable_dummy {
             binary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg1_type;
@@ -1062,9 +1339,7 @@ namespace intercept {
             binary_operator *op;
         };
 
-        struct nular_operator {
-            uintptr_t        v_table;
-            uint32_t         ref_count;
+        struct nular_operator : public _refcount_vtable_dummy {
             nular_function   *procedure_addr;
             sqf_script_type   return_type;
         };
@@ -1075,18 +1350,24 @@ namespace intercept {
             nular_operator *op;
         };
 
-        class game_value;
+
+
+
         class game_data : public refcount, public __internal::I_debug_value {
             friend class game_value;
             friend class intercept::invoker;
         public:
-            virtual const sqf_script_type & type() const { static sqf_script_type dummy; return dummy; }//#TODO replace op_script_type_info by some better name
+            virtual const sqf_script_type & type() const {
+            #ifdef _MSC_VER //Only on MSVC on Windows
+                __debugbreak(); //If you landed here you did something wrong while implementing your custom type.
+            #endif
+                static sqf_script_type dummy; return dummy;
+            }
             virtual ~game_data() {}
-
         protected:
             virtual bool get_as_bool() const { return false; }
             virtual float get_as_number() const { return 0.f; }
-            virtual r_string get_as_string() const { return r_string(); } //Only usable on String and Code! Use to_string instead!
+            virtual const r_string& get_as_string() const { static r_string dummy; dummy.clear(); return dummy; } ///Only usable on String and Code! Use to_string instead!
             virtual const auto_array<game_value>& get_as_const_array() const { static auto_array<game_value> dummy; dummy.clear(); return dummy; } //Why would you ever need this?
             virtual auto_array<game_value> &get_as_array() { static auto_array<game_value> dummy; dummy.clear(); return dummy; }
             virtual game_data *copy() const { return nullptr; }
@@ -1094,15 +1375,29 @@ namespace intercept {
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
             virtual void set_final(bool) {}; //Only on GameDataCode AFAIK
+        public: 
             virtual r_string to_string() const { return r_string(); }
             virtual bool equals(const game_data *) const { return false; };
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
+        private:
             virtual void placeholder() const {};
             virtual bool can_serialize() { return false; }
 
+
             int IAddRef() override { return add_ref(); };
             int IRelease() override { return release(); };
+        public:                               //#TODO make protected and give access to param_archive
+            virtual serialization_return serialize(param_archive& ar) {
+                if (ar._isExporting) {
+                    sqf_script_type _type = type();
+                    ar.serialize(r_string("type"sv), _type, 1);
+                }
+
+                return serialization_return::no_error;
+            }
+            static game_data* createFromSerialized(param_archive& ar);
+        protected:
         #ifdef __linux__
         public:
         #endif
@@ -1114,68 +1409,26 @@ namespace intercept {
             }
         };
 
-        class game_data_number : public game_data {
+        class game_value_conversion_error : public std::runtime_error {
         public:
-            static uintptr_t type_def;
-            static uintptr_t data_type_def;
-            static rv_pool_allocator* pool_alloc_base;
-            game_data_number();
-            game_data_number(float val_);
-            game_data_number(const game_data_number &copy_);
-            game_data_number(game_data_number &&move_);
-            game_data_number& operator = (const game_data_number &copy_);
-            game_data_number& operator = (game_data_number &&move_);
-            static void* operator new(std::size_t sz_);
-            static void operator delete(void* ptr_, std::size_t sz_);
-            float number;
-            size_t hash() const {
-                return __internal::pairhash(type_def, number);
-            };
-            //protected:
-            //    static thread_local game_data_pool<game_data_number> _data_pool;
+            explicit game_value_conversion_error(const std::string& _Message)
+                : runtime_error(_Message) {}
+
+            explicit game_value_conversion_error(const char* _Message)
+                : runtime_error(_Message) {}
         };
 
-        class game_data_bool : public game_data {
-        public:
-            static uintptr_t type_def;
-            static uintptr_t data_type_def;
-            static rv_pool_allocator* pool_alloc_base;
-            game_data_bool();
-            game_data_bool(bool val_);
-            game_data_bool(const game_data_bool &copy_);
-            game_data_bool(game_data_bool &&move_);
-            game_data_bool& operator = (const game_data_bool &copy_);
-            game_data_bool& operator = (game_data_bool &&move_);
-            static void* operator new(std::size_t sz_);
-            static void operator delete(void* ptr_, std::size_t sz_);
-            bool val;
-            size_t hash() const { return __internal::pairhash(type_def, val); };
-            //protected:
-            //    static thread_local game_data_pool<game_data_bool> _data_pool;
-        };
-
-        class[[deprecated]] rv_game_value{
-        };
-
-        class game_data_array;
-        class internal_object;
-
-        class __game_value_vtable_dummy {
-        public:
-            virtual void __dummy_vtable(void) {};
-            __game_value_vtable_dummy();
-        };
-
-        class game_value {
-            uintptr_t __vptr;
+        class game_value : public serialize_class {
             friend class intercept::invoker;
+            friend void __internal::set_game_value_vtable(uintptr_t);
+        protected:
+            static uintptr_t __vptr_def; //Users should not be able to access this
         public:
-            static uintptr_t __vptr_def;//#TODO make private and add friend classes
             game_value();
             ~game_value();
             void copy(const game_value & copy_); //I don't see any use for this.
             game_value(const game_value &copy_);
-            game_value(game_value &&move_);
+            game_value(game_value &&move_) noexcept;
 
 
 
@@ -1227,9 +1480,25 @@ namespace intercept {
             operator vector3() const;
             operator vector2() const;
 
+            /**
+            * \brief tries to convert the game_value to an array if possible
+            * \throws game_value_conversion_error {if game_value is not an array}
+            */
             auto_array<game_value>& to_array();
+            /**
+             * \brief tries to convert the game_value to an array if possible
+             * \throw game_value_conversion_error {if game_value is not an array}
+             */
             const auto_array<game_value>& to_array() const;
+            /**
+            * \brief tries to convert the game_value to an array if possible and return the element at given index.
+            * \throw game_value_conversion_error {if game_value is not an array}
+            */
             game_value& operator [](size_t i_);
+            /**
+            * \brief tries to convert the game_value to an array if possible and return the element at given index.
+            * \throw game_value_conversion_error {if game_value is not an array}
+            */
             game_value operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO return GameDataType
@@ -1248,6 +1517,9 @@ namespace intercept {
             //set's this game_value to null
             void clear() { data = nullptr; }
 
+
+            serialization_return serialize(param_archive& ar) override;
+
             ref<game_data> data;
             [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
@@ -1257,6 +1529,57 @@ namespace intercept {
             uintptr_t get_vtable() const;
             void set_vtable(uintptr_t vt);
 
+        };
+
+        class game_value_static : public game_value {
+        public:
+            ~game_value_static();
+            game_value_static(const game_value& copy) : game_value(copy) {}
+            game_value_static(game_value&& move) : game_value(move) {}
+            game_value_static operator=(const game_value& copy) { data = copy.data;return *this; }
+            operator game_value() { return *this; }
+        };
+
+    #pragma region GameData Types
+
+        class game_data_number : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
+            game_data_number();
+            game_data_number(float val_);
+            game_data_number(const game_data_number &copy_);
+            game_data_number(game_data_number &&move_);
+            game_data_number& operator = (const game_data_number &copy_);
+            game_data_number& operator = (game_data_number &&move_);
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
+            float number;
+            size_t hash() const {
+                return __internal::pairhash(type_def, number);
+            };
+            //protected:
+            //    static thread_local game_data_pool<game_data_number> _data_pool;
+        };
+
+        class game_data_bool : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
+            game_data_bool();
+            game_data_bool(bool val_);
+            game_data_bool(const game_data_bool &copy_);
+            game_data_bool(game_data_bool &&move_);
+            game_data_bool& operator = (const game_data_bool &copy_);
+            game_data_bool& operator = (game_data_bool &&move_);
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
+            bool val;
+            size_t hash() const { return __internal::pairhash(type_def, val); };
+            //protected:
+            //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
         class game_data_array : public game_data {
@@ -1370,7 +1693,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
-            size_t hash() const { return __internal::pairhash(type_def, script); };//#TODO might want to hash script string
+            size_t hash() const { return __internal::pairhash(type_def, script); }
             void *script;
         };
 
@@ -1508,7 +1831,7 @@ namespace intercept {
                 };
             }
 
-            visual_head_pos get_head_pos() {
+            visual_head_pos get_head_pos() const {
 
 
                 if (!object || !object->object) return visual_head_pos();
@@ -1521,9 +1844,9 @@ namespace intercept {
                     virtual void doStuff() {}
                 };
                 class v2 : public v1 {
-                    virtual void doStuff() {}
+                    void doStuff() override {}
                 };
-                v2* v = (v2*) vbase;
+                v2* v = reinterpret_cast<v2*>(vbase);
                 auto& typex = typeid(*v);
             #ifdef __GNUC__
                 auto test = typex.name();
@@ -1557,9 +1880,56 @@ namespace intercept {
         #endif
             struct {
                 uint32_t _x;
-                void* object; //#TODO this is real object pointer. Other classes are probably also incorrect
+                void* object;
             } *object;
         };
+        //#TODO add game_data_nothing
+        enum class GameDataType {
+            SCALAR,
+            BOOL,
+            ARRAY,
+            STRING,
+            NOTHING,
+            ANY,
+            NAMESPACE,
+            NaN,
+            CODE,
+            OBJECT,
+            SIDE,
+            GROUP,
+            TEXT,
+            SCRIPT,
+            TARGET,
+            CONFIG,
+            DISPLAY,
+            CONTROL,
+            NetObject,
+            SUBGROUP,
+            TEAM_MEMBER,
+            TASK,
+            DIARY_RECORD,
+            LOCATION,
+            end
+        };
+
+        namespace __internal {
+            GameDataType game_datatype_from_string(const r_string& name);
+            std::string to_string(GameDataType type);
+            //Not public API!
+            void add_game_datatype(r_string name, GameDataType type);
+
+            struct allocatorInfo {
+                uintptr_t genericAllocBase;
+                uintptr_t poolFuncAlloc;
+                uintptr_t poolFuncDealloc;
+                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+            };
+        }
+
+
+    #pragma endregion
+
+
     #if 0
         template<size_t Size = 1024, size_t Alloc_Length = 512>
         class game_data_string_pool {
@@ -1656,48 +2026,8 @@ namespace intercept {
         };
     #endif
 
-        enum class GameDataType {
-            SCALAR,
-            BOOL,
-            ARRAY,
-            STRING,
-            NOTHING,
-            ANY,
-            NAMESPACE,
-            NaN,
-            CODE,
-            OBJECT,
-            SIDE,
-            GROUP,
-            TEXT,
-            SCRIPT,
-            TARGET,
-            CONFIG,
-            DISPLAY,
-            CONTROL,
-            NetObject,
-            SUBGROUP,
-            TEAM_MEMBER,
-            TASK,
-            DIARY_RECORD,
-            LOCATION,
-            end
-        };
 
-        namespace __internal {
-            GameDataType game_datatype_from_string(const r_string& name);
-            std::string to_string(GameDataType type);
-            //Not public API!
-            void add_game_datatype(r_string name, GameDataType type);
-
-            struct allocatorInfo {
-                uintptr_t genericAllocBase;
-                uintptr_t poolFuncAlloc;
-                uintptr_t poolFuncDealloc;
-                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
-            };
-        }
-
+    #pragma region RSQF
         class registered_sqf_function {
             friend class sqf_functions;
         public:
@@ -1762,7 +2092,38 @@ namespace intercept {
             return sqf_this_;
         }
     #endif
+    #pragma endregion
 
+        enum class register_plugin_interface_result {
+            success,
+            interface_already_registered,
+            interface_name_occupied_by_other_module, //Use list_plugin_interfaces(name_) to find out who registered it 
+            invalid_interface_class
+        };
+
+
+    }
+    namespace __internal {
+        //#TODO move to types::__internal and make less ugly
+        class game_functions;
+        class game_operators;
+        class gsNular;
+        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
+        public:
+            types::auto_array<const types::script_type_info *> _scriptTypes;
+            types::map_string_to_class<game_functions, types::auto_array<game_functions>> _scriptFunctions;
+            types::map_string_to_class<game_operators, types::auto_array<game_operators>> _scriptOperators;
+            types::map_string_to_class<gsNular, types::auto_array<gsNular>> _scriptNulars;
+            types::game_data* create_gd_from_type(const types::sqf_script_type& type, types::param_archive* ar) const {
+                for (auto& it : _scriptTypes) {
+                    if (types::sqf_script_type(it) == type) {
+                        if (it->_createFunction) return it->_createFunction(ar);
+                        return nullptr;
+                    }
+                }
+                return nullptr;
+            }
+        };
     }
 }
 
@@ -1778,5 +2139,8 @@ namespace std {
         }
     };
 }
+
+
+
 
 

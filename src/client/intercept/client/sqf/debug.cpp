@@ -1,4 +1,4 @@
-﻿#include "debug.hpp"
+#include "debug.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -48,48 +48,44 @@ namespace intercept {
         }
 
         void diag_capture_frame(float frame_) {
+            if (!__sqf::unary__diag_captureframe__scalar__ret__nothing) return;
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframe__scalar__ret__nothing, frame_);
         }
 
         void diag_capture_frame_to_file(float frame_) {
+            if (!__sqf::unary__diag_captureframetofile__scalar__ret__nothing) return;
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureframetofile__scalar__ret__nothing, frame_);
         }
 
         void diag_capture_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
+            if (!__sqf::unary__diag_captureslowframe__array__ret__nothing) return;
+            game_value params({section_,
+                               threshold_});
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_captureslowframe__array__ret__nothing, params);
         }
 
         void diag_code_performance(const code &code_, const game_value &arguments_, float cycles_) {
-            game_value params({
-                code_,
-                arguments_,
-                cycles_
-            });
+            game_value params({code_,
+                               arguments_,
+                               cycles_});
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_codeperformance__array__ret__array, params);
         }
-        void diag_log(sqf_string_const_ref text_) {
-            host::functions.invoke_raw_unary(__sqf::unary__diag_log__any__ret__nothing, text_);
-        }
 
-        void diag_log(const game_value &text_) {
+        void diag_log(game_value text_) {
             host::functions.invoke_raw_unary(client::__sqf::unary__diag_log__any__ret__nothing, text_);
         }
         void diag_log_slow_frame(sqf_string_const_ref section_, float threshold_) {
-            game_value params({
-                section_,
-                threshold_
-            });
+            if (!__sqf::unary__diag_logslowframe__array__ret__nothing) return;
+            game_value params({section_,
+                               threshold_});
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_logslowframe__array__ret__nothing, params);
         }
 
         void enable_diag_legend(bool value_) {
+            if (!__sqf::unary__enablediaglegend__bool__ret__nothing) return;
             __helpers::__empty_unary_bool(__sqf::unary__enablediaglegend__bool__ret__nothing, value_);
         }
         void halt() {
@@ -98,5 +94,5 @@ namespace intercept {
         void throw_exception(const game_value exception_) {
             host::functions.invoke_raw_unary(__sqf::unary__throw__any__ret__nothing, exception_);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

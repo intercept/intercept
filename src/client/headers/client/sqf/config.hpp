@@ -26,11 +26,12 @@ namespace intercept {
             config_entry(types::config entry_);
             config_entry(config_entry const &copy_);
             config_entry(config_entry &&move_) noexcept;
-            config_entry & operator=(const config_entry &copy_);
-            config_entry & operator=(config_entry &&move_) noexcept;
+            config_entry &operator=(const config_entry &copy_);
+            config_entry &operator=(config_entry &&move_) noexcept;
             config_entry operator>>(sqf_string_const_ref entry_);
 
             operator config &();
+
         protected:
             types::config _config_entry;
             bool _initialized;
@@ -69,7 +70,33 @@ namespace intercept {
         bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_);
 
         sqf_return_string_list config_source_addon_list(const config &config_);
-        game_value mod_params(sqf_string_const_ref mod_class_, sqf_string_list_const_ref options_);
+        enum class mod_params_options : uint32_t {
+            name,          //String - name to be shown(Arma 3 instead of A3, etc.)
+            picture,       //String - picture shown in Mod Launcher
+            logo,          //String - logo to be shown in Main Menu
+            logoOver,      //String - logo to be shown in Main Menu when mouse is over
+            logoSmall,     //String - small version of logo, prepared for drawing small icons
+            tooltip,       //String - tooltip to be shown on mouse over
+            tooltipOwned,  //String - tooltip to be shown on mouse over the icon when DLC is owned by player
+            action,        //String - url to be triggered when mod button is clicked
+            actionName,    //String - what to put on Action Button
+            overview,      //String - overview text visible in expansion menu
+            hidePicture,   //Boolean - do not show mod picture icon in the main menu mod list
+            hideName,      //Boolean - do not show mod name in the main menu mod list
+            defaultMod,    //Boolean - default mods cannot be moved or disabled by Mod Launcher
+            serverOnly,    //Boolean - mod doesn't have to be installed on client in order to play on server with this mod running
+            active,        //Boolean - active mod(activated through command line or stored in profile by mod launcher)
+        };
+
+        inline constexpr mod_params_options operator|(mod_params_options _Left, mod_params_options _Right) {
+            return (static_cast<mod_params_options>(static_cast<unsigned int>(_Left)
+                                                    | static_cast<unsigned int>(_Right)));
+        }
+        inline constexpr bool operator&(mod_params_options _Left, mod_params_options _Right) {
+            return (static_cast<unsigned int>(_Left)
+                    & static_cast<unsigned int>(_Right));
+        }
+        std::vector<game_value> mod_params(sqf_string_const_ref mod_class_, mod_params_options options_);
         sqf_return_string type_of(const object &value_);
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

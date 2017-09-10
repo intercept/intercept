@@ -1,4 +1,4 @@
-﻿#include "eden.hpp"
+#include "eden.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -15,12 +15,12 @@ namespace intercept {
         std::pair<bool, bool> get_eden_icons_visible() {
             //#TODO build a wrapper for these bool array returns
             auto ret = host::functions.invoke_raw_nular(__sqf::nular__get3deniconsvisible__ret__array);
-            return { ret[0],ret[1] };
+            return {ret[0], ret[1]};
         }
 
         std::pair<bool, bool> get_eden_lines_visible() {
             auto ret = host::functions.invoke_raw_nular(__sqf::nular__get3denlinesvisible__ret__array);
-            return { ret[0],ret[1] };
+            return {ret[0], ret[1]};
         }
 
         bool is_eden() {
@@ -51,8 +51,7 @@ namespace intercept {
         float add_eden_event_handler(sqf_string_const_ref type_, const code &code_) {
             std::vector<game_value> params{
                 type_,
-                code_
-            };
+                code_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3deneventhandler__array__ret__scalar, params);
         }
@@ -107,8 +106,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -119,8 +117,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -131,8 +128,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -143,8 +139,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -155,8 +150,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -167,8 +161,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -179,8 +172,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -191,8 +183,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -203,8 +194,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -215,8 +205,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -227,8 +216,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -239,8 +227,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -251,8 +238,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -263,8 +249,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -275,8 +260,7 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
@@ -287,32 +271,28 @@ namespace intercept {
             std::vector<game_value> params{
                 type_,
                 std::move(from),
-                to_
-            };
+                to_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__add3denconnection__array__ret__nothing, params);
         }
         void move_eden_camera(const vector3 &pos_, const vector3 &offset_) {
             std::vector<game_value> params{
                 pos_,
-                offset_
-            };
+                offset_};
 
             host::functions.invoke_raw_unary(__sqf::unary__move3dencamera__array__ret__nothing, params);
         }
         void remove_eden_event_handler(sqf_string_const_ref type_, float id_) {
             std::vector<game_value> params{
                 type_,
-                id_
-            };
+                id_};
 
             host::functions.invoke_raw_unary(__sqf::unary__remove3deneventhandler__array__ret__nothing, params);
         }
         void set_eden_grid(sqf_string_const_ref type_, float increment_) {
             std::vector<game_value> params{
                 type_,
-                increment_
-            };
+                increment_};
 
             host::functions.invoke_raw_unary(__sqf::unary__set3dengrid__array__ret__nothing, params);
         }
@@ -320,8 +300,7 @@ namespace intercept {
         void set_eden_icons_visible(bool map_, bool scene_) {
             std::vector<game_value> params{
                 map_,
-                scene_
-            };
+                scene_};
 
             host::functions.invoke_raw_unary(__sqf::unary__set3deniconsvisible__array__ret__nothing, params);
         }
@@ -329,8 +308,7 @@ namespace intercept {
         void set_eden_lines_visible(bool map_, bool scene_) {
             std::vector<game_value> params{
                 map_,
-                scene_
-            };
+                scene_};
 
             host::functions.invoke_raw_unary(__sqf::unary__set3denlinesvisible__array__ret__nothing, params);
         }
@@ -339,16 +317,13 @@ namespace intercept {
             std::vector<game_value> params{
                 section_,
                 class_,
-                value_
-            };
+                value_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__set3denmissionattributes__array__ret__nothing, params);
         }
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
-            game_value parameters_({
-                configPath_,
-                position_
-            });
+            game_value parameters_({configPath_,
+                                    position_});
 
             auto eden_entities_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__create3dencomposition__array__ret__array, parameters_));
             std::vector<game_value> output_;
@@ -359,12 +334,10 @@ namespace intercept {
         }
 
         game_value create_3den_entity(sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty_) {
-            game_value parameters_({
-                mode_,
-                class_,
-                position_,
-                is_empty_
-            });
+            game_value parameters_({mode_,
+                                    class_,
+                                    position_,
+                                    is_empty_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__create3denentity__array__ret__any, parameters_);
         }
@@ -404,16 +377,12 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__set3denattributes__array__ret__bool, entity_attributes_);
         }
 
-        void remove_3den_connection(sqf_string_const_ref type_, const std::vector<object> &from_, sqf_string_const_ref to_) {
-            auto_array<game_value> from(from_.begin(), from_.end());
+        bool remove_3den_connection(sqf_string_const_ref type_, eden_entity from_, eden_entity to_) {
+            game_value params({type_,
+                               from_,
+                               to_});
 
-            game_value params({
-                type_,
-                std::move(from),
-                to_
-            });
-
-            host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
         }
 
         void set_3den_selected(const std::vector<object> &entites_) {
@@ -426,23 +395,21 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
         }
 
-        game_value create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty) {
-            game_value params_right({
-                mode_,
-                class_,
-                position_,
-                is_empty
-            });
+        eden_entity create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty) {
+            game_value params_right({mode_,
+                                     class_,
+                                     position_,
+                                     is_empty});
 
             return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
         }
 
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, sqf_string_const_ref_wrapper, std::reference_wrapper<float>> entity_, sqf_string_const_ref attribute_) {
             switch (entity_.index()) {
-            case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
-            case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
-            case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
-            case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
+                case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
+                case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
+                case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
+                case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
             }
             return std::vector<game_value>();
             //#TODO: add binary__get3denattribute__array__string__ret__array
@@ -453,17 +420,17 @@ namespace intercept {
         }
 
         bool set_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref attribute_class_, game_value _attribute_value) {
-            return  host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, section_, { attribute_class_ , std::move(_attribute_value) });
+            return host::functions.invoke_raw_binary(__sqf::binary__set3denmissionattribute__string__array__ret__nothing, section_, {attribute_class_, std::move(_attribute_value)});
         }
-        bool set_3den_attribute(const object& entity_, sqf_string_const_ref attribute_class_, game_value _attribute_value) {
-            return  host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, { attribute_class_ , std::move(_attribute_value) });
+        bool set_3den_attribute(eden_entity entity_, sqf_string_const_ref attribute_class_, game_value _attribute_value) {
+            return host::functions.invoke_raw_binary(__sqf::binary__set3denattribute__any__array__ret__bool, entity_, {attribute_class_, std::move(_attribute_value)});
         }
 
-        bool set_3den_layer(const object& entity_, float layer_) {
+        bool set_3den_layer(eden_entity entity_, float layer_) {
             return host::functions.invoke_raw_binary(__sqf::binary__set3denlayer__any__scalar__ret__bool, entity_, layer_);
         }
 
-        void set_3den_object_type(const std::vector<object> & objects_, sqf_string_const_ref classname_) {
+        void set_3den_object_type(const std::vector<object> &objects_, sqf_string_const_ref classname_) {
             auto_array<game_value> objects(objects_.begin(), objects_.end());
             host::functions.invoke_raw_binary(__sqf::binary__set3denobjecttype__array__string__ret__nothing, std::move(objects), classname_);
         }
@@ -472,12 +439,12 @@ namespace intercept {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
         }
 
-        sqf_return_string_list get_mission_layers() { //#TODO: Find out if this really returns sqf_return_string_list
+        sqf_return_string_list get_mission_layers() {  //#TODO: Find out if this really returns sqf_return_string_list
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__getmissionlayers__ret__array));
         }
 
         void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_) {
             host::functions.invoke_raw_binary(__sqf::binary__set3denlogictype__array__string__ret__nothing, auto_array<game_value>(objects_.begin(), objects_.end()), class_name_);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -1,4 +1,4 @@
-﻿#include "rotorlib.hpp"
+#include "rotorlib.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -58,7 +58,7 @@ namespace intercept {
 
             std::vector<rv_forces_rtd> rotors_forces;
             for (uint32_t i = 0; i < ret.size(); ++i) {
-                rotors_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
+                rotors_forces.push_back(rv_forces_rtd{ret[i][0], ret[i][1], ret[i][2]});
             }
 
             return rotors_forces;
@@ -69,7 +69,7 @@ namespace intercept {
 
             std::vector<rv_forces_rtd> wings_forces;
             for (uint32_t i = 0; i < ret.size(); ++i) {
-                wings_forces.push_back(rv_forces_rtd{ ret[i][0], ret[i][1], ret[i][2] });
+                wings_forces.push_back(rv_forces_rtd{ret[i][0], ret[i][1], ret[i][2]});
             }
 
             return wings_forces;
@@ -82,29 +82,23 @@ namespace intercept {
             return rv_weight_rtd::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__weightrtd__object__ret__array, heli_)));
         }
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_) {
-            game_value params({
-                amount_,
-                static_cast<float>(wheel_index_)
-            });
+            game_value params({amount_,
+                               static_cast<float>(wheel_index_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__setbrakesrtd__object__array__ret__nothing, heli_, params);
         }
 
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_) {
-            game_value params({
-                rpms_,
-                static_cast<float>(engine_index_)
-            });
+            game_value params({rpms_,
+                               static_cast<float>(engine_index_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__setenginerpmrtd__object__array__ret__nothing, heli_, params);
         }
 
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_) {
-            game_value params({
-                rpms_,
-                time_,
-                static_cast<float>(engine_index_)
-            });
+            game_value params({rpms_,
+                               time_,
+                               static_cast<float>(engine_index_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__setwantedrpmrtd__object__array__ret__nothing, heli_, params);
         }
@@ -117,11 +111,11 @@ namespace intercept {
         float air_density_rtd(float altitude_) {
             return __helpers::__number_unary_number(__sqf::unary__airdensityrtd__scalar__ret__scalar, altitude_);
         }
-        float collective_rtd(const object & helicopter_) {
+        float collective_rtd(const object &helicopter_) {
             return __helpers::__number_unary_object(__sqf::unary__collectivertd__object__ret__scalar, helicopter_);
         }
         bool is_stress_damage_enabled() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__isstressdamageenabled__ret__bool);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

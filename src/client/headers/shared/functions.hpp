@@ -99,14 +99,26 @@ namespace intercept {
             @param value_ A pointer to the allocator
             */
             const types::__internal::allocatorInfo*(*get_engine_allocator)();
+
+            //#TODO docs
+            const auto_array<r_string> * (*get_pbo_files_list)();
         private:
             /*!
             @brief Registers SQF Function
             */
-            types::registered_sqf_function(*register_sqf_function)(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {nullptr};
+            types::registered_sqf_function(*register_sqf_function)(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) { nullptr };
             types::registered_sqf_function(*register_sqf_function_unary)(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) { nullptr };
             types::registered_sqf_function(*register_sqf_function_nular)(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) { nullptr };
             std::pair<types::GameDataType, sqf_script_type>(*register_sqf_type)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) { nullptr };
+
+
+            //only reachable through wrapper that also passes module_name
+            register_plugin_interface_result(*register_plugin_interface)(r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);
+            /*!
+            @see intercept::extensions::list_plugin_interfaces
+            */
+            std::pair<r_string, auto_array<uint32_t>>(*list_plugin_interfaces)(std::string_view name_);
+            void*(*request_plugin_interface)(r_string module_name_, std::string_view name_, uint32_t api_version_);
         };
     }
 }

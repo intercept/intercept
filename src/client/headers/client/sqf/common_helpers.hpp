@@ -65,6 +65,7 @@ namespace intercept {
 
             std::vector<game_value> __convert_to_game_value_vector(game_value input_);
             std::vector<vector3> __convert_to_vector3_vector(game_value input_);
+            std::vector<vector2> __convert_to_vector2_vector(game_value input_);
             std::vector<object> __convert_to_objects_vector(game_value input_);
             sqf_return_string_list __convert_to_strings_vector(game_value input_);
             std::vector<float> __convert_to_numbers_vector(game_value input_);
@@ -80,6 +81,6 @@ namespace intercept {
             std::vector<location> __convert_to_locations_vector(game_value input_);
             std::vector<task> __convert_to_tasks_vector(game_value input_);
             vector3 __convert_to_vector3(game_value input_);
-        }
-    }
-}
+        }  // namespace __helpers
+    }      // namespace sqf
+}  // namespace intercept

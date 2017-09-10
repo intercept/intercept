@@ -55,7 +55,7 @@ def parse():
                         if (match_impl[1].startswith("__") or file.endswith(".cpp")):
                             continue
                         # Check if we have actually matched a valid declaration
-                        valid_match = re.search("[a-zA-Z0-9:<>_]+\s?[&\*]?\s+[&\*]?[a-zA-Z0-9_]+", match_impl[2])
+                        valid_match = re.search("[a-zA-Z0-9<>_]+\s?[&\*]?\s+[&\*]?[a-zA-Z0-9_]+", match_impl[2])
                         if (valid_match or match_impl[2] == "()"):
                             declarations.append([match_impl[0], match_impl[1], match_impl[2], [file, lineN]]) # full contract of our declaration
 

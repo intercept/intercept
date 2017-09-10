@@ -1,4 +1,4 @@
-﻿#include "tasks.hpp"
+#include "tasks.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -8,12 +8,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removesimpletask__object__task__ret__nothing, unit_, task_);
         }
 
-        task create_task(const team_member & member_, sqf_string_const_ref type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_) {
-            auto_array<game_value> p1{ type_ };
+        task create_task(const team_member &member_, sqf_string_const_ref type_, float priority, const std::vector<std::pair<std::string, std::string>> &name_value_pairs_, std::optional<task> parent_task_) {
+            auto_array<game_value> p1{type_};
             if (parent_task_)
                 p1.push_back(*parent_task_);
-            auto_array<game_value> params{ std::move(p1), priority };
-            for (auto& it : name_value_pairs_) {
+            auto_array<game_value> params{std::move(p1), priority};
+            for (auto &it : name_value_pairs_) {
                 params.push_back(it.first);
                 params.push_back(it.second);
             }
@@ -22,11 +22,9 @@ namespace intercept {
         }
 
         task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, float priority_) {
-            game_value params_right({
-                receiver_,
-                { type_ },
-                priority_
-            });
+            game_value params_right({receiver_,
+                                     std::move(auto_array<game_value>{type_}),
+                                     priority_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
         }
@@ -39,30 +37,19 @@ namespace intercept {
                 variables.push_back(variable.value);
             }
 
-            game_value params_right({
-                receiver_,
-                {
-                    type_,
-                    parent_task_
-                },
-                std::move(variables)
-            });
-
-            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__sendtask__team_member__array__ret__task, sender_, {receiver_, {type_, parent_task_}, std::move(variables)});
         }
 
         //#TODO: Find out which types state_, result_ and sentence_ are
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_) {
-            game_value params_right({
-                state_,
-                result_,
-                sentence_
-            });
+            game_value params_right({state_,
+                                     result_,
+                                     sentence_});
 
             host::functions.invoke_raw_binary(__sqf::binary__sendtaskresult__task__array__ret__nothing, task_, params_right);
         }
 
-        void set_current_task(const object& object_, const task& task_) {
+        void set_current_task(const object &object_, const task &task_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcurrenttask__object__task__ret__nothing, object_, task_);
         }
 
@@ -71,11 +58,11 @@ namespace intercept {
         }
 
         void set_simple_task_custom_data(const task &task_, sqf_string_const_ref icon_path_, sqf_string_const_ref tool_tip_, sqf_string_const_ref description_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskcustomdata__task__array__ret__nothing, task_, { icon_path_, tool_tip_, description_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskcustomdata__task__array__ret__nothing, task_, {icon_path_, tool_tip_, description_});
         }
 
         void set_simple_task_description(const task &task_, sqf_string_const_ref description_, sqf_string_const_ref description_short_, sqf_string_const_ref description_hud_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdescription__task__array__ret__nothing, task_, { description_, description_short_, description_hud_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletaskdescription__task__array__ret__nothing, task_, {description_, description_short_, description_hud_});
         }
 
         void set_simple_task_destination(const object &task_, const vector3 &position_) {
@@ -83,7 +70,7 @@ namespace intercept {
         }
 
         void set_simple_task_target(const task &task_, const object &target_, bool precise_position_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktarget__task__array__ret__nothing, task_, { target_, precise_position_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setsimpletasktarget__task__array__ret__nothing, task_, {target_, precise_position_});
         }
 
         void set_simple_task_type(const task &task_, sqf_string_const_ref task_type_) {
@@ -131,7 +118,6 @@ namespace intercept {
             return task(host::functions.invoke_raw_unary(__sqf::unary__currenttask__object__ret__task, value_));
         }
 
-
         float priority(task value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__priority__task__ret__scalar, value_);
         }
@@ -156,15 +142,15 @@ namespace intercept {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__registeredtasks__team_member__ret__array, member_));
         }
 
-        std::vector<task> simple_tasks(const object& unit_) {
+        std::vector<task> simple_tasks(const object &unit_) {
             return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__simpletasks__object__ret__array, unit_));
         }
 
-        sqf_return_string_list task_description(const task& task_) {
+        sqf_return_string_list task_description(const task &task_) {
             return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__taskdescription__task__ret__array, task_));
         }
 
-        vector3 task_destination(const task& task_) {
+        vector3 task_destination(const task &task_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__taskdestination__task__ret__array, task_);
 
             if (ret.size() == 0) {
@@ -180,7 +166,7 @@ namespace intercept {
         rv_task_custom_data task_custom_data(const task &task_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__taskcustomdata__task__ret__array, task_);
 
-            return rv_task_custom_data({ res[0], res[1], res[2] });
+            return rv_task_custom_data({res[0], res[1], res[2]});
         }
 
         vector3 task_marker_offset(const object &unit_) {
@@ -192,7 +178,7 @@ namespace intercept {
         }
 
         task create_simple_task(const object &unit_, sqf_string_const_ref name_, std::optional<task> parent_task_) {
-            game_value params_right(parent_task_.has_value() ? game_value{ name_, *parent_task_ } : game_value{ name_ });
+            game_value params_right(parent_task_.has_value() ? game_value{name_, *parent_task_} : game_value{name_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__createsimpletask__object__array__ret__task, unit_, params_right);
         }
@@ -211,111 +197,84 @@ namespace intercept {
         }
 
         sqf_return_string create_diary_link(sqf_string_const_ref subject_, const object &object_, sqf_string_const_ref text_) {
-            game_value params({
-                subject_,
-                object_,
-                text_
-            });
+            game_value params({subject_,
+                               object_,
+                               text_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__creatediarylink__array__ret__string, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_) {
-            game_value params({
-                subject_,
-                text_
-            });
+            game_value params({subject_,
+                               text_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_, const task &task_) {
-            game_value params({
-                subject_,
-                text_,
-                task_
-            });
+            game_value params({subject_,
+                               text_,
+                               task_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref text_, const task &task_, sqf_string_const_ref state_) {
-            game_value params({
-                subject_,
-                text_,
-                task_,
-                state_
-            });
+            game_value params({subject_,
+                               text_,
+                               task_,
+                               state_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_) {
-            game_value params({
-                subject_,
-                game_value({
-                title_,
-                text_
-            })
-            });
+            game_value params({subject_,
+                               game_value({title_,
+                                           text_})});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_, const task &task_) {
-            game_value params({
-                subject_,
-                game_value({
-                title_,
-                text_,
-            }),
-            task_
-            });
+            game_value params({subject_,
+                               game_value({
+                                   title_,
+                                   text_,
+                               }),
+                               task_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         sqf_return_string create_diary_record(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref title_, sqf_string_const_ref text_, const task &task_, sqf_string_const_ref state_) {
-            game_value params({
-                subject_,
-                game_value({
-                title_,
-                text_
-            }),
-                task_,
-                state_
-            });
+            game_value params({subject_,
+                               game_value({title_,
+                                           text_}),
+                               task_,
+                               state_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediaryrecord__object__array__ret__diary_record, object_, params);
         }
 
         float create_diary_subject(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref name_) {
-            game_value params({
-                subject_,
-                name_
-            });
+            game_value params({subject_,
+                               name_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params);
         }
 
         float create_diary_subject(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref name_, sqf_string_const_ref picture_) {
-            game_value params({
-                subject_,
-                name_,
-                picture_
-            });
+            game_value params({subject_,
+                               name_,
+                               picture_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__creatediarysubject__object__array__ret__scalar, object_, params);
         }
 
-
-
-
-
-
         //(de-)briefing
         void set_debriefing_text(sqf_string_const_ref endType_, sqf_string_const_ref title_, sqf_string_const_ref description_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setdebriefingtext__string__array__ret__nothing, endType_, { title_, description_ });
+            host::functions.invoke_raw_binary(__sqf::binary__setdebriefingtext__string__array__ret__nothing, endType_, {title_, description_});
         }
 
         sqf_return_string briefing_name() {
@@ -347,12 +306,10 @@ namespace intercept {
         }
 
         void enable_debriefing_stats(float left_, float top_, float width_, float height_) {
-            game_value params({
-                left_,
-                top_,
-                width_,
-                height_
-            });
+            game_value params({left_,
+                               top_,
+                               width_,
+                               height_});
 
             host::functions.invoke_raw_unary(__sqf::unary__enabledebriefingstats__array__ret__nothing, params);
         }
@@ -360,5 +317,5 @@ namespace intercept {
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_) {
             host::functions.invoke_raw_binary(__sqf::binary__objstatus__string__string__ret__nothing, objective_number_, status_);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

@@ -15,6 +15,7 @@ namespace intercept {
         class host {
         public:
             static client_functions functions;
+            static r_string module_name;
            
             /**
             * \brief Registers a custom SQF Binary Command
@@ -56,15 +57,21 @@ namespace intercept {
             * \param cf
             * \return The resulting GameDataType enum value and a instantiated sqf_script_type
             */
-            static std::pair<types::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
-        
-        
+            [[nodiscard]] static std::pair<types::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+
+
+            static register_plugin_interface_result register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_);
+            static std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
+            //if optional has value then void* != nullptr
+            static std::optional<void*> request_plugin_interface(std::string_view name_, uint32_t api_version_);
+
+
         };
 
 
         
         extern "C" {
-            DLLEXPORT void CDECL assign_functions(const struct client_functions funcs);
+            DLLEXPORT void CDECL assign_functions(const struct client_functions funcs, r_string module_name);
             DLLEXPORT void CDECL handle_unload();
         }
 

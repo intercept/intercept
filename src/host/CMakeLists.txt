@@ -2,10 +2,6 @@ cmake_minimum_required (VERSION 3.8)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON) 
 
-if(WIN32) 
-add_definitions(/DWINVER=0x0600 /D_WIN32_WINNT=0x0600)
-endif()
-
 add_definitions(/DINTERCEPT_HOST_DLL=1)
 
 if (NOT CMAKE_BUILD_TYPE AND CMAKE_COMPILER_IS_GNUCXX)

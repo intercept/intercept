@@ -30,10 +30,9 @@ namespace intercept {
         sqf_return_string task_state(task value_);
         sqf_return_string type(task value_);
         sqf_return_string_list registered_tasks(const team_member &member_);
-        std::vector<task> simple_tasks(const object& unit_);
-        sqf_return_string_list task_description(const task& task_);
-        vector3 task_destination(const task& task_);
-
+        std::vector<task> simple_tasks(const object &unit_);
+        sqf_return_string_list task_description(const task &task_);
+        vector3 task_destination(const task &task_);
 
         struct rv_task_custom_data {
             std::string icon_path;
@@ -53,12 +52,12 @@ namespace intercept {
 
         task create_simple_task(const object &unit_, sqf_string_const_ref name_, std::optional<task> parent_task_);
         void remove_simple_task(const object &unit_, const task &task_);
-        task create_task(const team_member& member_, sqf_string_const_ref type_, float priority, const std::vector<std::pair<std::string, std::string>>& name_value_pairs_, std::optional<task> parent_task_ = {});
+        task create_task(const team_member &member_, sqf_string_const_ref type_, float priority, const std::vector<std::pair<std::string, std::string>> &name_value_pairs_, std::optional<task> parent_task_ = {});
         //#TODO arguments incorrect
         task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, float priority_);
         task send_task(const team_member &sender_, const team_member &receiver_, sqf_string_const_ref type_, const task &parent_task_, float priority_, std::vector<rv_task_variables> &variables_);
         void send_task_result(const task &task_, const game_value &state_, const game_value &result_, const game_value &sentence_);
-        void set_current_task(const object& object_, const task& task_);
+        void set_current_task(const object &object_, const task &task_);
         void set_simple_task_always_visible(const task &task_, bool always_visible_);
         void set_simple_task_custom_data(const task &task_, sqf_string_const_ref icon_path_, sqf_string_const_ref tool_tip_, sqf_string_const_ref description_);
         void set_simple_task_description(const task &task_, sqf_string_const_ref description_, sqf_string_const_ref description_short_, sqf_string_const_ref description_hud_);
@@ -71,9 +70,6 @@ namespace intercept {
         std::vector<task> current_tasks(const team_member &team_member_);
         bool register_task(const team_member &value0_, sqf_string_const_ref value1_);
         void cancel_simple_task_destination(task value_);
-
-
-
 
         //diary
         sqf_return_string create_diary_link(sqf_string_const_ref subject_, const object &object_, sqf_string_const_ref text_);
@@ -89,7 +85,6 @@ namespace intercept {
         bool diary_subject_exists(const object &value0_, sqf_string_const_ref value1_);
         void select_diary_subject(const object &value0_, sqf_string_const_ref value1_);
 
-
         //(de-)briefing
         void set_debriefing_text(sqf_string_const_ref endType_, sqf_string_const_ref title_, sqf_string_const_ref description_);
         void enable_debriefing_stats(float left_, float top_, float width_, float height_);
@@ -102,5 +97,5 @@ namespace intercept {
         void on_briefing_team_switch(sqf_string_const_ref value_);
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

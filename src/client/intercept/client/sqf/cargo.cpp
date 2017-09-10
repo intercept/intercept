@@ -4,7 +4,7 @@
 
 namespace intercept {
     namespace sqf {
-        
+
         //cargo
         bool set_vehicle_cargo(const object &vehicle_, const object &cargo_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setvehiclecargo__object__object__ret__bool, vehicle_, cargo_);
@@ -29,17 +29,15 @@ namespace intercept {
         std::pair<bool, bool> can_vehicle_cargo(const object &vehicle_, const object &cargo_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__canvehiclecargo__object__object__ret__array, vehicle_, cargo_);
 
-            return std::pair<bool, bool>({ res[0],res[1] });
+            return std::pair<bool, bool>({res[0], res[1]});
         }
 
         void enable_vehicle_cargo(const object &vehicle_, bool enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enablevehiclecargo__object__bool__ret__nothing, vehicle_, enable_);
         }
 
-
-
         //sling
-        bool can_sling_load(const object& vehicle_, const object& cargo_) {
+        bool can_sling_load(const object &vehicle_, const object &cargo_) {
             return host::functions.invoke_raw_binary(__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_);
         }
 
@@ -89,149 +87,122 @@ namespace intercept {
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, sqf_string_const_ref to_point_, float segments_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                to_obj_,
-                to_point_,
-                segments_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               to_obj_,
+                               to_point_,
+                               segments_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_) {
-            game_value params({
-                from_obj_,
-                from_point_
-            });
+            game_value params({from_obj_,
+                               from_point_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
-
         object rope_create(const object &from_obj_, const vector3 &from_point_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_) {
-            game_value params({
-                from_obj_,
-                from_point_
-            });
+            game_value params({from_obj_,
+                               from_point_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, float length_) {
-            game_value params({
-                from_obj_,
-                from_point_,
-                length_
-            });
+            game_value params({from_obj_,
+                               from_point_,
+                               length_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__ropecreate__array__ret__object, params);
         }
 
         void rope_cut(const object &rope_, float distance_) {
-            game_value params({
-                rope_,
-                distance_
-            });
+            game_value params({rope_,
+                               distance_});
 
             host::functions.invoke_raw_unary(__sqf::unary__ropecut__array__ret__nothing, params);
         }
@@ -239,37 +210,31 @@ namespace intercept {
         std::vector<vector3> rope_end_position(const object &rope_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ropeendposition__object__ret__array, rope_);
 
-            std::vector<vector3> end_positions = { __helpers::__convert_to_vector3(ret[0]), __helpers::__convert_to_vector3(ret[1]) };
+            std::vector<vector3> end_positions = {__helpers::__convert_to_vector3(ret[0]), __helpers::__convert_to_vector3(ret[1])};
             return end_positions;
         }
 
         void rope_unwind(const object &rope_, float speed_, float length_) {
-            game_value params({
-                rope_,
-                speed_,
-                length_
-            });
+            game_value params({rope_,
+                               speed_,
+                               length_});
 
             host::functions.invoke_raw_unary(__sqf::unary__ropeunwind__array__ret__nothing, params);
         }
 
         void rope_unwind(const object &rope_, float speed_, float length_, bool relative_) {
-            game_value params({
-                rope_,
-                speed_,
-                length_,
-                relative_
-            });
+            game_value params({rope_,
+                               speed_,
+                               length_,
+                               relative_});
 
             host::functions.invoke_raw_unary(__sqf::unary__ropeunwind__array__ret__nothing, params);
         }
 
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_) {
-            game_value params_left({
-                vehicle_,
-                offset_,
-                rope_end_down_dir_
-            });
+            game_value params_left({vehicle_,
+                                    offset_,
+                                    rope_end_down_dir_});
 
             host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__array__object__ret__nothing, params_left, rope_);
         }
@@ -288,40 +253,34 @@ namespace intercept {
         }
 
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_) {
-            game_value args({
-                object2_,
-                offset_,
-                memPoint_
-            });
+            game_value args({object2_,
+                             offset_,
+                             memPoint_});
             host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
         }
 
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_) {
-            game_value args({
-                object2_,
-                offset_
-            });
+            game_value args({object2_,
+                             offset_});
             host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
         }
 
         void detach(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__detach__object__ret__nothing, value_);
         }
-        
+
         void light_detach_object(const object &value_) {
             __helpers::__empty_unary_object(__sqf::unary__lightdetachobject__object__ret__nothing, value_);
         }
-        
+
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
-            game_value params_right({
-                object_,
-                offset_
-            });
+            game_value params_right({object_,
+                                     offset_});
 
             host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
         }
         int get_cargo_index(const object &vehicle_, const object &unit_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getcargoindex__object__object__ret__scalar, vehicle_, unit_);
         }
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

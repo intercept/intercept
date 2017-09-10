@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "targetver.h"
 #include <assert.h>
@@ -37,8 +37,9 @@ namespace intercept {
     };
 
     std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
+    std::vector<std::string_view> &split(std::string_view s, char delim, std::vector<std::string_view> &elems);
     std::vector<std::string> split(const std::string &s, char delim);
-
+    std::vector<std::string_view> split(std::string_view s, char delim);
     // trim from start
     static inline std::string &ltrim(std::string &s) {
         s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](const char _char) {return !std::isspace(_char); }));

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -36,11 +36,9 @@ namespace intercept {
                 for (auto item : datas) {
                     datas_gv.push_back(game_value(item));
                 }
-                return game_value(std::vector<game_value>({
-                    texts_gv,
-                    values_gv,
-                    datas_gv
-                }));
+                return game_value(std::vector<game_value>({texts_gv,
+                                                           values_gv,
+                                                           datas_gv}));
             }
 
             operator game_value() const {
@@ -54,11 +52,9 @@ namespace intercept {
                 for (auto item : datas) {
                     datas_gv.push_back(game_value(item));
                 }
-                return game_value(std::vector<game_value>({
-                    texts_gv,
-                    values_gv,
-                    datas_gv
-                }));
+                return game_value(std::vector<game_value>({texts_gv,
+                                                           values_gv,
+                                                           datas_gv}));
             }
         };
 
@@ -81,23 +77,21 @@ namespace intercept {
             }
 
             static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
-                vector2 resolution = { resolution_vector_[0], resolution_vector_[1] };
-                vector2 viewport = { resolution_vector_[2], resolution_vector_[3] };
+                vector2 resolution = {resolution_vector_[0], resolution_vector_[1]};
+                vector2 viewport = {resolution_vector_[2], resolution_vector_[3]};
                 return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
             }
 
             std::vector<float> to_vector() const {
-                std::vector<float> ret_val{ resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale };
+                std::vector<float> ret_val{resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale};
                 return ret_val;
             }
         };
 
         /*ctrl_ */
 
-        control ctrl_create(const display& display_, sqf_string_const_ref class_, int idc_);
-        control ctrl_create(const display& display_, sqf_string_const_ref class_, int idc_, const control& controls_group_);
-
-
+        control ctrl_create(const display &display_, sqf_string_const_ref class_, int idc_);
+        control ctrl_create(const display &display_, sqf_string_const_ref class_, int idc_, const control &controls_group_);
 
         bool ctrl_auto_scroll_rewind(const control &value_);
         bool ctrl_checked(const control &value_);
@@ -149,23 +143,23 @@ namespace intercept {
         void ctrl_set_tooltip(const control &value0_, sqf_string_const_ref value1_);
         void ctrl_show(const control &value0_, bool value1_);
         void ctrl_show(int control_id_, bool show_);
-        void ctrl_set_foreground_color(const control& ctrl_, const rv_color& color_);
-        void ctrl_set_model_dir_and_up(const control& ctrl_, const vector3& dir_, const vector3& up_);
-        void ctrl_set_text_color(const control& ctrl_, const rv_color& color_);
-        void ctrl_set_tooltip_color_box(const control& ctrl_, const rv_color& color_);
-        void ctrl_set_tooltip_color_shade(const control& ctrl_, const rv_color& color_);
-        void ctrl_set_tooltip_color_text(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_foreground_color(const control &ctrl_, const rv_color &color_);
+        void ctrl_set_model_dir_and_up(const control &ctrl_, const vector3 &dir_, const vector3 &up_);
+        void ctrl_set_text_color(const control &ctrl_, const rv_color &color_);
+        void ctrl_set_tooltip_color_box(const control &ctrl_, const rv_color &color_);
+        void ctrl_set_tooltip_color_shade(const control &ctrl_, const rv_color &color_);
+        void ctrl_set_tooltip_color_text(const control &ctrl_, const rv_color &color_);
         void ctrl_activate(const control &value_);
         void ctrl_map_anim_clear(const control &value_);
         void ctrl_map_anim_commit(const control &value_);
-        void ctrl_map_cursor(const control& ctrl_, sqf_string_const_ref default_cursor_, sqf_string_const_ref new_cursor_);
+        void ctrl_map_cursor(const control &ctrl_, sqf_string_const_ref default_cursor_, sqf_string_const_ref new_cursor_);
         void ctrl_remove_all_event_handlers(const control &value0_, sqf_string_const_ref value1_);
         void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, float &id_);
-        void ctrl_set_active_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_active_color(const control &ctrl_, const rv_color &color_);
         void ctrl_set_auto_scroll_delay(const control &value0_, float value1_);
         void ctrl_set_auto_scroll_rewind(const control &value0_, bool value1_);
         void ctrl_set_auto_scroll_speed(const control &value0_, float value1_);
-        void ctrl_set_background_color(const control& ctrl_, const rv_color& color_);
+        void ctrl_set_background_color(const control &ctrl_, const rv_color &color_);
         void ctrl_set_checked(const control &value0_, bool value1_);
         void ctrl_set_focus(const control &value_);
         float ctrl_auto_scroll_delay(const control &value_);
@@ -190,57 +184,55 @@ namespace intercept {
         control ctrl_parent_controls_group(const control &value_);
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
 
-        vector2 ctrl_map_world_to_screen(const control& ctrl_, const std::variant<vector2, vector3> &position_);
+        vector2 ctrl_map_world_to_screen(const control &ctrl_, const std::variant<vector2, vector3> &position_);
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
-
 
         void ctrl_set_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
         float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
         float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_);
 
-
         //listbox/combobox
-        void lnb_delete_column(const control& ctrl_, float index_);
+        void lnb_delete_column(const control &ctrl_, float index_);
         void lnb_delete_row(const control &value0_, float value1_);
         void lnb_set_cur_sel_row(float idc_, float index_);
-        void lnb_set_cur_sel_row(const control& ctrl_, float index_);
+        void lnb_set_cur_sel_row(const control &ctrl_, float index_);
         void lnb_delete_column(float idc_, float index_);
         void lnb_delete_row(float idc_, float index_);
-        void lnb_set_color(float idc_, float row_, float column_, const rv_color& color_);
-        void lnb_set_color(const control& ctrl_, float row_, float column_, const rv_color& color_);
+        void lnb_set_color(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_color(const control &ctrl_, float row_, float column_, const rv_color &color_);
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_);
-        void lnb_set_columns_pos(const control& ctrl_, std::vector<float> positions_);
+        void lnb_set_columns_pos(const control &ctrl_, std::vector<float> positions_);
         void lnb_set_data(float idc_, float row_, float column_, sqf_string_const_ref data_);
-        void lnb_set_data(const control& ctrl_, float row_, float column_, sqf_string_const_ref data_);
+        void lnb_set_data(const control &ctrl_, float row_, float column_, sqf_string_const_ref data_);
         void lnb_set_picture(float idc_, float row_, float column_, sqf_string_const_ref name_);
-        void lnb_set_picture(const control& ctrl_, float row_, float column_, sqf_string_const_ref name_);
-        void lnb_set_text(float idc_, float row_, float column_, const game_value& data_);
-        void lnb_set_text(const control& ctrl_, float row_, float column_, const game_value& data_);
+        void lnb_set_picture(const control &ctrl_, float row_, float column_, sqf_string_const_ref name_);
+        void lnb_set_text(float idc_, float row_, float column_, const game_value &data_);
+        void lnb_set_text(const control &ctrl_, float row_, float column_, const game_value &data_);
         void lnb_set_value(float idc_, float row_, float column_, float value_);
-        void lnb_set_value(const control& ctrl_, float row_, float column_, float value_);
+        void lnb_set_value(const control &ctrl_, float row_, float column_, float value_);
         void lnb_clear(const control &value_);
         void lnb_clear(float value_);
-        float lnb_add_array(float idc_, const std::vector<rv_lnb_array>& lnb_array_);
-        float lnb_add_array(const control& ctrl_, const std::vector<rv_lnb_array>& lnb_array_);
+        float lnb_add_array(float idc_, const std::vector<rv_lnb_array> &lnb_array_);
+        float lnb_add_array(const control &ctrl_, const std::vector<rv_lnb_array> &lnb_array_);
         float lnb_add_row(float idc_, sqf_string_list_const_ref strings_);
-        float lnb_add_row(const control& ctrl_, sqf_string_list_const_ref strings_);
+        float lnb_add_row(const control &ctrl_, sqf_string_list_const_ref strings_);
         float lnb_value(float idc_, float row_, float column_);
-        float lnb_value(const control& ctrl_, float row_, float column_);
+        float lnb_value(const control &ctrl_, float row_, float column_);
         float lnb_add_column(const control &value0_, float value1_);
         float lnb_cur_sel_row(const control &value_);
         float lnb_cur_sel_row(float value_);
         sqf_return_string lnb_data(float idc_, float row_, float column_);
-        sqf_return_string lnb_data(const control& ctrl_, float row_, float column_);
+        sqf_return_string lnb_data(const control &ctrl_, float row_, float column_);
         sqf_return_string lnb_picture(float idc_, float row_, float column_);
-        sqf_return_string lnb_picture(const control& ctrl_, float row_, float column_);
+        sqf_return_string lnb_picture(const control &ctrl_, float row_, float column_);
         sqf_return_string lnb_text(float idc_, float row_, float column_);
-        sqf_return_string lnb_text(const control& ctrl_, float row_, float column_);
+        sqf_return_string lnb_text(const control &ctrl_, float row_, float column_);
         std::vector<float> lnb_get_columns_position(float idc_);
-        std::vector<float> lnb_get_columns_position(const control& ctrl_);
+        std::vector<float> lnb_get_columns_position(const control &ctrl_);
         std::vector<float> lnb_size(float idc_);
-        std::vector<float> lnb_size(const control& ctrl_);
+        std::vector<float> lnb_size(const control &ctrl_);
         rv_color lnb_color(float idc_, float row_, float column_);
-        rv_color lnb_color(const control& ctrl_, float row_, float column_);
+        rv_color lnb_color(const control &ctrl_, float row_, float column_);
 
         //listbox
         bool lb_is_selected(const control &value0_, float value1_);
@@ -248,9 +240,9 @@ namespace intercept {
         void lb_delete(const control &control_, int index_);
         // TODO std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
         void lb_set_color(int control_id_, int index_, rv_color color_);
-        void lb_set_color(const control &control_, int index_, const rv_color & color_);
-        void lb_set_color_right(int control_id_, int index_, const rv_color & color_);
-        void lb_set_color_right(const control &control_, int index_, const rv_color & color_);
+        void lb_set_color(const control &control_, int index_, const rv_color &color_);
+        void lb_set_color_right(int control_id_, int index_, const rv_color &color_);
+        void lb_set_color_right(const control &control_, int index_, const rv_color &color_);
         void lb_set_cur_sel(int control_id_, int index_);
         void lb_set_cur_sel(const control &control_, int index_);
         void lb_set_data(int control_id_, int index_, sqf_string_const_ref data_);
@@ -259,22 +251,22 @@ namespace intercept {
         void lb_set_picture(const control &control_, int index_, sqf_string_const_ref name_);
         void lb_set_picture_right(int control_id_, int index_, sqf_string_const_ref name_);
         void lb_set_picture_right(const control &control_, int index_, sqf_string_const_ref name_);
-        void lb_set_picture_color(int control_id_, int index_, const rv_color & color_);
-        void lb_set_picture_color(const control &control_, int index_, const rv_color & color_);
-        void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color & color_);
-        void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color & color_);
-        void lb_set_picture_color_selected(int control_id_, int index_, const rv_color & color_);
-        void lb_set_picture_color_selected(const control &control_, int index_, const rv_color & color_);
-        void lb_set_picture_right_color(const control &control_, int index_, const rv_color & color_);
-        void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color & color_);
-        void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color & color_);
+        void lb_set_picture_color(int control_id_, int index_, const rv_color &color_);
+        void lb_set_picture_color(const control &control_, int index_, const rv_color &color_);
+        void lb_set_picture_color_disabled(int control_id_, int index_, const rv_color &color_);
+        void lb_set_picture_color_disabled(const control &control_, int index_, const rv_color &color_);
+        void lb_set_picture_color_selected(int control_id_, int index_, const rv_color &color_);
+        void lb_set_picture_color_selected(const control &control_, int index_, const rv_color &color_);
+        void lb_set_picture_right_color(const control &control_, int index_, const rv_color &color_);
+        void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color &color_);
+        void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color &color_);
         void lb_set_text(const control &control_, int index_, sqf_string_const_ref text_);
         void lb_set_tooltip(int control_id_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
         void lb_set_value(const control &control_, int index_, float val_);
-        void lb_set_select_color(int idc_, int index_, const rv_color & color_);
-        void lb_set_select_color_right(int idc_, int index_, const rv_color & color_);
+        void lb_set_select_color(int idc_, int index_, const rv_color &color_);
+        void lb_set_select_color_right(int idc_, int index_, const rv_color &color_);
         void lb_clear(const control &value_);
         void lb_clear(float value_);
         float lb_add(int control_id_, sqf_string_const_ref text_);
@@ -289,7 +281,7 @@ namespace intercept {
         float lb_cur_sel(float value_);
         float lb_size(const control &value_);
         float lb_size(float value_);
-        
+
         sqf_return_string lb_data(int control_id_, int index_);
         sqf_return_string lb_data(const control &control_, int index_);
         sqf_return_string lb_picture(int control_id_, int index_);
@@ -310,51 +302,52 @@ namespace intercept {
         sqf_return_string lb_text_right(const control &value0_, float value1_);
 
         //treeview
-        void tv_set_text(float idc_, const std::vector<float>& path_, sqf_string_const_ref text_);
-        void tv_set_text(const control& ctrl_, const std::vector<float>& path_, sqf_string_const_ref text_);
-        void tv_collapse(int idc_, const std::vector<int>& path_);
-        void tv_collapse(const control& ctrl_, const std::vector<int>& path_);
-        void tv_delete(int idc_, const std::vector<int>& path_);
-        void tv_delete(const control& ctrl_, const std::vector<int>& path_);
-        void tv_expand(int idc_, const std::vector<int>& path_);
-        void tv_expand(const control& ctrl_, const std::vector<int>& path_);
-        void tv_set_cur_sel(int idc_, const std::vector<int>& path_);
-        void tv_set_cur_sel(const control& ctrl_, const std::vector<int>& path_);
-        void tv_set_data(int idc_, const std::vector<int>& path_, sqf_string_const_ref data_);
-        void tv_set_data(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref data_);
-        void tv_set_picture(int idc_, const std::vector<int>& path_, sqf_string_const_ref name_);
-        void tv_set_picture(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref name_);
-        void tv_set_picture_right(int idc_, const std::vector<int>& path_, sqf_string_const_ref name_);
-        void tv_set_picture_right(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref name_);
-        void tv_set_picture_color(int idc_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_picture_color(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_picture_color_right(int idc_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_picture_color_right(const control& ctrl_, const std::vector<int>& path_, const rv_color& color_);
-        void tv_set_tooltip(int idc_, const std::vector<int>& path_, sqf_string_const_ref text_);
-        void tv_set_tooltip(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref text_);
-        void tv_set_value(const control& ctrl_, const std::vector<int>& path_, float value_);
-        void tv_set_value(int idc_, const std::vector<int>& path_, float value_);
-        void tv_sort(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
-        void tv_sort_by_value(const control& ctrl_, const std::vector<int>& path_, bool reversed_ = false);
+        void tv_set_text(float idc_, const std::vector<float> &path_, sqf_string_const_ref text_);
+        void tv_set_text(const control &ctrl_, const std::vector<float> &path_, sqf_string_const_ref text_);
+        void tv_collapse(int idc_, const std::vector<int> &path_);
+        void tv_collapse(const control &ctrl_, const std::vector<int> &path_);
+        void tv_delete(int idc_, const std::vector<int> &path_);
+        void tv_delete(const control &ctrl_, const std::vector<int> &path_);
+        void tv_expand(int idc_, const std::vector<int> &path_);
+        void tv_expand(const control &ctrl_, const std::vector<int> &path_);
+        void tv_set_cur_sel(int idc_, const std::vector<int> &path_);
+        void tv_set_cur_sel(const control &ctrl_, const std::vector<int> &path_);
+        void tv_set_data(int idc_, const std::vector<int> &path_, sqf_string_const_ref data_);
+        void tv_set_data(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref data_);
+        void tv_set_picture(int idc_, const std::vector<int> &path_, sqf_string_const_ref name_);
+        void tv_set_picture(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref name_);
+        void tv_set_picture_right(int idc_, const std::vector<int> &path_, sqf_string_const_ref name_);
+        void tv_set_picture_right(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref name_);
+        void tv_set_picture_color(int idc_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_color(const control &ctrl_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_right_color(int idc_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_picture_right_color(const control &ctrl_, const std::vector<int> &path_, const rv_color &color_);
+        void tv_set_tooltip(int idc_, const std::vector<int> &path_, sqf_string_const_ref text_);
+        void tv_set_tooltip(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref text_);
+        void tv_set_value(const control &ctrl_, const std::vector<int> &path_, float value_);
+        void tv_set_value(int idc_, const std::vector<int> &path_, float value_);
+        void tv_sort(const control &ctrl_, const std::vector<int> &path_, bool reversed_ = false);
+        void tv_sort_by_value(const control &ctrl_, const std::vector<int> &path_, bool reversed_ = false);
         void tv_clear(float value_);
         void tv_clear(const control &value_);
-        sqf_return_string tv_data(int idc_, const std::vector<int>& path_);
-        sqf_return_string tv_data(const control& ctrl_, const std::vector<int>& path_);
-        sqf_return_string tv_picture(int idc_, const std::vector<int>& path_);
-        sqf_return_string tv_picture(const control& ctrl_, const std::vector<int>& path_);
-        sqf_return_string tv_picture_right(int idc_, const std::vector<int>& path_);
-        sqf_return_string tv_picture_right(const control& ctrl_, const std::vector<int>& path_);
-        sqf_return_string tv_text(int idc_, const std::vector<int>& path_);
-        sqf_return_string tv_text(const control& ctrl_, const std::vector<int>& path_);
-        float tv_value(int idc_, const std::vector<int>& path_);
-        float tv_value(const control& ctrl_, const std::vector<int>& path_);
-        int tv_add(int idc_, const std::vector<int>& path_, sqf_string_const_ref text_);
-        int tv_add(const control& ctrl_, const std::vector<int>& path_, sqf_string_const_ref text_);
-        int tv_count(int idc_, const std::vector<int>& path_);
-        int tv_count(const control& ctrl_, const std::vector<int>& path_);
-        //std::string tv_tooltip(const control &value0_, float value1_);
+        //#TODO typedef for const std::vector<int>
+        sqf_return_string tv_data(int idc_, const std::vector<int> &path_);
+        sqf_return_string tv_data(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string tv_picture(int idc_, const std::vector<int> &path_);
+        sqf_return_string tv_picture(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string tv_picture_right(int idc_, const std::vector<int> &path_);
+        sqf_return_string tv_picture_right(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string tv_text(int idc_, const std::vector<int> &path_);
+        sqf_return_string tv_text(const control &ctrl_, const std::vector<int> &path_);
+        float tv_value(int idc_, const std::vector<int> &path_);
+        float tv_value(const control &ctrl_, const std::vector<int> &path_);
+        int tv_add(int idc_, const std::vector<int> &path_, sqf_string_const_ref text_);
+        int tv_add(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref text_);
+        int tv_count(int idc_, const std::vector<int> &path_);
+        int tv_count(const control &ctrl_, const std::vector<int> &path_);
+
         std::vector<int> tv_cursel(int idc_);
-        std::vector<int> tv_cursel(const control& ctrl_);
+        std::vector<int> tv_cursel(const control &ctrl_);
 
         void tv_set_color(const control &control_, const std::vector<int> &path_, const rv_color &color_);
         void tv_set_picture_color_disabled(const control &control_, const std::vector<int> &path_, const rv_color &color_);
@@ -368,7 +361,6 @@ namespace intercept {
         void tv_collapse_all(const control &control_);
         void tv_expand_all(int idc_);
         void tv_expand_all(const control &control_);
-
 
         //Slider
         void slider_set_range(float value0_, float value1_, float value2_);
@@ -385,12 +377,12 @@ namespace intercept {
         float slider_position(float value_);
 
         //Overlay
-        void clear_overlay(const control & map_);
-        void close_overlay(const control & map_);
-        void commit_overlay(const control & map_);
+        void clear_overlay(const control &map_);
+        void close_overlay(const control &map_);
+        void commit_overlay(const control &map_);
         void save_overlay(const control &value_);
-        void load_overlay(const control &a_control_, const config & a_config_);
-        void new_overlay(const control &a_control_, const config & a_config_);
+        void load_overlay(const control &a_control_, const config &a_config_);
+        void new_overlay(const control &a_control_, const config &a_config_);
 
         //cut
         //NULAR -- https://github.com/intercept/intercept/issues/13
@@ -405,7 +397,6 @@ namespace intercept {
         int cut_text(int layer_, sqf_string_const_ref text_, sqf_string_const_ref type_, float speed_, bool show_on_map_);
 
         void title_fade_out(float value_);
-
 
         bool open_dlc_page(float value_);
         bool open_map(bool value_);
@@ -441,7 +432,6 @@ namespace intercept {
         void display_remove_all_event_handlers(sqf_string_const_ref value0_, const display &value1_);
         display find_display(float value_);
 
-
         bool is_tut_hints_enabled();
         void hint_c(sqf_string_const_ref value_);
         void hint_c(sqf_string_const_ref value0_, sqf_string_const_ref value1_);
@@ -449,14 +439,13 @@ namespace intercept {
         void hint_cadet(sqf_string_const_ref text_);
         void hint_silent(sqf_string_const_ref text_);
         void hintc(sqf_string_const_ref title_, sqf_string_list_const_ref content_);
-        void task_hint(sqf_string_const_ref text_, const rv_color& color_, sqf_string_const_ref icon_);
-
+        void task_hint(sqf_string_const_ref text_, const rv_color &color_, sqf_string_const_ref icon_);
 
         bool visible_watch();
         bool visible_map();
         bool visible_gps();
         bool visible_compass();
-        bool cb_checked(const control & control_);
+        bool cb_checked(const control &control_);
         void cb_set_checked(const control &value0_, bool value1_);
         bool create_dialog(sqf_string_const_ref dialog_name_);
 
@@ -464,8 +453,6 @@ namespace intercept {
         bool is_showing(const control &value_);
 
         bool map_anim_done();
-
-
 
         //show / shown
         bool shown_artillerycomputer();
@@ -496,38 +483,32 @@ namespace intercept {
 
         //Somewhat unsorted stuff //#sort
 
-
-
         bool preload_title_obj(sqf_string_const_ref name_, sqf_string_const_ref type_);
-        bool preload_title_obj(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI
+        bool preload_title_obj(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_, bool show_in_map_);  // speed is ignored - source: BIKI
         bool preload_title_rsc(sqf_string_const_ref name_, sqf_string_const_ref type_);
-        bool preload_title_rsc(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_, bool show_in_map_); // speed is ignored - source: BIKI      
+        bool preload_title_rsc(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_, bool show_in_map_);  // speed is ignored - source: BIKI
         /* potential namespace: gui, ui */
         void cut_obj(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_ = 1.0f);
         void cut_rsc(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_ = 1.0f, bool show_on_map_ = false);
         void cut_text(sqf_string_const_ref name_, sqf_string_const_ref type_, float speed_ = 1.0f, bool show_on_map_ = false);
-        void title_cut(sqf_string_const_ref text_, sqf_string_const_ref type_, const float& speed_ = 1);
-        void title_obj(sqf_string_const_ref class_, sqf_string_const_ref type_, const float& speed_ = 1, bool show_on_map_ = false);
-        void title_rsc(sqf_string_const_ref text_, sqf_string_const_ref type_, const float& speed_ = 1);
-        void title_text(sqf_string_const_ref text_, sqf_string_const_ref type_, const float& speed_ = 1);
+        void title_cut(sqf_string_const_ref text_, sqf_string_const_ref type_, const float &speed_ = 1);
+        void title_obj(sqf_string_const_ref class_, sqf_string_const_ref type_, const float &speed_ = 1, bool show_on_map_ = false);
+        void title_rsc(sqf_string_const_ref text_, sqf_string_const_ref type_, const float &speed_ = 1);
+        void title_text(sqf_string_const_ref text_, sqf_string_const_ref type_, const float &speed_ = 1);
         void map_anim_add(float time_, float zoom_, const object &object_);
         void map_anim_add(float time_, float zoom_, const vector3 &pos_);
 
         void close_dialog(float val_);
         void close_display(float value0_, const display &value1_);
 
-
-
         //@TODO: draw_icon could stand to have a few enums probably for arguments like shadow and align.
         void draw_icon(const control &ctrl_, sqf_string_const_ref texture_, const rv_color &color_, const vector2 &pos_, float width_, float height_, float angle_, sqf_string_const_ref text_, uint32_t shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref align_);
         void draw_icon(const control &ctrl_, sqf_string_const_ref texture_, const rv_color &color_, const object &pos_, float width_, float height_, float angle_, sqf_string_const_ref text_, uint32_t shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref align_);
-
 
         void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_);
 
         void collapse_object_tree(const control &value_);
         void import_all_groups(const control &value_);
-
 
         void restart_editor_camera(const control &value_);
         void selected_editor_objects(const control &value_);
@@ -553,9 +534,6 @@ namespace intercept {
         void force_map(bool value_);
         void in_game_ui_set_event_handler(sqf_string_const_ref name_, sqf_string_const_ref command_);
 
-
-
-
         float gear_slot_ammo_count(const control &value_);
         float next_menu_item_index(const control &value_);
         float progress_position(const control &value_);
@@ -566,9 +544,8 @@ namespace intercept {
         float safe_zone_x_abs();
         float safe_zone_w_abs();
 
-        sqf_return_string button_action(const control & control_);
+        sqf_return_string button_action(const control &control_);
         sqf_return_string button_action(int idc_);
-
 
         sqf_return_string gear_slot_data(const control &value_);
         sqf_return_string get_editor_mode(const control &value_);
@@ -588,8 +565,6 @@ namespace intercept {
         object get_editor_camera(const control &value_);
         object get_object_proxy(const control &value0_, sqf_string_const_ref value1_);
 
-
-        game_value get_variable(const control & ctrl_, sqf_string_const_ref var_name_, game_value default_value_);
         display display_parent(const display &display_);
 
         bool visible_score_table();
@@ -619,7 +594,7 @@ namespace intercept {
         void lb_sort_by_value(const control &value_);
 
         sqf_return_string ct_data(const control &control_, int index_);
-        std::vector<game_value> ct_find_header_rows(const control &control_, int index_);
+        std::vector<float> ct_find_header_rows(const control &control_, int index_);
         int ct_find_row_header(const control &control_, int index_);
         std::vector<control> ct_header_controls(const control &control_, int index_);
         void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_);
@@ -633,5 +608,5 @@ namespace intercept {
         float ct_value(const control &control_, float index_);
         rv_resolution get_resolution();
 
-    }
-}
+    }  // namespace sqf
+}  // namespace intercept

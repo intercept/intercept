@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "shared.hpp"
 
@@ -36,6 +36,13 @@ namespace intercept {
                 _args[i] = trim(_args[i]);
             }
         }
+        //#TODO string_view implementation
+        //arguments(std::string_view str) : _original(std::string(str)), _internal_index(0) {
+        //    _args = intercept::split(str, ',');
+        //    for (uint32_t i = 0; i < _args.size(); i++) {
+        //        _args[i] = trim(_args[i]);
+        //    }
+        //}
 
         size_t size() const { return _args.size(); }
 

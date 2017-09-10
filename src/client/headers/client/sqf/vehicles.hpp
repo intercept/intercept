@@ -19,6 +19,22 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+
+        struct rv_crew_member {
+            object unit;
+            std::string role;
+            float cargo_index;
+            std::vector<int> turret_path;
+            bool person_turret;
+
+            rv_crew_member(object unit_, std::string role_, float cargo_index_, std::vector<int> turret_path_, bool person_turret_)
+                : unit(std::move(unit_)),
+                  role(std::move(role_)),
+                  cargo_index(cargo_index_),
+                  turret_path(std::move(turret_path_)),
+                  person_turret(person_turret_) {}
+        };
+
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
         sqf_return_string get_forced_flag_texture(const object &flag_pole_);
@@ -53,20 +69,20 @@ namespace intercept {
         void enable_copilot(const object &value0_, bool value1_);
         void set_pilot_light(const object &value0_, bool value1_);
         void set_collision_light(const object &value0_, bool value1_);
-        float set_flag_animation_phase(const object& object_, float phase);
-        void set_flag_owner(const object& flag_, const object& owner_);
+        float set_flag_animation_phase(const object &object_, float phase);
+        void set_flag_owner(const object &flag_, const object &owner_);
         void set_flag_animation_phase(const object &flag_, float &animation_phase_);
         object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_atl_);
-        void add_to_remains_collector(const std::vector<object> & objects_);
+        void add_to_remains_collector(const std::vector<object> &objects_);
         void remove_from_remains_collector(const std::vector<object> &remains_);
         std::vector<rv_crew_member> full_crew(const object &veh_);
         std::vector<rv_crew_member> full_crew(const object &veh_, sqf_string_const_ref filter_, bool include_empty_ = false);
-        std::vector<object> crew(const object & _veh);
-        float aimed_at_target(const object& vehicle_, const object& target_);
-        float aimed_at_target(const object& vehicle_, const object& target_, sqf_string_const_ref weapon_);
-        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_);
-        void animate(const object& obj_, sqf_string_const_ref animation_name_, float phase_, bool instant_);
-        void animate_door(const object& obj_, sqf_string_const_ref door_name_, float phase_, bool now_);
+        std::vector<object> crew(const object &_veh);
+        float aimed_at_target(const object &vehicle_, const object &target_);
+        float aimed_at_target(const object &vehicle_, const object &target_, sqf_string_const_ref weapon_);
+        void animate(const object &obj_, sqf_string_const_ref animation_name_, float phase_);
+        void animate(const object &obj_, sqf_string_const_ref animation_name_, float phase_, bool instant_);
+        void animate_door(const object &obj_, sqf_string_const_ref door_name_, float phase_, bool now_);
         vector3 get_center_of_mass(const object &obj_);
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_);
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
@@ -74,18 +90,18 @@ namespace intercept {
         sqf_return_string_list all_turrets(const object &vehicle_, bool person_turrets_);
 
         sqf_return_string_list all_turrets(const object &vehicle_);
-        bool alive(const object & obj_);
-        object assigned_commander(const object & veh_);
-        object assigned_driver(const object & veh_);
-        object assigned_gunner(const object & veh_);
-        object assigned_target(const object & veh_);
-        object commander(const object & veh_);
-        void create_vehicle_crew(const object & veh_);
-        float damage(const object & object_);
+        bool alive(const object &obj_);
+        object assigned_commander(const object &veh_);
+        object assigned_driver(const object &veh_);
+        object assigned_gunner(const object &veh_);
+        object assigned_target(const object &veh_);
+        object commander(const object &veh_);
+        void create_vehicle_crew(const object &veh_);
+        float damage(const object &object_);
         object driver(const object &value_);
         object effective_commander(const object &value_);
 
-        void fill_weapons_from_pool(const object &value_);//#categorize inventory? to the other weapon pool stuff
+        void fill_weapons_from_pool(const object &value_);  //#categorize inventory? to the other weapon pool stuff
 
         object flag(const object &value_);
         object flag_owner(const object &value_);
@@ -163,8 +179,8 @@ namespace intercept {
 
         sqf_return_string_list get_object_materials(const object &object_);
         sqf_return_string_list get_object_textures(const object &object_);
-        std::vector<object> synchronized_objects(const object& obj_);
-        rv_model_info get_model_info(const object& object_);
+        std::vector<object> synchronized_objects(const object &obj_);
+        rv_model_info get_model_info(const object &object_);
         object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld);
         float get_container_max_load(sqf_string_const_ref containerclass_);
         rv_shot_parents get_shot_parents(const object &projectile_);
@@ -183,25 +199,24 @@ namespace intercept {
         bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
-        void select_weapon_turret(const object&, sqf_string_const_ref weapon_, const std::vector<int>& turretPath_);
-        void set_center_of_mass(const object& object_, const vector3& offset_, float time_ = 0.f);
+        void select_weapon_turret(const object &, sqf_string_const_ref weapon_, const std::vector<int> &turretPath_);
+        void set_center_of_mass(const object &object_, const vector3 &offset_, float time_ = 0.f);
         enum class feature_type {
-            disabled = 0,// - Feature disabled 
-            visible_object_distance = 1,// - Object is always visible within object view distance 
-            visible_terrain_distance = 2// - Object is always visible within terrain view distance 
+            disabled = 0,                 ///< Feature disabled
+            visible_object_distance = 1,  ///< Object is always visible within object view distance
+            visible_terrain_distance = 2  ///< Object is always visible within terrain view distance
         };
-        bool set_feature_type(const object& object_, feature_type type_);
+        bool set_feature_type(const object &object_, feature_type type_);
         bool set_feature_type(const object &object_, int type_);
         void set_mass(const object &object_, float mass_, std::optional<float> time_);
         void set_object_material(const object &object_, int index_, sqf_string_const_ref material_);
         void set_object_material_global(const object &object_, int index_, sqf_string_const_ref material_);
 
-
         void set_object_texture(const object &object_, int index_, sqf_string_const_ref texture_);
         void set_object_texture_global(const object &object_, int index_, sqf_string_const_ref texture_);
         void set_pilot_camera_direction(const object &vehicle_, const vector3 &direction_);
         void set_pilot_camera_rotation(const object &vehicle_, float yaw_, float pitch_);
-        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3> > target_);
+        bool set_pilot_camera_target(const object &vehicle_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);
@@ -211,7 +226,6 @@ namespace intercept {
         sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
         float flag_animation_phase(const object &flag_);
         object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
-
 
         void unassign_vehicle(const object &value_);
 
@@ -232,9 +246,9 @@ namespace intercept {
 
         // originally "side", but is already a type
         side get_side(const object &object_);
-        sqf_return_string wf_side_text(const object &object_); //https://community.bistudio.com/wiki/WFSideText
+        sqf_return_string wf_side_text(const object &object_);  //https://community.bistudio.com/wiki/WFSideText
         sqf_return_string wf_side_text(const group &group_);
         sqf_return_string wf_side_text(const side &side_);
-        rv_uav_control uav_control(const object& uav_);
-    }
-}
+        rv_uav_control uav_control(const object &uav_);
+    }  // namespace sqf
+}  // namespace intercept

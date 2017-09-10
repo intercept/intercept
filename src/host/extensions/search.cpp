@@ -1,10 +1,12 @@
-﻿#include "search.hpp"
+#include "search.hpp"
 #include <sstream>
 #include <iterator>
 #include <algorithm>
 #include <regex>
 #include <experimental/filesystem>
+#include <string_view>
 
+using namespace std::literals::string_view_literals;
 
 namespace intercept::search {
     plugin_searcher::plugin_searcher() {
@@ -12,10 +14,27 @@ namespace intercept::search {
         //std::cout << "pbolist " << pboList.size() << "\n";
         for (auto& file : pboList) {
             //std::cout << "mod " << file << "\n";
-            size_t last_index = file.find_last_of("\\/");
-            std::string path = file.substr(0, last_index);
+            size_t last_index = file.find_last_of(
+            #ifdef __linux__
+                "\\/"
+            #else
+                L"\\/"
+            #endif
+            );
+        #ifdef __linux__
+            std::string
+        #else
+            std::wstring
+        #endif
+            path = file.substr(0, last_index);
             //std::cout << "path " << path << "\n";
-            last_index = path.find_last_of("\\/");
+            last_index = path.find_last_of(
+            #ifdef __linux__
+                "\\/"
+            #else
+                L"\\/"
+            #endif
+            );
             path = path.substr(0, last_index);
             //std::cout << "modfolder " << path << "\n";
             if (std::find(active_mod_folder_list.begin(), active_mod_folder_list.end(), path) == active_mod_folder_list.end())
@@ -38,29 +57,41 @@ namespace intercept::search {
         return GetCommandLineA();
     #endif
     }
-
+#ifdef __linux__
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
-        LOG(DEBUG) << "Searching for Extension: " << name << "\n";
+        LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
         for (auto folder : active_mod_folder_list) {
-        #if _WIN64 || __X86_64__
-            std::string test_path = folder + "\\intercept\\" + name + "_x64.dll";
-        #else
-        #ifdef __linux__
             std::string test_path = folder + "/intercept/" + name + ".so";
-        #else
-            std::string test_path = folder + "\\intercept\\" + name + ".dll";
-        #endif
-        #endif
 
-            LOG(DEBUG) << "Mod: " << test_path << "\n";
+            LOG(DEBUG) << "Mod: "sv << test_path << "\n"sv;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 return test_path;
             }
         }
-        LOG(ERROR) << "Client plugin: " << name << " was not found.\n";
+        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
         return std::optional<std::string>();
     }
+#else
+    std::optional<std::wstring> plugin_searcher::find_extension(const std::wstring& name) {
+        LOG(DEBUG) << "Searching for Extension: "sv << name << "\n"sv;
+        for (auto folder : active_mod_folder_list) {
+        #if _WIN64 || __X86_64__
+            std::wstring test_path = folder + L"\\intercept\\" + name + L"_x64.dll";
+        #else
+            std::wstring test_path = folder + L"\\intercept\\" + name + L".dll";
+        #endif
+
+            LOG(DEBUG) << "Mod: "sv << test_path << "\n"sv;
+            std::ifstream check_file(test_path);
+            if (check_file.good()) {
+                return test_path;
+            }
+        }
+        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
+        return std::optional<std::wstring>();
+    }
+#endif
 }
 
 
@@ -207,8 +238,8 @@ PVOID GetLibraryProcAddress(PSTR LibraryName, PSTR ProcName) {
     return GetProcAddress(GetModuleHandleA(LibraryName), ProcName);
 }
 
-std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list() {
-    std::vector<std::string> _active_pbo_list;
+std::vector<std::wstring> intercept::search::plugin_searcher::generate_pbo_list() {
+    std::vector<std::wstring> _active_pbo_list;
     NTSTATUS status;
     ULONG handleInfoSize = 0x10000;
 
@@ -325,18 +356,16 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
 
         /* Print the information! */
         if (objectName.Length) {
-            std::wstring tmp_type(objectTypeInfo->Name.Buffer);
-            std::wstring tmp_name(objectName.Buffer);
+            std::wstring_view tmp_type(objectTypeInfo->Name.Buffer);
+            std::wstring_view tmp_name(objectName.Buffer);
 
-            std::string object_type(tmp_type.begin(), tmp_type.end());
-            std::string object_name(tmp_name.begin(), tmp_name.end());
             //LOG(INFO) << "File: " << object_name;
-            if (object_type == "File" && object_name.find(".pbo") != object_name.npos) {
-                char buffer[MAX_PATH];
-                GetFinalPathNameByHandle(dupHandle, buffer, sizeof(buffer), VOLUME_NAME_DOS);
+            if (tmp_type == L"File"sv && tmp_name.find(L".pbo"sv) != std::string::npos) {
+                wchar_t buffer[MAX_PATH];
+                GetFinalPathNameByHandleW(dupHandle, buffer, sizeof(buffer), VOLUME_NAME_DOS);
 
                 //LOG(INFO) << "Pbo: " << buffer;
-                _active_pbo_list.push_back(std::string(buffer));
+                _active_pbo_list.push_back(std::wstring(buffer));
             }
         }
 

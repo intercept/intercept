@@ -1,4 +1,4 @@
-﻿#include "shared/types.hpp"
+#include "shared/types.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"
 #include <assert.h>
@@ -122,6 +122,7 @@ namespace intercept {
 
 
         uintptr_t game_value::__vptr_def;
+        uintptr_t sqf_script_type::type_def;
 
 
         value_types sqf_script_type::type() const {
@@ -145,6 +146,7 @@ namespace intercept {
             }
         }
 
+    #pragma region GameData Types
         game_data_number::game_data_number() {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
@@ -375,9 +377,98 @@ namespace intercept {
             return pool_alloc_base->deallocate(ptr_);
         }
 
-        __game_value_vtable_dummy::__game_value_vtable_dummy() {
-            *reinterpret_cast<uintptr_t*>(this) = game_value::__vptr_def;
+        game_data* game_data::createFromSerialized(param_archive& ar) {
+            bool isNil = false;
+            if (ar.serialize(r_string("nil"sv), isNil, 1, false) != serialization_return::no_error) {
+                return nullptr;
+            }
+
+            sqf_script_type _type;
+            if (ar.serialize(r_string("type"sv), _type, 1) != serialization_return::no_error) return nullptr;
+
+            if (isNil) {
+                //#TODO create GameDataNil or GameDataNothing
+                return nullptr;
+            }
+
+            auto gs = reinterpret_cast<intercept::__internal::game_state *>(ar._parameters.front());
+            return gs->create_gd_from_type(_type, &ar);
         }
+
+        static std::map<std::string, types::GameDataType> additionalTypes;
+        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
+            //I know this is ugly. Feel free to make it better
+            if (name == "SCALAR"sv) return types::GameDataType::SCALAR;
+            if (name == "BOOL"sv) return types::GameDataType::BOOL;
+            if (name == "ARRAY"sv) return types::GameDataType::ARRAY;
+            if (name == "STRING"sv) return types::GameDataType::STRING;
+            if (name == "NOTHING"sv) return types::GameDataType::NOTHING;
+            if (name == "ANY"sv) return types::GameDataType::ANY;
+            if (name == "NAMESPACE"sv) return types::GameDataType::NAMESPACE;
+            if (name == "NaN"sv) return types::GameDataType::NaN;
+            if (name == "CODE"sv) return types::GameDataType::CODE;
+            if (name == "OBJECT"sv) return types::GameDataType::OBJECT;
+            if (name == "SIDE"sv) return types::GameDataType::SIDE;
+            if (name == "GROUP"sv) return types::GameDataType::GROUP;
+            if (name == "TEXT"sv) return types::GameDataType::TEXT;
+            if (name == "SCRIPT"sv) return types::GameDataType::SCRIPT;
+            if (name == "TARGET"sv) return types::GameDataType::TARGET;
+            if (name == "CONFIG"sv) return types::GameDataType::CONFIG;
+            if (name == "DISPLAY"sv) return types::GameDataType::DISPLAY;
+            if (name == "CONTROL"sv) return types::GameDataType::CONTROL;
+            if (name == "NetObject"sv) return types::GameDataType::NetObject;
+            if (name == "SUBGROUP"sv) return types::GameDataType::SUBGROUP;
+            if (name == "TEAM_MEMBER"sv) return types::GameDataType::TEAM_MEMBER;
+            if (name == "TASK"sv) return types::GameDataType::TASK;
+            if (name == "DIARY_RECORD"sv) return types::GameDataType::DIARY_RECORD;
+            if (name == "LOCATION"sv) return types::GameDataType::LOCATION;
+            auto found = additionalTypes.find(static_cast<std::string>(name));
+            if (found != additionalTypes.end())
+                return found->second;
+            return types::GameDataType::end;
+        }
+
+        std::string __internal::to_string(GameDataType type) {
+            switch (type) {
+                case GameDataType::SCALAR: return "SCALAR";
+                case GameDataType::BOOL: return "BOOL";
+                case GameDataType::ARRAY: return "ARRAY";
+                case GameDataType::STRING: return "STRING";
+                case GameDataType::NOTHING: return "NOTHING";
+                case GameDataType::ANY: return "ANY";
+                case GameDataType::NAMESPACE: return "NAMESPACE";
+                case GameDataType::NaN: return "NaN";
+                case GameDataType::CODE: return "CODE";
+                case GameDataType::OBJECT: return "OBJECT";
+                case GameDataType::SIDE: return "SIDE";
+                case GameDataType::GROUP: return "GROUP";
+                case GameDataType::TEXT: return "TEXT";
+                case GameDataType::SCRIPT: return "SCRIPT";
+                case GameDataType::TARGET: return "TARGET";
+                case GameDataType::CONFIG: return "CONFIG";
+                case GameDataType::DISPLAY: return "DISPLAY";
+                case GameDataType::CONTROL: return "CONTROL";
+                case GameDataType::SUBGROUP:  return "SUBGROUP";
+                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
+                case GameDataType::TASK: return "TASK";
+                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
+                case GameDataType::LOCATION: return "LOCATION";
+                default:;
+            }
+            for (auto& it : additionalTypes) {
+                if (it.second == type)
+                    return it.first;
+            }
+            return "";
+        }
+
+        void __internal::add_game_datatype(r_string name, GameDataType type) {
+            additionalTypes[static_cast<std::string>(name)] = type;
+        };
+
+    #pragma endregion
+
+    #pragma region GameValue
 
         game_value::game_value() {
             set_vtable(__vptr_def);
@@ -395,7 +486,7 @@ namespace intercept {
             copy(copy_);
         }
 
-        game_value::game_value(game_value && move_) {
+        game_value::game_value(game_value && move_) noexcept {
             set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
             data = move_.data;
             move_.data = nullptr;
@@ -551,12 +642,6 @@ namespace intercept {
             return false;
         }
 
-        game_value::operator r_string () const {
-            if (data)
-                return data->get_as_string();
-            return {};
-        }
-
         game_value::operator vector3() const {
             if (!data) return {};
             auto& array = data->get_as_array();
@@ -574,13 +659,30 @@ namespace intercept {
         }
 
         game_value::operator std::string() const {
-            if (data)
-                return static_cast<std::string>(data->get_as_string());
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return static_cast<std::string>(data->get_as_string());
+                return static_cast<std::string>(data->to_string());
+            }
+                
+            return {};
+        }
+
+        game_value::operator r_string () const {
+            if (data) {
+                auto type = data->get_vtable();
+                if (type == game_data_code::type_def || type == game_data_string::type_def)
+                    return data->get_as_string();
+                return data->to_string();
+            }
+
             return {};
         }
 
         auto_array<game_value>& game_value::to_array() {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
                 return data->get_as_array();
             }
             static auto_array<game_value> dummy;//else we would return a temporary.
@@ -590,6 +692,7 @@ namespace intercept {
 
         const auto_array<game_value>& game_value::to_array() const {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
                 return data->get_as_const_array();
             }
             static auto_array<game_value> dummy;//else we would return a temporary.
@@ -599,6 +702,7 @@ namespace intercept {
 
         game_value& game_value::operator [](size_t i_) {
             if (data) {
+                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
                 auto& array = data->get_as_array();
                 if (array.count() >= i_)
                     return array[i_];
@@ -610,6 +714,7 @@ namespace intercept {
 
         game_value game_value::operator [](size_t i_) const {
             if (!data) return {};
+            if(data->get_vtable() != game_data_array::type_def)throw game_value_conversion_error("Invalid array access");
             auto& array = data->get_as_array();
             if (array.count() >= i_)
                 return array[i_];
@@ -628,6 +733,7 @@ namespace intercept {
 
         size_t game_value::size() const {
             if (!data) return 0;
+            if (data->get_vtable() != game_data_array::type_def) return 0;
             return data->get_as_array().count();
         }
 
@@ -691,8 +797,20 @@ namespace intercept {
         void game_value::operator delete(void* ptr_, std::size_t) {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
         }
+       
+        bool exiting = false;
 
+        extern "C" DLLEXPORT void CDECL handle_unload_internal() {
+            exiting = true;
+        }
 
+        game_value_static::~game_value_static() {
+            if (exiting) data._ref = nullptr;
+        }
+
+    #pragma endregion
+
+    #pragma region Allocator
         class MemTableFunctions { //We don't want to expose this in the header. It's only used here
         public:
             virtual void *New(size_t size) = 0;
@@ -741,6 +859,10 @@ namespace intercept {
             virtual void Unlock() = 0;
             const char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
         };
+
+        void __internal::set_game_value_vtable(uintptr_t vtable) {
+            game_value::__vptr_def = vtable;
+        }
 
         void* __internal::rv_allocator_allocate_generic(size_t size) {
             static auto allocatorBase = GET_ENGINE_ALLOCATOR;
@@ -832,78 +954,83 @@ namespace intercept {
             dealloc(this, data);
         #endif
         }
+    #pragma endregion
 
-        static std::map<std::string, types::GameDataType> additionalTypes;
-        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
-            //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR") return types::GameDataType::SCALAR;
-            if (name == "BOOL") return types::GameDataType::BOOL;
-            if (name == "ARRAY") return types::GameDataType::ARRAY;
-            if (name == "STRING") return types::GameDataType::STRING;
-            if (name == "NOTHING") return types::GameDataType::NOTHING;
-            if (name == "ANY") return types::GameDataType::ANY;
-            if (name == "NAMESPACE") return types::GameDataType::NAMESPACE;
-            if (name == "NaN") return types::GameDataType::NaN;
-            if (name == "CODE") return types::GameDataType::CODE;
-            if (name == "OBJECT") return types::GameDataType::OBJECT;
-            if (name == "SIDE") return types::GameDataType::SIDE;
-            if (name == "GROUP") return types::GameDataType::GROUP;
-            if (name == "TEXT") return types::GameDataType::TEXT;
-            if (name == "SCRIPT") return types::GameDataType::SCRIPT;
-            if (name == "TARGET") return types::GameDataType::TARGET;
-            if (name == "CONFIG") return types::GameDataType::CONFIG;
-            if (name == "DISPLAY") return types::GameDataType::DISPLAY;
-            if (name == "CONTROL") return types::GameDataType::CONTROL;
-            if (name == "NetObject") return types::GameDataType::NetObject;
-            if (name == "SUBGROUP") return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER") return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK") return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD") return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION") return types::GameDataType::LOCATION;
-            auto found = additionalTypes.find(static_cast<std::string>(name));
-            if (found != additionalTypes.end())
-                return found->second;
-            return types::GameDataType::end;
+    #pragma region Serialization
+        intercept::types::serialization_return param_archive::serialize(r_string name, serialize_class & value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            param_archive sub_archive;
+            sub_archive._version = _version;
+            sub_archive._p3 = _p3;
+            sub_archive._parameters = _parameters;
+            sub_archive._isExporting = _isExporting;
+            delete sub_archive._p1;
+            if (_isExporting) {
+                sub_archive._p1 = _p1->add_entry_class(name, false);
+            } else {
+                sub_archive._p1 = _p1->get_entry_by_name(name);
+            }
+
+            if (!sub_archive._p1) {
+                return serialization_return::no_entry;
+            }
+
+            auto ret = value.serialize(sub_archive);
+            if (_isExporting) {
+                sub_archive._p1->compress();
+                delete sub_archive._p1;
+                sub_archive._p1 = nullptr;
+            }
+            return ret;
         }
 
-        std::string __internal::to_string(GameDataType type) {
-            switch (type) {
-                case GameDataType::SCALAR: return "SCALAR";
-                case GameDataType::BOOL: return "BOOL";
-                case GameDataType::ARRAY: return "ARRAY";
-                case GameDataType::STRING: return "STRING";
-                case GameDataType::NOTHING: return "NOTHING";
-                case GameDataType::ANY: return "ANY";
-                case GameDataType::NAMESPACE: return "NAMESPACE";
-                case GameDataType::NaN: return "NaN";
-                case GameDataType::CODE: return "CODE";
-                case GameDataType::OBJECT: return "OBJECT";
-                case GameDataType::SIDE: return "SIDE";
-                case GameDataType::GROUP: return "GROUP";
-                case GameDataType::TEXT: return "TEXT";
-                case GameDataType::SCRIPT: return "SCRIPT";
-                case GameDataType::TARGET: return "TARGET";
-                case GameDataType::CONFIG: return "CONFIG";
-                case GameDataType::DISPLAY: return "DISPLAY";
-                case GameDataType::CONTROL: return "CONTROL";
-                case GameDataType::SUBGROUP:  return "SUBGROUP";
-                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
-                case GameDataType::TASK: return "TASK";
-                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
-                case GameDataType::LOCATION: return "LOCATION";
-                default:;
+        serialization_return param_archive::serialize(r_string name, r_string& value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            if (_isExporting) {
+                _p1->add_entry(name, value);
+            } else {
+                auto entry = _p1->get_entry_by_name(name);
+                value = static_cast<r_string>(*entry);   //#TODO check if entry actually contains the type that we want
+                return serialization_return::no_error;
             }
-            for (auto& it : additionalTypes) {
-                if (it.second == type)
-                    return it.first;
-            }
-            return "";
+            return serialization_return::no_error;
         }
 
-        void __internal::add_game_datatype(r_string name, GameDataType type) {
-            additionalTypes[static_cast<std::string>(name)] = type;
-        };
+        serialization_return param_archive::serialize(r_string name, bool& value, int min_version) {
+            if (_version < min_version) return serialization_return::version_too_new;
+            if (_isExporting) {
+                _p1->add_entry(name, static_cast<int>(value));//I don't know why.. BI does this..
+            } else {
+                auto entry = _p1->get_entry_by_name(name);
+                value = static_cast<int>(*entry); //#TODO check if entry actually contains the type that we want
+                return serialization_return::no_error;
+            }
+            return serialization_return::no_error;
+        }
 
+        serialization_return param_archive::serialize(r_string name, bool& value, int min_version, bool default_value) {
+            if (_version < min_version) {
+                if (!_isExporting) value = default_value;
+                return serialization_return::no_error;
+            }
+            if (_isExporting && value == default_value) return serialization_return::no_error;
+            serialization_return err = serialize(name, value, min_version);
+            // if the value is not found, load the default one
+            if (err == serialization_return::no_entry) {
+                value = default_value;
+                return serialization_return::no_error;
+            }
+            return err;
+        }
+
+        serialization_return game_value::serialize(param_archive& ar) {
+            if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
+            ar.serialize(r_string("data"sv), data, 1);
+            //#TODO check if type == game_data_nothing. Can probably just use strcmp
+            //if (data && data->type() == game_data_nothing) data = nullptr;
+            return serialization_return::no_error;
+        }
+    #pragma endregion
     }
 }
 

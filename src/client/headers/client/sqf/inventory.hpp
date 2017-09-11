@@ -447,8 +447,8 @@ namespace intercept {
                     uniform = ret_game_value_[3];
                     vest = ret_game_value_[4];
                     backpack = ret_game_value_[5];
-                    headgear = ret_game_value_[6];
-                    facewear = ret_game_value_[7];
+                    headgear = static_cast<std::string>(ret_game_value_[6]);
+                    facewear = static_cast<std::string>(ret_game_value_[7]);
                     binocular = ret_game_value_[8];
                     auto_array<game_value> _tmp = ret_game_value_[9].to_array();
                     assigned_items = std::vector<std::string>(_tmp.begin(), _tmp.end());

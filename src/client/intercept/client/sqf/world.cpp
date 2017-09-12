@@ -485,8 +485,9 @@ namespace intercept {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
+            best_places.reserve(ret.size());
             for (uint32_t i = 0; i < ret.size(); ++i)
-                best_places.push_back(rv_best_place({ret[i]}));
+                best_places.push_back(rv_best_place(ret[i]));
 
             return best_places;
         }
@@ -501,8 +502,9 @@ namespace intercept {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
 
             std::vector<rv_best_place> best_places;
+            best_places.reserve(ret.size());
             for (uint32_t i = 0; i < ret.size(); ++i)
-                best_places.push_back(rv_best_place({ret[i]}));
+                best_places.push_back(rv_best_place(ret[i]));
 
             return best_places;
         }

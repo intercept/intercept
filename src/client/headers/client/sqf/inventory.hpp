@@ -21,7 +21,7 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
 
-        struct rv_magazine_ammo {
+        struct rv_magazine_ammo_full {
             std::string name;
             int count;
             bool loaded;
@@ -34,6 +34,19 @@ namespace intercept {
                                    loaded,
                                    static_cast<float>(type),
                                    location});
+            }
+        };
+
+        struct rv_magazine_ammo {
+            std::string name;
+            int count;
+            
+            operator game_value() const {
+                return game_value({ name, static_cast<float>(count) });
+            }
+
+            operator rv_magazine_ammo_full() const {
+                return rv_magazine_ammo_full({ name, count, false, -1, "" });
             }
         };
 
@@ -93,7 +106,7 @@ namespace intercept {
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_);
         std::vector<rv_magazine_ammo> magazines_ammo(const object &obj_);
         std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object &obj_);
-        std::vector<rv_magazine_ammo> magazines_ammo_full(const object &obj_);
+        std::vector<rv_magazine_ammo_full> magazines_ammo_full(const object &obj_);
         sqf_return_string_list magazines_detail(const object &obj_);
         sqf_return_string_list magazines_detail_backpack(const object &obj_);
         sqf_return_string_list magazines_detail_uniform(const object &obj_);
@@ -210,10 +223,10 @@ namespace intercept {
             }
         };
 
-        std::vector<rv_cargo> get_backpack_cargo(const object &container_);
-        std::vector<rv_cargo> get_item_cargo(const object &container_);
-        std::vector<rv_cargo> get_magazine_cargo(const object &container_);
-        std::vector<rv_cargo> get_weapon_cargo(const object &container_);
+        rv_cargo get_backpack_cargo(const object &container_);
+        rv_cargo get_item_cargo(const object &container_);
+        rv_cargo get_magazine_cargo(const object &container_);
+        rv_cargo get_weapon_cargo(const object &container_);
         sqf_return_string_list item_cargo(const object &container_);
         sqf_return_string_list weapon_cargo(const object &container_);
         sqf_return_string_list weapons(const object &unit_);

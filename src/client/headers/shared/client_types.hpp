@@ -334,6 +334,17 @@ namespace intercept {
         struct rv_best_place {
             vector2 pos;
             float result;
+
+            rv_best_place(const game_value& gv) {
+                if (gv.size() == 2) {
+                    pos = gv[0];
+                    result = gv[1];
+                }
+            }
+
+            operator game_value() const {
+                return game_value({ pos, result });
+            }
         };
         struct rv_uav_control {
             object unit;

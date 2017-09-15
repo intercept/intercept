@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -17,9 +17,7 @@ https://github.com/NouberNou/intercept
 #include <condition_variable>
 #include <queue>
 
-
 using namespace intercept::types;
-
 
 namespace intercept {
     /*!
@@ -27,8 +25,7 @@ namespace intercept {
     in client plugins.
     */
     class eventhandlers
-        : public singleton<eventhandlers>
-    {
+        : public singleton<eventhandlers> {
     public:
         eventhandlers();
         ~eventhandlers();
@@ -42,7 +39,6 @@ namespace intercept {
         static void post_init(game_value &args_);
         static void mission_stopped(game_value &args_);
 
-        
 #define EH_CLASS_DEF(x) static void x(game_value &args_)
 
         EH_CLASS_DEF(anim_changed);
@@ -95,4 +91,4 @@ namespace intercept {
         registered_sqf_function _ehFunc;
     };
 
-}
+}  // namespace intercept

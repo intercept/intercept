@@ -75,6 +75,13 @@ namespace intercept {
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
+        script spawn(game_value args, const code& code_) {
+            return host::functions.invoke_raw_binary(
+                __sqf::binary__spawn__any__code__ret__script,
+                args,
+                code_);
+        }
+
         bool is_nil_code(const code &code_) {
             return host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,
@@ -862,6 +869,32 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
         }
+
+        bool is_equal_to(game_value left_, game_value right_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, left_, right_);
+        }
+
+        bool is_equal_type(game_value left_, game_value right_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltype__any__any__ret__bool, left_, right_);
+        }
+
+        bool is_equal_type_all(game_value value_array_, game_value type_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeall__array__any__ret__bool, value_array_, type_);
+        }
+
+        bool is_equal_type_any(game_value value_, game_value types_array_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeany__any__array__ret__bool, value_, types_array_);
+        }
+
+        bool is_equal_type_array(game_value left_array_, game_value right_array_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypearray__array__array__ret__bool, left_array_, right_array_);
+        }
+
+        bool is_equal_type_params(game_value value_, game_value template_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeparams__any__array__ret__bool, value_, template_);
+        }
+
+
 
     }  // namespace sqf
 }  // namespace intercept

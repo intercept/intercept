@@ -150,4 +150,42 @@ namespace intercept::client {
     }
 
 #pragma endregion
+
+#pragma region MP Eventhandlers
+    std::unordered_map<EHIdentifier, std::pair<eventhandlers_mp, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMPEH;
+    EHIdentifier addScriptEH(types::object unit, eventhandlers_mp type) {
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+
+        r_string typeStr;
+        //#TODO eachFrame is just redirector to InvokePeriod.
+        switch (type) {
+        #define EHMP_CASE(name, retVal, args) \
+    case eventhandlers_mp::name: typeStr = #name##sv; break;
+            EHDEF_MP(EHMP_CASE)
+            default:;
+        }
+
+        auto uid = dist(rng);
+        //#TODO use hash of moduleName as identifier.. That's faster..
+        std::string command = std::string("[\"")
+            + intercept::client::host::module_name.data() + "\","
+            + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
+            + std::to_string(uid) + ","
+            + "_thisEventHandler] InterceptClientEvent _this";
+        float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string>(typeStr), command);
+
+        return { uid, ehid };
+    }
+
+    void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle) {
+        r_string typeStr;
+        switch (type) {
+            EHDEF_MP(EHMP_CASE)
+            default:;
+        }
+        sqf::remove_mp_event_handler(unit, static_cast<sqf_string>(typeStr), handle.second);
+    }
+
+#pragma endregion
 }  // namespace intercept::client

@@ -784,4 +784,75 @@ namespace intercept::client {
     }
 #pragma endregion
 
+#pragma region MP Eventhandlers
+
+#define EH_Func_Args_MP_MPHit types::object unit, types::object caused_by, float damage, types::object instigator
+#define EH_Func_Args_MP_MPKilled types::object unit, types::object killer, types::object instigator, bool use_effects
+#define EH_Func_Args_MP_MPRespawn types::object unit, types::object corpse
+
+    //Name,Function return value, Function Arguments
+#define EHDEF_MP(XX)                                                   \
+    XX(MPHit, void, EH_Func_Args_MP_MPHit)                               \
+    XX(MPKilled, void, EH_Func_Args_MP_MPKilled)         \
+    XX(MPRespawn, types::vector3, EH_Func_Args_MP_MPRespawn)
+
+#define COMPILETIME_CHECK_ENUM_MP(name, retVal, funcArg) static_assert(eventhandlers_mp::name >= eventhandlers_mp::MPHit);
+
+    /** @enum eventhandlers_object
+    @brief #TODO
+    */
+    //#TODO doc
+    enum class eventhandlers_mp {
+        MPHit,
+        MPKilled,
+        MPRespawn
+    };
+
+    EHDEF_MP(COMPILETIME_CHECK_ENUM_MP)
+
+        inline intercept::types::game_value callEHHandler(eventhandlers_mp ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
+        switch (ehType) {
+            case eventhandlers_mp::MPHit: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPHit)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+            case eventhandlers_mp::MPKilled: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPKilled)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+            case eventhandlers_mp::MPRespawn: {
+                auto newPos = (*reinterpret_cast<std::function<types::vector3(EH_Func_Args_MP_MPRespawn)>*>(func.get()))(args[0], args[1]);
+                return newPos;
+            } break;
+            default: assert(false);
+        }
+        return {};
+    }
+
+    EHIdentifier addScriptEH(types::object unit, eventhandlers_mp type);
+    void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle);
+
+    extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_mp, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMPEH;
+
+    template <eventhandlers_mp Type>
+    struct __addMPEventHandler_Impl;
+
+#define EH_Add_MP_definition(name, retVal, fncArg)                                                                                                          \
+    template <>                                                                                                                                               \
+    struct __addMPEventHandler_Impl<eventhandlers_mp::name> {                                                                                             \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                        \
+        [[nodiscard]] static EHIdentifier add(types::object unit, std::function<retVal(fncArg)> function) {                                                  \
+            auto ident = addScriptEH(unit, eventhandlers_mp::name);                                                                                         \
+            funcMapMPEH[ident] = {eventhandlers_mp::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
+            return ident;                                                                                                                                     \
+        }                                                                                                                                                     \
+    };
+
+    EHDEF_MP(EH_Add_MP_definition)
+
+        template <eventhandlers_mp Type, typename Func = typename __addMPEventHandler_Impl<Type>::fncType>
+    [[nodiscard]] EHIdentifierHandle addMPEventHandler(types::object unit, Func fnc) {
+        return { __addMPEventHandler_Impl<Type>::add(unit, fnc), [unit,type = Type](EHIdentifier& id) { funcMapMPEH.erase(id); delScriptEH(unit,type,id); } };
+    }
+#pragma endregion
+
+
 }  // namespace intercept::client                                                                                    

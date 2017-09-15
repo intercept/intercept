@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../shared.hpp"
 #include "shared/functions.hpp"
 
@@ -86,6 +86,7 @@ namespace intercept {
             invoker_lock & operator=(invoker_lock &&) = delete;
             ~invoker_lock();
             void lock();
+            void unlock();
         protected:
             bool _locked;
         };

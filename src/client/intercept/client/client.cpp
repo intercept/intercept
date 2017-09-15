@@ -148,5 +148,12 @@ namespace intercept {
             }
         }
 
+        inline void invoker_lock::unlock() {
+            if (_locked) {
+                host::functions.invoker_unlock();
+                _locked = false;
+            }
+        }
+
     }
 }

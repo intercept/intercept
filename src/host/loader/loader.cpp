@@ -79,7 +79,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook unary function "sv << function_name_;
+        LOG(WARNING) << "Attempting to hook unary function "sv << function_name_;
         auto op = _unary_operators.find(function_name_);
         if (op != _unary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -91,7 +91,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, binary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook binary function "sv << function_name_;
+        LOG(WARNING) << "Attempting to hook binary function "sv << function_name_;
         auto op = _binary_operators.find(function_name_);
         if (op != _binary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -103,7 +103,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, nular_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to hook nular function "sv << function_name_;
+        LOG(WARNING) << "Attempting to hook nular function "sv << function_name_;
         auto op = _nular_operators.find(function_name_);
         if (op != _nular_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -115,7 +115,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook unary function "sv << function_name_;
+        LOG(WARNING) << "Attempting to unhook unary function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _unary_operators.find(function_name_);
@@ -128,7 +128,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, binary_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook binary function "sv << function_name_;
+        //LOG(DEBUG) << "Attempting to unhook binary function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _binary_operators.find(function_name_);
@@ -141,7 +141,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, nular_function & trampoline_) {
-        LOG(DEBUG) << "Attempting to unhook nular function "sv << function_name_;
+        //LOG(DEBUG) << "Attempting to unhook nular function "sv << function_name_;
         if (&trampoline_ == nullptr)
             return false;
         auto op = _nular_operators.find(function_name_);

@@ -179,7 +179,7 @@ namespace intercept {
     }
 
     bool invoker::rv_event(const std::string& event_name_, game_value& params_) {
-        LOG(DEBUG) << "EH "sv << event_name_ << " START"sv;
+        //LOG(DEBUG) << "EH "sv << event_name_ << " START"sv;
         auto handler = _eventhandlers.find(event_name_);
         if (handler != _eventhandlers.end()) {
             bool all = false;
@@ -191,7 +191,7 @@ namespace intercept {
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
             handler->second(params_);
-            LOG(DEBUG) << "EH "sv << event_name_ << " END"sv;
+            //LOG(DEBUG) << "EH "sv << event_name_ << " END"sv;
             return true;
         }
         return false;
@@ -202,7 +202,7 @@ namespace intercept {
     }
 
     bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value args) {
-        LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " START"sv;
+        //LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " START"sv;
 
         auto signal_module = extensions::get().modules().find(extension_name);
         if (signal_module == extensions::get().modules().end()) {
@@ -225,7 +225,7 @@ namespace intercept {
         }
         _invoker_unlock signal_lock(this);
         signal_func(args);
-        LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " END"sv;
+        //LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " END"sv;
         return true;
     }
 
@@ -471,12 +471,12 @@ namespace intercept {
         _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
         _invoke_mutex.lock();
 
-        LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
+        //LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
     }
 
     void invoker::unlock() {
         _invoke_mutex.unlock();
-        LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
+        //LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
         _thread_count = _thread_count - 1;
     }
 
@@ -493,10 +493,10 @@ namespace intercept {
                 std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
                 invoker_accessible = false;
                 invoker_accessible_all = false;
-                LOG(DEBUG) << "LOCKED ALL"sv;
+                //LOG(DEBUG) << "LOCKED ALL"sv;
             } else {
                 invoker_accessible = false;
-                LOG(DEBUG) << "LOCKED"sv;
+                //LOG(DEBUG) << "LOCKED"sv;
             }
 
         }
@@ -505,7 +505,7 @@ namespace intercept {
     void invoker::_invoker_unlock::unlock() {
         if (!_unlocked) {
             if (_all) {
-                LOG(DEBUG) << "UNLOCKING ALL"sv;
+                //LOG(DEBUG) << "UNLOCKING ALL"sv;
                 std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
                     std::lock_guard<std::mutex> lock(_instance->_state_mutex);
@@ -515,7 +515,7 @@ namespace intercept {
                 }
                 _instance->_invoke_condition.notify_all();
             } else {
-                LOG(DEBUG) << "UNLOCKING"sv;
+                //LOG(DEBUG) << "UNLOCKING"sv;
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 invoker_accessible = true;
             }

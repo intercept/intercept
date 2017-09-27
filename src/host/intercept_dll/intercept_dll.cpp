@@ -100,7 +100,40 @@ void Init() {
     intercept::client::host::functions = intercept::extensions::get().functions;
     el::Configurations conf;
 
-    conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
+    auto arg_line = intercept::search::plugin_searcher::get_command_line();
+    std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
+    
+    
+    if (arg_line.find("-interceptdebuglog"sv) != std::string::npos) {
+        conf.set(el::Level::Debug, el::ConfigurationType::Enabled, "true");
+    }
+    else {
+        conf.set(el::Level::Debug, el::ConfigurationType::Enabled, "false");
+    }
+
+    auto logfile_it_ = arg_line.find("-interceptlogfile"sv);
+    if (logfile_it_ != std::string::npos) {
+        auto path_start_ = logfile_it_ + 17; // skip -interceptlogfile
+        size_t path_end_;
+        
+        //trim left
+        path_start_ = arg_line.find_first_not_of(" \t\"", path_start_);
+        
+        //trim right
+        path_end_ = arg_line.find("\"", path_start_); // find ending quotationmark
+        
+        if (path_start_ == std::string::npos) {
+            conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
+        }
+        else {
+            std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
+            conf.setGlobally(el::ConfigurationType::Filename, _path);
+        }
+    }
+    else {
+        conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
+    }
+
     conf.setGlobally(el::ConfigurationType::MaxLogFileSize, "10240");
 #ifdef _DEBUG
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%datetime] - %level - {%loc}t:%thread- %msg");

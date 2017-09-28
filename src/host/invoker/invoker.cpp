@@ -471,12 +471,16 @@ namespace intercept {
         _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
         _invoke_mutex.lock();
 
+    #ifdef _DEBUG
         LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
+    #endif
     }
 
     void invoker::unlock() {
         _invoke_mutex.unlock();
+    #ifdef _DEBUG
         LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
+    #endif
         _thread_count = _thread_count - 1;
     }
 
@@ -493,10 +497,14 @@ namespace intercept {
                 std::lock_guard<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex);
                 invoker_accessible = false;
                 invoker_accessible_all = false;
+            #ifdef _DEBUG
                 LOG(DEBUG) << "LOCKED ALL"sv;
+            #endif
             } else {
                 invoker_accessible = false;
+            #ifdef _DEBUG
                 LOG(DEBUG) << "LOCKED"sv;
+            #endif
             }
 
         }
@@ -505,7 +513,9 @@ namespace intercept {
     void invoker::_invoker_unlock::unlock() {
         if (!_unlocked) {
             if (_all) {
+            #ifdef _DEBUG
                 LOG(DEBUG) << "UNLOCKING ALL"sv;
+            #endif
                 std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
                     std::lock_guard<std::mutex> lock(_instance->_state_mutex);
@@ -515,7 +525,9 @@ namespace intercept {
                 }
                 _instance->_invoke_condition.notify_all();
             } else {
+            #ifdef _DEBUG
                 LOG(DEBUG) << "UNLOCKING"sv;
+            #endif
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 invoker_accessible = true;
             }

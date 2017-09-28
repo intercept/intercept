@@ -325,11 +325,11 @@ namespace intercept {
             std::vector<float> damages;
 
             rv_hit_points_damage(const game_value &_gv) {
-                auto _arr = _gv.to_array();
+                auto &_arr = _gv.to_array();
                 if (_arr.count() == 3) {
-                    auto _hp = _arr[0].to_array();
-                    auto _hs = _arr[1].to_array();
-                    auto _dmgs = _arr[2].to_array();
+                    auto &_hp = _arr[0].to_array();
+                    auto &_hs = _arr[1].to_array();
+                    auto &_dmgs = _arr[2].to_array();
 
                     //iterator conversion didnt work
                     hit_points.reserve(_hp.count());

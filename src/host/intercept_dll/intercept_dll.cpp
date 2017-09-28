@@ -106,8 +106,7 @@ void Init() {
     
     if (arg_line.find("-interceptdebuglog"sv) != std::string::npos) {
         conf.set(el::Level::Debug, el::ConfigurationType::Enabled, "true");
-    }
-    else {
+    } else {
         conf.set(el::Level::Debug, el::ConfigurationType::Enabled, "false");
     }
 
@@ -124,13 +123,11 @@ void Init() {
         
         if (path_start_ == std::string::npos) {
             conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
-        }
-        else {
+        } else {
             std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
             conf.setGlobally(el::ConfigurationType::Filename, _path);
         }
-    }
-    else {
+    } else {
         conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
     }
 

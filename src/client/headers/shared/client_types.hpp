@@ -106,6 +106,17 @@ namespace intercept {
                 alpha(alpha_) {}
         };
 
+
+#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
+        using sqf_string = r_string;
+        using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<r_string>;
+        using sqf_string_list_const_ref = const std::vector<r_string>&;
+
+
+        using sqf_string_const_ref = const r_string&;
+        using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
+#else
         using sqf_string = std::string;
         using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
         using sqf_return_string_list = std::vector<std::string>;
@@ -138,6 +149,9 @@ namespace intercept {
 
         //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
+#endif
+
+
 
 
 
@@ -310,10 +324,6 @@ namespace intercept {
 
 
 
-
-
-
-
         struct rv_vehicle_role {
             std::string role;
             std::vector<int> turret_path;
@@ -324,10 +334,6 @@ namespace intercept {
             sqf_return_string_list hit_selections;
             std::vector<float> damages;
         };
-
-
-
-
 
 
 
@@ -419,6 +425,23 @@ namespace intercept {
             std::string cursor_object_named_sel;
             float distance;
         };
+
+        class rv_turret_path {
+            game_value pathRaw;
+        public:
+            explicit rv_turret_path (game_value path) : pathRaw(std::move(path)) {}
+
+            explicit operator std::vector<float>() const {
+               if (pathRaw.type_enum() != GameDataType::ARRAY) return std::vector<float>();
+               std::vector<float> ret(pathRaw.to_array().begin(), pathRaw.to_array().end());
+               return ret;
+
+            }
+            operator game_value() const {return pathRaw;}
+
+        };
+
+
 
     }
 }

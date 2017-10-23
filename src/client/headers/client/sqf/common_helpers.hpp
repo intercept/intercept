@@ -63,6 +63,16 @@ namespace intercept {
 
             object __object_unary_object(unary_function fnc_, const object &obj_);
 
+
+            template <class T>
+            std::vector<T> __convert_to_vector(game_value input_) {//#TODO replaces the other convert functions by this template one
+                std::vector<TAPE_DRIVE_PROBLEM_TYPE> output;
+                output.reserve(input_.size());
+                for (auto &gv : input_.to_array()) {
+                    output.push_back(T(gv));
+                }
+                return output;
+            }
             std::vector<game_value> __convert_to_game_value_vector(game_value input_);
             std::vector<vector3> __convert_to_vector3_vector(game_value input_);
             std::vector<vector2> __convert_to_vector2_vector(game_value input_);

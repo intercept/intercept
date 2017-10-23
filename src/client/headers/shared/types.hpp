@@ -44,6 +44,35 @@ namespace intercept {
         using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
     #endif
 
+        enum class GameDataType {
+            SCALAR,
+            BOOL,
+            ARRAY,
+            STRING,
+            NOTHING,
+            ANY,
+            NAMESPACE,
+            NaN,
+            CODE,
+            OBJECT,
+            SIDE,
+            GROUP,
+            TEXT,
+            SCRIPT,
+            TARGET,
+            CONFIG,
+            DISPLAY,
+            CONTROL,
+            NetObject,
+            SUBGROUP,
+            TEAM_MEMBER,
+            TASK,
+            DIARY_RECORD,
+            LOCATION,
+            end
+        };
+
+
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         namespace __internal {
@@ -1501,7 +1530,9 @@ namespace intercept {
             */
             game_value operator [](size_t i_) const;
 
-            uintptr_t type() const;//#TODO return GameDataType
+            uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
+            /// doesn't handle all types. Will return GameDataType::ANY if not handled
+            types::GameDataType type_enum() const;
 
             [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
@@ -1884,33 +1915,6 @@ namespace intercept {
             } *object;
         };
         //#TODO add game_data_nothing
-        enum class GameDataType {
-            SCALAR,
-            BOOL,
-            ARRAY,
-            STRING,
-            NOTHING,
-            ANY,
-            NAMESPACE,
-            NaN,
-            CODE,
-            OBJECT,
-            SIDE,
-            GROUP,
-            TEXT,
-            SCRIPT,
-            TARGET,
-            CONFIG,
-            DISPLAY,
-            CONTROL,
-            NetObject,
-            SUBGROUP,
-            TEAM_MEMBER,
-            TASK,
-            DIARY_RECORD,
-            LOCATION,
-            end
-        };
 
         namespace __internal {
             GameDataType game_datatype_from_string(const r_string& name);

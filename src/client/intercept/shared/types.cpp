@@ -727,6 +727,42 @@ namespace intercept {
             return 0x0;
         }
 
+        types::GameDataType game_value::type_enum() const {//#TODO make a static sorted table in the same order as enum. turns this search into a binary search
+            if (!data) return GameDataType::NOTHING;
+            auto _type = data->get_vtable();
+            if (_type == game_data_object::type_def)
+                return GameDataType::OBJECT;
+            if (_type == game_data_number::type_def)
+                return GameDataType::SCALAR;
+            if (_type == game_data_string::type_def)
+                return GameDataType::STRING;
+            if (_type == game_data_array::type_def)
+                return GameDataType::ARRAY;
+            if (_type == game_data_bool::type_def)
+                return GameDataType::BOOL;
+            if (_type == game_data_group::type_def)
+                return GameDataType::GROUP;
+            if (_type == game_data_config::type_def)
+                return GameDataType::CONFIG;
+            if (_type == game_data_control::type_def)
+                return GameDataType::CONTROL;
+            if (_type == game_data_display::type_def)
+                return GameDataType::DISPLAY;
+            if (_type == game_data_location::type_def)
+                return GameDataType::LOCATION;
+            if (_type == game_data_script::type_def)
+                return GameDataType::SCRIPT;
+            if (_type == game_data_side::type_def)
+                return GameDataType::SIDE;
+            if (_type == game_data_rv_text::type_def)
+                return GameDataType::TEXT;
+            if (_type == game_data_rv_namespace::type_def)
+                return GameDataType::NAMESPACE;
+            if (_type == game_data_code::type_def)
+                return GameDataType::CODE;
+            return GameDataType::ANY;
+        }
+
         size_t game_value::length() const {
             return size();
         }

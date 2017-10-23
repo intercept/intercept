@@ -82,21 +82,17 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
         }
 
-        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_, int ammocount_) {
-            auto_array<game_value> path(turretpath_.begin(), turretpath_.end());
-
+        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_, int ammocount_) {
             game_value params({classname_,
-                               std::move(path),
+                               std::move(turret_path_),
                                static_cast<float>(ammocount_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazineturret__object__array__ret__nothing, obj_, params);
         }
 
-        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_) {
-            auto_array<game_value> path(turretpath_.begin(), turretpath_.end());
-
+        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_) {
             game_value params({classname_,
-                               std::move(path)});
+                               std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponturret__object__array__ret__nothing, obj_, params);
         }
@@ -152,8 +148,7 @@ namespace intercept {
 
             std::vector<rv_turret_magazine> output;
             for (uint32_t i = 0; i < input.size(); ++i) {
-                std::vector<int> turret_path = __helpers::__convert_to_integers_vector(input[i][1]);
-                output.push_back(rv_turret_magazine({input[i][0], turret_path, input[i][2], input[i][3], input[i][4]}));
+                output.push_back(rv_turret_magazine({input[i][0], rv_turret_path(input[i][1]), input[i][2], input[i][3], input[i][4]}));
             }
 
             return output;
@@ -687,13 +682,8 @@ namespace intercept {
         sqf_return_string current_weapon_mode(const object &gunner_) {
             return __helpers::__string_unary_object(__sqf::unary__currentweaponmode__object__ret__string, gunner_);
         }
-        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_) {
-            auto_array<game_value> turret_path;
-            for (int item : turret_path_) {
-                turret_path.push_back(static_cast<float>(item));
-            }
-
-            game_value params({std::move(turret_path),
+        void load_magazine(const object &obj_, rv_turret_path turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_) {
+            game_value params({std::move(turret_path_),
                                weapon_name_,
                                magazine_name_});
 
@@ -730,11 +720,11 @@ namespace intercept {
         void remove_magazine(const object &target_, sqf_string_const_ref magazine_) {
             host::functions.invoke_raw_binary(__sqf::binary__removemagazine__object__string_array__ret__nothing, target_, magazine_);
         }
-        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, target_, {magazine_, game_value(auto_array<game_value>(turretPath_.begin(), turretPath_.end()))});
+        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, target_, {magazine_, turret_path_ });
         }
-        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, target_, {magazine_, game_value(auto_array<game_value>(turretPath_.begin(), turretPath_.end()))});
+        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, target_, {magazine_, turret_path_ });
         }
         void remove_weapon_attachment_cargo(const object &, const std::vector<game_value> &) {
             //binary__removeweaponattachmentcargo__object__array__ret__nothing
@@ -742,8 +732,8 @@ namespace intercept {
         void remove_weapon_cargo(const object &, const std::vector<game_value> &) {
             //binary__removeweaponcargo__object__array__ret__nothing
         }
-        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, const std::vector<int> &turretPath_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, target_, {weapon_name_, game_value(auto_array<game_value>(turretPath_.begin(), turretPath_.end()))});
+        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, rv_turret_path turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, target_, {weapon_name_, turret_path_ });
         }
         void set_ammo(const object &target_, sqf_string_const_ref weapon_, int count) {
             host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, target_, {weapon_, count});
@@ -777,20 +767,16 @@ namespace intercept {
 
             return rv_weapon_accessories({res[0], res[1], res[2], res[3]});
         }
-        sqf_return_string_list magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path({turret_path_.begin(), turret_path_.end()});
-
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__magazinesturret__object__array__ret__array, vehicle_, std::move(turret_path)));
+        sqf_return_string_list magazines_turret(const object &vehicle_, rv_turret_path turret_path_) {
+            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__magazinesturret__object__array__ret__array, vehicle_, std::move(turret_path_)));
         }
 
-        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path({turret_path_.begin(), turret_path_.end()});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__magazineturretammo__object__array__ret__scalar, magazine_class_, std::move(turret_path));
+        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__magazineturretammo__object__array__ret__scalar, magazine_class_, std::move(turret_path_));
         }
 
-        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, const std::vector<int> &turret_path_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmagazineturretammo__object__array__ret__nothing, vehicle_, {magazine_class_, ammo_count_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end()))});
+        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, rv_turret_path turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmagazineturretammo__object__array__ret__nothing, vehicle_, {magazine_class_, ammo_count_, std::move(turret_path_)});
         }
         void set_vehicle_ammo(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvehicleammo__object__scalar__ret__nothing, value0_, value1_);
@@ -838,22 +824,16 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__addweaponpool__array__ret__nothing, params);
         }
-        sqf_return_string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
-            return host::functions.invoke_raw_binary(__sqf::binary__currentmagazinedetailturret__object__array__ret__string, vehicle_, std::move(turret_path));
+        sqf_return_string current_magazine_detail_turret(const object &vehicle_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__currentmagazinedetailturret__object__array__ret__string, vehicle_, std::move(turret_path_));
         }
 
-        sqf_return_string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
-            return host::functions.invoke_raw_binary(__sqf::binary__currentmagazineturret__object__array__ret__string, vehicle_, std::move(turret_path));
+        sqf_return_string current_magazine_turret(const object &vehicle_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__currentmagazineturret__object__array__ret__string, vehicle_, std::move(turret_path_));
         }
 
-        sqf_return_string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
-            return host::functions.invoke_raw_binary(__sqf::binary__currentweaponturret__object__array__ret__string, vehicle_, std::move(turret_path));
+        sqf_return_string current_weapon_turret(const object &vehicle_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__currentweaponturret__object__array__ret__string, vehicle_, std::move(turret_path_));
         }
 
         sqf_return_string_list get_artillery_ammo(const std::vector<object> &units_) {
@@ -901,10 +881,9 @@ namespace intercept {
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object__ret__array, unit_));
         }
 
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, std::optional<sqf_return_string> weapon_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
+        rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_) {
             auto_array<game_value> params{vehicle_,
-                                          std::move(turret_path)};
+                                          std::move(turret_path_)};
 
             if (weapon_)
                 params.push_back(weapon_.value());

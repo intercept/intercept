@@ -343,11 +343,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__moveingunner__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_) {
-            auto_array<game_value> path(turret_path_.begin(), turret_path_.end());
-
+        void move_in_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params({vehicle_,
-                               std::move(path)});
+                               std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
         }
@@ -365,8 +363,7 @@ namespace intercept {
             if (ret.size() == 1) {
                 return rv_vehicle_role({ret[0]});
             }
-            std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[1]);
-            return rv_vehicle_role({ret[0], turret_path});
+            return rv_vehicle_role({ret[0], rv_turret_path(ret[1])});
         }
 
         group get_group(const object &unit_) {
@@ -423,11 +420,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addplayerscores__object__array__ret__nothing, unit_, params_right);
         }
 
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
+        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params_right({vehicle_,
-                                     std::move(turret_path)});
+                                     std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasturret__object__array__ret__nothing, unit_, params_right);
         }

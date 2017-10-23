@@ -257,19 +257,15 @@ namespace intercept::client {
 #define EH_Func_Args_Object_FiredNear types::object unit, types::object vehicle, float distance, types::r_string weapon, types::r_string muzzle, types::r_string mode, types::r_string ammo, types::object gunner
 #define EH_Func_Args_Object_Fuel types::object vehicle, bool fuelState
 #define EH_Func_Args_Object_Gear types::object vehicle, bool gearState
-    //#TODO correct type for turretPath
     enum class get_in_position {
         driver,
         gunner,
         cargo
     };
-#define EH_Func_Args_Object_GetIn types::object vehicle, get_in_position position, types::object unit, types::auto_array<types::game_value> turretPath
-//#TODO correct type for turretPath
-#define EH_Func_Args_Object_GetInMan types::object vehicle, get_in_position position, types::object unit, types::auto_array<types::game_value> turretPath
-//#TODO correct type for turretPath
-#define EH_Func_Args_Object_GetOut types::object vehicle, get_in_position position, types::object unit, types::auto_array<types::game_value> turretPath
-//#TODO correct type for turretPath
-#define EH_Func_Args_Object_GetOutMan types::object vehicle, get_in_position position, types::object unit, types::auto_array<types::game_value> turretPath
+#define EH_Func_Args_Object_GetIn types::object vehicle, get_in_position position, types::object unit, types::rv_turret_path turret_path
+#define EH_Func_Args_Object_GetInMan types::object vehicle, get_in_position position, types::object unit, types::rv_turret_path turret_path
+#define EH_Func_Args_Object_GetOut types::object vehicle, get_in_position position, types::object unit, types::rv_turret_path turret_path
+#define EH_Func_Args_Object_GetOutMan types::object vehicle, get_in_position position, types::object unit, types::rv_turret_path turret_path
 #define EH_Func_Args_Object_HandleDamage types::object unit, types::r_string hitSelection, float dmage, types::object source, types::r_string projectile, float hitPartIndex, types::object instigator, types::r_string hitPoint
 #define EH_Func_Args_Object_HandleHeal types::object unit, types::object healer, bool healerCanHeal
 #define EH_Func_Args_Object_HandleRating types::object unit, float rating
@@ -316,10 +312,8 @@ namespace intercept::client {
 #define EH_Func_Args_Object_SoundPlayed types::object unit, sound_played_origin soundCode
 #define EH_Func_Args_Object_Take types::object unit, types::object container, types::r_string item
 #define EH_Func_Args_Object_TaskSetAsCurrent types::object unit, types::task task_
-//#TODO correct type for turretPath
-#define EH_Func_Args_Object_TurnIn types::object vehicle, types::object unit, types::auto_array<types::game_value> turretPath
-//#TODO correct type for turretPath
-#define EH_Func_Args_Object_TurnOut types::object vehicle, types::object unit, types::auto_array<types::game_value> turretPath
+#define EH_Func_Args_Object_TurnIn types::object vehicle, types::object unit, types::rv_turret_path turret_path
+#define EH_Func_Args_Object_TurnOut types::object vehicle, types::object unit, types::rv_turret_path turret_path
 #define EH_Func_Args_Object_WeaponAssembled types::object unit, types::object weapon
 #define EH_Func_Args_Object_WeaponDisassembled types::object unit, types::object primaryBag, types::object secondarybag
 #define EH_Func_Args_Object_WeaponDeployed types::object unit, bool isDeployed
@@ -516,7 +510,7 @@ namespace intercept::client {
                     p = get_in_position::gunner;
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetIn)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetIn)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
             } break;
             case eventhandlers_object::GetInMan: {
                 types::r_string pos = args[1];
@@ -527,7 +521,7 @@ namespace intercept::client {
                     p = get_in_position::gunner;
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetInMan)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetInMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
             } break;
             case eventhandlers_object::GetOut: {
                 types::r_string pos = args[1];
@@ -538,7 +532,7 @@ namespace intercept::client {
                     p = get_in_position::gunner;
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOut)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOut)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
             } break;
             case eventhandlers_object::GetOutMan: {
                 types::r_string pos = args[1];
@@ -549,7 +543,7 @@ namespace intercept::client {
                     p = get_in_position::gunner;
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOutMan)>*>(func.get()))(args[0], p, args[2], args[3].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOutMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
             } break;
             case eventhandlers_object::HandleDamage: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<float>(EH_Func_Args_Object_HandleDamage)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
@@ -640,10 +634,10 @@ namespace intercept::client {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TaskSetAsCurrent)>*>(func.get()))(args[0], args[1]);
             } break;
             case eventhandlers_object::TurnIn: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnIn)>*>(func.get()))(args[0], args[1], args[2].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnIn)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
             } break;
             case eventhandlers_object::TurnOut: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnOut)>*>(func.get()))(args[0], args[1], args[2].to_array());
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnOut)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
             } break;
             case eventhandlers_object::WeaponAssembled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponAssembled)>*>(func.get()))(args[0], args[1]);

@@ -769,7 +769,6 @@ namespace intercept {
                 if (copy_._n) {
                     insert(base::end(), copy_.begin(), copy_.end());
                 }
-                std::vector<int> x = { 1,2,3 };
                 return *this;
             }
 

@@ -153,28 +153,22 @@ namespace intercept {
     EH_START(fired_near)(static_cast<object &>(args_[0]), static_cast<object &>(args_[1]), static_cast<float>(args_[2]), static_cast<r_string>(args_[3]), static_cast<r_string>(args_[4]), static_cast<r_string>(args_[5]), static_cast<r_string>(args_[6]))EH_END;
     EH_START(fuel)(static_cast<object &>(args_[0]), static_cast<bool>(args_[1]))EH_END;
     EH_START(gear)(static_cast<object &>(args_[0]), static_cast<bool>(args_[1]))EH_END;
-    //EH_START(get_in)(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), std::vector<int> turret_path)EH_END;
+    //EH_START(get_in)(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path turret_path)EH_END;
 
-    void eventhandlers::get_in(game_value & args_)
-    {
-        auto_array<int> turret_path(args_[3].to_array().begin(), args_[3].to_array().end());
-
+    void eventhandlers::get_in(game_value & args_) {
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
-                module.second.eventhandlers.get_in(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), turret_path);
+                module.second.eventhandlers.get_in(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path(args_[3]));
             }
         }
     }
 
-    //EH_START(get_out)(static_cast<object &>(args_[0]), static_cast<rv_string>(args_[REPLACE_ME]), static_cast<object &>(args_[REPLACE_ME]), std::vector<int> turret_path)EH_END;
+    //EH_START(get_out)(static_cast<object &>(args_[0]), static_cast<rv_string>(args_[REPLACE_ME]), static_cast<object &>(args_[REPLACE_ME]), rv_turret_path turret_path)EH_END;
 
-    void eventhandlers::get_out(game_value & args_)
-    {
-        auto_array<int> turret_path(args_[3].to_array().begin(), args_[3].to_array().end());
-
+    void eventhandlers::get_out(game_value & args_) {
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {
-                module.second.eventhandlers.get_out(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), turret_path);
+                module.second.eventhandlers.get_out(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path(args_[3]));
             }
         }
     }

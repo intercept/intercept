@@ -66,7 +66,7 @@ namespace intercept {
 
             template <class T>
             std::vector<T> __convert_to_vector(game_value input_) {//#TODO replaces the other convert functions by this template one
-                std::vector<TAPE_DRIVE_PROBLEM_TYPE> output;
+                std::vector<T> output;
                 output.reserve(input_.size());
                 for (auto &gv : input_.to_array()) {
                     output.push_back(T(gv));

@@ -97,8 +97,8 @@ namespace intercept {
     XX(fired_near, object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_)    \
     XX(fuel, object &vehicle_, bool fuel_state_)                                                                                          \
     XX(gear, object &vehicle_, bool gear_state_)                                                                                          \
-    XX(get_in, object &vehicle_, r_string position_, object &unit_, auto_array<int> &turret_path)                                         \
-    XX(get_out, object &vehicle_, r_string position_, object &unit_, auto_array<int> &turret_path)                                        \
+    XX(get_in, object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path)                                           \
+    XX(get_out, object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path)                                          \
     XX(handle_damage, object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_) \
     XX(handle_heal, object &unit_, object &healder_, bool healer_can_heal_)                                                               \
     XX(handle_rating, object &unit_, float rating_)                                                                                       \

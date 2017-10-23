@@ -323,12 +323,6 @@ namespace intercept {
         };
 
 
-
-        struct rv_vehicle_role {
-            std::string role;
-            std::vector<int> turret_path;
-        };
-
         struct rv_hit_points_damage {
             sqf_return_string_list hit_points;
             sqf_return_string_list hit_selections;
@@ -441,7 +435,10 @@ namespace intercept {
 
         };
 
-
+        struct rv_vehicle_role {
+            std::string role;
+            rv_turret_path turret_path{ game_value() };
+        };
 
     }
 }

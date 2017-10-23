@@ -58,7 +58,7 @@ namespace intercept {
 
         struct rv_turret_magazine {
             std::string name;
-            std::vector<int> turret_path;
+            rv_turret_path turret_path;
             int count;
             int id;
             object creator;  // player
@@ -106,8 +106,8 @@ namespace intercept {
         void add_magazine_cargo(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_magazine_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_magazines(const object &obj_, sqf_string_const_ref classname_, int count_);
-        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_, int ammocount_);
-        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_);
+        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_, int ammocount_);
+        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_);
         void add_weapon_cargo(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_weapon_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_);
@@ -317,7 +317,7 @@ namespace intercept {
         sqf_return_string current_weapon(const object &veh_);
         sqf_return_string current_weapon_mode(const object &gunner_);
 
-        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
+        void load_magazine(const object &obj_, rv_turret_path turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
 
         struct rv_unit_description {
             std::string unit;
@@ -344,13 +344,13 @@ namespace intercept {
         sqf_return_string primary_weapon(const object &value_);
 
         void remove_magazine(const object &target_, sqf_string_const_ref magazine_);
-        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_);
-        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_);
+        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_);
+        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_);
         //Unimplemented in Engine - Arguments are nonsense
         void remove_weapon_attachment_cargo(const object &target_, const std::vector<game_value> &arg);
         //Unimplemented in Engine - Arguments are nonsense
         void remove_weapon_cargo(const object &target_, const std::vector<game_value> &arg);
-        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, const std::vector<int> &turretPath_);
+        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, rv_turret_path turret_path_);
         void set_ammo(const object &target_, sqf_string_const_ref weapon_, int count);
 
         struct rv_magazine_info {
@@ -497,9 +497,9 @@ namespace intercept {
         //inventory
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
-        sqf_return_string_list magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, const std::vector<int> &turret_path_);
-        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, const std::vector<int> &turret_path_);
+        sqf_return_string_list magazines_turret(const object &vehicle_, rv_turret_path turret_path_);
+        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, rv_turret_path turret_path_);
+        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, rv_turret_path turret_path_);
         void set_vehicle_ammo(const object &value0_, float value1_);
         void set_vehicle_ammo_def(const object &value0_, float value1_);
 
@@ -514,9 +514,9 @@ namespace intercept {
         void force_add_uniform(const object &value0_, sqf_string_const_ref value1_);
         void set_ammo_cargo(const object &value0_, float value1_);
         void add_weapon_pool(sqf_string_const_ref weapon_name_, int count_);
-        sqf_return_string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        sqf_return_string current_magazine_detail_turret(const object &vehicle_, rv_turret_path turret_path_);
+        sqf_return_string current_magazine_turret(const object &vehicle_, rv_turret_path turret_path_);
+        sqf_return_string current_weapon_turret(const object &vehicle_, rv_turret_path turret_path_);
         sqf_return_string_list get_artillery_ammo(const std::vector<object> &units_);
 
         void clear_item_pool();
@@ -536,7 +536,7 @@ namespace intercept {
         sqf_return_string hmd(const object &value_);
 
         rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
+        rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
 
     }  // namespace sqf
 }  // namespace intercept

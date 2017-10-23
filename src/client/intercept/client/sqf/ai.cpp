@@ -224,11 +224,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<float> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
+        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params({vehicle_,
-                               std::move(turret_path)});
+                               std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, params);
         }
@@ -696,10 +694,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, group_, enable_);
         }
 
-        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_) {
-            auto_array<game_value> turrent_path(turrent_path_.begin(), turrent_path_.end());
+        void enable_person_turret(const object &vehicle_, rv_turret_path turret_path_, bool enable_) {
 
-            game_value params_right({std::move(turrent_path),
+            game_value params_right({std::move(turret_path_),
                                      enable_});
 
             host::functions.invoke_raw_binary(__sqf::binary__enablepersonturret__object__array__ret__nothing, vehicle_, params_right);

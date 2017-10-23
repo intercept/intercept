@@ -387,6 +387,11 @@ namespace intercept {
                 return strlen(_ref->data());
             }
 
+            bool empty() const {
+                if (!_ref) return true;
+                return _ref->data() == '\0';
+            }
+
             size_t capacity() const {
                 if (!_ref) return 0;
                 return _ref->size();
@@ -470,6 +475,15 @@ namespace intercept {
             #ifdef __GNUC__
                 return !std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r; });
+            #else
+                return strcmp(data(), other) == 0;
+            #endif
+            }
+
+            bool compare_case_insensitive(const char *other) const {
+            #ifdef __GNUC__
+                return !std::equal(_ref->cbegin(), _ref->cend(),
+                    other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
             #else
                 return _stricmp(data(), other) == 0;
             #endif

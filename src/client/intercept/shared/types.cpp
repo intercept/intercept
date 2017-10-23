@@ -823,7 +823,7 @@ namespace intercept {
                 return reinterpret_cast<game_data_rv_namespace*>(data.getRef())->hash();
             if (_type == game_data_code::type_def)
                 return reinterpret_cast<game_data_code*>(data.getRef())->hash();
-            return 0;
+            return types::__internal::pairhash<uintptr_t,uintptr_t>(data->get_vtable(),reinterpret_cast<uintptr_t>(data.getRef()));
         };
 
         void* game_value::operator new(std::size_t sz_) {

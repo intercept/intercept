@@ -57,7 +57,7 @@ namespace intercept {
         void assign_as_commander(const object &unit_, const object &vehicle_);
         void assign_as_driver(const object &unit_, const object &vehicle_);
         void assign_as_gunner(const object &unit_, const object &vehicle_);
-        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
+        void assign_as_gunner(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
         void assign_as_cargo(const object &unit_, const object &vehicle_);
         void assign_as_cargo_index(const object &unit_, const object &vehicle_, int index_);
 

@@ -93,8 +93,8 @@ namespace intercept::client {
 
         auto uid = dist(rng);
         //#TODO use hash of moduleName as identifier.. That's faster..
-        std::string command = std::string("[\"")
-                              + intercept::client::host::module_name.data() + "\","
+        std::string command = std::string("['")
+                              + intercept::client::host::module_name.data() + "',"
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent _this";

@@ -224,7 +224,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
+        void assign_as_gunner(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params({vehicle_,
                                std::move(turret_path_)});
 

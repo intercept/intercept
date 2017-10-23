@@ -49,8 +49,6 @@ namespace intercept {
         RV_GENERIC_OBJECT_DEC(rv_namespace);
         RV_GENERIC_OBJECT_DEC(task);
 
-        typedef std::string marker;
-
         struct hit_part_ammo {
             float hit;
             float indirect_hit;
@@ -107,21 +105,6 @@ namespace intercept {
         };
 
 
-#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
-        using sqf_string = r_string;
-        using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type
-        using sqf_return_string_list = std::vector<r_string>;
-        using sqf_string_list_const_ref = const std::vector<r_string>&;
-
-
-        using sqf_string_const_ref = const r_string&;
-        using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
-#else
-        using sqf_string = std::string;
-        using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
-        using sqf_return_string_list = std::vector<std::string>;
-        using sqf_string_list_const_ref = const std::vector<std::string>&;
-
         class sqf_string_const_ref {
         public:
             sqf_string_const_ref(const std::string& ref) : _var(std::string_view(ref)) {}
@@ -146,6 +129,21 @@ namespace intercept {
             }
             std::variant<r_string, std::string_view> _var;
         };
+
+
+#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
+        using sqf_string = r_string;
+        using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<r_string>;
+        using sqf_string_list_const_ref = const std::vector<r_string>&;
+
+
+        using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
+#else
+        using sqf_string = std::string;
+        using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<std::string>;
+        using sqf_string_list_const_ref = const std::vector<std::string>&;
 
         //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
@@ -439,6 +437,8 @@ namespace intercept {
             std::string role;
             rv_turret_path turret_path{ game_value() };
         };
+        using marker = sqf_return_string;
+
 
     }
 }

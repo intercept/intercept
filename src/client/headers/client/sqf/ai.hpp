@@ -108,7 +108,7 @@ namespace intercept {
         void send_simple_command(const object &value0_, simple_command_type command_);
         sqf_return_string speed_mode(const object &obj_);
         sqf_return_string speed_mode(const group &grp_);
-        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
+        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE"sv);
         void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
         void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
         void do_fire(const object &unit_, const object &target_);

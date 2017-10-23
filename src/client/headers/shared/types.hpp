@@ -381,10 +381,15 @@ namespace intercept {
             explicit operator const char *() const { return data(); }
             operator std::string_view() const { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
-            //This calls strlen so O(N)
+            ///This calls strlen so O(N)
             size_t length() const {
                 if (!_ref) return 0;
                 return strlen(_ref->data());
+            }
+
+            ///This calls strlen so O(N)
+            size_t size() const {
+                return length();
             }
 
             bool empty() const {

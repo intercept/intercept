@@ -17,30 +17,18 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__diag_ticktime__ret__scalar);
         }
         std::vector<script> diag_active_mission_fsms() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activemissionfsms__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_nular(__sqf::nular__diag_activemissionfsms__ret__array);
+            return __helpers::__convert_to_vector<script>(ret);
         }
 
         std::vector<script> diag_active_sqf_scripts() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqfscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqfscripts__ret__array);
+            return __helpers::__convert_to_vector<script>(ret);
         }
 
         std::vector<script> diag_active_sqs_scripts() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqsscripts__ret__array);
-            std::vector<script> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(script(input[i]));
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_nular(__sqf::nular__diag_activesqsscripts__ret__array);
+            return __helpers::__convert_to_vector<script>(ret);
         }
 
         std::vector<script> diag_active_scripts() {

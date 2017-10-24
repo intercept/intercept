@@ -25,7 +25,7 @@ namespace intercept {
             std::string name;
             int count;
 
-            rv_magazine_ammo(const game_value &from_gv_) : name(from_gv_[0]),
+            explicit rv_magazine_ammo(const game_value &from_gv_) : name(from_gv_[0]),
                                                            count(from_gv_[1]) {}
 
             operator game_value() const {
@@ -38,7 +38,7 @@ namespace intercept {
             int type;
             std::string location;
 
-            rv_magazine_ammo_full(const game_value &from_gv_) : rv_magazine_ammo(from_gv_),
+            explicit rv_magazine_ammo_full(const game_value &from_gv_) : rv_magazine_ammo(from_gv_),
                                                                 loaded(from_gv_[2]),
                                                                 type(from_gv_[3]),
                                                                 location(from_gv_[4]) {}
@@ -57,6 +57,9 @@ namespace intercept {
         };
 
         struct rv_turret_magazine {
+
+            explicit rv_turret_magazine(game_value gv_) : name(gv_[0]),turret_path(gv_[1]),count(gv_[2]),id(gv_[3]),creator(gv_[4]){}
+
             std::string name;
             rv_turret_path turret_path;
             int count;
@@ -67,7 +70,7 @@ namespace intercept {
             std::string type;
             object container;
 
-            rv_container(const game_value &from_gv_) : type(from_gv_[0]),
+            explicit rv_container(const game_value &from_gv_) : type(from_gv_[0]),
                                                        container(from_gv_[1]) {}
             operator game_value() const {
                 return game_value({type, container});
@@ -87,7 +90,7 @@ namespace intercept {
             std::string magazine;
             float ammo_count;
 
-            rv_weapon_state(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
+            explicit rv_weapon_state(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
                                                                  muzzle(ret_game_value_[1]),
                                                                  mode(ret_game_value_[2]),
                                                                  magazine(ret_game_value_[3]),

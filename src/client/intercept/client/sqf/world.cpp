@@ -379,17 +379,8 @@ namespace intercept {
         }
 
         std::vector<rv_target> near_targets(const object &unit_, float radius_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__neartargets__object__scalar__ret__array, unit_, radius_);
-
-            std::vector<rv_target> targets;
-            for (size_t i = 0; i < res.size(); i++) {
-                targets.push_back(rv_target(
-                    res[i][0],
-                    res[i]
-                ));
-            }
-
-            return targets;
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__neartargets__object__scalar__ret__array, unit_, radius_);
+            return __helpers::__convert_to_vector<rv_target>(ret);
         }
 
         object nearest_object(const vector3 &pos_) {

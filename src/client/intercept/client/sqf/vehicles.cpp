@@ -159,13 +159,7 @@ namespace intercept {
 
         std::vector<rv_crew_member> full_crew(const object &veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__object__ret__array, veh_);
-
-            std::vector<rv_crew_member> crew_members;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], rv_turret_path(ret[i][3]), ret[i][4]));
-            }
-
-            return crew_members;
+            return __helpers::__convert_to_vector<rv_crew_member>(ret);
         }
 
         std::vector<rv_crew_member> full_crew(const object &veh_, sqf_string_const_ref filter_, bool include_empty_) {
@@ -174,13 +168,7 @@ namespace intercept {
                                include_empty_});
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__fullcrew__array__ret__array, params);
-
-            std::vector<rv_crew_member> crew_members;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                crew_members.push_back(rv_crew_member(ret[i][0], ret[i][1], ret[i][2], rv_turret_path(ret[i][3]), ret[i][4]));
-            }
-
-            return crew_members;
+            return __helpers::__convert_to_vector<rv_crew_member>(ret);
         }
 
         float aimed_at_target(const object &vehicle_, const object &target_) {

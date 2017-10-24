@@ -65,7 +65,17 @@ namespace intercept {
 
 
             template <class T>
-            std::vector<T> __convert_to_vector(game_value input_) {
+            typename std::enable_if<std::is_convertible<game_value, T>::value, std::vector<T>>::type
+            __convert_to_vector(game_value input_) {
+                if (input_.size() == 0) return {};
+                auto& arr = input_.to_array();
+                return std::vector<T>(arr.begin(), arr.end());
+            }
+
+
+            template <class T>
+            typename std::enable_if<!std::is_convertible<game_value, T>::value, std::vector<T>>::type
+            __convert_to_vector(game_value input_) {
                 std::vector<T> output;
                 if (input_.size() == 0) return {};
                 output.reserve(input_.size());

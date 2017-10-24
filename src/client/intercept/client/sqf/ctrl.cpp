@@ -1608,13 +1608,8 @@ namespace intercept {
         }
 
         std::vector<control> all_controls(const display &display_) {
-            game_value input__ = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
-            std::vector<control> output;
-
-            for (uint32_t i = 0; i < input__.size(); ++i) {
-                output.push_back(control(input__[i]));
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
+            return __helpers::__convert_to_vector<control>(ret);
         }
 
         control control_null() {

@@ -70,10 +70,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__count__config__ret__scalar, config_entry_);
         }
 
-        //std::vector<game_value> get_array(const config &config_entry_) {
-        // TODO implement get_array
-        //}
-
         config get_mission_config(sqf_string_const_ref value_) {
             return config(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfig__string__ret__config, value_));
         }

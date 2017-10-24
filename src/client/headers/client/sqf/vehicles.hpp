@@ -27,6 +27,13 @@ namespace intercept {
             rv_turret_path turret_path;
             bool person_turret;
 
+            rv_crew_member(game_value gv_)
+                : unit(gv_[0]),
+                role(gv_[1]),
+                cargo_index(gv_[2]),
+                turret_path(gv_[3]),
+                person_turret(gv_[4]) {}
+
             rv_crew_member(object unit_, std::string role_, float cargo_index_, rv_turret_path turret_path_, bool person_turret_)
                 : unit(std::move(unit_)),
                   role(std::move(role_)),

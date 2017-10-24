@@ -134,13 +134,8 @@ namespace intercept {
         }
 
         std::vector<rv_credit> library_credits() {
-            game_value input = host::functions.invoke_raw_nular(__sqf::nular__librarycredits__ret__array);
-
-            std::vector<rv_credit> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(input[i]);
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_nular(__sqf::nular__librarycredits__ret__array);
+            return __helpers::__convert_to_vector<rv_credit>(ret);
         }
 
         sqf_return_string_list library_disclaimers() {

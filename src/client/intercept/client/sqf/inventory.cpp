@@ -144,44 +144,23 @@ namespace intercept {
         }
 
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_) {
-            game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesallturrets__object__ret__array, obj_);
-
-            std::vector<rv_turret_magazine> output;
-            for (uint32_t i = 0; i < input.size(); ++i) {
-                output.push_back(rv_turret_magazine({input[i][0], rv_turret_path(input[i][1]), input[i][2], input[i][3], input[i][4]}));
-            }
-
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesallturrets__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<rv_turret_magazine>(ret);
         }
 
         std::vector<rv_magazine_ammo> magazines_ammo(const object &obj_) {
-            game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammo__object__ret__array, obj_);
-
-            auto &arr_ret = input.to_array();
-
-            std::vector<rv_magazine_ammo> output(arr_ret.begin(), arr_ret.end());
-
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammo__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<rv_magazine_ammo>(ret);
         }
 
         std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object &obj_) {
-            game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammocargo__object__ret__array, obj_);
-
-            auto &arr_ret = input.to_array();
-
-            std::vector<rv_magazine_ammo> output(arr_ret.begin(), arr_ret.end());
-
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammocargo__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<rv_magazine_ammo>(ret);
         }
 
         std::vector<rv_magazine_ammo_full> magazines_ammo_full(const object &obj_) {
-            game_value input = host::functions.invoke_raw_unary(__sqf::unary__magazinesammofull__object__ret__array, obj_);
-
-            auto &arr_ret = input.to_array();
-
-            std::vector<rv_magazine_ammo_full> output(arr_ret.begin(), arr_ret.end());
-
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammofull__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<rv_magazine_ammo_full>(ret);
         }
 
         sqf_return_string_list magazines_detail(const object &obj_) {

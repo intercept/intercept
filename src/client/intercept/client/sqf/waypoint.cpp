@@ -100,28 +100,16 @@ namespace intercept {
             return waypoint::__parse_type(host::functions.invoke_raw_unary(__sqf::unary__waypointtype__array__ret__string, wp_));
         }
         bool waypoint_visible(waypoint &wp_) {
-            // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
+            //#TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
             return host::functions.invoke_raw_unary(__sqf::unary__waypointvisible__array__ret__scalar, wp_);
         }
         std::vector<waypoint> synchronized_waypoints(waypoint &wp_) {
-            game_value rv_ret_vals(host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__array__ret__array, wp_));
-
-            // TODO test for logic.
-            std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
-                waypoints.push_back(waypoint(rv_ret_vals[i]));
-
-            return waypoints;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__array__ret__array, wp_);
+            return __helpers::__convert_to_vector<waypoint>(ret);
         }
         std::vector<waypoint> synchronized_waypoints(object &obj_) {
-            game_value rv_ret_vals(host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__object__ret__array, obj_));
-
-            // TODO test for logic.
-            std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
-                waypoints.push_back(waypoint(rv_ret_vals[i]));
-
-            return waypoints;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<waypoint>(ret);
         }
 
         void set_waypoint_behaviour(waypoint &wp_, waypoint::behaviour mode_) {

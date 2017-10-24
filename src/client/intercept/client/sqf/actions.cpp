@@ -5,7 +5,7 @@
 namespace intercept {
     namespace sqf {
         std::vector<float> action_ids(const object &entity_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__actionids__object__ret__array, entity_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__actionids__object__ret__array, entity_));
         }
 
         rv_action_params action_params(const object &entity_, int id_) {
@@ -52,7 +52,7 @@ namespace intercept {
 
         sqf_return_string_list action_keys(sqf_string_const_ref user_action_) {
             game_value act_keys = host::functions.invoke_raw_unary(__sqf::unary__actionkeys__string__ret__array, user_action_);
-            sqf_return_string_list r_arr = __helpers::__convert_to_strings_vector(act_keys);
+            sqf_return_string_list r_arr = __helpers::__convert_to_vector<sqf_return_string>(act_keys);
             return r_arr;
         }
 
@@ -78,7 +78,7 @@ namespace intercept {
 
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_) {
             game_value act_keys = host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, user_action_);
-            sqf_return_string_list r_arr = __helpers::__convert_to_strings_vector(act_keys);
+            sqf_return_string_list r_arr = __helpers::__convert_to_vector<sqf_return_string>(act_keys);
 
             return r_arr;
         }
@@ -86,14 +86,14 @@ namespace intercept {
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_) {
             game_value params({user_action_, static_cast<float>(max_keys_)});
 
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_, sqf_string_const_ref input_device_priority_) {
             game_value params({user_action_,
                                static_cast<float>(max_keys_),
                                input_device_priority_});
 
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
 
         float add_action(const object &object_, sqf_string_const_ref title_, sqf_string_const_ref script_, game_value arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {

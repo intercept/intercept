@@ -91,7 +91,7 @@ namespace intercept {
         }
 
         std::vector<task> current_tasks(const team_member &team_member_) {
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_));
+            return __helpers::__convert_to_vector<task>(host::functions.invoke_raw_unary(__sqf::unary__currenttasks__team_member__ret__array, team_member_));
         }
 
         sqf_return_string formation_task(const object &value_) {
@@ -139,24 +139,19 @@ namespace intercept {
         }
 
         sqf_return_string_list registered_tasks(const team_member &member_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__registeredtasks__team_member__ret__array, member_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__registeredtasks__team_member__ret__array, member_));
         }
 
         std::vector<task> simple_tasks(const object &unit_) {
-            return __helpers::__convert_to_tasks_vector(host::functions.invoke_raw_unary(__sqf::unary__simpletasks__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<task>(host::functions.invoke_raw_unary(__sqf::unary__simpletasks__object__ret__array, unit_));
         }
 
         sqf_return_string_list task_description(const task &task_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__taskdescription__task__ret__array, task_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__taskdescription__task__ret__array, task_));
         }
 
         vector3 task_destination(const task &task_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__taskdestination__task__ret__array, task_);
-
-            if (ret.size() == 0) {
-                return {};
-            }
-            return __helpers::__convert_to_vector3(ret);
+            return host::functions.invoke_raw_unary(__sqf::unary__taskdestination__task__ret__array, task_);
         }
 
         bool task_always_visible(const task &task_) {
@@ -170,7 +165,7 @@ namespace intercept {
         }
 
         vector3 task_marker_offset(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__taskmarkeroffset__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(__sqf::unary__taskmarkeroffset__object__ret__array, unit_);
         }
 
         sqf_return_string task_type(const task &task_) {

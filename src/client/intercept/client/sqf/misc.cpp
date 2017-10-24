@@ -144,7 +144,7 @@ namespace intercept {
         }
 
         sqf_return_string_list library_disclaimers() {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__librarydisclaimers__ret__array));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__librarydisclaimers__ret__array));
         }
         rv_product_version product_version() {
             return rv_product_version(host::functions.invoke_raw_nular(__sqf::nular__productversion__ret__array));
@@ -168,7 +168,7 @@ namespace intercept {
         }
 
         std::vector<float> get_dlcs(float filter_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__getdlcs__scalar__ret__array, filter_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getdlcs__scalar__ret__array, filter_));
         }
 
         float armory_points() {
@@ -516,7 +516,7 @@ namespace intercept {
         //side
 
         std::vector<object> detected_mines(const side &side_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__detectedmines__side__ret__array, side_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__detectedmines__side__ret__array, side_));
         }
 
         float count_side(const side &side_, std::vector<object> &objects_) {

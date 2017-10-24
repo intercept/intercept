@@ -13,7 +13,7 @@ namespace intercept {
         }
 
         sqf_return_string_list get_pylon_magazines(const object &vehicle_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getpylonmagazines__object__ret__array, vehicle_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getpylonmagazines__object__ret__array, vehicle_));
         }
 
         bool is_damage_allowed(const object &object_) {
@@ -154,7 +154,7 @@ namespace intercept {
         }
 
         std::vector<object> crew(const object &_veh) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__crew__object__ret__array, _veh));
         }
 
         std::vector<rv_crew_member> full_crew(const object &veh_) {
@@ -220,7 +220,7 @@ namespace intercept {
         }
 
         vector3 get_center_of_mass(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getcenterofmass__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(__sqf::unary__getcenterofmass__object__ret__array, obj_);
         }
 
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_) {
@@ -597,23 +597,23 @@ namespace intercept {
         rv_hit_points_damage get_all_hit_points_damage(const object &veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getallhitpointsdamage__object__ret__array, veh_);
 
-            sqf_return_string_list hit_points = __helpers::__convert_to_strings_vector(ret[0]);
-            sqf_return_string_list hit_selections = __helpers::__convert_to_strings_vector(ret[1]);
-            std::vector<float> damages = __helpers::__convert_to_numbers_vector(ret[2]);
+            sqf_return_string_list hit_points = __helpers::__convert_to_vector<sqf_return_string>(ret[0]);
+            sqf_return_string_list hit_selections = __helpers::__convert_to_vector<sqf_return_string>(ret[1]);
+            std::vector<float> damages = __helpers::__convert_to_vector<float>(ret[2]);
 
             return rv_hit_points_damage({hit_points, hit_selections, damages});
         }
 
         sqf_return_string_list get_object_materials(const object &object_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getobjectmaterials__object__ret__array, object_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getobjectmaterials__object__ret__array, object_));
         }
 
         sqf_return_string_list get_object_textures(const object &object_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getobjecttextures__object__ret__array, object_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getobjecttextures__object__ret__array, object_));
         }
 
         std::vector<object> synchronized_objects(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__synchronizedobjects__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__synchronizedobjects__object__ret__array, obj_));
         }
 
         rv_model_info get_model_info(const object &object_) {
@@ -643,7 +643,7 @@ namespace intercept {
         }
 
         sqf_return_string_list selection_names(const object &object_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
         }
 
         void switch_camera(const object &target_) {
@@ -802,7 +802,7 @@ namespace intercept {
         }
 
         sqf_return_string_list weapons_turret(const object &vehicle_, rv_turret_path turret_path_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, std::move(turret_path_)));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, std::move(turret_path_)));
         }
 
         float flag_animation_phase(const object &flag_) {
@@ -891,7 +891,7 @@ namespace intercept {
         }
 
         std::vector<object> roads_connected_to(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
         }
 
     }  // namespace sqf

@@ -86,9 +86,8 @@ namespace intercept {
         /**
         * Returns objects intersecting with the virtual line from begPos to endPos
         */
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = true);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_, const object &ignore_obj_two_);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = false);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_ = false);
 
         /**
         * Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionAGL
@@ -118,7 +117,7 @@ namespace intercept {
         /**
         * Find list of objects intersected by given line from begin_position_ to end_position_
         */
-        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_object_, const object &ignore_obj_, bool sort_by_distance_, int flags_);
+        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_object_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_, int flags_);
 
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
 

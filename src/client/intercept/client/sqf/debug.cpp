@@ -44,7 +44,7 @@ namespace intercept {
         }
 
         std::vector<script> diag_active_scripts() {
-            return __helpers::__convert_to_scripts_vector(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
+            return __helpers::__convert_to_vector<script>(host::functions.invoke_raw_nular(__sqf::nular__diag_activescripts__ret__array));
         }
 
         void diag_capture_frame(float frame_) {

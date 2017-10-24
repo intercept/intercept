@@ -564,10 +564,16 @@ namespace intercept {
         public:
             class const_iterator;
 
-            class iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+            class iterator {
                 friend class const_iterator;
                 Type* p_;
             public:
+                using iterator_category = std::random_access_iterator_tag;
+                using value_type = Type;
+                using difference_type = ptrdiff_t;
+                using pointer = Type*;
+                using reference = Type&;
+
                 iterator() : p_(nullptr) {}
                 explicit iterator(Type* p) : p_(p) {}
                 iterator(const iterator& other) : p_(other.p_) {}
@@ -599,9 +605,15 @@ namespace intercept {
                 Type* operator->() { return  p_; }
                 explicit operator Type*() { return p_; }
             };
-            class const_iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+            class const_iterator {
                 const Type* p_;
             public:
+                using iterator_category = std::random_access_iterator_tag;
+                using value_type = Type;
+                using difference_type = ptrdiff_t;
+                using pointer = Type * ;
+                using reference = Type & ;
+
                 const_iterator() : p_(nullptr) {}
                 explicit const_iterator(const Type* p) : p_(p) {}
                 const_iterator(const typename rv_array<Type>::iterator& other) : p_(other.p_) {}

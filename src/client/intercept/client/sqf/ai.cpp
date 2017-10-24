@@ -495,11 +495,11 @@ namespace intercept {
         }
 
         std::vector<object> formation_members(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
         }
 
         vector3 formation_position(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_);
         }
         sqf_return_string behaviour(const object &unit_) {
             return __helpers::__string_unary_object(__sqf::unary__behaviour__object__ret__string, unit_);

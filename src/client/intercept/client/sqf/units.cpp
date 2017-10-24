@@ -371,7 +371,7 @@ namespace intercept {
         }
 
         std::vector<object> group_selected_units(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
         }
 
         std::vector<sqf_return_string_list> squad_params(const object &unit_) {
@@ -379,7 +379,7 @@ namespace intercept {
             game_value _engine_result = host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_);
             _temp.reserve(_engine_result.size());
             for (auto &gv : _engine_result.to_array()) {
-                _temp.push_back(std::move(__helpers::__convert_to_strings_vector(gv)));
+                _temp.push_back(std::move(__helpers::__convert_to_vector<sqf_return_string>(gv)));
             }
             return _temp;
         }
@@ -389,11 +389,11 @@ namespace intercept {
         }
 
         sqf_return_string_list unit_addons(sqf_string_const_ref class_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__unitaddons__string__ret__array, class_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__unitaddons__string__ret__array, class_));
         }
 
         std::vector<object> get_all_owned_mines(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
         }
 
         void remove_all_owned_mines(const object &unit_) {

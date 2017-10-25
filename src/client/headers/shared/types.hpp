@@ -395,7 +395,7 @@ namespace intercept {
 
             bool empty() const {
                 if (!_ref) return true;
-                return _ref->data() == '\0';
+                return *_ref->data() == '\0';
             }
 
             size_t capacity() const {

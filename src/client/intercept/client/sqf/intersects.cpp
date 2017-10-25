@@ -79,8 +79,8 @@ namespace intercept {
         std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_) {
             game_value array_input({ begin_pos_,
                 end_pos_,
-                ignored_objects_.size() > 0 ? *ignored_objects_.begin() : game_value(),
-                ignored_objects_.size() > 1 ? *(ignored_objects_.begin() + 1) : game_value(),
+                ignored_objects_.size() > 0 ? game_value(*ignored_objects_.begin()) : game_value(),
+                ignored_objects_.size() > 1 ? game_value(*(ignored_objects_.begin() + 1)) : game_value(),
                 sort_by_distance_ });
             game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
             if (ignored_objects_.size() > 2) {//filter out the other objects
@@ -136,7 +136,7 @@ namespace intercept {
             game_value array_input({begin_position_,
                                     end_position_,
                                     with_obj_,
-                                    ignored_objects_.size() > 0 ? *ignored_objects_.begin() : game_value(),
+                                    ignored_objects_.size() > 0 ? game_value(*ignored_objects_.begin()) : game_value(),
                                     sort_by_distance_,
                                     static_cast<float>(flags_)});
 

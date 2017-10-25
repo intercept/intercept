@@ -36,7 +36,7 @@ namespace intercept {
             return extensions::get().list_plugin_interfaces(name_);
         };
         functions.request_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_) {
-            return extensions::get().request_plugin_interface(module_name_, name_, api_version_);
+            return extensions::get().request_plugin_interface(module_name_, name_, api_version_).value_or(nullptr);
         };
         functions.get_pbo_files_list = client_function_defs::get_pbo_files_list;
 
@@ -217,6 +217,11 @@ namespace intercept {
         new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
         new_module.functions.register_interfaces = reinterpret_cast<module::register_interfaces_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
         new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
+        new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
+        if (!new_module.functions.assign_functions) {
+            LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
+            return false;
+        }
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
 
 #define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
@@ -261,13 +266,9 @@ namespace intercept {
             }
         }
 
-        if (module->second.functions.handle_unload) {
-            module->second.functions.handle_unload();
-        }
+        if (module->second.functions.handle_unload_internal) module->second.functions.handle_unload_internal();
+        if (module->second.functions.handle_unload) module->second.functions.handle_unload();
 
-        if (module->second.functions.handle_unload_internal) {
-            module->second.functions.handle_unload_internal();
-        }
 
 #ifdef __linux
         if (dlclose(module->second.handle)) {  //returms 0 on success
@@ -333,7 +334,7 @@ namespace intercept {
         return {owning_module, std::move(ret)};
     }
 
-    void* extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
+    std::optional<void*> extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
         //#TODO store name as hash for faster lookups
         auto iface = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
                                   [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
@@ -343,7 +344,7 @@ namespace intercept {
             iface->second.modules_using_interface.push_back(module_name_);
             return ((*iface).second.interface_class);
         }
-        return nullptr;
+        return {};
     }
 
     std::unordered_map<std::string, module::entry>& extensions::modules() {

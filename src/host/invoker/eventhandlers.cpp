@@ -91,9 +91,7 @@ namespace intercept {
         get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
         LOG(INFO) << "Pre-start"sv;
         for (auto& module : extensions::get().modules()) {
-            if (module.second.functions.pre_start) {
-                module.second.functions.pre_start();
-            }
+            if (module.second.functions.pre_start) module.second.functions.pre_start();
         }
         preStartCalled = true;
     }
@@ -102,36 +100,29 @@ namespace intercept {
         extensions::get().reload_all();
         LOG(INFO) << "Pre-init"sv;
         for (auto& module : extensions::get().modules()) {
-            if (module.second.functions.pre_init) {
-                module.second.functions.pre_init();
-            }
+            module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set
+            if (module.second.functions.pre_init) module.second.functions.pre_init();
         }
     }
     void eventhandlers::post_init(game_value &)
     {
         LOG(INFO) << "Post-init"sv;
         for (auto& module : extensions::get().modules()) {
-            if (module.second.functions.post_init) {
-                module.second.functions.post_init();
-            }
+            if (module.second.functions.post_init) module.second.functions.post_init();
         }
     }
     void eventhandlers::mission_stopped(game_value &)
     {
         LOG(INFO) << "Mission Stopped"sv;
         for (auto& module : extensions::get().modules()) {
-            if (module.second.functions.mission_stopped) {
-                module.second.functions.mission_stopped();
-            }
+            if (module.second.functions.mission_stopped) module.second.functions.mission_stopped();
         }
     }
 #define EH_START(x) void eventhandlers::x(game_value & args_) {\
         for (auto& module : extensions::get().modules()) {\
-            if (module.second.eventhandlers.x) {\
-                module.second.eventhandlers.x
+            if (module.second.eventhandlers.x) module.second.eventhandlers.x
 
 #define EH_END ;\
-            }\
         }\
     }
 

@@ -18,6 +18,7 @@ namespace intercept {
         DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);  //#TODO no C ABI here! use r_string
         DLLEXPORT void CDECL on_interface_unload(r_string name_);
         DLLEXPORT void CDECL register_interfaces();
+        DLLEXPORT void CDECL handle_unload();
 
 #define EH(x) DLLEXPORT void CDECL x
 

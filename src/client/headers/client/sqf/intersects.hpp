@@ -43,8 +43,8 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
@@ -56,9 +56,9 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
-        * @params ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
+        * @param ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
@@ -70,14 +70,14 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
-        * @params ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
-        * @params ignore_obj2_ (Optional) second object to ignore or objNull: Default: objNull
-        * @params sort_mode_ (Optional): true: closest to furthest, false: furthest to closest. Default: true
-        * @params max_results_ (Optional) Max results to return. -1 to return every result. Default: 1
-        * @params lod1_ (Optional) Primary LOD to look for intersection. Default: "VIEW"
-        * @params lod2_ (Optional) Secondary LOD to look for intersection. Default: "FIRE"
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
+        * @param ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
+        * @param ignore_obj2_ (Optional) second object to ignore or objNull: Default: objNull
+        * @param sort_mode_ (Optional): true: closest to furthest, false: furthest to closest. Default: true
+        * @param max_results_ (Optional) Max results to return. -1 to return every result. Default: 1
+        * @param lod1_ (Optional) Primary LOD to look for intersection. Default: "VIEW"
+        * @param lod2_ (Optional) Secondary LOD to look for intersection. Default: "FIRE"
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */

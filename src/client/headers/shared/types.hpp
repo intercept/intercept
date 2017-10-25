@@ -20,6 +20,7 @@
 #endif
 using namespace std::literals::string_view_literals;
 
+/// @deprecated use sv instead
 [[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
     return { str, len };
 };
@@ -1618,6 +1619,7 @@ namespace intercept {
             /// doesn't handle all types. Will return GameDataType::ANY if not handled
             types::GameDataType type_enum() const;
 
+            /// @deprecated Replaced by size, because that name is more clear
             [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
@@ -2128,7 +2130,7 @@ namespace intercept {
 
     #ifdef __linux__
         template <game_value(*T)(game_value, game_value)>
-        static game_value  userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*l, *r));
@@ -2149,7 +2151,6 @@ namespace intercept {
         template <game_value(*T)()>
         static game_value userFunctionWrapper(uintptr_t gs) {
             return game_value(T());
-            //return sqf_this_;
         }
     #else
         template <game_value(*T)(game_value, game_value)>
@@ -2179,6 +2180,7 @@ namespace intercept {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }
+
     #endif
     #pragma endregion
 

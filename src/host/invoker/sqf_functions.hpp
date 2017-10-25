@@ -3,7 +3,8 @@
 @author Dedmen (dedmen@dedmen.de)
 
 @brief Contains the intercept::sqf_functions class.
-
+@defgroup RSQF Registered SQF Functions
+@ingroup RSQF
 https://github.com/NouberNou/intercept
 */
 #pragma once
@@ -73,47 +74,51 @@ namespace intercept {
         using WrapperFunctionUnary = intercept::types::unary_function;
         using WrapperFunctionNular = intercept::types::nular_function;
         /**
-         * \brief Registers a custom SQF Binary Command
-         * \param name 
-         * \param description 
-         * \param function_ 
-         * \param return_arg_type 
-         * \param left_arg_type 
-         * \param right_arg_type 
-         * \return A wrapper that should be kept alive as long as the function should be usable
-         */
+        * @brief Registers a custom SQF Binary Command
+        * @param name
+        * @param description
+        * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
+        * @param return_arg_type A value from intercept::types::GameDataType
+        * @param left_arg_type A value from intercept::types::GameDataType
+        * @param right_arg_type A value from intercept::types::GameDataType
+        * @return A wrapper that should be kept alive as long as the function should be usable
+        * @ingroup RSQF
+        */
         [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type);
         /**
-         * \brief Registers a custom SQF Unary Command
-         * \param name 
-         * \param description 
-         * \param function_ 
-         * \param return_arg_type 
-         * \param right_arg_type 
-         * \return A wrapper that should be kept alive as long as the function should be usable
-         */
+        * @brief Registers a custom SQF Unary Command
+        * @param name
+        * @param description
+        * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
+        * @param return_arg_type A value from intercept::types::GameDataType
+        * @param right_arg_type A value from intercept::types::GameDataType
+        * @return A wrapper that should be kept alive as long as the function should be usable
+        * @ingroup RSQF
+        */
         [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
         /**
-         * \brief Registers a custom SQF Nular Command
-         * \param name 
-         * \param description 
-         * \param function_ 
-         * \param return_arg_type 
-         * \return A wrapper that should be kept alive as long as the function should be usable
-         */
+        * @brief Registers a custom SQF Nular Command
+        * @param name
+        * @param description
+        * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
+        * @param return_arg_type A value from intercept::types::GameDataType
+        * @return A wrapper that should be kept alive as long as the function should be usable
+        * @ingroup RSQF
+        */
         [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
 
 
         bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
 
         /**
-        * \brief Registers a custom SQF script type
-        * \param name
-        * \param localizedName
-        * \param description
-        * \param typeName
-        * \param cf
-        * \return The resulting GameDataType enum value and a instantiated sqf_script_type
+        * @brief Registers a custom SQF script type
+        * @param name
+        * @param localizedName
+        * @param description
+        * @param typeName
+        * @param cf
+        * @return The resulting GameDataType enum value and a instantiated sqf_script_type
+        * @ingroup RSQF
         */
         std::pair<types::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 

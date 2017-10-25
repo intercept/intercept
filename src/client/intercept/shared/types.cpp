@@ -835,7 +835,7 @@ namespace intercept {
         }
        
         bool exiting = false;
-
+        /// @private
         extern "C" DLLEXPORT void CDECL handle_unload_internal() {
             exiting = true;
         }

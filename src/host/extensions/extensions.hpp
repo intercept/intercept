@@ -7,6 +7,9 @@
 This contains the functionality for loading and unload client plugin modules.
 
 https://github.com/NouberNou/intercept
+
+@defgroup plugin_interface Cross-Plugin Interface
+
 */
 #pragma once
 #include "arguments.hpp"
@@ -53,6 +56,7 @@ namespace intercept {
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
         typedef void(CDECL *register_interfaces_func)();
         typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, float handle, game_value args);
+        typedef void(CDECL *client_eventhandlers_clear_func)();
 
         //!@}
 
@@ -77,6 +81,7 @@ namespace intercept {
             on_interface_unload_func on_interface_unload;
             register_interfaces_func register_interfaces;
             client_eventhandler_func client_eventhandler;
+            client_eventhandlers_clear_func client_eventhandlers_clear;
             //!@}
         };
 
@@ -262,9 +267,21 @@ namespace intercept {
         bool list(const arguments &args_, std::string &result);
         //!@}
 
+
+        /// @ingroup plugin_interface
         register_plugin_interface_result register_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_, void *interface_class_);
+        /// @ingroup plugin_interface
         std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
-        void *request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_);
+        //
+
+        /**
+         * @brief Searches for a Plugin Interface
+         * @param name_ Name of the Interface you are searching for
+         * @param api_version_ API version of the Interface you are searching for
+         * @return pointer to the interface if it was found
+         * @ingroup plugin_interface
+         */
+        std::optional<void*> request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_);
 
         /*!
         @brief Returns the map of all loaded modules.

@@ -5,6 +5,9 @@
 @brief Helper stuff for Binding Callbacks to Eventhandlers on Objects and alike.
 
 https://github.com/NouberNou/intercept
+
+@defgroup eh_bind Eventhandlers with direct Callbacks
+Provides the ability to assign Eventhandlers without going through SQF
 */
 #pragma once
 #include "../shared/client_types.hpp"
@@ -16,15 +19,23 @@ namespace intercept::client {
         autosave,     ///< automatic checkpoint, saved using saveGame command
         continuesave  ///< saved when leaving a mission to the main menu
     };
-
-    using EHIdentifier = std::pair<int32_t, float>;
-
+    
+    /// @private
+    using EHIdentifier = std::tuple<int32_t, float, uint32_t>; //Internal ID, Arma ID, EHIteration
+    
+    /// @private
     struct EHIdentifier_hasher {
         size_t operator()(const intercept::client::EHIdentifier& x) const {
-            return intercept::types::__internal::pairhash(x.first, x.second);
+            return intercept::types::__internal::pairhash(std::get<0>(x), std::get<1>(x));
         }
     };
 
+
+    
+    /**
+     * @brief 
+     * @ingroup eh_bind
+     */
     class EHIdentifierHandle {
     public:
         EHIdentifierHandle(EHIdentifier ident, std::function<void(EHIdentifier&)> onDelete) : handle(std::make_shared<impl>(std::move(ident), std::move(onDelete))) {}
@@ -48,8 +59,6 @@ namespace intercept::client {
         display,
         ctrl
     };
-
-    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, intercept::types::game_value args);
 
 #pragma region Mission Eventhandlers
 
@@ -106,27 +115,27 @@ namespace intercept::client {
 @brief Mission event handlers are specific EHs that are anchored to the running mission and automatically removed when mission is over.
 */
     enum class eventhandlers_mission {
-        Draw3D,                  ///< Draw3D
-        Ended,                   ///< Ended
-        Loaded,                  ///< Game loading from save event
-        Map,                     ///< Map open / close event
-        HandleDisconnect,        /*< Player disconnect in MP event */
-        EntityRespawned,         /*< Some entity respawn event */
-        EntityKilled,            /*< Some entity death event */
-        EachFrame,               /*< Per frame event */
-        MapSingleClick,          /*< Map click event */
-        HCGroupSelectionChanged, /*< High Command group select event */
-        CommandModeChanged,      /*< High Command mode change event */
-        GroupIconClick,          /*< High Command icon click event */
-        GroupIconOverEnter,      /*< High Command icon enter event */
-        GroupIconOverLeave,      /*< High Command icon leave event */
-        PlayerConnected,         /*< Client joining MP mission event */
-        PlayerDisconnected,      /*< Client leaving MP mission event */
-        TeamSwitch,              /*< Player teamswitch event */
-        PreloadStarted,          /*< Mission preload start event */
-        PreloadFinished,         /*< Mission preload finish event */
-        PlayerViewChanged,       /*< Player view change event */
-        BuildingChanged          /*< Building model change event */
+        Draw3D,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Draw3D">Draw3D</a>
+        Ended,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Ended">Ended</a>
+        Loaded,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Loaded">Game loading from save event</a>
+        Map,                     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Map">Map open / close event</a>
+        HandleDisconnect,        ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HandleDisconnect">Player disconnect in MP event</a>
+        EntityRespawned,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityRespawned">Some entity respawn event</a>
+        EntityKilled,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityKilled">Some entity death event</a>
+        EachFrame,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EachFrame">Per frame event</a>
+        MapSingleClick,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MapSingleClick">Map click event</a>
+        HCGroupSelectionChanged, ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HCGroupSelectionChanged">High Command group select event</a>
+        CommandModeChanged,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#CommandModeChanged">High Command mode change event</a>
+        GroupIconClick,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconClick">High Command icon click event</a>
+        GroupIconOverEnter,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverEnter">High Command icon enter event</a>
+        GroupIconOverLeave,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverLeave">High Command icon leave event</a>
+        PlayerConnected,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerConnected">Client joining MP mission event</a>
+        PlayerDisconnected,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerDisconnected">Client leaving MP mission event</a>
+        TeamSwitch,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#TeamSwitch">Player teamswitch event</a>
+        PreloadStarted,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadStarted">Mission preload start event</a>
+        PreloadFinished,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadFinished">Mission preload finish event</a>
+        PlayerViewChanged,       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerViewChanged">Player view change event</a>
+        BuildingChanged          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#BuildingChanged">Building model change event</a>
     };
     /*
     @var eventhandlers_mission::Loaded
@@ -135,85 +144,16 @@ namespace intercept::client {
     */
     EHDEF_MISSION(COMPILETIME_CHECK_ENUM_MISSION)
 
-    inline intercept::types::game_value callEHHandler(eventhandlers_mission ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
-        switch (ehType) {
-            case eventhandlers_mission::PreloadStarted:   //[[fallthrough]]
-            case eventhandlers_mission::PreloadFinished:  //[[fallthrough]]
-            case eventhandlers_mission::EachFrame:        //[[fallthrough]]
-            case eventhandlers_mission::Draw3D: {
-                (*func)();
-            } break;
-            case eventhandlers_mission::Ended: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Ended)>*>(func.get()))(args[0]);
-            } break;
-            case eventhandlers_mission::Loaded: {
-                auto type = static_cast<intercept::types::r_string>(args[0]);
-                loaded_saveType type_ = {};
-                if (type == "save"sv)
-                    type_ = loaded_saveType::save;
-                else if (type == "autosave"sv)
-                    type_ = loaded_saveType::autosave;
-                else if (type == "continue"sv)
-                    type_ = loaded_saveType::continuesave;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Loaded)>*>(func.get()))(type_);
-            } break;
-            case eventhandlers_mission::Map: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Map)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_mission::HandleDisconnect: {
-                auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Mission_HandleDisconnect)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-                if (ret) return *ret;
-            } break;
-            case eventhandlers_mission::EntityRespawned: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_EntityRespawned)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_mission::EntityKilled: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_EntityKilled)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_mission::MapSingleClick: {
-                auto& arr = args[0].to_array();
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MapSingleClick)>*>(func.get()))(intercept::types::auto_array<intercept::types::object>(arr.begin(), arr.end()), args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_mission::HCGroupSelectionChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HCGroupSelectionChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_mission::CommandModeChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_CommandModeChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_mission::GroupIconClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconClick)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            } break;
-            case eventhandlers_mission::GroupIconOverEnter: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconOverEnter)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            } break;
-            case eventhandlers_mission::GroupIconOverLeave: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconOverLeave)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            } break;
-            case eventhandlers_mission::PlayerConnected: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerConnected)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_mission::PlayerDisconnected: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerDisconnected)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_mission::TeamSwitch: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_TeamSwitch)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_mission::PlayerViewChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerViewChanged)>*>(func.get()))(args[0], args[1], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_mission::BuildingChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_BuildingChanged)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            default:;
-        }
-        return {};
-    }
+    /// @private
+    intercept::types::game_value callEHHandler(eventhandlers_mission ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
 
+    /// @private
     EHIdentifier addScriptEH(eventhandlers_mission type);
+    /// @private
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle);
-
+    /// @private
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
-
+    /// @private
     template <eventhandlers_mission Type>
     struct __addMissionEventHandler_Impl;
 
@@ -230,6 +170,13 @@ namespace intercept::client {
 
     EHDEF_MISSION(EH_Add_Mission_definition)
 
+    /**
+    * @brief Registers a Mission Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_mission
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
     template <eventhandlers_mission Type, typename Func = typename __addMissionEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addMissionEventHandler(Func fnc) {
         return {__addMissionEventHandler_Impl<Type>::add(fnc), [type = Type](EHIdentifier& id) { funcMapMissionEH.erase(id); delScriptEH(type,id); }};
@@ -444,224 +391,15 @@ namespace intercept::client {
     };
 
     EHDEF_OBJECT(COMPILETIME_CHECK_ENUM_OBJECT)
-
-    inline intercept::types::game_value callEHHandler(eventhandlers_object ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
-        switch (ehType) {
-            case eventhandlers_object::AnimChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::AnimDone: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimDone)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::AnimStateChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimStateChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::ContainerClosed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ContainerClosed)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::ContainerOpened: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ContainerOpened)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::ControlsShifted: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ControlsShifted)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::Dammaged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Dammaged)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-            } break;
-            case eventhandlers_object::Deleted: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Deleted)>*>(func.get()))(args[0]);
-            } break;
-            case eventhandlers_object::Engine: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Engine)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::EpeContact: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContact)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_object::EpeContactEnd: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContactEnd)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_object::EpeContactStart: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContactStart)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            } break;
-            case eventhandlers_object::Explosion: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Explosion)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::Fired: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Fired)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            } break;
-            case eventhandlers_object::FiredMan: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_FiredMan)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            } break;
-            case eventhandlers_object::FiredNear: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_FiredNear)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            } break;
-            case eventhandlers_object::Fuel: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Fuel)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::Gear: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Gear)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::GetIn: {
-                types::r_string pos = args[1];
-                get_in_position p{};
-                if (pos == "driver"sv)
-                    p = get_in_position::driver;
-                else if (pos == "gunner"sv)
-                    p = get_in_position::gunner;
-                else if (pos == "cargo"sv)
-                    p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetIn)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            } break;
-            case eventhandlers_object::GetInMan: {
-                types::r_string pos = args[1];
-                get_in_position p{};
-                if (pos == "driver"sv)
-                    p = get_in_position::driver;
-                else if (pos == "gunner"sv)
-                    p = get_in_position::gunner;
-                else if (pos == "cargo"sv)
-                    p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetInMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            } break;
-            case eventhandlers_object::GetOut: {
-                types::r_string pos = args[1];
-                get_in_position p{};
-                if (pos == "driver"sv)
-                    p = get_in_position::driver;
-                else if (pos == "gunner"sv)
-                    p = get_in_position::gunner;
-                else if (pos == "cargo"sv)
-                    p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOut)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            } break;
-            case eventhandlers_object::GetOutMan: {
-                types::r_string pos = args[1];
-                get_in_position p{};
-                if (pos == "driver"sv)
-                    p = get_in_position::driver;
-                else if (pos == "gunner"sv)
-                    p = get_in_position::gunner;
-                else if (pos == "cargo"sv)
-                    p = get_in_position::cargo;
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOutMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            } break;
-            case eventhandlers_object::HandleDamage: {
-                auto ret = (*reinterpret_cast<std::function<std::optional<float>(EH_Func_Args_Object_HandleDamage)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-                if (ret) return *ret;
-            } break;
-            case eventhandlers_object::HandleHeal: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_HandleHeal)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::HandleRating: {
-                auto ret = (*reinterpret_cast<std::function<std::optional<float>(EH_Func_Args_Object_HandleRating)>*>(func.get()))(args[0], args[1]);
-                if (ret) return *ret;
-            } break;
-            case eventhandlers_object::HandleScore: {
-                auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Object_HandleScore)>*>(func.get()))(args[0], args[1], args[2]);
-                if (ret) return *ret;
-            } break;
-            case eventhandlers_object::Hit: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Hit)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_object::HitPart: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_HitPart)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], types::auto_array<types::r_string>(args[5].to_array().begin(), args[5].to_array().end()), args[6].to_array(), args[7], args[8], args[9], args[10]);
-            } break;
-            case eventhandlers_object::Init: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Init)>*>(func.get()))(args[0]);
-            } break;
-            case eventhandlers_object::HandleIdentity: {
-                auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Object_HandleIdentity)>*>(func.get()))(args[0]);
-                if (ret) return *ret;
-            } break;
-            case eventhandlers_object::IncomingMissile: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_IncomingMissile)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_object::InventoryClosed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_InventoryClosed)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::InventoryOpened: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_InventoryOpened)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::Killed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Killed)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_object::LandedTouchDown: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandedTouchDown)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::LandedStopped: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandedStopped)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::Landing: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Landing)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::LandingCanceled: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandingCanceled)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::Local: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Local)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::PostReset: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PostReset)>*>(func.get()))();
-            } break;
-            case eventhandlers_object::Put: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Put)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::Reloaded: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Reloaded)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4].to_array(), args[5].to_array());
-            } break;
-            case eventhandlers_object::Respawn: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Respawn)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::RopeAttach: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_RopeAttach)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::RopeBreak: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_RopeBreak)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::SeatSwitched: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SeatSwitched)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::SeatSwitchedMan: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SeatSwitchedMan)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::SoundPlayed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SoundPlayed)>*>(func.get()))(args[0], static_cast<sound_played_origin>(static_cast<int>(args[1])));
-            } break;
-            case eventhandlers_object::Take: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Take)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::TaskSetAsCurrent: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TaskSetAsCurrent)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::TurnIn: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnIn)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
-            } break;
-            case eventhandlers_object::TurnOut: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnOut)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
-            } break;
-            case eventhandlers_object::WeaponAssembled: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponAssembled)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::WeaponDisassembled: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponDisassembled)>*>(func.get()))(args[0], args[1], args[2]);
-            } break;
-            case eventhandlers_object::WeaponDeployed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponDeployed)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_object::WeaponRested: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponRested)>*>(func.get()))(args[0], args[1]);
-            } break;
-
-            default: assert(false);
-        }
-        return {};
-    }
-
+    /// @private
+    intercept::types::game_value callEHHandler(eventhandlers_object ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
+    /// @private
     EHIdentifier addScriptEH(types::object obj, eventhandlers_object type);
+    /// @private
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle);
-
+    /// @private
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_object, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapObjectEH;
-
+    /// @private
     template <eventhandlers_object Type>
     struct __addEventHandler_Impl;
 
@@ -678,6 +416,14 @@ namespace intercept::client {
 
     EHDEF_OBJECT(EH_Add_Object_definition)
 
+    /**
+    * @brief Registers a Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_object
+    * @param obj - the object you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
     template <eventhandlers_object Type, typename Func = typename __addEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addEventHandler(types::object obj, Func fnc) {
         return { __addEventHandler_Impl<Type>::add(obj, fnc), [obj,type = Type](EHIdentifier& id) { funcMapObjectEH.erase(id); delScriptEH(obj,type,id); } };
@@ -723,39 +469,15 @@ namespace intercept::client {
 
     EHDEF_CTRL(COMPILETIME_CHECK_ENUM_CTRL)
 
-    inline intercept::types::game_value callEHHandler(eventhandlers_ctrl ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
-        switch (ehType) {
-            case eventhandlers_ctrl::Draw: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseButtonDown: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseButtonUp: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseButtonClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseButtonDblClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseMoving: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            case eventhandlers_ctrl::MouseHolding: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            } break;
-            default: assert(false);
-        }
-        return {};
-    }
-
+    /// @private
+    intercept::types::game_value callEHHandler(eventhandlers_ctrl ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
+    /// @private
     EHIdentifier addScriptEH(types::control ctrl, eventhandlers_ctrl type);
+    /// @private
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle);
-
+    /// @private
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_ctrl, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapCtrlEH;
-
+    /// @private
     template <eventhandlers_ctrl Type>
     struct __ctrlAddEventHandler_Impl;
 
@@ -772,6 +494,14 @@ namespace intercept::client {
 
     EHDEF_CTRL(EH_Add_Ctrl_definition)
 
+    /**
+    * @brief Registers a CTRL Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_ctrl
+    * @param ctrl - the control you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
     template <eventhandlers_ctrl Type, typename Func = typename __ctrlAddEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle ctrlAddEventHandler(types::control ctrl, Func fnc) {
         return {__ctrlAddEventHandler_Impl<Type>::add(ctrl, fnc), [ctrl,type = Type](EHIdentifier& id) { funcMapCtrlEH.erase(id); delScriptEH(ctrl,type,id); }};
@@ -804,28 +534,15 @@ namespace intercept::client {
 
     EHDEF_MP(COMPILETIME_CHECK_ENUM_MP)
 
-        inline intercept::types::game_value callEHHandler(eventhandlers_mp ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
-        switch (ehType) {
-            case eventhandlers_mp::MPHit: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPHit)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_mp::MPKilled: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPKilled)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            } break;
-            case eventhandlers_mp::MPRespawn: {
-                auto newPos = (*reinterpret_cast<std::function<types::vector3(EH_Func_Args_MP_MPRespawn)>*>(func.get()))(args[0], args[1]);
-                return newPos;
-            } break;
-            default: assert(false);
-        }
-        return {};
-    }
-
+    /// @private
+    intercept::types::game_value callEHHandler(eventhandlers_mp ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
+    /// @private
     EHIdentifier addScriptEH(types::object unit, eventhandlers_mp type);
+    /// @private
     void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle);
-
+    /// @private
     extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_mp, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMPEH;
-
+    /// @private
     template <eventhandlers_mp Type>
     struct __addMPEventHandler_Impl;
 
@@ -842,6 +559,15 @@ namespace intercept::client {
 
     EHDEF_MP(EH_Add_MP_definition)
 
+
+        /**
+        * @brief Registers a MP Eventhandler with callback to a C++ function
+        * @tparam Type is a value from intercept::client::eventhandlers_mp
+        * @param unit - the unit you add this Eventhandler to.
+        * @param fnc - The function that will get called
+        * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+        * @ingroup eh_bind
+        */
         template <eventhandlers_mp Type, typename Func = typename __addMPEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addMPEventHandler(types::object unit, Func fnc) {
         return { __addMPEventHandler_Impl<Type>::add(unit, fnc), [unit,type = Type](EHIdentifier& id) { funcMapMPEH.erase(id); delScriptEH(unit,type,id); } };

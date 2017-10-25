@@ -45,14 +45,6 @@ intercept_fnc_isNilWrapper = {
 	(missionNamespace getVariable "INTERCEPT_CALL_ARGS") call intercept_fnc_callWrapper;
 };
 
-intercept_fnc__event = {
-    params ["_type", "_eventArgs"];
-};
-
-intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame;}";
-
-intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
-
 //{
 //    // _start = diag_tickTime;
 //    "intercept" callExtension "do_invoke_period:";
@@ -79,9 +71,20 @@ private _res = "intercept" callExtension "init_invoker:";
 
 //intercept_invoker_ok = true;
 if(intercept_invoker_ok) then {
+
+	intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame;}";
+	intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
+
     ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Intercept Invoker initialized.";
     diag_log text format["Intercept Pre-Init..."];
     ["pre_init",[]] call (uiNamespace getVariable "intercept_fnc_event");
     diag_log text format["Intercept Pre-Init Completed."];
+} else {
+    intercept_fnc__onFrame = {};
+    intercept_fnc_signal = {};
+
+    if (isNull (uiNamespace getVariable ["intercept_fnc_event", scriptNull]) then {
+        uiNamespace setVariable ["intercept_fnc_event", {}];
+    };
 };

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "shared.hpp"
 namespace intercept {
     namespace types {
@@ -57,11 +57,18 @@ namespace intercept {
             vector3_base operator - (const vector3_base &v) const { return vector3_base(x - v.x, y - v.y, z - v.z); }
             vector3_base operator - () const { return vector3_base(-x, -y, -z); }
 
+            vector3_base& operator *=(const vector3_base &v) { x *= v.x; y *= v.y; z *= v.z; return *this; }
+            vector3_base& operator *=(T mag) { x *= mag; y *= mag; z *= mag; return *this; }
+            vector3_base& operator /=(const vector3_base &v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
+            vector3_base& operator /=(T mag) { x /= mag; y /= mag; y /= mag; return *this; }
+            vector3_base& operator +=(const vector3_base &v) { x += v.x; y += v.y; z += v.z; return *this; }
+            vector3_base& operator -=(const vector3_base &v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+
             bool operator == (const vector3_base &r) const { return (x == r.x && y == r.y && z == r.z); }
-            bool operator >  (const vector3_base &) const { throw 1; }
-            bool operator <  (const vector3_base &) const { throw 1; }
-            bool operator <= (const vector3_base &) const { throw 1; }
-            bool operator >= (const vector3_base &) const { throw 1; }
+            bool operator >  (const vector3_base &r) const { if (*this == r) return false; throw 1; }
+            bool operator <  (const vector3_base &r) const { if (*this == r) return false; throw 1; }
+            bool operator <= (const vector3_base &r) const { if (*this == r) return true; throw 1; }
+            bool operator >= (const vector3_base &r) const { if (*this == r) return true; throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y + z * z); }
             T dot(const vector3_base &v) const { return (x * v.x + y * v.y + z * v.z); }
@@ -135,11 +142,18 @@ namespace intercept {
             vector2_base operator - (const vector2_base &v) const { return vector2_base(x - v.x, y - v.y); }
             vector2_base operator - () const { return vector2_base(-x, -y); }
 
+            vector2_base& operator *=(const vector2_base &v) { x *= v.x; y *= v.y; return *this;}
+            vector2_base& operator *=(T mag) { x *= mag; y *= mag; return *this; }
+            vector2_base& operator /=(const vector2_base &v) { x /= v.x; y /= v.y; return *this; }
+            vector2_base& operator /=(T mag) { x /= mag; y /= mag; return *this; }
+            vector2_base& operator +=(const vector2_base &v) { x += v.x; y += v.y; return *this; }
+            vector2_base& operator -=(const vector2_base &v) { x -= v.x; y -= v.y; return *this; }
+
             bool operator == (const vector2_base &r) const { return (x == r.x && y == r.y); }
-            bool operator >  (const vector2_base &) const { throw 1; }
-            bool operator <  (const vector2_base &) const { throw 1; }
-            bool operator <= (const vector2_base &) const { throw 1; }
-            bool operator >= (const vector2_base &) const { throw 1; }
+            bool operator >  (const vector2_base &r) const { if (*this == r) return false; throw 1; }
+            bool operator <  (const vector2_base &r) const { if (*this == r) return false; throw 1; }
+            bool operator <= (const vector2_base &r) const { if (*this == r) return true; throw 1; }
+            bool operator >= (const vector2_base &r) const { if (*this == r) return true; throw 1; }
 
             T magnitude() const { return sqrt(x * x + y * y); }
             T dot(const vector2_base &v) const { return (x * v.x + y * v.y); }

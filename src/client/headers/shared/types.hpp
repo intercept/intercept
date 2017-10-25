@@ -279,10 +279,12 @@ namespace intercept {
         public:
 
             size_t size() const { return _size; }
-            Type *data() { return &_data; }
-            const Type *data() const { return &_data; }
-            const Type * cbegin() const { return &_data; }
-            const Type * cend() const { return (&_data) + _size; }
+            Type* data() { return &_data; }
+            const Type* data() const { return &_data; }
+            Type* begin() { return &_data; }
+            Type* end() { return (&_data) + _size; }
+            const Type* cbegin() const { return &_data; }
+            const Type* cend() const { return (&_data) + _size; }
 
             //We delete ourselves! After release no one should have a pointer to us anymore!
             int release() const {
@@ -377,7 +379,6 @@ namespace intercept {
                     _ref = create(_ref->data());
                 }
             }
-
             explicit operator const char *() const { return data(); }
             operator std::string_view() const { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
@@ -402,7 +403,7 @@ namespace intercept {
                 return _ref->size();
             }
 
-            //== is case insensitive just like scripting
+            ///== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?
             #ifdef __GNUC__
@@ -413,39 +414,20 @@ namespace intercept {
             #endif
             }
 
-            //!= is case insensitive just like scripting
-            bool operator != (const char *other) const {
-                return !(*this == other);
-            }
-
-            bool operator < (const r_string& other) const {
-                if (!data()) return false; //empty?
-                return strcmp(data(), other.data()) < 0;
-            }
-
+            ///== is case insensitive just like scripting
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
                 if (data() == other.data()) return true;
-            #ifdef __GNUC__
+#ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
+#else
                 return _strcmpi(data(), other.data()) == 0;
-            #endif
+#endif
             }
 
+            ///== is case insensitive just like scripting
             bool operator == (const std::string& other) const {
-                if (!data()) return other.empty(); //empty?
-                if (other.length() > _ref->size()) return false; //There is more data than we can even have
-            #ifdef __GNUC__
-                return std::equal(_ref->cbegin(), _ref->cend(),
-                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other.data()) == 0;
-            #endif
-            }
-
-            bool operator == (const std::string_view& other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
 #ifdef __GNUC__
@@ -456,10 +438,39 @@ namespace intercept {
 #endif
             }
 
+            ///== is case insensitive just like scripting
+            bool operator == (std::string_view other) const {
+                if (!data()) return other.empty(); //empty?
+                if (other.length() > _ref->size()) return false; //There is more data than we can even have
+#ifdef __GNUC__
+                return std::equal(_ref->cbegin(), _ref->cend(),
+                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+#else
+                return _strcmpi(data(), other.data()) == 0;
+#endif
+            }
+
+            ///!= is case insensitive just like scripting
             bool operator != (const r_string& other) const {
                 return !(*this == other);
             }
 
+            ///!= is case insensitive just like scripting
+            bool operator != (const std::string& other) const {
+                return !(*this == other);
+            }
+
+            ///!= is case insensitive just like scripting
+            bool operator != (std::string_view other) const {//#TODO templates would be nice here. But we don't want string_view by reference
+                return !(*this == other);
+            }
+
+
+            bool operator < (const r_string& other) const {
+                if (!data()) return false; //empty?
+                return strcmp(data(), other.data()) < 0;
+            }
+           
             friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
                 _os << _s.data();
                 return _os;
@@ -485,7 +496,7 @@ namespace intercept {
             #endif
             }
 
-            bool compare_case_insensitive(const char *other) const {
+            bool compare_case_insensitive(const char *other) const {//#TODO string_view variant with length checking
             #ifdef __GNUC__
                 return !std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
@@ -513,6 +524,49 @@ namespace intercept {
             size_t hash() const {
                 return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
+
+            r_string append(std::string_view _right) {
+                auto myLength = length();
+                auto newData = create(myLength+_right.length());
+            #if __GNUC__
+                std::copy_n(data(), myLength, newData->data());
+                std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
+            #else
+                strncpy_s(newData->data(), myLength + _right.length(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+                strncpy_s(newData->data()+ myLength, _right.length(), _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            #endif
+                return r_string(newData);
+            }
+            r_string operator+(std::string_view _right){
+                return append(_right);
+            }
+            r_string operator+(std::string _right) {
+                return append(_right);
+            }
+            void to_lower() {
+                if (!_ref) return;
+                make_mutable();
+                std::transform(_ref->begin(),_ref->end(),_ref->begin(),::tolower);//https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+            }
+            ///Be careful! This returns nullptr on empty string
+            const char* begin() const {
+                if (_ref)
+                    return _ref->begin();
+                return nullptr;
+            }
+            ///Be careful! This returns nullptr on empty string
+            const char* end() const {
+                if (_ref)
+                    return _ref->end();
+                return nullptr;
+            }
+            char front() const {
+                if (_ref)
+                    return *_ref->begin();
+                return '\0';
+            }
+
+
 
         private:
             ref<compact_array<char>> _ref;

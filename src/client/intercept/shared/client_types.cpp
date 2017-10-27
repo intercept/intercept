@@ -1,4 +1,4 @@
-﻿#include "shared/client_types.hpp"
+#include "shared/client_types.hpp"
 #include "client/client.hpp"
 #include "shared/functions.hpp"
 
@@ -34,24 +34,6 @@ namespace intercept {
         bool internal_object::operator>(const internal_object& compare_) const {
             return static_cast<game_data_object *>(data.getRef())->object > static_cast<game_data_object *>(compare_.data.getRef())->object;
         }
-
-        bool internal_object::is_null() const {
-            //#TODO this is broken for Displays. so.. Just use virtual function
-            //#TODO use GameData's isNil virtual function
-            if (!data)
-                return true;
-            //#TODO pointer games = forbidden
-            uintptr_t datax = reinterpret_cast<uintptr_t>(data.getRef());
-            uintptr_t data_1 = datax + sizeof(uintptr_t)*3;
-            uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
-            if (data_2) {
-                uintptr_t data_3 = data_2 + sizeof(uintptr_t);
-                uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
-                return !val;
-            }
-            return true;
-        }
-
 
         //type::type(const rv_game_value &value_) : internal_object(value_) {}\ //deprecated
 #define RV_GENERIC_OBJECT_DEF(type)         type::type() : internal_object() {}\

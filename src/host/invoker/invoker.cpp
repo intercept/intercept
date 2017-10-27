@@ -94,7 +94,7 @@ namespace intercept {
     bool invoker::do_invoke_period() {
         {
             _invoker_unlock period_lock(this, true);
-            long timeout = clock() + 3;
+            const long timeout = clock() + 3;
             while (_thread_count > 0 && clock() < timeout) std::this_thread::sleep_for(std::chrono::microseconds(20));
         }
         {
@@ -293,8 +293,8 @@ namespace intercept {
 
 
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
-        auto left = reinterpret_cast<uintptr_t>(&left_arg_);
-        auto right = reinterpret_cast<uintptr_t>(&right_arg_);
+        const auto left = reinterpret_cast<uintptr_t>(&left_arg_);
+        const auto right = reinterpret_cast<uintptr_t>(&right_arg_);
     #ifdef __linux
         return function_(invoker::sqf_game_state, left, right);
     #else
@@ -324,8 +324,7 @@ namespace intercept {
     }
 
     std::string_view invoker::get_type_str(const game_value &value_) const {
-        auto type = value_.type();
-        return type_map.at(type);
+        return type_map.at(value_.type());
     }
 
     game_value invoker::_intercept_registerTypes(const game_value& left_arg_) {
@@ -432,8 +431,8 @@ namespace intercept {
         structure = { gd_tm->get_vtable(), gd_tm->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "TEAM_MEMBER"sv;
         invoker::get().type_structures["TEAM_MEMBER"sv] = structure;
-        game_data_team::type_def = structure.first;
-        game_data_team::data_type_def = structure.second;
+        game_data_team_member::type_def = structure.first;
+        game_data_team_member::data_type_def = structure.second;
 
         //#TODO add nothing and Nil
 

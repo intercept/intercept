@@ -29,14 +29,14 @@ namespace intercept {
     typedef std::unordered_map<std::string_view, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
-        sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
-        uintptr_t _gameState;
-        uintptr_t _operator_construct;
-        uintptr_t _operator_insert;
-        uintptr_t _unary_construct;
-        uintptr_t _unary_insert;
-        uintptr_t _type_vtable;
-        uintptr_t _file_banks;
+        constexpr sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
+        uintptr_t _gameState{};
+        uintptr_t _operator_construct{};
+        uintptr_t _operator_insert{};
+        uintptr_t _unary_construct{};
+        uintptr_t _unary_insert{};
+        uintptr_t _type_vtable{};
+        uintptr_t _file_banks{};
         std::vector<const script_type_info *> _types;
     };
 
@@ -268,7 +268,7 @@ namespace intercept {
         class gsFuncBase {
         public:
             r_string _name;
-            void copyPH(gsFuncBase* other) {
+            void copyPH(const gsFuncBase* other) noexcept {
                 securityStuff = other->securityStuff;
                 //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
             }
@@ -283,7 +283,7 @@ namespace intercept {
                 11
             #endif
             #endif
-            > securityStuff;  //Will scale with x64
+            > securityStuff {};  //Will scale with x64
             //size_t securityStuff[11];
         };
         class gsFunction : public gsFuncBase {
@@ -332,15 +332,15 @@ namespace intercept {
             r_string _category; //0x4d
         #endif
             void* placeholder11{ nullptr };//0x50 JNI probably
-            const char *get_map_key() const { return _name2.data(); }
+            const char *get_map_key() const noexcept { return _name2.data(); }
         };
 
         class game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
             game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
-            game_functions() {}
-            const char *get_map_key() const { return _name.data(); }
+            game_functions() noexcept {}
+            const char *get_map_key() const noexcept { return _name.data(); }
         };
 
         class game_operators : public auto_array<gsOperator>, public gsFuncBase {
@@ -348,8 +348,8 @@ namespace intercept {
             game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
             int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
-            game_operators() {}
-            const char *get_map_key() const { return _name.data(); }
+            game_operators() noexcept {}
+            const char *get_map_key() const noexcept { return _name.data(); }
         };
     }
 

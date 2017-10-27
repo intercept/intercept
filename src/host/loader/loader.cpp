@@ -154,7 +154,6 @@ namespace intercept {
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {
-        uintptr_t types_array = state_addr_;
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
     #ifdef __linux__
@@ -172,13 +171,13 @@ namespace intercept {
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
         GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
-        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-        uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+        const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+        const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
     #endif
         //std::cout << "base - size" << std::hex << baseAddress << moduleSize << "\n";
         auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
-            uintptr_t base = baseAddress;
-            uintptr_t size = moduleSize;
+            const uintptr_t base = baseAddress;
+            const uintptr_t size = moduleSize;
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (uintptr_t j = 0; j < patternLength; j++) {
@@ -193,10 +192,10 @@ namespace intercept {
         };
 
         auto findInMemoryPattern = [baseAddress, moduleSize](const char* pattern, const char* mask, uintptr_t offset = 0) {
-            uintptr_t base = baseAddress;
-            uintptr_t size = moduleSize;
+            const uintptr_t base = baseAddress;
+            const uintptr_t size = moduleSize;
 
-            uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
+            const uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
 
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
@@ -420,7 +419,7 @@ namespace intercept {
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
-            auto type = typeToEnum(entry->_name);
+            const auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
@@ -447,7 +446,7 @@ namespace intercept {
         //_sqf_register_funcs._unary_insert = future_unary_insert.get();
         _sqf_register_funcs._gameState = state_addr_;
 
-        uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
     #ifdef __linux__
         const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);

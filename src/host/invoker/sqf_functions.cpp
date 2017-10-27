@@ -64,7 +64,7 @@ switch (_returnType) { \
         break; \
 }
 
-void registered_sqf_func_wrapper::setUnused() {
+void registered_sqf_func_wrapper::setUnused() noexcept {
     return;
     //switch (_type) {
     //    case functionType::sqf_nular:
@@ -82,7 +82,7 @@ void registered_sqf_func_wrapper::setUnused() {
     //}
 }
 
-intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) : _func(func_) {
+intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::shared_ptr<registered_sqf_func_wrapper> func_) noexcept : _func(func_) {
 
 }
 intercept::registered_sqf_function_impl::~registered_sqf_function_impl() {
@@ -93,40 +93,23 @@ intercept::registered_sqf_function_impl::~registered_sqf_function_impl() {
     _func->setUnused();
 }
 
-registered_sqf_function::registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) : _function(func_) {
+registered_sqf_function::registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept : _function(func_) {
 
 }
 
-intercept::sqf_functions::sqf_functions() {}
+intercept::sqf_functions::sqf_functions() noexcept {}
 
 
 intercept::sqf_functions::~sqf_functions() {}
 
-void intercept::sqf_functions::initialize() {
+void intercept::sqf_functions::initialize() noexcept {
     _registerFuncs = loader::get().get_register_sqf_info();
     _canRegister = true;
 }
 
-void sqf_functions::setDisabled() {
+void sqf_functions::setDisabled() noexcept {
     _canRegister = false;
 }
-
-/*
- Dedmen
- Our Problem with registering SQF functions is that we are reallocating the Array that contains the function.
- Every compiled script compiles into Instructions. And the Instructions that call the actual engine functions keep pointers to the function
- which is inside said Array. Meaning by reallocating that Array we invalidate each pointer into it from any function that was compiled before we
- inserted our Function.
-
- Current workaround is by just registering our stuff before any function is compiled by overwriting
- CfgFunctions >> init
- to point to our script.
-
- Alternative workaround is to never deallocate the old Array and just keep it dangling.
- That way pointers into that still stay valid.
- This means however that we cannot use the Engines "InsertFunctionIntoFunctionMap" function but we don't want to use that anyway.
-
-*/
 
 intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
     if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
@@ -152,7 +135,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
-    auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
+    const auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
 
     //__internal::gsOperator op2;
     //constructBinary(&op2, retType, name.c_str(), 4, function_,
@@ -234,7 +217,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //    rightype,
     //    "", description.c_str(), "", "", "", "", "Intercept", 0);
 
-    auto test = findUnary("diag_log", GameDataType::ANY);
+    const auto test = findUnary("diag_log", GameDataType::ANY);
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
@@ -309,11 +292,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
 
-    auto test = findNular("player");
+    const auto test = findNular("player");
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
-    auto alreadyExists = findNular(std::string(name));
+    const auto alreadyExists = findNular(std::string(name));
 
     if (alreadyExists) {//Name already exists
         return registered_sqf_function{ nullptr };
@@ -418,7 +401,7 @@ std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::regis
     #endif
     );
     gs->_scriptTypes.emplace_back(newType);
-    auto newIndex = _registerFuncs._types.size();
+    const auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
     LOG(INFO) << "sqf_functions::registerType "sv << name << localizedName << description << typeName;
     types::__internal::add_game_datatype(name, static_cast<types::GameDataType>(newIndex));

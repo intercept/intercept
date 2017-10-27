@@ -178,7 +178,7 @@ namespace intercept {
         */
         class entry {
         public:
-            entry() : name(""), handle(nullptr) {}
+            entry() noexcept : name(""), handle(nullptr) {}
             entry(const std::string &name_, DLL_HANDLE handle_) : name(name_), handle(handle_) {}
             /*!
             @brief The name of the module
@@ -199,7 +199,7 @@ namespace intercept {
             @brief A intercept::module::functions struct containing pointers to
             plugin exported functions.
             */
-            functions_list functions;
+            functions_list functions {};
 
             /*!
             @brief A intercept::module::eventhandlers struct containing pointers to

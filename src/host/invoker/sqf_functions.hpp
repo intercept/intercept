@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Dedmen (dedmen@dedmen.de)
 
@@ -33,7 +33,7 @@ namespace intercept {
             registered_sqf_func_wrapper(GameDataType return_type_, __internal::gsNular* func_);
             registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, __internal::gsFunction* func_);
             registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, __internal::gsOperator* func_);
-            void setUnused();
+            void setUnused() noexcept;
 
             const functionType _type;
             const r_string _name;
@@ -50,7 +50,7 @@ namespace intercept {
 
     class registered_sqf_function_impl {
     public:
-        registered_sqf_function_impl(std::shared_ptr<__internal::registered_sqf_func_wrapper> func_);
+        registered_sqf_function_impl(std::shared_ptr<__internal::registered_sqf_func_wrapper> func_) noexcept;
         /*!
         @brief Gets called when Plugin unloads. This replaces the Function that will get unloaded by a dummy function
         */
@@ -66,10 +66,10 @@ namespace intercept {
         : public singleton<sqf_functions> {
         friend class registered_sqf_function_impl;
     public:
-        sqf_functions();
+        sqf_functions() noexcept;
         ~sqf_functions();
-        void initialize();
-        void setDisabled();
+        void initialize() noexcept;
+        void setDisabled() noexcept;
         using WrapperFunctionBinary = intercept::types::binary_function;
         using WrapperFunctionUnary = intercept::types::unary_function;
         using WrapperFunctionNular = intercept::types::nular_function;

@@ -13,7 +13,7 @@ using namespace std::literals::chrono_literals;
 namespace intercept {
 	class controller_module {
 	public:
-		controller_module() : _stopped(false) { }
+		constexpr controller_module() noexcept : _stopped(false) { }
 	    ~controller_module() { }
 
 	    void stop() {
@@ -32,7 +32,7 @@ namespace intercept {
 
     class dispatcher {
     public:
-		dispatcher() : _ready(true) { }
+        constexpr dispatcher() noexcept : _ready(true) { }
 
         virtual bool call(const std::string_view name_, arguments & args_, std::string & result_) {
             auto method = _methods.find(name_);
@@ -52,8 +52,8 @@ namespace intercept {
             return true;
         }
         
-        bool ready() const { return _ready;  }
-        void ready(bool r) { _ready.exchange(r); }
+        bool ready() const noexcept { return _ready;  }
+        void ready(bool r) noexcept { _ready.exchange(r); }
     protected:
         std::unordered_map < std::string_view, std::function<bool(arguments &, std::string &)> > _methods;
         std::atomic_bool _ready;
@@ -67,15 +67,15 @@ namespace intercept {
         uint64_t    id;
     };
     struct dispatch_result {
-        dispatch_result() {}
-        dispatch_result(std::string res, const uint64_t id_) : message(std::move(res)), id(id_) {}
+        constexpr dispatch_result() noexcept {}
+        dispatch_result(std::string res, const uint64_t id_) noexcept : message(std::move(res)), id(id_) {}
         std::string message;
-        uint64_t    id;
+        uint64_t    id{};
     };
 
     class threaded_dispatcher : public dispatcher {
     public:
-        threaded_dispatcher() : _stop(false), _message_id(0) {
+        threaded_dispatcher() noexcept : _stop(false), _message_id(0) {
  
         }
 

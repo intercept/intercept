@@ -118,7 +118,7 @@ bool intercept::cert::signing::verify() {
     //CRYPT_E_EXISTS
     //E_INVALIDARG
 
-    auto ret3 = CertAddCertificateContextToStore(
+    const auto ret3 = CertAddCertificateContextToStore(
         hMemoryStore,
         ct,
         CERT_STORE_ADD_ALWAYS,
@@ -167,7 +167,7 @@ bool intercept::cert::signing::verify() {
     ChainConfig.hExclusiveRoot = hMemoryStore;
     ChainConfig.hExclusiveTrustedPeople = hMemoryStore;
     HCERTCHAINENGINE         hChainEngine;
-    auto ret4 = CertCreateCertificateChainEngine(
+    const auto ret4 = CertCreateCertificateChainEngine(
         &ChainConfig,
         &hChainEngine);
     //auto err = GetLastError();
@@ -180,7 +180,7 @@ bool intercept::cert::signing::verify() {
     }
 
 
-    auto ret = CertGetCertificateChain(
+    const auto ret = CertGetCertificateChain(
         hChainEngine,
         pCertContext,
         NULL,
@@ -208,7 +208,7 @@ bool intercept::cert::signing::verify() {
     status.pvExtraPolicyStatus = &status2;
 
 
-    BOOL verified = CertVerifyCertificateChainPolicy(CERT_CHAIN_POLICY_BASE,//CERT_CHAIN_POLICY_AUTHENTICODE,
+    const BOOL verified = CertVerifyCertificateChainPolicy(CERT_CHAIN_POLICY_BASE,//CERT_CHAIN_POLICY_AUTHENTICODE,
         chainContext,
         &policy,
         &status);

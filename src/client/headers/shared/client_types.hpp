@@ -88,13 +88,13 @@ namespace intercept {
                 });
             }
 
-            rv_color(const game_value &ret_game_value_) :
+            explicit rv_color(const game_value &ret_game_value_) :
                 red(ret_game_value_[0]),
                 green(ret_game_value_[1]),
                 blue(ret_game_value_[2]),
                 alpha(ret_game_value_[3]) {}
 
-            rv_color(float red_, float green_, float blue_, float alpha_) :
+            rv_color(float red_, float green_, float blue_, float alpha_) noexcept :
                 red(red_),
                 green(green_),
                 blue(blue_),
@@ -104,11 +104,11 @@ namespace intercept {
 
         class sqf_string_const_ref {
         public:
-            sqf_string_const_ref(const std::string& ref) : _var(std::string_view(ref)) {}
-            sqf_string_const_ref(r_string ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const std::string& ref) noexcept : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(r_string ref) noexcept : _var(std::move(ref)) {}
             sqf_string_const_ref(const game_value& ref) : _var(r_string(ref)) {}
-            sqf_string_const_ref(std::string_view ref) : _var(std::move(ref)) {}
-            sqf_string_const_ref(const char* ref) : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(std::string_view ref) noexcept : _var(std::move(ref)) {}
+            sqf_string_const_ref(const char* ref) noexcept : _var(std::string_view(ref)) {}
             operator std::string_view() const {
                 if (std::holds_alternative<std::string_view>(_var))
                     return std::get<std::string_view>(_var);
@@ -206,10 +206,10 @@ namespace intercept {
 
             operator game_value() {
                 std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
+                for (auto c : color) {
                     color_gv.push_back(c);
                 }
-                for (rv_color ec : emissive_color) {
+                for (auto ec : emissive_color) {
                     emissive_color_gv.push_back(ec);
                 }
                 return game_value(std::vector<game_value>({
@@ -241,10 +241,10 @@ namespace intercept {
 
             operator game_value() const {
                 std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
+                for (auto c : color) {
                     color_gv.push_back(c);
                 }
-                for (rv_color ec : emissive_color) {
+                for (auto ec : emissive_color) {
                     emissive_color_gv.push_back(ec);
                 }
                 return game_value(std::vector<game_value>({
@@ -328,7 +328,7 @@ namespace intercept {
 
         struct rv_best_place {
             vector2 pos;
-            float result;
+            float result = -1;
 
             rv_best_place(const game_value& gv) {
                 if (gv.size() == 2) {
@@ -418,7 +418,7 @@ namespace intercept {
         class rv_turret_path {
             game_value pathRaw;
         public:
-            explicit rv_turret_path (game_value path) : pathRaw(std::move(path)) {}
+            explicit rv_turret_path (game_value path) noexcept : pathRaw(std::move(path)) {}
 
             explicit operator std::vector<float>() const {
                if (pathRaw.type_enum() != GameDataType::ARRAY) return std::vector<float>();

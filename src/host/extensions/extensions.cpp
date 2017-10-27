@@ -77,7 +77,7 @@ namespace intercept {
     #ifndef __linux__
         using string_type = std::wstring;
         using string_view_type = std::wstring_view;
-        string_view_type bad_chars = L".\\/:?\"<>|"sv;
+        static const string_view_type bad_chars = L".\\/:?\"<>|"sv;
         int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
         string_type path;
         path.resize(length);
@@ -98,7 +98,7 @@ namespace intercept {
 
         //Filter out bad chars
         for (auto it = path.begin(); it < path.end(); ++it) {
-            bool found = bad_chars.find(*it) != std::string::npos;
+            const bool found = bad_chars.find(*it) != std::string::npos;
             if (found) {
                 LOG(ERROR) << "Client plugin: "sv << path << " contains illegal characters in its name."sv;
                 return false;

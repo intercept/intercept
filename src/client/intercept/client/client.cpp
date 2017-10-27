@@ -109,8 +109,8 @@ namespace intercept {
             game_data_rv_text::data_type_def = data_type_def;
 
             host::functions.get_type_structure("TEAM_MEMBER"sv, type_def, data_type_def);
-            game_data_team::type_def = type_def;
-            game_data_team::data_type_def = data_type_def;
+            game_data_team_member::type_def = type_def;
+            game_data_team_member::data_type_def = data_type_def;
 
             host::functions.get_type_structure("NAMESPACE"sv, type_def, data_type_def);
             game_data_rv_namespace::type_def = type_def;

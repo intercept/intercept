@@ -7,13 +7,18 @@ namespace intercept::cert {
 
     class signing {
     public:
-        signing(std::wstring_view file_path_, types::r_string ca_cert_);
-        bool verify();
+        signing();
+        bool verifyCert(std::wstring_view file_path, types::r_string ca_cert);
+        enum class security_class {
+            not_signed,
+            self_signed,
+            core
+        };
+
+        security_class classify(std::wstring_view file_path);
+
         ~signing();
     private:
-        std::wstring_view file_path;
-        types::r_string ca_cert;
-        bool verified = false;
         static void debug_certs_in_store(void* store);
     };
 }

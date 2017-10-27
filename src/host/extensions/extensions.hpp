@@ -18,7 +18,7 @@ https://github.com/NouberNou/intercept
 #include "shared/client_types.hpp"
 #include "shared/functions.hpp"
 #include "singleton.hpp"
-
+#include "signing.hpp"
 #include "search.hpp"
 
 #if __linux__
@@ -308,6 +308,7 @@ namespace intercept {
         std::unordered_map<std::string, module::entry> _modules;
 
         search::plugin_searcher _searcher;
+        cert::signing _signTool;
     };
 
 }  // namespace intercept

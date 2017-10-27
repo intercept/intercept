@@ -2,7 +2,6 @@
 #include "controller.hpp"
 #include "export.hpp"
 #include "invoker.hpp"
-#include "signing.hpp"
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -114,8 +113,7 @@ namespace intercept {
         if (certPath && certPath->length() != 0) {
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
             if (certData.capacity() != 0) {
-                cert::signing sign_checker(*full_path, certData);
-                if (!sign_checker.verify()) {
+                if (!_signTool.verifyCert(*full_path, certData)) {
                     LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
                 }
             }

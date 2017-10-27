@@ -18,9 +18,6 @@ namespace intercept {
 
             bool operator<(const internal_object& compare_) const;
             bool operator>(const internal_object& compare_) const;
-
-            bool is_null() const;
-
         };
 
             //type(const rv_game_value &value_);\ deprecated

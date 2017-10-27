@@ -1623,8 +1623,11 @@ namespace intercept {
             [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
-            //Returns true for uninitialized game_value's and Nil values returned from Arma
+            /// @brief Returns true for uninitialized game_value's and Nil values returned from Arma
             bool is_nil() const;
+            /// @brief Trying to replicate SQF isNull as good as possible. It combines isNil and isNull.
+            bool is_null() const;
+
 
             bool operator==(const game_value& other) const;
             bool operator!=(const game_value& other) const;

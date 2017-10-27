@@ -778,6 +778,59 @@ namespace intercept {
             return (data->is_nil());
         }
 
+        bool game_value::is_null() const {
+            if (!data) return true;
+            if (data->is_nil()) return true;
+            auto type = type_enum();
+            switch (type) {
+
+                case GameDataType::SCALAR:      [[fallthrough]]
+                case GameDataType::BOOL:        [[fallthrough]]
+                case GameDataType::ARRAY:       [[fallthrough]]
+                case GameDataType::STRING:      [[fallthrough]]
+                case GameDataType::NOTHING:     [[fallthrough]]
+                case GameDataType::ANY:         [[fallthrough]]
+                case GameDataType::NAMESPACE:   [[fallthrough]]
+                case GameDataType::NaN:         [[fallthrough]]
+                case GameDataType::CODE:        [[fallthrough]]
+                case GameDataType::SIDE:        [[fallthrough]]
+                case GameDataType::TEXT:        [[fallthrough]]
+                case GameDataType::TARGET:      [[fallthrough]]
+                case GameDataType::NetObject:   [[fallthrough]]
+                case GameDataType::SUBGROUP:    [[fallthrough]]
+                case GameDataType::DIARY_RECORD:
+                    return false;
+                case GameDataType::OBJECT:      [[fallthrough]] //SL
+                case GameDataType::GROUP:       [[fallthrough]] //LL
+                case GameDataType::SCRIPT:      [[fallthrough]] //LL
+                case GameDataType::DISPLAY:     [[fallthrough]] //LL
+                case GameDataType::CONTROL:     [[fallthrough]] //LL
+                case GameDataType::TEAM_MEMBER: [[fallthrough]] //SLP
+                case GameDataType::TASK:        [[fallthrough]] //LL
+                case GameDataType::LOCATION://LL
+                { 
+                    const uintptr_t datax = reinterpret_cast<uintptr_t>(data.getRef());
+                    const uintptr_t data_1 = datax + sizeof(uintptr_t) * 3;
+                    const uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
+                    if (data_2) {
+                        uintptr_t data_3 = data_2 + sizeof(uintptr_t);
+                        uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
+                        return !val;
+                    }
+                    return true;
+                }
+                case GameDataType::CONFIG: {
+                    return !reinterpret_cast<game_data_config*>(data.getRef())->path.is_empty();//#TODO test
+                }
+
+
+                default: ;
+            }
+            
+
+            return false; //Dunno that Type. Users fault.
+        }
+
         bool game_value::operator==(const game_value& other) const {
             if (!data || !other.data) return false;
             if (data->type() != other.data->type()) return false;

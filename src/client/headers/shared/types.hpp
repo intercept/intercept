@@ -935,6 +935,27 @@ namespace intercept {
             #endif
                 --base::_n;
             }
+
+            void erase(const_iterator first, const_iterator last) {
+                if (first > last || first < base::begin() || last > base::end()) throw std::runtime_error("Invalid Iterator");
+                const size_t firstIndex = std::distance(base::cbegin(), first);
+                const size_t lastIndex = std::distance(base::cbegin(), last);
+                const size_t range = std::distance(first, last);
+
+                for (int index = firstIndex; index < lastIndex; index++)
+                {
+                    auto item = (*this)[index];
+                    item.~Type();
+                }
+                if (last != end()) {
+            #ifdef __GNUC__
+                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #else
+                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #endif
+                }
+                base::_n -= range;
+            }
             //This is sooo not threadsafe!
             template<class _InIt>
             iterator insert(iterator _where, _InIt _first, _InIt _last) {

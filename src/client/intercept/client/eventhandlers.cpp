@@ -29,6 +29,11 @@ namespace intercept::client {
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
+            case eventhandler_type::custom: {
+                auto found = customCallbackMap.find({ uid, handle, 0 });
+                if (found != customCallbackMap.end())
+                    retVal = (*found->second)(args);
+            } break;
             default:;
         }
         return;
@@ -612,6 +617,30 @@ namespace intercept::client {
         }
         sqf::remove_mp_event_handler(unit, static_cast<sqf_string>(typeStr), std::get<1>(handle));
     }
-
 #pragma endregion
+
+
+    std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value)>>, EHIdentifier_hasher> customCallbackMap;
+
+    std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<game_value(game_value)> fnc) {
+        static float ehId = -16777210.f;
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+        auto uid = dist(rng);
+
+        ehId += 1.f;
+        EHIdentifier ident{ uid, ehId, 0 };
+
+        customCallbackMap[ident] = std::make_shared<std::function<game_value(game_value)>>(fnc);
+
+        std::string command = std::string("[\"")
+            + intercept::client::host::module_name.data() + "\","
+            + std::to_string(static_cast<uint32_t>(eventhandler_type::custom)) + ","
+            + std::to_string(uid) + ","
+            + std::to_string(ehId) + "] InterceptClientEvent _this";
+
+        return { command, { ident, [](EHIdentifier& id) { funcMapMPEH.erase(id); } } };
+    }
+
+
 }  // namespace intercept::client

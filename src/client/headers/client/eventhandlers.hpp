@@ -38,6 +38,7 @@ namespace intercept::client {
      */
     class EHIdentifierHandle {
     public:
+        constexpr EHIdentifierHandle() noexcept {}
         EHIdentifierHandle(EHIdentifier ident, std::function<void(EHIdentifier&)> onDelete) : handle(std::make_shared<impl>(std::move(ident), std::move(onDelete))) {}
 
     private:
@@ -57,7 +58,8 @@ namespace intercept::client {
         mission,
         object,
         display,
-        ctrl
+        ctrl,
+        custom
     };
 
 #pragma region Mission Eventhandlers
@@ -560,19 +562,32 @@ namespace intercept::client {
     EHDEF_MP(EH_Add_MP_definition)
 
 
-        /**
-        * @brief Registers a MP Eventhandler with callback to a C++ function
-        * @tparam Type is a value from intercept::client::eventhandlers_mp
-        * @param unit - the unit you add this Eventhandler to.
-        * @param fnc - The function that will get called
-        * @return A wrapper that should be kept alive as long as the Eventhandler should be active
-        * @ingroup eh_bind
-        */
-        template <eventhandlers_mp Type, typename Func = typename __addMPEventHandler_Impl<Type>::fncType>
+    /**
+    * @brief Registers a MP Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_mp
+    * @param unit - the unit you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
+    template <eventhandlers_mp Type, typename Func = typename __addMPEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle addMPEventHandler(types::object unit, Func fnc) {
         return { __addMPEventHandler_Impl<Type>::add(unit, fnc), [unit,type = Type](EHIdentifier& id) { funcMapMPEH.erase(id); delScriptEH(unit,type,id); } };
     }
 #pragma endregion
 
+
+    /// @private
+    extern std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value)>>, EHIdentifier_hasher> customCallbackMap;
+
+
+    /**
+    * @brief Registers a custom callback to a C++ function
+    * @param fnc - The function that will get called. It's argument is _this from where the code was called
+    * @return A SQF script that, when called will call your C++ function.
+    * @return A wrapper that should be kept alive as long as the Callback should be active
+    * @ingroup eh_bind
+    */
+    [[nodiscard]] std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<types::game_value(types::game_value)> fnc);
 
 }  // namespace intercept::client                                                                                    

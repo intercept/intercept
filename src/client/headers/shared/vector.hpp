@@ -71,6 +71,7 @@ namespace intercept {
             constexpr bool operator <= (const vector3_base& r) const noexcept { if (*this == r) return true; return magnitude() < r.magnitude(); }
 
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y + z * z); }
+            constexpr T magnitude_squared() const noexcept { return x * x + y * y + z * z; }
             constexpr T dot(const vector3_base& v) const noexcept { return (x * v.x + y * v.y + z * v.z); }
             constexpr T distance(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y + dist.z); }
             constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
@@ -158,6 +159,7 @@ namespace intercept {
             constexpr bool operator <= (const vector2_base& r) const noexcept { if (*this == r) return true; return magnitude() < r.magnitude(); }
 
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y); }
+            constexpr T magnitude_squared() const noexcept { return x * x + y * y; }
             constexpr T dot(const vector2_base& v) const noexcept { return (x * v.x + y * v.y); }
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }

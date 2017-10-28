@@ -64,6 +64,7 @@ namespace intercept {
             EH_EVENT_DEF(weapon_disassembled);
             EH_EVENT_DEF(weapon_deployed);
             EH_EVENT_DEF(weapon_rested);
+            EH_EVENT_DEF(post_start);
             _initialized = true;
         }
     }
@@ -94,6 +95,15 @@ namespace intercept {
             if (module.second.functions.pre_start) module.second.functions.pre_start();
         }
         preStartCalled = true;
+    }
+    void eventhandlers::post_start(game_value &) {
+        static bool postStartCalled = false;
+        if (postStartCalled) throw std::runtime_error("post_start called twice");
+        LOG(INFO) << "Post-start"sv;
+        for (auto& module : extensions::get().modules()) {
+            if (module.second.functions.post_start) module.second.functions.post_start();
+        }
+        postStartCalled = true;
     }
     void eventhandlers::pre_init(game_value &)
     {

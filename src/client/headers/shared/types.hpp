@@ -891,7 +891,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
 
@@ -904,7 +904,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
                 return iterator(&item);
@@ -950,7 +950,7 @@ namespace intercept {
                 for (; _first != _last; ++_first) {
                     //emplace_back(*_first);
                     //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                    auto& item = (*this)[index];
+                    auto& item = base::_data[index];
                     ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
                     ++index;
                 }

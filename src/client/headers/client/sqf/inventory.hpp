@@ -381,6 +381,17 @@ namespace intercept {
                     return game_value({});
                 }
             }
+            bool operator==(const rv_magazine_info& other) const {
+                return
+                    magazine == other.magazine &&
+                    ammo == other.ammo &&
+                    count == other.count;
+            }
+            void clear() {
+                magazine.clear();
+                ammo = -1;
+                count = -1;
+            }
         };
 
         struct rv_weapon_info {  //#TODO It would be better to store these as r_strings
@@ -421,6 +432,26 @@ namespace intercept {
                     return game_value({});
                 }
             }
+
+            bool operator==(const rv_weapon_info& other) const {
+                return
+                    weapon == other.weapon &&
+                    silencer == other.silencer &&
+                    laser == other.laser &&
+                    optics == other.optics &&
+                    primary_muzzle_magazine == other.primary_muzzle_magazine &&
+                    secondary_muzzle_magazine == other.secondary_muzzle_magazine &&
+                    bipod == other.bipod;
+            }
+            void clear() {
+                weapon.clear();
+                silencer.clear();
+                laser.clear();
+                optics.clear();
+                primary_muzzle_magazine.clear();
+                secondary_muzzle_magazine.clear();
+                bipod.clear();
+            }
         };
 
         struct rv_container_info {
@@ -447,8 +478,20 @@ namespace intercept {
                                        auto_array<game_value>(items.begin(), items.end())});
                 } else {
                     return game_value({});
+                
                 }
             }
+
+            bool operator==(const rv_container_info& other) const {
+                return
+                    container == other.container &&
+                    items == other.items;
+            }
+             void clear() {
+                 container.clear();
+                 items.clear();
+            }
+
         };
 
         struct rv_unit_loadout {
@@ -462,6 +505,8 @@ namespace intercept {
             std::string facewear;
             rv_weapon_info binocular;
             std::vector<std::string> assigned_items;
+            
+            rv_unit_loadout() {}
 
             rv_unit_loadout(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() == 0) return;
@@ -490,10 +535,37 @@ namespace intercept {
                                    static_cast<game_value>(binocular),
                                    auto_array<game_value>(assigned_items.begin(), assigned_items.end())});
             }
+
+            bool operator==(const rv_unit_loadout& other) const {
+                return
+                    primary == other.primary &&
+                    secondary == other.secondary &&
+                    handgun == other.handgun &&
+                    uniform == other.uniform &&
+                    vest == other.vest &&
+                    backpack == other.backpack &&
+                    headgear == other.headgear &&
+                    facewear == other.facewear &&
+                    binocular == other.binocular &&
+                    assigned_items == other.assigned_items;
+            }
+            void clear() {
+                primary.clear();
+                secondary.clear();
+                handgun.clear();
+                uniform.clear();
+                vest.clear();
+                backpack.clear();
+                headgear.clear();
+                facewear.clear();
+                binocular.clear();
+                assigned_items.clear();
+            }
         };
 
-        rv_unit_loadout get_unit_loadout(const object &obj_);
-        rv_unit_loadout get_unit_loadout(const config &cfg_);
+        /// @brief you can cast this to intercept::sqf::rv_unit_loadout to easily parse it
+        game_value get_unit_loadout(const object &obj_);
+        game_value get_unit_loadout(const config &cfg_);
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_ = false);
         void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_ = false);
 

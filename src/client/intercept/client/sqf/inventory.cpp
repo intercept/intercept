@@ -708,13 +708,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, target_, {weapon_, count});
         }
 
-        rv_unit_loadout get_unit_loadout(const object &obj_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__object_array__ret__array, obj_);
-            return rv_unit_loadout(ret);
+        game_value get_unit_loadout(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__object_array__ret__array, obj_);
         }
-        rv_unit_loadout get_unit_loadout(const config &cfg_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__config__ret__array, cfg_);
-            return rv_unit_loadout(ret);
+        game_value get_unit_loadout(const config &cfg_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__config__ret__array, cfg_);
         }
         //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
         //binary__setunitloadout__object__string__ret__nothing

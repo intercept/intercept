@@ -3,10 +3,6 @@
 namespace intercept {
     namespace types {
 
-        template <typename T> T acos(T) { return -1; }
-        template <typename T> T cos(T) { return -1; }
-        template <typename T> T sin(T) { return -1; }
-
         template<typename T>
         class vector3_base {
         public:

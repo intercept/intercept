@@ -548,10 +548,11 @@ namespace intercept {
             r_string operator+(std::string _right) {
                 return append(_right);
             }
-            void to_lower() {
-                if (!_ref) return;
+            r_string& to_lower() {
+                if (!_ref) return *this;
                 make_mutable();
                 std::transform(_ref->begin(),_ref->end(),_ref->begin(),::tolower);//https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+                return *this;
             }
             ///Be careful! This returns nullptr on empty string
             const char* begin() const noexcept {

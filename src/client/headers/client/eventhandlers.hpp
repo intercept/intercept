@@ -12,6 +12,7 @@ Provides the ability to assign Eventhandlers without going through SQF
 #pragma once
 #include "../shared/client_types.hpp"
 #include <functional>
+#include <vector>
 namespace intercept::client {
 
     enum class loaded_saveType {
@@ -221,7 +222,35 @@ namespace intercept::client {
 #define EH_Func_Args_Object_HandleScore types::object unit, types::object object_, float score
 #define EH_Func_Args_Object_Hit types::object unit, types::object causedBy, float damage, types::object instigator
 //#TODO correct type for ammo
-#define EH_Func_Args_Object_HitPart types::object target, types::object shooter, types::object bullet, types::vector3 position, types::vector3 velocity, types::auto_array<types::r_string> selection, types::auto_array<types::game_value> ammo, types::vector3 direction, float radius, types::r_string surface, bool direct
+
+ class eventhandler_hit_part_type {
+ public:
+     explicit eventhandler_hit_part_type(const types::game_value& gv) :
+         target(gv[0]),
+         shooter(gv[1]),
+         bullet(gv[2]),
+         position(gv[3]),
+         velocity(gv[4]),
+         selection(gv[5].to_array().begin(), gv[5].to_array().end()),
+         ammo(gv[6].to_array().begin(), gv[6].to_array().end()),
+         direction(gv[7]),
+         radius(gv[8]),
+         surface(gv[9]),
+         direct(gv[19]) {}
+     types::object target;
+     types::object shooter;
+     types::object bullet;
+     types::vector3 position;
+     types::vector3 velocity;
+     types::auto_array<types::r_string> selection;
+     types::auto_array<types::game_value> ammo;
+     types::vector3 direction;
+     float radius;
+     types::r_string surface;
+     bool direct;
+ };
+
+#define EH_Func_Args_Object_HitPart std::vector<eventhandler_hit_part_type>;
 #define EH_Func_Args_Object_Init types::object unit
 #define EH_Func_Args_Object_HandleIdentity types::object unit
 #define EH_Func_Args_Object_IncomingMissile types::object target, types::r_string ammo, types::object vehicle, types::object instigator
@@ -297,7 +326,6 @@ namespace intercept::client {
     XX(HandleRating, std::optional<float>, EH_Func_Args_Object_HandleRating)    \
     XX(HandleScore, std::optional<bool>, EH_Func_Args_Object_HandleScore)       \
     XX(Hit, void, EH_Func_Args_Object_Hit)                                      \
-    XX(HitPart, void, EH_Func_Args_Object_HitPart)                              \
     XX(Init, void, EH_Func_Args_Object_Init)                                    \
     XX(HandleIdentity, std::optional<bool>, EH_Func_Args_Object_HandleIdentity) \
     XX(IncomingMissile, void, EH_Func_Args_Object_IncomingMissile)              \
@@ -326,6 +354,10 @@ namespace intercept::client {
     XX(WeaponDisassembled, void, EH_Func_Args_Object_WeaponDisassembled)        \
     XX(WeaponDeployed, void, EH_Func_Args_Object_WeaponDeployed)                \
     XX(WeaponRested, void, EH_Func_Args_Object_WeaponRested)
+
+   // XX(HitPart, void, EH_Func_Args_Object_HitPart)                              \
+
+
 
 #define COMPILETIME_CHECK_ENUM_OBJECT(name, retVal, funcArg) static_assert(eventhandlers_object::name >= eventhandlers_object::AnimChanged);
 
@@ -417,6 +449,19 @@ namespace intercept::client {
     };
 
     EHDEF_OBJECT(EH_Add_Object_definition)
+
+    /// @private
+    template <>
+    struct __addEventHandler_Impl<eventhandlers_object::HitPart> {
+        using fncType = std::function<void(std::vector<eventhandler_hit_part_type>)>;
+        [[nodiscard]] static EHIdentifier add(types::object obj, std::function<void(std::vector<eventhandler_hit_part_type>)> function) {
+            auto ident = addScriptEH(obj, eventhandlers_object::HitPart);
+            funcMapObjectEH[ident] = { eventhandlers_object::HitPart, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function)) };
+            return ident;
+        }
+    };
+
+
 
     /**
     * @brief Registers a Eventhandler with callback to a C++ function

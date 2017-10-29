@@ -159,7 +159,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -327,7 +327,12 @@ namespace intercept::client {
             }
                 break;
             case eventhandlers_object::HitPart: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_HitPart)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], types::auto_array<types::r_string>(args[5].to_array().begin(), args[5].to_array().end()), args[6].to_array(), args[7], args[8], args[9], args[10]);
+                std::vector<eventhandler_hit_part_type> vec;
+                for (auto& el : args.to_array()) {
+                    vec.emplace_back(el);
+                }
+
+                (*reinterpret_cast<std::function<void(std::vector<eventhandler_hit_part_type>)>*>(func.get()))(std::move(vec));
             }
                 break;
             case eventhandlers_object::Init: {
@@ -459,6 +464,7 @@ namespace intercept::client {
 #define EHOBJ_CASE(name, retVal, args) \
     case eventhandlers_object::name: typeStr = #name##sv; break;
             EHDEF_OBJECT(EHOBJ_CASE)
+            case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
             default:;
         }
 
@@ -468,7 +474,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "',"
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -479,6 +485,7 @@ namespace intercept::client {
         r_string typeStr;
         switch (type) {
             EHDEF_OBJECT(EHOBJ_CASE)
+            case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
         default:;
         }
         sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), static_cast<int>(std::get<1>(handle)));
@@ -542,7 +549,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -602,7 +609,7 @@ namespace intercept::client {
             + intercept::client::host::module_name.data() + "\","
             + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
             + std::to_string(uid) + ","
-            + "_thisEventHandler] InterceptClientEvent _this";
+            + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string>(typeStr), command);
 
         return { uid, ehid, EHIteration };
@@ -637,7 +644,7 @@ namespace intercept::client {
             + intercept::client::host::module_name.data() + "\","
             + std::to_string(static_cast<uint32_t>(eventhandler_type::custom)) + ","
             + std::to_string(uid) + ","
-            + std::to_string(ehId) + "] InterceptClientEvent _this";
+            + std::to_string(ehId) + "] InterceptClientEvent [_this]";
 
         return { command, { ident, [](EHIdentifier& id) { funcMapMPEH.erase(id); } } };
     }

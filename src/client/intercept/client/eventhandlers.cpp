@@ -2,7 +2,11 @@
 #include "eventhandlers.hpp"
 #include "sqf.hpp"
 
+namespace intercept::types {
+    extern bool exiting;
+};
 namespace intercept::client {
+
     /// @private
     uint32_t EHIteration = 0; //How often the EH's have been cleared yet. Used to detect invalid removeEH calls
 
@@ -166,7 +170,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration  || exiting) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MISSION(EHMISS_CASE)
@@ -481,7 +485,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_OBJECT(EHOBJ_CASE)
@@ -556,7 +560,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_CTRL(EHCTRL_CASE)
@@ -616,7 +620,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MP(EHMP_CASE)

@@ -48,9 +48,7 @@ namespace intercept::client {
             impl(EHIdentifier&& ident_, std::function<void(EHIdentifier&)>&& onDelete_) : ident(ident_), onDelete(onDelete_) {}
             EHIdentifier ident;
             std::function<void(EHIdentifier&)> onDelete;
-            ~impl() {
-                onDelete(ident);
-            }
+            ~impl();
         };
         std::shared_ptr<impl> handle;
     };

@@ -52,6 +52,11 @@ namespace intercept::client {
 #pragma region Mission Eventhandlers
     std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
 
+    EHIdentifierHandle::impl::~impl() {
+        if (!exiting)
+            onDelete(ident);
+    }
+
     intercept::types::game_value callEHHandler(eventhandlers_mission ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
         switch (ehType) {
             case eventhandlers_mission::PreloadStarted: //[[fallthrough]]
@@ -170,7 +175,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration  || exiting) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MISSION(EHMISS_CASE)
@@ -485,7 +490,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_OBJECT(EHOBJ_CASE)
@@ -560,7 +565,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_CTRL(EHCTRL_CASE)
@@ -620,7 +625,7 @@ namespace intercept::client {
     }
 
     void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration || exiting) return;//Handle not valid anymore
+        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MP(EHMP_CASE)

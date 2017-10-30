@@ -551,7 +551,7 @@ namespace intercept {
             r_string& to_lower() {
                 if (!_ref) return *this;
                 make_mutable();
-                std::transform(_ref->begin(),_ref->end(),_ref->begin(),::tolower);//https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+                std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
                 return *this;
             }
             ///Be careful! This returns nullptr on empty string

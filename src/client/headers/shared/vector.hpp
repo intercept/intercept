@@ -3,6 +3,17 @@
 namespace intercept {
     namespace types {
 
+        template<class _Ty> //Copy from STL headers. Because GCC6 doesn't support it
+        constexpr const _Ty& clamp(const _Ty& _Val, const _Ty& _Min_val,
+            const _Ty& _Max_val) {// returns _Val constrained to [_Min_val, _Max_val] ordered by _Pred
+            return (_Max_val < _Val
+                ? _Max_val
+                : _Val < _Min_val
+                ? _Min_val
+                : _Val);
+        }
+
+
         template<typename T>
         class vector3_base {
         public:
@@ -84,7 +95,7 @@ namespace intercept {
             /// @brief spherical linear interpolate
             static constexpr vector3_base slerp(vector3_base start, vector3_base end, T percent) noexcept {
                 T dot = start.dot(end);
-                dot = std::clamp(dot, -1.0f, 1.0f);
+                dot = clamp(dot, -1.0f, 1.0f);
 
                 T theta = std::acos(dot) * percent;
                 vector3_base relative = end - start*dot;
@@ -171,7 +182,7 @@ namespace intercept {
             /// @brief spherical linear interpolate
             static constexpr vector2_base slerp(vector2_base start, vector2_base end, T percent) noexcept {
                 T dot = start.dot(end);
-                dot = std::clamp(dot, -1.0f, 1.0f);
+                dot = clamp(dot, -1.0f, 1.0f);
 
                 T theta = std::acos(dot) * percent;
                 vector2_base relative = end - start*dot;

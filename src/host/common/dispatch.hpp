@@ -67,7 +67,7 @@ namespace intercept {
         uint64_t    id;
     };
     struct dispatch_result {
-        constexpr dispatch_result() noexcept {}
+        dispatch_result() noexcept {}
         dispatch_result(std::string res, const uint64_t id_) noexcept : message(std::move(res)), id(id_) {}
         std::string message;
         uint64_t    id{};

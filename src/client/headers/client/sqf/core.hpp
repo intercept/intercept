@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -25,6 +25,8 @@ namespace intercept {
         //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
         game_value call(const code &code_);
+        script spawn(game_value args, const code &code_);
+
 
         bool is_nil_code(const code &code_);
         code compile(sqf_string_const_ref sqf_);
@@ -222,6 +224,19 @@ namespace intercept {
         int count_type(sqf_string_const_ref type_, const std::vector<object> &objects_);
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
+
+
+        bool is_equal_to(game_value left_, game_value right_);
+        bool is_equal_type(game_value left_, game_value right_);
+        bool is_equal_type_all(game_value value_array_, game_value type_);
+        bool is_equal_type_any(game_value value_, game_value types_array_);
+        bool is_equal_type_array(game_value left_array_, game_value right_array_);
+        bool is_equal_type_params(game_value value_, game_value template_);
+
+
+
+
+
 
     }  // namespace sqf
 }  // namespace intercept

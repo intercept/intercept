@@ -600,11 +600,7 @@ namespace intercept {
         rv_hit_points_damage get_all_hit_points_damage(const object &veh_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getallhitpointsdamage__object__ret__array, veh_);
 
-            sqf_return_string_list hit_points = __helpers::__convert_to_strings_vector(ret[0]);
-            sqf_return_string_list hit_selections = __helpers::__convert_to_strings_vector(ret[1]);
-            std::vector<float> damages = __helpers::__convert_to_numbers_vector(ret[2]);
-
-            return rv_hit_points_damage({hit_points, hit_selections, damages});
+            return rv_hit_points_damage(ret);
         }
 
         sqf_return_string_list get_object_materials(const object &object_) {

@@ -323,22 +323,7 @@ namespace intercept {
             sqf_return_string_list hit_selections;
             std::vector<float> damages;
 
-            rv_hit_points_damage(const game_value &_gv) {
-                auto &_arr = _gv.to_array();
-                if (_arr.count() == 3) {
-                    auto &_hp = _arr[0].to_array();
-                    auto &_hs = _arr[1].to_array();
-                    auto &_dmgs = _arr[2].to_array();
-
-                    //iterator conversion didnt work
-                    hit_points.reserve(_hp.count());
-                    hit_selections.reserve(_hs.count());
-                    damages.reserve(_dmgs.count());
-                    for (auto &_x : _hp) hit_points.emplace_back(_x);
-                    for (auto &_x : _hs) hit_selections.emplace_back(_x);
-                    for (auto &_x : _dmgs) damages.emplace_back(_x);
-                }
-            }
+            explicit rv_hit_points_damage(const game_value& _gv);
 
             operator game_value() const {
                 return game_value({ hit_points, hit_selections, damages });
@@ -366,7 +351,7 @@ namespace intercept {
             object unit;
             std::string position;
 
-            rv_uav_control(const game_value &ret_game_value_) :
+            explicit rv_uav_control(const game_value &ret_game_value_) :
                 unit(ret_game_value_[0]),
                 position(ret_game_value_[1]) {}
         };
@@ -376,7 +361,7 @@ namespace intercept {
             std::string path;
             bool skeleton;
 
-            rv_model_info(const game_value &ret_game_value_) :
+            explicit rv_model_info(const game_value &ret_game_value_) :
                 name(ret_game_value_[0]),
                 path(ret_game_value_[1]),
                 skeleton(ret_game_value_[2]) {}

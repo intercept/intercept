@@ -1,6 +1,7 @@
 #include "shared/client_types.hpp"
 #include "client/client.hpp"
 #include "shared/functions.hpp"
+#include "../client/sqf/common_helpers.hpp"
 
 namespace intercept {
     namespace types {
@@ -76,5 +77,13 @@ namespace intercept {
         RV_GENERIC_OBJECT_DEF(rv_namespace)
 
         RV_GENERIC_OBJECT_DEF(task)
+
+rv_hit_points_damage::rv_hit_points_damage(const game_value& _gv) {
+                auto& _arr = _gv.to_array();
+                if (_arr.count() != 3) return;
+                hit_points = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[0]);
+                hit_selections = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[1]);
+                damages = sqf::__helpers::__convert_to_vector<float>(_arr[2]);
+            }
     }
 }

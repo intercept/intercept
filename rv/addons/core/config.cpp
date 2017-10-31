@@ -960,7 +960,7 @@ class Intercept {
 
 class Extended_PreStart_EventHandlers {
     class Intercept_Core {
-        init = "isNil{['post_start', _this] call (uiNamespace getVariable 'intercept_fnc_event');}"
+        init = "['post_start', _this] call (uiNamespace getVariable 'intercept_fnc_event');"
     };
 };
 

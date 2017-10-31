@@ -32,7 +32,7 @@ namespace intercept {
 
     class dispatcher {
     public:
-        constexpr dispatcher() noexcept : _ready(true) { }
+        dispatcher() noexcept : _ready(true) { }
 
         virtual bool call(const std::string_view name_, arguments & args_, std::string & result_) {
             auto method = _methods.find(name_);

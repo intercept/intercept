@@ -498,21 +498,17 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
         }
 
-        float distance_gv(game_value start_,game_value end_) {
-             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        }
-
         float distance(object start_, vector3 end_) {
-            return distance_gv(start_, end_);
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         };
         float distance(object start_, object end_) {
-            return distance_gv(start_, end_);
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         };
         float distance(vector3 start_, vector3 end_) {
-            return distance_gv(start_, end_);
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         };
         float distance(vector3 start_, object end_) {
-            return distance_gv(start_, end_);
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         };
 
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_) {

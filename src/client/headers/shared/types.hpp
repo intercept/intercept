@@ -423,36 +423,36 @@ namespace intercept {
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
                 if (data() == other.data()) return true;
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///== is case insensitive just like scripting
             bool operator == (const std::string& other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///== is case insensitive just like scripting
             bool operator == (std::string_view other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///!= is case insensitive just like scripting
@@ -530,7 +530,7 @@ namespace intercept {
                 return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
 
-            r_string append(std::string_view _right) {
+            r_string append(std::string_view _right) const {
                 auto myLength = length();
                 auto newData = create(myLength+_right.length());
             #if __GNUC__

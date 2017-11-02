@@ -1,5 +1,5 @@
 #pragma once
-#include "shared.hpp"
+#include "../shared.hpp"
 #include "types.hpp"
 #include <variant>
 namespace intercept {
@@ -322,6 +322,12 @@ namespace intercept {
             sqf_return_string_list hit_points;
             sqf_return_string_list hit_selections;
             std::vector<float> damages;
+
+            explicit rv_hit_points_damage(const game_value& _gv);
+
+            operator game_value() const {
+                return game_value({ hit_points, hit_selections, damages });
+            }
         };
 
 
@@ -345,7 +351,7 @@ namespace intercept {
             object unit;
             std::string position;
 
-            rv_uav_control(const game_value &ret_game_value_) :
+            explicit rv_uav_control(const game_value &ret_game_value_) :
                 unit(ret_game_value_[0]),
                 position(ret_game_value_[1]) {}
         };
@@ -355,7 +361,7 @@ namespace intercept {
             std::string path;
             bool skeleton;
 
-            rv_model_info(const game_value &ret_game_value_) :
+            explicit rv_model_info(const game_value &ret_game_value_) :
                 name(ret_game_value_[0]),
                 path(ret_game_value_[1]),
                 skeleton(ret_game_value_[2]) {}

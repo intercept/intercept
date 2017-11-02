@@ -13,6 +13,6 @@ set_target_properties(extensions_static PROPERTIES COMPILE_DEFINITIONS _STATIC)
 set_target_properties(extensions_static PROPERTIES FOLDER intercept)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	set_target_properties(extensions_static PROPERTIES LINK_SEARCH_START_STATIC 1)
-	set_target_properties(extensions_static PROPERTIES LINK_SEARCH_END_STATIC 1)
+    set_target_properties(extensions_static PROPERTIES LINK_SEARCH_START_STATIC 1)
+    set_target_properties(extensions_static PROPERTIES LINK_SEARCH_END_STATIC 1)
 endif()

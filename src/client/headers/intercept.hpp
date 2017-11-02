@@ -9,7 +9,10 @@
 namespace intercept {
     extern "C" {
         DLLEXPORT int  CDECL api_version();
+        /// @brief before initFunctions. Actually a prePreStart
         DLLEXPORT void CDECL pre_start();
+        /// @brief CBA XEH_preStart
+        DLLEXPORT void CDECL post_start();
         DLLEXPORT void CDECL pre_init();
         DLLEXPORT void CDECL post_init();
         DLLEXPORT void CDECL mission_end();

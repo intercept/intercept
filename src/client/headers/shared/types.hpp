@@ -8,7 +8,7 @@
 //#include <utility>
 #include "vector.hpp"
 //#include "pool.hpp"
-#include "shared.hpp"
+#include "../shared.hpp"
 #include <string_view>
 #include <string.h>
 #include <algorithm>
@@ -423,36 +423,36 @@ namespace intercept {
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
                 if (data() == other.data()) return true;
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///== is case insensitive just like scripting
             bool operator == (const std::string& other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///== is case insensitive just like scripting
             bool operator == (std::string_view other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
             ///!= is case insensitive just like scripting
@@ -530,7 +530,7 @@ namespace intercept {
                 return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
 
-            r_string append(std::string_view _right) {
+            r_string append(std::string_view _right) const {
                 auto myLength = length();
                 auto newData = create(myLength+_right.length());
             #if __GNUC__
@@ -548,10 +548,16 @@ namespace intercept {
             r_string operator+(std::string _right) {
                 return append(_right);
             }
-            void to_lower() {
-                if (!_ref) return;
+            r_string& to_lower() {
+                if (!_ref) return *this;
                 make_mutable();
-                std::transform(_ref->begin(),_ref->end(),_ref->begin(),::tolower);//https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+            #ifdef __linux__
+                std::transform(_ref->begin(), _ref->end(), _ref->begin(), ::tolower);
+            #else
+                std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+            #endif
+                
+                return *this;
             }
             ///Be careful! This returns nullptr on empty string
             const char* begin() const noexcept {
@@ -891,7 +897,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
 
@@ -904,7 +910,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
                 return iterator(&item);
@@ -935,6 +941,27 @@ namespace intercept {
             #endif
                 --base::_n;
             }
+
+            void erase(const_iterator first, const_iterator last) {
+                if (first > last || first < base::begin() || last > base::end()) throw std::runtime_error("Invalid Iterator");
+                const size_t firstIndex = std::distance(base::cbegin(), first);
+                const size_t lastIndex = std::distance(base::cbegin(), last);
+                const size_t range = std::distance(first, last);
+
+                for (int index = firstIndex; index < lastIndex; index++)
+                {
+                    auto item = (*this)[index];
+                    item.~Type();
+                }
+                if (last != end()) {
+            #ifdef __GNUC__
+                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #else
+                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #endif
+                }
+                base::_n -= range;
+            }
             //This is sooo not threadsafe!
             template<class _InIt>
             iterator insert(iterator _where, _InIt _first, _InIt _last) {
@@ -950,7 +977,7 @@ namespace intercept {
                 for (; _first != _last; ++_first) {
                     //emplace_back(*_first);
                     //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                    auto& item = (*this)[index];
+                    auto& item = base::_data[index];
                     ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
                     ++index;
                 }

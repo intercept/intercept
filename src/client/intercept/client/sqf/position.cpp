@@ -1,4 +1,4 @@
-﻿#include "chat.hpp"
+#include "chat.hpp"
 #include "client/pointers.hpp"
 #include "position.hpp"
 #include "common_helpers.hpp"
@@ -498,18 +498,18 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
         }
 
-        float distance(std::variant<object, vector3> start_, std::variant<object, vector3> end_) {
-            game_value from, to;
-            switch (start_.index()) {
-                case 0: from = (std::get<object>(start_)); break;
-                case 1: from = (std::get<vector3>(start_)); break;
-            }
-            switch (end_.index()) {
-                case 0: to = (std::get<object>(start_)); break;
-                case 1: to = (std::get<vector3>(start_)); break;
-            }
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, from, to);
-        }
+        float distance(object start_, vector3 end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        };
+        float distance(object start_, object end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        };
+        float distance(vector3 start_, vector3 end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        };
+        float distance(vector3 start_, object end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        };
 
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_) {
             auto_array<game_value> params_right;

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -134,7 +134,10 @@ namespace intercept {
         float distance_sqr(std::variant<object, vector3, location> start_, std::variant<object, vector3, location> end_);
         //#Categorize is this really position category? Sounds more worldish
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_);
-        float distance(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
+        float distance(object start_, vector3 end_);
+        float distance(object start_, object end_);
+        float distance(vector3 start_, vector3 end_);
+        float distance(vector3 start_, object end_);
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_);
         vector3 building_exit(const object &building_, int index_);
         

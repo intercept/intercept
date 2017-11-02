@@ -13,7 +13,7 @@ intercept_fnc_test = {
         };
         diag_log text format["Intercept Invoker test result: %1 == %2", _res, profileNameSteam];
     };
-    intercept_invoker_ok
+    nil
 };
 
 intercept_fnc_exportOpList = {
@@ -67,24 +67,21 @@ private _res = "intercept" callExtension "init_invoker:";
 
 [] call intercept_fnc_test;
 
-
-
-//intercept_invoker_ok = true;
 if(intercept_invoker_ok) then {
 
-	intercept_fnc__onFrame = compileFinal "isNil {interceptOnFrame;}";
+	intercept_fnc_onFrame = compileFinal "isNil {interceptOnFrame;}";
 	intercept_fnc_signal = compileFinal preProcessFileLineNumbers "\z\intercept\rv\addons\core\signal.sqf";
 
-    ["intercept_onFrame", "onEachFrame", intercept_fnc__onFrame] call BIS_fnc_addStackedEventHandler;
+    ["intercept_onFrame", "onEachFrame", intercept_fnc_onFrame] call BIS_fnc_addStackedEventHandler;
     diag_log text "Intercept Invoker initialized.";
     diag_log text format["Intercept Pre-Init..."];
     ["pre_init",[]] call (uiNamespace getVariable "intercept_fnc_event");
     diag_log text format["Intercept Pre-Init Completed."];
 } else {
-    intercept_fnc__onFrame = {};
-    intercept_fnc_signal = {};
+    intercept_fnc_onFrame = compileFinal "";
+    intercept_fnc_signal =  compileFinal "";
 
-    if (isNull (uiNamespace getVariable ["intercept_fnc_event", scriptNull]) then {
+    if (isNull (uiNamespace getVariable ["intercept_fnc_event", scriptNull])) then {
         uiNamespace setVariable ["intercept_fnc_event", {}];
     };
 };

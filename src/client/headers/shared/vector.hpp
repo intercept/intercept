@@ -1,11 +1,18 @@
 #pragma once
-#include "shared.hpp"
+#include "../shared.hpp"
 namespace intercept {
     namespace types {
 
-        template <typename T> T acos(T) { return -1; }
-        template <typename T> T cos(T) { return -1; }
-        template <typename T> T sin(T) { return -1; }
+        template<class _Ty> //Copy from STL headers. Because GCC6 doesn't support it
+        constexpr const _Ty& clamp(const _Ty& _Val, const _Ty& _Min_val,
+            const _Ty& _Max_val) {// returns _Val constrained to [_Min_val, _Max_val] ordered by _Pred
+            return (_Max_val < _Val
+                ? _Max_val
+                : _Val < _Min_val
+                ? _Min_val
+                : _Val);
+        }
+
 
         template<typename T>
         class vector3_base {
@@ -71,6 +78,7 @@ namespace intercept {
             constexpr bool operator <= (const vector3_base& r) const noexcept { if (*this == r) return true; return magnitude() < r.magnitude(); }
 
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y + z * z); }
+            constexpr T magnitude_squared() const noexcept { return x * x + y * y + z * z; }
             constexpr T dot(const vector3_base& v) const noexcept { return (x * v.x + y * v.y + z * v.z); }
             constexpr T distance(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y + dist.z); }
             constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
@@ -87,7 +95,7 @@ namespace intercept {
             /// @brief spherical linear interpolate
             static constexpr vector3_base slerp(vector3_base start, vector3_base end, T percent) noexcept {
                 T dot = start.dot(end);
-                dot = std::clamp(dot, -1.0f, 1.0f);
+                dot = clamp(dot, -1.0f, 1.0f);
 
                 T theta = std::acos(dot) * percent;
                 vector3_base relative = end - start*dot;
@@ -158,6 +166,7 @@ namespace intercept {
             constexpr bool operator <= (const vector2_base& r) const noexcept { if (*this == r) return true; return magnitude() < r.magnitude(); }
 
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y); }
+            constexpr T magnitude_squared() const noexcept { return x * x + y * y; }
             constexpr T dot(const vector2_base& v) const noexcept { return (x * v.x + y * v.y); }
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
@@ -173,7 +182,7 @@ namespace intercept {
             /// @brief spherical linear interpolate
             static constexpr vector2_base slerp(vector2_base start, vector2_base end, T percent) noexcept {
                 T dot = start.dot(end);
-                dot = std::clamp(dot, -1.0f, 1.0f);
+                dot = clamp(dot, -1.0f, 1.0f);
 
                 T theta = std::acos(dot) * percent;
                 vector2_base relative = end - start*dot;

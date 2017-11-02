@@ -2,7 +2,11 @@
 #include "eventhandlers.hpp"
 #include "sqf.hpp"
 
+namespace intercept::types {
+    extern bool exiting;
+};
 namespace intercept::client {
+
     /// @private
     uint32_t EHIteration = 0; //How often the EH's have been cleared yet. Used to detect invalid removeEH calls
 
@@ -29,6 +33,11 @@ namespace intercept::client {
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
+            case eventhandler_type::custom: {
+                auto found = customCallbackMap.find({ uid, handle, 0 });
+                if (found != customCallbackMap.end())
+                    retVal = (*found->second)(args);
+            } break;
             default:;
         }
         return;
@@ -42,6 +51,11 @@ namespace intercept::client {
     }
 #pragma region Mission Eventhandlers
     std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
+
+    EHIdentifierHandle::impl::~impl() {
+        if (!exiting)
+            onDelete(ident);
+    }
 
     intercept::types::game_value callEHHandler(eventhandlers_mission ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
         switch (ehType) {
@@ -154,7 +168,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -322,7 +336,12 @@ namespace intercept::client {
             }
                 break;
             case eventhandlers_object::HitPart: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_HitPart)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], types::auto_array<types::r_string>(args[5].to_array().begin(), args[5].to_array().end()), args[6].to_array(), args[7], args[8], args[9], args[10]);
+                std::vector<eventhandler_hit_part_type> vec;
+                for (auto& el : args.to_array()) {
+                    vec.emplace_back(el);
+                }
+
+                (*reinterpret_cast<std::function<void(std::vector<eventhandler_hit_part_type>)>*>(func.get()))(std::move(vec));
             }
                 break;
             case eventhandlers_object::Init: {
@@ -454,6 +473,7 @@ namespace intercept::client {
 #define EHOBJ_CASE(name, retVal, args) \
     case eventhandlers_object::name: typeStr = #name##sv; break;
             EHDEF_OBJECT(EHOBJ_CASE)
+            case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
             default:;
         }
 
@@ -463,7 +483,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "',"
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -474,6 +494,7 @@ namespace intercept::client {
         r_string typeStr;
         switch (type) {
             EHDEF_OBJECT(EHOBJ_CASE)
+            case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
         default:;
         }
         sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), static_cast<int>(std::get<1>(handle)));
@@ -537,7 +558,7 @@ namespace intercept::client {
                               + intercept::client::host::module_name.data() + "\","
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
-                              + "_thisEventHandler] InterceptClientEvent _this";
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration };
@@ -597,7 +618,7 @@ namespace intercept::client {
             + intercept::client::host::module_name.data() + "\","
             + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
             + std::to_string(uid) + ","
-            + "_thisEventHandler] InterceptClientEvent _this";
+            + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string>(typeStr), command);
 
         return { uid, ehid, EHIteration };
@@ -612,6 +633,30 @@ namespace intercept::client {
         }
         sqf::remove_mp_event_handler(unit, static_cast<sqf_string>(typeStr), std::get<1>(handle));
     }
-
 #pragma endregion
+
+
+    std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value)>>, EHIdentifier_hasher> customCallbackMap;
+
+    std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<game_value(game_value)> fnc) {
+        static float ehId = -16777210.f;
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+        auto uid = dist(rng);
+
+        ehId += 1.f;
+        EHIdentifier ident{ uid, ehId, 0 };
+
+        customCallbackMap[ident] = std::make_shared<std::function<game_value(game_value)>>(fnc);
+
+        std::string command = std::string("[\"")
+            + intercept::client::host::module_name.data() + "\","
+            + std::to_string(static_cast<uint32_t>(eventhandler_type::custom)) + ","
+            + std::to_string(uid) + ","
+            + std::to_string(ehId) + "] InterceptClientEvent [_this]";
+
+        return { command, { ident, [](EHIdentifier& id) { funcMapMPEH.erase(id); } } };
+    }
+
+
 }  // namespace intercept::client

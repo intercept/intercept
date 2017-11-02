@@ -64,6 +64,7 @@ namespace intercept {
             EH_EVENT_DEF(weapon_disassembled);
             EH_EVENT_DEF(weapon_deployed);
             EH_EVENT_DEF(weapon_rested);
+            EH_EVENT_DEF(post_start);
             _initialized = true;
         }
     }
@@ -78,7 +79,7 @@ namespace intercept {
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.client_eventhandler && module.second.name == static_cast<std::string_view>(moduleName)) {
                 game_value ret{};
-                module.second.functions.client_eventhandler(ret, ehType, uid, left_arg[3], right_arg);
+                module.second.functions.client_eventhandler(ret, ehType, uid, left_arg[3], right_arg[0]);
                 return ret;
             }
         }
@@ -88,12 +89,21 @@ namespace intercept {
     void eventhandlers::pre_start(game_value &) {
         static bool preStartCalled = false;
         if (preStartCalled) throw std::runtime_error("pre_start called twice");
-        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ANY);
+        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ARRAY);
         LOG(INFO) << "Pre-start"sv;
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) module.second.functions.pre_start();
         }
         preStartCalled = true;
+    }
+    void eventhandlers::post_start(game_value &) {
+        static bool postStartCalled = false;
+        if (postStartCalled) throw std::runtime_error("post_start called twice");
+        LOG(INFO) << "Post-start"sv;
+        for (auto& module : extensions::get().modules()) {
+            if (module.second.functions.post_start) module.second.functions.post_start();
+        }
+        postStartCalled = true;
     }
     void eventhandlers::pre_init(game_value &)
     {

@@ -188,6 +188,7 @@ namespace intercept {
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
         new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
+        auto is_signed_function = reinterpret_cast<module::is_signed_function>(GET_PROC_ADDR(dllHandle, "is_signed"));
 
         //First verify that this is a valid Plugin before we initialize the rest.
 
@@ -210,7 +211,10 @@ namespace intercept {
             LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
             return false;
         }
-        //#TODO add is_signed check security_class variable
+        if (security_class != cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
+            LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
+            return false;
+        }
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));
@@ -243,7 +247,13 @@ namespace intercept {
 
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
+
+
+
         _modules[path_] = new_module;
+#ifndef __linux__
+        _module_security_classes[reinterpret_cast<uintptr_t>(dllHandle)] = security_class;
+#endif
 
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();

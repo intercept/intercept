@@ -57,6 +57,7 @@ namespace intercept {
         typedef void(CDECL *register_interfaces_func)();
         typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, float handle, game_value args);
         typedef void(CDECL *client_eventhandlers_clear_func)();
+        typedef bool(CDECL *is_signed_function)();
 
         //!@}
 
@@ -216,7 +217,7 @@ namespace intercept {
             /*!
             @brief A handle to the plugin dynamic library.
             */
-            DLL_HANDLE handle; //#TODO add module base adress
+            DLL_HANDLE handle;
 
             /*!
             @brief A list of names of exported Plugin Interfaces.
@@ -309,7 +310,10 @@ namespace intercept {
         /*!
         @brief The map of all loaded modules.
         */
-        std::unordered_map<std::string, module::entry> _modules; //#TODO or sorted vector by modules base adress
+        std::unordered_map<std::string, module::entry> _modules;
+
+        /// @brief a map of module base adresses to their security class
+        std::map<uintptr_t, cert::signing::security_class> _module_security_classes;
 
         search::plugin_searcher _searcher;
         cert::signing _signTool;

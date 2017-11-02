@@ -180,7 +180,7 @@ namespace intercept {
         class entry {
         public:
             entry() noexcept : name(""), handle(nullptr) {}
-            entry(const std::string &name_, DLL_HANDLE handle_) : name(name_), handle(handle_) {}
+            entry(const std::string &name_, DLL_HANDLE handle_, cert::signing::security_class security_class_) : name(name_), handle(handle_), security_class(security_class_) {}
             /*!
             @brief The name of the module
             */
@@ -216,7 +216,7 @@ namespace intercept {
             /*!
             @brief A handle to the plugin dynamic library.
             */
-            DLL_HANDLE handle;
+            DLL_HANDLE handle; //#TODO add module base adress
 
             /*!
             @brief A list of names of exported Plugin Interfaces.
@@ -224,6 +224,9 @@ namespace intercept {
             @remark Uses r_string as string container because that can easily be passed over the dll boundary.
             */
             std::vector<plugin_interface_identifier> exported_interfaces;
+            
+            /// @todo doc
+            cert::signing::security_class security_class;
         };
     }  // namespace module
 
@@ -306,7 +309,7 @@ namespace intercept {
         /*!
         @brief The map of all loaded modules.
         */
-        std::unordered_map<std::string, module::entry> _modules;
+        std::unordered_map<std::string, module::entry> _modules; //#TODO or sorted vector by modules base adress
 
         search::plugin_searcher _searcher;
         cert::signing _signTool;

@@ -3,8 +3,6 @@
 #include "shared/client_types.hpp"
 namespace intercept::cert {
 
-
-
     class signing {
     public:
         signing();
@@ -18,6 +16,16 @@ namespace intercept::cert {
     private:
         static void debug_certs_in_store(void* store);
     };
+
+#ifndef __linux__
+    extern thread_local signing::security_class current_security_class = signing::security_class::not_signed;
+
+
+
+
+#endif
+
+
 }
 
 

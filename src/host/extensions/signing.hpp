@@ -24,9 +24,8 @@ namespace intercept::cert {
         static void debug_certs_in_store(void* store);
     };
 
-#ifndef __linux__
     extern thread_local signing::security_class current_security_class;
-
+#ifndef __linux__
 #include "Windows.h"
 #include <future>
 #include <intrin.h>

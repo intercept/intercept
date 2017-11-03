@@ -379,15 +379,21 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
         switch (shared->_type) {
         case functionType::sqf_nular:
             shared->_nular->_operator->procedure_addr = shared->undo->_procN;
+#ifndef __linux__
             shared->_nular->_description = shared->undo->_description;
+#endif
             return true;
         case functionType::sqf_function:
             shared->_func->_operator->procedure_addr = shared->undo->_procU;
+#ifndef __linux__
             shared->_func->_description = shared->undo->_description;
+#endif
             return true;
         case functionType::sqf_operator:
             shared->_op->_operator->procedure_addr = shared->undo->_procB;
+#ifndef __linux__
             shared->_op->_description = shared->undo->_description;
+#endif
             return true;
         }
         return false;

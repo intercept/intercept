@@ -132,10 +132,9 @@ namespace intercept {
         if (!full_path)
             return false;
 
-    #ifndef __linux__
-        //certificate check
         cert::signing::security_class security_class = cert::signing::security_class::not_signed;
-        if (certPath && certPath->length() != 0) {
+    #ifndef __linux__
+        if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
             auto sec_class = _signTool.verifyCert(*full_path, certData);
             if (sec_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
@@ -235,10 +234,12 @@ namespace intercept {
             LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
             return false;
         }
+#ifndef __linux__
         if (security_class != cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
             LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
             return false;
         }
+#endif
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));

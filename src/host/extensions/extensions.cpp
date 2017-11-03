@@ -2,7 +2,6 @@
 #include "controller.hpp"
 #include "export.hpp"
 #include "invoker.hpp"
-#include "signing.hpp"
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -25,12 +24,36 @@ namespace intercept {
         functions.invoker_lock = client_function_defs::invoker_lock;
         functions.invoker_unlock = client_function_defs::invoker_unlock;
         functions.get_engine_allocator = client_function_defs::get_engine_allocator;
-        functions.register_sqf_function = client_function_defs::register_sqf_function;
-        functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
-        functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
-        functions.register_sqf_type = client_function_defs::register_sqf_type;
+        functions.register_sqf_function = [](std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
+            CERT_ENTER;
+            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
+            CERT_EXIT;
+            return registered;
+        };
+        functions.register_sqf_function_unary = [](std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
+            CERT_ENTER;
+            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, right_arg_type);
+            CERT_EXIT;
+            return registered;
+        };
+        functions.register_sqf_function_nular = [](std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
+            CERT_ENTER;
+            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
+            CERT_EXIT;
+            return registered;
+        };
+        functions.register_sqf_type = [](std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+            CERT_ENTER;
+            auto registered = sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
+            CERT_EXIT;
+            return registered;
+        };
+
         functions.register_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
-            return extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+            CERT_ENTER;
+            auto ret = extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+            CERT_EXIT;
+            return ret;
         };
         functions.list_plugin_interfaces = [](std::string_view name_) {
             return extensions::get().list_plugin_interfaces(name_);
@@ -109,15 +132,13 @@ namespace intercept {
         if (!full_path)
             return false;
 
+        cert::signing::security_class security_class = cert::signing::security_class::not_signed;
     #ifndef __linux__
-        //certificate check
-        if (certPath && certPath->length() != 0) {
+        if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
-            if (certData.capacity() != 0) {
-                cert::signing sign_checker(*full_path, certData);
-                if (!sign_checker.verify()) {
-                    LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
-                }
+            auto sec_class = _signTool.verifyCert(*full_path, certData);
+            if (sec_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
+                LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
             }
         }
     #endif
@@ -179,7 +200,7 @@ namespace intercept {
         string_type utf8_name = *full_path;
     #endif
 
-        auto new_module = module::entry(utf8_name, dllHandle);
+        auto new_module = module::entry(utf8_name, dllHandle, security_class);
 
 #ifdef __linux__
 #define GET_PROC_ADDR dlsym
@@ -189,6 +210,8 @@ namespace intercept {
 
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
+        new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
+        auto is_signed_function = reinterpret_cast<module::is_signed_function>(GET_PROC_ADDR(dllHandle, "is_signed"));
 
         //First verify that this is a valid Plugin before we initialize the rest.
 
@@ -206,6 +229,17 @@ namespace intercept {
             LOG(ERROR) << "Module "sv << path << " failed to define the assign_functions function."sv;
             return false;
         }
+        //Defined in client lib. So plugin MUST have this
+        if (!new_module.functions.client_eventhandlers_clear) {
+            LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
+            return false;
+        }
+#ifndef __linux__
+        if (security_class != cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
+            LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
+            return false;
+        }
+#endif
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));
@@ -218,12 +252,19 @@ namespace intercept {
         new_module.functions.post_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "post_start"));
         new_module.functions.register_interfaces = reinterpret_cast<module::register_interfaces_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
         new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
-        new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
-        if (!new_module.functions.client_eventhandlers_clear) {
-            LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
-            return false;
-        }
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
+        
+
+       
+
+
+
+
+
+
+
+
+
 
 #define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
         EH_LIST(EH_PROC_DEF)
@@ -231,7 +272,13 @@ namespace intercept {
 
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
+
+
+
         _modules[path_] = new_module;
+#ifndef __linux__
+        _module_security_classes[reinterpret_cast<uintptr_t>(dllHandle)] = security_class;
+#endif
 
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();

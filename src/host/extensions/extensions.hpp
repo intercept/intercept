@@ -18,7 +18,7 @@ https://github.com/NouberNou/intercept
 #include "shared/client_types.hpp"
 #include "shared/functions.hpp"
 #include "singleton.hpp"
-
+#include "signing.hpp"
 #include "search.hpp"
 
 #if __linux__
@@ -57,6 +57,7 @@ namespace intercept {
         typedef void(CDECL *register_interfaces_func)();
         typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, float handle, game_value args);
         typedef void(CDECL *client_eventhandlers_clear_func)();
+        typedef bool(CDECL *is_signed_function)();
 
         //!@}
 
@@ -180,7 +181,7 @@ namespace intercept {
         class entry {
         public:
             entry() noexcept : name(""), handle(nullptr) {}
-            entry(const std::string &name_, DLL_HANDLE handle_) : name(name_), handle(handle_) {}
+            entry(const std::string &name_, DLL_HANDLE handle_, cert::signing::security_class security_class_) : name(name_), handle(handle_), security_class(security_class_) {}
             /*!
             @brief The name of the module
             */
@@ -224,6 +225,9 @@ namespace intercept {
             @remark Uses r_string as string container because that can easily be passed over the dll boundary.
             */
             std::vector<plugin_interface_identifier> exported_interfaces;
+            
+            /// @todo doc
+            cert::signing::security_class security_class;
         };
     }  // namespace module
 
@@ -308,7 +312,11 @@ namespace intercept {
         */
         std::unordered_map<std::string, module::entry> _modules;
 
+        /// @brief a map of module base adresses to their security class
+        std::map<uintptr_t, cert::signing::security_class> _module_security_classes;
+
         search::plugin_searcher _searcher;
+        cert::signing _signTool;
     };
 
 }  // namespace intercept

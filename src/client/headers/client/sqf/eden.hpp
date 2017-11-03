@@ -28,7 +28,6 @@ namespace intercept {
         std::pair<bool, bool> get_eden_icons_visible();
         // [showScene,showMap]
         std::pair<bool, bool> get_eden_lines_visible();
-        // TODO array[] get_eden_mouse_over(); //      Array in format: [type,Eden Entity], where type can be: "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
         bool is_eden();
         bool is_eden_multiplayer();
         float get_eden_action_state(sqf_string_const_ref value_);
@@ -49,7 +48,7 @@ namespace intercept {
         void get_eden_grid(sqf_string_const_ref value_);
         struct rv_eden_mouse_over {
             std::string type;
-            game_value entity;
+            game_value entity;//#TODO make enum "Object", "Group", "Trigger", "Logic", "Waypoint" or "Marker"
 
             explicit rv_eden_mouse_over(const game_value &rv_game_value_)
                 : type(rv_game_value_[0]),

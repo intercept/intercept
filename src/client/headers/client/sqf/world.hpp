@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -71,7 +71,6 @@ namespace intercept {
         float gusts();
         float humidity();
         float waves();
-        // TODO void set_waves(float lerp_time_, float val_); // TODO
 
         float lightnings();
 

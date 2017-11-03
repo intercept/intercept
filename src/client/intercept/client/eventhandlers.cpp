@@ -169,7 +169,7 @@ namespace intercept::client {
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string>(typeStr), command);
+        float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), command);
 
         return {uid, ehid, EHIteration };
     }
@@ -181,7 +181,7 @@ namespace intercept::client {
             EHDEF_MISSION(EHMISS_CASE)
             default:;
         }
-        sqf::remove_mission_event_handler(static_cast<sqf_string>(typeStr), std::get<1>(handle));
+        sqf::remove_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), std::get<1>(handle));
     }
 
 #pragma endregion
@@ -484,7 +484,7 @@ namespace intercept::client {
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string>(typeStr), command);
+        float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), command);
 
         return {uid, ehid, EHIteration };
     }
@@ -497,7 +497,7 @@ namespace intercept::client {
             case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
         default:;
         }
-        sqf::remove_event_handler(obj, static_cast<sqf_string>(typeStr), static_cast<int>(std::get<1>(handle)));
+        sqf::remove_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), static_cast<int>(std::get<1>(handle)));
     }
 #pragma endregion
 
@@ -619,7 +619,7 @@ namespace intercept::client {
             + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
             + std::to_string(uid) + ","
             + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string>(typeStr), command);
+        float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
 
         return { uid, ehid, EHIteration };
     }
@@ -631,7 +631,7 @@ namespace intercept::client {
             EHDEF_MP(EHMP_CASE)
             default:;
         }
-        sqf::remove_mp_event_handler(unit, static_cast<sqf_string>(typeStr), std::get<1>(handle));
+        sqf::remove_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), std::get<1>(handle));
     }
 #pragma endregion
 

@@ -30,21 +30,36 @@ namespace intercept {
         class registered_sqf_func_wrapper {
             using GameDataType = types::GameDataType;
         public:
+            struct undo_info {
+                r_string _description;
+                union {
+                    binary_function* _procB;
+                    unary_function* _procU;
+                    nular_function* _procN;
+                };
+            };
+
+
             registered_sqf_func_wrapper(GameDataType return_type_, __internal::gsNular* func_);
             registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, __internal::gsFunction* func_);
             registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, __internal::gsOperator* func_);
+            registered_sqf_func_wrapper(GameDataType return_type_, __internal::gsNular* func_, undo_info undo);
+            registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, __internal::gsFunction* func_, undo_info undo);
+            registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, __internal::gsOperator* func_, undo_info undo);
             void setUnused() noexcept;
 
             const functionType _type;
             const r_string _name;
             union {
-                const __internal::gsNular* _nular;
-                const __internal::gsFunction* _func;
-                const __internal::gsOperator* _op;
+                __internal::gsNular* _nular;
+                __internal::gsFunction* _func;
+                __internal::gsOperator* _op;
             };
             const types::GameDataType _lArgType;
             const types::GameDataType _rArgType;
             const types::GameDataType _returnType;
+            std::unique_ptr<undo_info> undo;
+
         };
     }
 

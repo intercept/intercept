@@ -80,6 +80,8 @@ typedef struct {
     LPWSTR lpszMoreInfoLink;
 } SPROG_PUBLISHERINFO, *PSPROG_PUBLISHERINFO;
 
+thread_local intercept::cert::signing::security_class intercept::cert::current_security_class = intercept::cert::signing::security_class::not_signed;
+
 
 intercept::cert::signing::signing() {}
 intercept::cert::signing::~signing() {}

@@ -306,6 +306,14 @@ namespace intercept {
 
         bool do_reload;
 
+        cert::signing::security_class get_module_security_class(uintptr_t mod_base) {
+            auto found = _module_security_classes.find(mod_base);
+            if (found != _module_security_classes.end())
+                return found->second;
+            return cert::signing::security_class::not_signed;
+        }
+
+
     protected:
         /*!
         @brief The map of all loaded modules.

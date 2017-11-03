@@ -155,29 +155,31 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         operators = static_cast<game_operators*>(table->push_back(game_operators(lowerName.c_str())));
         operators->copyPH(test);
     } else {  //Name already exists
-        auto found = findBinary(std::string(name), left_arg_type, right_arg_type);//Function with same arg types already exists
-        if (intercept::cert::current_security_class != cert::signing::security_class::core && //Core certified plugins have exception for this rule
-            found) return registered_sqf_function{ nullptr };
-        
-        //We only manipulate elements that are resolved at runtime.
-        //This redirects a normal script command to Intercept. You can still call the original from within Intercept.
 
 
-        registered_sqf_func_wrapper::undo_info undo;
-        undo._procB = found->_operator->procedure_addr;
-        found->_operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
-#ifndef __linux__
-        undo._description = found->_description;
-        found->_description = description;
-#endif
+        if (auto found = findBinary(std::string(name), left_arg_type, right_arg_type); found) {//Function with same arg types already exists
+            if (intercept::cert::current_security_class != cert::signing::security_class::core) return registered_sqf_function{ nullptr }; //Core certified plugins have exception for this rule
 
-        LOG(INFO) << "sqf_functions::registerFunction binary OVERRIDE "sv << name << " " << types::__internal::to_string(return_arg_type)
-            << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-            << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << found << "\n";
+            //We only manipulate elements that are resolved at runtime.
+            //This redirects a normal script command to Intercept. You can still call the original from within Intercept.
 
-        auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, found);
+            registered_sqf_func_wrapper::undo_info undo;
+            undo._procB = found->_operator->procedure_addr;
+            found->_operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
+        #ifndef __linux__
+            undo._description = found->_description;
+            found->_description = description;
+        #endif
 
-        return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
+            LOG(INFO) << "sqf_functions::registerFunction binary OVERRIDE "sv << name << " " << types::__internal::to_string(return_arg_type)
+                << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
+                << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << found << "\n";
+
+            auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, found);
+
+            return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
+        }
+        if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
     }
 
     __internal::gsOperator op;

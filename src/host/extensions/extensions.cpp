@@ -24,30 +24,10 @@ namespace intercept {
         functions.invoker_lock = client_function_defs::invoker_lock;
         functions.invoker_unlock = client_function_defs::invoker_unlock;
         functions.get_engine_allocator = client_function_defs::get_engine_allocator;
-        functions.register_sqf_function = [](std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
-            CERT_ENTER;
-            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
-            CERT_EXIT;
-            return registered;
-        };
-        functions.register_sqf_function_unary = [](std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
-            CERT_ENTER;
-            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, right_arg_type);
-            CERT_EXIT;
-            return registered;
-        };
-        functions.register_sqf_function_nular = [](std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
-            CERT_ENTER;
-            auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
-            CERT_EXIT;
-            return registered;
-        };
-        functions.register_sqf_type = [](std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
-            CERT_ENTER;
-            auto registered = sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
-            CERT_EXIT;
-            return registered;
-        };
+        functions.register_sqf_function = client_function_defs::register_sqf_function;
+        functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
+        functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
+        functions.register_sqf_type = client_function_defs::register_sqf_type;
 
         functions.register_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
             CERT_ENTER;
@@ -136,8 +116,8 @@ namespace intercept {
     #ifndef __linux__
         if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
-            auto sec_class = _signTool.verifyCert(*full_path, certData);
-            if (sec_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
+            security_class = _signTool.verifyCert(*full_path, certData);
+            if (security_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
                 LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
             }
         }

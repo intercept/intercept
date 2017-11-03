@@ -878,6 +878,7 @@ namespace intercept {
                 case GameDataType::TASK: return reinterpret_cast<game_data*>(data.getRef())->to_string().hash(); //"Task %s (id %d)" or "No Task"
                 case GameDataType::DIARY_RECORD: return reinterpret_cast<game_data*>(data.getRef())->to_string().hash(); //"No diary record" or... The text of that record? Text might be long and make this hash heavy
                 case GameDataType::LOCATION: return reinterpret_cast<game_data_location*>(data.getRef())->hash();
+                case GameDataType::end: return 0;
             }
 
             return types::__internal::pairhash<uintptr_t,uintptr_t>(data->get_vtable(),reinterpret_cast<uintptr_t>(data.getRef()));
@@ -1083,7 +1084,7 @@ namespace intercept {
                 _p1->add_entry(name, value);
             } else {
                 const auto entry = _p1->get_entry_by_name(name);
-                value = static_cast<r_string>(*entry);   //#TODO check if entry actually contains the type that we want
+                value = static_cast<r_string>(std::move(*entry));   //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
             return serialization_return::no_error;

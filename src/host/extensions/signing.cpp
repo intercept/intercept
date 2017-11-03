@@ -188,7 +188,6 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         nullptr
     );
 
-    if (ct) CertFreeCertificateContext(ct);
 
     debug_certs_in_store(hMemoryStore);
     debug_certs_in_store(hStore);
@@ -250,7 +249,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         hChainEngine,
         pCertContext,
         nullptr,
-        hMemoryStore,
+        hStore, //Has to be here so we can find intermediaries that are included in the plugins cert
         &ChainPara,
         CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
         nullptr,
@@ -315,15 +314,16 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
             }
             returnCode = coreSigned ? security_class::core : security_class::self_signed;
         }
-        case CERT_E_REVOCATION_FAILURE: {
+            break;
+        case CERT_E_REVOCATION_FAILURE:
             returnCode = coreSigned ? security_class::core : security_class::self_signed;
-        }
-        case CRYPT_E_REVOKED: {//cert actively revoked
+            break;
+        case CRYPT_E_REVOKED: //cert actively revoked
             returnCode = security_class::not_signed;
-        }
-        case CERT_E_CHAINING: { //Couldn't build chain
+            break;
+        case CERT_E_CHAINING: //Couldn't build chain
             returnCode = security_class::not_signed;
-        }
+            break;
     }
 
 
@@ -358,10 +358,12 @@ OutputDebugStringA(sz);
 
  */
 
-void intercept::cert::signing::debug_certs_in_store(HCERTSTORE store) {
+void intercept::cert::signing::debug_certs_in_store([[maybe_unused]] HCERTSTORE store) {
+#ifdef __DEBUG
     PCCERT_CONTEXT pCertContextx = nullptr;
     while (pCertContextx = CertEnumCertificatesInStore(store, pCertContextx)) {
         CryptUIDlgViewContext(CERT_STORE_CERTIFICATE_CONTEXT, pCertContextx, nullptr, nullptr, 0, nullptr);
     }
+#endif
 }
 #endif

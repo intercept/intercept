@@ -35,10 +35,7 @@ namespace intercept::cert {
     HMODULE hmod;                                                                                                                               \
     if (auto pcToHeader = GetProcAddress(GetModuleHandleA("ntdll"), "RtlPcToFileHeader"); pcToHeader) {                                         \
         if (reinterpret_cast<void*(NTAPI *)(_In_ PVOID PcValue, _Out_ PVOID * BaseOfImage)>(pcToHeader)(_ReturnAddress(), (void**)&hmod)) {     \
-            auto& seclist = intercept::extensions::get()._module_security_classes;                                                              \
-            auto found = seclist.find(reinterpret_cast<uintptr_t>(hmod));                                                                       \
-            if (found != seclist.end())                                                                                                         \
-                intercept::cert::current_security_class = found->second;                                                                        \
+            intercept::cert::current_security_class = intercept::extensions::get().get_module_security_class(reinterpret_cast<uintptr_t>(hmod));\
         }}
 #define CERT_EXIT intercept::cert::current_security_class = intercept::cert::signing::security_class::not_signed;
 

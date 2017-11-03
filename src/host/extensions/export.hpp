@@ -87,7 +87,15 @@ namespace intercept {
 
         @return A pointer to the allocator
         */
-        const types::__internal::allocatorInfo* get_engine_allocator();
+        const types::__internal::allocatorInfo* get_engine_allocator();    
+        /*!
+        @brief Registers SQF Function
+        */
+        [[nodiscard]] types::registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
+        std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+
         const auto_array<r_string>* get_pbo_files_list();
     }
 }

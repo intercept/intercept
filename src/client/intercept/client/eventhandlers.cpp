@@ -171,17 +171,17 @@ namespace intercept::client {
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return {uid, ehid, EHIteration };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
 
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MISSION(EHMISS_CASE)
             default:;
         }
-        sqf::remove_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), std::get<1>(handle));
+        sqf::remove_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), handle.arma_eh_id);
     }
 
 #pragma endregion
@@ -486,18 +486,18 @@ namespace intercept::client {
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return {uid, ehid, EHIteration };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
 
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_OBJECT(EHOBJ_CASE)
             case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
         default:;
         }
-        sqf::remove_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), static_cast<int>(std::get<1>(handle)));
+        sqf::remove_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), static_cast<int>(handle.arma_eh_id));
     }
 #pragma endregion
 
@@ -561,17 +561,17 @@ namespace intercept::client {
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
-        return {uid, ehid, EHIteration };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
 
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_CTRL(EHCTRL_CASE)
         default:;
         }
-        sqf::ctrl_remove_event_handler(ctrl,static_cast<sqf_string>(typeStr), std::get<1>(handle));
+        sqf::ctrl_remove_event_handler(ctrl,static_cast<sqf_string>(typeStr), handle.arma_eh_id);
     }
 
 #pragma endregion
@@ -621,17 +621,17 @@ namespace intercept::client {
             + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return { uid, ehid, EHIteration };
+        return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
 
     void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle) {
-        if (std::get<2>(handle) != EHIteration) return;//Handle not valid anymore
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;//Handle not valid anymore
         r_string typeStr;
         switch (type) {
             EHDEF_MP(EHMP_CASE)
             default:;
         }
-        sqf::remove_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), std::get<1>(handle));
+        sqf::remove_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), handle.arma_eh_id);
     }
 #pragma endregion
 
@@ -645,7 +645,7 @@ namespace intercept::client {
         auto uid = dist(rng);
 
         ehId += 1.f;
-        EHIdentifier ident{ uid, ehId, 0 };
+        EHIdentifier ident{ uid, ehId, 0, 0 };
 
         customCallbackMap[ident] = std::make_shared<std::function<game_value(game_value)>>(fnc);
 

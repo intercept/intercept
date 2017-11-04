@@ -22,12 +22,24 @@ namespace intercept::client {
     };
     
     /// @private
-    using EHIdentifier = std::tuple<int32_t, float, uint32_t>; //Internal ID, Arma ID, EHIteration
-    
+    struct EHIdentifier {
+        int32_t internal_id;
+        float arma_eh_id;
+        uint32_t EHIteration;
+        uint8_t EHType;
+        bool already_deleted = false;
+        bool operator==(const EHIdentifier& other) const {
+            return internal_id == other.internal_id && arma_eh_id == other.arma_eh_id && EHType == other.EHType;
+        }
+
+
+    };
+
+
     /// @private
     struct EHIdentifier_hasher {
         size_t operator()(const intercept::client::EHIdentifier& x) const {
-            return intercept::types::__internal::pairhash(std::get<0>(x), std::get<1>(x));
+            return intercept::types::__internal::pairhash(x.internal_id, x.arma_eh_id);
         }
     };
 
@@ -41,7 +53,21 @@ namespace intercept::client {
     public:
         constexpr EHIdentifierHandle() noexcept {}
         EHIdentifierHandle(EHIdentifier ident, std::function<void(EHIdentifier&)> onDelete) : handle(std::make_shared<impl>(std::move(ident), std::move(onDelete))) {}
-
+        EHIdentifierHandle& operator=(const EHIdentifierHandle& other){
+            //This is extra protection against deleting already deleted EHs.
+            //EHIteration already protects against this so this is just optional extra
+            //Performance impact is minimal so I don't really care if this is useless
+            if (other.handle && handle && handle!=other.handle) {
+                auto& myIdent = handle->ident;
+                auto& otherIdent = other.handle->ident;
+                if (otherIdent.internal_id != myIdent.internal_id
+                    && otherIdent.EHType == myIdent.EHType
+                    && otherIdent.arma_eh_id == myIdent.arma_eh_id) //We were replaced by a EH with same ID and type. Which can only happen if the old one doesn't exist.
+                    other.handle->ident.already_deleted = true;
+            }
+            handle = other.handle;
+            return *this;
+        }
     private:
         class impl {
         public:

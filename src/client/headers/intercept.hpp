@@ -22,6 +22,7 @@ namespace intercept {
         DLLEXPORT void CDECL on_interface_unload(r_string name_);
         DLLEXPORT void CDECL register_interfaces();
         DLLEXPORT void CDECL handle_unload();
+        DLLEXPORT bool CDECL is_signed();
 
 #define EH(x) DLLEXPORT void CDECL x
 

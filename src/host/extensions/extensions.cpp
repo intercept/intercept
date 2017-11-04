@@ -215,7 +215,7 @@ namespace intercept {
             return false;
         }
 #ifndef __linux__
-        if (security_class != cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
+        if (security_class == cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
             LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
             return false;
         }

@@ -1,5 +1,5 @@
 #pragma once
-#include "shared.hpp"
+#include "../shared.hpp"
 #include "types.hpp"
 #include <variant>
 namespace intercept {
@@ -18,9 +18,6 @@ namespace intercept {
 
             bool operator<(const internal_object& compare_) const;
             bool operator>(const internal_object& compare_) const;
-
-            bool is_null() const;
-
         };
 
             //type(const rv_game_value &value_);\ deprecated
@@ -48,8 +45,6 @@ namespace intercept {
         RV_GENERIC_OBJECT_DEC(team_member);
         RV_GENERIC_OBJECT_DEC(rv_namespace);
         RV_GENERIC_OBJECT_DEC(task);
-
-        typedef std::string marker;
 
         struct hit_part_ammo {
             float hit;
@@ -93,31 +88,27 @@ namespace intercept {
                 });
             }
 
-            rv_color(const game_value &ret_game_value_) :
+            explicit rv_color(const game_value &ret_game_value_) :
                 red(ret_game_value_[0]),
                 green(ret_game_value_[1]),
                 blue(ret_game_value_[2]),
                 alpha(ret_game_value_[3]) {}
 
-            rv_color(float red_, float green_, float blue_, float alpha_) :
+            rv_color(float red_, float green_, float blue_, float alpha_) noexcept :
                 red(red_),
                 green(green_),
                 blue(blue_),
                 alpha(alpha_) {}
         };
 
-        using sqf_string = std::string;
-        using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
-        using sqf_return_string_list = std::vector<std::string>;
-        using sqf_string_list_const_ref = const std::vector<std::string>&;
 
         class sqf_string_const_ref {
         public:
-            sqf_string_const_ref(const std::string& ref) : _var(std::string_view(ref)) {}
-            sqf_string_const_ref(r_string ref) : _var(std::move(ref)) {}
+            sqf_string_const_ref(const std::string& ref) noexcept : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(r_string ref) noexcept : _var(std::move(ref)) {}
             sqf_string_const_ref(const game_value& ref) : _var(r_string(ref)) {}
-            sqf_string_const_ref(std::string_view ref) : _var(std::move(ref)) {}
-            sqf_string_const_ref(const char* ref) : _var(std::string_view(ref)) {}
+            sqf_string_const_ref(std::string_view ref) noexcept : _var(std::move(ref)) {}
+            sqf_string_const_ref(const char* ref) noexcept : _var(std::string_view(ref)) {}
             operator std::string_view() const {
                 if (std::holds_alternative<std::string_view>(_var))
                     return std::get<std::string_view>(_var);
@@ -136,8 +127,26 @@ namespace intercept {
             std::variant<r_string, std::string_view> _var;
         };
 
+
+#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
+        using sqf_string = r_string;
+        using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<r_string>;
+        using sqf_string_list_const_ref = const std::vector<r_string>&;
+
+
+        using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
+#else
+        using sqf_string = std::string;
+        using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
+        using sqf_return_string_list = std::vector<std::string>;
+        using sqf_string_list_const_ref = const std::vector<std::string>&;
+
         //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
         using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
+#endif
+
+
 
 
 
@@ -197,10 +206,10 @@ namespace intercept {
 
             operator game_value() {
                 std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
+                for (auto c : color) {
                     color_gv.push_back(c);
                 }
-                for (rv_color ec : emissive_color) {
+                for (auto ec : emissive_color) {
                     emissive_color_gv.push_back(ec);
                 }
                 return game_value(std::vector<game_value>({
@@ -232,10 +241,10 @@ namespace intercept {
 
             operator game_value() const {
                 std::vector<game_value> color_gv, emissive_color_gv;
-                for (rv_color c : color) {
+                for (auto c : color) {
                     color_gv.push_back(c);
                 }
-                for (rv_color ec : emissive_color) {
+                for (auto ec : emissive_color) {
                     emissive_color_gv.push_back(ec);
                 }
                 return game_value(std::vector<game_value>({
@@ -309,37 +318,12 @@ namespace intercept {
         };
 
 
-
-
-
-
-
-        struct rv_vehicle_role {
-            std::string role;
-            std::vector<int> turret_path;
-        };
-
         struct rv_hit_points_damage {
             sqf_return_string_list hit_points;
             sqf_return_string_list hit_selections;
             std::vector<float> damages;
 
-            rv_hit_points_damage(const game_value &_gv) {
-                auto &_arr = _gv.to_array();
-                if (_arr.count() == 3) {
-                    auto &_hp = _arr[0].to_array();
-                    auto &_hs = _arr[1].to_array();
-                    auto &_dmgs = _arr[2].to_array();
-
-                    //iterator conversion didnt work
-                    hit_points.reserve(_hp.count());
-                    hit_selections.reserve(_hs.count());
-                    damages.reserve(_dmgs.count());
-                    for (auto &_x : _hp) hit_points.emplace_back(_x);
-                    for (auto &_x : _hs) hit_selections.emplace_back(_x);
-                    for (auto &_x : _dmgs) damages.emplace_back(_x);
-                }
-            }
+            explicit rv_hit_points_damage(const game_value& _gv);
 
             operator game_value() const {
                 return game_value({ hit_points, hit_selections, damages });
@@ -348,13 +332,9 @@ namespace intercept {
 
 
 
-
-
-
-
         struct rv_best_place {
             vector2 pos;
-            float result;
+            float result = -1;
 
             rv_best_place(const game_value& gv) {
                 if (gv.size() == 2) {
@@ -371,7 +351,7 @@ namespace intercept {
             object unit;
             std::string position;
 
-            rv_uav_control(const game_value &ret_game_value_) :
+            explicit rv_uav_control(const game_value &ret_game_value_) :
                 unit(ret_game_value_[0]),
                 position(ret_game_value_[1]) {}
         };
@@ -381,7 +361,7 @@ namespace intercept {
             std::string path;
             bool skeleton;
 
-            rv_model_info(const game_value &ret_game_value_) :
+            explicit rv_model_info(const game_value &ret_game_value_) :
                 name(ret_game_value_[0]),
                 path(ret_game_value_[1]),
                 skeleton(ret_game_value_[2]) {}
@@ -413,9 +393,9 @@ namespace intercept {
             float subjective_cost;
             object object_;
             float position_accuracy;
-            rv_target(vector3&& pos, const game_value& from)
+            rv_target(const game_value& from)
             {
-                position = std::move(pos);
+                position = from[0];
                 type = std::string(from[1]);
                 side_ = from[2];
                 subjective_cost = from[3];
@@ -440,6 +420,28 @@ namespace intercept {
             std::string cursor_object_named_sel;
             float distance;
         };
+
+        class rv_turret_path {
+            game_value pathRaw;
+        public:
+            explicit rv_turret_path (game_value path) noexcept : pathRaw(std::move(path)) {}
+
+            explicit operator std::vector<float>() const {
+               if (pathRaw.type_enum() != GameDataType::ARRAY) return std::vector<float>();
+               std::vector<float> ret(pathRaw.to_array().begin(), pathRaw.to_array().end());
+               return ret;
+
+            }
+            operator game_value() const {return pathRaw;}
+
+        };
+
+        struct rv_vehicle_role {
+            std::string role;
+            rv_turret_path turret_path{ game_value() };
+        };
+        using marker = sqf_return_string;
+
 
     }
 }

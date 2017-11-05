@@ -1,6 +1,7 @@
-﻿#include "shared/client_types.hpp"
+#include "shared/client_types.hpp"
 #include "client/client.hpp"
 #include "shared/functions.hpp"
+#include "../client/sqf/common_helpers.hpp"
 
 namespace intercept {
     namespace types {
@@ -34,24 +35,6 @@ namespace intercept {
         bool internal_object::operator>(const internal_object& compare_) const {
             return static_cast<game_data_object *>(data.getRef())->object > static_cast<game_data_object *>(compare_.data.getRef())->object;
         }
-
-        bool internal_object::is_null() const {
-            //#TODO this is broken for Displays. so.. Just use virtual function
-            //#TODO use GameData's isNil virtual function
-            if (!data)
-                return true;
-            //#TODO pointer games = forbidden
-            uintptr_t datax = reinterpret_cast<uintptr_t>(data.getRef());
-            uintptr_t data_1 = datax + sizeof(uintptr_t)*3;
-            uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
-            if (data_2) {
-                uintptr_t data_3 = data_2 + sizeof(uintptr_t);
-                uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
-                return !val;
-            }
-            return true;
-        }
-
 
         //type::type(const rv_game_value &value_) : internal_object(value_) {}\ //deprecated
 #define RV_GENERIC_OBJECT_DEF(type)         type::type() : internal_object() {}\
@@ -94,5 +77,13 @@ namespace intercept {
         RV_GENERIC_OBJECT_DEF(rv_namespace)
 
         RV_GENERIC_OBJECT_DEF(task)
+
+rv_hit_points_damage::rv_hit_points_damage(const game_value& _gv) {
+                auto& _arr = _gv.to_array();
+                if (_arr.count() != 3) return;
+                hit_points = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[0]);
+                hit_selections = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[1]);
+                damages = sqf::__helpers::__convert_to_vector<float>(_arr[2]);
+            }
     }
 }

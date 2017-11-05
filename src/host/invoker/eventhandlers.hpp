@@ -36,6 +36,7 @@ namespace intercept {
 
         static void pre_init(game_value &args_);
         static void pre_start(game_value &args_);
+        static void post_start(game_value &args_);
         static void post_init(game_value &args_);
         static void mission_stopped(game_value &args_);
 

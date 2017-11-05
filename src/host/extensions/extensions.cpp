@@ -2,7 +2,6 @@
 #include "controller.hpp"
 #include "export.hpp"
 #include "invoker.hpp"
-#include "signing.hpp"
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -29,14 +28,18 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
+
         functions.register_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
-            return extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+            CERT_ENTER;
+            auto ret = extensions::get().register_plugin_interface(module_name_, name_, api_version_, interface_class_);
+            CERT_EXIT;
+            return ret;
         };
         functions.list_plugin_interfaces = [](std::string_view name_) {
             return extensions::get().list_plugin_interfaces(name_);
         };
         functions.request_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_) {
-            return extensions::get().request_plugin_interface(module_name_, name_, api_version_);
+            return extensions::get().request_plugin_interface(module_name_, name_, api_version_).value_or(nullptr);
         };
         functions.get_pbo_files_list = client_function_defs::get_pbo_files_list;
 
@@ -77,7 +80,7 @@ namespace intercept {
     #ifndef __linux__
         using string_type = std::wstring;
         using string_view_type = std::wstring_view;
-        string_view_type bad_chars = L".\\/:?\"<>|"sv;
+        static const string_view_type bad_chars = L".\\/:?\"<>|"sv;
         int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
         string_type path;
         path.resize(length);
@@ -98,7 +101,7 @@ namespace intercept {
 
         //Filter out bad chars
         for (auto it = path.begin(); it < path.end(); ++it) {
-            bool found = bad_chars.find(*it) != std::string::npos;
+            const bool found = bad_chars.find(*it) != std::string::npos;
             if (found) {
                 LOG(ERROR) << "Client plugin: "sv << path << " contains illegal characters in its name."sv;
                 return false;
@@ -109,15 +112,13 @@ namespace intercept {
         if (!full_path)
             return false;
 
+        cert::signing::security_class security_class = cert::signing::security_class::not_signed;
     #ifndef __linux__
-        //certificate check
-        if (certPath && certPath->length() != 0) {
+        if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
-            if (certData.capacity() != 0) {
-                cert::signing sign_checker(*full_path, certData);
-                if (!sign_checker.verify()) {
-                    LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
-                }
+            security_class = _signTool.verifyCert(*full_path, certData);
+            if (security_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
+                LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
             }
         }
     #endif
@@ -179,7 +180,7 @@ namespace intercept {
         string_type utf8_name = *full_path;
     #endif
 
-        auto new_module = module::entry(utf8_name, dllHandle);
+        auto new_module = module::entry(utf8_name, dllHandle, security_class);
 
 #ifdef __linux__
 #define GET_PROC_ADDR dlsym
@@ -189,6 +190,8 @@ namespace intercept {
 
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
+        new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
+        auto is_signed_function = reinterpret_cast<module::is_signed_function>(GET_PROC_ADDR(dllHandle, "is_signed"));
 
         //First verify that this is a valid Plugin before we initialize the rest.
 
@@ -206,6 +209,17 @@ namespace intercept {
             LOG(ERROR) << "Module "sv << path << " failed to define the assign_functions function."sv;
             return false;
         }
+        //Defined in client lib. So plugin MUST have this
+        if (!new_module.functions.client_eventhandlers_clear) {
+            LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
+            return false;
+        }
+#ifndef __linux__
+        if (security_class == cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
+            LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
+            return false;
+        }
+#endif
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));
@@ -215,9 +229,22 @@ namespace intercept {
         new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GET_PROC_ADDR(dllHandle, "post_init"));
         new_module.functions.pre_init = reinterpret_cast<module::pre_init_func>(GET_PROC_ADDR(dllHandle, "pre_init"));
         new_module.functions.pre_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "pre_start"));
+        new_module.functions.post_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "post_start"));
         new_module.functions.register_interfaces = reinterpret_cast<module::register_interfaces_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
         new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
         new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
+        
+
+       
+
+
+
+
+
+
+
+
+
 
 #define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
         EH_LIST(EH_PROC_DEF)
@@ -225,7 +252,13 @@ namespace intercept {
 
         new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
+
+
+
         _modules[path_] = new_module;
+#ifndef __linux__
+        _module_security_classes[reinterpret_cast<uintptr_t>(dllHandle)] = security_class;
+#endif
 
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();
@@ -261,13 +294,9 @@ namespace intercept {
             }
         }
 
-        if (module->second.functions.handle_unload) {
-            module->second.functions.handle_unload();
-        }
+        if (module->second.functions.handle_unload_internal) module->second.functions.handle_unload_internal();
+        if (module->second.functions.handle_unload) module->second.functions.handle_unload();
 
-        if (module->second.functions.handle_unload_internal) {
-            module->second.functions.handle_unload_internal();
-        }
 
 #ifdef __linux
         if (dlclose(module->second.handle)) {  //returms 0 on success
@@ -333,7 +362,7 @@ namespace intercept {
         return {owning_module, std::move(ret)};
     }
 
-    void* extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
+    std::optional<void*> extensions::request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_) {
         //#TODO store name as hash for faster lookups
         auto iface = std::find_if(exported_interfaces.begin(), exported_interfaces.end(),
                                   [&name_, &api_version_](const std::pair<module::plugin_interface_identifier, module::plugin_interface>& item) {
@@ -343,7 +372,7 @@ namespace intercept {
             iface->second.modules_using_interface.push_back(module_name_);
             return ((*iface).second.interface_class);
         }
-        return nullptr;
+        return {};
     }
 
     std::unordered_map<std::string, module::entry>& extensions::modules() {

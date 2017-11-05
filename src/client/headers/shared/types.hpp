@@ -8,7 +8,7 @@
 //#include <utility>
 #include "vector.hpp"
 //#include "pool.hpp"
-#include "shared.hpp"
+#include "../shared.hpp"
 #include <string_view>
 #include <string.h>
 #include <algorithm>
@@ -20,6 +20,7 @@
 #endif
 using namespace std::literals::string_view_literals;
 
+/// @deprecated use sv instead
 [[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
     return { str, len };
 };
@@ -44,6 +45,35 @@ namespace intercept {
         using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
     #endif
 
+        enum class GameDataType {
+            SCALAR,
+            BOOL,
+            ARRAY,
+            STRING,
+            NOTHING,
+            ANY,
+            NAMESPACE,
+            NaN,
+            CODE,
+            OBJECT,
+            SIDE,
+            GROUP,
+            TEXT,
+            SCRIPT,
+            TARGET,
+            CONFIG,
+            DISPLAY,
+            CONTROL,
+            NetObject,
+            SUBGROUP,
+            TEAM_MEMBER,
+            TASK,
+            DIARY_RECORD,
+            LOCATION,
+            end
+        };
+
+
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         namespace __internal {
@@ -56,8 +86,8 @@ namespace intercept {
             }
             class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
             public:
-                I_debug_value() {}
-                virtual ~I_debug_value() {}
+                I_debug_value() noexcept {}
+                virtual ~I_debug_value() = default;
                 // IDebugValue
                 virtual int IAddRef() = 0;
                 virtual int IRelease() = 0;
@@ -101,6 +131,7 @@ namespace intercept {
                 auto ptr = allocate(_count);
 
                 for (size_t i = 0; i < _count; ++i) {
+#pragma warning(suppress: 26409)
                     ::new (ptr + i) Type();
                 }
 
@@ -142,17 +173,17 @@ namespace intercept {
 
         class refcount_base {
         public:
-            constexpr refcount_base() : _refcount(0) {}
-            refcount_base(const refcount_base &src) { _refcount = 0; }
-            void operator = (const refcount_base &src) const {}
+            constexpr refcount_base() noexcept : _refcount(0) {}
+            constexpr refcount_base(const refcount_base &src) noexcept : _refcount(0) {}
+            constexpr void operator = (const refcount_base &src) const noexcept {}
 
-            constexpr int add_ref() const {
+            constexpr int add_ref() const noexcept {
                 return ++_refcount;
             }
-            int dec_ref() const {
+            constexpr int dec_ref() const noexcept {
                 return --_refcount;
             }
-            int ref_count() const {
+            constexpr int ref_count() const noexcept {
                 return _refcount;
             }
             mutable int _refcount;
@@ -161,9 +192,9 @@ namespace intercept {
         //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
         class refcount : public refcount_base {
         public:
-            virtual ~refcount() {}
+            virtual ~refcount() = default;
             int release() const {
-                int rcount = dec_ref();
+                const auto rcount = dec_ref();
                 if (rcount == 0) {
                     //this->~refcount();
                     lastRefDeleted();
@@ -171,11 +202,13 @@ namespace intercept {
                 }
                 return rcount;
             }
+#pragma warning(suppress: 26440) //suppress "can be noexcept" this can throw if this is invalid ptr
             void destruct() const {
                 delete const_cast<refcount *>(this);
             }
             virtual void lastRefDeleted() const { destruct(); }
-            virtual int __dummy_refcount_func() const { return 0; }
+        private:
+            virtual int __dummy_refcount_func() const noexcept { return 0; }
         };
         class game_value_static;
         template<class Type>
@@ -184,11 +217,11 @@ namespace intercept {
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
             Type* _ref;
         public:
-            ref() : _ref(nullptr) {}
+            constexpr ref() noexcept : _ref(nullptr) {}
             ~ref() { free(); }
 
             //Construct from Pointer
-            ref(Type* other) {
+            constexpr ref(Type* other) noexcept {
                 if (other) other->add_ref();
                 _ref = other;
             }
@@ -202,7 +235,7 @@ namespace intercept {
             }
 
             //Construct from reference
-            ref(const ref &sRef) {
+            constexpr ref(const ref &sRef) {
                 Type *source = sRef._ref;
                 if (source) source->add_ref();
                 _ref = source;
@@ -217,18 +250,18 @@ namespace intercept {
                 return *this;
             }
 
-            bool isNull() const { return _ref == nullptr; }
+            constexpr bool isNull() const noexcept { return _ref == nullptr; }
             void free() {
                 if (!_ref) return;
                 _ref->release();
                 _ref = nullptr;
             }
             //This returns a pointer to the underlying object. Use with caution!
-            Type *getRef() const { return _ref; }
-            Type *operator -> () const { return _ref; }
-            operator Type *() const { return _ref; }
-            bool operator != (const ref<Type>& other_) { return _ref != other_._ref; }
-            size_t ref_count() const { return _ref ? _ref->ref_count() : 0; }
+            constexpr Type *getRef() const noexcept { return _ref; }
+            constexpr Type *operator -> () const noexcept { return _ref; }
+            operator Type *() const noexcept { return _ref; }
+            bool operator != (const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
+            size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
         };
 
     #pragma endregion
@@ -249,27 +282,30 @@ namespace intercept {
             static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
         public:
 
-            size_t size() const { return _size; }
-            Type *data() { return &_data; }
-            const Type *data() const { return &_data; }
-            const Type * cbegin() const { return &_data; }
-            const Type * cend() const { return (&_data) + _size; }
+            size_t size() const noexcept { return _size; }
+            Type* data() noexcept { return &_data; }
+            const Type* data() const noexcept { return &_data; }
+            Type* begin() noexcept { return &_data; }
+            Type* end() noexcept { return (&_data) + _size; }
+            const Type* cbegin() const noexcept { return &_data; }
+            const Type* cend() const noexcept { return (&_data) + _size; }
 
             //We delete ourselves! After release no one should have a pointer to us anymore!
             int release() const {
-                int ret = dec_ref();
+                const auto ret = dec_ref();
                 if (!ret) del();
                 return ret;
             }
 
             static compact_array* create(size_t number_of_elements_) {
-                size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+                const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
                 compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+#pragma warning(suppress: 26409) //don't use new/delete
                 new (buffer) compact_array(number_of_elements_);
                 return buffer;
             }
             static compact_array* create(const compact_array &other) {
-                size_t size = other.size();
+                const size_t size = other.size();
                 compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
                 new (buffer) compact_array(size);
                 std::copy(other.data(), other.data() + other.size(), buffer->data());
@@ -278,14 +314,15 @@ namespace intercept {
             void del() const {
                 this->~compact_array();
                 const void* _thisptr = this;
-                void* _thisptr2 = const_cast<void*>(_thisptr);
-                Allocator::deallocate(reinterpret_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
+#pragma warning(suppress: 26492) //don't cast away const
+                auto _thisptr2 = const_cast<void*>(_thisptr);
+                Allocator::deallocate(static_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
             }
 
             size_t _size;
-            Type _data;
+            Type _data {};
         private:
-            explicit compact_array(size_t size_) {
+            explicit compact_array(size_t size_) noexcept {
                 _size = size_;
             }
         };
@@ -303,7 +340,7 @@ namespace intercept {
         class r_string {
         protected:
         public:
-            r_string() {}
+            constexpr r_string() noexcept {}
             r_string(std::string_view str) {
                 if (str.length()) _ref = create(str.data(), str.length());
             }
@@ -311,7 +348,7 @@ namespace intercept {
             //constexpr r_string(const r_string_const<N>& c) {
             //    _ref = reinterpret_cast<compact_array<char>*>(&c);
             //}
-            explicit r_string(compact_array<char>* dat) : _ref(dat) {}
+            explicit r_string(compact_array<char>* dat) noexcept : _ref(dat) {}
             r_string(r_string&& _move) noexcept {
                 _ref = _move._ref;
                 _move._ref = nullptr;
@@ -336,34 +373,42 @@ namespace intercept {
                 _ref = create(_copy.data(), _copy.length());
                 return *this;
             }
-            const char* data() const {
+            const char* data() const noexcept {
                 if (_ref) return _ref->data();
-                static char empty[]{ 0 };
-                return empty;
+                return "";
             }
-            const char* c_str() const { return data(); }
+            const char* c_str() const noexcept { return data(); }
             //This will copy the underlying container if we cannot safely modify this r_string
             void make_mutable() {
                 if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
                     _ref = create(_ref->data());
                 }
             }
-
-            explicit operator const char *() const { return data(); }
-            operator std::string_view() const { return std::string_view(data()); }
+            explicit operator const char *() const noexcept { return data(); }
+            operator std::string_view() const noexcept { return std::string_view(data()); }
             //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
-            //This calls strlen so O(N)
-            size_t length() const {
+            ///This calls strlen so O(N)
+            size_t length() const noexcept {
                 if (!_ref) return 0;
                 return strlen(_ref->data());
             }
 
-            size_t capacity() const {
+            ///This calls strlen so O(N)
+            size_t size() const noexcept {
+                return length();
+            }
+
+            bool empty() const noexcept {
+                if (!_ref) return true;
+                return *_ref->data() == '\0';
+            }
+
+            size_t capacity() const noexcept {
                 if (!_ref) return 0;
                 return _ref->size();
             }
 
-            //== is case insensitive just like scripting
+            ///== is case insensitive just like scripting
             bool operator == (const char *other) const {
                 if (!data())  return (!other || !*other); //empty?
             #ifdef __GNUC__
@@ -374,16 +419,7 @@ namespace intercept {
             #endif
             }
 
-            //!= is case insensitive just like scripting
-            bool operator != (const char *other) const {
-                return !(*this == other);
-            }
-
-            bool operator < (const r_string& other) const {
-                if (!data()) return false; //empty?
-                return strcmp(data(), other.data()) < 0;
-            }
-
+            ///== is case insensitive just like scripting
             bool operator == (const r_string& other) const {
                 if (!data()) return (!other.data() || !*other.data()); //empty?
                 if (data() == other.data()) return true;
@@ -395,6 +431,7 @@ namespace intercept {
             #endif
             }
 
+            ///== is case insensitive just like scripting
             bool operator == (const std::string& other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
@@ -406,21 +443,39 @@ namespace intercept {
             #endif
             }
 
-            bool operator == (const std::string_view& other) const {
+            ///== is case insensitive just like scripting
+            bool operator == (std::string_view other) const {
                 if (!data()) return other.empty(); //empty?
                 if (other.length() > _ref->size()) return false; //There is more data than we can even have
-#ifdef __GNUC__
+            #ifdef __GNUC__
                 return std::equal(_ref->cbegin(), _ref->cend(),
                     other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-#else
+            #else
                 return _strcmpi(data(), other.data()) == 0;
-#endif
+            #endif
             }
 
+            ///!= is case insensitive just like scripting
             bool operator != (const r_string& other) const {
                 return !(*this == other);
             }
 
+            ///!= is case insensitive just like scripting
+            bool operator != (const std::string& other) const {
+                return !(*this == other);
+            }
+
+            ///!= is case insensitive just like scripting
+            bool operator != (std::string_view other) const {//#TODO templates would be nice here. But we don't want string_view by reference
+                return !(*this == other);
+            }
+
+
+            bool operator < (const r_string& other) const {
+                if (!data()) return false; //empty?
+                return strcmp(data(), other.data()) < 0;
+            }
+           
             friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
                 _os << _s.data();
                 return _os;
@@ -442,6 +497,15 @@ namespace intercept {
                 return !std::equal(_ref->cbegin(), _ref->cend(),
                     other, [](unsigned char l, unsigned char r) {return l == r; });
             #else
+                return strcmp(data(), other) == 0;
+            #endif
+            }
+
+            bool compare_case_insensitive(const char *other) const {//#TODO string_view variant with length checking
+            #ifdef __GNUC__
+                return !std::equal(_ref->cbegin(), _ref->cend(),
+                    other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
+            #else
                 return _stricmp(data(), other) == 0;
             #endif
             }
@@ -462,9 +526,59 @@ namespace intercept {
             void clear() {
                 _ref = nullptr;
             }
-            size_t hash() const {
+            size_t hash() const noexcept {
                 return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
             }
+
+            r_string append(std::string_view _right) const {
+                auto myLength = length();
+                auto newData = create(myLength+_right.length()+1);//Space for terminating nullchar
+            #if __GNUC__
+                std::copy_n(data(), myLength, newData->data());
+                std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
+            #else
+                memcpy_s(newData->data(), newData->size(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+                memcpy_s(newData->data()+ myLength, newData->size() - myLength, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            #endif
+                newData->data()[myLength + _right.length()] = 0;
+                return r_string(newData);
+            }
+            r_string operator+(std::string_view _right){
+                return append(_right);
+            }
+            r_string operator+(std::string _right) {
+                return append(_right);
+            }
+            r_string& to_lower() {
+                if (!_ref) return *this;
+                make_mutable();
+            #ifdef __linux__
+                std::transform(_ref->begin(), _ref->end(), _ref->begin(), ::tolower);
+            #else
+                std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
+            #endif
+                
+                return *this;
+            }
+            ///Be careful! This returns nullptr on empty string
+            const char* begin() const noexcept {
+                if (_ref)
+                    return _ref->begin();
+                return nullptr;
+            }
+            ///Be careful! This returns nullptr on empty string
+            const char* end() const noexcept {
+                if (_ref)
+                    return _ref->end();
+                return nullptr;
+            }
+            char front() const noexcept {
+                if (_ref)
+                    return *_ref->begin();
+                return '\0';
+            }
+
+
 
         private:
             ref<compact_array<char>> _ref;
@@ -516,10 +630,16 @@ namespace intercept {
         public:
             class const_iterator;
 
-            class iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+            class iterator {
                 friend class const_iterator;
                 Type* p_;
             public:
+                using iterator_category = std::random_access_iterator_tag;
+                using value_type = Type;
+                using difference_type = ptrdiff_t;
+                using pointer = Type*;
+                using reference = Type&;
+
                 iterator() : p_(nullptr) {}
                 explicit iterator(Type* p) : p_(p) {}
                 iterator(const iterator& other) : p_(other.p_) {}
@@ -551,19 +671,25 @@ namespace intercept {
                 Type* operator->() { return  p_; }
                 explicit operator Type*() { return p_; }
             };
-            class const_iterator : public std::iterator<std::random_access_iterator_tag, Type> {
+            class const_iterator {
                 const Type* p_;
             public:
+                using iterator_category = std::random_access_iterator_tag;
+                using value_type = Type;
+                using difference_type = ptrdiff_t;
+                using pointer = Type * ;
+                using reference = Type & ;
+
                 const_iterator() : p_(nullptr) {}
-                explicit const_iterator(const Type* p) : p_(p) {}
+                explicit const_iterator(const Type* p) noexcept : p_(p) {}
                 const_iterator(const typename rv_array<Type>::iterator& other) : p_(other.p_) {}
-                const_iterator(const const_iterator& other) : p_(other.p_) {}
+                const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
                 const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
                 const const_iterator& operator=(const typename rv_array<Type>::iterator& other) { p_ = other.p_; return other; }
 
-                const_iterator& operator++() { ++p_; return *this; } // prefix++
+                const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
                 const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
-                const_iterator& operator--() { --p_; return *this; } // prefix--
+                const_iterator& operator--() noexcept { --p_; return *this; } // prefix--
                 const_iterator  operator--(int) { const_iterator tmp(*this); --(*this); return tmp; } // postfix--
 
                 void           operator+=(const std::size_t& n) { p_ += n; }
@@ -571,36 +697,38 @@ namespace intercept {
                 const_iterator operator+ (const std::size_t& n)        const { const_iterator tmp(*this); tmp += n; return tmp; }
                 const_iterator operator+ (const const_iterator& other) const { const_iterator tmp(*this); tmp += other; return tmp; }
 
-                void           operator-=(const std::size_t& n) { p_ -= n; }
-                void           operator-=(const const_iterator& other) { p_ -= other.p_; }
+                void           operator-=(const std::size_t& n) noexcept { p_ -= n; }
+                void           operator-=(const const_iterator& other) noexcept { p_ -= other.p_; }
                 const_iterator operator- (const std::size_t& n)        const { const_iterator tmp(*this); tmp -= n; return tmp; }
-                std::size_t    operator- (const const_iterator& other) const { return p_ - other.p_; }
+                std::size_t    operator- (const const_iterator& other) const noexcept { return p_ - other.p_; }
 
-                bool operator< (const const_iterator& other) const { return (p_ - other.p_) < 0; }
-                bool operator<=(const const_iterator& other) const { return (p_ - other.p_) <= 0; }
-                bool operator> (const const_iterator& other) const { return (p_ - other.p_) > 0; }
-                bool operator>=(const const_iterator& other) const { return (p_ - other.p_) >= 0; }
-                bool operator==(const const_iterator& other) const { return  p_ == other.p_; }
-                bool operator!=(const const_iterator& other) const { return  p_ != other.p_; }
+                bool operator< (const const_iterator& other) const noexcept { return (p_ - other.p_) < 0; }
+                bool operator<=(const const_iterator& other) const noexcept { return (p_ - other.p_) <= 0; }
+                bool operator> (const const_iterator& other) const noexcept { return (p_ - other.p_) > 0; }
+                bool operator>=(const const_iterator& other) const noexcept { return (p_ - other.p_) >= 0; }
+                bool operator==(const const_iterator& other) const noexcept { return  p_ == other.p_; }
+                bool operator!=(const const_iterator& other) const noexcept { return  p_ != other.p_; }
 
-                const Type& operator*()  const { return *p_; }
-                const Type* operator->() const { return  p_; }
-                explicit operator const Type*() const { return p_; }
+                const Type& operator*()  const noexcept { return *p_; }
+                const Type* operator->() const noexcept { return  p_; }
+                explicit operator const Type*() const noexcept { return p_; }
             };
 
 
-            rv_array() :_data(nullptr), _n(0) {};
+            constexpr rv_array() noexcept :_data(nullptr), _n(0) {};
             rv_array(rv_array<Type>&& move_) noexcept :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
             Type &get(size_t i) {
+                if (i > count()) throw std::out_of_range("rv_array access out of range");
                 return _data[i];
             }
             const Type &get(size_t i) const {
+                if (i > count()) throw std::out_of_range("rv_array access out of range");
                 return _data[i];
             }
             Type &operator [] (size_t i) { return get(i); }
             const Type &operator [] (size_t i) const { return get(i); }
             Type *data() { return _data; }
-            size_t count() const { return static_cast<size_t>(_n); }
+            constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
 
             iterator begin() { if (!_data) return iterator(); return iterator(&get(0)); }
             iterator end() { if (!_data) return iterator(); return iterator(&get(_n)); }
@@ -705,7 +833,7 @@ namespace intercept {
             using base::cbegin;
             using iterator = typename base::iterator;
             using const_iterator = typename base::const_iterator;
-            auto_array() : rv_array<Type>(), _maxItems(0) {};
+            constexpr auto_array() noexcept : rv_array<Type>(), _maxItems(0) {};
             auto_array(const std::initializer_list<Type> &init_) : rv_array<Type>(), _maxItems(0) {
                 insert(end(), init_.begin(), init_.end());
             }
@@ -740,7 +868,6 @@ namespace intercept {
                 if (copy_._n) {
                     insert(base::end(), copy_.begin(), copy_.end());
                 }
-                std::vector<int> x = { 1,2,3 };
                 return *this;
             }
 
@@ -771,7 +898,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
 
@@ -784,7 +911,7 @@ namespace intercept {
                 if (_maxItems < base::_n + 1) {
                     grow(1);
                 }
-                auto& item = (*this)[base::_n];
+                auto& item = base::_data[base::_n];
                 ::new (&item) Type(std::forward<_Valty>(_Val)...);
                 ++base::_n;
                 return iterator(&item);
@@ -804,7 +931,7 @@ namespace intercept {
             //}
             void erase(const_iterator element) {
                 if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
-                size_t index = std::distance(base::cbegin(), element);
+                const size_t index = std::distance(base::cbegin(), element);
                 if (static_cast<int>(index) > base::_n) return;
                 auto item = (*this)[index];
                 item.~Type();
@@ -815,22 +942,43 @@ namespace intercept {
             #endif
                 --base::_n;
             }
+
+            void erase(const_iterator first, const_iterator last) {
+                if (first > last || first < base::begin() || last > base::end()) throw std::runtime_error("Invalid Iterator");
+                const size_t firstIndex = std::distance(base::cbegin(), first);
+                const size_t lastIndex = std::distance(base::cbegin(), last);
+                const size_t range = std::distance(first, last);
+
+                for (int index = firstIndex; index < lastIndex; index++)
+                {
+                    auto item = (*this)[index];
+                    item.~Type();
+                }
+                if (last != end()) {
+            #ifdef __GNUC__
+                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #else
+                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+            #endif
+                }
+                base::_n -= range;
+            }
             //This is sooo not threadsafe!
             template<class _InIt>
             iterator insert(iterator _where, _InIt _first, _InIt _last) {
                 if (_first == _last) return _where; //Boogie!
                 if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
-                size_t insertOffset = std::distance(base::begin(), _where);
-                size_t previousEnd = static_cast<size_t>(base::_n);
-                size_t oldSize = base::count();
-                size_t insertedSize = std::distance(_first, _last);
+                const size_t insertOffset = std::distance(base::begin(), _where);
+                const size_t previousEnd = static_cast<size_t>(base::_n);
+                const size_t oldSize = base::count();
+                const size_t insertedSize = std::distance(_first, _last);
                 reserve(oldSize + insertedSize);
 
                 auto index = base::_n;
                 for (; _first != _last; ++_first) {
                     //emplace_back(*_first);
                     //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                    auto& item = (*this)[index];
+                    auto& item = base::_data[index];
                     ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
                     ++index;
                 }
@@ -860,13 +1008,13 @@ namespace intercept {
         };
 
 
-        static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) {
+        static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
             while (*key) {
                 hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
             }
             return hashValue;
         }
-        static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) {
+        static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) noexcept {
             while (*key) {
                 hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
             }
@@ -874,20 +1022,20 @@ namespace intercept {
         }
 
         struct map_string_to_class_trait {
-            static unsigned int hash_key(const char * key) {
+            static unsigned int hash_key(const char * key) noexcept {
                 return rv_map_hash_string_case_sensitive(key);
             }
-            static bool compare_keys(const char * k1, const char * k2) {
+            static bool compare_keys(const char * k1, const char * k2) noexcept {
                 return strcmp(k1, k2) == 0;
             }
         };
 
         struct map_string_to_class_trait_caseinsensitive : public map_string_to_class_trait {
-            static unsigned int hash_key(const char * key) {
+            static unsigned int hash_key(const char * key) noexcept {
                 return rv_map_hash_string_case_insensitive(key);
             }
 
-            static bool compare_keys(const char * k1, const char * k2) {
+            static bool compare_keys(const char * k1, const char * k2) noexcept {
             #ifdef __GNUC__
                 return std::equal(k1, k1 + strlen(k1),
                     k2, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
@@ -1196,7 +1344,7 @@ namespace intercept {
                         return serialization_return::no_entry;
                     }
 
-                    auto ret = value->serialize(sub_archive);
+                    const auto ret = value->serialize(sub_archive);
                     if (_isExporting) {
                         sub_archive._p1->compress();
                         delete sub_archive._p1;
@@ -1277,26 +1425,26 @@ namespace intercept {
         class sqf_script_type : public serialize_class {
         public:
             static uintptr_t type_def; //#TODO should not be accessible
-            sqf_script_type() { set_vtable(type_def); }
-            sqf_script_type(const script_type_info* type) {
+            sqf_script_type() noexcept { set_vtable(type_def); }
+            sqf_script_type(const script_type_info* type) noexcept {
                 single_type = type; set_vtable(type_def);
             }
             //#TODO use type_def instead
-            sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) :
+            sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept :
                 single_type(st), compound_type(ct) {
                 set_vtable(vt);
             }
-            void set_vtable(uintptr_t v) { *reinterpret_cast<uintptr_t*>(this) = v; }
-            uintptr_t get_vtable() const { return *reinterpret_cast<const uintptr_t*>(this); }
+            void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
+            uintptr_t get_vtable() const noexcept { return *reinterpret_cast<const uintptr_t*>(this); }
             sqf_script_type(sqf_script_type&& other) noexcept :
             single_type(other.single_type), compound_type(other.compound_type) {
                 set_vtable(other.get_vtable());
             }
-            sqf_script_type(const sqf_script_type& other) :
+            sqf_script_type(const sqf_script_type& other) noexcept :
                 single_type(other.single_type), compound_type(other.compound_type) {
                 set_vtable(other.get_vtable());
             }
-            sqf_script_type& operator=(const sqf_script_type& other) {
+            sqf_script_type& operator=(const sqf_script_type& other) noexcept {
                 single_type = other.single_type;
                 compound_type = other.compound_type;
                 set_vtable(other.get_vtable());
@@ -1306,10 +1454,10 @@ namespace intercept {
             compound_script_type_info*  compound_type{ nullptr };
             value_types type() const;
             std::string type_str() const;
-            bool operator==(const sqf_script_type& other) const {
+            bool operator==(const sqf_script_type& other) const noexcept {
                 return single_type == other.single_type && compound_type == other.compound_type;
             }
-            bool operator!=(const sqf_script_type& other) const {
+            bool operator!=(const sqf_script_type& other) const noexcept {
                 return single_type != other.single_type || compound_type != other.compound_type;
             }
         };
@@ -1404,7 +1552,7 @@ namespace intercept {
             uintptr_t get_vtable() const {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
-            uintptr_t get_secondary_vtable() const {
+            uintptr_t get_secondary_vtable() const noexcept {
                 return *reinterpret_cast<const uintptr_t*>(static_cast<const __internal::I_debug_value*>(this));
             }
         };
@@ -1501,13 +1649,19 @@ namespace intercept {
             */
             game_value operator [](size_t i_) const;
 
-            uintptr_t type() const;//#TODO return GameDataType
+            uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
+            /// doesn't handle all types. Will return GameDataType::ANY if not handled
+            types::GameDataType type_enum() const;
 
+            /// @deprecated Replaced by size, because that name is more clear
             [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
-            //Returns true for uninitialized game_value's and Nil values returned from Arma
+            /// @brief Returns true for uninitialized game_value's and Nil values returned from Arma
             bool is_nil() const;
+            /// @brief Trying to replicate SQF isNull as good as possible. It combines isNil and isNull.
+            bool is_null() const;
+
 
             bool operator==(const game_value& other) const;
             bool operator!=(const game_value& other) const;
@@ -1537,7 +1691,7 @@ namespace intercept {
             game_value_static(const game_value& copy) : game_value(copy) {}
             game_value_static(game_value&& move) : game_value(move) {}
             game_value_static operator=(const game_value& copy) { data = copy.data;return *this; }
-            operator game_value() { return *this; }
+            operator game_value() const { return *this; }
         };
 
     #pragma region GameData Types
@@ -1629,127 +1783,128 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_group() {
+            game_data_group() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, group); };
-            void *group;
+            void *group{};
         };
 
         class game_data_config : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_config() {
+            game_data_config() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, config); };
-            void *config;
+            void *config{};
+            auto_array<r_string> path;
         };
 
         class game_data_control : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_control() {
+            game_data_control() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, control); };
-            void *control;
+            void *control{};
         };
 
         class game_data_display : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_display() {
+            game_data_display() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, display); };
-            void *display;
+            void *display{};
         };
 
         class game_data_location : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_location() {
+            game_data_location() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, location); };
-            void *location;
+            void *location{};
         };
 
         class game_data_script : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_script() {
+            game_data_script() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, script); }
-            void *script;
+            void *script{};
         };
 
         class game_data_side : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_side() {
+            game_data_side() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, side); };
-            void *side;
+            void *side{};
         };
 
         class game_data_rv_text : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_rv_text() {
+            game_data_rv_text() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, rv_text); };
-            void *rv_text;
+            void *rv_text{};
         };
 
-        class game_data_team : public game_data {
+        class game_data_team_member : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_team() {
+            game_data_team_member() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, team); };
-            void *team;
+            void *team{};
         };
 
         class game_data_rv_namespace : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_rv_namespace() {
+            game_data_rv_namespace() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
             size_t hash() const { return __internal::pairhash(type_def, rv_namespace); };
-            void *rv_namespace;
+            void *rv_namespace{};
         };
 
         class game_data_code : public game_data {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_code() {
+            game_data_code() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
@@ -1765,7 +1920,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            game_data_object() {
+            game_data_object() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             };
@@ -1793,9 +1948,9 @@ namespace intercept {
             };
         #ifndef __linux__
             //Not compatible yet. Not sure if every will be.
-            visualState get_position_matrix() const {
+            visualState get_position_matrix() const noexcept {
                 if (!object || !object->object) return visualState();
-                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+                const uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
 
                 struct visState1 {
                     vector3 _aside;
@@ -1813,8 +1968,8 @@ namespace intercept {
                     vector3 _acceleration;
                 };
 
-                visState1* s1 = reinterpret_cast<visState1*>(vbase + sizeof(uintptr_t));
-                visState2* s2 = reinterpret_cast<visState2*>(vbase + 0x44);
+                const auto s1 = reinterpret_cast<const visState1*>(vbase + sizeof(uintptr_t));
+                const auto s2 = reinterpret_cast<const visState2*>(vbase + 0x44);
 
                 return visualState{
                     true,
@@ -1841,10 +1996,10 @@ namespace intercept {
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
             #endif
                 class v1 {
-                    virtual void doStuff() {}
+                    virtual void doStuff() noexcept {}
                 };
                 class v2 : public v1 {
-                    void doStuff() override {}
+                    void doStuff() noexcept override {}
                 };
                 v2* v = reinterpret_cast<v2*>(vbase);
                 auto& typex = typeid(*v);
@@ -1854,7 +2009,7 @@ namespace intercept {
                 auto test = typex.raw_name();
             #endif
 
-                auto hash = typex.hash_code();
+                const auto hash = typex.hash_code();
                 if (hash !=
                 #if _WIN64 || __X86_64__
                     0xb57aedbe2fc8b61e
@@ -1862,7 +2017,7 @@ namespace intercept {
                     0x6d4f3e40
                 #endif
                     && strcmp(test, ".?AVManVisualState@@") != 0) return  visual_head_pos();
-                visual_head_pos* s3 = reinterpret_cast<visual_head_pos*>(vbase +
+                const auto s3 = reinterpret_cast<const visual_head_pos*>(vbase +
                 #if _WIN64 || __X86_64__
                     0x168
                 #else
@@ -1879,38 +2034,11 @@ namespace intercept {
             }
         #endif
             struct {
-                uint32_t _x;
-                void* object;
-            } *object;
+                uint32_t _x{};
+                void* object{};
+            } *object {};
         };
         //#TODO add game_data_nothing
-        enum class GameDataType {
-            SCALAR,
-            BOOL,
-            ARRAY,
-            STRING,
-            NOTHING,
-            ANY,
-            NAMESPACE,
-            NaN,
-            CODE,
-            OBJECT,
-            SIDE,
-            GROUP,
-            TEXT,
-            SCRIPT,
-            TARGET,
-            CONFIG,
-            DISPLAY,
-            CONTROL,
-            NetObject,
-            SUBGROUP,
-            TEAM_MEMBER,
-            TASK,
-            DIARY_RECORD,
-            LOCATION,
-            end
-        };
 
         namespace __internal {
             GameDataType game_datatype_from_string(const r_string& name);
@@ -2031,16 +2159,16 @@ namespace intercept {
         class registered_sqf_function {
             friend class sqf_functions;
         public:
-            registered_sqf_function() {};
-            explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_);
-            void clear() { _function = nullptr; }
+            constexpr registered_sqf_function() noexcept {};
+            explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;
+            void clear() noexcept { _function = nullptr; }
         private:
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
 
     #ifdef __linux__
         template <game_value(*T)(game_value, game_value)>
-        static game_value  userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
+        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
             game_value* l = reinterpret_cast<game_value*>(left_arg_);
             game_value* r = reinterpret_cast<game_value*>(right_arg_);
             return game_value(T(*l, *r));
@@ -2061,7 +2189,6 @@ namespace intercept {
         template <game_value(*T)()>
         static game_value userFunctionWrapper(uintptr_t gs) {
             return game_value(T());
-            //return sqf_this_;
         }
     #else
         template <game_value(*T)(game_value, game_value)>
@@ -2091,6 +2218,7 @@ namespace intercept {
             ::new (sqf_this_) game_value(T());
             return sqf_this_;
         }
+
     #endif
     #pragma endregion
 

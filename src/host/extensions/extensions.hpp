@@ -7,6 +7,9 @@
 This contains the functionality for loading and unload client plugin modules.
 
 https://github.com/NouberNou/intercept
+
+@defgroup plugin_interface Cross-Plugin Interface
+
 */
 #pragma once
 #include "arguments.hpp"
@@ -15,7 +18,7 @@ https://github.com/NouberNou/intercept
 #include "shared/client_types.hpp"
 #include "shared/functions.hpp"
 #include "singleton.hpp"
-
+#include "signing.hpp"
 #include "search.hpp"
 
 #if __linux__
@@ -53,6 +56,8 @@ namespace intercept {
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
         typedef void(CDECL *register_interfaces_func)();
         typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, float handle, game_value args);
+        typedef void(CDECL *client_eventhandlers_clear_func)();
+        typedef bool(CDECL *is_signed_function)();
 
         //!@}
 
@@ -68,6 +73,7 @@ namespace intercept {
             handle_unload_func handle_unload;
             handle_unload_func handle_unload_internal;
             pre_start_func pre_start;
+            pre_start_func post_start;
             pre_init_func pre_init;
             post_init_func post_init;
             mission_end_func mission_end;
@@ -77,6 +83,7 @@ namespace intercept {
             on_interface_unload_func on_interface_unload;
             register_interfaces_func register_interfaces;
             client_eventhandler_func client_eventhandler;
+            client_eventhandlers_clear_func client_eventhandlers_clear;
             //!@}
         };
 
@@ -97,8 +104,8 @@ namespace intercept {
     XX(fired_near, object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_)    \
     XX(fuel, object &vehicle_, bool fuel_state_)                                                                                          \
     XX(gear, object &vehicle_, bool gear_state_)                                                                                          \
-    XX(get_in, object &vehicle_, r_string position_, object &unit_, auto_array<int> &turret_path)                                         \
-    XX(get_out, object &vehicle_, r_string position_, object &unit_, auto_array<int> &turret_path)                                        \
+    XX(get_in, object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path)                                           \
+    XX(get_out, object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path)                                          \
     XX(handle_damage, object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_) \
     XX(handle_heal, object &unit_, object &healder_, bool healer_can_heal_)                                                               \
     XX(handle_rating, object &unit_, float rating_)                                                                                       \
@@ -173,8 +180,8 @@ namespace intercept {
         */
         class entry {
         public:
-            entry() : name(""), handle(nullptr) {}
-            entry(const std::string &name_, DLL_HANDLE handle_) : name(name_), handle(handle_) {}
+            entry() noexcept : name(""), handle(nullptr) {}
+            entry(const std::string &name_, DLL_HANDLE handle_, cert::signing::security_class security_class_) : name(name_), handle(handle_), security_class(security_class_) {}
             /*!
             @brief The name of the module
             */
@@ -194,7 +201,7 @@ namespace intercept {
             @brief A intercept::module::functions struct containing pointers to
             plugin exported functions.
             */
-            functions_list functions;
+            functions_list functions {};
 
             /*!
             @brief A intercept::module::eventhandlers struct containing pointers to
@@ -218,6 +225,9 @@ namespace intercept {
             @remark Uses r_string as string container because that can easily be passed over the dll boundary.
             */
             std::vector<plugin_interface_identifier> exported_interfaces;
+            
+            /// @todo doc
+            cert::signing::security_class security_class;
         };
     }  // namespace module
 
@@ -262,9 +272,21 @@ namespace intercept {
         bool list(const arguments &args_, std::string &result);
         //!@}
 
+
+        /// @ingroup plugin_interface
         register_plugin_interface_result register_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_, void *interface_class_);
+        /// @ingroup plugin_interface
         std::pair<r_string, auto_array<uint32_t>> list_plugin_interfaces(std::string_view name_);
-        void *request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_);
+        //
+
+        /**
+         * @brief Searches for a Plugin Interface
+         * @param name_ Name of the Interface you are searching for
+         * @param api_version_ API version of the Interface you are searching for
+         * @return pointer to the interface if it was found
+         * @ingroup plugin_interface
+         */
+        std::optional<void*> request_plugin_interface(r_string module_name_, std::string_view name_, uint32_t api_version_);
 
         /*!
         @brief Returns the map of all loaded modules.
@@ -284,13 +306,25 @@ namespace intercept {
 
         bool do_reload;
 
+        cert::signing::security_class get_module_security_class(uintptr_t mod_base) {
+            auto found = _module_security_classes.find(mod_base);
+            if (found != _module_security_classes.end())
+                return found->second;
+            return cert::signing::security_class::not_signed;
+        }
+
+
     protected:
         /*!
         @brief The map of all loaded modules.
         */
         std::unordered_map<std::string, module::entry> _modules;
 
+        /// @brief a map of module base adresses to their security class
+        std::map<uintptr_t, cert::signing::security_class> _module_security_classes;
+
         search::plugin_searcher _searcher;
+        cert::signing _signTool;
     };
 
 }  // namespace intercept

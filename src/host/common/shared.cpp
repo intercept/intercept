@@ -17,10 +17,11 @@ namespace intercept {
 
     //http://stackoverflow.com/a/5506223
     std::vector<std::string_view>& split(std::string_view s, char delim, std::vector<std::string_view>& elems) {
-        std::string::size_type pos, lastPos = 0, length = s.length();
+        std::string::size_type lastPos = 0;
+        const auto length = s.length();
 
         while (lastPos < length + 1) {
-            pos = s.find_first_of(delim, lastPos);
+            std::string::size_type pos = s.find_first_of(delim, lastPos);
             if (pos == std::string::npos) {
                 pos = length;
             }

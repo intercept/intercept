@@ -154,7 +154,6 @@ namespace intercept {
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {
-        uintptr_t types_array = state_addr_;
         auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
     #ifdef __linux__
@@ -172,13 +171,13 @@ namespace intercept {
         MODULEINFO modInfo = { nullptr };
         HMODULE hModule = GetModuleHandleA(nullptr);
         GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
-        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-        uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+        const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+        const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
     #endif
         //std::cout << "base - size" << std::hex << baseAddress << moduleSize << "\n";
         auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
-            uintptr_t base = baseAddress;
-            uintptr_t size = moduleSize;
+            const uintptr_t base = baseAddress;
+            const uintptr_t size = moduleSize;
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
                 for (uintptr_t j = 0; j < patternLength; j++) {
@@ -193,10 +192,10 @@ namespace intercept {
         };
 
         auto findInMemoryPattern = [baseAddress, moduleSize](const char* pattern, const char* mask, uintptr_t offset = 0) {
-            uintptr_t base = baseAddress;
-            uintptr_t size = moduleSize;
+            const uintptr_t base = baseAddress;
+            const uintptr_t size = moduleSize;
 
-            uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
+            const uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
 
             for (uintptr_t i = 0; i < size - patternLength; i++) {
                 bool found = true;
@@ -295,9 +294,9 @@ namespace intercept {
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x40\x53\x48\x83\xEC\x20\xFF\x41\x60\x48\x8B\x41\x08\x48\x8B\xD9\x48\x3B\xC1\x74\x0B\x48\x85\xC0\x74\x06\x48\x83\xC0\xE0\x75\x2B\x48\x8D\x41\x18\x48\x8B\x49\x20\x48\x3B\xC8\x74\x0E\x48\x85\xC9\x74\x09\x48\x8D\x41\xE0\x48\x85\xC0\x75\x10\x48\x8B\xCB\xE8\x00\x00\x00\x00\x84\xC0\x0F\x84\x00\x00\x00\x00\x4C\x8B\x43\x08\x32\xC9\x45\x33\xD2\x4C\x3B\xC3\x74\x0B\x4D\x85\xC0\x74\x06\x49\x83\xC0\xE0\x75\x2A\x4C\x8B\x43\x20\x48\x8D\x43\x18\x4C\x3B\xC0", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_fileBanks = std::async([&]() {
-            auto patternFindLoc = findInMemoryPattern("\x41\x55\x41\x56\x41\x57\x48\x83\xEC\x50\x48\x8B\xCA\x4C\x8B\xF2\xE8\x00\x00\x00\x00\x49\x8B\x16\x48\x85\xD2\x74\x1C\x48\x8B\x0D\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x18\x49\xC7\x06\x00\x00\x00\x00\x41\xC7\x46\x00\x00\x00\x00\x00\x4C\x8B\x2D\x00\x00\x00\x00\x45\x33\xFF\x4C\x89\x6C\x24\x00\x45\x39\x7D\x08\x0F\x8E\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x4C\x89\x64\x24\x00\x45\x33\xE4\x66\x90", "xxxxxxxxxxxxxxxxx????xxxxxxxxxxx????xxxxxxxxx????xxx?????xxx????xxxxxxx?xxxxxx????xxxx?xxxx?xxxx?xxxx?xxxx?xxxxx");
-            auto offs =  *reinterpret_cast<uint32_t*>(patternFindLoc + 0x3C);
-            return patternFindLoc + 0x40 + offs;
+            auto patternFindLoc = findInMemoryPattern("\x48\x83\xEC\x28\x48\x8B\x0D\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x08\x33\xC9\x48\x85\xC0\x74\x18\x48\x89\x08\x89\x48\x10\x89\x48\x08\x48\x89\x48\x28\x89\x48\x38\x89\x48\x30\x88\x48\x21\xEB\x03\x48\x8B\xC1\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x83\xC4\x28\xE9", "xxxxxxx????x????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxx");
+            auto offs =  *reinterpret_cast<uint32_t*>(patternFindLoc + 0x42);
+            return patternFindLoc + 0x46 + offs;
         });
     #else
 
@@ -307,10 +306,10 @@ namespace intercept {
     #else
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
-        auto future_fileBanks = std::async([&]()
-        {
-            auto patternFindLoc = findInMemoryPattern("\x83\xec\x00\x55\x57\x8b\x7c\x24\x00\x8b\xcf\xe8\x00\x00\x00\x00\x8b\x17\x85\xd2\x74\x00\x8b\x0d\x00\x00\x00\x00\x52\x8b\x01\xff\x50\x00\xc7\x07\x00\x00\x00\x00\xc7\x47\x00\x00\x00\x00\x00\xa1\x00\x00\x00\x00\x33\xed\x89\x44\x24\x00\x39\x68\x00\x0f\x8e\x00\x00\x00\x00\x53\x56\x8b\x00\x68\x00\x00\x00\x00\x8b\x1c\xa8\x89\x5c\x24\x00\xe8\x00\x00\x00\x00", "xx?xxxxx?xxx????xxxxx?xx????xxxxx?xx????xx?????x????xxxxx?xx?xx????xxxxx????xxxxxx?x????");
-            return *reinterpret_cast<uintptr_t*>(patternFindLoc) + 0x30;
+        auto future_fileBanks = std::async([&]() {
+            auto patternFindLoc = findInMemoryPattern("\x8b\x0d\x00\x00\x00\x00\x6a\x00\x8b\x01\xff\x50\x00\x85\xc0\x74\x00\xc7\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc6\x40\x00\x00\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3\x33\xc0\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3", "xx????x?xxxx?xxx?xx????xx?????xx?????xx?????xx?????xx?????xx??x????x????x????xxxxx????x????x????xx");
+            return *reinterpret_cast<uintptr_t*>(patternFindLoc) + 0x44;
+            //prntscr gli4fh dedmen sharex/eko4AXiY.png
         });
     #endif
 
@@ -420,7 +419,7 @@ namespace intercept {
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
-            auto type = typeToEnum(entry->_name);
+            const auto type = typeToEnum(entry->_name);
             if (poolAlloc && type != types::GameDataType::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
@@ -430,7 +429,7 @@ namespace intercept {
 
         //File Banks
 #ifndef __linux__
-        //_sqf_register_funcs._file_banks = future_fileBanks.get(); //Broken in 1.74
+        //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
 #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
@@ -447,7 +446,7 @@ namespace intercept {
         //_sqf_register_funcs._unary_insert = future_unary_insert.get();
         _sqf_register_funcs._gameState = state_addr_;
 
-        uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
     #ifdef __linux__
         const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);

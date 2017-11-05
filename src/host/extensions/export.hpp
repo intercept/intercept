@@ -26,7 +26,7 @@ namespace intercept {
         /*!
         @brief Invokes a raw nular SQF function from a nular function pointer.
 
-        @params function_ The nular_function pointer.
+        @param function_ The nular_function pointer.
 
         @return rv_game_value The raw returned data from the function.
         */
@@ -35,8 +35,8 @@ namespace intercept {
         /*!
         @brief Invokes a raw unary SQF function from a unary function pointer.
 
-        @params function_ The unary_function pointer.
-        @params right_arg_ A reference to a game_value argument.
+        @param function_ The unary_function pointer.
+        @param right_arg_ A reference to a game_value argument.
 
         @return rv_game_value The raw returned data from the function.
         */
@@ -45,9 +45,9 @@ namespace intercept {
         /*!
         @brief Invokes a raw binary SQF function from a binary function pointer.
 
-        @params function_ The binary_function pointer.
-        @params left_arg_ A reference to a game_value argument for the left side.
-        @params right_arg_ A reference to a game_value argument for the right side.
+        @param function_ The binary_function pointer.
+        @param left_arg_ A reference to a game_value argument for the left side.
+        @param right_arg_ A reference to a game_value argument for the right side.
 
         @return rv_game_value The raw returned data from the function.
         */
@@ -87,8 +87,7 @@ namespace intercept {
 
         @return A pointer to the allocator
         */
-        const types::__internal::allocatorInfo* get_engine_allocator();
-
+        const types::__internal::allocatorInfo* get_engine_allocator();    
         /*!
         @brief Registers SQF Function
         */
@@ -96,6 +95,7 @@ namespace intercept {
         [[nodiscard]] types::registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
         [[nodiscard]] types::registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
         std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+
         const auto_array<r_string>* get_pbo_files_list();
     }
 }

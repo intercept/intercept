@@ -63,24 +63,28 @@ namespace intercept {
 
             object __object_unary_object(unary_function fnc_, const object &obj_);
 
-            std::vector<game_value> __convert_to_game_value_vector(game_value input_);
-            std::vector<vector3> __convert_to_vector3_vector(game_value input_);
-            std::vector<vector2> __convert_to_vector2_vector(game_value input_);
-            std::vector<object> __convert_to_objects_vector(game_value input_);
-            sqf_return_string_list __convert_to_strings_vector(game_value input_);
-            std::vector<float> __convert_to_numbers_vector(game_value input_);
-            std::vector<int> __convert_to_integers_vector(game_value input_);
-            std::vector<bool> __convert_to_booleans_vector(game_value input_);
-            std::vector<script> __convert_to_scripts_vector(game_value input_);
-            std::vector<team_member> __convert_to_team_members_vector(game_value input_);
-            std::vector<group> __convert_to_groups_vector(game_value input__);
-            std::vector<control> __convert_to_controls_vector(game_value input_);
-            std::vector<display> __convert_to_displays_vector(game_value input_);
-            std::vector<marker> __convert_to_markers_vector(game_value input_);
-            std::vector<config> __convert_to_configs_vector(game_value input_);
-            std::vector<location> __convert_to_locations_vector(game_value input_);
-            std::vector<task> __convert_to_tasks_vector(game_value input_);
-            vector3 __convert_to_vector3(game_value input_);
+
+            template <class T>
+            typename std::enable_if<std::is_convertible<game_value, T>::value, std::vector<T>>::type
+            __convert_to_vector(game_value input_) {
+                if (input_.size() == 0) return {};
+                auto& arr = input_.to_array();
+                return std::vector<T>(arr.begin(), arr.end());
+            }
+
+
+            template <class T>
+            typename std::enable_if<!std::is_convertible<game_value, T>::value, std::vector<T>>::type
+            __convert_to_vector(game_value input_) {
+                std::vector<T> output;
+                if (input_.size() == 0) return {};
+                output.reserve(input_.size());
+                for (auto &gv : input_.to_array()) {
+                    output.emplace_back(T(gv));
+                }
+                return output;
+            }
+
         }  // namespace __helpers
     }      // namespace sqf
 }  // namespace intercept

@@ -12,7 +12,6 @@ themselves using these functions they are most likely doing something unintentio
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "../shared.hpp"
 #include "types.hpp"
 
 using namespace intercept::types;
@@ -35,7 +34,7 @@ namespace intercept {
             /*!
             @brief Invokes a raw nular SQF function from a nular function pointer.
 
-            @params function_ The nular_function pointer.
+            @param function_ The nular_function pointer.
 
             @return rv_game_value The raw returned data from the function.
             */
@@ -45,8 +44,8 @@ namespace intercept {
             /*!
             @brief Invokes a raw unary SQF function from a unary function pointer.
 
-            @params function_ The unary_function pointer.
-            @params right_arg_ A reference to a game_value argument.
+            @param function_ The unary_function pointer.
+            @param right_arg_ A reference to a game_value argument.
 
             @return rv_game_value The raw returned data from the function.
             */
@@ -56,9 +55,9 @@ namespace intercept {
             /*!
             @brief Invokes a raw binary SQF function from a binary function pointer.
 
-            @params function_ The binary_function pointer.
-            @params left_arg_ A reference to a game_value argument for the left side.
-            @params right_arg_ A reference to a game_value argument for the right side.
+            @param function_ The binary_function pointer.
+            @param left_arg_ A reference to a game_value argument for the left side.
+            @param right_arg_ A reference to a game_value argument for the right side.
 
             @return rv_game_value The raw returned data from the function.
             */

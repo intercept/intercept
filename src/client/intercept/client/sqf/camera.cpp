@@ -243,7 +243,7 @@ namespace intercept {
 
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ppeffectcreate__array__ret__scalar_array, std::move(effects));
 
-            return __helpers::__convert_to_numbers_vector(ret);
+            return __helpers::__convert_to_vector<float>(ret);
         }
 
         bool pp_effect_committed(sqf_string_const_ref value_) {
@@ -300,20 +300,20 @@ namespace intercept {
         }
 
         vector3 get_pilot_camera_direction(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameradirection__object__ret__array, object_));
+            return host::functions.invoke_raw_unary(__sqf::unary__getpilotcameradirection__object__ret__array, object_);
         }
 
         vector3 get_pilot_camera_position(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraposition__object__ret__array, object_));
+            return host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraposition__object__ret__array, object_);
         }
         vector3 get_pilot_camera_rotation(const object &object_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_));
+            return host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_);
         }
         rv_camera_target get_pilot_camera_target(const object &object_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
 
             return rv_camera_target({ret[0],
-                                     __helpers::__convert_to_vector3(ret[1]),
+                                     ret[1],
                                      ret[2]});
         }
 

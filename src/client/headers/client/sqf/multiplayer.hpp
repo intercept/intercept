@@ -72,8 +72,8 @@ namespace intercept {
         game_value remote_exec(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
         game_value remote_exec_call(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_);
 
-        bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_);
-        int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_);
+        bool turret_local(const object &vehicle_, rv_turret_path turret_path_);
+        int turret_owner(const object &vehicle_, rv_turret_path turret_path_);
         //mp
         int admin(int owner_id_);
         int remote_executed_owner();

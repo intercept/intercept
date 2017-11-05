@@ -100,28 +100,16 @@ namespace intercept {
             return waypoint::__parse_type(host::functions.invoke_raw_unary(__sqf::unary__waypointtype__array__ret__string, wp_));
         }
         bool waypoint_visible(waypoint &wp_) {
-            // TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
+            //#TODO THIS CAN RETURN 0, CHECK FOR 0 AND RETURN FALSE.
             return host::functions.invoke_raw_unary(__sqf::unary__waypointvisible__array__ret__scalar, wp_);
         }
         std::vector<waypoint> synchronized_waypoints(waypoint &wp_) {
-            game_value rv_ret_vals(host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__array__ret__array, wp_));
-
-            // TODO test for logic.
-            std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
-                waypoints.push_back(waypoint(rv_ret_vals[i]));
-
-            return waypoints;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__array__ret__array, wp_);
+            return __helpers::__convert_to_vector<waypoint>(ret);
         }
         std::vector<waypoint> synchronized_waypoints(object &obj_) {
-            game_value rv_ret_vals(host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__object__ret__array, obj_));
-
-            // TODO test for logic.
-            std::vector<waypoint> waypoints;
-            for (uint32_t i = 0; i < rv_ret_vals.size() - 1; i++)
-                waypoints.push_back(waypoint(rv_ret_vals[i]));
-
-            return waypoints;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedwaypoints__object__ret__array, obj_);
+            return __helpers::__convert_to_vector<waypoint>(ret);
         }
 
         void set_waypoint_behaviour(waypoint &wp_, waypoint::behaviour mode_) {
@@ -251,29 +239,17 @@ namespace intercept {
             game_value params({group_,
                                static_cast<float>(index_)});
 
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params);
         }
 
         std::vector<waypoint> waypoints(const object &player_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, player_);
-
-            std::vector<waypoint> waypoints;
-            for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(waypoint(res[i]));
-            }
-
-            return waypoints;
+            return __helpers::__convert_to_vector<waypoint>(res);
         }
 
         std::vector<waypoint> waypoints(const group &group_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__waypoints__object_group__ret__array, group_);
-
-            std::vector<waypoint> waypoints;
-            for (size_t i = 0; i < res.size(); i++) {
-                waypoints.push_back(waypoint(res[i]));
-            }
-
-            return waypoints;
+            return __helpers::__convert_to_vector<waypoint>(res);
         }
 
         void set_effect_condition(std::variant<object, waypoint> unit_, sqf_string_const_ref statement_) {
@@ -309,11 +285,7 @@ namespace intercept {
             return rv_trigger_timeout(host::functions.invoke_raw_unary(__sqf::unary__triggertimeout__object__ret__array, trigger_));
         }
         std::vector<object> list(const object &trigger_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__list__object__ret__array, trigger_);
-
-            if (ret.size() == 0) return {};
-
-            return __helpers::__convert_to_objects_vector(ret);
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__list__object__ret__array, trigger_));
         }
         void trigger_attach_object(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerattachobject__object__scalar__ret__nothing, value0_, value1_);

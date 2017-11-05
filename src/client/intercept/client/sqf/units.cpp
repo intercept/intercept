@@ -343,11 +343,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__moveingunner__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_) {
-            auto_array<game_value> path(turret_path_.begin(), turret_path_.end());
-
+        void move_in_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params({vehicle_,
-                               std::move(path)});
+                               std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
         }
@@ -365,8 +363,7 @@ namespace intercept {
             if (ret.size() == 1) {
                 return rv_vehicle_role({ret[0]});
             }
-            std::vector<int> turret_path = __helpers::__convert_to_integers_vector(ret[1]);
-            return rv_vehicle_role({ret[0], turret_path});
+            return rv_vehicle_role({ret[0], rv_turret_path(ret[1])});
         }
 
         group get_group(const object &unit_) {
@@ -374,7 +371,7 @@ namespace intercept {
         }
 
         std::vector<object> group_selected_units(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
         }
 
         std::vector<sqf_return_string_list> squad_params(const object &unit_) {
@@ -382,7 +379,7 @@ namespace intercept {
             game_value _engine_result = host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_);
             _temp.reserve(_engine_result.size());
             for (auto &gv : _engine_result.to_array()) {
-                _temp.push_back(std::move(__helpers::__convert_to_strings_vector(gv)));
+                _temp.push_back(std::move(__helpers::__convert_to_vector<sqf_return_string>(gv)));
             }
             return _temp;
         }
@@ -392,11 +389,11 @@ namespace intercept {
         }
 
         sqf_return_string_list unit_addons(sqf_string_const_ref class_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__unitaddons__string__ret__array, class_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__unitaddons__string__ret__array, class_));
         }
 
         std::vector<object> get_all_owned_mines(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__getallownedmines__object__ret__array, unit_));
         }
 
         void remove_all_owned_mines(const object &unit_) {
@@ -423,11 +420,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addplayerscores__object__array__ret__nothing, unit_, params_right);
         }
 
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
+        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params_right({vehicle_,
-                                     std::move(turret_path)});
+                                     std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasturret__object__array__ret__nothing, unit_, params_right);
         }

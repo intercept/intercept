@@ -57,7 +57,7 @@ namespace intercept {
         void assign_as_commander(const object &unit_, const object &vehicle_);
         void assign_as_driver(const object &unit_, const object &vehicle_);
         void assign_as_gunner(const object &unit_, const object &vehicle_);
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<float> &turret_path_);
+        void assign_as_gunner(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
         void assign_as_cargo(const object &unit_, const object &vehicle_);
         void assign_as_cargo_index(const object &unit_, const object &vehicle_, int index_);
 
@@ -108,7 +108,7 @@ namespace intercept {
         void send_simple_command(const object &value0_, simple_command_type command_);
         sqf_return_string speed_mode(const object &obj_);
         sqf_return_string speed_mode(const group &grp_);
-        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
+        object create_agent(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE"sv);
         void do_artillery_fire(const object &unit_, const vector3 &position_, float radius_, int rounds_);
         void do_artillery_fire(const std::vector<object> &units_, const vector3 &position_, float radius_, int rounds_);
         void do_fire(const object &unit_, const object &target_);
@@ -207,7 +207,7 @@ namespace intercept {
         void enable_gun_lights(const group &group_, bool &enable_);
         void enable_ir_lasers(const object &unit_, bool &enable_);
         void enable_ir_lasers(const group &group_, bool &enable_);
-        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_);
+        void enable_person_turret(const object &vehicle_, rv_turret_path turret_path_, bool enable_);
         object find_cover(const object &object_, const vector3 &position_, const vector3 &hide_position_, float max_dist_, std::optional<float> min_dist_, std::optional<vector3> visible_position_, std::optional<object> ignore_object_);
         void fly_in_height_asl(const object &aircraft_, float height_careless_safe_aware_, float height_combat_, float height_stealth_);
         void force_follow_road(const object &vehicle_, bool follow_);

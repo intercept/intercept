@@ -543,11 +543,25 @@ namespace intercept {
                 newData->data()[myLength + _right.length()] = 0;
                 return r_string(newData);
             }
+            r_string& appendModify(std::string_view _right) {
+                auto myLength = length();
+                auto newData = create(myLength+_right.length()+1);//Space for terminating nullchar
+            #if __GNUC__
+                std::copy_n(data(), myLength, newData->data());
+                std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
+            #else
+                memcpy_s(newData->data(), newData->size(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+                memcpy_s(newData->data()+ myLength, newData->size() - myLength, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            #endif
+                newData->data()[myLength + _right.length()] = 0;
+                _ref = newData;
+                return *this;
+            }
             r_string operator+(std::string_view _right){
                 return append(_right);
             }
-            r_string operator+(std::string _right) {
-                return append(_right);
+            r_string& operator+=(std::string_view _right) {
+                return appendModify(_right);
             }
             r_string& to_lower() {
                 if (!_ref) return *this;

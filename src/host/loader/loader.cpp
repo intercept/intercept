@@ -267,7 +267,7 @@ namespace intercept {
         auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&]() {
             uintptr_t stringOffset = future_stringOffset.get();
         #ifndef __linux__
-            return (findInMemory(reinterpret_cast<char*>(&stringOffset), 4) - sizeof(uintptr_t));
+            return (findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));
         #else
             uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
             return vtableStart;
@@ -295,7 +295,7 @@ namespace intercept {
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_fileBanks = std::async([&]() {
             auto patternFindLoc = findInMemoryPattern("\x48\x83\xEC\x28\x48\x8B\x0D\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x08\x33\xC9\x48\x85\xC0\x74\x18\x48\x89\x08\x89\x48\x10\x89\x48\x08\x48\x89\x48\x28\x89\x48\x38\x89\x48\x30\x88\x48\x21\xEB\x03\x48\x8B\xC1\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x83\xC4\x28\xE9", "xxxxxxx????x????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxx");
-            auto offs =  *reinterpret_cast<uint32_t*>(patternFindLoc + 0x42);
+            auto offs = *reinterpret_cast<uint32_t*>(patternFindLoc + 0x42);
             return patternFindLoc + 0x46 + offs;
         });
     #else
@@ -428,9 +428,9 @@ namespace intercept {
 
 
         //File Banks
-#ifndef __linux__
-        //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
-#endif
+    #ifndef __linux__
+            //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
+    #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
         //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
@@ -481,4 +481,46 @@ namespace intercept {
         return _sqf_register_funcs;
     }
 
+    uintptr_t loader::find_game_state(uintptr_t stack_base) {
+
+    #ifdef __linux__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x264);
+        return game_state_addr;
+    #else
+        auto checkValid = [](uintptr_t base) -> bool {
+            if (IsBadReadPtr(reinterpret_cast<void*>(base), 32)) return false;
+            struct size_check {
+                uintptr_t p1;//typearray
+                uintptr_t s1;
+                uintptr_t s2;
+                uintptr_t p2;//functions
+                uintptr_t s3;
+                uintptr_t p3;//operators
+                uintptr_t s4;
+                uintptr_t p4;//nulars
+            };
+            auto size_check_type = reinterpret_cast<size_check*>(base);
+            if (size_check_type->s1 != size_check_type->s2) return false; //auto_array size vs capacity. Should be compacted here.
+                                                                          //Check if all the function tables are valid
+            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p1), 32)) return false;
+            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p2), 32)) return false;
+            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p3), 32)) return false;
+            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p4), 32)) return false;
+            return true;
+        };
+    #if _WIN64 || __X86_64__
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x160);
+        if (checkValid(game_state_addr)) return game_state_addr;
+        //game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x190); //Found in 1.76 profv7
+    #else
+        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 8);
+    #endif
+        if (checkValid(game_state_addr)) return game_state_addr;
+
+        for (uintptr_t i = 0; i < 0x300; i += sizeof(uintptr_t)) {
+            if (checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i))) return *reinterpret_cast<uintptr_t *>(stack_base + i);
+        }
+    #endif
+        return 0x0;
+    }
 }

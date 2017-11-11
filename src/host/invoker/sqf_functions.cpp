@@ -137,7 +137,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
-    static const auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
+    const auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
 
     auto operators = findOperators(std::string(name));
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
@@ -221,7 +221,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
 
-    static const auto test = findUnary("diag_log", GameDataType::ANY);
+    const auto test = findUnary("diag_log", GameDataType::ANY);
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
@@ -304,7 +304,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
 
-    static const auto test = findNular("player");
+    const auto test = findNular("player");
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 

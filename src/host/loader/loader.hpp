@@ -232,8 +232,8 @@ namespace intercept {
         */
         const sqf_register_functions& get_register_sqf_info() const;
 
-
-
+        ///Finds game_state on the Stack
+        static uintptr_t find_game_state(uintptr_t stack_base);
 
     protected:
         /*!

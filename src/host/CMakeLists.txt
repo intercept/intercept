@@ -14,9 +14,10 @@ option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive")
+    #remove -s to enable debug symbols. Also maybe add -g or -g3
+    SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive -pthread")
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-    set(CMAKE_SHARED_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+    set(CMAKE_SHARED_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Wl,-rpath,$ORIGIN")
 else()
     set(CMAKE_CXX_FLAGS_DEBUG "/D _DEBUG /MTd /Zi /Ob0 /Od /RTC1 /EHsc")
     set(CMAKE_CXX_FLAGS_MINSIZEREL     "/MT /O1 /Ob1 /D /EHsc NDEBUG")

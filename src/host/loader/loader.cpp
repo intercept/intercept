@@ -481,46 +481,63 @@ namespace intercept {
         return _sqf_register_funcs;
     }
 
-    uintptr_t loader::find_game_state(uintptr_t stack_base) {
+#ifdef __linux__
+#include <unistd.h>     // getpid...
+    bool IsBadReadPtr(void *ptr, size_t size) {
+        int result = access((const char *) ptr, F_OK);
+        if (result == -1 && errno == EFAULT)
+            return true;
+        return false;
+    }
 
-    #ifdef __linux__
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x264);
-        return game_state_addr;
-    #else
+#endif
+
+    uintptr_t loader::find_game_state(uintptr_t stack_base) {
         auto checkValid = [](uintptr_t base) -> bool {
             if (IsBadReadPtr(reinterpret_cast<void*>(base), 32)) return false;
             struct size_check {
                 uintptr_t p1;//typearray
-                uintptr_t s1;
-                uintptr_t s2;
+                uintptr_t typeCount;
+                uintptr_t typeCapacity;
                 uintptr_t p2;//functions
-                uintptr_t s3;
+                int f_tableCount{ 0 };
+                int f_count{ 0 };
                 uintptr_t p3;//operators
-                uintptr_t s4;
+                int o_tableCount{ 0 };
+                int o_count{ 0 };
                 uintptr_t p4;//nulars
+                int n_tableCount{ 0 };
+                int n_count{ 0 };
             };
             auto size_check_type = reinterpret_cast<size_check*>(base);
-            if (size_check_type->s1 != size_check_type->s2) return false; //auto_array size vs capacity. Should be compacted here.
+            if (size_check_type->typeCount != size_check_type->typeCapacity) return false; //auto_array size vs capacity. Should be compacted here.
                                                                           //Check if all the function tables are valid
             if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p1), 32)) return false;
             if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p2), 32)) return false;
             if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p3), 32)) return false;
             if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p4), 32)) return false;
             return true;
-        };
-    #if _WIN64 || __X86_64__
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x160);
-        if (checkValid(game_state_addr)) return game_state_addr;
-        //game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x190); //Found in 1.76 profv7
-    #else
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 8);
-    #endif
-        if (checkValid(game_state_addr)) return game_state_addr;
+            };
+
+    //#ifdef __linux__
+    //    uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x264);
+    //#else
+    //    #if _WIN64 || __X86_64__
+    //        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x160);
+    //        if (checkValid(game_state_addr)) return game_state_addr;
+    //        game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 0x190); //Found in 1.76 profv7
+    //    #else
+    //        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(stack_base + 8);
+    //    #endif
+    //#endif
+    //
+    //    if (checkValid(game_state_addr)) return game_state_addr;
 
         for (uintptr_t i = 0; i < 0x300; i += sizeof(uintptr_t)) {
-            if (checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i))) return *reinterpret_cast<uintptr_t *>(stack_base + i);
+            bool isValid = checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i));
+            if (isValid) return *reinterpret_cast<uintptr_t *>(stack_base + i);
         }
-    #endif
+
         return 0x0;
     }
 }

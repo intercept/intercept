@@ -82,10 +82,6 @@ typedef struct {
 
 thread_local intercept::cert::signing::security_class intercept::cert::current_security_class = intercept::cert::signing::security_class::not_signed;
 
-
-intercept::cert::signing::signing() {}
-intercept::cert::signing::~signing() {}
-
 intercept::cert::signing::security_class intercept::cert::signing::verifyCert(std::wstring_view file_path, types::r_string ca_cert) {
     HCERTSTORE hStore = nullptr;
     HCRYPTMSG hMsg = nullptr;
@@ -366,4 +362,9 @@ void intercept::cert::signing::debug_certs_in_store([[maybe_unused]] HCERTSTORE 
     }
 #endif
 }
+
+#else
+
+intercept::cert::signing::security_class intercept::cert::signing::verifyCert(std::wstring_view, types::r_string) {}
+void intercept::cert::signing::debug_certs_in_store(void*) {}
 #endif

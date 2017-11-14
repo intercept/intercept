@@ -5,8 +5,6 @@
 #include <future>
 #include <sstream> //Debugging
 
-#define INTERNAL_TAG 0x0000dede
-
 #if INTERCEPT_HOST_DLL
 #include "loader.hpp"
 #define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();

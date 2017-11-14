@@ -8,7 +8,6 @@ namespace intercept {
         class internal_object : public game_value {
         public:
             internal_object();
-            //internal_object(const rv_game_value &value_);  //deprecated
             internal_object(const game_value &value_);
             internal_object(const internal_object &copy_);
             internal_object(internal_object &&move_) noexcept;
@@ -20,7 +19,6 @@ namespace intercept {
             bool operator>(const internal_object& compare_) const;
         };
 
-            //type(const rv_game_value &value_);\ deprecated
 #define RV_GENERIC_OBJECT_DEC(type) class type : public internal_object {\
             public:\
                 type();\

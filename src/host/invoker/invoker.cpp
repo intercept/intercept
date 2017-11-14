@@ -33,18 +33,9 @@ namespace intercept {
             _attached = true;
             controller::get().add("init_invoker"sv, std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("test_invoker"sv, std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("do_invoke_period"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
             controller::get().add("invoker_begin_register"sv, std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register"sv, std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register"sv, std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("rv_event"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
-            controller::get().add("signal"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
             eventhandlers::get().initialize();
         }
     }
@@ -56,13 +47,6 @@ namespace intercept {
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
         _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
-        //#deprecate
-        //if (loader::get().hook_function("str", _register_hook, _register_hook_trampoline)) {
-        //    LOG(INFO) << "Registration function hooked.";
-        //}
-        //else {
-        //    LOG(ERROR) << "Registration function failed to hook.";
-        //}
         return true;
     }
 
@@ -76,13 +60,6 @@ namespace intercept {
         _intercept_registerTypes_function.clear(); //#TEST
         sqf_functions::get().setDisabled();
         init_file_bank_list();
-        //#deprecate
-        //if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
-        //    LOG(INFO) << "Registration function unhooked.";
-        //}
-        //else {
-        //    LOG(INFO) << "Registration function failed to unhook.";
-        //}
 
         return true;
     }
@@ -230,13 +207,7 @@ namespace intercept {
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_) {
-        //_eh_params_name = "intercept_params_var";
         _invoker_unlock init_lock(this);
-        //_mission_namespace = invoke_raw("missionnamespace");
-        //loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
-        //_eh_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, _eh_params_name);
-        //game_value p_name = "intercept_signal_var";
-        //_signal_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, p_name);
         return true;
     }
 

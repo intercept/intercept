@@ -20,11 +20,6 @@
 #endif
 using namespace std::literals::string_view_literals;
 
-/// @deprecated use sv instead
-[[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
-    return { str, len };
-};
-
 namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
@@ -1667,8 +1662,6 @@ namespace intercept {
             /// doesn't handle all types. Will return GameDataType::ANY if not handled
             types::GameDataType type_enum() const;
 
-            /// @deprecated Replaced by size, because that name is more clear
-            [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
             /// @brief Returns true for uninitialized game_value's and Nil values returned from Arma

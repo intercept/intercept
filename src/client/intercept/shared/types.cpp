@@ -763,10 +763,6 @@ namespace intercept {
             return GameDataType::ANY;
         }
 
-        size_t game_value::length() const {
-            return size();
-        }
-
         size_t game_value::size() const {
             if (!data) return 0;
             if (data->get_vtable() != game_data_array::type_def) return 0;

@@ -5,8 +5,6 @@
 #include <future>
 #include <sstream> //Debugging
 
-#define INTERNAL_TAG 0x0000dede
-
 #if INTERCEPT_HOST_DLL
 #include "loader.hpp"
 #define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();
@@ -763,10 +761,6 @@ namespace intercept {
             return GameDataType::ANY;
         }
 
-        size_t game_value::length() const {
-            return size();
-        }
-
         size_t game_value::size() const {
             if (!data) return 0;
             if (data->get_vtable() != game_data_array::type_def) return 0;
@@ -991,40 +985,6 @@ namespace intercept {
         #endif
             return alloc->Realloc(_Ptr, _size);
         }
-
-        //template<class Type>
-        //void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
-        //    //#TODO assert when _ptr is not 32/64bit aligned
-        //    // deallocate object at _Ptr
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    //std::stringstream stream;
-        //    //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
-        //    //OutputDebugStringA(stream.str().c_str());
-        //    alloc->Delete(_Ptr);
-        //}
-        //
-        //template<class Type>
-        //Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
-        //
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        //    //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
-        //    //std::stringstream stream;
-        //    //stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
-        //    //OutputDebugStringA(stream.str().c_str());
-        //    return newData;
-        //}
-
-
-        //template<class Type>
-        //Type* rv_allocator<Type>::reallocate(Type* _Ptr, size_t _count) {
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;   
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    Type* newData = reinterpret_cast<Type*>(alloc->Realloc(_Ptr,sizeof(Type)*_count));
-        //    return newData;
-        //}
 
         void* rv_pool_allocator::allocate(size_t count) {
         #ifdef __linux__

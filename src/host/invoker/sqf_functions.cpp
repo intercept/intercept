@@ -371,7 +371,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
     //std::stringstream stream;
     LOG(INFO, "sqf_functions::registerFunction nular {} {} = {0:x} @ {0:x}\n", name, types::__internal::to_string(return_arg_type)
-        , static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), static_cast<void*>(inserted)
+        , static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), static_cast<const void*>(inserted)
     );
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, inserted);
 

@@ -90,7 +90,7 @@ namespace intercept {
         static bool preStartCalled = false;
         if (preStartCalled) throw std::runtime_error("pre_start called twice");
         get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ARRAY);
-        LOG(INFO) << "Pre-start"sv;
+        LOG(INFO, "Pre-start");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) module.second.functions.pre_start();
         }
@@ -99,7 +99,7 @@ namespace intercept {
     void eventhandlers::post_start(game_value &) {
         static bool postStartCalled = false;
         if (postStartCalled) throw std::runtime_error("post_start called twice");
-        LOG(INFO) << "Post-start"sv;
+        LOG(INFO, "Post-start");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_start) module.second.functions.post_start();
         }
@@ -108,7 +108,7 @@ namespace intercept {
     void eventhandlers::pre_init(game_value &)
     {
         extensions::get().reload_all();
-        LOG(INFO) << "Pre-init"sv;
+        LOG(INFO, "Pre-init");
         for (auto& module : extensions::get().modules()) {
             module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set
             if (module.second.functions.pre_init) module.second.functions.pre_init();
@@ -116,14 +116,14 @@ namespace intercept {
     }
     void eventhandlers::post_init(game_value &)
     {
-        LOG(INFO) << "Post-init"sv;
+        LOG(INFO, "Post-init");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_init) module.second.functions.post_init();
         }
     }
     void eventhandlers::mission_stopped(game_value &)
     {
-        LOG(INFO) << "Mission Stopped"sv;
+        LOG(INFO, "Mission Stopped");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.mission_stopped) module.second.functions.mission_stopped();
         }

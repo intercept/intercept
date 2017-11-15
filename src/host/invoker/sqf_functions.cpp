@@ -171,10 +171,12 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
             found->_description = description;
         #endif
 
-            LOG(INFO) << "sqf_functions::registerFunction binary OVERRIDE "sv << name << " " << types::__internal::to_string(return_arg_type)
-                << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-                << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << found << "\n";
-
+            LOG(INFO, "sqf_functions::registerFunction binary OVERRIDE {} {} = {0:x} {} = {0:x} {} = {0:x} @ {0:x}\n", name,
+                types::__internal::to_string(return_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
+                types::__internal::to_string(left_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),
+                types::__internal::to_string(right_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
+                static_cast<const void*>(found)
+            );
             auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, found);
 
             return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -203,9 +205,12 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction binary "sv << name << " " << types::__internal::to_string(return_arg_type)
-        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << inserted << "\n";
+    LOG(INFO, "sqf_functions::registerFunction binary {} {} = {0:x} {} = {0:x} {} = {0:x} @ {0:x}\n", name,
+        types::__internal::to_string(return_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
+        types::__internal::to_string(left_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),
+        types::__internal::to_string(right_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
+        static_cast<const void*>(inserted)
+    );
 
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, left_arg_type, right_arg_type, inserted);
 
@@ -256,9 +261,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
             found->_description = description;
 #endif
 
-            LOG(INFO) << "sqf_functions::registerFunction unary OVERRIDE "sv << name << " " << types::__internal::to_string(return_arg_type)
-                << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-                << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << found << "\n";
+            LOG(INFO, "sqf_functions::registerFunction unary OVERRIDE {} {} = {0:x} {} = {0:x} @ {0:x}\n", name,
+                types::__internal::to_string(return_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
+                types::__internal::to_string(right_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
+                static_cast<const void*>(found)
+            );
 
             auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, found, undo);
 
@@ -285,9 +292,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction unary "sv << name << " " << types::__internal::to_string(return_arg_type)
-        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << types::__internal::to_string(right_arg_type) << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(right_arg_type)] << " @ "sv << inserted << "\n";
+    LOG(INFO, "sqf_functions::registerFunction unary {} {} = {0:x} {} = {0:x} @ {0:x}\n", name,
+        types::__internal::to_string(return_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
+        types::__internal::to_string(right_arg_type), static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
+        static_cast<const void*>(inserted)
+    );
 
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, right_arg_type, inserted);
 
@@ -322,11 +331,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         undo._description = alreadyExists->_description;
         alreadyExists->_description = description;
 #endif
-
-        LOG(INFO) << "sqf_functions::registerFunction nular OVERRIDE "sv << name << " " << types::__internal::to_string(return_arg_type)
-            << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-            << " @ "sv << alreadyExists << "\n";
-
+        LOG(INFO, "sqf_functions::registerFunction nular OVERRIDE {} {} = {0:x} @ {0:x}\n", name, types::__internal::to_string(return_arg_type)
+            , static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), static_cast<const void*>(alreadyExists)
+        );
         auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, alreadyExists, undo);
 
         return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -363,10 +370,9 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
     //std::stringstream stream;
-    LOG(INFO) << "sqf_functions::registerFunction nular "sv << name << " " << types::__internal::to_string(return_arg_type)
-        << "=" << std::hex << _registerFuncs._types[static_cast<size_t>(return_arg_type)] << " "
-        << " @ "sv << inserted << "\n";
-
+    LOG(INFO, "sqf_functions::registerFunction nular {} {} = {0:x} @ {0:x}\n", name, types::__internal::to_string(return_arg_type)
+        , static_cast<const void*>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), static_cast<void*>(inserted)
+    );
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, inserted);
 
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
@@ -459,7 +465,7 @@ std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::regis
     gs->_scriptTypes.emplace_back(newType);
     const auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
-    LOG(INFO) << "sqf_functions::registerType "sv << name << localizedName << description << typeName;
+    LOG(INFO, "sqf_functions::registerType {} {} {} ", name, localizedName, description, typeName);
     types::__internal::add_game_datatype(name, static_cast<types::GameDataType>(newIndex));
     return { static_cast<types::GameDataType>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }

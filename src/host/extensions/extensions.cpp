@@ -67,7 +67,7 @@ namespace intercept {
     void extensions::reload_all() {
         if (!do_reload)
             return;
-        LOG(INFO) << "Doing client DLL reload."sv;
+        LOG(INFO, "Doing client DLL reload.");
         auto current_modules = _modules;
         for (auto module : current_modules) {
             unload(module.first);
@@ -82,7 +82,7 @@ namespace intercept {
         using string_view_type = std::wstring_view;
         static const string_view_type bad_chars = L".\\/:?\"<>|"sv;
         int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
-        string_type path;
+        std::wstring path;
         path.resize(length);
         MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);
     #else
@@ -92,10 +92,10 @@ namespace intercept {
         string_view_type bad_chars = ".\\/:?\"<>|"sv;
     #endif
 
-        LOG(INFO) << "Load requested ["sv << path_ << "]"sv;
+        LOG(INFO, "Load requested [{}]", path_);
 
         if (_modules.find(path_) != _modules.end()) {
-            LOG(ERROR) << "Module already loaded ["sv << path << "]"sv;
+            LOG(ERROR, "Module already loaded [{}]", path_) ;
             return true;
         }
 
@@ -103,14 +103,17 @@ namespace intercept {
         for (auto it = path.begin(); it < path.end(); ++it) {
             const bool found = bad_chars.find(*it) != std::string::npos;
             if (found) {
-                LOG(ERROR) << "Client plugin: "sv << path << " contains illegal characters in its name."sv;
+                LOG(ERROR, "Client plugin: {} contains illegal characters in its name.", path_);
                 return false;
             }
         }
 
         auto full_path = _searcher.find_extension(path);
-        if (!full_path)
+        if (!full_path) {
+            LOG(ERROR, "Client plugin: {} was not found.\n", path_);
             return false;
+        }
+            
 
         cert::signing::security_class security_class = cert::signing::security_class::not_signed;
     #ifndef __linux__
@@ -118,7 +121,7 @@ namespace intercept {
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
             security_class = _signTool.verifyCert(*full_path, certData);
             if (security_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
-                LOG(ERROR) << "PluginLoad failed, code signing certificate invalid "sv << " [" << *full_path << "]";
+                LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
             }
         }
     #endif
@@ -133,23 +136,23 @@ namespace intercept {
 
 #ifndef __linux__  //Lazyness
         if (do_reload) {
-            LOG(INFO) << "Loading plugin from temp file."sv;
+            LOG(INFO, "Loading plugin from temp file.");
             wchar_t tmpPath[MAX_PATH + 1], buffer[MAX_PATH + 1];
 
             if (!GetTempPathW(MAX_PATH, tmpPath)) {
-                LOG(ERROR) << "GetTempPath() failed, e="sv << GetLastError();
+                LOG(ERROR, "GetTempPath() failed, e={}", GetLastError());
                 return false;
             }
             if (!GetTempFileNameW(tmpPath, L"intercept_temp", 0, buffer)) {
-                LOG(ERROR) << "GetTempFileName() failed, e="sv << GetLastError();
+                LOG(ERROR, "GetTempFileName() failed, e={}", GetLastError());
                 return false;
             }
             std::wstring temp_filename = buffer;
-            LOG(INFO) << "Temp file: "sv << temp_filename;
+            //LOG(INFO, "Temp file: {}", temp_filename);
             if (!CopyFileW(full_path->c_str(), temp_filename.c_str(), FALSE)) {
                 DeleteFileW(temp_filename.c_str());
                 if (!CopyFileW(full_path->c_str(), temp_filename.c_str(), FALSE)) {
-                    LOG(ERROR) << "CopyFile() , e="sv << GetLastError();
+                    LOG(ERROR, "CopyFile() failed, e={}", GetLastError());
                     return false;
                 }
             }
@@ -160,13 +163,13 @@ namespace intercept {
 #ifdef __linux__
         auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e="sv << dlerror() << " [" << *full_path << "]";
+            LOG(ERROR, "LoadLibrary() failed, e={} [{}]", dlerror(), path_);
             return false;
         }
 #else
         auto dllHandle = LoadLibraryW(full_path->c_str());
         if (!dllHandle) {
-            LOG(ERROR) << "LoadLibrary() failed, e="sv << GetLastError() << " [" << *full_path << "]";
+            LOG(ERROR, "LoadLibrary() failed, e={} [{}]", GetLastError(), path_);
             return false;
         }
 #endif
@@ -196,27 +199,27 @@ namespace intercept {
         //First verify that this is a valid Plugin before we initialize the rest.
 
         if (!new_module.functions.api_version) {
-            LOG(ERROR) << "Module "sv << path << " failed to define the api_version function."sv;
+            LOG(ERROR, "Module {} failed to define the api_version function.", path_);
             return false;
         }
 
         if (new_module.functions.api_version() < PLUGIN_MIN_API_VERSION) {
-            LOG(ERROR) << "Module "sv << path << " has invalid API Version. Has: "sv << new_module.functions.api_version() << " Need: "sv << PLUGIN_MIN_API_VERSION;
+            LOG(ERROR, "Module {} has invalid API Version. Has: {} Need: {}", path_, new_module.functions.api_version(), PLUGIN_MIN_API_VERSION);
             return false;
         }
 
         if (!new_module.functions.assign_functions) {
-            LOG(ERROR) << "Module "sv << path << " failed to define the assign_functions function."sv;
+            LOG(ERROR, "Module {} failed to define the assign_functions function.", path_);
             return false;
         }
         //Defined in client lib. So plugin MUST have this
         if (!new_module.functions.client_eventhandlers_clear) {
-            LOG(ERROR) << "Module "sv << path << " failed to define the client_eventhandlers_clear function."sv;
+            LOG(ERROR, "Module {} failed to define the client_eventhandlers_clear function.", path_);
             return false;
         }
 #ifndef __linux__
         if (security_class == cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
-            LOG(ERROR) << "Module "sv << path << " is not code signed but says it should be."sv;
+            LOG(ERROR, "Module {} is not code signed but says it should be.", path_);
             return false;
         }
 #endif
@@ -263,15 +266,15 @@ namespace intercept {
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();
 
-        LOG(INFO) << "Load completed ["sv << path << "]"sv;
+        LOG(INFO, "Load completed [{}]", path_);
         return false;
     }
 
     bool extensions::unload(std::string path_) {
-        LOG(INFO) << "Unload requested ["sv << path_ << "]"sv;
+        LOG(INFO, "Unload requested [{}]", path_);
         auto module = _modules.find(path_);
         if (module == _modules.end()) {
-            LOG(INFO) << "Unload failed, module not loaded ["sv << path_ << "]"sv;
+            LOG(INFO, "Unload failed, module not loaded [{}]", path_);
             return true;
         }
 
@@ -300,15 +303,14 @@ namespace intercept {
 
 #ifdef __linux
         if (dlclose(module->second.handle)) {  //returms 0 on success
-            LOG(INFO) << "dlclose() failed during unload, e="sv << dlerror();
+            LOG(INFO, "dlclose() failed during unload, e={}", dlerror());
 #else
         if (!FreeLibrary(module->second.handle)) {
-            LOG(INFO) << "FreeLibrary() failed during unload, e="sv << GetLastError();
+            LOG(INFO, "FreeLibrary() failed during unload, e={}", GetLastError());
 #endif
             return false;
         }
-
-        LOG(INFO) << "Unload complete ["sv << path_ << "]"sv; //path_ sometimes becomes corrupted if placed after the erase
+        LOG(INFO, "Unload complete [{}]", path_);//path_ sometimes becomes corrupted if placed after the erase
 
         _modules.erase(path_);
 
@@ -316,12 +318,12 @@ namespace intercept {
     }
 
     bool extensions::list(const arguments&, std::string& result) {
-        LOG(INFO) << "Listing loaded modules"sv;
+        LOG(INFO, "Listing loaded modules");
         std::string res;
 
         for (auto& kv : _modules) {
             res = res + kv.first + ", ";
-            LOG(INFO) << "\t" << kv.first;
+            LOG(INFO, "\t {}", kv.first);
         }
 
         result = res;

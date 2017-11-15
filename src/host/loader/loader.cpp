@@ -409,7 +409,7 @@ namespace intercept {
         #endif
         #endif
             LOG(INFO, "{} {} {}\n", entry->_localizedName, entry->_javaFunc, entry->_readableName);
-            LOG(INFO, "Found Type operator: {} create@{0:x} pool@{0:x}\n", entry->_name, static_cast<const void*>(entry->_createFunction), poolAlloc);
+            LOG(INFO, "Found Type operator: {} create@{0:x} pool@{0:x}\n", entry->_name, reinterpret_cast<const void*>(entry->_createFunction), poolAlloc);
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 

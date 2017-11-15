@@ -51,7 +51,6 @@ namespace intercept::search {
             file_contents += line;
             file_contents.push_back('\n'); //#TODO can linux even have more than one line?
         }
-        std::cout << "cmdLine " << file_contents << "\n";
         return file_contents;
     #else
         return GetCommandLineA();

@@ -20,11 +20,6 @@
 #endif
 using namespace std::literals::string_view_literals;
 
-/// @deprecated use sv instead
-[[deprecated("use sv instead")]] constexpr std::string_view operator ""_sv(char const* str, std::size_t len) noexcept {
-    return { str, len };
-};
-
 namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
@@ -1671,8 +1666,6 @@ namespace intercept {
             /// doesn't handle all types. Will return GameDataType::ANY if not handled
             types::GameDataType type_enum() const;
 
-            /// @deprecated Replaced by size, because that name is more clear
-            [[deprecated("Replaced by size, because that name is more clear")]] size_t length() const;
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
             /// @brief Returns true for uninitialized game_value's and Nil values returned from Arma
@@ -2079,104 +2072,6 @@ namespace intercept {
 
 
     #pragma endregion
-
-
-    #if 0
-        template<size_t Size = 1024, size_t Alloc_Length = 512>
-        class game_data_string_pool {
-        public:
-            game_data_string_pool() : _running(false) {
-                for (size_t i = 0; i < Size; ++i)
-                    _buy_entry(Alloc_Length);
-            }
-
-            inline r_string acquire(size_t alloc_length_) {
-                std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
-                if (_pool_queue.size() == 0 || alloc_length_ > Alloc_Length)
-                    _buy_entry(alloc_length_);
-                r_string ret = _pool_queue.front();
-                _pool_queue.pop();
-                return ret;
-            }
-
-            inline void release(r_string _ptr) {
-                /*
-                std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
-                if (_ptr->ref_count_internal <= 1) {
-                    _ptr->ref_count_internal = 0;
-                    _ptr->length = 0;
-                    _ptr->char_string = 0x0;
-                    _pool_queue.push(_ptr);
-                } else {
-                    if (!_running) {
-                        _running = true;
-                        _collection_thread = std::thread(&game_data_string_pool::_string_collector, this);
-                    }
-                    _string_collection.push_back(_ptr);
-                }
-                */
-            }
-
-            ~game_data_string_pool() {
-                _running = false;
-                _collection_thread.join();
-            }
-        protected:
-            std::queue<r_string> _pool_queue;
-            std::vector<r_string> _pool;
-            std::mutex _string_collection_mutex;
-            std::thread _collection_thread;
-            std::atomic<bool> _running;
-
-            inline void _buy_entry(size_t alloc_length_) {
-                r_string str;
-                _pool_queue.push(str);
-                _pool.push_back(str);
-            }
-
-            /*!
-            @brief A list of strings to monitor for deletion, used by the string collector.
-            */
-            std::list<r_string> _string_collection;
-
-            /*!
-            @brief Collects a string and adds it to a queue that waits for its internal
-            ref counter to reach 1, at which point it can be safely released.
-
-            Strings allocated by Intercept are allocated in the Intercept host memory
-            because the engine may or may not use them right away. In some cases the
-            string may be held in some sort of execution logic for a significant time.
-            Since these strings are normal internal strings, the engine will adjust
-            their ref counter to account for this, and we need to monitor the ref counter
-            to make sure that we can safely release it.
-
-            @param str_ A pointer to the string to release.
-            */
-            void _string_collector() {
-                /*
-                while (_running) {
-                    {
-                        std::lock_guard<std::mutex> collector_lock(_string_collection_mutex);
-                        for (auto it = _string_collection.begin(); it != _string_collection.end();) {
-                            if ((*it)->ref_count_internal <= 1) {
-                                rv_string *ptr = *it;
-                                ptr->ref_count_internal = 0;
-                                ptr->length = 0;
-                                ptr->char_string = 0x0;
-                                _pool_queue.push(ptr);
-                                _string_collection.erase(it++);
-                            } else {
-                                ++it;
-                            }
-                        }
-                    }
-                    sleep(250);
-                }
-                */
-            }
-        };
-    #endif
-
 
     #pragma region RSQF
         class registered_sqf_function {

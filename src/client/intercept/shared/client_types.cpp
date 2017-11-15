@@ -36,7 +36,6 @@ namespace intercept {
             return static_cast<game_data_object *>(data.getRef())->object > static_cast<game_data_object *>(compare_.data.getRef())->object;
         }
 
-        //type::type(const rv_game_value &value_) : internal_object(value_) {}\ //deprecated
 #define RV_GENERIC_OBJECT_DEF(type)         type::type() : internal_object() {}\
         type::type(const game_value & value_) : internal_object(value_) {}\
         type::type(const type &copy_) : internal_object(copy_) {}\

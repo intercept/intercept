@@ -33,18 +33,9 @@ namespace intercept {
             _attached = true;
             controller::get().add("init_invoker"sv, std::bind(&intercept::invoker::init_invoker, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("test_invoker"sv, std::bind(&intercept::invoker::test_invoker, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("do_invoke_period"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
             controller::get().add("invoker_begin_register"sv, std::bind(&intercept::invoker::invoker_begin_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_register"sv, std::bind(&intercept::invoker::invoker_register, this, std::placeholders::_1, std::placeholders::_2));
             controller::get().add("invoker_end_register"sv, std::bind(&intercept::invoker::invoker_end_register, this, std::placeholders::_1, std::placeholders::_2));
-            controller::get().add("rv_event"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
-            controller::get().add("signal"sv, [](const arguments & args_, std::string & result_) {
-                return false; //#deprecate
-            });
             eventhandlers::get().initialize();
         }
     }
@@ -56,13 +47,6 @@ namespace intercept {
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
         _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
-        //#deprecate
-        //if (loader::get().hook_function("str", _register_hook, _register_hook_trampoline)) {
-        //    LOG(INFO) << "Registration function hooked.";
-        //}
-        //else {
-        //    LOG(ERROR) << "Registration function failed to hook.";
-        //}
         return true;
     }
 
@@ -76,13 +60,6 @@ namespace intercept {
         _intercept_registerTypes_function.clear(); //#TEST
         sqf_functions::get().setDisabled();
         init_file_bank_list();
-        //#deprecate
-        //if (loader::get().unhook_function("str", _register_hook, _register_hook_trampoline)) {
-        //    LOG(INFO) << "Registration function unhooked.";
-        //}
-        //else {
-        //    LOG(INFO) << "Registration function failed to unhook.";
-        //}
 
         return true;
     }
@@ -230,13 +207,7 @@ namespace intercept {
     }
 
     bool invoker::init_invoker(const arguments & args_, std::string & result_) {
-        //_eh_params_name = "intercept_params_var";
         _invoker_unlock init_lock(this);
-        //_mission_namespace = invoke_raw("missionnamespace");
-        //loader::get().get_function("getvariable", _get_variable_func, "NAMESPACE", "STRING");
-        //_eh_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, _eh_params_name);
-        //game_value p_name = "intercept_signal_var";
-        //_signal_params = invoke_raw_nolock(_get_variable_func, _mission_namespace, p_name);
         return true;
     }
 
@@ -446,23 +417,32 @@ namespace intercept {
         return true;
     }
 
-    void invoker::lock() {
-        _thread_count = _thread_count + 1;
-        std::unique_lock<std::mutex> lock(_state_mutex);
-        _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
-        _invoke_mutex.lock();
 
+    void invoker::lock() {
+        //If the thread is already locked. We don't want to check if we are allowed to lock.
+        //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
+        //lock the invoker again before it can unlock it's first lock.
+        //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
+        //But thread needs to lock it so it can unlock the first lock.
+        if (_thread_count == 0) {
+            std::unique_lock<std::mutex> lock(_state_mutex);
+            _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
+            _invoke_mutex.lock();
+        } else {
+            _invoke_mutex.lock();
+        }
+        ++_thread_count;
     #ifdef _DEBUG
         LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
     #endif
     }
 
     void invoker::unlock() {
+        --_thread_count;
         _invoke_mutex.unlock();
     #ifdef _DEBUG
         LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
     #endif
-        _thread_count = _thread_count - 1;
     }
 
     invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _unlocked(false), _instance(instance_), _all(all_threads_) {

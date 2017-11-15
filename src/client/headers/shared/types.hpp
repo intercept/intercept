@@ -210,9 +210,9 @@ namespace intercept {
         class ref {
             friend class game_value_static; //Overrides _ref to nullptr in destructor when Arma is exiting
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
-            Type* _ref;
+            Type* _ref{nullptr};
         public:
-            constexpr ref() noexcept : _ref(nullptr) {}
+            constexpr ref() noexcept {}
             ~ref() { free(); }
 
             //Construct from Pointer
@@ -221,7 +221,7 @@ namespace intercept {
                 _ref = other;
             }
             //Copy from pointer
-            const ref &operator = (Type *source) {
+            const ref &operator = (Type *source) noexcept {
                 Type *old = _ref;
                 if (source) source->add_ref();
                 _ref = source;
@@ -230,7 +230,7 @@ namespace intercept {
             }
 
             //Construct from reference
-            constexpr ref(const ref &sRef) {
+            constexpr ref(const ref &sRef) noexcept {
                 Type *source = sRef._ref;
                 if (source) source->add_ref();
                 _ref = source;
@@ -246,7 +246,7 @@ namespace intercept {
             }
 
             constexpr bool isNull() const noexcept { return _ref == nullptr; }
-            void free() {
+            void free() noexcept {
                 if (!_ref) return;
                 _ref->release();
                 _ref = nullptr;
@@ -1580,16 +1580,35 @@ namespace intercept {
         protected:
             static uintptr_t __vptr_def; //Users should not be able to access this
         public:
-            game_value();
-            ~game_value();
-            void copy(const game_value & copy_); //I don't see any use for this.
-            game_value(const game_value &copy_);
-            game_value(game_value &&move_) noexcept;
+            game_value() noexcept {
+                set_vtable(__vptr_def);
+            }
+            ~game_value() noexcept {
+            }
 
+            void copy(const game_value& copy_) noexcept {
+                set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
+                if (copy_.data) {
+                    data = copy_.data;
+                }
+            } 
+            
+            game_value(const game_value& copy_) {//I don't see any use for this.
+                copy(copy_);
+            }
+         
+            game_value(game_value&& move_) noexcept {
+                set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
+                data = move_.data;
+                move_.data = nullptr;
+            }
 
 
             //Conversions
-            game_value(game_data* val_);
+            game_value(game_data* val_) noexcept {
+                set_vtable(__vptr_def);
+                data = val_;
+            };
             game_value(float val_);
             game_value(int val_);
             game_value(bool val_);
@@ -1679,8 +1698,12 @@ namespace intercept {
         #ifndef __linux__
         protected:
         #endif
-            uintptr_t get_vtable() const;
-            void set_vtable(uintptr_t vt);
+            uintptr_t get_vtable() const noexcept {
+                return *reinterpret_cast<const uintptr_t*>(this);
+            }
+            void set_vtable(uintptr_t vt) noexcept {
+                *reinterpret_cast<uintptr_t*>(this) = vt;
+            }
 
         };
 

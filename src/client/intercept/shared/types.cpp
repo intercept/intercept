@@ -470,37 +470,6 @@ namespace intercept {
 
     #pragma region GameValue
 
-        game_value::game_value() {
-            set_vtable(__vptr_def);
-            data = nullptr;
-        }
-
-        void game_value::copy(const game_value & copy_) {
-            set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
-            if (copy_.data) {
-                data = copy_.data;
-            }
-        }
-
-        game_value::game_value(const game_value & copy_) {
-            copy(copy_);
-        }
-
-        game_value::game_value(game_value && move_) noexcept {
-            set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
-            data = move_.data;
-            move_.data = nullptr;
-        }
-
-        game_value::~game_value() {
-            data = nullptr;
-        }
-
-        game_value::game_value(game_data* val_) {
-            set_vtable(__vptr_def);
-            data = val_;
-        }
-
         game_value::game_value(float val_) {
             set_vtable(__vptr_def);
             data = new game_data_number(val_);
@@ -555,14 +524,6 @@ namespace intercept {
         game_value::game_value(const internal_object &internal_) {
             set_vtable(__vptr_def); //object class has bugged vtable :u
             data = internal_.data;
-        }
-
-        uintptr_t game_value::get_vtable() const {
-            return *reinterpret_cast<const uintptr_t*>(this);
-        }
-
-        void game_value::set_vtable(uintptr_t vt) {
-            *reinterpret_cast<uintptr_t*>(this) = vt;
         }
 
         game_value & game_value::operator = (const game_value &copy_) {

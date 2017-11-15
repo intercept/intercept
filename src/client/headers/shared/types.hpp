@@ -31,19 +31,14 @@ namespace intercept {
     class invoker;
     namespace types {
         class game_value;
+        using game_value_parameter = const game_value&;
         class game_data_array;
         class internal_object;
         class game_data;
-    #ifdef __linux__
-        //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
+
         using nular_function = game_value(*) (uintptr_t state);
-        using unary_function = game_value(*) (uintptr_t state, uintptr_t);
-        using binary_function = game_value(*) (uintptr_t state, uintptr_t, uintptr_t);
-    #else
-        using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
-        using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);
-        using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
-    #endif
+        using unary_function = game_value(*) (uintptr_t state, game_value_parameter);
+        using binary_function = game_value(*) (uintptr_t state, game_value_parameter, game_value_parameter);
 
         enum class GameDataType {
             SCALAR,
@@ -740,7 +735,6 @@ namespace intercept {
                 return _data[i];
             }
             Type &operator [] (size_t i) { return get(i); }
-            const Type &operator [] (size_t i) const { return get(i); }
             Type *data() { return _data; }
             constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
 
@@ -1646,22 +1640,13 @@ namespace intercept {
             * \brief tries to convert the game_value to an array if possible
             * \throws game_value_conversion_error {if game_value is not an array}
             */
-            auto_array<game_value>& to_array();
-            /**
-             * \brief tries to convert the game_value to an array if possible
-             * \throw game_value_conversion_error {if game_value is not an array}
-             */
-            const auto_array<game_value>& to_array() const;
+            auto_array<game_value>& to_array() const;
+
             /**
             * \brief tries to convert the game_value to an array if possible and return the element at given index.
             * \throw game_value_conversion_error {if game_value is not an array}
             */
-            game_value& operator [](size_t i_);
-            /**
-            * \brief tries to convert the game_value to an array if possible and return the element at given index.
-            * \throw game_value_conversion_error {if game_value is not an array}
-            */
-            game_value operator [](size_t i_) const;
+            game_value& operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
             /// doesn't handle all types. Will return GameDataType::ANY if not handled
@@ -1698,6 +1683,7 @@ namespace intercept {
             void set_vtable(uintptr_t vt);
 
         };
+
 
         class game_value_static : public game_value {
         public:
@@ -2180,59 +2166,62 @@ namespace intercept {
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
 
-    #ifdef __linux__
-        template <game_value(*T)(game_value, game_value)>
-        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = reinterpret_cast<game_value*>(left_arg_);
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*l, *r));
+    #if defined _MSC_VER && !defined _WIN64
+    #pragma warning(disable:4731) //ebp was changed in assembly
+        template <game_value(*T)(game_value_parameter, game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+            void* func = (void*) T;
+            __asm{
+                pop ecx;
+                pop ebp;
+                //mov ebp, esp;
+                mov eax, [esp + 12];
+                mov[esp + 8], eax;
+                mov eax, [esp + 16];
+                mov[esp + 12], eax;
+                jmp ecx;
+            }
         }
 
-        template <game_value(*T)(game_value)>
-        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*r));
-        }
-
-        template <game_value(*T)(const game_value&)>
-        static game_value userFunctionWrapper_ref(uintptr_t gs, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*r));
+        template <game_value(*T)(game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+            void* func = (void*) T;
+            __asm {
+                pop ecx;
+                pop ebp;
+                //mov ebp, esp;
+                mov eax, [esp + 12];
+                mov[esp + 8], eax;
+                jmp ecx;
+            }
         }
 
         template <game_value(*T)()>
-        static game_value userFunctionWrapper(uintptr_t gs) {
-            return game_value(T());
+        static game_value userFunctionWrapper(uintptr_t) noexcept {
+            void* func = (void*) T;
+            __asm {
+                pop ecx;
+                pop ebp;
+                //mov ebp, esp;
+                jmp ecx;
+            }
         }
+    #pragma warning(default:4731) //ebp was changed in assembly
     #else
-        template <game_value(*T)(game_value, game_value)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = reinterpret_cast<game_value*>(left_arg_);
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*l, *r));
-            return sqf_this_;
+        template <game_value(*T)(game_value_parameter, game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+            return T(left_arg_, right_arg_);
         }
 
-        template <game_value(*T)(game_value)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*r));
-            return sqf_this_;
-        }
-
-        template <game_value(*T)(const game_value&)>
-        static game_value* userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*r));
-            return sqf_this_;
+        template <game_value(*T)(game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+            return T(right_arg_);
         }
 
         template <game_value(*T)()>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
-            ::new (sqf_this_) game_value(T());
-            return sqf_this_;
+        static game_value userFunctionWrapper(uintptr_t) noexcept {
+            return T();
         }
-
     #endif
     #pragma endregion
 

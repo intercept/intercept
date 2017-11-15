@@ -5,7 +5,7 @@ set(INTERCEPT_EXAMPLE_NAME "intercept_client")
 
 intercept_set_linker_options()
 
-option(USE_ENGINE_TYPES "USE_ENGINE_TYPES" ON)
+option(USE_ENGINE_TYPES "USE_ENGINE_TYPES" OFF)
 
 if(USE_ENGINE_TYPES)
     add_definitions(/DINTERCEPT_SQF_STRTYPE_RSTRING)

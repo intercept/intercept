@@ -2092,7 +2092,6 @@ namespace intercept {
             __asm{
                 pop ecx;
                 pop ebp;
-                //mov ebp, esp;
                 mov eax, [esp + 12];
                 mov[esp + 8], eax;
                 mov eax, [esp + 16];
@@ -2107,7 +2106,6 @@ namespace intercept {
             __asm {
                 pop ecx;
                 pop ebp;
-                //mov ebp, esp;
                 mov eax, [esp + 12];
                 mov[esp + 8], eax;
                 jmp ecx;
@@ -2120,7 +2118,6 @@ namespace intercept {
             __asm {
                 pop ecx;
                 pop ebp;
-                //mov ebp, esp;
                 jmp ecx;
             }
         }

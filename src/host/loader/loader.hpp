@@ -175,46 +175,6 @@ namespace intercept {
         bool get_function(std::string_view function_name_, nular_function &function_);
 
         /*!@{
-        @brief Hook a function.
-
-        Hooks a function so that when it is executed in SQF the hooked function
-        will execute in its place instead.
-
-        @warning Warning, this will only hook the first function (and in the future
-        raise an exception if there is an overload of this function).
-
-        @param [in] function_name_ The name of the function to hook.
-        @param [in] hook_ A void pointer to the function to call instead.
-        @param [out] trampoline_ A reference to the trampoline that stores the
-        original function call.
-
-        @return `true` if the hook succeded, `false` if the hook failed.
-        */
-        bool hook_function(std::string_view function_name_, void *hook_, unary_function &trampoline_);
-        bool hook_function(std::string_view function_name_, void *hook_, binary_function &trampoline_);
-        bool hook_function(std::string_view function_name_, void *hook_, nular_function &trampoline_);
-        //!@}
-
-        /*!@{
-        @brief Unhook a unary function.
-
-        Unhooks an already hooked functon. You must pass in the name, original
-        hooked function (the `hook_` parameter that was passed in) and the trampoline
-        that was assigned by the hook function.
-
-        @param [in] function_name_ The name of the function to unhook.
-        @param [in] hook_ A void pointer to the function that is being called in
-        place of the original.
-        @param [out] trampoline_ The trampoline that was returned via reference
-        in the original hook.
-        */
-        bool unhook_function(std::string function_name_, void *hook_, unary_function &trampoline_);
-        bool unhook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
-        bool unhook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
-        //!@}
-
-
-        /*!@{
         @brief Return the associated function maps.
         */
         const unary_map & unary() const;

@@ -26,19 +26,14 @@ namespace intercept {
     class invoker;
     namespace types {
         class game_value;
+        using game_value_parameter = const game_value&;
         class game_data_array;
         class internal_object;
         class game_data;
-    #ifdef __linux__
-        //using nular_function = game_value*(__attribute__((__stdcall__))*) (game_value *);
+
         using nular_function = game_value(*) (uintptr_t state);
-        using unary_function = game_value(*) (uintptr_t state, uintptr_t);
-        using binary_function = game_value(*) (uintptr_t state, uintptr_t, uintptr_t);
-    #else
-        using nular_function = game_value*(CDECL *) (game_value *, uintptr_t);
-        using unary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t);
-        using binary_function = game_value*(CDECL *) (game_value *, uintptr_t, uintptr_t, uintptr_t);
-    #endif
+        using unary_function = game_value(*) (uintptr_t state, game_value_parameter);
+        using binary_function = game_value(*) (uintptr_t state, game_value_parameter, game_value_parameter);
 
         enum class GameDataType {
             SCALAR,
@@ -210,9 +205,9 @@ namespace intercept {
         class ref {
             friend class game_value_static; //Overrides _ref to nullptr in destructor when Arma is exiting
             static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
-            Type* _ref;
+            Type* _ref{nullptr};
         public:
-            constexpr ref() noexcept : _ref(nullptr) {}
+            constexpr ref() noexcept {}
             ~ref() { free(); }
 
             //Construct from Pointer
@@ -221,7 +216,7 @@ namespace intercept {
                 _ref = other;
             }
             //Copy from pointer
-            const ref &operator = (Type *source) {
+            const ref &operator = (Type *source) noexcept {
                 Type *old = _ref;
                 if (source) source->add_ref();
                 _ref = source;
@@ -230,7 +225,7 @@ namespace intercept {
             }
 
             //Construct from reference
-            constexpr ref(const ref &sRef) {
+            constexpr ref(const ref &sRef) noexcept {
                 Type *source = sRef._ref;
                 if (source) source->add_ref();
                 _ref = source;
@@ -246,7 +241,7 @@ namespace intercept {
             }
 
             constexpr bool isNull() const noexcept { return _ref == nullptr; }
-            void free() {
+            void free() noexcept {
                 if (!_ref) return;
                 _ref->release();
                 _ref = nullptr;
@@ -735,7 +730,6 @@ namespace intercept {
                 return _data[i];
             }
             Type &operator [] (size_t i) { return get(i); }
-            const Type &operator [] (size_t i) const { return get(i); }
             Type *data() { return _data; }
             constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
 
@@ -1581,16 +1575,35 @@ namespace intercept {
         protected:
             static uintptr_t __vptr_def; //Users should not be able to access this
         public:
-            game_value();
-            ~game_value();
-            void copy(const game_value & copy_); //I don't see any use for this.
-            game_value(const game_value &copy_);
-            game_value(game_value &&move_) noexcept;
+            game_value() noexcept {
+                set_vtable(__vptr_def);
+            }
+            ~game_value() noexcept {
+            }
 
+            void copy(const game_value& copy_) noexcept {
+                set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
+                if (copy_.data) {
+                    data = copy_.data;
+                }
+            } 
+            
+            game_value(const game_value& copy_) {//I don't see any use for this.
+                copy(copy_);
+            }
+         
+            game_value(game_value&& move_) noexcept {
+                set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
+                data = move_.data;
+                move_.data = nullptr;
+            }
 
 
             //Conversions
-            game_value(game_data* val_);
+            game_value(game_data* val_) noexcept {
+                set_vtable(__vptr_def);
+                data = val_;
+            };
             game_value(float val_);
             game_value(int val_);
             game_value(bool val_);
@@ -1641,22 +1654,13 @@ namespace intercept {
             * \brief tries to convert the game_value to an array if possible
             * \throws game_value_conversion_error {if game_value is not an array}
             */
-            auto_array<game_value>& to_array();
-            /**
-             * \brief tries to convert the game_value to an array if possible
-             * \throw game_value_conversion_error {if game_value is not an array}
-             */
-            const auto_array<game_value>& to_array() const;
+            auto_array<game_value>& to_array() const;
+
             /**
             * \brief tries to convert the game_value to an array if possible and return the element at given index.
             * \throw game_value_conversion_error {if game_value is not an array}
             */
-            game_value& operator [](size_t i_);
-            /**
-            * \brief tries to convert the game_value to an array if possible and return the element at given index.
-            * \throw game_value_conversion_error {if game_value is not an array}
-            */
-            game_value operator [](size_t i_) const;
+            game_value& operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
             /// doesn't handle all types. Will return GameDataType::ANY if not handled
@@ -1687,10 +1691,15 @@ namespace intercept {
         #ifndef __linux__
         protected:
         #endif
-            uintptr_t get_vtable() const;
-            void set_vtable(uintptr_t vt);
+            uintptr_t get_vtable() const noexcept {
+                return *reinterpret_cast<const uintptr_t*>(this);
+            }
+            void set_vtable(uintptr_t vt) noexcept {
+                *reinterpret_cast<uintptr_t*>(this) = vt;
+            }
 
         };
+
 
         class game_value_static : public game_value {
         public:
@@ -2075,59 +2084,59 @@ namespace intercept {
             std::shared_ptr<registered_sqf_function_impl> _function;
         };
 
-    #ifdef __linux__
-        template <game_value(*T)(game_value, game_value)>
-        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = reinterpret_cast<game_value*>(left_arg_);
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*l, *r));
+    #if defined _MSC_VER && !defined _WIN64
+    #pragma warning(disable:4731) //ebp was changed in assembly
+        template <game_value(*T)(game_value_parameter, game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+            void* func = (void*) T;
+            __asm{
+                pop ecx;
+                pop ebp;
+                mov eax, [esp + 12];
+                mov[esp + 8], eax;
+                mov eax, [esp + 16];
+                mov[esp + 12], eax;
+                jmp ecx;
+            }
         }
 
-        template <game_value(*T)(game_value)>
-        static game_value userFunctionWrapper(uintptr_t gs, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*r));
-        }
-
-        template <game_value(*T)(const game_value&)>
-        static game_value userFunctionWrapper_ref(uintptr_t gs, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            return game_value(T(*r));
+        template <game_value(*T)(game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+            void* func = (void*) T;
+            __asm {
+                pop ecx;
+                pop ebp;
+                mov eax, [esp + 12];
+                mov[esp + 8], eax;
+                jmp ecx;
+            }
         }
 
         template <game_value(*T)()>
-        static game_value userFunctionWrapper(uintptr_t gs) {
-            return game_value(T());
+        static game_value userFunctionWrapper(uintptr_t) noexcept {
+            void* func = (void*) T;
+            __asm {
+                pop ecx;
+                pop ebp;
+                jmp ecx;
+            }
         }
+    #pragma warning(default:4731) //ebp was changed in assembly
     #else
-        template <game_value(*T)(game_value, game_value)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t left_arg_, uintptr_t right_arg_) {
-            game_value* l = reinterpret_cast<game_value*>(left_arg_);
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*l, *r));
-            return sqf_this_;
+        template <game_value(*T)(game_value_parameter, game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+            return T(left_arg_, right_arg_);
         }
 
-        template <game_value(*T)(game_value)>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*r));
-            return sqf_this_;
-        }
-
-        template <game_value(*T)(const game_value&)>
-        static game_value* userFunctionWrapper_ref(game_value* sqf_this_, uintptr_t, uintptr_t right_arg_) {
-            game_value* r = reinterpret_cast<game_value*>(right_arg_);
-            ::new (sqf_this_) game_value(T(*r));
-            return sqf_this_;
+        template <game_value(*T)(game_value_parameter)>
+        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+            return T(right_arg_);
         }
 
         template <game_value(*T)()>
-        static game_value* userFunctionWrapper(game_value* sqf_this_, uintptr_t) {
-            ::new (sqf_this_) game_value(T());
-            return sqf_this_;
+        static game_value userFunctionWrapper(uintptr_t) noexcept {
+            return T();
         }
-
     #endif
     #pragma endregion
 

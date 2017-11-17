@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.8)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON) 
 
 add_definitions(/DINTERCEPT_HOST_DLL=1)
+add_definitions(/DNOMINMAX)
 
 if (NOT CMAKE_BUILD_TYPE AND CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "No build type selected, default to Debug")

@@ -156,7 +156,6 @@ namespace intercept {
     }
 
     bool invoker::rv_event(const std::string& event_name_, game_value_parameter params_) {
-        //LOG(DEBUG) << "EH "sv << event_name_ << " START"sv;
         auto handler = _eventhandlers.find(event_name_);
         if (handler != _eventhandlers.end()) {
             bool all = false;
@@ -168,7 +167,6 @@ namespace intercept {
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);
             handler->second(params_);
-            //LOG(DEBUG) << "EH "sv << event_name_ << " END"sv;
             return true;
         }
         return false;
@@ -179,8 +177,6 @@ namespace intercept {
     }
 
     bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value_parameter args) {
-        //LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " START"sv;
-
         auto signal_module = extensions::get().modules().find(extension_name);
         if (signal_module == extensions::get().modules().end()) {
             return false;
@@ -202,7 +198,6 @@ namespace intercept {
         }
         _invoker_unlock signal_lock(this);
         signal_func(args);
-        //LOG(DEBUG) << "Signal "sv << extension_name << " : " << signal_name << " END"sv;
         return true;
     }
 
@@ -285,7 +280,7 @@ namespace intercept {
 
         auto regInfo = loader::get().get_register_sqf_info();
 
-        LOG(INFO) << "Registration Hook Function Called: "sv << invoker::get()._registration_type;
+        LOG(INFO, "Registration Hook Function Called: {}", invoker::get()._registration_type);
         auto step = invoker::get()._registration_type;
         invoker::get()._sqf_game_state = regInfo._gameState;
         sqf_game_state = regInfo._gameState;
@@ -402,7 +397,7 @@ namespace intercept {
         invoker::get().type_map[structure.first] = "SQF_SCRIPT_TYPE"sv;
         invoker::get().type_structures["SQF_SCRIPT_TYPE"sv] = structure;
 
-        LOG(INFO) << "invoker::_intercept_registerTypes done\n"sv;
+        LOG(INFO, "invoker::_intercept_registerTypes done");
         return true;
     }
 
@@ -433,7 +428,7 @@ namespace intercept {
         }
         ++_thread_count;
     #ifdef _DEBUG
-        LOG(DEBUG) << "Client Thread ACQUIRE EXCLUSIVE"sv;
+        LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
     #endif
     }
 
@@ -441,7 +436,7 @@ namespace intercept {
         --_thread_count;
         _invoke_mutex.unlock();
     #ifdef _DEBUG
-        LOG(DEBUG) << "Client Thread RELEASE EXCLUSIVE"sv;
+        LOG(DEBUG, "Client Thread RELEASE EXCLUSIVE");
     #endif
     }
 
@@ -459,12 +454,12 @@ namespace intercept {
                 invoker_accessible = false;
                 invoker_accessible_all = false;
             #ifdef _DEBUG
-                LOG(DEBUG) << "LOCKED ALL"sv;
+                LOG(DEBUG, "LOCKED ALL");
             #endif
             } else {
                 invoker_accessible = false;
             #ifdef _DEBUG
-                LOG(DEBUG) << "LOCKED"sv;
+                LOG(DEBUG, "LOCKED");
             #endif
             }
 
@@ -475,7 +470,7 @@ namespace intercept {
         if (!_unlocked) {
             if (_all) {
             #ifdef _DEBUG
-                LOG(DEBUG) << "UNLOCKING ALL"sv;
+                LOG(DEBUG, "UNLOCKING ALL");
             #endif
                 std::unique_lock<std::recursive_mutex> invoke_lock(_instance->_invoke_mutex, std::defer_lock);
                 {
@@ -487,7 +482,7 @@ namespace intercept {
                 _instance->_invoke_condition.notify_all();
             } else {
             #ifdef _DEBUG
-                LOG(DEBUG) << "UNLOCKING"sv;
+                LOG(DEBUG, "UNLOCKING");
             #endif
                 std::lock_guard<std::mutex> lock(_instance->_state_mutex);
                 invoker_accessible = true;

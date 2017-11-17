@@ -51,7 +51,6 @@ namespace intercept::search {
             file_contents += line;
             file_contents.push_back('\n'); //#TODO can linux even have more than one line?
         }
-        std::cout << "cmdLine " << file_contents << "\n";
         return file_contents;
     #else
         return GetCommandLineA();
@@ -59,7 +58,7 @@ namespace intercept::search {
     }
 #ifdef __linux__
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
-        LOG(INFO) << "Searching for Extension: "sv << name << "\n"sv;
+        LOG(INFO, "Searching for Extension: {}", name);
         for (auto folder : active_mod_folder_list) {
             std::string test_path = folder + "/intercept/" + name + ".so";
 
@@ -68,12 +67,12 @@ namespace intercept::search {
                 return test_path;
             }
         }
-        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
+        LOG(ERROR, "Client plugin: {} was not found.", name);
         return std::optional<std::string>();
     }
 #else
     std::optional<std::wstring> plugin_searcher::find_extension(const std::wstring& name) {
-        LOG(INFO) << "Searching for Extension: "sv << name << "\n"sv;
+        //LOG(INFO, L"Searching for Extension: {}", name);
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
             std::wstring test_path = folder + L"\\intercept\\" + name + L"_x64.dll";
@@ -86,7 +85,6 @@ namespace intercept::search {
                 return test_path;
             }
         }
-        LOG(ERROR) << "Client plugin: "sv << name << " was not found.\n"sv;
         return std::optional<std::wstring>();
     }
 #endif

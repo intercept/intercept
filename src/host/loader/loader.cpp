@@ -239,7 +239,7 @@ namespace intercept {
         if (!GetFileVersionInfo(fileName, handle, size, versionInfo)) {
             delete[] versionInfo;
         }
-        UINT    			len = 0;
+        UINT                len = 0;
         VS_FIXEDFILEINFO*   vsfi = nullptr;
         VerQueryValue(versionInfo, "\\", reinterpret_cast<void**>(&vsfi), &len);
         short version = HIWORD(vsfi->dwFileVersionLS);//131

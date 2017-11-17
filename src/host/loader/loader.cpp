@@ -445,7 +445,7 @@ namespace intercept {
         const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
-        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t>(*/allocatorVtablePtr/*)*/);
+        const char* test = getRTTIName(allocatorVtablePtr);
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
     #endif
         _allocator.genericAllocBase = allocatorVtablePtr;

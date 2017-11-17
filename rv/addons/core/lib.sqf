@@ -14,14 +14,8 @@ intercept_fnc_exportOpList = {
 intercept_fnc_callWrapper = {
     scopeName "main";
     params ["_args", "_code"];
-    private _res = nil;
-    if(!isNil "_args") then {
-        _res = _args call _code;
-    } else {
-        _res = call _code;
-    };
+    private _res = [_x] apply {_args call _code} select 0;
     missionNamespace setVariable ["INTERCEPT_CALL_RETURN", _res];
-    INTERCEPT_DUMMY;
 };
 
 intercept_fnc_isNilWrapper = {

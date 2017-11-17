@@ -58,7 +58,7 @@ namespace intercept::search {
     }
 #ifdef __linux__
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
-        LOG(INFO, "Searching for Extension: {}\n", name);
+        LOG(INFO, "Searching for Extension: {}", name);
         for (auto folder : active_mod_folder_list) {
             std::string test_path = folder + "/intercept/" + name + ".so";
 
@@ -67,12 +67,12 @@ namespace intercept::search {
                 return test_path;
             }
         }
-        LOG(ERROR, "Client plugin: {} was not found.\n", name);
+        LOG(ERROR, "Client plugin: {} was not found.", name);
         return std::optional<std::string>();
     }
 #else
     std::optional<std::wstring> plugin_searcher::find_extension(const std::wstring& name) {
-        //LOG(INFO, L"Searching for Extension: {}\n", name);
+        //LOG(INFO, L"Searching for Extension: {}", name);
         for (auto folder : active_mod_folder_list) {
         #if _WIN64 || __X86_64__
             std::wstring test_path = folder + L"\\intercept\\" + name + L"_x64.dll";

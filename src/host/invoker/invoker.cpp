@@ -415,7 +415,7 @@ namespace intercept {
         invoker::get().type_map[structure.first] = "SQF_SCRIPT_TYPE"sv;
         invoker::get().type_structures["SQF_SCRIPT_TYPE"sv] = structure;
 
-        LOG(INFO, "invoker::_intercept_registerTypes done\n");
+        LOG(INFO, "invoker::_intercept_registerTypes done");
         return true;
     }
 

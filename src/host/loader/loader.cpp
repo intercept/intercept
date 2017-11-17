@@ -330,9 +330,9 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO, "Found unary operator: {} {} ({}) @{0:x}\n",
+                LOG(INFO, "Found unary operator: {} {} ({}) @{:x}",
                     new_entry.op->return_type.type_str(),new_entry.name,
-                    new_entry.op->arg_type.type_str(), static_cast<const void*>(new_entry.op->procedure_addr));
+                    new_entry.op->arg_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _unary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -346,9 +346,9 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO, "Found binary operator: {} ({}) {} ({}) @{0:x}\n",
+                LOG(INFO, "Found binary operator: {} ({}) {} ({}) @{:x}",
                     new_entry.op->return_type.type_str(), new_entry.op->arg1_type.type_str(), new_entry.name,
-                    new_entry.op->arg2_type.type_str(), static_cast<const void*>(new_entry.op->procedure_addr));
+                    new_entry.op->arg2_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _binary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -361,7 +361,7 @@ namespace intercept {
             new_entry.op = entry._operator;
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
-            LOG(INFO, "Found nular operator: {} {} @{0:x}\n", new_entry.op->return_type.type_str(), new_entry.name, static_cast<const void*>(new_entry.op->procedure_addr));
+            LOG(INFO, "Found nular operator: {} {} @{:x}", new_entry.op->return_type.type_str(), new_entry.name, reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
             _nular_operators[entry._name2].push_back(new_entry);
         }
 
@@ -408,8 +408,8 @@ namespace intercept {
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
         #endif
-            LOG(INFO, "{} {} {}\n", entry->_localizedName, entry->_javaFunc, entry->_readableName);
-            LOG(INFO, "Found Type operator: {} create@{0:x} pool@{0:x}\n", entry->_name, reinterpret_cast<const void*>(entry->_createFunction), poolAlloc);
+            LOG(INFO, "{} {} {}", entry->_localizedName, entry->_javaFunc, entry->_readableName);
+            LOG(INFO, "Found Type operator: {} create@{:x} pool@{:x}", entry->_name, reinterpret_cast<uintptr_t>(entry->_createFunction), poolAlloc);
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
@@ -445,7 +445,7 @@ namespace intercept {
         const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
-        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
+        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t>(*/allocatorVtablePtr/*)*/);
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
     #endif
         _allocator.genericAllocBase = allocatorVtablePtr;

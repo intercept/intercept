@@ -110,7 +110,7 @@ namespace intercept {
 
         auto full_path = _searcher.find_extension(path);
         if (!full_path) {
-            LOG(ERROR, "Client plugin: {} was not found.\n", path_);
+            LOG(ERROR, "Client plugin: {} was not found.", path_);
             return false;
         }
             

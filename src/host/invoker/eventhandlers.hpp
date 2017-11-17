@@ -38,7 +38,7 @@ namespace intercept {
         static void pre_start(game_value &args_);
         static void post_start(game_value &args_);
         static void post_init(game_value &args_);
-        static void mission_stopped(game_value &args_);
+        static void mission_ended(game_value &args_);
 
 #define EH_CLASS_DEF(x) static void x(game_value &args_)
 

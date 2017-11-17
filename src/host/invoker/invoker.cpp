@@ -40,7 +40,7 @@ namespace intercept {
         }
     }
 
-    bool invoker::invoker_begin_register(const arguments & args_, std::string & result_) {
+    bool invoker::invoker_begin_register(const arguments&, std::string&) {
 
         sqf_functions::get().initialize();
         _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper_ref<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
@@ -50,12 +50,12 @@ namespace intercept {
         return true;
     }
 
-    bool invoker::invoker_register(const arguments & args_, std::string & result_) {
+    bool invoker::invoker_register(const arguments& args_, std::string&) {
         _registration_type = args_.as_string(0);
         return true;
     }
 
-    bool invoker::invoker_end_register(const arguments & args_, std::string & result_) {
+    bool invoker::invoker_end_register(const arguments&, std::string&) {
         //#TODO move pre_start to here
         _intercept_registerTypes_function.clear(); //#TEST
         sqf_functions::get().setDisabled();
@@ -163,7 +163,7 @@ namespace intercept {
             // If we are stopping a mission it is assumed that threads will be
             // stopped and joined here. Deadlocks can occur if we do not open up
             // the invoker to all threads.
-            if (event_name_ == "mission_stopped"sv)
+            if (event_name_ == "mission_ended"sv)
                 all = true;
             _invoker_unlock eh_lock(this, all);
             //game_value params = invoke_raw_nolock(_get_variable_func, &_mission_namespace, &var_name);

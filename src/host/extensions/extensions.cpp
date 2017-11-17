@@ -223,7 +223,7 @@ namespace intercept {
 
         new_module.functions.handle_unload = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload"));
         new_module.functions.handle_unload_internal = reinterpret_cast<module::handle_unload_func>(GET_PROC_ADDR(dllHandle, "handle_unload_internal"));
-        new_module.functions.mission_end = reinterpret_cast<module::mission_end_func>(GET_PROC_ADDR(dllHandle, "mission_end"));
+        new_module.functions.mission_ended = reinterpret_cast<module::mission_ended_func>(GET_PROC_ADDR(dllHandle, "mission_ended"));
         new_module.functions.on_frame = reinterpret_cast<module::on_frame_func>(GET_PROC_ADDR(dllHandle, "on_frame"));
         //new_module.functions.on_signal = (module::on_signal_func)GetProcAddress(dllHandle, "on_signal"); //#TODO why is this disabled?!
         new_module.functions.post_init = reinterpret_cast<module::post_init_func>(GET_PROC_ADDR(dllHandle, "post_init"));
@@ -232,16 +232,6 @@ namespace intercept {
         new_module.functions.post_start = reinterpret_cast<module::pre_start_func>(GET_PROC_ADDR(dllHandle, "post_start"));
         new_module.functions.register_interfaces = reinterpret_cast<module::register_interfaces_func>(GET_PROC_ADDR(dllHandle, "register_interfaces"));
         new_module.functions.client_eventhandler = reinterpret_cast<module::client_eventhandler_func>(GET_PROC_ADDR(dllHandle, "client_eventhandler"));
-        new_module.functions.mission_stopped = reinterpret_cast<module::mission_stopped_func>(GET_PROC_ADDR(dllHandle, "mission_stopped"));
-        
-
-       
-
-
-
-
-
-
 
 
 

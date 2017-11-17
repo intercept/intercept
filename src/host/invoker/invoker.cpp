@@ -43,7 +43,7 @@ namespace intercept {
     bool invoker::invoker_begin_register(const arguments&, std::string&) {
 
         sqf_functions::get().initialize();
-        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper_ref<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
+        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
         _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
         _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
         _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
@@ -151,11 +151,11 @@ namespace intercept {
 
     }
 
-    game_value invoker::_intercept_event(game_value left_arg_, game_value right_arg_) {
+    game_value invoker::_intercept_event(game_value_parameter left_arg_, game_value_parameter right_arg_) {
         return invoker::get().rv_event(left_arg_, right_arg_);
     }
 
-    bool invoker::rv_event(const std::string& event_name_, game_value& params_) {
+    bool invoker::rv_event(const std::string& event_name_, game_value_parameter params_) {
         auto handler = _eventhandlers.find(event_name_);
         if (handler != _eventhandlers.end()) {
             bool all = false;
@@ -172,11 +172,11 @@ namespace intercept {
         return false;
     }
 
-    game_value invoker::_intercept_signal(game_value left_arg_, game_value right_arg_) {
+    game_value invoker::_intercept_signal(game_value_parameter left_arg_, game_value_parameter right_arg_) {
         return invoker::get().signal(left_arg_[0], left_arg_[1], right_arg_);
     }
 
-    bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value args) {
+    bool invoker::signal(const std::string& extension_name, const std::string& signal_name, game_value_parameter args) {
         auto signal_module = extensions::get().modules().find(extension_name);
         if (signal_module == extensions::get().modules().end()) {
             return false;
@@ -215,13 +215,7 @@ namespace intercept {
     }
 
     game_value invoker::invoke_raw_nolock(nular_function function_) {
-        //;  //#TODO change nular_function definition to take game_value*
-    #ifdef __linux
         return function_(invoker::sqf_game_state);
-    #else
-        game_value ret;
-        function_(&ret, invoker::sqf_game_state); return ret;
-    #endif
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_) const {
@@ -233,12 +227,7 @@ namespace intercept {
     }
 
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
-    #ifdef __linux
-        return function_(invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_));
-    #else
-        game_value ret;
-        function_(&ret, invoker::sqf_game_state, reinterpret_cast<uintptr_t>(&right_arg_)); return ret;
-    #endif
+        return function_(invoker::sqf_game_state, right_arg_);
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_, const game_value &right_, const std::string &right_type_) const {
@@ -259,14 +248,7 @@ namespace intercept {
 
 
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
-        const auto left = reinterpret_cast<uintptr_t>(&left_arg_);
-        const auto right = reinterpret_cast<uintptr_t>(&right_arg_);
-    #ifdef __linux
-        return function_(invoker::sqf_game_state, left, right);
-    #else
-        game_value ret;
-        function_(&ret, invoker::sqf_game_state, left, right); return ret;
-    #endif
+        return function_(invoker::sqf_game_state, left_arg_, right_arg_);
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_, const game_value &left_, const game_value &right_) const {
@@ -293,7 +275,7 @@ namespace intercept {
         return type_map.at(value_.type());
     }
 
-    game_value invoker::_intercept_registerTypes(const game_value& left_arg_) {
+    game_value invoker::_intercept_registerTypes(game_value_parameter left_arg_) {
         using GameDataType = types::GameDataType;
 
         auto regInfo = loader::get().get_register_sqf_info();
@@ -419,7 +401,7 @@ namespace intercept {
         return true;
     }
 
-    bool invoker::add_eventhandler(std::string_view name_, std::function<void(game_value&)> func_) {
+    bool invoker::add_eventhandler(std::string_view name_, std::function<void(game_value_parameter)> func_) {
         std::string name(name_);
         if (_eventhandlers.find(name) != _eventhandlers.end()) {
             // @TODO: Exceptions

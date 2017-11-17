@@ -69,7 +69,7 @@ namespace intercept {
         }
     }
 
-    game_value eventhandlers::client_eventhandler(game_value left_arg, game_value right_arg) {
+    game_value eventhandlers::client_eventhandler(game_value_parameter left_arg, game_value_parameter right_arg) {
         r_string moduleName = left_arg[0];
         const int ehType = left_arg[1];
         const float uidf = left_arg[2];
@@ -86,7 +86,7 @@ namespace intercept {
         return {};
     }
 
-    void eventhandlers::pre_start(game_value &) {
+    void eventhandlers::pre_start(game_value_parameter) {
         static bool preStartCalled = false;
         if (preStartCalled) throw std::runtime_error("pre_start called twice");
         get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ARRAY);
@@ -96,7 +96,7 @@ namespace intercept {
         }
         preStartCalled = true;
     }
-    void eventhandlers::post_start(game_value &) {
+    void eventhandlers::post_start(game_value_parameter) {
         static bool postStartCalled = false;
         if (postStartCalled) throw std::runtime_error("post_start called twice");
         LOG(INFO, "Post-start");
@@ -105,7 +105,7 @@ namespace intercept {
         }
         postStartCalled = true;
     }
-    void eventhandlers::pre_init(game_value &)
+    void eventhandlers::pre_init(game_value_parameter)
     {
         extensions::get().reload_all();
         LOG(INFO, "Pre-init");
@@ -114,14 +114,14 @@ namespace intercept {
             if (module.second.functions.pre_init) module.second.functions.pre_init();
         }
     }
-    void eventhandlers::post_init(game_value &)
+    void eventhandlers::post_init(game_value_parameter)
     {
         LOG(INFO, "Post-init");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_init) module.second.functions.post_init();
         }
     }
-    void eventhandlers::mission_ended(game_value &)
+    void eventhandlers::mission_ended(game_value_parameter)
     {
         LOG(INFO, "Mission Stopped");
         for (auto& module : extensions::get().modules()) {
@@ -129,7 +129,7 @@ namespace intercept {
             if (module.second.functions.mission_ended) module.second.functions.mission_ended();
         }
     }
-#define EH_START(x) void eventhandlers::x(game_value & args_) {\
+#define EH_START(x) void eventhandlers::x(game_value_parameter args_) {\
         for (auto& module : extensions::get().modules()) {\
             if (module.second.eventhandlers.x) module.second.eventhandlers.x
 
@@ -157,7 +157,7 @@ namespace intercept {
     EH_START(gear)(static_cast<object &>(args_[0]), static_cast<bool>(args_[1]))EH_END;
     //EH_START(get_in)(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path turret_path)EH_END;
 
-    void eventhandlers::get_in(game_value & args_) {
+    void eventhandlers::get_in(game_value_parameter args_) {
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_in) {
                 module.second.eventhandlers.get_in(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path(args_[3]));
@@ -167,7 +167,7 @@ namespace intercept {
 
     //EH_START(get_out)(static_cast<object &>(args_[0]), static_cast<rv_string>(args_[REPLACE_ME]), static_cast<object &>(args_[REPLACE_ME]), rv_turret_path turret_path)EH_END;
 
-    void eventhandlers::get_out(game_value & args_) {
+    void eventhandlers::get_out(game_value_parameter args_) {
         for (auto& module : extensions::get().modules()) {
             if (module.second.eventhandlers.get_out) {
                 module.second.eventhandlers.get_out(static_cast<object &>(args_[0]), static_cast<r_string>(args_[1]), static_cast<object &>(args_[2]), rv_turret_path(args_[3]));

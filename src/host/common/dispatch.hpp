@@ -100,7 +100,7 @@ namespace intercept {
             } else {
 #ifdef _DEBUG
                 if (name_ != "fetch_result" && name_ != "do_invoke_period") {
-                    LOG(TRACE) << "dispatch[immediate]:\t[" << name_ << "] { " << args_.get() << " }";
+                    TRACE("dispatch[immediate]:\t[{}] { {} }", name_, args_.get());
                 }
 #endif
                 return dispatcher::call(name_, args_, result_);
@@ -159,7 +159,7 @@ namespace intercept {
                         result.message.resize(4096);
 #ifdef _DEBUG
                         if (_message.command != "fetch_result") {
-                            LOG(TRACE) << "dispatch[threaded]:\t[" << _message.command << "]";
+                            TRACE("dispatch[threaded]:\t[{}]", _message.command);
                             if (_message.args.size() > 0) {
                                 //    LOG(TRACE) << "\t{ " << _messages.front().args.get() << " }";
                             }

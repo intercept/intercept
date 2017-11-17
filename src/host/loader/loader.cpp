@@ -79,7 +79,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(WARNING) << "Attempting to hook unary function "sv << function_name_;
+        LOG(WARNING, "Attempting to hook unary function {}", function_name_);
         auto op = _unary_operators.find(function_name_);
         if (op != _unary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -91,7 +91,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, binary_function & trampoline_) {
-        LOG(WARNING) << "Attempting to hook binary function "sv << function_name_;
+        LOG(WARNING, "Attempting to hook binary function {}", function_name_);
         auto op = _binary_operators.find(function_name_);
         if (op != _binary_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -103,7 +103,7 @@ namespace intercept {
     }
 
     bool loader::hook_function(std::string_view function_name_, void * hook_, nular_function & trampoline_) {
-        LOG(WARNING) << "Attempting to hook nular function "sv << function_name_;
+        LOG(WARNING, "Attempting to hook nular function {}", function_name_);
         auto op = _nular_operators.find(function_name_);
         if (op != _nular_operators.end()) {
             uintptr_t op_ptr = op->second[0].procedure_ptr_addr;
@@ -115,7 +115,7 @@ namespace intercept {
     }
 
     bool loader::unhook_function(std::string function_name_, void * hook_, unary_function & trampoline_) {
-        LOG(WARNING) << "Attempting to unhook unary function "sv << function_name_;
+        LOG(WARNING, "Attempting to unhook unary function {}", function_name_);
         if (&trampoline_ == nullptr)
             return false;
         auto op = _unary_operators.find(function_name_);
@@ -330,11 +330,9 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO) << "Found unary operator: "sv <<
-                    new_entry.op->return_type.type_str() << " " <<
-                    new_entry.name <<
-                    "(" << new_entry.op->arg_type.type_str() << ")" <<
-                    " @ "sv << new_entry.op->procedure_addr << "\n";
+                LOG(INFO, "Found unary operator: {} {} ({}) @{:x}",
+                    new_entry.op->return_type.type_str(),new_entry.name,
+                    new_entry.op->arg_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _unary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -348,12 +346,9 @@ namespace intercept {
                 new_entry.op = entry._operator;
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
-                LOG(INFO) << "Found binary operator: "sv <<
-                    new_entry.op->return_type.type_str() << " " <<
-                    "(" << new_entry.op->arg1_type.type_str() << ")" <<
-                    new_entry.name <<
-                    "(" << new_entry.op->arg2_type.type_str() << ")" <<
-                    " @ "sv << new_entry.op->procedure_addr << "\n";
+                LOG(INFO, "Found binary operator: {} ({}) {} ({}) @{:x}",
+                    new_entry.op->return_type.type_str(), new_entry.op->arg1_type.type_str(), new_entry.name,
+                    new_entry.op->arg2_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _binary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -366,8 +361,7 @@ namespace intercept {
             new_entry.op = entry._operator;
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
             new_entry.name = entry._name.data();
-            LOG(INFO) << "Found nular operator: "sv << new_entry.op->return_type.type_str() << " "
-                << new_entry.name << " @ "sv << new_entry.op->procedure_addr << "\n";
+            LOG(INFO, "Found nular operator: {} {} @{:x}", new_entry.op->return_type.type_str(), new_entry.name, reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
             _nular_operators[entry._name2].push_back(new_entry);
         }
 
@@ -414,8 +408,8 @@ namespace intercept {
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
         #endif
-            LOG(INFO) << entry->_localizedName << entry->_javaFunc << entry->_readableName << "\n";
-            LOG(INFO) << "Found Type operator: "sv << entry->_name << " create@ "sv << std::hex << entry->_createFunction << " pool@ "sv << poolAlloc << "\n";
+            LOG(INFO, "{} {} {}", entry->_localizedName, entry->_javaFunc, entry->_readableName);
+            LOG(INFO, "Found Type operator: {} create@{:x} pool@{:x}", entry->_name, reinterpret_cast<uintptr_t>(entry->_createFunction), poolAlloc);
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
@@ -451,7 +445,7 @@ namespace intercept {
         const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);
     #else
-        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t*>(*/allocatorVtablePtr/*)*/);
+        const char* test = getRTTIName(/**reinterpret_cast<uintptr_t>(*/allocatorVtablePtr/*)*/);
         assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
     #endif
         _allocator.genericAllocBase = allocatorVtablePtr;

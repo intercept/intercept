@@ -615,6 +615,6 @@ namespace intercept {
 
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
-        std::pair<float,float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
+        std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
     }  // namespace sqf
 }  // namespace intercept

@@ -46,7 +46,6 @@ namespace intercept {
         float random(float seed_, float x_, std::optional<float> y_);
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_);
         bool can_suspend();
-        bool is_equal_to(const object &l_, const object &r_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
         script exec_vm(sqf_string_const_ref value_);

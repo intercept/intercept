@@ -374,14 +374,9 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
         }
 
-        std::vector<sqf_return_string_list> squad_params(const object &unit_) {
-            std::vector<sqf_return_string_list> _temp;
+        std::pair<std::vector<sqf_return_string>, std::vector<sqf_return_string>> squad_params(const object &unit_) {
             game_value _engine_result = host::functions.invoke_raw_unary(__sqf::unary__squadparams__object__ret__array, unit_);
-            _temp.reserve(_engine_result.size());
-            for (auto &gv : _engine_result.to_array()) {
-                _temp.push_back(std::move(__helpers::__convert_to_vector<sqf_return_string>(gv)));
-            }
-            return _temp;
+            return { std::move(__helpers::__convert_to_vector<sqf_return_string>(_engine_result[0])),std::move(__helpers::__convert_to_vector<sqf_return_string>(_engine_result[1])) };
         }
 
         bool unit_ready(const object &unit_) {

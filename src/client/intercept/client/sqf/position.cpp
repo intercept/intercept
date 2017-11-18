@@ -179,17 +179,11 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_);
         }
 
-        vector2 world_to_screen(const vector3 &pos_agl_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-        }
-
-        vector2 world_to_screen(const vector3 &pos_agl_, bool &in_screen_) {
+        std::optional<vector2> world_to_screen(const vector3 &pos_agl_) {
             game_value result = host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
             if (static_cast<game_data_array *>(result.data.getRef())->length() == 2)
-                in_screen_ = true;
-            else
-                in_screen_ = false;
-            return game_value(result);
+                return game_value(result);
+            return {};
         }
         void set_vector_dir(const object &obj_, const vector3 &vec_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);

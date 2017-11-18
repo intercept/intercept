@@ -77,8 +77,7 @@ namespace intercept {
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
-        vector2 world_to_screen(const vector3 &pos_agl_);
-        vector2 world_to_screen(const vector3 &pos_agl_, bool &in_screen_);
+        std::optional<vector2> world_to_screen(const vector3 &pos_agl_);
 
         void set_vector_dir(const object &obj_, const vector3 &vec_);
         void set_velocity(const object &obj_, const vector3 &vel_);

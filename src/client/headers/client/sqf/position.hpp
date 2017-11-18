@@ -147,5 +147,12 @@ namespace intercept {
         */
         std::vector<vector3> building_pos(const object &building_, int index_);
 
+        vector3 vector_model_to_world(const object &object_, vector3 modelDir_);
+        vector3 vector_model_to_world_visual(const object &object_, vector3 modelDir_);
+        vector3 vector_world_to_model(const object &object_, vector3 worldDir_);
+        vector3 vector_world_to_model_visual(const object &object_, vector3 worldDir_);
+
+
+
     }  // namespace sqf
 }  // namespace intercept

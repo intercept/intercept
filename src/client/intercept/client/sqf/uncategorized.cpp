@@ -128,6 +128,13 @@ namespace intercept {
         // binary__vectorfromto__array__array__ret__array
         // binary__vectormultiply__array__scalar__ret__array
         // unary__tofixed__scalar__ret__nothing
+        // binary__call__any__code__ret__any
+        // binary__append__array__array__ret__nothing
+        // binary__arrayintersect__array__array__ret__array
+        // binary__pushback__array__any__ret__scalar
+        // binary__selectrandomweighted__array__array__ret__any
+        // binary__set__array__array__ret__nothing
+        // binary__sort__array__bool__ret__nothing
 
         // nular__allsites__ret__array (deprecated - source: BI Wiki)
         // nular__false__ret__bool

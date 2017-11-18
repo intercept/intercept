@@ -533,6 +533,19 @@ namespace intercept {
             };
         }
 
+        vector3 vector_model_to_world(const object& object_, vector3 modelDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworld__object__array__ret__array, object_, modelDir_);
+        }
+        vector3 vector_model_to_world_visual(const object& object_, vector3 modelDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworldvisual__object__array__ret__array, object_, modelDir_);
+        }
+        vector3 vector_world_to_model(const object& object_, vector3 worldDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodel__object__array__ret__array, object_, worldDir_);
+        }
+        vector3 vector_world_to_model_visual(const object& object_, vector3 worldDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodelvisual__object__array__ret__array, object_, worldDir_);
+        }
+
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {
             auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
 

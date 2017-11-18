@@ -161,10 +161,6 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__cansuspend__ret__bool);
         }
 
-        bool is_equal_to(const object &l_, const object &r_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, l_, r_);
-        }
-
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
             game_value params({min_,
                                max_,

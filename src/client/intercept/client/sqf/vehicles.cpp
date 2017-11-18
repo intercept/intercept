@@ -846,6 +846,14 @@ namespace intercept {
             return rv_uav_control(host::functions.invoke_raw_unary(__sqf::unary__uavcontrol__object__ret__array, uav_));
         }
 
+        bool is_vehicle_radar_on(const object& vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isvehicleradaron__object__ret__bool, vehicle_);
+        }
+
+        sqf_return_string_list list_vehicle_sensors(const object& vehicle_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__listvehiclesensors__object__ret__array, vehicle_));
+        }
+
         side get_side(const object &object_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__object__ret__side, object_));
         }

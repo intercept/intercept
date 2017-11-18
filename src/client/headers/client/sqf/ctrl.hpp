@@ -233,6 +233,14 @@ namespace intercept {
         std::vector<float> lnb_size(const control &ctrl_);
         rv_color lnb_color(float idc_, float row_, float column_);
         rv_color lnb_color(const control &ctrl_, float row_, float column_);
+        void lnb_sort(float idc_, int column_, bool reversed_ = false);
+        void lnb_sort(const control &ctrl_, int column_, bool reversed_ = false);
+        void lnb_sort_by_value(float idc_, int column_, bool reversed_ = false);
+        void lnb_sort_by_value(const control &ctrl_, int column_, bool reversed_ = false);
+
+
+        unary__lnbsort__array__ret__nothing
+            unary__lnbsortbyvalue__array__ret__nothing
 
         //listbox
         bool lb_is_selected(const control &value0_, float value1_);

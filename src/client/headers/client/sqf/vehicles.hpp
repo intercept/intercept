@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -257,5 +257,8 @@ namespace intercept {
         sqf_return_string wf_side_text(const group &group_);
         sqf_return_string wf_side_text(const side &side_);
         rv_uav_control uav_control(const object &uav_);
+        bool is_vehicle_radar_on(const object &vehicle_);
+        sqf_return_string_list list_vehicle_sensors(const object &vehicle_);
+
     }  // namespace sqf
 }  // namespace intercept

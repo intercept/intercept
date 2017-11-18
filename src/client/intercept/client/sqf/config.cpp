@@ -66,7 +66,7 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(output);
         }
 
-        float count(const config &config_entry_) {
+        int count(const config &config_entry_) {
             return host::functions.invoke_raw_unary(__sqf::unary__count__config__ret__scalar, config_entry_);
         }
 

@@ -863,5 +863,9 @@ namespace intercept {
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, std::move(params)));
         }
 
+        std::pair<float, float> backpack_space_for(const object& backpack_, sqf_string_const_ref weapon_) {
+            auto res = host::functions.invoke_raw_binary(__sqf::binary__backpackspacefor__object__string__ret__array, backpack_, weapon_);
+            return  { res[0], res[1] };
+        }
     }  // namespace sqf
 }  // namespace intercept

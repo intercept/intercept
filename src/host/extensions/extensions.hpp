@@ -49,8 +49,7 @@ namespace intercept {
         typedef void(CDECL *pre_start_func)();
         typedef void(CDECL *pre_init_func)();
         typedef void(CDECL *post_init_func)();
-        typedef void(CDECL *mission_end_func)();
-        typedef void(CDECL *mission_stopped_func)();
+        typedef void(CDECL *mission_ended_func)();
         typedef void(CDECL *on_frame_func)();
         typedef void(CDECL *on_signal_func)(game_value_parameter this_);
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
@@ -76,8 +75,7 @@ namespace intercept {
             pre_start_func post_start;
             pre_init_func pre_init;
             post_init_func post_init;
-            mission_end_func mission_end;
-            mission_stopped_func mission_stopped;
+            mission_ended_func mission_ended;
             on_frame_func on_frame;
             on_signal_func on_signal;
             on_interface_unload_func on_interface_unload;

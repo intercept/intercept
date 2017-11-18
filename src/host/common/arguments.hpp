@@ -89,6 +89,6 @@ namespace intercept {
     protected:
         std::vector<std::string> _args;
         const std::string        _original;
-        uint32_t				 _internal_index;
+        uint32_t                 _internal_index;
     };
 }

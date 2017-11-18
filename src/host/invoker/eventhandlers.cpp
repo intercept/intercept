@@ -16,7 +16,7 @@ namespace intercept {
             invoker::get().add_eventhandler("pre_start"sv, std::bind(&eventhandlers::pre_start, std::placeholders::_1));
             invoker::get().add_eventhandler("pre_init"sv, std::bind(&eventhandlers::pre_init, std::placeholders::_1));
             invoker::get().add_eventhandler("post_init"sv, std::bind(&eventhandlers::post_init, std::placeholders::_1));
-            invoker::get().add_eventhandler("mission_stopped"sv, std::bind(&eventhandlers::mission_stopped, std::placeholders::_1));
+            invoker::get().add_eventhandler("mission_ended"sv, std::bind(&eventhandlers::mission_ended, std::placeholders::_1));
 
 #define EH_EVENT_DEF(x) invoker::get().add_eventhandler(#x, std::bind(&eventhandlers::x, std::placeholders::_1));
 
@@ -121,11 +121,12 @@ namespace intercept {
             if (module.second.functions.post_init) module.second.functions.post_init();
         }
     }
-    void eventhandlers::mission_stopped(game_value_parameter)
+    void eventhandlers::mission_ended(game_value_parameter)
     {
         LOG(INFO, "Mission Stopped");
         for (auto& module : extensions::get().modules()) {
-            if (module.second.functions.mission_stopped) module.second.functions.mission_stopped();
+            module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set
+            if (module.second.functions.mission_ended) module.second.functions.mission_ended();
         }
     }
 #define EH_START(x) void eventhandlers::x(game_value_parameter args_) {\

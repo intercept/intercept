@@ -224,7 +224,7 @@ namespace intercept {
         bool _patched;
     };
 
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+    namespace __internal {
         class gsFuncBase {
         public:
             r_string _name;

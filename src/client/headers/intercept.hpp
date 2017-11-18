@@ -15,8 +15,7 @@ namespace intercept {
         DLLEXPORT void CDECL post_start();
         DLLEXPORT void CDECL pre_init();
         DLLEXPORT void CDECL post_init();
-        DLLEXPORT void CDECL mission_end();
-        DLLEXPORT void CDECL mission_stopped();
+        DLLEXPORT void CDECL mission_ended();
         DLLEXPORT void CDECL on_frame();
         DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);  //#TODO no C ABI here! use r_string
         DLLEXPORT void CDECL on_interface_unload(r_string name_);

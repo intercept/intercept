@@ -566,8 +566,11 @@ namespace intercept {
         /// @brief you can cast this to intercept::sqf::rv_unit_loadout to easily parse it
         game_value get_unit_loadout(const object &obj_);
         game_value get_unit_loadout(const config &cfg_);
+        game_value get_unit_loadout(sqf_string_const_ref cfg_);
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_ = false);
         void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_ = false);
+        void set_unit_loadout(const object &obj_, const config &cfg_);
+        void set_unit_loadout(const object &obj_, sqf_string_const_ref cfg_);
 
         //inventory
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);
@@ -612,6 +615,6 @@ namespace intercept {
 
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
-
+        std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
     }  // namespace sqf
 }  // namespace intercept

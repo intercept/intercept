@@ -161,10 +161,6 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__cansuspend__ret__bool);
         }
 
-        bool is_equal_to(const object &l_, const object &r_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, l_, r_);
-        }
-
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
             game_value params({min_,
                                max_,
@@ -287,16 +283,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__control__array__ret__nothing, control_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_)});
-        }
-
         void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_), public_});
         }
 
-        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, {variable_, std::move(value_)});
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, {variable_, std::move(value_), public_ });
         }
 
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_) {
@@ -307,12 +299,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__task__array__ret__nothing, task_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, {variable_, std::move(value_)});
-        }
-
-        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, {var_name_, std::move(value_)});
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, {variable_, std::move(value_), public_ });
         }
 
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_) {
@@ -892,6 +880,10 @@ namespace intercept {
 
         bool is_equal_type_params(game_value value_, game_value template_) {
             return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeparams__any__array__ret__bool, value_, template_);
+        }
+
+        int get_mission_version() {
+            return host::functions.invoke_raw_nular(__sqf::nular__missionversion__ret__scalar);
         }
 
 

@@ -71,6 +71,7 @@ namespace intercept {
 
         std::vector<object> units(const group &gp_);
         side get_side(const group &group_);
+        side side_get(const group& group_);
         sqf_return_string_list all_variables(const group &value_);
         bool is_null(const group &value_);
 

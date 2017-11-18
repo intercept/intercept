@@ -714,14 +714,20 @@ namespace intercept {
         game_value get_unit_loadout(const config &cfg_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__config__ret__array, cfg_);
         }
-        //#TODO: Implement set_unit_loadout variations, I skipped it. @jonpas
-        //binary__setunitloadout__object__string__ret__nothing
-        //binary__setunitloadout__object__config__ret__nothing
+        game_value get_unit_loadout(sqf_string_const_ref cfg_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getunitloadout__string__ret__array, cfg_);
+        }
         void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, {loadout_, rearm_});
         }
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__array__ret__nothing, obj_, {static_cast<game_value>(loadout_), rearm_});
+        }
+        void set_unit_loadout(const object &obj_, const config &cfg_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__config__ret__nothing, obj_, cfg_);
+        }
+        void set_unit_loadout(const object &obj_, sqf_string_const_ref cfg_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__string__ret__nothing, obj_, cfg_);
         }
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessories__object__string__ret__array, unit_, weapon_class_);
@@ -857,5 +863,9 @@ namespace intercept {
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__array__ret__array, std::move(params)));
         }
 
+        std::pair<float, float> backpack_space_for(const object& backpack_, sqf_string_const_ref weapon_) {
+            auto res = host::functions.invoke_raw_binary(__sqf::binary__backpackspacefor__object__string__ret__array, backpack_, weapon_);
+            return  { res[0], res[1] };
+        }
     }  // namespace sqf
 }  // namespace intercept

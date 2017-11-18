@@ -783,6 +783,22 @@ namespace intercept {
             return rv_color(host::functions.invoke_raw_binary(__sqf::binary__lnbcolor__control__array__ret__array, ctrl_, params));
         }
 
+        void lnb_sort(float idc_, int column_, bool reversed_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ , column_ ,reversed_ });
+        }
+
+        void lnb_sort(const control& ctrl_, int column_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsort__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
+        }
+
+        void lnb_sort_by_value(float idc_, int column_, bool reversed_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ ,column_ ,reversed_ });
+        }
+
+        void lnb_sort_by_value(const control& ctrl_, int column_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsortbyvalue__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
+        }
+
         sqf_return_string lnb_data(float idc_, float row_, float column_) {
             game_value item({row_,
                              column_});
@@ -2549,5 +2565,12 @@ namespace intercept {
             return rv_resolution::from_vector(__helpers::__convert_to_vector<float>(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
         }
 
+        vector2 get_mouse_position() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmouseposition__ret__array);
+        }
+
+        bool is_ui_context() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isuicontext__ret__bool);
+        }
     }  // namespace sqf
 }  // namespace intercept

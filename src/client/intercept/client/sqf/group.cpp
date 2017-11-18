@@ -124,6 +124,9 @@ namespace intercept {
         side get_side(const group &group_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__group__ret__side, group_));
         }
+
+        side side_get(const group& group_) { return get_side(group_); }
+
         sqf_return_string_list all_variables(const group &value_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__group__ret__array, value_));

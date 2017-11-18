@@ -46,7 +46,6 @@ namespace intercept {
         float random(float seed_, float x_, std::optional<float> y_);
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_);
         bool can_suspend();
-        bool is_equal_to(const object &l_, const object &r_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_);
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_);
         script exec_vm(sqf_string_const_ref value_);
@@ -76,15 +75,13 @@ namespace intercept {
 
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
-        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_);
-        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_);
-        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_ = false);
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_, bool public_ = false);
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const task &task_, sqf_string_const_ref variable_, game_value value_);
-        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_);
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_, bool public_ = false);
         
-        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_);
-        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_);
+        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_ = false);
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_);
@@ -232,7 +229,7 @@ namespace intercept {
         bool is_equal_type_any(game_value value_, game_value types_array_);
         bool is_equal_type_array(game_value left_array_, game_value right_array_);
         bool is_equal_type_params(game_value value_, game_value template_);
-
+        int get_mission_version();
 
 
 

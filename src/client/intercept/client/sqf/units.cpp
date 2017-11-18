@@ -370,6 +370,10 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__group__object__ret__group, unit_);
         }
 
+        group group_get(const object& unit_) {
+            return get_group(unit_);
+        }
+
         std::vector<object> group_selected_units(const object &unit_) {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__groupselectedunits__object__ret__array, unit_));
         }

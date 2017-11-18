@@ -110,6 +110,7 @@ namespace intercept {
         void remote_control(const object &controller_, const object &controlled_);
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
         group get_group(const object &unit_);  // originally "group", but is already a type
+        group group_get(const object &unit_);
         std::vector<object> group_selected_units(const object &unit_);
         std::pair<std::vector<sqf_return_string>, std::vector<sqf_return_string>> squad_params(const object &unit_); //#TODO correct return type
         bool unit_ready(const object &unit_);

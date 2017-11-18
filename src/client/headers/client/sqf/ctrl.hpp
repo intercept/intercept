@@ -238,10 +238,6 @@ namespace intercept {
         void lnb_sort_by_value(float idc_, int column_, bool reversed_ = false);
         void lnb_sort_by_value(const control &ctrl_, int column_, bool reversed_ = false);
 
-
-        unary__lnbsort__array__ret__nothing
-            unary__lnbsortbyvalue__array__ret__nothing
-
         //listbox
         bool lb_is_selected(const control &value0_, float value1_);
         void lb_delete(int control_id_, int index_);

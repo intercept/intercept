@@ -75,7 +75,6 @@ namespace intercept {
 
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
-        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_ = false);
         void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_, bool public_ = false);
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_);

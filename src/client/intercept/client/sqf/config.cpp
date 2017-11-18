@@ -110,7 +110,7 @@ namespace intercept {
             return __helpers::__convert_to_vector<config>(host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, condition_, config_));
         }
 
-        config select(const config &a_config_, float a_number_) {
+        config select(const config &a_config_, int a_number_) {
             return config(host::functions.invoke_raw_binary(__sqf::binary__select__config__scalar__ret__config, a_config_, a_number_));
         }
 

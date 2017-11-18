@@ -229,7 +229,7 @@ namespace intercept {
         bool is_equal_type_any(game_value value_, game_value types_array_);
         bool is_equal_type_array(game_value left_array_, game_value right_array_);
         bool is_equal_type_params(game_value value_, game_value template_);
-
+        int get_mission_version();
 
 
 

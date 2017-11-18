@@ -611,6 +611,8 @@ namespace intercept {
         void ct_set_value(const control &control_, float value_);
         float ct_value(const control &control_, float index_);
         rv_resolution get_resolution();
+        vector2 get_mouse_position();
+        bool is_ui_context();
 
     }  // namespace sqf
 }  // namespace intercept

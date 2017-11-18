@@ -2565,5 +2565,12 @@ namespace intercept {
             return rv_resolution::from_vector(__helpers::__convert_to_vector<float>(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
         }
 
+        vector2 get_mouse_position() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmouseposition__ret__array);
+        }
+
+        bool is_ui_context() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isuicontext__ret__bool);
+        }
     }  // namespace sqf
 }  // namespace intercept

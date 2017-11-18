@@ -882,6 +882,10 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeparams__any__array__ret__bool, value_, template_);
         }
 
+        int get_mission_version() {
+            return host::functions.invoke_raw_nular(__sqf::nular__missionversion__ret__scalar);
+        }
+
 
 
     }  // namespace sqf

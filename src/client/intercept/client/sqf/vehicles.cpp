@@ -854,6 +854,13 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__listvehiclesensors__object__ret__array, vehicle_));
         }
 
+        void add_force(const object& object_, vector3 force_, vector3 position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addforce__object__array__ret__nothing, object_, { force_, position_ });
+        }
+        void add_torque(const object& object_, vector3 torque_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addtorque__object__array__ret__nothing, object_, torque_);
+        }
+
         side get_side(const object &object_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__object__ret__side, object_));
         }

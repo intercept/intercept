@@ -259,6 +259,8 @@ namespace intercept {
         rv_uav_control uav_control(const object &uav_);
         bool is_vehicle_radar_on(const object &vehicle_);
         sqf_return_string_list list_vehicle_sensors(const object &vehicle_);
+        void add_force(const object &object_, vector3 force_, vector3 position_);
+        void add_torque(const object &object_, vector3 torque_);
 
     }  // namespace sqf
 }  // namespace intercept

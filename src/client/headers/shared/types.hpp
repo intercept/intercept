@@ -67,6 +67,7 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         namespace __internal {
+            class game_state;
             void set_game_value_vtable(uintptr_t vtable);
             template <typename T, typename U>
             std::size_t pairhash(const T& first, const U& second) {
@@ -192,8 +193,7 @@ namespace intercept {
                 }
                 return rcount;
             }
-#pragma warning(suppress: 26440) //suppress "can be noexcept" this can throw if this is invalid ptr
-            void destruct() const {
+            void destruct() const noexcept {
                 delete const_cast<refcount *>(this);
             }
             virtual void lastRefDeleted() const { destruct(); }
@@ -240,14 +240,16 @@ namespace intercept {
                 return *this;
             }
 
-            constexpr bool isNull() const noexcept { return _ref == nullptr; }
+            constexpr bool is_null() const noexcept { return _ref == nullptr; }
             void free() noexcept {
                 if (!_ref) return;
                 _ref->release();
                 _ref = nullptr;
             }
             //This returns a pointer to the underlying object. Use with caution!
-            constexpr Type *getRef() const noexcept { return _ref; }
+            constexpr Type *getRef() const noexcept { return _ref; }              //#TODO deprecate
+            //This returns a pointer to the underlying object. Use with caution!
+            constexpr Type *get() const noexcept { return _ref; }
             constexpr Type *operator -> () const noexcept { return _ref; }
             operator Type *() const noexcept { return _ref; }
             bool operator != (const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
@@ -269,7 +271,7 @@ namespace intercept {
     #pragma region Containers
         template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
         class compact_array : public refcount_base {
-            static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
+            //static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
         public:
 
             size_t size() const noexcept { return _size; }
@@ -279,6 +281,13 @@ namespace intercept {
             Type* end() noexcept { return (&_data) + _size; }
             const Type* cbegin() const noexcept { return &_data; }
             const Type* cend() const noexcept { return (&_data) + _size; }
+
+            const Type& operator[](size_t index) {
+                return *(begin() + index);
+            }
+            const Type& get(size_t index) {
+                return *(begin() + index);
+            }
 
             //We delete ourselves! After release no one should have a pointer to us anymore!
             int release() const {
@@ -299,6 +308,20 @@ namespace intercept {
                 compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
                 new (buffer) compact_array(size);
                 std::copy(other.data(), other.data() + other.size(), buffer->data());
+                return buffer;
+            }
+            //Specialty function to copy less elements or to allocate more space
+            static compact_array* create(const compact_array &other, size_t element_count) {
+                const size_t size = other.size();
+                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
+                new (buffer) compact_array(element_count);
+                std::memset(buffer->data(), 0, (element_count) * sizeof(Type));
+                auto elementsToCopy = std::min(size, element_count);
+            #ifdef _MSC_VER
+                std::_Copy_no_deprecate(other.data(), other.data() + elementsToCopy, buffer->data());
+            #else
+                std::copy(other.data(), other.data() + elementsToCopy, buffer->data());
+            #endif
                 return buffer;
             }
             void del() const {
@@ -966,6 +989,14 @@ namespace intercept {
                 }
                 base::_n -= range;
             }
+            
+            void erase(uint32_t index, uint32_t count = 1) {
+                if (count == 1)
+                    erase(begin() + index);
+                else if (count > 1)
+                    erase(begin() + index, begin() + index + (count-1));
+            }
+            
             //This is sooo not threadsafe!
             template<class _InIt>
             iterator insert(iterator _where, _InIt _first, _InIt _last) {
@@ -1009,6 +1040,77 @@ namespace intercept {
                 return true;
             }
         };
+
+        template <class Type>
+        struct find_key_array_traits {
+            using key_type = const Type&;
+            static bool equals(key_type a, key_type b) { return a == b; }
+            static key_type get_key(const Type &a) { return a; }
+        };
+
+        template<class Type, class traits = find_key_array_traits<Type>>
+        class find_key_array : public auto_array<Type> {
+            using base = auto_array<Type>;
+            using key_type = typename traits::key_type;
+        public:
+            void delete_at(uint32_t index) { base::erase(index, 1); }
+            void delete_at(uint32_t index, uint32_t count) { base::erase(index, count); }
+            bool delete_by_key(key_type key) {
+                int index = find_by_key(key);
+                if (index < 0) return false;
+                delete_at(index);
+                return true;
+            }
+
+            void delete_all_by_key(key_type key) {
+                base::erase(std::remove_if(base::begin(), base::end(), [key](const Type& el) {
+                    return traits::equals(traits::get_key(el), key);
+                }), base::end());
+            }
+
+            std::optional<uint32_t> find(const Type& elem) const {
+                return find_by_key(traits::get_key(elem));
+            }
+            std::optional<uint32_t> find_by_key(key_type key) const {
+                for (int i = 0; i < base::Size(); i++)
+                    if (traits::equals(traits::get_key(base::get(i)), key)) return i;
+                return {};
+            }
+
+            std::optional<uint32_t> push_back_unique(const Type& src) {
+                if (find(src)) return -1;
+                return this->push_back(src);
+            }
+
+            uint32_t find_or_push_back(const Type& src) {
+                auto index = find(src);
+                if (index) return index;
+                return this->push_back(src);
+            }
+        };
+
+        template <class Type>
+        struct reference_array_find_key_array_traits {
+            using key_type = const Type&;
+            static bool equals(key_type a, key_type b) { return a == b; }
+            static key_type get_key(const Type &a) { return a.get(); }
+        };
+
+        template <class Type>
+        class reference_array : public find_key_array<ref<Type>, reference_array_find_key_array_traits<Type>> {
+            using base = find_key_array <ref<Type>, reference_array_find_key_array_traits<Type>>;
+            using traits = reference_array_find_key_array_traits<Type>;
+        public:
+            using base::delete_at;
+
+            bool delete_at(const Type* el) { return base::delete_by_key(el); }
+            bool delete_at(const ref<Type>& src) const { return base::delete_by_key(traits::get_key(src)); }
+
+
+            bool find(const Type* el) { return base::find_by_key(el); }
+            bool find(const ref<Type>& src) const { return base::find_by_key(traits::get_key(src)); }
+        };
+
 
 
         static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
@@ -1583,10 +1685,8 @@ namespace intercept {
 
             void copy(const game_value& copy_) noexcept {
                 set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
-                if (copy_.data) {
-                    data = copy_.data;
-                }
-            } 
+                data = copy_.data;
+            }
             
             game_value(const game_value& copy_) {//I don't see any use for this.
                 copy(copy_);
@@ -1916,6 +2016,32 @@ namespace intercept {
             void *rv_namespace{};
         };
 
+
+        class game_instruction : public refcount {
+        public:
+            struct sourcedocpos {//See ArmaDebugEngine for more info on this
+                uintptr_t vtable;
+                r_string sourcefile;
+                uint32_t sourceline;
+                r_string content;
+                uint32_t pos;
+            } sdp;
+
+
+            virtual bool exec(__internal::game_state* state, void* t) = 0;
+            /// how data stack changes after the instruction is processed
+            virtual int stack_size(void* t) const = 0;
+            // returns position in source code
+            virtual bool bfunc() const { return false; }
+            /// text of the instruction (for disassembly, profiling etc.)
+            virtual r_string get_name() const = 0;
+        };
+
+        class game_instruction_constant : public game_instruction {
+        public:
+            game_value value;
+        };
+
         class game_data_code : public game_data {
         public:
             static uintptr_t type_def;
@@ -1926,9 +2052,9 @@ namespace intercept {
             };
             size_t hash() const { return __internal::pairhash(type_def, code_string); };
             r_string code_string;
-            uintptr_t instruction_array;
-            uint32_t instruction_array_size;
-            uint32_t instruction_array_max_size;
+            ref<compact_array<ref<game_instruction>>> instructions;
+            uint32_t _dummy1;
+            uint32_t _dummy;
             bool is_final;
         };
 
@@ -2067,6 +2193,8 @@ namespace intercept {
                 uintptr_t poolFuncAlloc;
                 uintptr_t poolFuncDealloc;
                 std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+                game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
+                void(*setvar_func) (const char* name, const game_value& val) { nullptr };
             };
         }
 

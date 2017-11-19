@@ -75,6 +75,40 @@ namespace intercept {
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
+        game_value call2(const code &code_, game_value args_) {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto sv = host::functions.get_engine_allocator()->setvar_func;
+            if (!ef || !sv) return call(code_, args_);
+
+            auto missionNamespace = mission_namespace();
+ 
+            static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
+
+            auto data = static_cast<game_data_code*>(wrapper.data.getRef());
+
+            auto ns = missionNamespace.data.getRef();
+            static r_string fname = "interceptCall"sv;
+
+            sv("_i135_ar_", args_);
+            sv("_i135_cc_", code_);
+
+            auto ret = ef(*data, ns, fname);
+            return ret;
+        }
+
+        game_value call2(const code &code_) {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            if (!ef) return call(code_);
+
+            auto data = static_cast<game_data_code*>(code_.data.getRef());
+
+            auto ns = mission_namespace().data.getRef();
+            static r_string fname = "interceptCall"sv;
+            auto ret = ef(*data, ns, fname);
+            return ret;
+        }
+
+
         script spawn(game_value args, const code& code_) {
             return host::functions.invoke_raw_binary(
                 __sqf::binary__spawn__any__code__ret__script,

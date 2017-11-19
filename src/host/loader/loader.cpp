@@ -79,7 +79,7 @@ namespace intercept {
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {
-        auto game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
+        game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
 
     #ifdef __linux__
         std::ifstream maps("/proc/self/maps");
@@ -240,7 +240,23 @@ namespace intercept {
 
     #endif
 
+    #if _WIN32 && !_WIN64
+        //via profile context "scrpt"
+        auto future_evaluateScript = std::async([&]() {
+            auto patternFindLoc = findInMemoryPattern(
+                "\xA1\x00\x00\x00\x00\x81\xEC\x00\x00\x00\x00\x53\x55\x56\x57\x8B\xF9\xA8\x01\x75\x1C\x83\xC8\x01\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xA3\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\x80\x3D\x00\x00\x00\x00\x00\x75\x49\xE8\x00\x00\x00\x00\x50\x68\x00\x00\x00\x00\x68\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xA3\x00\x00\x00\x00\xE8\x00\x00\x00\x00\xA3\x00\x00\x00\x00\xC6\x05\x00\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x0F\xB6\xC0\x8D\x4C\x24\x1C\x50\x68\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x8B\xB4\x24\x00\x00\x00\x00\x83\xCB\xFF\x80\x3D\x00\x00\x00\x00\x00\xBD\x00\x00\x00\x00\x74\x68\x51\x8B\x0E\x8B\xD4\x85\xC9\x74\x06\x8B\xC5\xF0\x0F\xC1\x01\x8D\x44\x24\x18\x89\x0A\x50",
+                "x????xx????xxxxxxxxxxxxxxx????????x????xx????????xx?????xxx????xx????x????x????xx????????xx????????xx????????x????x????x????xx?????x????x????xxxxxxxxx????x????xxx????xxxxx?????x????xxxxxxxxxxxxxxxxxxxxxxxx");
 
+            return patternFindLoc;
+        });
+        auto future_varSetLocal = std::async([&]() {
+            auto patternFindLoc = findInMemoryPattern(
+                "\x51\x56\x57\x8B\x7C\x24\x10\x8B\xF1\x85\xFF\x0F\x84\x00\x00\x00\x00\x80\x3F\x00\x0F\x84\x00\x00\x00\x00\x57\xC7\x44\x24\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x8B\x54\x24\x14\x83\xC4\x04\x85\xC0\x74\x09\xB9\x00\x00\x00\x00\xF0\x0F\xC1\x08\x53\x83\xCB\xFF\x89\x44\x24\x14\x85\xD2\x74\x15\x8B\xC3\xF0\x0F\xC1\x02\x48\x75\x0C\x8B\x0D\x00\x00\x00\x00\x52\x8B\x01\xFF\x50\x0C\x8D\x4C\x24\x14\xE8\x00\x00\x00\x00\x80\x7C\x24\x00\x00\x75\x12\x80\x3F\x5F\x74\x0D\x6A\x05\x56\xE8\x00\x00\x00\x00\x83\xC4\x08\xEB\x56",
+                "xxxxxxxxxxxxx????xxxxx????xxxx?????x????xxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxx????xxx??xxxxxxxxxxx????xxxxx");
+
+            return patternFindLoc;
+        });
+    #endif
 
         /*
         Unary Hashmap
@@ -352,17 +368,7 @@ namespace intercept {
     #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ARRAY)] = reinterpret_cast<uintptr_t>(&_binary_operators["arrayintersect"].front().op->arg1_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::OBJECT)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg1_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::STRING)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->arg2_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::SCALAR)] = reinterpret_cast<uintptr_t>(&_binary_operators["doorphase"].front().op->return_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::BOOL)] = reinterpret_cast<uintptr_t>(&_unary_operators["isplayer"].front().op->return_type);
-        //_sqf_register_funcs._types[static_cast<size_t>(types::GameDataType::ANY)] = reinterpret_cast<uintptr_t>(&_unary_operators["diag_log"].front().op->arg_type);
 
-        //_sqf_register_funcs._operator_construct = future_operator_construct.get();
-        //_sqf_register_funcs._operator_insert = future_operator_insert.get();
-        //_sqf_register_funcs._unary_construct = future_unary_construct.get();
-        //_sqf_register_funcs._unary_insert = future_unary_insert.get();
         _sqf_register_funcs._gameState = state_addr_;
 
         const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
@@ -378,6 +384,45 @@ namespace intercept {
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     #endif
+
+
+    #if _WIN32 && !_WIN64
+        //via profile context "scrpt"
+        evaluate_script_function = future_evaluateScript.get();
+        varset_function = future_varSetLocal.get();
+
+        if (evaluate_script_function && varset_function) {
+            _allocator.evaluate_func = [](const game_data_code& code, void* ns, const r_string& name) -> game_value {
+                typedef game_value*(__thiscall *evaluate_func) (__internal::game_state* gs, game_value& ret, const r_string& code, void* instruction_list, void* context, void* ns, const r_string& name);
+                
+                evaluate_func func = reinterpret_cast<evaluate_func>(loader::get().evaluate_script_function);
+                
+
+                struct contextType {
+                    bool _local;
+                    bool _nilerror;
+                } c{ false, true };
+                game_value ret;
+                func(loader::get().game_state, ret, code.code_string, (void*) &code.instructions, &c, ns, name);
+                return ret;
+            };
+
+            _allocator.setvar_func = [](const char* name, const game_value& val) -> void {
+                typedef void(__thiscall *varset) (__internal::game_state* gs, const char* name, const game_value& val, bool readonly, bool force);
+
+                varset setvar = reinterpret_cast<varset>(loader::get().varset_function);
+                setvar(loader::get().game_state, name, val, false, true);
+
+            };
+
+        }
+            
+    #endif
+
+
+
+
+
     }
 
     const unary_map & loader::unary() const {

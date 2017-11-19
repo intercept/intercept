@@ -25,6 +25,8 @@ namespace intercept {
         //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
         game_value call(const code &code_);
+        game_value call2(const code &code_, game_value args_);
+        game_value call2(const code &code_);
         script spawn(game_value args, const code &code_);
 
 

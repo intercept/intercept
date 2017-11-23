@@ -7,15 +7,9 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
+
 #include "singleton.hpp"
-#include "logging.hpp"
-#include "arguments.hpp"
-#include "loader.hpp"
 #include "shared/types.hpp"
-#include <mutex>
-#include <condition_variable>
-#include <queue>
 
 using namespace intercept::types;
 

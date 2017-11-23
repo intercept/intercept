@@ -10,6 +10,7 @@ https://github.com/NouberNou/intercept
 Provides the ability to assign Eventhandlers without going through SQF
 */
 #pragma once
+#pragma comment(linker, "/include:client_eventhandlers_clear")
 #include "../shared/client_types.hpp"
 #include <functional>
 #include <vector>

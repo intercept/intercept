@@ -7,7 +7,6 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#pragma comment(linker, "/include:client_eventhandlers_clear")
 
 #include "singleton.hpp"
 #include "shared/types.hpp"

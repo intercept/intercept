@@ -57,7 +57,7 @@ on_success:
       Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
       Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
       
-      Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_x64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept`""
+      Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_w64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept`""
       
       7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
       Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip"  

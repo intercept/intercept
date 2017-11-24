@@ -40,6 +40,28 @@ build:
 build_script:
   - msbuild "%vcproj_file%"
   
+on_success:
+  - ps: |
+      New-Item artifacts\intercept\client\include -type directory
+      Copy-Item src\client\headers\* artifacts\intercept\client\include
+      
+      New-Item artifacts\intercept\client\lib -type directory
+      Copy-Item build\win32\intercept_client\RelWithDebInfo\intercept_client.lib artifacts\intercept\client\lib
+      
+      New-Item artifacts\intercept\client\lib64 -type directory
+      Copy-Item build\win64\intercept_client\RelWithDebInfo\intercept_client.lib artifacts\intercept\client\lib64
+      
+      New-Item artifacts\intercept\host\@intercept\addons -type directory
+      Copy-Item build\win32\intercept\RelWithDebInfo\intercept.dll artifacts\intercept\host\@intercept
+      Copy-Item build\win32\intercept\RelWithDebInfo\intercept.pdb artifacts\intercept\host\@intercept
+      Copy-Item build\win64\intercept\RelWithDebInfo\intercept_x64.dll artifacts\intercept\host\@intercept
+      Copy-Item build\win64\intercept\RelWithDebInfo\intercept_x64.pdb artifacts\intercept\host\@intercept
+      
+      tools\armake_x64.exe build rv\addons\core artifacts\intercept\host\@intercept\addons\intercept_core.pbo
+      
+      7z a "artifacts\intercept_{build}.zip" "%APPVEYOR_BUILD_FOLDER%\artifacts\intercept"
+      Push-AppveyorArtifact "artifacts\intercept_{build}.zip"  
+  
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib
   name: win32_client_lib

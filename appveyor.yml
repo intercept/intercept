@@ -43,7 +43,7 @@ build_script:
 on_success:
   - ps: |
       New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include -type directory
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\src\client\headers\* $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\src\client\headers\* $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include -recurse
       
       New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib -type directory
       Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept_client\RelWithDebInfo\intercept_client.lib $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib
@@ -57,10 +57,10 @@ on_success:
       Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
       Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
       
-      tools\armake_x64.exe build "$env:APPVEYOR_BUILD_FOLDER\rv\addons\core" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons\intercept_core.pbo"
+      Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_x64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept`""
       
-      7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_$env:APPVEYOR_BUILD_VERSION.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
-      Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_$env:APPVEYOR_BUILD_VERSION.zip"  
+      7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
+      Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip"  
   
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib

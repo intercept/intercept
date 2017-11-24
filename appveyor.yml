@@ -42,6 +42,7 @@ build_script:
   
 on_success:
   - ps: |
+      Set-Location %APPVEYOR_BUILD_FOLDER%
       New-Item artifacts\intercept\client\include -type directory
       Copy-Item src\client\headers\* artifacts\intercept\client\include
       

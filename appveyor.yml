@@ -42,26 +42,25 @@ build_script:
   
 on_success:
   - ps: |
-      Set-Location %APPVEYOR_BUILD_FOLDER%
-      New-Item artifacts\intercept\client\include -type directory
-      Copy-Item src\client\headers\* artifacts\intercept\client\include
+      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include -type directory
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\src\client\headers\* $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include
       
-      New-Item artifacts\intercept\client\lib -type directory
-      Copy-Item build\win32\intercept_client\RelWithDebInfo\intercept_client.lib artifacts\intercept\client\lib
+      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib -type directory
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept_client\RelWithDebInfo\intercept_client.lib $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib
       
-      New-Item artifacts\intercept\client\lib64 -type directory
-      Copy-Item build\win64\intercept_client\RelWithDebInfo\intercept_client.lib artifacts\intercept\client\lib64
+      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib64 -type directory
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept_client\RelWithDebInfo\intercept_client.lib $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib64
       
-      New-Item artifacts\intercept\host\@intercept\addons -type directory
-      Copy-Item build\win32\intercept\RelWithDebInfo\intercept.dll artifacts\intercept\host\@intercept
-      Copy-Item build\win32\intercept\RelWithDebInfo\intercept.pdb artifacts\intercept\host\@intercept
-      Copy-Item build\win64\intercept\RelWithDebInfo\intercept_x64.dll artifacts\intercept\host\@intercept
-      Copy-Item build\win64\intercept\RelWithDebInfo\intercept_x64.pdb artifacts\intercept\host\@intercept
+      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons -type directory
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept\RelWithDebInfo\intercept.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept\RelWithDebInfo\intercept.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
+      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
       
-      tools\armake_x64.exe build rv\addons\core artifacts\intercept\host\@intercept\addons\intercept_core.pbo
+      tools\armake_x64.exe build "$env:APPVEYOR_BUILD_FOLDER\rv\addons\core" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons\intercept_core.pbo"
       
-      7z a "artifacts\intercept_{build}.zip" "%APPVEYOR_BUILD_FOLDER%\artifacts\intercept"
-      Push-AppveyorArtifact "artifacts\intercept_{build}.zip"  
+      7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_$env:APPVEYOR_BUILD_VERSION.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
+      Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_$env:APPVEYOR_BUILD_VERSION.zip"  
   
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib

@@ -10,7 +10,7 @@
 //#include "pool.hpp"
 #include "../shared.hpp"
 #include <string_view>
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <memory>
 

@@ -45,8 +45,8 @@ build:
   verbosity: minimal
 
 build_script:
-  - msbuild vcproj\Intercept.sln
-  - msbuild vcproj64\Intercept.sln
+  - msbuild vcproj\Intercept.sln /m
+  - msbuild vcproj64\Intercept.sln /m 
   
 on_success:
   - ps: .\tools\ci_publish_artifacts.ps1

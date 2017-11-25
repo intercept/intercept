@@ -79,7 +79,6 @@ switch (_returnType) { \
 }
 
 void registered_sqf_func_wrapper::setUnused() noexcept {
-    return;
     //switch (_type) {
     //    case functionType::sqf_nular:
     //        if (_nular && _nular->_operator)

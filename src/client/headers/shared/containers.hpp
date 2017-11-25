@@ -86,8 +86,8 @@ namespace intercept::types {
     class refcount_base {
     public:
         constexpr refcount_base() noexcept : _refcount(0) {}
-        constexpr refcount_base(const refcount_base &src) noexcept : _refcount(0) {}
-        constexpr void operator = (const refcount_base &src) const noexcept {}
+        constexpr refcount_base(const refcount_base &) noexcept : _refcount(0) {}
+        constexpr void operator = (const refcount_base &) const noexcept {}
 
         constexpr int add_ref() const noexcept {
             return ++_refcount;
@@ -237,7 +237,7 @@ namespace intercept::types {
             const size_t size = other.size();
             compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
             new (buffer) compact_array(element_count);
-            std::memset(buffer->data(), 0, (element_count) * sizeof(Type));
+            std::memset(buffer->data(), 0, element_count * sizeof(Type));
             const auto elements_to_copy = std::min(size, element_count);
         #ifdef _MSC_VER
             std::_Copy_no_deprecate(other.data(), other.data() + elements_to_copy, buffer->data());
@@ -273,39 +273,38 @@ namespace intercept::types {
     //};
 
     class r_string {
-    protected:
     public:
         constexpr r_string() noexcept {}
-        r_string(std::string_view str) {
-            if (str.length()) _ref = create(str.data(), str.length());
+        r_string(std::string_view str_) {
+            if (str_.length()) _ref = create(str_.data(), str_.length());
         }
         //template <size_t N>
         //constexpr r_string(const r_string_const<N>& c) {
         //    _ref = reinterpret_cast<compact_array<char>*>(&c);
         //}
-        explicit r_string(compact_array<char>* dat) noexcept : _ref(dat) {}
-        r_string(r_string&& _move) noexcept {
-            _ref = _move._ref;
-            _move._ref = nullptr;
+        explicit r_string(compact_array<char>* dat_) noexcept : _ref(dat_) {}
+        r_string(r_string&& move_) noexcept {
+            _ref = move_._ref;
+            move_._ref = nullptr;
         }
-        r_string(const r_string& _copy) {
-            _ref = _copy._ref;
+        r_string(const r_string& copy_) {
+            _ref = copy_._ref;
         }
 
-        r_string& operator = (r_string&& _move) noexcept {
-            if (this == &_move)
+        r_string& operator = (r_string&& move_) noexcept {
+            if (this == &move_)
                 return *this;
-            _ref = _move._ref;
-            _move._ref = nullptr;
+            _ref = move_._ref;
+            move_._ref = nullptr;
             return *this;
         }
 
-        r_string& operator = (const r_string& _copy) {
-            _ref = _copy._ref;
+        r_string& operator = (const r_string& copy_) {
+            _ref = copy_._ref;
             return *this;
         }
-        r_string& operator = (std::string_view _copy) {
-            _ref = create(_copy.data(), _copy.length());
+        r_string& operator = (std::string_view copy_) {
+            _ref = create(copy_.data(), copy_.length());
             return *this;
         }
         const char* data() const noexcept {
@@ -344,60 +343,60 @@ namespace intercept::types {
         }
 
         ///== is case insensitive just like scripting
-        bool operator == (const char *other) const {
-            if (!data())  return (!other || !*other); //empty?
+        bool operator == (const char *other_) const {
+            if (!data())  return !other_ || !*other_; //empty?
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other) == 0;
+            return _strcmpi(data(), other_) == 0;
         #endif
         }
 
         ///== is case insensitive just like scripting
-        bool operator == (const r_string& other) const {
-            if (!data()) return (!other.data() || !*other.data()); //empty?
-            if (data() == other.data()) return true;
+        bool operator == (const r_string& other_) const {
+            if (!data()) return !other_.data() || !*other_.data(); //empty?
+            if (data() == other_.data()) return true;
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other.data()) == 0;
+            return _strcmpi(data(), other_.data()) == 0;
         #endif
         }
 
         ///== is case insensitive just like scripting
-        bool operator == (const std::string& other) const {
-            if (!data()) return other.empty(); //empty?
-            if (other.length() > _ref->size()) return false; //There is more data than we can even have
+        bool operator == (const std::string& other_) const {
+            if (!data()) return other_.empty(); //empty?
+            if (other_.length() > _ref->size()) return false; //There is more data than we can even have
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other.data()) == 0;
+            return _strcmpi(data(), other_.data()) == 0;
         #endif
         }
 
         ///== is case insensitive just like scripting
-        bool operator == (std::string_view other) const {
-            if (!data()) return other.empty(); //empty?
-            if (other.length() > _ref->size()) return false; //There is more data than we can even have
+        bool operator == (std::string_view other_) const {
+            if (!data()) return other_.empty(); //empty?
+            if (other_.length() > _ref->size()) return false; //There is more data than we can even have
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other.data()) == 0;
+            return _strcmpi(data(), other_.data()) == 0;
         #endif
         }
 
         ///!= is case insensitive just like scripting
-        bool operator != (const r_string& other) const {
-            return !(*this == other);
+        bool operator != (const r_string& other_) const {
+            return !(*this == other_);
         }
 
         ///!= is case insensitive just like scripting
-        bool operator != (const std::string& other) const {
-            return !(*this == other);
+        bool operator != (const std::string& other_) const {
+            return !(*this == other_);
         }
 
         ///!= is case insensitive just like scripting
@@ -427,21 +426,21 @@ namespace intercept::types {
             return _in;
         }
 
-        bool compare_case_sensitive(const char *other) const {
+        bool compare_case_sensitive(const char *other_) const {
         #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
                 other, [](unsigned char l, unsigned char r) {return l == r; });
         #else
-            return strcmp(data(), other) == 0;
+            return strcmp(data(), other_) == 0;
         #endif
         }
 
-        bool compare_case_insensitive(const char *other) const {//#TODO string_view variant with length checking
+        bool compare_case_insensitive(const char *other_) const {//#TODO string_view variant with length checking
         #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
                 other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         #else
-            return _stricmp(data(), other) == 0;
+            return _stricmp(data(), other_) == 0;
         #endif
         }
 
@@ -466,17 +465,17 @@ namespace intercept::types {
         }
 
         r_string append(std::string_view _right) const {
-            auto myLength = length();
-            auto newData = create(myLength + _right.length() + 1);//Space for terminating nullchar
+            const auto my_length = length();
+            auto new_data = create(my_length + _right.length() + 1);//Space for terminating nullchar
         #if __GNUC__
-            std::copy_n(data(), myLength, newData->data());
-            std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
+            std::copy_n(data(), my_length, new_data->data());
+            std::copy_n(_right.data(), _right.length(), new_data->data() + my_length);
         #else
-            memcpy_s(newData->data(), newData->size(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(newData->data() + myLength, newData->size() - myLength, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            memcpy_s(new_data->data(), new_data->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            memcpy_s(new_data->data() + my_length, new_data->size() - my_length, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
         #endif
-            newData->data()[myLength + _right.length()] = 0;
-            return r_string(newData);
+            new_data->data()[my_length + _right.length()] = 0;
+            return r_string(new_data);
         }
         r_string& append_modify(std::string_view _right) {
             const auto my_length = length();
@@ -532,28 +531,28 @@ namespace intercept::types {
     private:
         ref<compact_array<char>> _ref;
 
-        static compact_array<char> *create(const char *str, size_t len) {
-            if (len == 0 || *str == 0) return nullptr;
-            compact_array<char> *string = compact_array<char>::create(len + 1);
+        static compact_array<char> *create(const char *str, const size_t len_) {
+            if (len_ == 0 || *str == 0) return nullptr;
+            compact_array<char> *string = compact_array<char>::create(len_ + 1);
         #if __GNUC__
             std::copy_n(str, len, string->data());
         #else
-            strncpy_s(string->data(), string->size(), str, len);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            strncpy_s(string->data(), string->size(), str, len_);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
         #endif
-            string->data()[len] = 0;
+            string->data()[len_] = 0;
             return string;
         }
 
-        static compact_array<char> *create(size_t len) {
-            if (len == 0) return nullptr;
-            compact_array<char> *string = compact_array<char>::create(len + 1);
+        static compact_array<char> *create(const size_t len_) {
+            if (len_ == 0) return nullptr;
+            compact_array<char> *string = compact_array<char>::create(len_ + 1);
             string->data()[0] = 0;
             return string;
         }
 
-        static compact_array<char> *create(const char *str) {
-            if (*str == 0) return nullptr;
-            return create(str, strlen(str));
+        static compact_array<char> *create(const char *str_) {
+            if (*str_ == 0) return nullptr;
+            return create(str_, strlen(str_));
         }
     };
 
@@ -664,8 +663,8 @@ namespace intercept::types {
         };
 
 
-        constexpr rv_array() noexcept :_data(nullptr), _n(0) {};
-        rv_array(rv_array<Type>&& move_) noexcept :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
+        constexpr rv_array() noexcept :_data(nullptr), _n(0) {}
+        rv_array(rv_array<Type>&& move_) noexcept :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; }
         Type &get(const size_t i_) {
             if (i_ > count()) throw std::out_of_range("rv_array access out of range");
             return _data[i_];
@@ -696,23 +695,23 @@ namespace intercept::types {
         bool is_empty() const { return _n == 0; }
 
         template <class Func>
-        void for_each(const Func &f) const {
+        void for_each(const Func &f_) const {
             for (size_t i = 0; i < count(); i++) {
-                f(get(i));
+                f_(get(i));
             }
         }
 
         template <class Func>
-        void for_each_backwards(const Func &f) const { //This returns if Func returns true
+        void for_each_backwards(const Func &f_) const { //This returns if Func returns true
             for (size_t i = count() - 1; i >= 0; i--) {
-                if (f(get(i))) return;
+                if (f_(get(i))) return;
             }
         }
 
         template <class Func>
-        void for_each(const Func &f) {
+        void for_each(const Func &f_) {
             for (size_t i = 0; i < count(); i++) {
-                f(get(i));
+                f_(get(i));
             }
         }
         size_t hash() const {
@@ -733,46 +732,46 @@ namespace intercept::types {
         typedef rv_array<Type> base;
     protected:
         int _maxItems;
-        Type *try_realloc(Type *old, size_t n) {
-            Type *ret = rv_allocator<Type>::reallocate(old, n);
+        Type *try_realloc(Type *old_, size_t n_) {
+            Type *ret = rv_allocator<Type>::reallocate(old_, n_);
             return ret;
         }
 
-        void reallocate(size_t size) {
+        void reallocate(size_t size_) {
 
-            if (_maxItems == size) return;
+            if (_maxItems == size_) return;
 
-            if (base::_n > static_cast<int>(size)) {
-                resize(size);
+            if (base::_n > static_cast<int>(size_)) {
+                resize(size_);
                 return;//resize calls reallocate and reallocates... Ugly.. I know
             }
             Type *newData = nullptr;
-            if (base::_data && size > 0 && ((newData = try_realloc(base::_data, size)))) {
+            if (base::_data && size_ > 0 && ((newData = try_realloc(base::_data, size_)))) {
                 //if (size > _maxItems)//Don't null out new stuff if there is no new stuff
                 //    std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
-                _maxItems = static_cast<int>(size);
+                _maxItems = static_cast<int>(size_);
                 base::_data = newData;
                 return;
             }
-            newData = rv_allocator<Type>::create_uninitialized_array(size);
+            newData = rv_allocator<Type>::create_uninitialized_array(size_);
             //memset(newData, 0, size * sizeof(Type));
             if (base::_data) {
             #ifdef __GNUC__
                 memmove(newData, base::_data, base::_n * sizeof(Type));
             #else
                 //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
-                memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
             #endif
                 rv_allocator<Type>::deallocate(base::_data);
             }
             base::_data = newData;
-            _maxItems = static_cast<int>(size);
+            _maxItems = static_cast<int>(size_);
 
         }
 
-        void grow(size_t n) {
+        void grow(const size_t n_) {
         #undef max
-            reallocate(_maxItems + std::max(n, growthFactor));
+            reallocate(_maxItems + std::max(n_, growthFactor));
         }
     public:
         using base::end;
@@ -781,13 +780,13 @@ namespace intercept::types {
         using base::cbegin;
         using iterator = typename base::iterator;
         using const_iterator = typename base::const_iterator;
-        constexpr auto_array() noexcept : rv_array<Type>(), _maxItems(0) {};
+        constexpr auto_array() noexcept : rv_array<Type>(), _maxItems(0) {}
         auto_array(const std::initializer_list<Type> &init_) : rv_array<Type>(), _maxItems(0) {
             insert(end(), init_.begin(), init_.end());
         }
         template<class _InIt>
-        auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
-            insert(end(), _first, _last);
+        auto_array(_InIt first_, _InIt last_) : rv_array<Type>(), _maxItems(0) {
+            insert(end(), first_, last_);
         }
         auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(0) {
             insert(end(), copy_.begin(), copy_.end());
@@ -819,35 +818,35 @@ namespace intercept::types {
             return *this;
         }
 
-        void resize(size_t n) {
-            if (static_cast<int>(n) < base::_n) {
-                for (int i = static_cast<int>(n); i < base::_n; i++) {
+        void resize(const size_t n_) {
+            if (static_cast<int>(n_) < base::_n) {
+                for (int i = static_cast<int>(n_); i < base::_n; i++) {
                     (*this)[i].~Type();
                 }
-                base::_n = static_cast<int>(n);
+                base::_n = static_cast<int>(n_);
             }
-            if (n == 0 && base::_data) {
+            if (n_ == 0 && base::_data) {
                 rv_allocator<Type>::deallocate(rv_array<Type>::_data);
                 rv_array<Type>::_data = nullptr;
                 return;
             }
-            reallocate(n);
+            reallocate(n_);
         }
-        void reserve(size_t res) {
-            if (_maxItems < static_cast<int>(res)) {
-                grow(res - _maxItems);
+        void reserve(const size_t res_) {
+            if (_maxItems < static_cast<int>(res_)) {
+                grow(res_ - _maxItems);
             }
         }
         template<class... _Valty>
-        iterator emplace(iterator _where, _Valty&&... _Val) {
-            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
-            const size_t insertOffset = _where - base::begin();
+        iterator emplace(iterator where_, _Valty&&... val_) {
+            if (where_ < base::begin() || where_ > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
+            const size_t insertOffset = where_ - base::begin();
             auto previousEnd = base::_n;
             if (_maxItems < base::_n + 1) {
                 grow(1);
             }
             auto& item = base::_data[base::_n];
-            ::new (&item) Type(std::forward<_Valty>(_Val)...);
+            ::new (&item) Type(std::forward<_Valty>(val_)...);
             ++base::_n;
 
             std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
@@ -855,20 +854,20 @@ namespace intercept::types {
             return base::begin() + insertOffset;
         }
         template<class... _Valty>
-        iterator emplace_back(_Valty&&... _Val) {
+        iterator emplace_back(_Valty&&... val_) {
             if (_maxItems < base::_n + 1) {
                 grow(1);
             }
             auto& item = base::_data[base::_n];
-            ::new (&item) Type(std::forward<_Valty>(_Val)...);
+            ::new (&item) Type(std::forward<_Valty>(val_)...);
             ++base::_n;
             return iterator(&item);
         }
-        iterator push_back(const Type& _Val) {
-            return emplace_back(_Val);
+        iterator push_back(const Type& val_) {
+            return emplace_back(val_);
         }
-        iterator push_back(Type&& _Val) {
-            return emplace_back(std::move(_Val));
+        iterator push_back(Type&& val_) {
+            return emplace_back(std::move(val_));
         }
 
         //void erase(int index) {
@@ -877,9 +876,9 @@ namespace intercept::types {
         //    item.~Type();
         //    memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
         //}
-        void erase(const_iterator element) {
-            if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
-            const size_t index = std::distance(base::cbegin(), element);
+        void erase(const_iterator element_) {
+            if (element_ < base::begin() || element_ > base::end()) throw std::runtime_error("Invalid Iterator");
+            const size_t index = std::distance(base::cbegin(), element_);
             if (static_cast<int>(index) > base::_n) return;
             auto item = (*this)[index];
             item.~Type();
@@ -891,17 +890,17 @@ namespace intercept::types {
             --base::_n;
         }
 
-        void erase(const_iterator first, const_iterator last) {
-            if (first > last || first < base::begin() || last > base::end()) throw std::runtime_error("Invalid Iterator");
-            const size_t firstIndex = std::distance(base::cbegin(), first);
-            const size_t lastIndex = std::distance(base::cbegin(), last);
-            const size_t range = std::distance(first, last);
+        void erase(const_iterator first_, const_iterator last_) {
+            if (first_ > last_ || first_ < base::begin() || last_ > base::end()) throw std::runtime_error("Invalid Iterator");
+            const size_t firstIndex = std::distance(base::cbegin(), first_);
+            const size_t lastIndex = std::distance(base::cbegin(), last_);
+            const size_t range = std::distance(first_, last_);
 
-            for (int index = firstIndex; index < lastIndex; index++) {
+            for (int index = firstIndex; index < lastIndex; ++index) {
                 auto item = (*this)[index];
                 item.~Type();
             }
-            if (last != end()) {
+            if (last_ != end()) {
             #ifdef __GNUC__
                 memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
             #else
@@ -911,11 +910,11 @@ namespace intercept::types {
             base::_n -= range;
         }
 
-        void erase(uint32_t index, uint32_t count = 1) {
-            if (count == 1)
-                erase(begin() + index);
-            else if (count > 1)
-                erase(begin() + index, begin() + index + (count - 1));
+        void erase(const uint32_t index_, const uint32_t count_ = 1) {
+            if (count_ == 1)
+                erase(begin() + index_);
+            else if (count_ > 1)
+                erase(begin() + index_, begin() + index_ + (count_ - 1));
         }
 
         //This is sooo not threadsafe!
@@ -949,11 +948,11 @@ namespace intercept::types {
             _maxItems = 0;
         }
 
-        bool operator==(rv_array<Type> other) {
-            if (other._n != base::_n || ((base::_data == nullptr || other._data == nullptr) && base::_data != other._data))
+        bool operator==(rv_array<Type> other_) {
+            if (other_._n != base::_n || ((base::_data == nullptr || other_._data == nullptr) && base::_data != other_._data))
                 return false;
             auto index = 0;
-            for (auto& it : other) {
+            for (auto& it : other_) {
                 if ((*this[index]) != it)
                     return false;
                 ++index;
@@ -965,56 +964,56 @@ namespace intercept::types {
     template <class Type>
     struct find_key_array_traits {
         using key_type = const Type&;
-        static bool equals(key_type a, key_type b) { return a == b; }
-        static key_type get_key(const Type &a) { return a; }
+        static bool equals(key_type a_, key_type b_) { return a_ == b_; }
+        static key_type get_key(const Type &a_) { return a_; }
     };
 
-    template<class Type, class traits = find_key_array_traits<Type>>
+    template<class Type, class Traits = find_key_array_traits<Type>>
     class find_key_array : public auto_array<Type> {
         using base = auto_array<Type>;
-        using key_type = typename traits::key_type;
+        using key_type = typename Traits::key_type;
     public:
-        void delete_at(uint32_t index) { base::erase(index, 1); }
-        void delete_at(uint32_t index, uint32_t count) { base::erase(index, count); }
-        bool delete_by_key(key_type key) {
-            int index = find_by_key(key);
+        void delete_at(uint32_t index_) { base::erase(index_, 1); }
+        void delete_at(uint32_t index_, uint32_t count_) { base::erase(index_, count_); }
+        bool delete_by_key(key_type key_) {
+            const int index = find_by_key(key_);
             if (index < 0) return false;
             delete_at(index);
             return true;
         }
 
-        void delete_all_by_key(key_type key) {
-            base::erase(std::remove_if(base::begin(), base::end(), [key](const Type& el) {
-                return traits::equals(traits::get_key(el), key);
+        void delete_all_by_key(key_type key_) {
+            base::erase(std::remove_if(base::begin(), base::end(), [key_](const Type& el) {
+                return Traits::equals(Traits::get_key(el), key_);
             }), base::end());
         }
 
-        std::optional<uint32_t> find(const Type& elem) const {
-            return find_by_key(traits::get_key(elem));
+        std::optional<uint32_t> find(const Type& elem_) const {
+            return find_by_key(Traits::get_key(elem_));
         }
-        std::optional<uint32_t> find_by_key(key_type key) const {
+        std::optional<uint32_t> find_by_key(key_type key_) const {
             for (int i = 0; i < base::Size(); i++)
-                if (traits::equals(traits::get_key(base::get(i)), key)) return i;
+                if (Traits::equals(Traits::get_key(base::get(i)), key_)) return i;
             return {};
         }
 
-        std::optional<uint32_t> push_back_unique(const Type& src) {
-            if (find(src)) return -1;
-            return this->push_back(src);
+        std::optional<uint32_t> push_back_unique(const Type& src_) {
+            if (find(src_)) return -1;
+            return this->push_back(src_);
         }
 
-        uint32_t find_or_push_back(const Type& src) {
-            auto index = find(src);
+        uint32_t find_or_push_back(const Type& src_) {
+            auto index = find(src_);
             if (index) return index;
-            return this->push_back(src);
+            return this->push_back(src_);
         }
     };
 
     template <class Type>
     struct reference_array_find_key_array_traits {
         using key_type = const Type&;
-        static bool equals(key_type a, key_type b) { return a == b; }
-        static key_type get_key(const Type &a) { return a.get(); }
+        static bool equals(key_type a_, key_type b_) { return a_ == b_; }
+        static key_type get_key(const Type &a_) { return a_.get(); }
     };
 
     template <class Type>
@@ -1024,23 +1023,23 @@ namespace intercept::types {
     public:
         using base::delete_at;
 
-        bool delete_at(const Type* el) { return base::delete_by_key(el); }
-        bool delete_at(const ref<Type>& src) const { return base::delete_by_key(traits::get_key(src)); }
+        bool delete_at(const Type* el_) { return base::delete_by_key(el_); }
+        bool delete_at(const ref<Type>& src_) const { return base::delete_by_key(traits::get_key(src_)); }
 
 
-        bool find(const Type* el) { return base::find_by_key(el); }
-        bool find(const ref<Type>& src) const { return base::find_by_key(traits::get_key(src)); }
+        bool find(const Type* el_) { return base::find_by_key(el_); }
+        bool find(const ref<Type>& src_) const { return base::find_by_key(traits::get_key(src_)); }
     };
 
 
 
-    static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
+    static unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
         while (*key) {
             hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
         }
         return hashValue;
     }
-    static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) noexcept {
+    static unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) noexcept {
         while (*key) {
             hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
         }
@@ -1056,7 +1055,7 @@ namespace intercept::types {
         }
     };
 
-    struct map_string_to_class_trait_caseinsensitive : public map_string_to_class_trait {
+    struct map_string_to_class_trait_caseinsensitive : map_string_to_class_trait {
         static unsigned int hash_key(const char * key) noexcept {
             return rv_map_hash_string_case_insensitive(key);
         }
@@ -1094,12 +1093,12 @@ namespace intercept::types {
                 }
             }
         public:
-            iterator(const map_string_to_class<Type, Container, Traits> &base) {
-                _table = 0; _item = 0; _map = &base;
+            iterator(const map_string_to_class<Type, Container, Traits> &base_) {
+                _table = 0; _item = 0; _map = &base_;
                 get_next();
             }
-            iterator(const map_string_to_class<Type, Container, Traits> &base, bool) { //Creates end Iterator
-                _item = 0; _map = &base;
+            iterator(const map_string_to_class<Type, Container, Traits> &base_, bool) { //Creates end Iterator
+                _item = 0; _map = &base_;
                 _table = number_of_tables();
             }
             iterator& operator++ () {
@@ -1148,66 +1147,65 @@ namespace intercept::types {
         map_string_to_class() {}
 
         template <class Func>
-        void for_each(Func func) const {
+        void for_each(Func func_) const {
             if (!_table || !_count) return;
             for (int i = 0; i < _tableCount; i++) {
                 const Container &container = _table[i];
                 for (int j = 0; j < container.count(); j++) {
-                    func(container[j]);
+                    func_(container[j]);
                 }
             }
         }
 
         template <class Func>
-        void for_each_backwards(Func func) const {
+        void for_each_backwards(Func func_) const {
             if (!_table || !_count) return;
             for (int i = _tableCount - 1; i >= 0; i--) {
                 const Container &container = _table[i];
                 for (int j = container.count() - 1; j >= 0; j--) {
-                    func(container[j]);
+                    func_(container[j]);
                 }
             }
         }
 
-        const Type &get(const char* key) const {
+        const Type &get(const char* key_) const {
             if (!_table || !_count) return _null_entry;
-            int hashedKey = hash_key(key);
-            for (int i = 0; i < _table[hashedKey].count(); i++) {
-                const Type &item = _table[hashedKey][i];
-                if (Traits::compare_keys(item.get_map_key(), key))
+            const int hashed_key = hash_key(key_);
+            for (int i = 0; i < _table[hashed_key].count(); i++) {
+                const Type &item = _table[hashed_key][i];
+                if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
             }
             return _null_entry;
         }
 
-        Container* get_table_for_key(const char* key) {
+        Container* get_table_for_key(const char* key_) {
             if (!_table || !_count) return nullptr;
-            int hashedKey = hash_key(key);
-            return &_table[hashedKey];
+            const int hashed_key = hash_key(key_);
+            return &_table[hashed_key];
         }
 
-        Type &get(const char* key) {
+        Type &get(const char* key_) {
             if (!_table || !_count) return _null_entry;
-            int hashedKey = hash_key(key);
-            for (size_t i = 0; i < _table[hashedKey].count(); i++) {
-                Type &item = _table[hashedKey][i];
-                if (Traits::compare_keys(item.get_map_key(), key))
+            const int hashed_key = hash_key(key_);
+            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
+                Type &item = _table[hashed_key][i];
+                if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
             }
             return _null_entry;
         }
 
-        static bool is_null(const Type &value) { return &value == &_null_entry; }
+        static bool is_null(const Type &value_) { return &value_ == &_null_entry; }
 
-        bool has_key(const char* key) const {
-            return !is_null(get(key));
+        bool has_key(const char* key_) const {
+            return !is_null(get(key_));
         }
 
-    public:
         int count() const { return _count; }
     protected:
-        int hash_key(const char* key) const {
-            return Traits::hash_key(key) % _tableCount;
+        int hash_key(const char* key_) const {
+            return Traits::hash_key(key_) % _tableCount;
         }
     };
 

@@ -181,7 +181,7 @@ namespace intercept {
 
         std::optional<vector2> world_to_screen(const vector3 &pos_agl_) {
             game_value result = host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (static_cast<game_data_array *>(result.data.getRef())->length() == 2)
+            if (static_cast<game_data_array *>(result.data.get())->length() == 2)
                 return game_value(result);
             return {};
         }

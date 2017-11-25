@@ -29,7 +29,7 @@ namespace intercept {
             stop();
             _worker.join();
             return true;
-        };
+        }
     
     protected:
         bool _initiated;

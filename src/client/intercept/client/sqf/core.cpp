@@ -84,9 +84,9 @@ namespace intercept {
  
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
 
-            auto data = static_cast<game_data_code*>(wrapper.data.getRef());
+            auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            auto ns = missionNamespace.data.getRef();
+            auto ns = missionNamespace.data.get();
             static r_string fname = "interceptCall"sv;
 
             sv("_i135_ar_", args_);
@@ -100,9 +100,9 @@ namespace intercept {
             auto ef = host::functions.get_engine_allocator()->evaluate_func;
             if (!ef) return call2(code_);
 
-            auto data = static_cast<game_data_code*>(code_.data.getRef());
+            auto data = static_cast<game_data_code*>(code_.data.get());
 
-            auto ns = mission_namespace().data.getRef();
+            auto ns = mission_namespace().data.get();
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return ret;

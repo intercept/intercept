@@ -55,7 +55,6 @@ namespace intercept {
             SUBGROUP,
             TEAM_MEMBER,
             TASK,
-            TASK,
             DIARY_RECORD,
             LOCATION,
             end
@@ -414,19 +413,19 @@ namespace intercept {
             virtual void set_readonly(bool) {} //No clue what this does...
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
-            virtual void set_final(bool) {}; //Only on GameDataCode AFAIK
+            virtual void set_final(bool) {} //Only on GameDataCode AFAIK
         public: 
             virtual r_string to_string() const { return r_string(); }
-            virtual bool equals(const game_data *) const { return false; };
+            virtual bool equals(const game_data *) const { return false; }
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
         private:
-            virtual void placeholder() const {};
+            virtual void placeholder() const {}
             virtual bool can_serialize() { return false; }
 
 
-            int IAddRef() override { return add_ref(); };
-            int IRelease() override { return release(); };
+            int IAddRef() override { return add_ref(); }
+            int IRelease() override { return release(); }
         public:                               //#TODO make protected and give access to param_archive
             virtual serialization_return serialize(param_archive& ar) {
                 if (ar._isExporting) {
@@ -490,7 +489,7 @@ namespace intercept {
             game_value(game_data* val_) noexcept {
                 set_vtable(__vptr_def);
                 data = val_;
-            };
+            }
             game_value(float val_);
             game_value(int val_);
             game_value(bool val_);
@@ -573,7 +572,7 @@ namespace intercept {
             serialization_return serialize(param_archive& ar) override;
 
             ref<game_data> data;
-            [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
+            [[deprecated]] static void* operator new(const std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
         #ifndef __linux__
         protected:
@@ -604,18 +603,18 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             static rv_pool_allocator* pool_alloc_base;
-            game_data_number();
-            game_data_number(float val_);
+            game_data_number() noexcept;
+            game_data_number(float val_) noexcept;
             game_data_number(const game_data_number &copy_);
-            game_data_number(game_data_number &&move_);
+            game_data_number(game_data_number &&move_) noexcept;
             game_data_number& operator = (const game_data_number &copy_);
-            game_data_number& operator = (game_data_number &&move_);
+            game_data_number& operator = (game_data_number &&move_) noexcept;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
             size_t hash() const {
                 return __internal::pairhash(type_def, number);
-            };
+            }
             //protected:
             //    static thread_local game_data_pool<game_data_number> _data_pool;
         };
@@ -628,13 +627,13 @@ namespace intercept {
             game_data_bool();
             game_data_bool(bool val_);
             game_data_bool(const game_data_bool &copy_);
-            game_data_bool(game_data_bool &&move_);
+            game_data_bool(game_data_bool &&move_) noexcept;
             game_data_bool& operator = (const game_data_bool &copy_);
-            game_data_bool& operator = (game_data_bool &&move_);
+            game_data_bool& operator = (game_data_bool &&move_) noexcept;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
-            size_t hash() const { return __internal::pairhash(type_def, val); };
+            size_t hash() const { return __internal::pairhash(type_def, val); }
             //protected:
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
@@ -650,9 +649,9 @@ namespace intercept {
             game_data_array(const std::initializer_list<game_value> &init_);
             game_data_array(auto_array<game_value> &&init_);
             game_data_array(const game_data_array &copy_);
-            game_data_array(game_data_array &&move_);
+            game_data_array(game_data_array &&move_) noexcept;
             game_data_array& operator = (const game_data_array &copy_);
-            game_data_array& operator = (game_data_array &&move_);
+            game_data_array& operator = (game_data_array &&move_) noexcept;
             ~game_data_array();
             auto_array<game_value> data;
             auto length() { return data.count(); }
@@ -666,16 +665,16 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             static rv_pool_allocator* pool_alloc_base;
-            game_data_string();
+            game_data_string() noexcept;
             game_data_string(const std::string &str_);
             game_data_string(const r_string &str_);
             game_data_string(const game_data_string &copy_);
-            game_data_string(game_data_string &&move_);
+            game_data_string(game_data_string &&move_) noexcept;
             game_data_string& operator = (const game_data_string &copy_);
-            game_data_string& operator = (game_data_string &&move_);
+            game_data_string& operator = (game_data_string &&move_) noexcept;
             ~game_data_string();
             r_string raw_string;
-            size_t hash() const { return __internal::pairhash(type_def, raw_string); };
+            size_t hash() const { return __internal::pairhash(type_def, raw_string); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             //protected:
@@ -689,8 +688,8 @@ namespace intercept {
             game_data_group() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, group); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, group); }
             void *group{};
         };
 
@@ -701,8 +700,8 @@ namespace intercept {
             game_data_config() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, config); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, config); }
             void *config{};
             auto_array<r_string> path;
         };
@@ -714,8 +713,8 @@ namespace intercept {
             game_data_control() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, control); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, control); }
             void *control{};
         };
 
@@ -726,8 +725,8 @@ namespace intercept {
             game_data_display() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, display); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, display); }
             void *display{};
         };
 
@@ -738,8 +737,8 @@ namespace intercept {
             game_data_location() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, location); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, location); }
             void *location{};
         };
 
@@ -750,7 +749,7 @@ namespace intercept {
             game_data_script() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
+            }
             size_t hash() const { return __internal::pairhash(type_def, script); }
             void *script{};
         };
@@ -762,8 +761,8 @@ namespace intercept {
             game_data_side() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, side); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, side); }
             void *side{};
         };
 
@@ -774,8 +773,8 @@ namespace intercept {
             game_data_rv_text() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, rv_text); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, rv_text); }
             void *rv_text{};
         };
 
@@ -786,8 +785,8 @@ namespace intercept {
             game_data_team_member() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, team); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, team); }
             void *team{};
         };
 
@@ -798,8 +797,8 @@ namespace intercept {
             game_data_rv_namespace() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, rv_namespace); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, rv_namespace); }
             void *rv_namespace{};
         };
 
@@ -836,8 +835,8 @@ namespace intercept {
             game_data_code() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, code_string); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, code_string); }
             r_string code_string;
             ref<compact_array<ref<game_instruction>>> instructions;
             uint32_t _dummy1;
@@ -852,8 +851,8 @@ namespace intercept {
             game_data_object() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); }
             struct visualState {
                 //will be false if you called stuff on nullObj
                 bool valid{ false };
@@ -992,7 +991,7 @@ namespace intercept {
         class registered_sqf_function {
             friend class sqf_functions;
         public:
-            constexpr registered_sqf_function() noexcept {};
+            constexpr registered_sqf_function() noexcept {}
             explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;
             void clear() noexcept { _function = nullptr; }
         private:

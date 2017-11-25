@@ -29,11 +29,11 @@ namespace intercept {
         }
 
         bool internal_object::operator<(const internal_object& compare_) const {
-            return static_cast<game_data_object *>(data.getRef())->object < static_cast<game_data_object *>(compare_.data.getRef())->object;
+            return static_cast<game_data_object *>(data.get())->object < static_cast<game_data_object *>(compare_.data.get())->object;
         }
 
         bool internal_object::operator>(const internal_object& compare_) const {
-            return static_cast<game_data_object *>(data.getRef())->object > static_cast<game_data_object *>(compare_.data.getRef())->object;
+            return static_cast<game_data_object *>(data.get())->object > static_cast<game_data_object *>(compare_.data.get())->object;
         }
 
 #define RV_GENERIC_OBJECT_DEF(type)         type::type() : internal_object() {}\

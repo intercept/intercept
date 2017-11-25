@@ -37,7 +37,7 @@ if(![string]::IsNullOrEmpty($env:APPVEYOR_REPO_TAG_NAME)) {
 
 # Zip host artifact and publish it
 7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_host$zipExtension.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\@intercept" | Out-Null
-Write-Host "Zipped dev files"
+Write-Host "Zipped host files"
 Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_host$zipExtension.zip"  
 
 # Zip dev artifact and publish it

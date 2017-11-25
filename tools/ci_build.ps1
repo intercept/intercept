@@ -20,21 +20,27 @@ Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\interc
 Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
 
 # Pack host addon
-Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_w64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons\intercept_core.pbo`""
+Write-Host "Packing intercept_core.pbo"
+Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_w64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons\intercept_core.pbo`"" -Wait
 
 # Copy host addon to host addon folder
 Copy-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons\intercept_core.pbo $env:APPVEYOR_BUILD_FOLDER\artifacts\@intercept\addons
 
 # Define zip extension when commit tag is present
 $zipExtension = ""
-if($env:APPVEYOR_REPO_TAG) {
+if(![string]::IsNullOrEmpty($env:APPVEYOR_REPO_TAG_NAME)) {
+    Write-Host "Tag name is present: $env:APPVEYOR_REPO_TAG_NAME"
     $zipExtension = "_$env:APPVEYOR_REPO_TAG_NAME"
+} else {
+    Write-Host "Tag name is not present, not including it into artifacts"
 }
 
 # Zip host artifact and publish it
-7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_host$zipExtension.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\@intercept"
+7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_host$zipExtension.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\@intercept" | Out-Null
 Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_host$zipExtension.zip"  
+Write-Host "Zipped host files"
 
 # Zip dev artifact and publish it
-7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_dev$zipExtension.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
+7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_dev$zipExtension.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept" | Out-Null
 Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept_dev$zipExtension.zip"  
+Write-Host "Zipped dev files"

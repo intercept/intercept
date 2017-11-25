@@ -45,8 +45,11 @@ build:
   verbosity: minimal
 
 build_script:
-  - msbuild vcproj
-  - msbuild vcproj64
+  - cd vcproj
+  - msbuild Intercept.sln
+  - cd ..\vcproj64
+  - msbuild Intercept.sln
+  - cd ..
   
 on_success:
   - ps: .\tools\ci_build.ps1

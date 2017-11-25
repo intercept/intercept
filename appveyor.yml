@@ -10,27 +10,30 @@ branches:
 configuration:
 - RelWithDebInfo
 
-environment:
-  matrix:
-    - platform: Win32
-      vcproj_dir: vcproj
-      vcproj_file: vcproj\Intercept.sln
-      cmake_gen: "Visual Studio 15 2017"
-      cmake_args: ""
+#environment:
+#  matrix:
+#    - platform: Win32
+#      vcproj_dir: vcproj
+#      vcproj_file: vcproj\Intercept.sln
+#      cmake_gen: "Visual Studio 15 2017"
+#      cmake_args: ""
 
-    - platform: x64
-      vcproj_dir: vcproj64
-      vcproj_file: vcproj64\Intercept.sln
-      cmake_gen: "Visual Studio 15 2017 Win64"
-      cmake_args: "-DUSE_64BIT_BUILD=ON"
+#    - platform: x64
+#      vcproj_dir: vcproj64
+#      vcproj_file: vcproj64\Intercept.sln
+#      cmake_gen: "Visual Studio 15 2017 Win64"
+#      cmake_args: "-DUSE_64BIT_BUILD=ON"
 
 matrix:
   fast_finish: true
 
 before_build:
   - mkdir build
-  - cd %vcproj_dir%
-  - cmake .. -G "%cmake_gen%" %cmake_args%
+  - cd vcproj
+  - cmake .. -G "Visual Studio 15 2017"
+  - cd ..
+  - cd vcproj64
+  - cmake .. -G "Visual Studio 15 2017" "-DUSE_64BIT_BUILD=ON"
   - cd ..
 
 build:
@@ -38,30 +41,12 @@ build:
   verbosity: minimal
 
 build_script:
-  - msbuild "%vcproj_file%"
+  - msbuild vcproj
+  - msbuild vcproj64
   
 on_success:
-  - ps: |
-      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include -type directory
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\src\client\headers\* $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\include -recurse
-      
-      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib -type directory
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept_client\RelWithDebInfo\intercept_client.lib $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib
-      
-      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib64 -type directory
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept_client\RelWithDebInfo\intercept_client.lib $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\client\lib64
-      
-      New-Item $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept\addons -type directory
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept\RelWithDebInfo\intercept.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win32\intercept\RelWithDebInfo\intercept.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.dll $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
-      Copy-Item $env:APPVEYOR_BUILD_FOLDER\build\win64\intercept\RelWithDebInfo\intercept_x64.pdb $env:APPVEYOR_BUILD_FOLDER\artifacts\intercept\host\@intercept
-      
-      Start-Process -FilePath "$env:APPVEYOR_BUILD_FOLDER\tools\armake_w64.exe" -ArgumentList "build `"$env:APPVEYOR_BUILD_FOLDER\rv\addons\core`" `"$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept`""
-      
-      7z a "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip" "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept"
-      Push-AppveyorArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\intercept.zip"  
-  
+  - ps: .\tools\ci_build.ps1
+
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib
   name: win32_client_lib

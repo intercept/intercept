@@ -1,4 +1,4 @@
 * text eol=crlf
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg binary
-*.exe filter=lfs diff=lfs merge=lfs -text
+tools/armake_w64.exe filter=lfs diff=lfs merge=lfs -text

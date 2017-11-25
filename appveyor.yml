@@ -49,7 +49,7 @@ build_script:
   - msbuild vcproj64\Intercept.sln
   
 on_success:
-  - ps: .\tools\ci_build.ps1
+  - ps: .\tools\ci_publish_artifacts.ps1
 
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib

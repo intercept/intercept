@@ -150,7 +150,7 @@ namespace intercept {
                     attributes.push_back(std::get<0>(it.second));
                 else
                     attributes.push_back(std::get<1>(it.second).get());
-            };
+            }
 
             return host::functions.invoke_raw_binary(__sqf::binary__setattributes__text_string__array__ret__text, text_, std::move(attributes));
         }

@@ -1544,7 +1544,7 @@ namespace intercept {
 
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_) {
             game_value args({static_cast<float>(index_),
-                             (tooltip_)});
+                             tooltip_});
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsettooltip__control__array__ret__nothing, control_, args);
         }

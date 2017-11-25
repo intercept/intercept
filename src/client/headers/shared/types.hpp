@@ -353,7 +353,7 @@ namespace intercept {
             }
         };
 
-        struct unary_operator : public _refcount_vtable_dummy {
+        struct unary_operator : _refcount_vtable_dummy {
             unary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg_type;
@@ -365,7 +365,7 @@ namespace intercept {
             unary_operator *op;
         };
 
-        struct binary_operator : public _refcount_vtable_dummy {
+        struct binary_operator : _refcount_vtable_dummy {
             binary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg1_type;
@@ -378,7 +378,7 @@ namespace intercept {
             binary_operator *op;
         };
 
-        struct nular_operator : public _refcount_vtable_dummy {
+        struct nular_operator : _refcount_vtable_dummy {
             nular_function   *procedure_addr;
             sqf_script_type   return_type;
         };
@@ -655,7 +655,7 @@ namespace intercept {
             ~game_data_array();
             auto_array<game_value> data;
             auto length() { return data.count(); }
-            size_t hash() const { return __internal::pairhash(type_def, data.hash()); };
+            size_t hash() const { return __internal::pairhash(type_def, data.hash()); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };

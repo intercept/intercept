@@ -304,7 +304,6 @@ namespace intercept {
             if (fog_decay_.has_value() && fog_base_.has_value())
                 host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, {fog_value_, *fog_decay_, *fog_base_});
             host::functions.invoke_raw_binary(__sqf::binary__setfog__scalar__scalar_array__ret__nothing, time_, fog_value_);
-            return;
         }
 
         int get_terrain_grid() {

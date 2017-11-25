@@ -220,6 +220,10 @@ namespace intercept {
         */
         sqf_register_functions _sqf_register_funcs;
 
+        __internal::game_state* game_state;
+        uintptr_t evaluate_script_function;
+        uintptr_t varset_function;
+
         bool _attached;
         bool _patched;
     };

@@ -648,7 +648,7 @@ namespace intercept::client {
 
 
     /// @private
-    extern std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value)>>, EHIdentifier_hasher> customCallbackMap;
+    extern std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value_parameter)>>, EHIdentifier_hasher> customCallbackMap;
 
 
     /**
@@ -658,6 +658,6 @@ namespace intercept::client {
     * @return A wrapper that should be kept alive as long as the Callback should be active
     * @ingroup eh_bind
     */
-    [[nodiscard]] std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<types::game_value(types::game_value)> fnc);
+    [[nodiscard]] std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<types::game_value(types::game_value_parameter)> fnc);
 
 }  // namespace intercept::client                                                                                    

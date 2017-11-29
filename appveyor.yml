@@ -20,7 +20,7 @@ before_build:
   - cmake .. -G "Visual Studio 15 2017"
   - cd ..
   - cd vcproj64
-  - cmake .. -G "Visual Studio 15 2017" "-DUSE_64BIT_BUILD=ON"
+  - cmake .. -G "Visual Studio 15 2017 Win64" "-DUSE_64BIT_BUILD=ON"
   - cd ..
 
 build:

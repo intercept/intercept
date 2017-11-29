@@ -28,7 +28,7 @@ build:
   verbosity: minimal
 
 build_script:
-  - msbuild vcproj\Intercept.sln /m /VERBOSE
+  - msbuild vcproj\Intercept.sln /m /v:diag
   - msbuild vcproj64\Intercept.sln /m 
   
 on_success:

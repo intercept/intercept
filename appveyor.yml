@@ -1,6 +1,10 @@
 version: "{build}"
 
-image: Visual Studio 2017 Preview
+image: Visual Studio 2017
+
+# Troubleshooting
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 branches:
   only:
@@ -10,27 +14,13 @@ branches:
 configuration:
 - RelWithDebInfo
 
-environment:
-  matrix:
-    - platform: Win32
-      vcproj_dir: vcproj
-      vcproj_file: vcproj\Intercept.sln
-      cmake_gen: "Visual Studio 15 2017"
-      cmake_args: ""
-
-    - platform: x64
-      vcproj_dir: vcproj64
-      vcproj_file: vcproj64\Intercept.sln
-      cmake_gen: "Visual Studio 15 2017 Win64"
-      cmake_args: "-DUSE_64BIT_BUILD=ON"
-
-matrix:
-  fast_finish: true
-
 before_build:
   - mkdir build
-  - cd %vcproj_dir%
-  - cmake .. -G "%cmake_gen%" %cmake_args%
+  - cd vcproj
+  - cmake .. -G "Visual Studio 15 2017"
+  - cd ..
+  - cd vcproj64
+  - cmake .. -G "Visual Studio 15 2017 Win64" "-DUSE_64BIT_BUILD=ON"
   - cd ..
 
 build:
@@ -38,8 +28,12 @@ build:
   verbosity: minimal
 
 build_script:
-  - msbuild "%vcproj_file%"
+  - msbuild vcproj\Intercept.sln /m
+  - msbuild vcproj64\Intercept.sln /m 
   
+on_success:
+  - ps: .\tools\ci_publish_artifacts.ps1
+
 artifacts:
 - path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib
   name: win32_client_lib

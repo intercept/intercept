@@ -240,6 +240,12 @@ namespace intercept {
                 return *this;
             }
 
+            void swap(ref &other) {
+                auto temp = other._ref;
+                other._ref = _ref;
+                _ref = temp;
+            }
+
             constexpr bool is_null() const noexcept { return _ref == nullptr; }
             void free() noexcept {
                 if (!_ref) return;
@@ -363,8 +369,7 @@ namespace intercept {
             //}
             explicit r_string(compact_array<char>* dat) noexcept : _ref(dat) {}
             r_string(r_string&& _move) noexcept {
-                _ref = _move._ref;
-                _move._ref = nullptr;
+                _ref.swap(_move._ref);
             }
             r_string(const r_string& _copy) {
                 _ref = _copy._ref;
@@ -373,8 +378,7 @@ namespace intercept {
             r_string& operator = (r_string&& _move) noexcept {
                 if (this == &_move)
                     return *this;
-                _ref = _move._ref;
-                _move._ref = nullptr;
+                _ref.swap(_move._ref);
                 return *this;
             }
 

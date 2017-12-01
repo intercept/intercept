@@ -414,7 +414,7 @@ namespace intercept {
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     #endif
-
+        _allocator.gameState = state_addr_;
 
     #if _WIN32
         //via profile context "scrpt"
@@ -528,8 +528,8 @@ namespace intercept {
     //    if (checkValid(game_state_addr)) return game_state_addr;
 
         for (uintptr_t i = 0; i < 0x300; i += sizeof(uintptr_t)) {
-            bool isValid = checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i));
-            if (isValid) return *reinterpret_cast<uintptr_t *>(stack_base + i);
+            const bool is_valid = checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i));
+            if (is_valid) return *reinterpret_cast<uintptr_t *>(stack_base + i);
         }
 
         return 0x0;

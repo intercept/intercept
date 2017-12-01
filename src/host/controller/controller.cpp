@@ -126,7 +126,7 @@ namespace intercept {
         std::list<std::string_view> sorted_binary_list;
         for (auto binary : binary_list) {
             sorted_binary_list.push_back(binary.first);
-        };
+        }
         sorted_binary_list.sort();
 
         for (auto binary_entry : sorted_binary_list) {
@@ -164,7 +164,7 @@ namespace intercept {
         std::list<std::string_view> sorted_nular_list;
         for (auto nular : nular_list) {
             sorted_nular_list.push_back(nular.first);
-        };
+        }
         sorted_nular_list.sort();
 
         for (auto nular_entry : sorted_nular_list) {

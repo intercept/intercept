@@ -79,7 +79,6 @@ switch (_returnType) { \
 }
 
 void registered_sqf_func_wrapper::setUnused() noexcept {
-    return;
     //switch (_type) {
     //    case functionType::sqf_nular:
     //        if (_nular && _nular->_operator)
@@ -191,7 +190,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._description = description;
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<binary_operator>::createSingle();
+    op._operator = rv_allocator<binary_operator>::create_single();
     op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
     op._operator->return_type = retType;
@@ -281,7 +280,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._description = description;
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<unary_operator>::createSingle();
+    op._operator = rv_allocator<unary_operator>::create_single();
     op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
     op._operator->return_type = retType;
@@ -348,7 +347,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     op._description = description;
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<nular_operator>::createSingle();
+    op._operator = rv_allocator<nular_operator>::create_single();
     op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
     op._operator->return_type = retType;
@@ -455,7 +454,7 @@ std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::regis
     if (name.length() > 128) throw std::length_error("intercept::sqf_functions::registerType name can maximum be 128 chars long");
     auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
 
-    auto newType = rv_allocator<script_type_info>::createSingle(
+    auto newType = rv_allocator<script_type_info>::create_single(
     #ifdef __linux__
         name,cf,localizedName,localizedName
     #else

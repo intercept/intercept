@@ -181,7 +181,7 @@ namespace intercept {
 
         std::optional<vector2> world_to_screen(const vector3 &pos_agl_) {
             game_value result = host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (static_cast<game_data_array *>(result.data.getRef())->length() == 2)
+            if (static_cast<game_data_array *>(result.data.get())->length() == 2)
                 return game_value(result);
             return {};
         }
@@ -494,16 +494,16 @@ namespace intercept {
 
         float distance(object start_, vector3 end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        };
+        }
         float distance(object start_, object end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        };
+        }
         float distance(vector3 start_, vector3 end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        };
+        }
         float distance(vector3 start_, object end_) {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
-        };
+        }
 
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_) {
             auto_array<game_value> params_right;
@@ -530,7 +530,7 @@ namespace intercept {
                 return std::vector<vector3>({host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_))});
             } else { 
                 return __helpers::__convert_to_vector<vector3>(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
-            };
+            }
         }
 
         vector3 vector_model_to_world(const object& object_, vector3 modelDir_) {

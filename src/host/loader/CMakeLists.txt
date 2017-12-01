@@ -4,7 +4,7 @@ file(GLOB LOADER_SOURCES *.h *.hpp *.c *.cpp)
 
 SOURCE_GROUP("main" FILES ${LOADER_SOURCES})
 
-file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../../client/headers/shared/vector.hpp ../../client/headers/shared/types.hpp ../../client/intercept/shared/types.cpp)
+file(GLOB INTERCEPT_CLIENT_SHARED_SOURCES  ../../client/headers/shared/vector.hpp ../../client/headers/shared/types.hpp ../../client/headers/shared/containers.hpp ../../client/intercept/shared/types.cpp ../../client/intercept/shared/containers.cpp)
 
 SOURCE_GROUP("intercept_includes\\shared" FILES ${INTERCEPT_CLIENT_SHARED_SOURCES})
 

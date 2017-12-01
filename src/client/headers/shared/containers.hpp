@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <optional>
+#include <cstring>
 
 namespace intercept::types {
     
@@ -202,7 +203,11 @@ namespace intercept::types {
             if (old) old->release();//decrement reference and delete object if refcount == 0
             return *this;
         }
-
+        void swap(ref &other_) noexcept {
+            auto temp = other_._ref;
+            other_._ref = _ref;
+            _ref = temp;
+        }
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
         void free() noexcept {
             if (!_ref) return;
@@ -365,8 +370,7 @@ namespace intercept::types {
         //}
         explicit r_string(compact_array<char>* dat_) noexcept : _ref(dat_) {}
         r_string(r_string&& move_) noexcept {
-            _ref = move_._ref;
-            move_._ref = nullptr;
+            _ref.swap(move_._ref);
         }
         r_string(const r_string& copy_) {
             _ref = copy_._ref;
@@ -375,8 +379,7 @@ namespace intercept::types {
         r_string& operator = (r_string&& move_) noexcept {
             if (this == &move_)
                 return *this;
-            _ref = move_._ref;
-            move_._ref = nullptr;
+            _ref.swap(move_._ref);
             return *this;
         }
 
@@ -428,7 +431,7 @@ namespace intercept::types {
             if (!data())  return !other_ || !*other_; //empty?
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                other_, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
             return _strcmpi(data(), other_) == 0;
         #endif
@@ -440,7 +443,7 @@ namespace intercept::types {
             if (data() == other_.data()) return true;
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
             return _strcmpi(data(), other_.data()) == 0;
         #endif
@@ -452,7 +455,7 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
             return _strcmpi(data(), other_.data()) == 0;
         #endif
@@ -464,7 +467,7 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
         #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
             return _strcmpi(data(), other_.data()) == 0;
         #endif
@@ -510,7 +513,7 @@ namespace intercept::types {
         bool compare_case_sensitive(const char *other_) const {
         #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other, [](unsigned char l, unsigned char r) {return l == r; });
+                other_, [](unsigned char l, unsigned char r) {return l == r; });
         #else
             return strcmp(data(), other_) == 0;
         #endif
@@ -519,7 +522,7 @@ namespace intercept::types {
         bool compare_case_insensitive(const char *other_) const {//#TODO string_view variant with length checking
         #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
+                other_, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         #else
             return _stricmp(data(), other_) == 0;
         #endif
@@ -545,30 +548,30 @@ namespace intercept::types {
             return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
         }
 
-        r_string append(std::string_view _right) const {
+        r_string append(std::string_view right_) const {
             const auto my_length = length();
-            auto new_data = create(my_length + _right.length() + 1);//Space for terminating nullchar
+            auto new_data = create(my_length + right_.length() + 1);//Space for terminating nullchar
         #if __GNUC__
             std::copy_n(data(), my_length, new_data->data());
-            std::copy_n(_right.data(), _right.length(), new_data->data() + my_length);
+            std::copy_n(right_.data(), right_.length(), new_data->data() + my_length);
         #else
             memcpy_s(new_data->data(), new_data->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(new_data->data() + my_length, new_data->size() - my_length, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            memcpy_s(new_data->data() + my_length, new_data->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
         #endif
-            new_data->data()[my_length + _right.length()] = 0;
+            new_data->data()[my_length + right_.length()] = 0;
             return r_string(new_data);
         }
-        r_string& append_modify(std::string_view _right) {
+        r_string& append_modify(std::string_view right_) {
             const auto my_length = length();
-            auto newData = create(my_length + _right.length() + 1);//Space for terminating nullchar
+            auto newData = create(my_length + right_.length() + 1);//Space for terminating nullchar
         #if __GNUC__
             std::copy_n(data(), my_length, newData->data());
-            std::copy_n(_right.data(), _right.length(), newData->data() + my_length);
+            std::copy_n(right_.data(), right_.length(), newData->data() + my_length);
         #else
             memcpy_s(newData->data(), newData->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(newData->data() + my_length, newData->size() - my_length, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
+            memcpy_s(newData->data() + my_length, newData->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
         #endif
-            newData->data()[my_length + _right.length()] = 0;
+            newData->data()[my_length + right_.length()] = 0;
             _ref = newData;
             return *this;
         }
@@ -616,7 +619,7 @@ namespace intercept::types {
             if (len_ == 0 || *str == 0) return nullptr;
             compact_array<char> *string = compact_array<char>::create(len_ + 1);
         #if __GNUC__
-            std::copy_n(str, len, string->data());
+            std::copy_n(str, len_, string->data());
         #else
             strncpy_s(string->data(), string->size(), str, len_);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
         #endif

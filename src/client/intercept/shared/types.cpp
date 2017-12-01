@@ -477,7 +477,9 @@ namespace intercept {
             data = new game_data_number(val_);
         }
 
-        game_value::game_value(const int val_) : game_value(static_cast<float>(val_)) {}
+        game_value::game_value(int val_) : game_value(static_cast<float>(val_)) {}
+
+        game_value::game_value(size_t val_) : game_value(static_cast<float>(val_)) {}
 
         game_value::game_value(bool val_) {
             set_vtable(__vptr_def);

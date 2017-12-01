@@ -202,7 +202,11 @@ namespace intercept::types {
             if (old) old->release();//decrement reference and delete object if refcount == 0
             return *this;
         }
-
+        void swap(ref &other_) noexcept {
+            auto temp = other_._ref;
+            other_._ref = _ref;
+            _ref = temp;
+        }
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
         void free() noexcept {
             if (!_ref) return;
@@ -365,8 +369,7 @@ namespace intercept::types {
         //}
         explicit r_string(compact_array<char>* dat_) noexcept : _ref(dat_) {}
         r_string(r_string&& move_) noexcept {
-            _ref = move_._ref;
-            move_._ref = nullptr;
+            _ref.swap(move_._ref);
         }
         r_string(const r_string& copy_) {
             _ref = copy_._ref;
@@ -375,8 +378,7 @@ namespace intercept::types {
         r_string& operator = (r_string&& move_) noexcept {
             if (this == &move_)
                 return *this;
-            _ref = move_._ref;
-            move_._ref = nullptr;
+            _ref.swap(move_._ref);
             return *this;
         }
 

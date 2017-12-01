@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <optional>
+#include <cstring>
 
 namespace intercept::types {
     

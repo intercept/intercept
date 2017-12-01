@@ -18,7 +18,49 @@ namespace intercept::types {
     template<class Type>
     class rv_allocator : std::allocator<Type> {
     public:
+
+        using value_type = Type;
+
+        using pointer = value_type *;
+        using const_pointer = const value_type *;
+
+        using reference = value_type&;
+        using const_reference = const value_type&;
+
+        using size_type = size_t;
+        using difference_type = ptrdiff_t;
+
+        using propagate_on_container_move_assignment = std::true_type;
+        using is_always_equal = std::true_type;
+
+
+        template<class Other>
+        using rebind = rv_allocator<Other>;
+
+        template<class Other>
+        using rebind_alloc = rv_allocator<Other>;
+
+        template<class Other>
+        using rebind_traits = std::allocator_traits<rv_allocator<Other>>;
+
+        rv_allocator() {}
+        template<class Other>
+        rv_allocator(const rv_allocator<Other>&) {}
+        template<class Other>
+        rv_allocator(rv_allocator<Other>&&) {}
+
+       
+
         static void deallocate(Type* _Ptr, size_t = 0) {
+            return __internal::rv_allocator_deallocate_generic(_Ptr);
+        }
+
+        static void destroy(Type* _Ptr) {
+            _Ptr->~Type();
+        }
+
+        static void destroy_deallocate(Type* _Ptr, size_t = 0) {
+            destroy(_Ptr);
             return __internal::rv_allocator_deallocate_generic(_Ptr);
         }
         //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
@@ -177,6 +219,45 @@ namespace intercept::types {
         bool operator != (const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
         size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
     };
+
+
+    ///When this goes out of scope. The pointer is deleted. This takes ownership of the pointer
+    template<class Type>
+    class unique_ref {
+    protected:
+        mutable Type* _ref;
+    public:
+        unique_ref() { _ref = NULL; }
+        unique_ref(Type* source) {
+            _ref = source;
+        }
+        unique_ref(const unique_ref& other) {
+            _ref = other._ref;
+            other._ref = nullptr;//We take ownership
+        }
+        ~unique_ref() { clear(); }
+
+        void operator = (Type* other) {
+            if (_ref == other) return;
+            clear();
+            _ref = other;
+        }
+
+        void operator = (const unique_ref& other) {
+            if (other._ref == _ref) return;
+            clear();
+            _ref = other._ref;
+            other._ref = nullptr;//We take ownership
+        }
+
+        bool is_null() const { return _ref == nullptr; }
+        void clear() { if (_ref) delete _ref; _ref = nullptr; }
+        Type* operator -> () const { return _ref; }
+        operator Type* () const { return _ref; }
+        Type *get() const { return _ref; }
+    };
+
+
 
 #pragma endregion
 
@@ -674,8 +755,10 @@ namespace intercept::types {
             return _data[i_];
         }
         Type &operator [] (const size_t i_) { return get(i_); }
+        const Type &operator [] (const size_t i_) const { return get(i_); }
         Type *data() { return _data; }
         constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
+        constexpr size_t size() const noexcept { return static_cast<size_t>(_n); }
 
         iterator begin() { if (!_data) return iterator(); return iterator(&get(0)); }
         iterator end() { if (!_data) return iterator(); return iterator(&get(_n)); }
@@ -896,7 +979,7 @@ namespace intercept::types {
             const size_t lastIndex = std::distance(base::cbegin(), last_);
             const size_t range = std::distance(first_, last_);
 
-            for (int index = firstIndex; index < lastIndex; ++index) {
+            for (size_t index = firstIndex; index < lastIndex; ++index) {
                 auto item = (*this)[index];
                 item.~Type();
             }

@@ -382,6 +382,13 @@ namespace intercept {
         game_data_team_member::type_def = structure.first;
         game_data_team_member::data_type_def = structure.second;
 
+
+        ref<game_data> gd_nt(regInfo._types[static_cast<size_t>(GameDataType::NOTHING)]->_createFunction(nullptr));
+        structure = { gd_nt->get_vtable(), gd_nt->get_secondary_vtable() };
+        invoker::get().type_map[structure.first] = "NOTHING"sv;
+        invoker::get().type_structures["NOTHING"sv] = structure;
+        game_data_nothing::type_def = structure.first;
+        game_data_nothing::data_type_def = structure.second;
         //#TODO add nothing and Nil
 
 

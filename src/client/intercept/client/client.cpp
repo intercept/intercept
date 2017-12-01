@@ -115,9 +115,11 @@ namespace intercept {
             host::functions.get_type_structure("NAMESPACE"sv, type_def, data_type_def);
             game_data_rv_namespace::type_def = type_def;
             game_data_rv_namespace::data_type_def = data_type_def;
-
-
-
+            
+            host::functions.get_type_structure("NOTHING"sv, type_def, data_type_def);
+            game_data_nothing::type_def = type_def;
+            game_data_nothing::data_type_def = data_type_def;
+            
             host::functions.get_type_structure("GV"sv, type_def, data_type_def);
             intercept::types::__internal::set_game_value_vtable(type_def);
 

@@ -5,6 +5,13 @@
 #include <future>
 #include <sstream> //Debugging
 
+#if INTERCEPT_HOST_DLL
+#include "loader.hpp"
+#define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();
+#else
+#define GET_ENGINE_ALLOCATOR client::host::functions.get_engine_allocator()
+#endif
+
 namespace intercept {
     namespace __internal {
         /*
@@ -106,6 +113,9 @@ namespace intercept {
 
         uintptr_t game_data_rv_namespace::type_def;
         uintptr_t game_data_rv_namespace::data_type_def;
+
+        uintptr_t game_data_nothing::type_def;
+        uintptr_t game_data_nothing::data_type_def;
 
         uintptr_t game_data_object::type_def;
         uintptr_t game_data_object::data_type_def;
@@ -694,6 +704,8 @@ namespace intercept {
                 return GameDataType::NAMESPACE;
             if (_type == game_data_code::type_def)
                 return GameDataType::CODE;
+            if (_type == game_data_nothing::type_def)
+                return GameDataType::NOTHING;
             return GameDataType::ANY;
         }
 
@@ -835,14 +847,18 @@ namespace intercept {
     #pragma endregion
 
     #pragma region Serialization
+        uintptr_t param_archive::get_game_state() {
+            auto allocinfo = GET_ENGINE_ALLOCATOR;
+            return allocinfo->gameState;
+        }
+
         intercept::types::serialization_return param_archive::serialize(r_string name, serialize_class & value, int min_version) {
             if (_version < min_version) return serialization_return::version_too_new;
-            param_archive sub_archive;
+            param_archive sub_archive(nullptr);
             sub_archive._version = _version;
             sub_archive._p3 = _p3;
             sub_archive._parameters = _parameters;
             sub_archive._isExporting = _isExporting;
-            delete sub_archive._p1;
             if (_isExporting) {
                 sub_archive._p1 = _p1->add_entry_class(name, false);
             } else {
@@ -856,7 +872,7 @@ namespace intercept {
             auto ret = value.serialize(sub_archive);
             if (_isExporting) {
                 sub_archive._p1->compress();
-                delete sub_archive._p1;
+                rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                 sub_archive._p1 = nullptr;
             }
             return ret;
@@ -867,7 +883,8 @@ namespace intercept {
             if (_isExporting) {
                 _p1->add_entry(name, value);
             } else {
-                const auto entry = _p1->get_entry_by_name(name);
+                unique_ref<param_archive_entry> entry = _p1->get_entry_by_name(name);
+                if (!entry) return serialization_return::no_entry;
                 value = static_cast<r_string>(std::move(*entry));   //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
@@ -879,7 +896,8 @@ namespace intercept {
             if (_isExporting) {
                 _p1->add_entry(name, static_cast<int>(value));//I don't know why.. BI does this..
             } else {
-                const auto entry = _p1->get_entry_by_name(name);
+                unique_ref<param_archive_entry> entry = _p1->get_entry_by_name(name);
+                if (!entry) return serialization_return::no_entry;
                 value = static_cast<int>(*entry); //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
@@ -902,10 +920,10 @@ namespace intercept {
         }
 
         serialization_return game_value::serialize(param_archive& ar) {
-            if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
+            if (!data) data = rv_allocator<game_data_nothing>::create_single();
             ar.serialize(r_string("data"sv), data, 1);
-            //#TODO check if type == game_data_nothing. Can probably just use strcmp
-            //if (data && data->type() == game_data_nothing) data = nullptr;
+
+            if (data && data->get_vtable() == game_data_nothing::type_def) data = nullptr;
             return serialization_return::no_error;
         }
     #pragma endregion

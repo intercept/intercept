@@ -171,9 +171,9 @@ namespace intercept {
             //https://connect.microsoft.com/VisualStudio/feedback/details/805301/explicit-cannot-be-used-with-virtual
             virtual
             #ifndef _MSC_VER
-            explicit
+                explicit
             #endif
-            operator const r_string() const { return r_string(); }
+                operator const r_string() const { return operator r_string(); }
         public:
             virtual operator r_string() const { return r_string(); }
             virtual operator bool() const { return false; }
@@ -202,11 +202,14 @@ namespace intercept {
         class serialize_class;
         class param_archive {
         public:
-            virtual ~param_archive() { if (_p1) delete _p1; }
+            static uintptr_t get_game_state();//Kinda missplaced here...
+            param_archive(param_archive_entry* p1) : _p1(p1) { _parameters.push_back(get_game_state()); }
+            virtual ~param_archive() { if (_p1) rv_allocator<param_archive_entry>::destroy_deallocate(_p1); }
             //#TODO add SRef class
-            param_archive_entry* _p1{ new param_archive_entry() }; //pointer to classEntry. vtable something
+            param_archive_entry* _p1{ rv_allocator<param_archive_entry>::create_single() }; //pointer to classEntry. vtable something
             int _version{ 1 }; //version
-            char _p3{ 0 }; //be careful with alignment seems to always be 0 for exporting.
+                               //#TODO is that 64bit on x64?
+            uint32_t _p3{ 0 }; //be careful with alignment seems to always be 0 for exporting.
             auto_array<uintptr_t> _parameters; //parameters? on serializing gameData only element is pointer to gameState
             bool _isExporting{ true }; //writing data vs loading data
             serialization_return serialize(r_string name, serialize_class& value, int min_version);
@@ -219,12 +222,12 @@ namespace intercept {
                 if (_isExporting || _p3 == 2) {
                     if (!value) return serialization_return::no_error;
 
-                    param_archive sub_archive;
+                    param_archive sub_archive(nullptr);
                     sub_archive._version = _version;
                     sub_archive._p3 = _p3;
                     sub_archive._parameters = _parameters;
                     sub_archive._isExporting = _isExporting;
-                    delete sub_archive._p1;
+
                     if (_isExporting) {
                         sub_archive._p1 = _p1->add_entry_class(name, false);
                     } else {
@@ -238,17 +241,17 @@ namespace intercept {
                     const auto ret = value->serialize(sub_archive);
                     if (_isExporting) {
                         sub_archive._p1->compress();
-                        delete sub_archive._p1;
+                        rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                         sub_archive._p1 = nullptr;
                     }
                 } else {
 
-                    param_archive sub_archive;
+                    param_archive sub_archive(nullptr);
                     sub_archive._version = _version;
                     sub_archive._p3 = _p3;
                     sub_archive._parameters = _parameters;
                     sub_archive._isExporting = _isExporting;
-                    delete sub_archive._p1;
+
                     if (_isExporting) {
                         sub_archive._p1 = _p1->add_entry_class(name, false);
                     } else {
@@ -262,7 +265,7 @@ namespace intercept {
                     if (val) val->serialize(sub_archive);
                     if (_isExporting) {
                         sub_archive._p1->compress();
-                        delete sub_archive._p1;
+                        rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                         sub_archive._p1 = nullptr;
                     }
                 }
@@ -322,7 +325,7 @@ namespace intercept {
             }
             //#TODO use type_def instead
             sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept :
-                single_type(st), compound_type(ct) {
+            single_type(st), compound_type(ct) {
                 set_vtable(vt);
             }
             void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
@@ -414,7 +417,7 @@ namespace intercept {
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
             virtual void set_final(bool) {} //Only on GameDataCode AFAIK
-        public: 
+        public:
             virtual r_string to_string() const { return r_string(); }
             virtual bool equals(const game_data *) const { return false; }
             virtual const char *type_as_string() const { return "unknown"; }
@@ -466,18 +469,17 @@ namespace intercept {
             game_value() noexcept {
                 set_vtable(__vptr_def);
             }
-            ~game_value() noexcept {
-            }
+            ~game_value() noexcept {}
 
             void copy(const game_value& copy_) noexcept {
                 set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
                 data = copy_.data;
             }
-            
+
             game_value(const game_value& copy_) {//I don't see any use for this.
                 copy(copy_);
             }
-         
+
             game_value(game_value&& move_) noexcept {
                 set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
                 data = move_.data;
@@ -549,7 +551,7 @@ namespace intercept {
             game_value& operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
-            /// doesn't handle all types. Will return GameDataType::ANY if not handled
+                                   /// doesn't handle all types. Will return GameDataType::ANY if not handled
             types::GameDataType type_enum() const;
 
             size_t size() const;
@@ -592,7 +594,7 @@ namespace intercept {
             ~game_value_static();
             game_value_static(const game_value& copy) : game_value(copy) {}
             game_value_static(game_value&& move) : game_value(move) {}
-            game_value_static operator=(const game_value& copy) { data = copy.data;return *this; }
+            game_value_static operator=(const game_value& copy) { data = copy.data; return *this; }
             operator game_value() const { return *this; }
         };
 
@@ -802,6 +804,17 @@ namespace intercept {
             void *rv_namespace{};
         };
 
+        class game_data_nothing : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_nothing() noexcept {
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
+            }
+            size_t hash() const { return type_def; }
+        };
+
 
         class game_instruction : public refcount {
         public:
@@ -904,7 +917,7 @@ namespace intercept {
                     s1->_aside,
                     s1->_up,
                     s1->_dir,
-                    { s1->_position.x,s1->_position.z,s1->_position.y},
+                    { s1->_position.x,s1->_position.z,s1->_position.y },
                     s1->_scale,
                     s1->_maxScale,
                     s2->_deltaT,
@@ -964,7 +977,7 @@ namespace intercept {
             struct {
                 uint32_t _x{};
                 void* object{};
-            } *object {};
+            } *object{};
         };
         //#TODO add game_data_nothing
 
@@ -981,6 +994,7 @@ namespace intercept {
                 std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
                 game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
                 void(*setvar_func) (const char* name, const game_value& val) { nullptr };
+                uintptr_t gameState;
             };
         }
 
@@ -1003,7 +1017,7 @@ namespace intercept {
         template <game_value(*T)(game_value_parameter, game_value_parameter)>
         static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
             void* func = (void*) T;
-            __asm{
+            __asm {
                 pop ecx;
                 pop ebp;
                 mov eax, [esp + 12];

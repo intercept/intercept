@@ -179,8 +179,8 @@ namespace intercept {
         void set_curator_coef(const object &curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_) {
             if (coef_.index() == 0)
                 host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, {action_, std::get<bool>(coef_)});
-            return;
-            host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, {action_, std::get<float>(coef_)});
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setcuratorcoef__object__array__ret__nothing, curator_, {action_, std::get<float>(coef_)});
         }
 
         void assign_curator(const object &player_, const object &curator_module_) {

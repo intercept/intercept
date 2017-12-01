@@ -13,11 +13,8 @@
 #include <cstring>
 #include <algorithm>
 #include <memory>
+#include "containers.hpp"
 
-//GNUC somehow can't do it if it's inside shared.hpp.
-#ifdef __GNUC__
-#define CDECL __attribute__ ((__cdecl__))
-#endif
 using namespace std::literals::string_view_literals;
 
 namespace intercept {
@@ -84,1221 +81,6 @@ namespace intercept {
                 virtual int IRelease() = 0;
             };
         }
-
-    #pragma region Allocator
-
-
-        namespace __internal {
-            void* rv_allocator_allocate_generic(size_t _size);
-            void rv_allocator_deallocate_generic(void* _Ptr);
-            void* rv_allocator_reallocate_generic(void* _Ptr, size_t _size);
-        }
-
-        template<class Type>
-        class rv_allocator : std::allocator<Type> {
-        public:
-            static void deallocate(Type* _Ptr, size_t = 0) {
-                return __internal::rv_allocator_deallocate_generic(_Ptr);
-            }
-            //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
-            //use the create* Methods instead
-            static Type* allocate(size_t _count) {
-                return reinterpret_cast<Type*>(__internal::rv_allocator_allocate_generic(sizeof(Type)*_count));
-            }
-
-            //Allocates and Initializes one Object
-            template<class... _Types>
-            static Type* createSingle(_Types&&... _Args) {
-                auto ptr = allocate(1);
-                ::new (ptr) Type(std::forward<_Types>(_Args)...);
-                //Have to do a little more unfancy stuff for people that want to overload the new operator
-                return ptr;
-            }
-
-            //Allocates and initializes array of Elements using the default constructor.
-            static Type* createArray(size_t _count) {
-                if (_count == 1) return createSingle();
-
-                auto ptr = allocate(_count);
-
-                for (size_t i = 0; i < _count; ++i) {
-#pragma warning(suppress: 26409)
-                    ::new (ptr + i) Type();
-                }
-
-                return ptr;
-            }
-
-            static Type* createUninitializedArray(size_t _count) {
-                if (_count == 1) return createSingle();
-
-                auto ptr = allocate(_count);
-
-                return ptr;
-            }
-
-            static Type* reallocate(Type* _Ptr, size_t _count) {
-                return reinterpret_cast<Type*>(__internal::rv_allocator_reallocate_generic(_Ptr, sizeof(Type)*_count));
-            }
-        };
-
-        class rv_pool_allocator {
-            char pad_0x0000[0x24]; //0x0000
-        public:
-            const char* _allocName;
-
-            int _1;
-            int _2;
-            int _3;
-            int _4;
-            int allocated_count;
-
-            void* allocate(size_t count);
-            void deallocate(void* data);
-
-        };
-    #pragma endregion
-
-
-    #pragma region Refcounting
-
-        class refcount_base {
-        public:
-            constexpr refcount_base() noexcept : _refcount(0) {}
-            constexpr refcount_base(const refcount_base &src) noexcept : _refcount(0) {}
-            constexpr void operator = (const refcount_base &src) const noexcept {}
-
-            constexpr int add_ref() const noexcept {
-                return ++_refcount;
-            }
-            constexpr int dec_ref() const noexcept {
-                return --_refcount;
-            }
-            constexpr int ref_count() const noexcept {
-                return _refcount;
-            }
-            mutable int _refcount;
-        };
-
-        //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
-        class refcount : public refcount_base {
-        public:
-            virtual ~refcount() = default;
-            int release() const {
-                const auto rcount = dec_ref();
-                if (rcount == 0) {
-                    //this->~refcount();
-                    lastRefDeleted();
-                    //rv_allocator<refcount>::deallocate(const_cast<refcount *>(this), 0);
-                }
-                return rcount;
-            }
-            void destruct() const noexcept {
-                delete const_cast<refcount *>(this);
-            }
-            virtual void lastRefDeleted() const { destruct(); }
-        private:
-            virtual int __dummy_refcount_func() const noexcept { return 0; }
-        };
-        class game_value_static;
-        template<class Type>
-        class ref {
-            friend class game_value_static; //Overrides _ref to nullptr in destructor when Arma is exiting
-            static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
-            Type* _ref{nullptr};
-        public:
-            constexpr ref() noexcept {}
-            ~ref() { free(); }
-
-            //Construct from Pointer
-            constexpr ref(Type* other) noexcept {
-                if (other) other->add_ref();
-                _ref = other;
-            }
-            //Copy from pointer
-            const ref &operator = (Type *source) noexcept {
-                Type *old = _ref;
-                if (source) source->add_ref();
-                _ref = source;
-                if (old) old->release();//decrement reference and delete object if refcount == 0
-                return *this;
-            }
-
-            //Construct from reference
-            constexpr ref(const ref &sRef) noexcept {
-                Type *source = sRef._ref;
-                if (source) source->add_ref();
-                _ref = source;
-            }
-            //Copy from reference.
-            const ref &operator = (const ref &other) {
-                Type *source = other._ref;
-                Type *old = _ref;
-                if (source) source->add_ref();
-                _ref = source;
-                if (old) old->release();//decrement reference and delete object if refcount == 0
-                return *this;
-            }
-
-            void swap(ref &other) {
-                auto temp = other._ref;
-                other._ref = _ref;
-                _ref = temp;
-            }
-
-            constexpr bool is_null() const noexcept { return _ref == nullptr; }
-            void free() noexcept {
-                if (!_ref) return;
-                _ref->release();
-                _ref = nullptr;
-            }
-            //This returns a pointer to the underlying object. Use with caution!
-            constexpr Type *getRef() const noexcept { return _ref; }              //#TODO deprecate
-            //This returns a pointer to the underlying object. Use with caution!
-            constexpr Type *get() const noexcept { return _ref; }
-            constexpr Type *operator -> () const noexcept { return _ref; }
-            operator Type *() const noexcept { return _ref; }
-            bool operator != (const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
-            size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
-        };
-
-    #pragma endregion
-
-        /*
-        This is a placeholder so i can use refcount but still have an accessible vtable pointer
-        */
-        class __vtable {
-        public:
-            uintptr_t _vtable{ 0 };
-        };
-
-        class _refcount_vtable_dummy : public __vtable, public refcount_base {};
-
-    #pragma region Containers
-        template<class Type, class Allocator = rv_allocator<char>> //Has to be allocator of type char
-        class compact_array : public refcount_base {
-            //static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
-        public:
-
-            size_t size() const noexcept { return _size; }
-            Type* data() noexcept { return &_data; }
-            const Type* data() const noexcept { return &_data; }
-            Type* begin() noexcept { return &_data; }
-            Type* end() noexcept { return (&_data) + _size; }
-            const Type* cbegin() const noexcept { return &_data; }
-            const Type* cend() const noexcept { return (&_data) + _size; }
-
-            const Type& operator[](size_t index) {
-                return *(begin() + index);
-            }
-            const Type& get(size_t index) {
-                return *(begin() + index);
-            }
-
-            //We delete ourselves! After release no one should have a pointer to us anymore!
-            int release() const {
-                const auto ret = dec_ref();
-                if (!ret) del();
-                return ret;
-            }
-
-            static compact_array* create(size_t number_of_elements_) {
-                const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
-                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-#pragma warning(suppress: 26409) //don't use new/delete
-                new (buffer) compact_array(number_of_elements_);
-                return buffer;
-            }
-            static compact_array* create(const compact_array &other) {
-                const size_t size = other.size();
-                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-                new (buffer) compact_array(size);
-                std::copy(other.data(), other.data() + other.size(), buffer->data());
-                return buffer;
-            }
-            //Specialty function to copy less elements or to allocate more space
-            static compact_array* create(const compact_array &other, size_t element_count) {
-                const size_t size = other.size();
-                compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
-                new (buffer) compact_array(element_count);
-                std::memset(buffer->data(), 0, (element_count) * sizeof(Type));
-                auto elementsToCopy = std::min(size, element_count);
-            #ifdef _MSC_VER
-                std::_Copy_no_deprecate(other.data(), other.data() + elementsToCopy, buffer->data());
-            #else
-                std::copy(other.data(), other.data() + elementsToCopy, buffer->data());
-            #endif
-                return buffer;
-            }
-            void del() const {
-                this->~compact_array();
-                const void* _thisptr = this;
-#pragma warning(suppress: 26492) //don't cast away const
-                auto _thisptr2 = const_cast<void*>(_thisptr);
-                Allocator::deallocate(static_cast<char*>(_thisptr2), _size - 1 + sizeof(compact_array));
-            }
-
-            size_t _size;
-            Type _data {};
-        private:
-            explicit compact_array(size_t size_) noexcept {
-                _size = size_;
-            }
-        };
-
-
-        //template<std::size_t N>
-        //class r_string_const : public refcount_base { // constexpr string
-        //private:
-        //    const size_t _size;
-        //    const char _data[];
-        //public:
-        //    constexpr r_string_const(const char a[N]) : _size(N - 1), _data({a[0] ... a[N]}) { add_ref(); }
-        //};
-
-        class r_string {
-        protected:
-        public:
-            constexpr r_string() noexcept {}
-            r_string(std::string_view str) {
-                if (str.length()) _ref = create(str.data(), str.length());
-            }
-            //template <size_t N>
-            //constexpr r_string(const r_string_const<N>& c) {
-            //    _ref = reinterpret_cast<compact_array<char>*>(&c);
-            //}
-            explicit r_string(compact_array<char>* dat) noexcept : _ref(dat) {}
-            r_string(r_string&& _move) noexcept {
-                _ref.swap(_move._ref);
-            }
-            r_string(const r_string& _copy) {
-                _ref = _copy._ref;
-            }
-
-            r_string& operator = (r_string&& _move) noexcept {
-                if (this == &_move)
-                    return *this;
-                _ref.swap(_move._ref);
-                return *this;
-            }
-
-            r_string& operator = (const r_string& _copy) {
-                _ref = _copy._ref;
-                return *this;
-            }
-            r_string& operator = (std::string_view _copy) {
-                _ref = create(_copy.data(), _copy.length());
-                return *this;
-            }
-            const char* data() const noexcept {
-                if (_ref) return _ref->data();
-                return "";
-            }
-            const char* c_str() const noexcept { return data(); }
-            //This will copy the underlying container if we cannot safely modify this r_string
-            void make_mutable() {
-                if (_ref && _ref->ref_count() > 1) {//If there is only one reference we can safely modify the string
-                    _ref = create(_ref->data());
-                }
-            }
-            explicit operator const char *() const noexcept { return data(); }
-            operator std::string_view() const noexcept { return std::string_view(data()); }
-            //explicit operator std::string() const { return std::string(data()); } //non explicit will break string_view operator because std::string operator because it becomes ambiguous
-            ///This calls strlen so O(N)
-            size_t length() const noexcept {
-                if (!_ref) return 0;
-                return strlen(_ref->data());
-            }
-
-            ///This calls strlen so O(N)
-            size_t size() const noexcept {
-                return length();
-            }
-
-            bool empty() const noexcept {
-                if (!_ref) return true;
-                return *_ref->data() == '\0';
-            }
-
-            size_t capacity() const noexcept {
-                if (!_ref) return 0;
-                return _ref->size();
-            }
-
-            ///== is case insensitive just like scripting
-            bool operator == (const char *other) const {
-                if (!data())  return (!other || !*other); //empty?
-            #ifdef __GNUC__
-                return std::equal(_ref->cbegin(), _ref->cend(),
-                    other, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other) == 0;
-            #endif
-            }
-
-            ///== is case insensitive just like scripting
-            bool operator == (const r_string& other) const {
-                if (!data()) return (!other.data() || !*other.data()); //empty?
-                if (data() == other.data()) return true;
-            #ifdef __GNUC__
-                return std::equal(_ref->cbegin(), _ref->cend(),
-                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other.data()) == 0;
-            #endif
-            }
-
-            ///== is case insensitive just like scripting
-            bool operator == (const std::string& other) const {
-                if (!data()) return other.empty(); //empty?
-                if (other.length() > _ref->size()) return false; //There is more data than we can even have
-            #ifdef __GNUC__
-                return std::equal(_ref->cbegin(), _ref->cend(),
-                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other.data()) == 0;
-            #endif
-            }
-
-            ///== is case insensitive just like scripting
-            bool operator == (std::string_view other) const {
-                if (!data()) return other.empty(); //empty?
-                if (other.length() > _ref->size()) return false; //There is more data than we can even have
-            #ifdef __GNUC__
-                return std::equal(_ref->cbegin(), _ref->cend(),
-                    other.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(data(), other.data()) == 0;
-            #endif
-            }
-
-            ///!= is case insensitive just like scripting
-            bool operator != (const r_string& other) const {
-                return !(*this == other);
-            }
-
-            ///!= is case insensitive just like scripting
-            bool operator != (const std::string& other) const {
-                return !(*this == other);
-            }
-
-            ///!= is case insensitive just like scripting
-            bool operator != (std::string_view other) const {//#TODO templates would be nice here. But we don't want string_view by reference
-                return !(*this == other);
-            }
-
-
-            bool operator < (const r_string& other) const {
-                if (!data()) return false; //empty?
-                return strcmp(data(), other.data()) < 0;
-            }
-           
-            friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
-                _os << _s.data();
-                return _os;
-            }
-
-            friend std::istream& operator >> (std::istream& _in, r_string& _t){
-                char inp;
-                std::string tmp;
-                while (_in.get(inp)) {
-                    if (inp == 0) break;
-                    tmp.push_back(inp);
-                }
-                _t._ref = create(tmp.data(), tmp.length());
-                return _in;
-            }
-
-            bool compare_case_sensitive(const char *other) const {
-            #ifdef __GNUC__
-                return !std::equal(_ref->cbegin(), _ref->cend(),
-                    other, [](unsigned char l, unsigned char r) {return l == r; });
-            #else
-                return strcmp(data(), other) == 0;
-            #endif
-            }
-
-            bool compare_case_insensitive(const char *other) const {//#TODO string_view variant with length checking
-            #ifdef __GNUC__
-                return !std::equal(_ref->cbegin(), _ref->cend(),
-                    other, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
-            #else
-                return _stricmp(data(), other) == 0;
-            #endif
-            }
-
-            size_t find(char ch, size_t start = 0) const {
-                if (length() == 0) return -1;
-                const char *pos = strchr(_ref->data() + start, ch);
-                if (pos == nullptr) return -1;
-                return pos - _ref->data();
-            }
-
-            size_t find(const char *sub, int nStart = 0) const {
-                if (_ref == nullptr || length() == 0) return -1;
-                const char *pos = strstr(_ref->data() + nStart, sub);
-                if (pos == nullptr) return -1;
-                return pos - _ref->data();
-            }
-            void clear() {
-                _ref = nullptr;
-            }
-            size_t hash() const noexcept {
-                return std::hash<std::string_view>()(std::string_view(data(), _ref ? _ref->size() : 0u));
-            }
-
-            r_string append(std::string_view _right) const {
-                auto myLength = length();
-                auto newData = create(myLength+_right.length()+1);//Space for terminating nullchar
-            #if __GNUC__
-                std::copy_n(data(), myLength, newData->data());
-                std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
-            #else
-                memcpy_s(newData->data(), newData->size(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-                memcpy_s(newData->data()+ myLength, newData->size() - myLength, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            #endif
-                newData->data()[myLength + _right.length()] = 0;
-                return r_string(newData);
-            }
-            r_string& appendModify(std::string_view _right) {
-                auto myLength = length();
-                auto newData = create(myLength+_right.length()+1);//Space for terminating nullchar
-            #if __GNUC__
-                std::copy_n(data(), myLength, newData->data());
-                std::copy_n(_right.data(), _right.length(), newData->data() + myLength);
-            #else
-                memcpy_s(newData->data(), newData->size(), data(), myLength);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-                memcpy_s(newData->data()+ myLength, newData->size() - myLength, _right.data(), _right.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            #endif
-                newData->data()[myLength + _right.length()] = 0;
-                _ref = newData;
-                return *this;
-            }
-            r_string operator+(std::string_view _right){
-                return append(_right);
-            }
-            r_string& operator+=(std::string_view _right) {
-                return appendModify(_right);
-            }
-            r_string& to_lower() {
-                if (!_ref) return *this;
-                make_mutable();
-            #ifdef __linux__
-                std::transform(_ref->begin(), _ref->end(), _ref->begin(), ::tolower);
-            #else
-                std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
-            #endif
-                
-                return *this;
-            }
-            ///Be careful! This returns nullptr on empty string
-            const char* begin() const noexcept {
-                if (_ref)
-                    return _ref->begin();
-                return nullptr;
-            }
-            ///Be careful! This returns nullptr on empty string
-            const char* end() const noexcept {
-                if (_ref)
-                    return _ref->end();
-                return nullptr;
-            }
-            char front() const noexcept {
-                if (_ref)
-                    return *_ref->begin();
-                return '\0';
-            }
-
-
-
-        private:
-            ref<compact_array<char>> _ref;
-
-            static compact_array<char> *create(const char *str, size_t len) {
-                if (len == 0 || *str == 0) return nullptr;
-                compact_array<char> *string = compact_array<char>::create(len + 1);
-            #if __GNUC__
-                std::copy_n(str, len, string->data());
-            #else
-                strncpy_s(string->data(), string->size(), str, len);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            #endif
-                string->data()[len] = 0;
-                return string;
-            }
-
-            static compact_array<char> *create(size_t len) {
-                if (len == 0) return nullptr;
-                compact_array<char> *string = compact_array<char>::create(len + 1);
-                string->data()[0] = 0;
-                return string;
-            }
-
-            static compact_array<char> *create(const char *str) {
-                if (*str == 0) return nullptr;
-                return create(str, strlen(str));
-            }
-        };
-
-        //constexpr r_string tests
-        //#define r_string_literal(str) \
-        //    ([]() -> const r_string_const<sizeof(str)- 1>& { \
-        //        static const r_string_const<sizeof(str)- 1> literal{ str }; \
-        //        return literal; \
-        //    }())
-
-        //constexpr const r_string& operator ""_rs(const char* __str, size_t len) {
-        //    return r_string_literal(__str);
-        //};
-
-        //Contributed by ArmaDebugEngine
-        class rv_arraytype {};
-
-        template<class Type>
-        class rv_array : public rv_arraytype {
-        protected:
-            Type *_data;
-            int _n;
-        public:
-            class const_iterator;
-
-            class iterator {
-                friend class const_iterator;
-                Type* p_;
-            public:
-                using iterator_category = std::random_access_iterator_tag;
-                using value_type = Type;
-                using difference_type = ptrdiff_t;
-                using pointer = Type*;
-                using reference = Type&;
-
-                iterator() : p_(nullptr) {}
-                explicit iterator(Type* p) : p_(p) {}
-                iterator(const iterator& other) : p_(other.p_) {}
-                const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
-
-                iterator& operator++() { ++p_; return *this; } // prefix++
-                iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
-                iterator& operator--() { --p_; return *this; } // prefix--
-                iterator  operator--(int) { iterator tmp(*this); --(*this); return tmp; } // postfix--
-
-                void     operator+=(const std::size_t& n) { p_ += n; }
-                void     operator+=(const iterator& other) { p_ += other.p_; }
-                iterator operator+ (const std::size_t& n) const { iterator tmp(*this); tmp += n; return tmp; }
-                iterator operator+ (const iterator& other) const { iterator tmp(*this); tmp += other; return tmp; }
-
-                void        operator-=(const std::size_t& n) { p_ -= n; }
-                void        operator-=(const iterator& other) { p_ -= other.p_; }
-                iterator    operator- (const std::size_t& n) const { iterator tmp(*this); tmp -= n; return tmp; }
-                std::size_t operator- (const iterator& other) const { return p_ - other.p_; }
-
-                bool operator< (const iterator& other) const { return (p_ - other.p_) < 0; }
-                bool operator<=(const iterator& other) const { return (p_ - other.p_) <= 0; }
-                bool operator> (const iterator& other) const { return (p_ - other.p_) > 0; }
-                bool operator>=(const iterator& other) const { return (p_ - other.p_) >= 0; }
-                bool operator==(const iterator& other) const { return  p_ == other.p_; }
-                bool operator!=(const iterator& other) const { return  p_ != other.p_; }
-
-                Type& operator*() const { return *p_; }
-                Type* operator->() { return  p_; }
-                explicit operator Type*() { return p_; }
-            };
-            class const_iterator {
-                const Type* p_;
-            public:
-                using iterator_category = std::random_access_iterator_tag;
-                using value_type = Type;
-                using difference_type = ptrdiff_t;
-                using pointer = Type * ;
-                using reference = Type & ;
-
-                const_iterator() : p_(nullptr) {}
-                explicit const_iterator(const Type* p) noexcept : p_(p) {}
-                const_iterator(const typename rv_array<Type>::iterator& other) : p_(other.p_) {}
-                const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
-                const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
-                const const_iterator& operator=(const typename rv_array<Type>::iterator& other) { p_ = other.p_; return other; }
-
-                const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
-                const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
-                const_iterator& operator--() noexcept { --p_; return *this; } // prefix--
-                const_iterator  operator--(int) { const_iterator tmp(*this); --(*this); return tmp; } // postfix--
-
-                void           operator+=(const std::size_t& n) { p_ += n; }
-                void           operator+=(const const_iterator& other) { p_ += other.p_; }
-                const_iterator operator+ (const std::size_t& n)        const { const_iterator tmp(*this); tmp += n; return tmp; }
-                const_iterator operator+ (const const_iterator& other) const { const_iterator tmp(*this); tmp += other; return tmp; }
-
-                void           operator-=(const std::size_t& n) noexcept { p_ -= n; }
-                void           operator-=(const const_iterator& other) noexcept { p_ -= other.p_; }
-                const_iterator operator- (const std::size_t& n)        const { const_iterator tmp(*this); tmp -= n; return tmp; }
-                std::size_t    operator- (const const_iterator& other) const noexcept { return p_ - other.p_; }
-
-                bool operator< (const const_iterator& other) const noexcept { return (p_ - other.p_) < 0; }
-                bool operator<=(const const_iterator& other) const noexcept { return (p_ - other.p_) <= 0; }
-                bool operator> (const const_iterator& other) const noexcept { return (p_ - other.p_) > 0; }
-                bool operator>=(const const_iterator& other) const noexcept { return (p_ - other.p_) >= 0; }
-                bool operator==(const const_iterator& other) const noexcept { return  p_ == other.p_; }
-                bool operator!=(const const_iterator& other) const noexcept { return  p_ != other.p_; }
-
-                const Type& operator*()  const noexcept { return *p_; }
-                const Type* operator->() const noexcept { return  p_; }
-                explicit operator const Type*() const noexcept { return p_; }
-            };
-
-
-            constexpr rv_array() noexcept :_data(nullptr), _n(0) {};
-            rv_array(rv_array<Type>&& move_) noexcept :_data(move_._data), _n(move_._n) { move_._data = nullptr; move_._n = 0; };
-            Type &get(size_t i) {
-                if (i > count()) throw std::out_of_range("rv_array access out of range");
-                return _data[i];
-            }
-            const Type &get(size_t i) const {
-                if (i > count()) throw std::out_of_range("rv_array access out of range");
-                return _data[i];
-            }
-            Type &operator [] (size_t i) { return get(i); }
-            Type *data() { return _data; }
-            constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
-
-            iterator begin() { if (!_data) return iterator(); return iterator(&get(0)); }
-            iterator end() { if (!_data) return iterator(); return iterator(&get(_n)); }
-
-            const_iterator cbegin() const { return const_iterator(&get(0)); }
-            const_iterator cend() const { return const_iterator(&get(_n)); }
-
-            const_iterator begin() const { return const_iterator(&get(0)); }
-            const_iterator end() const { return const_iterator(&get(_n)); }
-
-            const Type &front() const { return get(0); }
-            const Type &back() const { return get(_n - 1); }
-
-            Type &front() { return get(0); }
-            Type &back() { return get(_n - 1); }
-
-            bool is_empty() const { return _n == 0; }
-
-            template <class Func>
-            void for_each(const Func &f) const {
-                for (size_t i = 0; i < count(); i++) {
-                    f(get(i));
-                }
-            }
-
-            template <class Func>
-            void for_each_backwards(const Func &f) const { //This returns if Func returns true
-                for (size_t i = count() - 1; i >= 0; i--) {
-                    if (f(get(i))) return;
-                }
-            }
-
-            template <class Func>
-            void for_each(const Func &f) {
-                for (size_t i = 0; i < count(); i++) {
-                    f(get(i));
-                }
-            }
-            size_t hash() const {
-                size_t _hash{ 0 };
-                for (const auto& it : *this) {
-                    _hash ^= std::hash<Type>()(it) + 0x9e3779b9 + (_hash << 6) + (_hash >> 2);
-                }
-                return _hash;
-            }
-            template<typename FindType>
-            iterator find(const FindType& find_) {
-                return std::find(begin(), end(), find_);
-            }
-        };
-
-        template<class Type, size_t growthFactor = 32>
-        class auto_array : public rv_array<Type> {
-            typedef rv_array<Type> base;
-        protected:
-            int _maxItems;
-            Type *try_realloc(Type *old, size_t n) {
-                Type *ret = rv_allocator<Type>::reallocate(old, n);
-                return ret;
-            }
-
-            void reallocate(size_t size) {
-
-                if (_maxItems == size) return;
-
-                if (base::_n > static_cast<int>(size)) {
-                    resize(size);
-                    return;//resize calls reallocate and reallocates... Ugly.. I know
-                }
-                Type *newData = nullptr;
-                if (base::_data && size > 0 && ((newData = try_realloc(base::_data, size)))) {
-                    //if (size > _maxItems)//Don't null out new stuff if there is no new stuff
-                    //    std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
-                    _maxItems = static_cast<int>(size);
-                    base::_data = newData;
-                    return;
-                }
-                newData = rv_allocator<Type>::createUninitializedArray(size);
-                //memset(newData, 0, size * sizeof(Type));
-                if (base::_data) {
-                #ifdef __GNUC__
-                    memmove(newData, base::_data, base::_n * sizeof(Type));
-                #else
-                    //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
-                    memmove_s(newData, size * sizeof(Type), base::_data, base::_n * sizeof(Type));
-                #endif
-                    rv_allocator<Type>::deallocate(base::_data);
-                }
-                base::_data = newData;
-                _maxItems = static_cast<int>(size);
-
-            }
-
-            void grow(size_t n) {
-            #undef max
-                reallocate(_maxItems + std::max(n, growthFactor));
-            }
-        public:
-            using base::end;
-            using base::begin;
-            using base::cend;
-            using base::cbegin;
-            using iterator = typename base::iterator;
-            using const_iterator = typename base::const_iterator;
-            constexpr auto_array() noexcept : rv_array<Type>(), _maxItems(0) {};
-            auto_array(const std::initializer_list<Type> &init_) : rv_array<Type>(), _maxItems(0) {
-                insert(end(), init_.begin(), init_.end());
-            }
-            template<class _InIt>
-            auto_array(_InIt _first, _InIt _last) : rv_array<Type>(), _maxItems(0) {
-                insert(end(), _first, _last);
-            }
-            auto_array(const auto_array<Type> &copy_) : rv_array<Type>(), _maxItems(0) {
-                insert(end(), copy_.begin(), copy_.end());
-            }
-            auto_array(auto_array<Type> &&move_) noexcept : rv_array<Type>(std::move(move_)), _maxItems(move_._maxItems) {
-                move_._maxItems = 0;
-            }
-            ~auto_array() {
-                if (base::_data == nullptr) return;
-                resize(0);
-            }
-            void shrink_to_fit() {
-                resize(base::_n);
-            }
-            auto_array& operator = (auto_array &&move_) noexcept {
-                base::_n = move_._n;
-                _maxItems = move_._maxItems;
-                base::_data = move_._data;
-                move_._data = nullptr;
-                move_._n = 0;
-                move_._maxItems = 0;
-                return *this;
-            }
-
-            auto_array& operator = (const auto_array &copy_) {
-                if (copy_._n) {
-                    insert(base::end(), copy_.begin(), copy_.end());
-                }
-                return *this;
-            }
-
-            void resize(size_t n) {
-                if (static_cast<int>(n) < base::_n) {
-                    for (int i = static_cast<int>(n); i < base::_n; i++) {
-                        (*this)[i].~Type();
-                    }
-                    base::_n = static_cast<int>(n);
-                }
-                if (n == 0 && base::_data) {
-                    rv_allocator<Type>::deallocate(rv_array<Type>::_data);
-                    rv_array<Type>::_data = nullptr;
-                    return;
-                }
-                reallocate(n);
-            }
-            void reserve(size_t res) {
-                if (_maxItems < static_cast<int>(res)) {
-                    grow(res - _maxItems);
-                }
-            }
-            template<class... _Valty>
-            iterator emplace(iterator _where, _Valty&&... _Val) {
-                if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
-                const size_t insertOffset = _where - base::begin();
-                auto previousEnd = base::_n;
-                if (_maxItems < base::_n + 1) {
-                    grow(1);
-                }
-                auto& item = base::_data[base::_n];
-                ::new (&item) Type(std::forward<_Valty>(_Val)...);
-                ++base::_n;
-
-                std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
-
-                return base::begin() + insertOffset;
-            }
-            template<class... _Valty>
-            iterator emplace_back(_Valty&&... _Val) {
-                if (_maxItems < base::_n + 1) {
-                    grow(1);
-                }
-                auto& item = base::_data[base::_n];
-                ::new (&item) Type(std::forward<_Valty>(_Val)...);
-                ++base::_n;
-                return iterator(&item);
-            }
-            iterator push_back(const Type& _Val) {
-                return emplace_back(_Val);
-            }
-            iterator push_back(Type&& _Val) {
-                return emplace_back(std::move(_Val));
-            }
-
-            //void erase(int index) {
-            //    if (index > base::_n) return;
-            //    auto item = (*this)[index];
-            //    item.~Type();
-            //    memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
-            //}
-            void erase(const_iterator element) {
-                if (element < base::begin() || element > base::end()) throw std::runtime_error("Invalid Iterator");
-                const size_t index = std::distance(base::cbegin(), element);
-                if (static_cast<int>(index) > base::_n) return;
-                auto item = (*this)[index];
-                item.~Type();
-            #ifdef __GNUC__
-                memmove(&(*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
-            #else
-                memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
-            #endif
-                --base::_n;
-            }
-
-            void erase(const_iterator first, const_iterator last) {
-                if (first > last || first < base::begin() || last > base::end()) throw std::runtime_error("Invalid Iterator");
-                const size_t firstIndex = std::distance(base::cbegin(), first);
-                const size_t lastIndex = std::distance(base::cbegin(), last);
-                const size_t range = std::distance(first, last);
-
-                for (int index = firstIndex; index < lastIndex; index++)
-                {
-                    auto item = (*this)[index];
-                    item.~Type();
-                }
-                if (last != end()) {
-            #ifdef __GNUC__
-                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
-            #else
-                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
-            #endif
-                }
-                base::_n -= range;
-            }
-            
-            void erase(uint32_t index, uint32_t count = 1) {
-                if (count == 1)
-                    erase(begin() + index);
-                else if (count > 1)
-                    erase(begin() + index, begin() + index + (count-1));
-            }
-            
-            //This is sooo not threadsafe!
-            template<class _InIt>
-            iterator insert(iterator _where, _InIt _first, _InIt _last) {
-                if (_first == _last) return _where; //Boogie!
-                if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator"); //WTF?!
-                const size_t insertOffset = std::distance(base::begin(), _where);
-                const size_t previousEnd = static_cast<size_t>(base::_n);
-                const size_t oldSize = base::count();
-                const size_t insertedSize = std::distance(_first, _last);
-                reserve(oldSize + insertedSize);
-
-                auto index = base::_n;
-                for (; _first != _last; ++_first) {
-                    //emplace_back(*_first);
-                    //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
-                    auto& item = base::_data[index];
-                    ::new (&item) Type(std::forward<decltype(*_first)>(*_first));
-                    ++index;
-                }
-                base::_n = index;
-
-                std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
-                return base::begin() + insertOffset;
-            }
-            void clear() {
-                if (base::_data)
-                    rv_allocator<Type>::deallocate(rv_array<Type>::_data);
-                base::_n = 0;
-                _maxItems = 0;
-            }
-
-            bool operator==(rv_array<Type> other) {
-                if (other._n != base::_n || ((base::_data == nullptr || other._data == nullptr) && base::_data != other._data))
-                    return false;
-                auto index = 0;
-                for (auto& it : other) {
-                    if ((*this[index]) != it)
-                        return false;
-                    ++index;
-                }
-                return true;
-            }
-        };
-
-        template <class Type>
-        struct find_key_array_traits {
-            using key_type = const Type&;
-            static bool equals(key_type a, key_type b) { return a == b; }
-            static key_type get_key(const Type &a) { return a; }
-        };
-
-        template<class Type, class traits = find_key_array_traits<Type>>
-        class find_key_array : public auto_array<Type> {
-            using base = auto_array<Type>;
-            using key_type = typename traits::key_type;
-        public:
-            void delete_at(uint32_t index) { base::erase(index, 1); }
-            void delete_at(uint32_t index, uint32_t count) { base::erase(index, count); }
-            bool delete_by_key(key_type key) {
-                int index = find_by_key(key);
-                if (index < 0) return false;
-                delete_at(index);
-                return true;
-            }
-
-            void delete_all_by_key(key_type key) {
-                base::erase(std::remove_if(base::begin(), base::end(), [key](const Type& el) {
-                    return traits::equals(traits::get_key(el), key);
-                }), base::end());
-            }
-
-            std::optional<uint32_t> find(const Type& elem) const {
-                return find_by_key(traits::get_key(elem));
-            }
-            std::optional<uint32_t> find_by_key(key_type key) const {
-                for (int i = 0; i < base::Size(); i++)
-                    if (traits::equals(traits::get_key(base::get(i)), key)) return i;
-                return {};
-            }
-
-            std::optional<uint32_t> push_back_unique(const Type& src) {
-                if (find(src)) return -1;
-                return this->push_back(src);
-            }
-
-            uint32_t find_or_push_back(const Type& src) {
-                auto index = find(src);
-                if (index) return index;
-                return this->push_back(src);
-            }
-        };
-
-        template <class Type>
-        struct reference_array_find_key_array_traits {
-            using key_type = const Type&;
-            static bool equals(key_type a, key_type b) { return a == b; }
-            static key_type get_key(const Type &a) { return a.get(); }
-        };
-
-        template <class Type>
-        class reference_array : public find_key_array<ref<Type>, reference_array_find_key_array_traits<Type>> {
-            using base = find_key_array <ref<Type>, reference_array_find_key_array_traits<Type>>;
-            using traits = reference_array_find_key_array_traits<Type>;
-        public:
-            using base::delete_at;
-
-            bool delete_at(const Type* el) { return base::delete_by_key(el); }
-            bool delete_at(const ref<Type>& src) const { return base::delete_by_key(traits::get_key(src)); }
-
-
-            bool find(const Type* el) { return base::find_by_key(el); }
-            bool find(const ref<Type>& src) const { return base::find_by_key(traits::get_key(src)); }
-        };
-
-
-
-        static inline unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
-            while (*key) {
-                hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
-            }
-            return hashValue;
-        }
-        static inline unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) noexcept {
-            while (*key) {
-                hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
-            }
-            return hashValue;
-        }
-
-        struct map_string_to_class_trait {
-            static unsigned int hash_key(const char * key) noexcept {
-                return rv_map_hash_string_case_sensitive(key);
-            }
-            static bool compare_keys(const char * k1, const char * k2) noexcept {
-                return strcmp(k1, k2) == 0;
-            }
-        };
-
-        struct map_string_to_class_trait_caseinsensitive : public map_string_to_class_trait {
-            static unsigned int hash_key(const char * key) noexcept {
-                return rv_map_hash_string_case_insensitive(key);
-            }
-
-            static bool compare_keys(const char * k1, const char * k2) noexcept {
-            #ifdef __GNUC__
-                return std::equal(k1, k1 + strlen(k1),
-                    k2, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-            #else
-                return _strcmpi(k1, k2) == 0;
-            #endif
-            }
-        };
-
-        template <class Type, class Container, class Traits = map_string_to_class_trait>
-        class map_string_to_class {
-        protected:
-            Container* _table;
-            int _tableCount{ 0 };
-            int _count{ 0 };
-            static Type _null_entry;
-        public:
-
-            class iterator {
-                size_t _table;
-                size_t _item;
-                const map_string_to_class<Type, Container, Traits> *_map;
-                size_t number_of_tables() {
-                    return _map->_table ? static_cast<size_t>(_map->_tableCount) : 0u;
-                }
-                void get_next() {
-                    while (_table < number_of_tables() && _item >= _map->_table[_table].count()) {
-                        _table++;
-                        _item = 0;
-                    }
-                }
-            public:
-                iterator(const map_string_to_class<Type, Container, Traits> &base) {
-                    _table = 0; _item = 0; _map = &base;
-                    get_next();
-                }
-                iterator(const map_string_to_class<Type, Container, Traits> &base, bool) { //Creates end Iterator
-                    _item = 0; _map = &base;
-                    _table = number_of_tables();
-                }
-                iterator& operator++ () {
-                    if (_table >= number_of_tables()) return *this;
-                    ++_item;
-                    get_next();
-                    return *this;
-                }
-                iterator operator++(int) {
-                    iterator _tmp = *this;
-                    ++*this;
-                    return (_tmp);
-                }
-                bool operator==(const iterator& _other) {
-                    return _table == _other._table && _item == _other._item;
-                }
-                bool operator!=(const iterator& _other) {
-                    return _table != _other._table || _item != _other._item;
-                }
-                const Type &operator * () const {
-                    return _map->_table[_table][_item];
-                }
-                const Type *operator-> () const {
-                    return &_map->_table[_table][_item];
-                }
-                Type &operator * () {
-                    return _map->_table[_table][_item];
-                }
-                Type *operator-> () {
-                    return &_map->_table[_table][_item];
-                }
-            };
-            iterator begin() {
-                return iterator(*this);
-            }
-            iterator end() {
-                return iterator(*this, true);
-            }
-            const iterator begin() const {
-                return iterator(*this);
-            }
-            const iterator end() const {
-                return iterator(*this, true);
-            }
-
-            map_string_to_class() {}
-
-            template <class Func>
-            void for_each(Func func) const {
-                if (!_table || !_count) return;
-                for (int i = 0; i < _tableCount; i++) {
-                    const Container &container = _table[i];
-                    for (int j = 0; j < container.count(); j++) {
-                        func(container[j]);
-                    }
-                }
-            }
-
-            template <class Func>
-            void for_each_backwards(Func func) const {
-                if (!_table || !_count) return;
-                for (int i = _tableCount - 1; i >= 0; i--) {
-                    const Container &container = _table[i];
-                    for (int j = container.count() - 1; j >= 0; j--) {
-                        func(container[j]);
-                    }
-                }
-            }
-
-            const Type &get(const char* key) const {
-                if (!_table || !_count) return _null_entry;
-                int hashedKey = hash_key(key);
-                for (int i = 0; i < _table[hashedKey].count(); i++) {
-                    const Type &item = _table[hashedKey][i];
-                    if (Traits::compare_keys(item.get_map_key(), key))
-                        return item;
-                }
-                return _null_entry;
-            }
-
-            Container* get_table_for_key(const char* key) {
-                if (!_table || !_count) return nullptr;
-                int hashedKey = hash_key(key);
-                return &_table[hashedKey];
-            }
-
-            Type &get(const char* key) {
-                if (!_table || !_count) return _null_entry;
-                int hashedKey = hash_key(key);
-                for (size_t i = 0; i < _table[hashedKey].count(); i++) {
-                    Type &item = _table[hashedKey][i];
-                    if (Traits::compare_keys(item.get_map_key(), key))
-                        return item;
-                }
-                return _null_entry;
-            }
-
-            static bool is_null(const Type &value) { return &value == &_null_entry; }
-
-            bool has_key(const char* key) const {
-                return !is_null(get(key));
-            }
-
-        public:
-            int count() const { return _count; }
-        protected:
-            int hash_key(const char* key) const {
-                return Traits::hash_key(key) % _tableCount;
-            }
-        };
-
-        template<class Type, class Container, class Traits>
-        Type map_string_to_class<Type, Container, Traits>::_null_entry;
-
-
-    #pragma endregion
 
     #pragma region Serialization
         enum class serialization_return {
@@ -1389,9 +171,9 @@ namespace intercept {
             //https://connect.microsoft.com/VisualStudio/feedback/details/805301/explicit-cannot-be-used-with-virtual
             virtual
             #ifndef _MSC_VER
-            explicit
+                explicit
             #endif
-            operator const r_string() const { return r_string(); }
+                operator const r_string() const { return operator r_string(); }
         public:
             virtual operator r_string() const { return r_string(); }
             virtual operator bool() const { return false; }
@@ -1420,11 +202,14 @@ namespace intercept {
         class serialize_class;
         class param_archive {
         public:
-            virtual ~param_archive() { if (_p1) delete _p1; }
+            static uintptr_t get_game_state();//Kinda missplaced here...
+            param_archive(param_archive_entry* p1) : _p1(p1) { _parameters.push_back(get_game_state()); }
+            virtual ~param_archive() { if (_p1) rv_allocator<param_archive_entry>::destroy_deallocate(_p1); }
             //#TODO add SRef class
-            param_archive_entry* _p1{ new param_archive_entry() }; //pointer to classEntry. vtable something
+            param_archive_entry* _p1{ rv_allocator<param_archive_entry>::create_single() }; //pointer to classEntry. vtable something
             int _version{ 1 }; //version
-            char _p3{ 0 }; //be careful with alignment seems to always be 0 for exporting.
+                               //#TODO is that 64bit on x64?
+            uint32_t _p3{ 0 }; //be careful with alignment seems to always be 0 for exporting.
             auto_array<uintptr_t> _parameters; //parameters? on serializing gameData only element is pointer to gameState
             bool _isExporting{ true }; //writing data vs loading data
             serialization_return serialize(r_string name, serialize_class& value, int min_version);
@@ -1437,12 +222,12 @@ namespace intercept {
                 if (_isExporting || _p3 == 2) {
                     if (!value) return serialization_return::no_error;
 
-                    param_archive sub_archive;
+                    param_archive sub_archive(nullptr);
                     sub_archive._version = _version;
                     sub_archive._p3 = _p3;
                     sub_archive._parameters = _parameters;
                     sub_archive._isExporting = _isExporting;
-                    delete sub_archive._p1;
+
                     if (_isExporting) {
                         sub_archive._p1 = _p1->add_entry_class(name, false);
                     } else {
@@ -1456,17 +241,17 @@ namespace intercept {
                     const auto ret = value->serialize(sub_archive);
                     if (_isExporting) {
                         sub_archive._p1->compress();
-                        delete sub_archive._p1;
+                        rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                         sub_archive._p1 = nullptr;
                     }
                 } else {
 
-                    param_archive sub_archive;
+                    param_archive sub_archive(nullptr);
                     sub_archive._version = _version;
                     sub_archive._p3 = _p3;
                     sub_archive._parameters = _parameters;
                     sub_archive._isExporting = _isExporting;
-                    delete sub_archive._p1;
+
                     if (_isExporting) {
                         sub_archive._p1 = _p1->add_entry_class(name, false);
                     } else {
@@ -1480,7 +265,7 @@ namespace intercept {
                     if (val) val->serialize(sub_archive);
                     if (_isExporting) {
                         sub_archive._p1->compress();
-                        delete sub_archive._p1;
+                        rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                         sub_archive._p1 = nullptr;
                     }
                 }
@@ -1540,7 +325,7 @@ namespace intercept {
             }
             //#TODO use type_def instead
             sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept :
-                single_type(st), compound_type(ct) {
+            single_type(st), compound_type(ct) {
                 set_vtable(vt);
             }
             void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
@@ -1571,7 +356,7 @@ namespace intercept {
             }
         };
 
-        struct unary_operator : public _refcount_vtable_dummy {
+        struct unary_operator : _refcount_vtable_dummy {
             unary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg_type;
@@ -1583,7 +368,7 @@ namespace intercept {
             unary_operator *op;
         };
 
-        struct binary_operator : public _refcount_vtable_dummy {
+        struct binary_operator : _refcount_vtable_dummy {
             binary_function   *procedure_addr;
             sqf_script_type   return_type;
             sqf_script_type   arg1_type;
@@ -1596,7 +381,7 @@ namespace intercept {
             binary_operator *op;
         };
 
-        struct nular_operator : public _refcount_vtable_dummy {
+        struct nular_operator : _refcount_vtable_dummy {
             nular_function   *procedure_addr;
             sqf_script_type   return_type;
         };
@@ -1631,19 +416,19 @@ namespace intercept {
             virtual void set_readonly(bool) {} //No clue what this does...
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
-            virtual void set_final(bool) {}; //Only on GameDataCode AFAIK
-        public: 
+            virtual void set_final(bool) {} //Only on GameDataCode AFAIK
+        public:
             virtual r_string to_string() const { return r_string(); }
-            virtual bool equals(const game_data *) const { return false; };
+            virtual bool equals(const game_data *) const { return false; }
             virtual const char *type_as_string() const { return "unknown"; }
             virtual bool is_nil() const { return false; }
         private:
-            virtual void placeholder() const {};
+            virtual void placeholder() const {}
             virtual bool can_serialize() { return false; }
 
 
-            int IAddRef() override { return add_ref(); };
-            int IRelease() override { return release(); };
+            int IAddRef() override { return add_ref(); }
+            int IRelease() override { return release(); }
         public:                               //#TODO make protected and give access to param_archive
             virtual serialization_return serialize(param_archive& ar) {
                 if (ar._isExporting) {
@@ -1684,18 +469,17 @@ namespace intercept {
             game_value() noexcept {
                 set_vtable(__vptr_def);
             }
-            ~game_value() noexcept {
-            }
+            ~game_value() noexcept {}
 
             void copy(const game_value& copy_) noexcept {
                 set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
                 data = copy_.data;
             }
-            
+
             game_value(const game_value& copy_) {//I don't see any use for this.
                 copy(copy_);
             }
-         
+
             game_value(game_value&& move_) noexcept {
                 set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
                 data = move_.data;
@@ -1707,7 +491,7 @@ namespace intercept {
             game_value(game_data* val_) noexcept {
                 set_vtable(__vptr_def);
                 data = val_;
-            };
+            }
             game_value(float val_);
             game_value(int val_);
             game_value(bool val_);
@@ -1767,7 +551,7 @@ namespace intercept {
             game_value& operator [](size_t i_) const;
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
-            /// doesn't handle all types. Will return GameDataType::ANY if not handled
+                                   /// doesn't handle all types. Will return GameDataType::ANY if not handled
             types::GameDataType type_enum() const;
 
             size_t size() const;
@@ -1790,7 +574,7 @@ namespace intercept {
             serialization_return serialize(param_archive& ar) override;
 
             ref<game_data> data;
-            [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
+            [[deprecated]] static void* operator new(const std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
         #ifndef __linux__
         protected:
@@ -1810,7 +594,7 @@ namespace intercept {
             ~game_value_static();
             game_value_static(const game_value& copy) : game_value(copy) {}
             game_value_static(game_value&& move) : game_value(move) {}
-            game_value_static operator=(const game_value& copy) { data = copy.data;return *this; }
+            game_value_static operator=(const game_value& copy) { data = copy.data; return *this; }
             operator game_value() const { return *this; }
         };
 
@@ -1821,18 +605,18 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             static rv_pool_allocator* pool_alloc_base;
-            game_data_number();
-            game_data_number(float val_);
+            game_data_number() noexcept;
+            game_data_number(float val_) noexcept;
             game_data_number(const game_data_number &copy_);
-            game_data_number(game_data_number &&move_);
+            game_data_number(game_data_number &&move_) noexcept;
             game_data_number& operator = (const game_data_number &copy_);
-            game_data_number& operator = (game_data_number &&move_);
+            game_data_number& operator = (game_data_number &&move_) noexcept;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
             size_t hash() const {
                 return __internal::pairhash(type_def, number);
-            };
+            }
             //protected:
             //    static thread_local game_data_pool<game_data_number> _data_pool;
         };
@@ -1845,13 +629,13 @@ namespace intercept {
             game_data_bool();
             game_data_bool(bool val_);
             game_data_bool(const game_data_bool &copy_);
-            game_data_bool(game_data_bool &&move_);
+            game_data_bool(game_data_bool &&move_) noexcept;
             game_data_bool& operator = (const game_data_bool &copy_);
-            game_data_bool& operator = (game_data_bool &&move_);
+            game_data_bool& operator = (game_data_bool &&move_) noexcept;
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
-            size_t hash() const { return __internal::pairhash(type_def, val); };
+            size_t hash() const { return __internal::pairhash(type_def, val); }
             //protected:
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
@@ -1867,13 +651,13 @@ namespace intercept {
             game_data_array(const std::initializer_list<game_value> &init_);
             game_data_array(auto_array<game_value> &&init_);
             game_data_array(const game_data_array &copy_);
-            game_data_array(game_data_array &&move_);
+            game_data_array(game_data_array &&move_) noexcept;
             game_data_array& operator = (const game_data_array &copy_);
-            game_data_array& operator = (game_data_array &&move_);
+            game_data_array& operator = (game_data_array &&move_) noexcept;
             ~game_data_array();
             auto_array<game_value> data;
             auto length() { return data.count(); }
-            size_t hash() const { return __internal::pairhash(type_def, data.hash()); };
+            size_t hash() const { return __internal::pairhash(type_def, data.hash()); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };
@@ -1883,16 +667,16 @@ namespace intercept {
             static uintptr_t type_def;
             static uintptr_t data_type_def;
             static rv_pool_allocator* pool_alloc_base;
-            game_data_string();
+            game_data_string() noexcept;
             game_data_string(const std::string &str_);
             game_data_string(const r_string &str_);
             game_data_string(const game_data_string &copy_);
-            game_data_string(game_data_string &&move_);
+            game_data_string(game_data_string &&move_) noexcept;
             game_data_string& operator = (const game_data_string &copy_);
-            game_data_string& operator = (game_data_string &&move_);
+            game_data_string& operator = (game_data_string &&move_) noexcept;
             ~game_data_string();
             r_string raw_string;
-            size_t hash() const { return __internal::pairhash(type_def, raw_string); };
+            size_t hash() const { return __internal::pairhash(type_def, raw_string); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             //protected:
@@ -1906,8 +690,8 @@ namespace intercept {
             game_data_group() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, group); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, group); }
             void *group{};
         };
 
@@ -1918,8 +702,8 @@ namespace intercept {
             game_data_config() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, config); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, config); }
             void *config{};
             auto_array<r_string> path;
         };
@@ -1931,8 +715,8 @@ namespace intercept {
             game_data_control() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, control); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, control); }
             void *control{};
         };
 
@@ -1943,8 +727,8 @@ namespace intercept {
             game_data_display() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, display); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, display); }
             void *display{};
         };
 
@@ -1955,8 +739,8 @@ namespace intercept {
             game_data_location() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, location); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, location); }
             void *location{};
         };
 
@@ -1967,7 +751,7 @@ namespace intercept {
             game_data_script() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
+            }
             size_t hash() const { return __internal::pairhash(type_def, script); }
             void *script{};
         };
@@ -1979,8 +763,8 @@ namespace intercept {
             game_data_side() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, side); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, side); }
             void *side{};
         };
 
@@ -1991,8 +775,8 @@ namespace intercept {
             game_data_rv_text() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, rv_text); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, rv_text); }
             void *rv_text{};
         };
 
@@ -2003,8 +787,8 @@ namespace intercept {
             game_data_team_member() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, team); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, team); }
             void *team{};
         };
 
@@ -2015,9 +799,20 @@ namespace intercept {
             game_data_rv_namespace() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, rv_namespace); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, rv_namespace); }
             void *rv_namespace{};
+        };
+
+        class game_data_nothing : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            game_data_nothing() noexcept {
+                *reinterpret_cast<uintptr_t*>(this) = type_def;
+                *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
+            }
+            size_t hash() const { return type_def; }
         };
 
 
@@ -2053,8 +848,8 @@ namespace intercept {
             game_data_code() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, code_string); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, code_string); }
             r_string code_string;
             ref<compact_array<ref<game_instruction>>> instructions;
             uint32_t _dummy1;
@@ -2069,8 +864,8 @@ namespace intercept {
             game_data_object() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
-            };
-            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); };
+            }
+            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); }
             struct visualState {
                 //will be false if you called stuff on nullObj
                 bool valid{ false };
@@ -2122,7 +917,7 @@ namespace intercept {
                     s1->_aside,
                     s1->_up,
                     s1->_dir,
-                    { s1->_position.x,s1->_position.z,s1->_position.y},
+                    { s1->_position.x,s1->_position.z,s1->_position.y },
                     s1->_scale,
                     s1->_maxScale,
                     s2->_deltaT,
@@ -2182,7 +977,7 @@ namespace intercept {
             struct {
                 uint32_t _x{};
                 void* object{};
-            } *object {};
+            } *object{};
         };
         //#TODO add game_data_nothing
 
@@ -2199,6 +994,7 @@ namespace intercept {
                 std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
                 game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
                 void(*setvar_func) (const char* name, const game_value& val) { nullptr };
+                uintptr_t gameState;
             };
         }
 
@@ -2209,7 +1005,7 @@ namespace intercept {
         class registered_sqf_function {
             friend class sqf_functions;
         public:
-            constexpr registered_sqf_function() noexcept {};
+            constexpr registered_sqf_function() noexcept {}
             explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;
             void clear() noexcept { _function = nullptr; }
         private:
@@ -2221,7 +1017,7 @@ namespace intercept {
         template <game_value(*T)(game_value_parameter, game_value_parameter)>
         static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
             void* func = (void*) T;
-            __asm{
+            __asm {
                 pop ecx;
                 pop ebp;
                 mov eax, [esp + 12];

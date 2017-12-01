@@ -2,13 +2,13 @@
 
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-  <Type Name="r_string">
+  <Type Name="intercept::types::r_string">
     <DisplayString Condition="_ref._ref == 0">-- empty --</DisplayString>
     <DisplayString>{&amp;(_ref._ref-&gt;_data),s}</DisplayString>
     <StringView>&amp;(_ref._ref-&gt;_data),s</StringView>
   </Type>
   
-  <Type Name="rv_array&lt;*&gt;">
+  <Type Name="intercept::types::rv_array&lt;*&gt;">
     <DisplayString Condition="_n == 0">Empty</DisplayString>
     <DisplayString Condition="_n == 1">1 item: [{_data[0]}]</DisplayString>
     <DisplayString Condition="_n == 2">2 items: [{_data[0]},{_data[1]}]</DisplayString>
@@ -26,7 +26,7 @@
     </Expand>
   </Type>
 
-  <Type Name="ref&lt;*&gt;">
+  <Type Name="intercept::types::ref&lt;*&gt;">
     <DisplayString Condition="_ref == 0">NULL</DisplayString>
     <DisplayString>{*_ref}</DisplayString>
     <Expand>
@@ -34,7 +34,7 @@
     </Expand>
   </Type>
   
-  <Type Name="map_string_to_class&lt;*&gt;">
+  <Type Name="intercept::types::map_string_to_class&lt;*&gt;">
     <DisplayString>count = {_count}</DisplayString>
     <Expand >
       <Item Name="entryCount">_count</Item>

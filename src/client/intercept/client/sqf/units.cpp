@@ -1,4 +1,4 @@
-﻿#include "units.hpp"
+#include "units.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -498,8 +498,8 @@ namespace intercept {
         void set_unit_trait(const object &unit_, sqf_string_const_ref skill_name_, std::variant<bool, float> value_, bool is_custom_) {
             if (value_.index() == 0)
                 host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, {skill_name_, std::get<0>(value_), is_custom_});
-            return;
-            host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, {skill_name_, std::get<1>(value_), is_custom_});
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setunittrait__object__array__ret__nothing, unit_, {skill_name_, std::get<1>(value_), is_custom_});
         }
 
         void leave_vehicle(const object &value0_, const group &value1_) {

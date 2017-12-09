@@ -727,7 +727,7 @@ namespace intercept::client {
         */
         template <eventhandlers_mp Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle displayAddEventHandler(types::display disp, Func fnc) {
-        return { __displayAddEventHandler_Impl<Type>::add(disp, fnc), [unit,type = Type](EHIdentifier& id) { funcMapDisplayEH.erase(id); delScriptEH(disp,type,id); } };
+        return { __displayAddEventHandler_Impl<Type>::add(disp, fnc), [disp,type = Type](EHIdentifier& id) { funcMapDisplayEH.erase(id); delScriptEH(disp,type,id); } };
     }
 #pragma endregion
 

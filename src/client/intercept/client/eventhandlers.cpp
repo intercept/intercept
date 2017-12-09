@@ -28,8 +28,18 @@ namespace intercept::client {
                 if (found != funcMapObjectEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::display: {
+            case eventhandler_type::ctrl: {
                 auto found = funcMapCtrlEH.find({uid, handle, EHIteration });
+                if (found != funcMapCtrlEH.end())
+                    retVal = callEHHandler(found->second.first, args, found->second.second);
+            } break;
+            case eventhandler_type::mp: {
+                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration });
+                if (found != funcMapCtrlEH.end())
+                    retVal = callEHHandler(found->second.first, args, found->second.second);
+            } break;
+            case eventhandler_type::display: {
+                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration });
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
@@ -47,6 +57,9 @@ namespace intercept::client {
         funcMapMissionEH.clear();
         funcMapObjectEH.clear();
         funcMapCtrlEH.clear();
+        funcMapMPEH.clear();
+        funcMapDisplayEH.clear();
+
         EHIteration++;
     }
 #pragma region Mission Eventhandlers
@@ -556,7 +569,7 @@ namespace intercept::client {
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\"")
                               + intercept::client::host::module_name.data() + "\","
-                              + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
+                              + std::to_string(static_cast<uint32_t>(eventhandler_type::ctrl)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
@@ -604,7 +617,6 @@ namespace intercept::client {
         std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
 
         r_string typeStr;
-        //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
         #define EHMP_CASE(name, retVal, args) \
     case eventhandlers_mp::name: typeStr = #name##sv; break;
@@ -616,7 +628,7 @@ namespace intercept::client {
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\"")
             + intercept::client::host::module_name.data() + "\","
-            + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
+            + std::to_string(static_cast<uint32_t>(eventhandler_type::mp)) + ","
             + std::to_string(uid) + ","
             + "_thisEventHandler] InterceptClientEvent [_this]";
         float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
@@ -635,6 +647,75 @@ namespace intercept::client {
     }
 #pragma endregion
 
+#pragma region Display Eventhandlers
+    std::unordered_map<EHIdentifier, std::pair<eventhandlers_display, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapDisplayEH;
+
+    intercept::types::game_value callEHHandler(eventhandlers_display ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
+        switch (ehType) {
+
+            case eventhandlers_display::Load: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onLoad)>*>(func.get()))(args);
+            }break;
+            case eventhandlers_display::Unload: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onUnload)>*>(func.get()))(args[0], args[1]);
+            }break;
+            case eventhandlers_display::ChildDestroyed: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
+            }break;
+            case eventhandlers_display::KeyDown: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }break;
+            case eventhandlers_display::KeyUp: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }break;
+            case eventhandlers_display::MouseMoving: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseMoving)>*>(func.get()))(args[0], args[1], args[2]);
+            }break;
+            case eventhandlers_display::MouseZChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseZChanged)>*>(func.get()))(args[0], args[1]);
+            }break;
+            default: assert(false);
+        }
+        return {};
+    }
+
+    EHIdentifier addScriptEH(types::display disp, eventhandlers_display type) {
+        std::default_random_engine rng(std::random_device{}());
+        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
+
+        r_string typeStr;
+        switch (type) {
+        #define EHDisplay_CASE(name, retVal, args) \
+    case eventhandlers_display::name: typeStr = #name##sv; break;
+            EHDEF_Display(EHDisplay_CASE)
+            default:;
+        }
+
+        auto uid = dist(rng);
+        //#TODO use hash of moduleName as identifier.. That's faster..
+        std::string command = std::string("[\"")
+            + intercept::client::host::module_name.data() + "\","
+            + std::to_string(static_cast<uint32_t>(eventhandler_type::display)) + ","
+            + std::to_string(uid) + ","
+            + "_thisEventHandler] InterceptClientEvent [_this]";
+        float ehid = intercept::sqf::display_add_event_handler(disp, static_cast<sqf_string_const_ref>(typeStr), command);
+
+        return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+    }
+
+    void delScriptEH(types::display disp, eventhandlers_display type, EHIdentifier& handle) {
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;//Handle not valid anymore
+        r_string typeStr;
+        switch (type) {
+            EHDEF_Display(EHDisplay_CASE)
+            default:;
+        }
+        sqf::display_remove_eventhandler(disp, static_cast<sqf_string_const_ref>(typeStr), handle.arma_eh_id);
+    }
+#pragma endregion
+
+
+#pragma region Custom Callback
 
     std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value_parameter)>>, EHIdentifier_hasher> customCallbackMap;
 
@@ -658,5 +739,6 @@ namespace intercept::client {
         return { command, { ident, [](EHIdentifier& id) { customCallbackMap.erase(id); } } };
     }
 
+#pragma endregion
 
 }  // namespace intercept::client

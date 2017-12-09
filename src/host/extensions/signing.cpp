@@ -312,6 +312,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         }
             break;
         case CERT_E_REVOCATION_FAILURE:
+        case CRYPT_E_REVOCATION_OFFLINE:
             returnCode = coreSigned ? security_class::core : security_class::self_signed;
             break;
         case CRYPT_E_REVOKED: //cert actively revoked

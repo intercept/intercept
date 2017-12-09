@@ -663,8 +663,8 @@ namespace intercept::client {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
             }break;
             case eventhandlers_display::KeyDown: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }break;
+                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Display_onKeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }
             case eventhandlers_display::KeyUp: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
             }break;

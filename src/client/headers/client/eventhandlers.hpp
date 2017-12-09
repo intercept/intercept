@@ -668,7 +668,7 @@ namespace intercept::client {
     XX(Load, void, EH_Func_Args_Display_onLoad)                               \
     XX(Unload, void, EH_Func_Args_Display_onUnload)                           \
     XX(ChildDestroyed, void, EH_Func_Args_Display_onChildDestroyed)           \
-    XX(KeyDown, void, EH_Func_Args_Display_onKeyDown)                         \
+    XX(KeyDown, bool, EH_Func_Args_Display_onKeyDown)                         \
     XX(KeyUp, void, EH_Func_Args_Display_onKeyUp)                             \
     XX(MouseMoving, void, EH_Func_Args_Display_onMouseMoving)                 \
     XX(MouseZChanged, void, EH_Func_Args_Display_onMouseZChanged)

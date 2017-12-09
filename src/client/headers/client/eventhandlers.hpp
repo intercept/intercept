@@ -725,7 +725,7 @@ namespace intercept::client {
         * @return A wrapper that should be kept alive as long as the Eventhandler should be active
         * @ingroup eh_bind
         */
-        template <eventhandlers_mp Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
+        template <eventhandlers_display Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle displayAddEventHandler(types::display disp, Func fnc) {
         return { __displayAddEventHandler_Impl<Type>::add(disp, fnc), [disp,type = Type](EHIdentifier& id) { funcMapDisplayEH.erase(id); delScriptEH(disp,type,id); } };
     }

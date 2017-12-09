@@ -717,21 +717,19 @@ namespace intercept::client {
     EHDEF_Display(EH_Add_Display_definition)
 
 
-        /**
-        * @brief Registers a Display Eventhandler with callback to a C++ function
-        * @tparam Type is a value from intercept::client::eventhandlers_display
-        * @param disp - the display you add this Eventhandler to.
-        * @param fnc - The function that will get called
-        * @return A wrapper that should be kept alive as long as the Eventhandler should be active
-        * @ingroup eh_bind
-        */
-        template <eventhandlers_display Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
+    /**
+    * @brief Registers a Display Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_display
+    * @param disp - the display you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
+    template <eventhandlers_display Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
     [[nodiscard]] EHIdentifierHandle displayAddEventHandler(types::display disp, Func fnc) {
         return { __displayAddEventHandler_Impl<Type>::add(disp, fnc), [disp,type = Type](EHIdentifier& id) { funcMapDisplayEH.erase(id); delScriptEH(disp,type,id); } };
     }
 #pragma endregion
-
-
 
 #pragma region Custom Callback
 

@@ -235,7 +235,6 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
     if (!ret4) {
         if (pSignerInfo) LocalFree(pSignerInfo);
         if (hStore) CertCloseStore(hStore, 0);
-        if (pSignerInfo) LocalFree(pSignerInfo);
         if (pCertContext) CertFreeCertificateContext(pCertContext);
         return security_class::not_signed;
     }

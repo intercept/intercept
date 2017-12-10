@@ -91,6 +91,7 @@ namespace intercept::client {
         object,
         display,
         ctrl,
+        mp,
         custom
     };
 
@@ -600,7 +601,7 @@ namespace intercept::client {
 
 #define COMPILETIME_CHECK_ENUM_MP(name, retVal, funcArg) static_assert(eventhandlers_mp::name >= eventhandlers_mp::MPHit);
 
-    /** @enum eventhandlers_object
+    /** @enum eventhandlers_mp
     @brief #TODO
     */
     //#TODO doc
@@ -652,6 +653,85 @@ namespace intercept::client {
     }
 #pragma endregion
 
+#pragma region Display Eventhandlers
+
+#define EH_Func_Args_Display_onLoad types::display disp
+#define EH_Func_Args_Display_onUnload types::display disp, float exit_code
+#define EH_Func_Args_Display_onChildDestroyed types::display disp, types::display closed_disp, float exit_code
+#define EH_Func_Args_Display_onKeyDown types::display disp, int dik, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_onKeyUp types::display disp, int dik, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_onMouseMoving types::display disp, float delta_x, float delta_y
+#define EH_Func_Args_Display_onMouseZChanged types::display disp, float change
+
+    //Name,Function return value, Function Arguments
+#define EHDEF_Display(XX)                                                   \
+    XX(Load, void, EH_Func_Args_Display_onLoad)                               \
+    XX(Unload, void, EH_Func_Args_Display_onUnload)                           \
+    XX(ChildDestroyed, void, EH_Func_Args_Display_onChildDestroyed)           \
+    XX(KeyDown, bool, EH_Func_Args_Display_onKeyDown)                         \
+    XX(KeyUp, void, EH_Func_Args_Display_onKeyUp)                             \
+    XX(MouseMoving, void, EH_Func_Args_Display_onMouseMoving)                 \
+    XX(MouseZChanged, void, EH_Func_Args_Display_onMouseZChanged)
+
+#define COMPILETIME_CHECK_ENUM_Display(name, retVal, funcArg) static_assert(eventhandlers_display::name >= eventhandlers_display::Load);
+
+    /** @enum eventhandlers_display
+    @brief #TODO
+    */
+    //#TODO doc
+    enum class eventhandlers_display {
+        Load,
+        Unload,
+        ChildDestroyed,
+        KeyDown,
+        KeyUp,
+        MouseMoving,
+        MouseZChanged
+    };
+
+    EHDEF_Display(COMPILETIME_CHECK_ENUM_Display)
+
+    /// @private
+    intercept::types::game_value callEHHandler(eventhandlers_display ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
+    /// @private
+    EHIdentifier addScriptEH(types::display disp, eventhandlers_display type);
+    /// @private
+    void delScriptEH(types::display disp, eventhandlers_display type, EHIdentifier& handle);
+    /// @private
+    extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_display, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapDisplayEH;
+    /// @private
+    template <eventhandlers_display Type>
+    struct __displayAddEventHandler_Impl;
+
+#define EH_Add_Display_definition(name, retVal, fncArg)                                                                                                          \
+    template <>                                                                                                                                               \
+    struct __displayAddEventHandler_Impl<eventhandlers_display::name> {                                                                                             \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                        \
+        [[nodiscard]] static EHIdentifier add(types::display disp, std::function<retVal(fncArg)> function) {                                                  \
+            auto ident = addScriptEH(disp, eventhandlers_display::name);                                                                                         \
+            funcMapDisplayEH[ident] = {eventhandlers_display::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
+            return ident;                                                                                                                                     \
+        }                                                                                                                                                     \
+    };
+
+    EHDEF_Display(EH_Add_Display_definition)
+
+
+    /**
+    * @brief Registers a Display Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_display
+    * @param disp - the display you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
+    template <eventhandlers_display Type, typename Func = typename __displayAddEventHandler_Impl<Type>::fncType>
+    [[nodiscard]] EHIdentifierHandle displayAddEventHandler(types::display disp, Func fnc) {
+        return { __displayAddEventHandler_Impl<Type>::add(disp, fnc), [disp,type = Type](EHIdentifier& id) { funcMapDisplayEH.erase(id); delScriptEH(disp,type,id); } };
+    }
+#pragma endregion
+
+#pragma region Custom Callback
 
     /// @private
     extern std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value_parameter)>>, EHIdentifier_hasher> customCallbackMap;
@@ -665,5 +745,5 @@ namespace intercept::client {
     * @ingroup eh_bind
     */
     [[nodiscard]] std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<types::game_value(types::game_value_parameter)> fnc);
-
+#pragma endregion
 }  // namespace intercept::client                                                                                    

@@ -338,7 +338,10 @@ namespace intercept {
         }
 
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_), public_ });
+            if (public_)
+                host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_), public_ });
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_)});
         }
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_) {

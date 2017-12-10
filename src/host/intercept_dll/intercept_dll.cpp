@@ -105,29 +105,34 @@ __attribute__((constructor))
         spdlog::set_level(spdlog::level::info);
     }
 
-    auto logfile_it_ = arg_line.find("-interceptlogfile"sv);
-    if (logfile_it_ != std::string::npos) {
-        auto path_start_ = logfile_it_ + 17; // skip -interceptlogfile
 
-        //trim left
-        path_start_ = arg_line.find_first_not_of(" \t\"", path_start_);
-        
-        //trim right
-        size_t path_end_ = arg_line.find("\"", path_start_); // find ending quotationmark
-        
-        if (path_start_ == std::string::npos) {
-            logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
-        } else {
-            std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
-            logging::logfile = spdlog::rotating_logger_mt("logfile", _path, 1024000, 3);
-        }
-    } else {
-        logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
-    }
-
-    logging::logfile->flush_on(spdlog::level::debug);
     spdlog::set_pattern("[%H:%M:%S]-{%l}- %v");
+    try {
+        auto logfile_it_ = arg_line.find("-interceptlogfile"sv);
+        if (logfile_it_ != std::string::npos) {
+            auto path_start_ = logfile_it_ + 17; // skip -interceptlogfile
 
+            //trim left
+            path_start_ = arg_line.find_first_not_of(" \t\"", path_start_);
+
+            //trim right
+            size_t path_end_ = arg_line.find("\"", path_start_); // find ending quotationmark
+
+            if (path_start_ == std::string::npos) {
+                logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+            } else {
+                std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
+                logging::logfile = spdlog::rotating_logger_mt("logfile", _path, 1024000, 3);
+            }
+        } else {
+            logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+        }
+
+        logging::logfile->flush_on(spdlog::level::debug);
+    } catch (const spdlog::spdlog_ex&) {
+        spdlog::set_level(spdlog::level::off);
+        logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
+    }
 
     LOG(INFO, "Intercept DLL Loaded");
 }

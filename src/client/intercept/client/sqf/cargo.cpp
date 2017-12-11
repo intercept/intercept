@@ -11,11 +11,11 @@ namespace intercept {
         }
 
         std::vector<object> assigned_cargo(const object &veh_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__assignedcargo__object__ret__array, veh_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__assignedcargo__object__ret__array, veh_));
         }
 
         std::vector<object> get_vehicle_cargo(const object &vehicle_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__getvehiclecargo__object__ret__array, vehicle_));
         }
 
         object is_vehicle_cargo(const object &vehicle_) {
@@ -79,11 +79,11 @@ namespace intercept {
         }
 
         std::vector<object> rope_attached_objects(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropeattachedobjects__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropeattachedobjects__object__ret__array, obj_));
         }
 
         std::vector<object> ropes(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__ropes__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropes__object__ret__array, obj_));
         }
 
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
@@ -209,9 +209,7 @@ namespace intercept {
 
         std::vector<vector3> rope_end_position(const object &rope_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ropeendposition__object__ret__array, rope_);
-
-            std::vector<vector3> end_positions = {__helpers::__convert_to_vector3(ret[0]), __helpers::__convert_to_vector3(ret[1])};
-            return end_positions;
+            return __helpers::__convert_to_vector<vector3>(ret);
         }
 
         void rope_unwind(const object &rope_, float speed_, float length_) {
@@ -245,7 +243,7 @@ namespace intercept {
 
         //attach
         std::vector<object> attached_objects(const object &obj_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__attachedobjects__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__attachedobjects__object__ret__array, obj_));
         }
 
         object attached_to(const object &obj_) {

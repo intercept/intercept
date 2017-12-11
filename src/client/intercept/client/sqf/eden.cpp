@@ -56,7 +56,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__add3deneventhandler__array__ret__scalar, params);
         }
         std::vector<object> all_eden_entities() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__all3denentities__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__all3denentities__ret__array));
         }
         void do_eden_action(sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__do3denaction__string__ret__nothing, value_);
@@ -325,12 +325,8 @@ namespace intercept {
             game_value parameters_({configPath_,
                                     position_});
 
-            auto eden_entities_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__create3dencomposition__array__ret__array, parameters_));
-            std::vector<game_value> output_;
-            for (uint32_t i = 0; i < eden_entities_.size(); ++i) {
-                output_.push_back(eden_entities_[i]);
-            }
-            return output_;
+            auto ret = host::functions.invoke_raw_unary(__sqf::unary__create3dencomposition__array__ret__array, parameters_);
+            return __helpers::__convert_to_vector<game_value>(ret);
         }
 
         game_value create_3den_entity(sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty_) {
@@ -343,12 +339,8 @@ namespace intercept {
         }
 
         std::vector<game_value> create_3den_connections(const game_value &entity_) {
-            auto connections_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denconnections__any__ret__array, entity_));
-            std::vector<game_value> output_;
-            for (uint32_t i = 0; i < connections_.size(); ++i) {
-                output_.push_back(connections_[i]);
-            }
-            return output_;
+            auto ret = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denconnections__any__ret__array, entity_));
+            return __helpers::__convert_to_vector<game_value>(ret);
         }
 
         game_value get_3den_entity(const float &entity_id_) {
@@ -356,21 +348,13 @@ namespace intercept {
         }
 
         std::vector<game_value> get_3den_layer_entities(const float &layer_id_) {
-            auto entities_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
-            std::vector<game_value> output_;
-            for (uint32_t i = 0; i < entities_.size(); ++i) {
-                output_.push_back(entities_[i]);
-            }
-            return output_;
+            auto ret = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denlayerentities__scalar__ret__array, layer_id_));
+            return __helpers::__convert_to_vector<game_value>(ret);
         }
 
         std::vector<game_value> get_3den_selected(sqf_string_const_ref type_) {
-            auto entities_ = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denselected__string__ret__array, type_));
-            std::vector<game_value> output_;
-            for (uint32_t i = 0; i < entities_.size(); ++i) {
-                output_.push_back(entities_[i]);
-            }
-            return output_;
+            auto ret = game_value(host::functions.invoke_raw_unary(__sqf::unary__get3denselected__string__ret__array, type_));
+            return __helpers::__convert_to_vector<game_value>(ret);
         }
 
         bool set_3den_attributes(const std::vector<game_value> &entity_attributes_) {
@@ -406,10 +390,10 @@ namespace intercept {
 
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, sqf_string_const_ref_wrapper, std::reference_wrapper<float>> entity_, sqf_string_const_ref attribute_) {
             switch (entity_.index()) {
-                case 0: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
-                case 1: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
-                case 2: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
-                case 3: return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
+                case 0: return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__object__string__ret__array, std::get<0>(entity_).get(), attribute_));
+                case 1: return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__group__string__ret__array, std::get<1>(entity_).get(), attribute_));
+                case 2: return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__string__string__ret__array, std::get<2>(entity_).get(), attribute_));
+                case 3: return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, std::get<3>(entity_).get(), attribute_));
             }
             return std::vector<game_value>();
             //#TODO: add binary__get3denattribute__array__string__ret__array
@@ -436,11 +420,11 @@ namespace intercept {
         }
 
         sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
         }
 
         sqf_return_string_list get_mission_layers() {  //#TODO: Find out if this really returns sqf_return_string_list
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__getmissionlayers__ret__array));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__getmissionlayers__ret__array));
         }
 
         void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_) {

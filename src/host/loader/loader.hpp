@@ -30,13 +30,13 @@ namespace intercept {
 
     struct sqf_register_functions {
         sqf_register_functions() : _types(static_cast<size_t>(types::GameDataType::end)) {}
-        uintptr_t _gameState;
-        uintptr_t _operator_construct;
-        uintptr_t _operator_insert;
-        uintptr_t _unary_construct;
-        uintptr_t _unary_insert;
-        uintptr_t _type_vtable;
-        uintptr_t _file_banks;
+        uintptr_t _gameState{};
+        uintptr_t _operator_construct{};
+        uintptr_t _operator_insert{};
+        uintptr_t _unary_construct{};
+        uintptr_t _unary_insert{};
+        uintptr_t _type_vtable{};
+        uintptr_t _file_banks{};
         std::vector<const script_type_info *> _types;
     };
 
@@ -175,46 +175,6 @@ namespace intercept {
         bool get_function(std::string_view function_name_, nular_function &function_);
 
         /*!@{
-        @brief Hook a function.
-
-        Hooks a function so that when it is executed in SQF the hooked function
-        will execute in its place instead.
-
-        @warning Warning, this will only hook the first function (and in the future
-        raise an exception if there is an overload of this function).
-
-        @param [in] function_name_ The name of the function to hook.
-        @param [in] hook_ A void pointer to the function to call instead.
-        @param [out] trampoline_ A reference to the trampoline that stores the
-        original function call.
-
-        @return `true` if the hook succeded, `false` if the hook failed.
-        */
-        bool hook_function(std::string_view function_name_, void *hook_, unary_function &trampoline_);
-        bool hook_function(std::string_view function_name_, void *hook_, binary_function &trampoline_);
-        bool hook_function(std::string_view function_name_, void *hook_, nular_function &trampoline_);
-        //!@}
-
-        /*!@{
-        @brief Unhook a unary function.
-
-        Unhooks an already hooked functon. You must pass in the name, original
-        hooked function (the `hook_` parameter that was passed in) and the trampoline
-        that was assigned by the hook function.
-
-        @param [in] function_name_ The name of the function to unhook.
-        @param [in] hook_ A void pointer to the function that is being called in
-        place of the original.
-        @param [out] trampoline_ The trampoline that was returned via reference
-        in the original hook.
-        */
-        bool unhook_function(std::string function_name_, void *hook_, unary_function &trampoline_);
-        bool unhook_function(std::string function_name_, void *hook_, binary_function &trampoline_);
-        bool unhook_function(std::string function_name_, void *hook_, nular_function &trampoline_);
-        //!@}
-
-
-        /*!@{
         @brief Return the associated function maps.
         */
         const unary_map & unary() const;
@@ -232,8 +192,8 @@ namespace intercept {
         */
         const sqf_register_functions& get_register_sqf_info() const;
 
-
-
+        ///Finds game_state on the Stack
+        static uintptr_t find_game_state(uintptr_t stack_base);
 
     protected:
         /*!
@@ -260,15 +220,19 @@ namespace intercept {
         */
         sqf_register_functions _sqf_register_funcs;
 
+        __internal::game_state* game_state;
+        uintptr_t evaluate_script_function;
+        uintptr_t varset_function;
+
         bool _attached;
         bool _patched;
     };
 
-    namespace __internal {	 //@Nou where should i store this stuff? It shall only be used internally.
+    namespace __internal {
         class gsFuncBase {
         public:
             r_string _name;
-            void copyPH(gsFuncBase* other) {
+            void copyPH(const gsFuncBase* other) noexcept {
                 securityStuff = other->securityStuff;
                 //std::copy(std::begin(other->securityStuff), std::end(other->securityStuff), std::begin(securityStuff));
             }
@@ -283,7 +247,7 @@ namespace intercept {
                 11
             #endif
             #endif
-            > securityStuff;  //Will scale with x64
+            > securityStuff {};  //Will scale with x64
             //size_t securityStuff[11];
         };
         class gsFunction : public gsFuncBase {
@@ -332,15 +296,15 @@ namespace intercept {
             r_string _category; //0x4d
         #endif
             void* placeholder11{ nullptr };//0x50 JNI probably
-            const char *get_map_key() const { return _name2.data(); }
+            const char *get_map_key() const noexcept { return _name2.data(); }
         };
 
         class game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
             game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
-            game_functions() {}
-            const char *get_map_key() const { return _name.data(); }
+            game_functions() noexcept {}
+            const char *get_map_key() const noexcept { return _name.data(); }
         };
 
         class game_operators : public auto_array<gsOperator>, public gsFuncBase {
@@ -348,8 +312,8 @@ namespace intercept {
             game_operators(std::string name) : _name(name.c_str()) {}
             r_string _name;
             int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
-            game_operators() {}
-            const char *get_map_key() const { return _name.data(); }
+            game_operators() noexcept {}
+            const char *get_map_key() const noexcept { return _name.data(); }
         };
     }
 

@@ -73,50 +73,29 @@ namespace intercept {
                                     sort_by_distance_});
             game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
 
-            game_data_array *intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
-
-            std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length(); ++i) {
-                output.push_back(object(intersects->data[i]));
-            }
-
-            return output;
+            return __helpers::__convert_to_vector<object>(intersects_value);
         }
 
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_) {
-            game_value array_input({begin_pos_,
-                                    end_pos_,
-                                    ignore_obj_one_,
-                                    game_value(),
-                                    sort_by_distance_});
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_) {
+            game_value array_input({ begin_pos_,
+                end_pos_,
+                ignored_objects_.size() > 0 ? game_value(*ignored_objects_.begin()) : game_value(),
+                ignored_objects_.size() > 1 ? game_value(*(ignored_objects_.begin() + 1)) : game_value(),
+                sort_by_distance_ });
             game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
-
-            game_data_array *intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
-
-            std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length(); ++i) {
-                output.push_back(object(intersects->data[i]));
+            if (ignored_objects_.size() > 2) {//filter out the other objects
+                                              //modified variant of __helpers::__convert_to_vector<object>
+                std::vector<object> output;
+                if (intersects_value.size() == 0) return {};
+                output.reserve(intersects_value.size());
+                for (auto &gv : intersects_value.to_array()) {
+                    if (std::find(ignored_objects_.begin(), ignored_objects_.end(), gv) == ignored_objects_.end())//Not in ignore list
+                        output.emplace_back(object(gv));
+                }
+                return output;
             }
 
-            return output;
-        }
-
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_, const object &ignore_obj_two_) {
-            game_value array_input({begin_pos_,
-                                    end_pos_,
-                                    ignore_obj_one_,
-                                    ignore_obj_two_,
-                                    sort_by_distance_});
-            game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectswith__array__ret__array, array_input);
-
-            game_data_array *intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
-
-            std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length(); ++i) {
-                output.push_back(object(intersects->data[i]));
-            }
-
-            return output;
+            return __helpers::__convert_to_vector<object>(intersects_value);
         }
 
         bool terrain_intersect(const vector3 &begin_pos_, const vector3 &end_pos_) {
@@ -153,29 +132,36 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__lineintersects__array__ret__bool, array_input);
         }
 
-        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_obj_, const object &ignore_obj_, bool sort_by_distance_, int flags_) {
+        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_obj_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_, int flags_) {
             game_value array_input({begin_position_,
                                     end_position_,
                                     with_obj_,
-                                    ignore_obj_,
+                                    ignored_objects_.size() > 0 ? game_value(*ignored_objects_.begin()) : game_value(),
                                     sort_by_distance_,
                                     static_cast<float>(flags_)});
 
             game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectsobjs__array__ret__array, array_input);
-            game_data_array *intersects = static_cast<game_data_array *>(intersects_value.data.getRef());
 
-            std::vector<object> output;
-            for (uint32_t i = 0; i < intersects->length(); ++i) {
-                output.push_back(object(intersects->data[i]));
+            if (ignored_objects_.size() > 1) {//filter out the other objects
+                                              //modified variant of __helpers::__convert_to_vector<object>
+                std::vector<object> output;
+                if (intersects_value.size() == 0) return {};
+                output.reserve(intersects_value.size());
+                for (auto &gv : intersects_value.to_array()) {
+                    if (std::find(ignored_objects_.begin(), ignored_objects_.end(), gv) == ignored_objects_.end())//Not in ignore list
+                        output.emplace_back(object(gv));
+                }
+                return output;
             }
-            return output;
+
+            return __helpers::__convert_to_vector<object>(intersects_value);
         }
 
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_) {
             game_value params({pos1_,
                                pos2_});
 
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params));
+            return host::functions.invoke_raw_unary(__sqf::unary__terrainintersectatasl__array__ret__array, params);
         }
 
         float check_visibility(const object& ignore_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {

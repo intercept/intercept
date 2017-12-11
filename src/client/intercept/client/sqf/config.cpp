@@ -42,7 +42,7 @@ namespace intercept {
 
         std::vector<config> config_hierarchy(const config &config_entry_) {
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__confighierarchy__config__ret__array, config_entry_);
-            return __helpers::__convert_to_configs_vector(output);
+            return __helpers::__convert_to_vector<config>(output);
         }
 
         sqf_return_string config_name(const config &config_entry_) {
@@ -54,7 +54,7 @@ namespace intercept {
                                     condition_,
                                     inherit});
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__configproperties__array__ret__array, array_entry);
-            return __helpers::__convert_to_configs_vector(output);
+            return __helpers::__convert_to_vector<config>(output);
         }
 
         sqf_return_string config_source_mod(const config &config_entry_) {
@@ -63,16 +63,12 @@ namespace intercept {
 
         sqf_return_string_list config_source_mod_list(const config &config_entry_) {
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__configsourcemodlist__config__ret__array, config_entry_);
-            return __helpers::__convert_to_strings_vector(output);
+            return __helpers::__convert_to_vector<sqf_return_string>(output);
         }
 
-        float count(const config &config_entry_) {
+        int count(const config &config_entry_) {
             return host::functions.invoke_raw_unary(__sqf::unary__count__config__ret__scalar, config_entry_);
         }
-
-        //std::vector<game_value> get_array(const config &config_entry_) {
-        // TODO implement get_array
-        //}
 
         config get_mission_config(sqf_string_const_ref value_) {
             return config(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfig__string__ret__config, value_));
@@ -111,10 +107,10 @@ namespace intercept {
         }
 
         std::vector<config> config_classes(sqf_string_const_ref condition_, const config &config_) {
-            return __helpers::__convert_to_configs_vector(host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, condition_, config_));
+            return __helpers::__convert_to_vector<config>(host::functions.invoke_raw_binary(__sqf::binary__configclasses__string__config__ret__array, condition_, config_));
         }
 
-        config select(const config &a_config_, float a_number_) {
+        config select(const config &a_config_, int a_number_) {
             return config(host::functions.invoke_raw_binary(__sqf::binary__select__config__scalar__ret__config, a_config_, a_number_));
         }
 
@@ -162,7 +158,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__array__ret__bool, type1_, params);
         }
         sqf_return_string_list config_source_addon_list(const config &config_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__configsourceaddonlist__config__ret__array, config_));
         }
 
         std::vector<game_value> mod_params(sqf_string_const_ref mod_class_, mod_params_options options_) {
@@ -184,7 +180,7 @@ namespace intercept {
             if (options_ & mod_params_options::serverOnly) options.push_back("serverOnly"sv);
             if (options_ & mod_params_options::active) options.push_back("active"sv);
 
-            return __helpers::__convert_to_game_value_vector(
+            return __helpers::__convert_to_vector<game_value>(
                 host::functions.invoke_raw_unary(__sqf::unary__modparams__array__ret__array, {mod_class_, std::move(options)}));
         }
         sqf_return_string type_of(const object &value_) {

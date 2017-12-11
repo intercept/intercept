@@ -233,6 +233,10 @@ namespace intercept {
         std::vector<float> lnb_size(const control &ctrl_);
         rv_color lnb_color(float idc_, float row_, float column_);
         rv_color lnb_color(const control &ctrl_, float row_, float column_);
+        void lnb_sort(float idc_, int column_, bool reversed_ = false);
+        void lnb_sort(const control &ctrl_, int column_, bool reversed_ = false);
+        void lnb_sort_by_value(float idc_, int column_, bool reversed_ = false);
+        void lnb_sort_by_value(const control &ctrl_, int column_, bool reversed_ = false);
 
         //listbox
         bool lb_is_selected(const control &value0_, float value1_);
@@ -607,6 +611,8 @@ namespace intercept {
         void ct_set_value(const control &control_, float value_);
         float ct_value(const control &control_, float index_);
         rv_resolution get_resolution();
+        vector2 get_mouse_position();
+        bool is_ui_context();
 
     }  // namespace sqf
 }  // namespace intercept

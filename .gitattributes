@@ -1,4 +1,4 @@
 * text eol=crlf
-
-*.png binary
+*.png filter=lfs diff=lfs merge=lfs -text
 *.jpg binary
+*.exe filter=lfs diff=lfs merge=lfs -text

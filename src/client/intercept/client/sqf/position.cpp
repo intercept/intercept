@@ -1,4 +1,4 @@
-﻿#include "chat.hpp"
+#include "chat.hpp"
 #include "client/pointers.hpp"
 #include "position.hpp"
 #include "common_helpers.hpp"
@@ -165,31 +165,25 @@ namespace intercept {
         }
 
         vector3 velocity_model_space(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__velocitymodelspace__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(__sqf::unary__velocitymodelspace__object__ret__array, obj_);
         }
 
         vector3 vector_up_visual(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__vectorupvisual__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(__sqf::unary__vectorupvisual__object__ret__array, obj_);
         }
 
         vector3 vector_up(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__vectorup__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(__sqf::unary__vectorup__object__ret__array, obj_);
         }
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_);
         }
 
-        vector2 world_to_screen(const vector3 &pos_agl_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-        }
-
-        vector2 world_to_screen(const vector3 &pos_agl_, bool &in_screen_) {
+        std::optional<vector2> world_to_screen(const vector3 &pos_agl_) {
             game_value result = host::functions.invoke_raw_unary(__sqf::unary__worldtoscreen__array__ret__array, pos_agl_);
-            if (static_cast<game_data_array *>(result.data.getRef())->length() == 2)
-                in_screen_ = true;
-            else
-                in_screen_ = false;
-            return game_value(result);
+            if (static_cast<game_data_array *>(result.data.get())->length() == 2)
+                return game_value(result);
+            return {};
         }
         void set_vector_dir(const object &obj_, const vector3 &vec_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);
@@ -229,7 +223,7 @@ namespace intercept {
         }
 
         vector3 bounding_center(const object &obj_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__boundingcenter__object__ret__array, obj_));
+            return host::functions.invoke_raw_unary(__sqf::unary__boundingcenter__object__ret__array, obj_);
         }
 
         float get_dir(const object &value_) {
@@ -273,24 +267,24 @@ namespace intercept {
         }
 
         vector3 unit_aim_position(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(__sqf::unary__unitaimposition__object__ret__array, unit_);
         }
 
         vector3 unit_aim_position_visual(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_);
         }
         vector3 model_to_world_visual_world(const object &object_, const vector3 model_pos_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_));
+            return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_);
         }
 
         vector3 model_to_world_world(const object &object_, const vector3 model_pos_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_));
+            return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_);
         }
         vector3 screen_to_world(const vector2 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__screentoworld__array__ret__array, pos_);
         }
         vector3 model_to_world(const object &object_, const vector3 &offset_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__modeltoworld__object__array__ret__array, object_, offset_));
+            return host::functions.invoke_raw_binary(__sqf::binary__modeltoworld__object__array__ret__array, object_, offset_);
         }
         bool in_area(t_sqf_in_area_position position_, const object &trigger_) {
             game_value param_left;
@@ -426,7 +420,7 @@ namespace intercept {
                                      shore_line_,
                                      ignore_object_});
 
-            return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
+            return __helpers::__convert_to_vector<vector3>(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
         }
 
         vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_) {
@@ -495,20 +489,20 @@ namespace intercept {
             game_value args({std::move(types),
                              range_});
 
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
         }
 
-        float distance(std::variant<object, vector3> start_, std::variant<object, vector3> end_) {
-            game_value from, to;
-            switch (start_.index()) {
-                case 0: from = (std::get<object>(start_)); break;
-                case 1: from = (std::get<vector3>(start_)); break;
-            }
-            switch (end_.index()) {
-                case 0: to = (std::get<object>(start_)); break;
-                case 1: to = (std::get<vector3>(start_)); break;
-            }
-            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, from, to);
+        float distance(object start_, vector3 end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        }
+        float distance(object start_, object end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        }
+        float distance(vector3 start_, vector3 end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
+        }
+        float distance(vector3 start_, object end_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__distance__object_array__object_array__ret__scalar, start_, end_);
         }
 
         bool set_vehicle_position(const object &object_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, const object> position_, sqf_string_list_const_ref markers_, float placement_radius_, std::optional<std::string> special_) {
@@ -528,15 +522,28 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__setvehicleposition__object__array__ret__bool, object_, std::move(params_right));
         }
         vector3 building_exit(const object &building_, int index_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingexit__object__scalar__ret__array, building_, index_));
+            return host::functions.invoke_raw_binary(__sqf::binary__buildingexit__object__scalar__ret__array, building_, index_);
         }
 
         std::vector<vector3> building_pos(const object &building_, int index_) {
             if (index_ > -1) {
-                return std::vector<vector3>({__helpers::__convert_to_vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)))});
+                return std::vector<vector3>({host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_))});
             } else { 
-                return __helpers::__convert_to_vector3_vector(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
-            };
+                return __helpers::__convert_to_vector<vector3>(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
+            }
+        }
+
+        vector3 vector_model_to_world(const object& object_, vector3 modelDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworld__object__array__ret__array, object_, modelDir_);
+        }
+        vector3 vector_model_to_world_visual(const object& object_, vector3 modelDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworldvisual__object__array__ret__array, object_, modelDir_);
+        }
+        vector3 vector_world_to_model(const object& object_, vector3 worldDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodel__object__array__ret__array, object_, worldDir_);
+        }
+        vector3 vector_world_to_model_visual(const object& object_, vector3 worldDir_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodelvisual__object__array__ret__array, object_, worldDir_);
         }
 
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {

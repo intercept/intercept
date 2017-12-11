@@ -24,11 +24,11 @@ namespace intercept {
         }
 
         std::vector<int> tv_cursel(int idc_) {
-            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(__sqf::unary__tvcursel__scalar__ret__array, static_cast<float>(idc_)));
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__tvcursel__scalar__ret__array, static_cast<float>(idc_)));
         }
 
         std::vector<int> tv_cursel(const control &ctrl_) {
-            return __helpers::__convert_to_integers_vector(host::functions.invoke_raw_unary(__sqf::unary__tvcursel__control__ret__array, ctrl_));
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__tvcursel__control__ret__array, ctrl_));
         }
 
         void tv_collapse(int idc_, const std::vector<int> &path_) {
@@ -783,6 +783,22 @@ namespace intercept {
             return rv_color(host::functions.invoke_raw_binary(__sqf::binary__lnbcolor__control__array__ret__array, ctrl_, params));
         }
 
+        void lnb_sort(float idc_, int column_, bool reversed_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ , column_ ,reversed_ });
+        }
+
+        void lnb_sort(const control& ctrl_, int column_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsort__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
+        }
+
+        void lnb_sort_by_value(float idc_, int column_, bool reversed_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ ,column_ ,reversed_ });
+        }
+
+        void lnb_sort_by_value(const control& ctrl_, int column_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsortbyvalue__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
+        }
+
         sqf_return_string lnb_data(float idc_, float row_, float column_) {
             game_value item({row_,
                              column_});
@@ -815,11 +831,11 @@ namespace intercept {
         }
 
         std::vector<float> lnb_get_columns_position(float idc_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__lnbgetcolumnsposition__scalar__ret__array, idc_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lnbgetcolumnsposition__scalar__ret__array, idc_));
         }
 
         std::vector<float> lnb_get_columns_position(const control &ctrl_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__lnbgetcolumnsposition__control__ret__array, ctrl_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lnbgetcolumnsposition__control__ret__array, ctrl_));
         }
 
         sqf_return_string lnb_picture(float idc_, float row_, float column_) {
@@ -840,11 +856,11 @@ namespace intercept {
         }
 
         std::vector<float> lnb_size(float idc_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__lnbsize__control__ret__array, idc_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lnbsize__control__ret__array, idc_));
         }
 
         std::vector<float> lnb_size(const control &ctrl_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__lnbsize__scalar__ret__array, ctrl_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lnbsize__scalar__ret__array, ctrl_));
         }
 
         sqf_return_string lnb_text(float idc_, float row_, float column_) {
@@ -1235,21 +1251,12 @@ namespace intercept {
 
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ctrlmodeldirandup__control__ret__array, ctrl_);
-
-            vector3 vector_dir = __helpers::__convert_to_vector3(ret[0]);
-            vector3 vector_up = __helpers::__convert_to_vector3(ret[1]);
-
-            return {vector_dir, vector_up};
+            return __helpers::__convert_to_vector<vector3>(ret);
         }
 
         std::vector<float> ctrl_position(const control &ctrl_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ctrlposition__control__ret__array, ctrl_);
-
-            std::vector<float> position;
-            for (uint32_t i = 0; i < ret.size(); ++i)
-                position.push_back(float(ret[i]));
-
-            return position;
+            return __helpers::__convert_to_vector<float>(ret);
         }
 
         float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_) {
@@ -1367,7 +1374,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lbpictureright__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
-        // TODO std::vector<float> lb_selection(const control &control_) { ... }; // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
+        //#TODO std::vector<float> lb_selection(const control &control_) { ... }; // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
 
         void lb_set_color(int control_id_, int index_, rv_color color_) {
             game_value args({static_cast<float>(control_id_),
@@ -1537,7 +1544,7 @@ namespace intercept {
 
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_) {
             game_value args({static_cast<float>(index_),
-                             (tooltip_)});
+                             tooltip_});
 
             host::functions.invoke_raw_binary(__sqf::binary__lbsettooltip__control__array__ret__nothing, control_, args);
         }
@@ -1617,13 +1624,8 @@ namespace intercept {
         }
 
         std::vector<control> all_controls(const display &display_) {
-            game_value input__ = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
-            std::vector<control> output;
-
-            for (uint32_t i = 0; i < input__.size(); ++i) {
-                output.push_back(control(input__[i]));
-            }
-            return output;
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
+            return __helpers::__convert_to_vector<control>(ret);
         }
 
         control control_null() {
@@ -1878,7 +1880,7 @@ namespace intercept {
 
         //NULAR -- https://github.com/intercept/intercept/issues/13
         sqf_return_string_list all_cut_layers() {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__allcutlayers__ret__array));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__allcutlayers__ret__array));
         }
 
         int cut_fade_out(sqf_string_const_ref layer_name_, float duration_) {
@@ -2444,13 +2446,13 @@ namespace intercept {
         rv_ct_list ct_add_header(const control &control_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddheader__control__ret__array, control_);
 
-            return rv_ct_list({res[0], __helpers::__convert_to_controls_vector(res[1])});
+            return rv_ct_list({res[0], __helpers::__convert_to_vector<control>(res[1])});
         }
 
         rv_ct_list ct_add_row(const control &control_) {
             game_value res = host::functions.invoke_raw_unary(__sqf::unary__ctaddrow__control__ret__array, control_);
 
-            return rv_ct_list({res[0], __helpers::__convert_to_controls_vector(res[1])});
+            return rv_ct_list({res[0], __helpers::__convert_to_vector<control>(res[1])});
         }
 
         void ct_clear(const control &control_) {
@@ -2513,7 +2515,7 @@ namespace intercept {
         }
 
         std::vector<float> ct_find_header_rows(const control &control_, int index_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_binary(__sqf::binary__ctfindheaderrows__control__scalar__ret__array, control_, index_));
         }
 
         int ct_find_row_header(const control &control_, int index_) {
@@ -2521,7 +2523,7 @@ namespace intercept {
         }
 
         std::vector<control> ct_header_controls(const control &control_, int index_) {
-            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctheadercontrols__control__scalar__ret__array, control_, index_));
+            return __helpers::__convert_to_vector<control>(host::functions.invoke_raw_binary(__sqf::binary__ctheadercontrols__control__scalar__ret__array, control_, index_));
         }
 
         void ct_remove_headers(const control &control_, const std::vector<int> &header_indexes_) {
@@ -2533,7 +2535,7 @@ namespace intercept {
         }
 
         std::vector<control> ct_row_controls(const control &control_, int index_) {
-            return __helpers::__convert_to_controls_vector(host::functions.invoke_raw_binary(__sqf::binary__ctrowcontrols__control__scalar__ret__array, control_, index_));
+            return __helpers::__convert_to_vector<control>(host::functions.invoke_raw_binary(__sqf::binary__ctrowcontrols__control__scalar__ret__array, control_, index_));
         }
 
         void ct_set_cur_sel(const control &control_, int index_) {
@@ -2560,8 +2562,15 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctvalue__control__scalar__ret__scalar, control_, index_);
         }
         rv_resolution get_resolution() {
-            return rv_resolution::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
+            return rv_resolution::from_vector(__helpers::__convert_to_vector<float>(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array)));
         }
 
+        vector2 get_mouse_position() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmouseposition__ret__array);
+        }
+
+        bool is_ui_context() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isuicontext__ret__bool);
+        }
     }  // namespace sqf
 }  // namespace intercept

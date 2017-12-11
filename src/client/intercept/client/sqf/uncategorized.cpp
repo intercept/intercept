@@ -1,4 +1,4 @@
-﻿#include "uncategorized.hpp"
+#include "uncategorized.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "position.hpp"  //for uses of get_pos_obj. Should be removed once they are sorted
@@ -56,6 +56,7 @@ namespace intercept {
         // unary__reverse__array__ret__nothing
         // unary__round__scalar_nan__ret__scalar_nan
         // unary__selectrandom__array__ret__any
+        //  unary__selectrandomweighted__array__ret__any
         // unary__sin__scalar_nan__ret__scalar_nan
         // unary__sqrt__scalar_nan__ret__scalar_nan
         // unary__switch__any__ret__switch
@@ -96,12 +97,6 @@ namespace intercept {
         // binary__foreachmemberteam__code__team_member__ret__nothing
         // binary__from__for__scalar__ret__for
         // binary__in__any__array__ret__bool
-        // binary__isequalto__any__any__ret__bool
-        // binary__isequaltype__any__any__ret__bool
-        // binary__isequaltypeall__array__any__ret__bool
-        // binary__isequaltypeany__any__array__ret__bool
-        // binary__isequaltypearray__array__array__ret__bool
-        // binary__isequaltypeparams__any__array__ret__bool
         // binary__joinstring__array__string__ret__string
         // binary__max__scalar_nan__scalar_nan__ret__scalar_nan
         // binary__min__scalar_nan__scalar_nan__ret__scalar_nan
@@ -116,7 +111,6 @@ namespace intercept {
         // binary__select__array__bool__ret__any
         // binary__select__array__array__ret__array
         // binary__select__string__array__ret__string
-        // binary__spawn__any__code__ret__script ------------------------------------------------------------------------
         // binary__splitstring__string__string__ret__array
         // binary__step__for__scalar__ret__for
         // binary__then__if__code__ret__any
@@ -133,6 +127,14 @@ namespace intercept {
         // binary__vectordotproduct__array__array__ret__scalar
         // binary__vectorfromto__array__array__ret__array
         // binary__vectormultiply__array__scalar__ret__array
+        // unary__tofixed__scalar__ret__nothing
+        // binary__call__any__code__ret__any
+        // binary__append__array__array__ret__nothing
+        // binary__arrayintersect__array__array__ret__array
+        // binary__pushback__array__any__ret__scalar
+        // binary__selectrandomweighted__array__array__ret__any
+        // binary__set__array__array__ret__nothing
+        // binary__sort__array__bool__ret__nothing
 
         // nular__allsites__ret__array (deprecated - source: BI Wiki)
         // nular__false__ret__bool
@@ -249,6 +251,8 @@ namespace intercept {
         /* deprecated?*/
         // binary__seteditorobjectscope__control__array__ret__nothing
         // nular__benchmark__ret__scalar
+        // unary__textlog__any__ret__nothing
+        // unary__textlogformat__array__ret__nothing
         /////////////////////// DO NOT IMPLEMENT ABOVE FUNCTIONS /////////////////////////
 
     }  // namespace sqf

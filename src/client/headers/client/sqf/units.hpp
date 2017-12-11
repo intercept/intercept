@@ -105,13 +105,14 @@ namespace intercept {
         void move_in_commander(const object &unit_, const object &vehicle_);
         void move_in_driver(const object &unit_, const object &vehicle_);
         void move_in_gunner(const object &unit_, const object &vehicle_);
-        void move_in_turret(const object &unit_, const object &vehicle_, const std::vector<int> turret_path_);
+        void move_in_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
 
         void remote_control(const object &controller_, const object &controlled_);
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
         group get_group(const object &unit_);  // originally "group", but is already a type
+        group group_get(const object &unit_);
         std::vector<object> group_selected_units(const object &unit_);
-        std::vector<sqf_return_string_list> squad_params(const object &unit_); //#TODO correct return type
+        std::pair<sqf_return_string_list, sqf_return_string_list> squad_params(const object &unit_); //#TODO correct return type
         bool unit_ready(const object &unit_);
         sqf_return_string_list unit_addons(sqf_string_const_ref class_);
         std::vector<object> get_all_owned_mines(const object &unit_);
@@ -119,7 +120,7 @@ namespace intercept {
         bool unit_is_uav(const object &unit_);
         void add_owned_mine(const object &unit_, const object &mine_);
         void add_player_scores(const object &unit_, int kills_infantry_, int kills_soft_, int kills_armor_, int kills_air_, int killed_);
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<int> &turret_path_);
+        void assign_as_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
         bool connect_terminal_to_uav(const object &unit_, const object &uav_);
         void disable_uav_connectability(const object &object_, const object &uav_, bool check_all_items_);
         void enable_uav_connect_ability(const object &unit_, const object &uav_, bool check_all_items_);

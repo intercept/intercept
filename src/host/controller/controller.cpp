@@ -15,26 +15,25 @@
 namespace intercept {
     controller::controller() : threaded_dispatcher() {
         _initiated = false;
-		add("init"sv, std::bind(&intercept::controller::init, this, std::placeholders::_1, std::placeholders::_2));
+        add("init"sv, std::bind(&intercept::controller::init, this, std::placeholders::_1, std::placeholders::_2));
         add("reset"sv, std::bind(&intercept::controller::reset, this, std::placeholders::_1, std::placeholders::_2));
         add("ready"sv, std::bind(&intercept::controller::get_ready, this, std::placeholders::_1, std::placeholders::_2));
-		add("stop"sv, std::bind(&controller::do_stop, this, std::placeholders::_1, std::placeholders::_2));
+        add("stop"sv, std::bind(&controller::do_stop, this, std::placeholders::_1, std::placeholders::_2));
         add("export_ptr_list"sv, std::bind(&controller::export_ptr_list, this, std::placeholders::_1, std::placeholders::_2));
         // action results
         add("fetch_result"sv, std::bind(&intercept::controller::fetch_result, this, std::placeholders::_1, std::placeholders::_2));
     }
-    controller::~controller() { }
 
-	bool controller::init(const arguments &, std::string & result_) {
-		if (!_initiated) {
+    bool controller::init(const arguments &, std::string & result_) {
+        if (!_initiated) {
             //loader::get().attach_controller(); // no longer needed, as the loader is called directly once.
             invoker::get().attach_controller();
             extensions::get().attach_controller();
             result_ = "1";
-			_initiated = true;
-		}
-		return true;
-	}
+            _initiated = true;
+        }
+        return true;
+    }
 
     bool controller::get_ready(const arguments &, std::string & result_) const {
         result_ = "0";
@@ -71,8 +70,8 @@ namespace intercept {
         if (_results.size() > 0) {
             std::lock_guard<std::mutex> _lock(_results_lock);
             dispatch_result res = _results.front();
-			std::stringstream ss;
-			ss << "[" << res.id << ",[" << res.message << "]]";
+            std::stringstream ss;
+            ss << "[" << res.id << ",[" << res.message << "]]";
             result_ = ss.str();
             _results.pop();
         }
@@ -127,7 +126,7 @@ namespace intercept {
         std::list<std::string_view> sorted_binary_list;
         for (auto binary : binary_list) {
             sorted_binary_list.push_back(binary.first);
-        };
+        }
         sorted_binary_list.sort();
 
         for (auto binary_entry : sorted_binary_list) {
@@ -165,7 +164,7 @@ namespace intercept {
         std::list<std::string_view> sorted_nular_list;
         for (auto nular : nular_list) {
             sorted_nular_list.push_back(nular.first);
-        };
+        }
         sorted_nular_list.sort();
 
         for (auto nular_entry : sorted_nular_list) {

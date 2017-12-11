@@ -43,8 +43,8 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
@@ -56,9 +56,9 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
-        * @params ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
+        * @param ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
@@ -70,14 +70,14 @@ namespace intercept {
         * Doesn't return intersection with sea surface. Hardcoded max distance: 5000m.
         * Biki: https://community.bistudio.com/wiki/lineIntersectsSurfaces
         *
-        * @params begin_pos_asl_: PositionASL - virtual line start
-        * @params end_pos_asl_: PositionASL - virtual line end
-        * @params ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
-        * @params ignore_obj2_ (Optional) second object to ignore or objNull: Default: objNull
-        * @params sort_mode_ (Optional): true: closest to furthest, false: furthest to closest. Default: true
-        * @params max_results_ (Optional) Max results to return. -1 to return every result. Default: 1
-        * @params lod1_ (Optional) Primary LOD to look for intersection. Default: "VIEW"
-        * @params lod2_ (Optional) Secondary LOD to look for intersection. Default: "FIRE"
+        * @param begin_pos_asl_: PositionASL - virtual line start
+        * @param end_pos_asl_: PositionASL - virtual line end
+        * @param ignore_obj1_ (Optional) first object to ignore or objNull: Default: objNull
+        * @param ignore_obj2_ (Optional) second object to ignore or objNull: Default: objNull
+        * @param sort_mode_ (Optional): true: closest to furthest, false: furthest to closest. Default: true
+        * @param max_results_ (Optional) Max results to return. -1 to return every result. Default: 1
+        * @param lod1_ (Optional) Primary LOD to look for intersection. Default: "VIEW"
+        * @param lod2_ (Optional) Secondary LOD to look for intersection. Default: "FIRE"
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
@@ -86,9 +86,8 @@ namespace intercept {
         /**
         * Returns objects intersecting with the virtual line from begPos to endPos
         */
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = true);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_);
-        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_, const object &ignore_obj_one_, const object &ignore_obj_two_);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, bool sort_by_distance_ = false);
+        std::vector<object> line_intersects_with(const vector3 &begin_pos_, const vector3 &end_pos_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_ = false);
 
         /**
         * Checks for intersection of terrain between two positions. Returns true if intersects with terrain. Uses PositionAGL
@@ -118,7 +117,7 @@ namespace intercept {
         /**
         * Find list of objects intersected by given line from begin_position_ to end_position_
         */
-        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_object_, const object &ignore_obj_, bool sort_by_distance_, int flags_);
+        std::vector<object> line_intersects_objs(const vector3 &begin_position_, const vector3 &end_position_, const object &with_object_, std::initializer_list<object> ignored_objects_, bool sort_by_distance_, int flags_);
 
         vector3 terrain_intersect_at_asl(const vector3 &pos1_, const vector3 &pos2_);
 

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -24,10 +24,17 @@ namespace intercept {
             object unit;
             std::string role;
             float cargo_index;
-            std::vector<int> turret_path;
+            rv_turret_path turret_path;
             bool person_turret;
 
-            rv_crew_member(object unit_, std::string role_, float cargo_index_, std::vector<int> turret_path_, bool person_turret_)
+            rv_crew_member(game_value gv_)
+                : unit(gv_[0]),
+                role(gv_[1]),
+                cargo_index(gv_[2]),
+                turret_path(gv_[3]),
+                person_turret(gv_[4]) {}
+
+            rv_crew_member(object unit_, std::string role_, float cargo_index_, rv_turret_path turret_path_, bool person_turret_)
                 : unit(std::move(unit_)),
                   role(std::move(role_)),
                   cargo_index(cargo_index_),
@@ -87,9 +94,9 @@ namespace intercept {
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_);
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         void delete_vehicle(const object &obj_);
-        sqf_return_string_list all_turrets(const object &vehicle_, bool person_turrets_);
+        std::vector<rv_turret_path> all_turrets(const object &vehicle_, bool person_turrets_);
 
-        sqf_return_string_list all_turrets(const object &vehicle_);
+        std::vector<rv_turret_path> all_turrets(const object &vehicle_);
         bool alive(const object &obj_);
         object assigned_commander(const object &veh_);
         object assigned_driver(const object &veh_);
@@ -194,12 +201,12 @@ namespace intercept {
         void disable_collision_with(const object &object1_, const object &object2_);
         void enable_collision_with(const object &object1_, const object &object2_);
         void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
-        void lock_camera_to(const object &vehicle_, const object &target_, const std::vector<int> &turret_path_);
+        void lock_camera_to(const object &vehicle_, const object &target_, rv_turret_path turret_path_);
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
-        bool locked_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        void lock_turret(const object &vehicle_, const std::vector<int> &turret_path_, bool lock_);
+        bool locked_turret(const object &vehicle_, rv_turret_path turret_path_);
+        void lock_turret(const object &vehicle_, rv_turret_path turret_path_, bool lock_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
-        void select_weapon_turret(const object &, sqf_string_const_ref weapon_, const std::vector<int> &turretPath_);
+        void select_weapon_turret(const object &, sqf_string_const_ref weapon_, rv_turret_path turret_path_);
         void set_center_of_mass(const object &object_, const vector3 &offset_, float time_ = 0.f);
         enum class feature_type {
             disabled = 0,                 ///< Feature disabled
@@ -222,8 +229,8 @@ namespace intercept {
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
-        object turret_unit(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string_list weapons_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        object turret_unit(const object &vehicle_, rv_turret_path turret_path_);
+        sqf_return_string_list weapons_turret(const object &vehicle_, rv_turret_path turret_path_);
         float flag_animation_phase(const object &flag_);
         object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
 
@@ -250,5 +257,10 @@ namespace intercept {
         sqf_return_string wf_side_text(const group &group_);
         sqf_return_string wf_side_text(const side &side_);
         rv_uav_control uav_control(const object &uav_);
+        bool is_vehicle_radar_on(const object &vehicle_);
+        sqf_return_string_list list_vehicle_sensors(const object &vehicle_);
+        void add_force(const object &object_, vector3 force_, vector3 position_);
+        void add_torque(const object &object_, vector3 torque_);
+
     }  // namespace sqf
 }  // namespace intercept

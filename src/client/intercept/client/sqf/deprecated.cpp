@@ -119,7 +119,7 @@ namespace intercept {
 
         //#TODO: Find out if the return type is correct
         sqf_return_string_list list_objects(const control &map_, sqf_string_const_ref type_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__listobjects__control__string__ret__array, map_, type_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__listobjects__control__string__ret__array, map_, type_));
         }
 
         game_value set_object_arguments(const control &map_, sqf_string_const_ref object_, sqf_string_list_const_ref values_) {
@@ -138,7 +138,7 @@ namespace intercept {
         }
 
         sqf_return_string_list get_object_children(const control &map_, sqf_string_const_ref object_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_binary(__sqf::binary__getobjectchildren__control__string__ret__array, map_, object_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__getobjectchildren__control__string__ret__array, map_, object_));
         }
 
         rv_text set_attributes(const rv_text &text_, const std::vector<std::pair<std::string, std::variant<rv_text, sqf_string_const_ref_wrapper>>> &attributes_) {
@@ -150,7 +150,7 @@ namespace intercept {
                     attributes.push_back(std::get<0>(it.second));
                 else
                     attributes.push_back(std::get<1>(it.second).get());
-            };
+            }
 
             return host::functions.invoke_raw_binary(__sqf::binary__setattributes__text_string__array__ret__text, text_, std::move(attributes));
         }

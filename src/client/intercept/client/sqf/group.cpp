@@ -119,13 +119,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
         }
         std::vector<object> units(const group &gp_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__units__group__ret__array, gp_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__units__group__ret__array, gp_));
         }
         side get_side(const group &group_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__group__ret__side, group_));
         }
+
+        side side_get(const group& group_) { return get_side(group_); }
+
         sqf_return_string_list all_variables(const group &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__group__ret__array, value_));
         }
         bool is_null(const group &value_) {
@@ -151,7 +154,7 @@ namespace intercept {
         }
 
         std::vector<bool> group_icons_visible() {
-            return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_nular(__sqf::nular__groupiconsvisible__ret__array));
+            return __helpers::__convert_to_vector<bool>(host::functions.invoke_raw_nular(__sqf::nular__groupiconsvisible__ret__array));
         }
         rv_group_icon get_group_icon(const group &group_, int &id_) {
             game_value res = host::functions.invoke_raw_binary(__sqf::binary__getgroupicon__group__scalar__ret__array, group_, id_);
@@ -208,7 +211,7 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__agent__team_member__ret__object, value_));
         }
         std::vector<team_member> agents() {
-            return __helpers::__convert_to_team_members_vector(host::functions.invoke_raw_nular(__sqf::nular__agents__ret__array));
+            return __helpers::__convert_to_vector<team_member>(host::functions.invoke_raw_nular(__sqf::nular__agents__ret__array));
         }
 
         void set_formation(const team_member &value0_, sqf_string_const_ref value1_) {
@@ -241,7 +244,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__teamtype__team_member__ret__string, value_);
         }
         std::vector<object> members(const team_member &team_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__members__team_member__ret__array, team_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__members__team_member__ret__array, team_));
         }
 
         void add_resources(const team_member &team_member_, sqf_string_list_const_ref resources_) {

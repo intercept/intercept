@@ -24,9 +24,28 @@ namespace intercept {
         struct rv_magazine_ammo {
             std::string name;
             int count;
+
+            explicit rv_magazine_ammo(const game_value &from_gv_) : name(from_gv_[0]),
+                                                           count(from_gv_[1]) {}
+
+            operator game_value() const {
+                return game_value({name, static_cast<float>(count)});
+            }
+        };
+
+        struct rv_magazine_ammo_full : rv_magazine_ammo {
             bool loaded;
             int type;
             std::string location;
+
+            explicit rv_magazine_ammo_full(const game_value &from_gv_) : rv_magazine_ammo(from_gv_),
+                                                                loaded(from_gv_[2]),
+                                                                type(from_gv_[3]),
+                                                                location(from_gv_[4]) {}
+
+            rv_magazine_ammo_full(const rv_magazine_ammo &from_mag_) : rv_magazine_ammo(from_mag_),
+                                                                       loaded(false),
+                                                                       type(-1) {}
 
             operator game_value() const {
                 return game_value({name,
@@ -38,8 +57,11 @@ namespace intercept {
         };
 
         struct rv_turret_magazine {
+
+            explicit rv_turret_magazine(game_value gv_) : name(gv_[0]),turret_path(gv_[1]),count(gv_[2]),id(gv_[3]),creator(gv_[4]){}
+
             std::string name;
-            std::vector<int> turret_path;
+            rv_turret_path turret_path;
             int count;
             int id;
             object creator;  // player
@@ -47,6 +69,12 @@ namespace intercept {
         struct rv_container {
             std::string type;
             object container;
+
+            explicit rv_container(const game_value &from_gv_) : type(from_gv_[0]),
+                                                       container(from_gv_[1]) {}
+            operator game_value() const {
+                return game_value({type, container});
+            }
         };
         struct rv_weapon_accessories {
             std::string silencer;
@@ -62,11 +90,11 @@ namespace intercept {
             std::string magazine;
             float ammo_count;
 
-            rv_weapon_state(game_value ret_game_value_) : weapon(ret_game_value_[0]),
-                                                          muzzle(ret_game_value_[1]),
-                                                          mode(ret_game_value_[2]),
-                                                          magazine(ret_game_value_[3]),
-                                                          ammo_count(ret_game_value_[4]) {}
+            explicit rv_weapon_state(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
+                                                                 muzzle(ret_game_value_[1]),
+                                                                 mode(ret_game_value_[2]),
+                                                                 magazine(ret_game_value_[3]),
+                                                                 ammo_count(ret_game_value_[4]) {}
         };
 
         /* potential namespace: items, inventory, campaign */
@@ -81,8 +109,8 @@ namespace intercept {
         void add_magazine_cargo(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_magazine_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_magazines(const object &obj_, sqf_string_const_ref classname_, int count_);
-        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_, int ammocount_);
-        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, const std::vector<int> &turretpath_);
+        void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_, int ammocount_);
+        void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_);
         void add_weapon_cargo(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_weapon_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_);
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_);
@@ -93,7 +121,7 @@ namespace intercept {
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_);
         std::vector<rv_magazine_ammo> magazines_ammo(const object &obj_);
         std::vector<rv_magazine_ammo> magazines_ammo_cargo(const object &obj_);
-        std::vector<rv_magazine_ammo> magazines_ammo_full(const object &obj_);
+        std::vector<rv_magazine_ammo_full> magazines_ammo_full(const object &obj_);
         sqf_return_string_list magazines_detail(const object &obj_);
         sqf_return_string_list magazines_detail_backpack(const object &obj_);
         sqf_return_string_list magazines_detail_uniform(const object &obj_);
@@ -206,14 +234,14 @@ namespace intercept {
             std::vector<float> amounts;
 
             explicit operator game_value() const {
-                return game_value({ types, amounts });
+                return game_value({types, amounts});
             }
         };
 
-        std::vector<rv_cargo> get_backpack_cargo(const object &container_);
-        std::vector<rv_cargo> get_item_cargo(const object &container_);
-        std::vector<rv_cargo> get_magazine_cargo(const object &container_);
-        std::vector<rv_cargo> get_weapon_cargo(const object &container_);
+        rv_cargo get_backpack_cargo(const object &container_);
+        rv_cargo get_item_cargo(const object &container_);
+        rv_cargo get_magazine_cargo(const object &container_);
+        rv_cargo get_weapon_cargo(const object &container_);
         sqf_return_string_list item_cargo(const object &container_);
         sqf_return_string_list weapon_cargo(const object &container_);
         sqf_return_string_list weapons(const object &unit_);
@@ -231,7 +259,7 @@ namespace intercept {
                                                              ammo(ret_game_value_[1]) {}
 
             explicit operator game_value() const {
-                return game_value({ name, ammo });
+                return game_value({name, ammo});
             }
         };
 
@@ -253,7 +281,7 @@ namespace intercept {
                                                                  bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
 
             explicit operator game_value() const {
-                return game_value({ weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod });
+                return game_value({weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod});
             }
         };
 
@@ -292,7 +320,7 @@ namespace intercept {
         sqf_return_string current_weapon(const object &veh_);
         sqf_return_string current_weapon_mode(const object &gunner_);
 
-        void load_magazine(const object &obj_, const std::vector<int> &turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
+        void load_magazine(const object &obj_, rv_turret_path turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_);
 
         struct rv_unit_description {
             std::string unit;
@@ -319,13 +347,13 @@ namespace intercept {
         sqf_return_string primary_weapon(const object &value_);
 
         void remove_magazine(const object &target_, sqf_string_const_ref magazine_);
-        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_);
-        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, const std::vector<int> &turretPath_);
+        void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_);
+        void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_);
         //Unimplemented in Engine - Arguments are nonsense
         void remove_weapon_attachment_cargo(const object &target_, const std::vector<game_value> &arg);
         //Unimplemented in Engine - Arguments are nonsense
         void remove_weapon_cargo(const object &target_, const std::vector<game_value> &arg);
-        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, const std::vector<int> &turretPath_);
+        void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, rv_turret_path turret_path_);
         void set_ammo(const object &target_, sqf_string_const_ref weapon_, int count);
 
         struct rv_magazine_info {
@@ -343,28 +371,41 @@ namespace intercept {
 
             operator game_value() const {
                 if (ammo != -1) {
-                    return game_value({ magazine,
+                    return game_value({magazine,
                                        static_cast<float>(ammo),
-                                       static_cast<float>(count) });
+                                       static_cast<float>(count)});
                 } else if (count != -1) {
-                    return game_value({ magazine,
-                                   static_cast<float>(count) });
+                    return game_value({magazine,
+                                       static_cast<float>(count)});
                 } else {
                     return game_value({});
                 }
             }
+            bool operator==(const rv_magazine_info& other) const {
+                return
+                    magazine == other.magazine &&
+                    ammo == other.ammo &&
+                    count == other.count;
+            }
+            void clear() {
+                magazine.clear();
+                ammo = -1;
+                count = -1;
+            }
         };
 
-        struct rv_weapon_info { //#TODO It would be better to store these as r_strings
+        struct rv_weapon_info {  //#TODO It would be better to store these as r_strings
             std::string weapon;
-            std::string silencer = "";
-            std::string laser; 
+            std::string silencer;
+            std::string laser;
             std::string optics;
             rv_magazine_info primary_muzzle_magazine;
             rv_magazine_info secondary_muzzle_magazine;
             std::string bipod;
 
-            rv_weapon_info(const game_value &ret_game_value_) { 
+            rv_weapon_info() {}
+
+            rv_weapon_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
                     weapon = static_cast<std::string>(ret_game_value_[0]);
                     silencer = static_cast<std::string>(ret_game_value_[1]);
@@ -380,22 +421,44 @@ namespace intercept {
 
             explicit operator game_value() const {
                 if (weapon != "") {
-                    return game_value({ weapon,
-                                   silencer,
-                                   laser,
-                                   optics,
-                                   primary_muzzle_magazine,
-                                   secondary_muzzle_magazine,
-                                   bipod });
+                    return game_value({weapon,
+                                       silencer,
+                                       laser,
+                                       optics,
+                                       primary_muzzle_magazine,
+                                       secondary_muzzle_magazine,
+                                       bipod});
                 } else {
                     return game_value({});
                 }
+            }
+
+            bool operator==(const rv_weapon_info& other) const {
+                return
+                    weapon == other.weapon &&
+                    silencer == other.silencer &&
+                    laser == other.laser &&
+                    optics == other.optics &&
+                    primary_muzzle_magazine == other.primary_muzzle_magazine &&
+                    secondary_muzzle_magazine == other.secondary_muzzle_magazine &&
+                    bipod == other.bipod;
+            }
+            void clear() {
+                weapon.clear();
+                silencer.clear();
+                laser.clear();
+                optics.clear();
+                primary_muzzle_magazine.clear();
+                secondary_muzzle_magazine.clear();
+                bipod.clear();
             }
         };
 
         struct rv_container_info {
             std::string container;
             std::vector<rv_magazine_info> items;
+
+            rv_container_info() {}
 
             rv_container_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
@@ -411,12 +474,24 @@ namespace intercept {
 
             explicit operator game_value() const {
                 if (container != "") {
-                    return game_value({ container,
-                                   auto_array<game_value>(items.begin(), items.end()) });
+                    return game_value({container,
+                                       auto_array<game_value>(items.begin(), items.end())});
                 } else {
                     return game_value({});
+                
                 }
             }
+
+            bool operator==(const rv_container_info& other) const {
+                return
+                    container == other.container &&
+                    items == other.items;
+            }
+             void clear() {
+                 container.clear();
+                 items.clear();
+            }
+
         };
 
         struct rv_unit_loadout {
@@ -430,17 +505,21 @@ namespace intercept {
             std::string facewear;
             rv_weapon_info binocular;
             std::vector<std::string> assigned_items;
+            
+            rv_unit_loadout() {}
 
-            rv_unit_loadout(const game_value &ret_game_value_) : primary(ret_game_value_[0]),
-                                                                 secondary(ret_game_value_[1]),
-                                                                 handgun(ret_game_value_[2]),
-                                                                 uniform(ret_game_value_[3]),
-                                                                 vest(ret_game_value_[4]),
-                                                                 backpack(ret_game_value_[5]),
-                                                                 headgear(ret_game_value_[6]),
-                                                                 facewear(ret_game_value_[7]),
-                                                                 binocular(ret_game_value_[8]) {
-                auto_array<game_value> _tmp = ret_game_value_[9].to_array();
+            rv_unit_loadout(const game_value &ret_game_value_) {
+                if (ret_game_value_.size() == 0) return;
+                primary = ret_game_value_[0];
+                secondary = ret_game_value_[1];
+                handgun = ret_game_value_[2];
+                uniform = ret_game_value_[3];
+                vest = ret_game_value_[4];
+                backpack = ret_game_value_[5];
+                headgear = static_cast<std::string>(ret_game_value_[6]);
+                facewear = static_cast<std::string>(ret_game_value_[7]);
+                binocular = ret_game_value_[8];
+                auto &_tmp = ret_game_value_[9].to_array();
                 assigned_items = std::vector<std::string>(_tmp.begin(), _tmp.end());
             }
 
@@ -456,19 +535,49 @@ namespace intercept {
                                    static_cast<game_value>(binocular),
                                    auto_array<game_value>(assigned_items.begin(), assigned_items.end())});
             }
+
+            bool operator==(const rv_unit_loadout& other) const {
+                return
+                    primary == other.primary &&
+                    secondary == other.secondary &&
+                    handgun == other.handgun &&
+                    uniform == other.uniform &&
+                    vest == other.vest &&
+                    backpack == other.backpack &&
+                    headgear == other.headgear &&
+                    facewear == other.facewear &&
+                    binocular == other.binocular &&
+                    assigned_items == other.assigned_items;
+            }
+            void clear() {
+                primary.clear();
+                secondary.clear();
+                handgun.clear();
+                uniform.clear();
+                vest.clear();
+                backpack.clear();
+                headgear.clear();
+                facewear.clear();
+                binocular.clear();
+                assigned_items.clear();
+            }
         };
 
-        rv_unit_loadout get_unit_loadout(const object &obj_);
-        rv_unit_loadout get_unit_loadout(const config &cfg_);
+        /// @brief you can cast this to intercept::sqf::rv_unit_loadout to easily parse it
+        game_value get_unit_loadout(const object &obj_);
+        game_value get_unit_loadout(const config &cfg_);
+        game_value get_unit_loadout(sqf_string_const_ref cfg_);
         void set_unit_loadout(const object &obj_, const rv_unit_loadout &loadout_, bool rearm_ = false);
         void set_unit_loadout(const object &obj_, const game_value &loadout_, bool rearm_ = false);
+        void set_unit_loadout(const object &obj_, const config &cfg_);
+        void set_unit_loadout(const object &obj_, sqf_string_const_ref cfg_);
 
         //inventory
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_);
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_);
-        sqf_return_string_list magazines_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, const std::vector<int> &turret_path_);
-        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, const std::vector<int> &turret_path_);
+        sqf_return_string_list magazines_turret(const object &vehicle_, rv_turret_path turret_path_);
+        int magazine_turret_ammo(sqf_string_const_ref magazine_class_, rv_turret_path turret_path_);
+        void set_magazine_turret_ammo(const object &vehicle_, sqf_string_const_ref magazine_class_, int ammo_count_, rv_turret_path turret_path_);
         void set_vehicle_ammo(const object &value0_, float value1_);
         void set_vehicle_ammo_def(const object &value0_, float value1_);
 
@@ -483,9 +592,9 @@ namespace intercept {
         void force_add_uniform(const object &value0_, sqf_string_const_ref value1_);
         void set_ammo_cargo(const object &value0_, float value1_);
         void add_weapon_pool(sqf_string_const_ref weapon_name_, int count_);
-        sqf_return_string current_magazine_detail_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_magazine_turret(const object &vehicle_, const std::vector<int> &turret_path_);
-        sqf_return_string current_weapon_turret(const object &vehicle_, const std::vector<int> &turret_path_);
+        sqf_return_string current_magazine_detail_turret(const object &vehicle_, rv_turret_path turret_path_);
+        sqf_return_string current_magazine_turret(const object &vehicle_, rv_turret_path turret_path_);
+        sqf_return_string current_weapon_turret(const object &vehicle_, rv_turret_path turret_path_);
         sqf_return_string_list get_artillery_ammo(const std::vector<object> &units_);
 
         void clear_item_pool();
@@ -505,7 +614,7 @@ namespace intercept {
         sqf_return_string hmd(const object &value_);
 
         rv_weapon_state weapon_state(const object &unit_);
-        rv_weapon_state weapon_state(const object &vehicle_, const std::vector<int> &turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
-
+        rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
+        std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
     }  // namespace sqf
 }  // namespace intercept

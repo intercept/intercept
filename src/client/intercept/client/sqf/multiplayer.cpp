@@ -128,8 +128,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
         }
 
-        void serverCommand(sqf_string_const_ref command_, sqf_string_const_ref password_) {
-            host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
+        bool server_command(sqf_string_const_ref command_, sqf_string_const_ref password_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__servercommand__string__string__ret__bool, command_, password_);
         }
 
         bool did_jipowner(const object &value_) {
@@ -164,12 +164,12 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__didjip__ret__bool);
         }
 
-        bool turret_local(const object &vehicle_, const std::vector<int> &turret_path_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__turretlocal__object__array__ret__bool, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
+        bool turret_local(const object &vehicle_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__turretlocal__object__array__ret__bool, vehicle_, std::move(turret_path_));
         }
 
-        int turret_owner(const object &vehicle_, const std::vector<int> &turret_path_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__turretowner__object__array__ret__scalar, vehicle_, std::move(auto_array<game_value>(turret_path_.begin(), turret_path_.end())));
+        int turret_owner(const object &vehicle_, rv_turret_path turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__turretowner__object__array__ret__scalar, vehicle_, std::move(turret_path_));
         }
 
         float client_owner() {

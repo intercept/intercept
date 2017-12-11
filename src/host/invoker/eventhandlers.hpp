@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -7,19 +7,11 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "singleton.hpp"
-#include "logging.hpp"
-#include "arguments.hpp"
-#include "loader.hpp"
-#include "shared/types.hpp"
-#include <mutex>
-#include <condition_variable>
-#include <queue>
 
+#include "singleton.hpp"
+#include "shared/types.hpp"
 
 using namespace intercept::types;
-
 
 namespace intercept {
     /*!
@@ -27,23 +19,22 @@ namespace intercept {
     in client plugins.
     */
     class eventhandlers
-        : public singleton<eventhandlers>
-    {
+        : public singleton<eventhandlers> {
     public:
         eventhandlers();
         ~eventhandlers();
 
         void initialize();
 
-        static game_value client_eventhandler(game_value left_arg, game_value right_arg);
+        static game_value client_eventhandler(game_value_parameter left_arg, game_value_parameter right_arg);
 
-        static void pre_init(game_value &args_);
-        static void pre_start(game_value &args_);
-        static void post_init(game_value &args_);
-        static void mission_stopped(game_value &args_);
+        static void pre_init(game_value_parameter args_);
+        static void pre_start(game_value_parameter args_);
+        static void post_start(game_value_parameter args_);
+        static void post_init(game_value_parameter args_);
+        static void mission_ended(game_value_parameter args_);
 
-        
-#define EH_CLASS_DEF(x) static void x(game_value &args_)
+#define EH_CLASS_DEF(x) static void x(game_value_parameter args_)
 
         EH_CLASS_DEF(anim_changed);
         EH_CLASS_DEF(anim_done);
@@ -95,4 +86,4 @@ namespace intercept {
         registered_sqf_function _ehFunc;
     };
 
-}
+}  // namespace intercept

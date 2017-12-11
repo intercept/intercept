@@ -958,12 +958,11 @@ class Intercept {
 };
 */
 
-//initFunctionsWrapper takes care of that for us
-//class Extended_PreStart_EventHandlers {
-//    class Intercept_Core {
-//        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\boot.sqf';";
-//    };
-//};
+class Extended_PreStart_EventHandlers {
+    class Intercept_Core {
+        init = "['post_start', _this] call (uiNamespace getVariable 'intercept_fnc_event');";
+    };
+};
 
 class Extended_PreInit_EventHandlers {
     class Intercept_Core {
@@ -978,16 +977,8 @@ class Extended_PostInit_EventHandlers {
     };
 };
 
-
-
-//Signal has to be defined past preStart because it's using Intercept defined script commands
-//class CfgFunctions {
-//    class Intercept {
-//        class api {
-//            class signal {
-//                file = "z\intercept\rv\addons\core\signal.sqf";
-//                headerType = -1;
-//            };
-//        };
-//    };
-//};
+class Extended_DisplayUnload_EventHandlers {
+    class RscDisplayMission {
+        Intercept_MissionEnded = "['mission_ended', []] call (uiNamespace getVariable 'intercept_fnc_event');";
+    };
+};

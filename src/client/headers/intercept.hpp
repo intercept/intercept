@@ -9,15 +9,19 @@
 namespace intercept {
     extern "C" {
         DLLEXPORT int  CDECL api_version();
+        /// @brief before initFunctions. Actually a prePreStart
         DLLEXPORT void CDECL pre_start();
+        /// @brief CBA XEH_preStart
+        DLLEXPORT void CDECL post_start();
         DLLEXPORT void CDECL pre_init();
         DLLEXPORT void CDECL post_init();
-        DLLEXPORT void CDECL mission_end();
-        DLLEXPORT void CDECL mission_stopped();
+        DLLEXPORT void CDECL mission_ended();
         DLLEXPORT void CDECL on_frame();
         DLLEXPORT void CDECL on_signal(std::string &signal_name_, game_value& value1_);  //#TODO no C ABI here! use r_string
         DLLEXPORT void CDECL on_interface_unload(r_string name_);
         DLLEXPORT void CDECL register_interfaces();
+        DLLEXPORT void CDECL handle_unload();
+        DLLEXPORT bool CDECL is_signed();
 
 #define EH(x) DLLEXPORT void CDECL x
 
@@ -36,8 +40,8 @@ namespace intercept {
         EH(fired_near)(object &unit_, object &firer_, float distance_, r_string weapon_, r_string muzzle_, r_string mode_, r_string ammo_);
         EH(fuel)(object &vehicle_, bool fuel_state_);
         EH(gear)(object &vehicle_, bool gear_state_);
-        EH(get_in)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
-        EH(get_out)(object &vehicle_, r_string position_, object &unit_, std::vector<int> &turret_path);
+        EH(get_in)(object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path);
+        EH(get_out)(object &vehicle_, r_string position_, object &unit_, rv_turret_path turret_path);
         EH(handle_damage)(object &unit_, r_string selection_name_, float damage_, object &source_, r_string projectile_, int hit_part_index_);
         EH(handle_heal)(object &unit_, object &healder_, bool healer_can_heal_);
         EH(handle_rating)(object &unit_, float rating_);

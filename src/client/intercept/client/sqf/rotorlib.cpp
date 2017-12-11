@@ -34,15 +34,15 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__enableautotrimrtd__object__bool__ret__bool, value0_, value1_);
         }
         std::vector<bool> engines_is_on_rtd(const object &heli_) {
-            return __helpers::__convert_to_booleans_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesisonrtd__object__ret__array, heli_));
+            return __helpers::__convert_to_vector<bool>(host::functions.invoke_raw_unary(__sqf::unary__enginesisonrtd__object__ret__array, heli_));
         }
 
         std::vector<float> engines_rpm_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__enginesrpmrtd__object__ret__array, heli_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__enginesrpmrtd__object__ret__array, heli_));
         }
 
         std::vector<float> engines_torque_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__enginestorquertd__object__ret__array, heli_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__enginestorquertd__object__ret__array, heli_));
         }
         void set_rotor_brake_rtd(const object &value0_, float value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setrotorbrakertd__object__scalar__ret__nothing, value0_, value1_);
@@ -55,31 +55,19 @@ namespace intercept {
         }
         std::vector<rv_forces_rtd> rotors_forces_rtd(const object &heli_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__rotorsforcesrtd__object__ret__array, heli_);
-
-            std::vector<rv_forces_rtd> rotors_forces;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                rotors_forces.push_back(rv_forces_rtd{ret[i][0], ret[i][1], ret[i][2]});
-            }
-
-            return rotors_forces;
+            return __helpers::__convert_to_vector<rv_forces_rtd>(ret);
         }
 
         std::vector<rv_forces_rtd> wings_forces_rtd(const object &heli_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__wingsforcesrtd__object__ret__array, heli_);
-
-            std::vector<rv_forces_rtd> wings_forces;
-            for (uint32_t i = 0; i < ret.size(); ++i) {
-                wings_forces.push_back(rv_forces_rtd{ret[i][0], ret[i][1], ret[i][2]});
-            }
-
-            return wings_forces;
+            return __helpers::__convert_to_vector<rv_forces_rtd>(ret);
         }
         std::vector<float> rotors_rpm_rtd(const object &heli_) {
-            return __helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__rotorsrpmrtd__object__ret__array, heli_));
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__rotorsrpmrtd__object__ret__array, heli_));
         }
 
         rv_weight_rtd weight_rtd(const object &heli_) {
-            return rv_weight_rtd::from_vector(__helpers::__convert_to_numbers_vector(host::functions.invoke_raw_unary(__sqf::unary__weightrtd__object__ret__array, heli_)));
+            return rv_weight_rtd::from_vector(__helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__weightrtd__object__ret__array, heli_)));
         }
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_) {
             game_value params({amount_,

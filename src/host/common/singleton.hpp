@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cstdint>
 #include <assert.h>
 
@@ -32,7 +32,7 @@ namespace intercept {
         }
     protected:
         // Can only create Singleton via get() function
-        singleton() {}
+        singleton() noexcept {}
         static T /***/_singletonInstance;
         static bool _initialized;
     };

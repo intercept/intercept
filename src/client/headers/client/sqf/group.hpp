@@ -29,7 +29,6 @@ namespace intercept {
 
         /* Group */
         bool group_icon_selectable();
-        // TODO std::array<bool, 2> group_icons_visible();
         group grp_null();
         void clear_group_icons(const group &value_);
         group create_group(const side &value_, bool delete_when_empty_ = false);
@@ -72,6 +71,7 @@ namespace intercept {
 
         std::vector<object> units(const group &gp_);
         side get_side(const group &group_);
+        side side_get(const group& group_);
         sqf_return_string_list all_variables(const group &value_);
         bool is_null(const group &value_);
 

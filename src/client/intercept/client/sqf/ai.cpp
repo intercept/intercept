@@ -224,11 +224,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, vehicle_);
         }
 
-        void assign_as_turret(const object &unit_, const object &vehicle_, const std::vector<float> &turret_path_) {
-            auto_array<game_value> turret_path(turret_path_.begin(), turret_path_.end());
-
+        void assign_as_gunner(const object &unit_, const object &vehicle_, rv_turret_path turret_path_) {
             game_value params({vehicle_,
-                               std::move(turret_path)});
+                               std::move(turret_path_)});
 
             host::functions.invoke_raw_binary(__sqf::binary__assignasgunner__object__object__ret__nothing, unit_, params);
         }
@@ -497,11 +495,11 @@ namespace intercept {
         }
 
         std::vector<object> formation_members(const object &unit_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__formationmembers__object__ret__array, unit_));
         }
 
         vector3 formation_position(const object &unit_) {
-            return __helpers::__convert_to_vector3(host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_));
+            return host::functions.invoke_raw_unary(__sqf::unary__formationposition__object__ret__array, unit_);
         }
         sqf_return_string behaviour(const object &unit_) {
             return __helpers::__string_unary_object(__sqf::unary__behaviour__object__ret__string, unit_);
@@ -696,10 +694,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__enableirlasers__object_group__bool__ret__nothing, group_, enable_);
         }
 
-        void enable_person_turret(const object &vehicle_, const std::vector<int> &turrent_path_, bool enable_) {
-            auto_array<game_value> turrent_path(turrent_path_.begin(), turrent_path_.end());
+        void enable_person_turret(const object &vehicle_, rv_turret_path turret_path_, bool enable_) {
 
-            game_value params_right({std::move(turrent_path),
+            game_value params_right({std::move(turret_path_),
                                      enable_});
 
             host::functions.invoke_raw_binary(__sqf::binary__enablepersonturret__object__array__ret__nothing, vehicle_, params_right);

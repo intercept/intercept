@@ -5,8 +5,6 @@
 #include <future>
 #include <sstream> //Debugging
 
-#define INTERNAL_TAG 0x0000dede
-
 #if INTERCEPT_HOST_DLL
 #include "loader.hpp"
 #define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();
@@ -110,11 +108,14 @@ namespace intercept {
         uintptr_t game_data_rv_text::type_def;
         uintptr_t game_data_rv_text::data_type_def;
 
-        uintptr_t game_data_team::type_def;
-        uintptr_t game_data_team::data_type_def;
+        uintptr_t game_data_team_member::type_def;
+        uintptr_t game_data_team_member::data_type_def;
 
         uintptr_t game_data_rv_namespace::type_def;
         uintptr_t game_data_rv_namespace::data_type_def;
+
+        uintptr_t game_data_nothing::type_def;
+        uintptr_t game_data_nothing::data_type_def;
 
         uintptr_t game_data_object::type_def;
         uintptr_t game_data_object::data_type_def;
@@ -128,32 +129,33 @@ namespace intercept {
         value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
                 return{ static_cast<std::string>(single_type->_name) };
-            } else {
-                return{
-                    static_cast<std::string>(compound_type->types->first->_name),
-                    static_cast<std::string>(compound_type->types->second->_name)
-                };
             }
+
+            return{
+                static_cast<std::string>(compound_type->types->first->_name),
+                static_cast<std::string>(compound_type->types->second->_name)
+            };
         }
 
         std::string sqf_script_type::type_str() const {
             if (single_type != nullptr) {
                 return static_cast<std::string>(single_type->_name);
-            } else {
-                return
-                    static_cast<std::string>(compound_type->types->first->_name) + "_" +
-                    static_cast<std::string>(compound_type->types->second->_name);
             }
+
+            return
+                static_cast<std::string>(compound_type->types->first->_name) + "_" +
+                static_cast<std::string>(compound_type->types->second->_name);
+
         }
 
     #pragma region GameData Types
-        game_data_number::game_data_number() {
+        game_data_number::game_data_number() noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             number = 0.0f;
         }
 
-        game_data_number::game_data_number(float val_) {
+        game_data_number::game_data_number(float val_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             number = val_;
@@ -165,7 +167,7 @@ namespace intercept {
             number = copy_.number;
         }
 
-        game_data_number::game_data_number(game_data_number && move_) {
+        game_data_number::game_data_number(game_data_number && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -179,7 +181,7 @@ namespace intercept {
             return *this;
         }
 
-        game_data_number & game_data_number::operator=(game_data_number && move_) {
+        game_data_number & game_data_number::operator=(game_data_number && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -217,7 +219,7 @@ namespace intercept {
             val = copy_.val;
         }
 
-        game_data_bool::game_data_bool(game_data_bool && move_) {
+        game_data_bool::game_data_bool(game_data_bool && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -231,7 +233,7 @@ namespace intercept {
             return *this;
         }
 
-        game_data_bool & game_data_bool::operator=(game_data_bool && move_) {
+        game_data_bool & game_data_bool::operator=(game_data_bool && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -251,7 +253,7 @@ namespace intercept {
             return pool_alloc_base->deallocate(ptr_);
         }
 
-        game_data_string::game_data_string() {
+        game_data_string::game_data_string() noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
         }
@@ -273,7 +275,7 @@ namespace intercept {
             raw_string = copy_.raw_string;
         }
 
-        game_data_string::game_data_string(game_data_string && move_) {
+        game_data_string::game_data_string(game_data_string && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -288,7 +290,7 @@ namespace intercept {
             return *this;
         }
 
-        game_data_string & game_data_string::operator=(game_data_string && move_) {
+        game_data_string & game_data_string::operator=(game_data_string && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             _refcount = move_._refcount;
@@ -343,7 +345,7 @@ namespace intercept {
             data = copy_.data;
         }
 
-        game_data_array::game_data_array(game_data_array && move_) {
+        game_data_array::game_data_array(game_data_array && move_) noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             data = std::move(move_.data);
@@ -356,7 +358,7 @@ namespace intercept {
             return *this;
         }
 
-        game_data_array & game_data_array::operator = (game_data_array &&move_) {
+        game_data_array & game_data_array::operator = (game_data_array &&move_) noexcept {
             if (this == &move_)
                 return *this;
             data = std::move(move_.data);
@@ -462,44 +464,13 @@ namespace intercept {
             return "";
         }
 
-        void __internal::add_game_datatype(r_string name, GameDataType type) {
-            additionalTypes[static_cast<std::string>(name)] = type;
-        };
+        void __internal::add_game_datatype(const r_string name_, const GameDataType type_) {
+            additionalTypes[static_cast<std::string>(name_)] = type_;
+        }
 
     #pragma endregion
 
     #pragma region GameValue
-
-        game_value::game_value() {
-            set_vtable(__vptr_def);
-            data = nullptr;
-        }
-
-        void game_value::copy(const game_value & copy_) {
-            set_vtable(__vptr_def); //Whatever vtable copy_ has.. if it's different then it's wrong
-            if (copy_.data) {
-                data = copy_.data;
-            }
-        }
-
-        game_value::game_value(const game_value & copy_) {
-            copy(copy_);
-        }
-
-        game_value::game_value(game_value && move_) noexcept {
-            set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
-            data = move_.data;
-            move_.data = nullptr;
-        }
-
-        game_value::~game_value() {
-            data = nullptr;
-        }
-
-        game_value::game_value(game_data* val_) {
-            set_vtable(__vptr_def);
-            data = val_;
-        }
 
         game_value::game_value(float val_) {
             set_vtable(__vptr_def);
@@ -507,6 +478,8 @@ namespace intercept {
         }
 
         game_value::game_value(int val_) : game_value(static_cast<float>(val_)) {}
+
+        game_value::game_value(size_t val_) : game_value(static_cast<float>(val_)) {}
 
         game_value::game_value(bool val_) {
             set_vtable(__vptr_def);
@@ -555,14 +528,6 @@ namespace intercept {
         game_value::game_value(const internal_object &internal_) {
             set_vtable(__vptr_def); //object class has bugged vtable :u
             data = internal_.data;
-        }
-
-        uintptr_t game_value::get_vtable() const {
-            return *reinterpret_cast<const uintptr_t*>(this);
-        }
-
-        void game_value::set_vtable(uintptr_t vt) {
-            *reinterpret_cast<uintptr_t*>(this) = vt;
         }
 
         game_value & game_value::operator = (const game_value &copy_) {
@@ -660,7 +625,7 @@ namespace intercept {
 
         game_value::operator std::string() const {
             if (data) {
-                auto type = data->get_vtable();
+                const auto type = data->get_vtable();
                 if (type == game_data_code::type_def || type == game_data_string::type_def)
                     return static_cast<std::string>(data->get_as_string());
                 return static_cast<std::string>(data->to_string());
@@ -671,7 +636,7 @@ namespace intercept {
 
         game_value::operator r_string () const {
             if (data) {
-                auto type = data->get_vtable();
+                const auto type = data->get_vtable();
                 if (type == game_data_code::type_def || type == game_data_string::type_def)
                     return data->get_as_string();
                 return data->to_string();
@@ -680,7 +645,7 @@ namespace intercept {
             return {};
         }
 
-        auto_array<game_value>& game_value::to_array() {
+        auto_array<game_value>& game_value::to_array() const {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
                 return data->get_as_array();
@@ -690,17 +655,7 @@ namespace intercept {
             return dummy;
         }
 
-        const auto_array<game_value>& game_value::to_array() const {
-            if (data) {
-                if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid conversion to array");
-                return data->get_as_const_array();
-            }
-            static auto_array<game_value> dummy;//else we would return a temporary.
-            dummy.clear(); //In case user modified it before
-            return dummy;
-        }
-
-        game_value& game_value::operator [](size_t i_) {
+        game_value& game_value::operator [](size_t i_) const {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
                 auto& array = data->get_as_array();
@@ -712,23 +667,48 @@ namespace intercept {
             return dummy;
         }
 
-        game_value game_value::operator [](size_t i_) const {
-            if (!data) return {};
-            if(data->get_vtable() != game_data_array::type_def)throw game_value_conversion_error("Invalid array access");
-            auto& array = data->get_as_array();
-            if (array.count() >= i_)
-                return array[i_];
-            return {};
-        }
-
         uintptr_t game_value::type() const {
             if (data)
-                return *reinterpret_cast<uintptr_t*>(data.getRef()); //#TODO use GetType virtual func instead
+                return *reinterpret_cast<uintptr_t*>(data.get()); //#TODO use GetType virtual func instead
             return 0x0;
         }
 
-        size_t game_value::length() const {
-            return size();
+        types::GameDataType game_value::type_enum() const {//#TODO make a static sorted table in the same order as enum. turns this search into a binary search
+            if (!data) return GameDataType::NOTHING;
+            const auto _type = data->get_vtable();
+            if (_type == game_data_object::type_def)
+                return GameDataType::OBJECT;
+            if (_type == game_data_number::type_def)
+                return GameDataType::SCALAR;
+            if (_type == game_data_string::type_def)
+                return GameDataType::STRING;
+            if (_type == game_data_array::type_def)
+                return GameDataType::ARRAY;
+            if (_type == game_data_bool::type_def)
+                return GameDataType::BOOL;
+            if (_type == game_data_group::type_def)
+                return GameDataType::GROUP;
+            if (_type == game_data_config::type_def)
+                return GameDataType::CONFIG;
+            if (_type == game_data_control::type_def)
+                return GameDataType::CONTROL;
+            if (_type == game_data_display::type_def)
+                return GameDataType::DISPLAY;
+            if (_type == game_data_location::type_def)
+                return GameDataType::LOCATION;
+            if (_type == game_data_script::type_def)
+                return GameDataType::SCRIPT;
+            if (_type == game_data_side::type_def)
+                return GameDataType::SIDE;
+            if (_type == game_data_rv_text::type_def)
+                return GameDataType::TEXT;
+            if (_type == game_data_rv_namespace::type_def)
+                return GameDataType::NAMESPACE;
+            if (_type == game_data_code::type_def)
+                return GameDataType::CODE;
+            if (_type == game_data_nothing::type_def)
+                return GameDataType::NOTHING;
+            return GameDataType::ANY;
         }
 
         size_t game_value::size() const {
@@ -739,7 +719,60 @@ namespace intercept {
 
         bool game_value::is_nil() const {
             if (!data) return true;
-            return (data->is_nil());
+            return data->is_nil();
+        }
+
+        bool game_value::is_null() const {
+            if (!data) return true;
+            if (data->is_nil()) return true;
+            auto type = type_enum();
+            switch (type) {
+
+                case GameDataType::SCALAR:      //[[fallthrough]] //#TODO fix when MSVC get's their stuff together
+                case GameDataType::BOOL:        //[[fallthrough]]
+                case GameDataType::ARRAY:       //[[fallthrough]]
+                case GameDataType::STRING:      //[[fallthrough]]
+                case GameDataType::NOTHING:     //[[fallthrough]]
+                case GameDataType::ANY:         //[[fallthrough]]
+                case GameDataType::NAMESPACE:   //[[fallthrough]]
+                case GameDataType::NaN:         //[[fallthrough]]
+                case GameDataType::CODE:        //[[fallthrough]]
+                case GameDataType::SIDE:        //[[fallthrough]]
+                case GameDataType::TEXT:        //[[fallthrough]]
+                case GameDataType::TARGET:      //[[fallthrough]]
+                case GameDataType::NetObject:   //[[fallthrough]]
+                case GameDataType::SUBGROUP:    //[[fallthrough]]
+                case GameDataType::DIARY_RECORD:
+                    return false;
+                case GameDataType::OBJECT:      //[[fallthrough]] //SL
+                case GameDataType::GROUP:       //[[fallthrough]] //LL
+                case GameDataType::SCRIPT:      //[[fallthrough]] //LL
+                case GameDataType::DISPLAY:     //[[fallthrough]] //LL
+                case GameDataType::CONTROL:     //[[fallthrough]] //LL
+                case GameDataType::TEAM_MEMBER: //[[fallthrough]] //SLP
+                case GameDataType::TASK:        //[[fallthrough]] //LL
+                case GameDataType::LOCATION://LL
+                { 
+                    const uintptr_t datax = reinterpret_cast<uintptr_t>(data.get());
+                    const uintptr_t data_1 = datax + sizeof(uintptr_t) * 3;
+                    const uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
+                    if (data_2) {
+                        const uintptr_t data_3 = data_2 + sizeof(uintptr_t);
+                        const uintptr_t val = *reinterpret_cast<uintptr_t *>(data_3);
+                        return !val;
+                    }
+                    return true;
+                }
+                case GameDataType::CONFIG: {
+                    return !reinterpret_cast<game_data_config*>(data.get())->path.is_empty();//#TODO test
+                }
+
+
+                default: ;
+            }
+            
+
+            return false; //Dunno that Type. Users fault.
         }
 
         bool game_value::operator==(const game_value& other) const {
@@ -756,42 +789,47 @@ namespace intercept {
 
         size_t game_value::hash() const {
             if (!data) return 0;
-            auto _type = data->get_vtable();
-            if (_type == game_data_object::type_def)
-                return reinterpret_cast<game_data_object*>(data.getRef())->hash();
-            if (_type == game_data_number::type_def)
-                return reinterpret_cast<game_data_number*>(data.getRef())->hash();
-            if (_type == game_data_string::type_def)
-                return reinterpret_cast<game_data_string*>(data.getRef())->hash();
-            if (_type == game_data_array::type_def)
-                return reinterpret_cast<game_data_array*>(data.getRef())->hash();
-            if (_type == game_data_bool::type_def)
-                return reinterpret_cast<game_data_bool*>(data.getRef())->hash();
-            if (_type == game_data_group::type_def)
-                return reinterpret_cast<game_data_group*>(data.getRef())->hash();
-            if (_type == game_data_config::type_def)
-                return reinterpret_cast<game_data_config*>(data.getRef())->hash();
-            if (_type == game_data_control::type_def)
-                return reinterpret_cast<game_data_control*>(data.getRef())->hash();
-            if (_type == game_data_display::type_def)
-                return reinterpret_cast<game_data_display*>(data.getRef())->hash();
-            if (_type == game_data_location::type_def)
-                return reinterpret_cast<game_data_location*>(data.getRef())->hash();
-            if (_type == game_data_script::type_def)
-                return reinterpret_cast<game_data_script*>(data.getRef())->hash();
-            if (_type == game_data_side::type_def)
-                return reinterpret_cast<game_data_side*>(data.getRef())->hash();
-            if (_type == game_data_rv_text::type_def)
-                return reinterpret_cast<game_data_rv_text*>(data.getRef())->hash();
-            if (_type == game_data_rv_namespace::type_def)
-                return reinterpret_cast<game_data_rv_namespace*>(data.getRef())->hash();
-            if (_type == game_data_code::type_def)
-                return reinterpret_cast<game_data_code*>(data.getRef())->hash();
-            return 0;
-        };
 
-        void* game_value::operator new(std::size_t sz_) {
-            return rv_allocator<game_value>::createArray(sz_);
+            switch(type_enum()) {
+                case GameDataType::SCALAR: return reinterpret_cast<game_data_number*>(data.get())->hash();
+                case GameDataType::BOOL: return reinterpret_cast<game_data_bool*>(data.get())->hash();
+                case GameDataType::ARRAY: return reinterpret_cast<game_data_array*>(data.get())->hash();
+                case GameDataType::STRING: return reinterpret_cast<game_data_string*>(data.get())->hash();
+                case GameDataType::NOTHING: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case GameDataType::NAMESPACE: return reinterpret_cast<game_data_rv_namespace*>(data.get())->hash();
+                case GameDataType::NaN: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case GameDataType::CODE: return reinterpret_cast<game_data_code*>(data.get())->hash();
+                case GameDataType::OBJECT: return reinterpret_cast<game_data_object*>(data.get())->hash();
+                case GameDataType::SIDE: return reinterpret_cast<game_data_side*>(data.get())->hash();
+                case GameDataType::GROUP: return reinterpret_cast<game_data_group*>(data.get())->hash();
+                case GameDataType::TEXT: return reinterpret_cast<game_data_rv_text*>(data.get())->hash();
+                case GameDataType::SCRIPT: return reinterpret_cast<game_data_script*>(data.get())->hash();
+                case GameDataType::TARGET: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case GameDataType::CONFIG: return reinterpret_cast<game_data_config*>(data.get())->hash();
+                case GameDataType::DISPLAY: return reinterpret_cast<game_data_display*>(data.get())->hash();
+                case GameDataType::CONTROL: return reinterpret_cast<game_data_control*>(data.get())->hash();
+#if defined(_DEBUG) && defined(_MSC_VER)
+                //If you encounter any of these give Dedmen a repro.
+                case GameDataType::ANY: __debugbreak(); break;//ANY should never be seen as a value.
+                case GameDataType::NetObject: __debugbreak(); break;
+                case GameDataType::SUBGROUP: __debugbreak(); break;
+#else
+                case GameDataType::ANY: return 0;
+                case GameDataType::NetObject: return 0;
+                case GameDataType::SUBGROUP: return 0;
+#endif
+                case GameDataType::TEAM_MEMBER: return reinterpret_cast<game_data_team_member*>(data.get())->hash();
+                case GameDataType::TASK: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"Task %s (id %d)" or "No Task"
+                case GameDataType::DIARY_RECORD: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"No diary record" or... The text of that record? Text might be long and make this hash heavy
+                case GameDataType::LOCATION: return reinterpret_cast<game_data_location*>(data.get())->hash();
+                case GameDataType::end: return 0;
+            }
+
+            return types::__internal::pairhash<uintptr_t,uintptr_t>(data->get_vtable(),reinterpret_cast<uintptr_t>(data.get()));
+        }
+
+        void* game_value::operator new(const std::size_t sz_) {
+            return rv_allocator<game_value>::create_array(sz_);
         }
 
         void game_value::operator delete(void* ptr_, std::size_t) {
@@ -799,7 +837,7 @@ namespace intercept {
         }
        
         bool exiting = false;
-
+        /// @private
         extern "C" DLLEXPORT void CDECL handle_unload_internal() {
             exiting = true;
         }
@@ -810,161 +848,19 @@ namespace intercept {
 
     #pragma endregion
 
-    #pragma region Allocator
-        class MemTableFunctions { //We don't want to expose this in the header. It's only used here
-        public:
-            virtual void *New(size_t size) = 0;
-            virtual void *New(size_t size, const char *file, int line) = 0;
-            virtual void Delete(void *mem) = 0;
-            virtual void Delete(void *mem, const char *file, int line) = 0;
-            virtual void *Realloc(void *mem, size_t size) = 0;
-            virtual void *Realloc(void *mem, size_t size, const char *file, int line) = 0;
-            virtual void *Resize(void *mem, size_t size) = 0; //This actually doesn't do anything.
-
-            virtual void *NewPage(size_t size, size_t align) = 0;
-            virtual void DeletePage(void *page, size_t size) = 0;
-
-            virtual void *HeapAlloc(void *mem, size_t size) = 0;
-            virtual void *HeapAlloc(void *mem, size_t size, const char *file, int line) = 0;//HeapAlloc
-
-            virtual void *HeapDelete(void *mem, size_t size) = 0;
-            virtual void *HeapDelete(void *mem, size_t size, const char *file, int line) = 0;//HeapFree
-
-        #ifdef __linux__
-            virtual int something1(void* mem, size_t unknown) = 0; //memalign alloc and memmove
-            virtual int something2(void* mem, size_t unknown) = 0; //redirect to something1
-            virtual int something3(void* mem, size_t unknown) = 0; //ret 0
-        #endif
-
-            virtual int something(void* mem, size_t unknown) = 0; //Returns HeapSize(mem) - (unknown<=4 ? 4 : unknown) -(-0 & 3) -3
-            //In Linux binary this calls malloc_usable_size(unknown)
-            //In Linux binary this allocates aligned memory and moves memory. But on linux it also takes 4 args
-
-            virtual size_t GetPageRecommendedSize() = 0;
-
-            virtual void *HeapBase() = 0;
-            virtual size_t HeapUsed() = 0;
-
-            virtual size_t HeapUsedByNew() = 0;
-            virtual size_t HeapCommited() = 0;
-            virtual int FreeBlocks() = 0;
-            virtual int MemoryAllocatedBlocks() = 0;
-            virtual void Report() = 0;//Does nothing on release build. Maybe on Profiling build
-            virtual bool CheckIntegrity() = 0;//Does nothing on release build. Maybe on Profiling build returns true.
-            virtual bool IsOutOfMemory() = 0;//If true we are so full we are already moving memory to disk.
-
-            virtual void CleanUp() = 0;//Does nothing? I guess.
-                                       //Synchronization for Multithreaded access
-            virtual void Lock() = 0;
-            virtual void Unlock() = 0;
-            const char* arr[6]{ "tbb4malloc_bi","tbb3malloc_bi","jemalloc_bi","tcmalloc_bi","nedmalloc_bi","custommalloc_bi" };
-        };
-
-        void __internal::set_game_value_vtable(uintptr_t vtable) {
-            game_value::__vptr_def = vtable;
-        }
-
-        void* __internal::rv_allocator_allocate_generic(size_t size) {
-            static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
-        #else
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
-        #endif
-            return alloc->New(size);
-        }
-
-        void __internal::rv_allocator_deallocate_generic(void* _Ptr) {
-            //#TODO assert when _ptr is not 32/64bit aligned
-            // deallocate object at _Ptr
-            static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
-        #else
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
-        #endif
-            alloc->Delete(_Ptr);
-        }
-
-        void* __internal::rv_allocator_reallocate_generic(void* _Ptr, size_t _size) {
-            //#TODO assert when _ptr is not 32/64bit aligned
-            // deallocate object at _Ptr
-            static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        #ifdef __linux__
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
-        #else
-            MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
-        #endif
-            return alloc->Realloc(_Ptr, _size);
-        }
-
-        //template<class Type>
-        //void rv_allocator<Type>::deallocate(Type* _Ptr, size_t) {
-        //    //#TODO assert when _ptr is not 32/64bit aligned
-        //    // deallocate object at _Ptr
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    //std::stringstream stream;
-        //    //stream << "deallocate " << "x * " << typeid(Type).name() << "@" << std::hex << (int)_Ptr << "\n";
-        //    //OutputDebugStringA(stream.str().c_str());
-        //    alloc->Delete(_Ptr);
-        //}
-        //
-        //template<class Type>
-        //Type* rv_allocator<Type>::allocate(size_t _count) {	// allocate array of _Count elements
-        //
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;
-        //    //uintptr_t allocatorBase = GET_ENGINE_ALLOCATOR;    
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    Type* newData = reinterpret_cast<Type*>(alloc->New(sizeof(Type)*_count));
-        //    //std::stringstream stream;
-        //    //stream << "allocate " << _count << " * " << typeid(Type).name() << "@" << std::hex << (int) newData << "\n";
-        //    //OutputDebugStringA(stream.str().c_str());
-        //    return newData;
-        //}
-
-
-        //template<class Type>
-        //Type* rv_allocator<Type>::reallocate(Type* _Ptr, size_t _count) {
-        //    auto allocatorBase = GET_ENGINE_ALLOCATOR;   
-        //    MemTableFunctions* alloc = (MemTableFunctions*) allocatorBase->genericAllocBase;
-        //    Type* newData = reinterpret_cast<Type*>(alloc->Realloc(_Ptr,sizeof(Type)*_count));
-        //    return newData;
-        //}
-
-        void* rv_pool_allocator::allocate(size_t count) {
-        #ifdef __linux__
-            __internal::rv_allocator_allocate_generic(count);
-        #else
-            static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t /*count*/);
-            allocFunc alloc = reinterpret_cast<allocFunc>(allocatorBase->poolFuncAlloc);
-            auto allocation = alloc(this, count);
-            return allocation;
-        #endif
-        }
-
-        void rv_pool_allocator::deallocate(void* data) {
-        #ifdef __linux__
-            __internal::rv_allocator_deallocate_generic(data);
-        #else
-            static auto allocatorBase = GET_ENGINE_ALLOCATOR;
-            typedef void(__thiscall *deallocFunc)(rv_pool_allocator*, void* /*data*/);
-            deallocFunc dealloc = reinterpret_cast<deallocFunc>(allocatorBase->poolFuncDealloc);
-            dealloc(this, data);
-        #endif
-        }
-    #pragma endregion
-
     #pragma region Serialization
+        uintptr_t param_archive::get_game_state() {
+            auto allocinfo = GET_ENGINE_ALLOCATOR;
+            return allocinfo->gameState;
+        }
+
         intercept::types::serialization_return param_archive::serialize(r_string name, serialize_class & value, int min_version) {
             if (_version < min_version) return serialization_return::version_too_new;
-            param_archive sub_archive;
+            param_archive sub_archive(nullptr);
             sub_archive._version = _version;
             sub_archive._p3 = _p3;
             sub_archive._parameters = _parameters;
             sub_archive._isExporting = _isExporting;
-            delete sub_archive._p1;
             if (_isExporting) {
                 sub_archive._p1 = _p1->add_entry_class(name, false);
             } else {
@@ -978,7 +874,7 @@ namespace intercept {
             auto ret = value.serialize(sub_archive);
             if (_isExporting) {
                 sub_archive._p1->compress();
-                delete sub_archive._p1;
+                rv_allocator<param_archive_entry>::destroy_deallocate(sub_archive._p1);
                 sub_archive._p1 = nullptr;
             }
             return ret;
@@ -989,8 +885,9 @@ namespace intercept {
             if (_isExporting) {
                 _p1->add_entry(name, value);
             } else {
-                auto entry = _p1->get_entry_by_name(name);
-                value = static_cast<r_string>(*entry);   //#TODO check if entry actually contains the type that we want
+                unique_ref<param_archive_entry> entry = _p1->get_entry_by_name(name);
+                if (!entry) return serialization_return::no_entry;
+                value = static_cast<r_string>(std::move(*entry));   //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
             return serialization_return::no_error;
@@ -1001,7 +898,8 @@ namespace intercept {
             if (_isExporting) {
                 _p1->add_entry(name, static_cast<int>(value));//I don't know why.. BI does this..
             } else {
-                auto entry = _p1->get_entry_by_name(name);
+                unique_ref<param_archive_entry> entry = _p1->get_entry_by_name(name);
+                if (!entry) return serialization_return::no_entry;
                 value = static_cast<int>(*entry); //#TODO check if entry actually contains the type that we want
                 return serialization_return::no_error;
             }
@@ -1014,7 +912,7 @@ namespace intercept {
                 return serialization_return::no_error;
             }
             if (_isExporting && value == default_value) return serialization_return::no_error;
-            serialization_return err = serialize(name, value, min_version);
+            const serialization_return err = serialize(name, value, min_version);
             // if the value is not found, load the default one
             if (err == serialization_return::no_entry) {
                 value = default_value;
@@ -1024,10 +922,10 @@ namespace intercept {
         }
 
         serialization_return game_value::serialize(param_archive& ar) {
-            if (!data) data = new game_data_bool(false);//#TODO use game_data_nothing and rv allocator
+            if (!data) data = rv_allocator<game_data_nothing>::create_single();
             ar.serialize(r_string("data"sv), data, 1);
-            //#TODO check if type == game_data_nothing. Can probably just use strcmp
-            //if (data && data->type() == game_data_nothing) data = nullptr;
+
+            if (data && data->get_vtable() == game_data_nothing::type_def) data = nullptr;
             return serialization_return::no_error;
         }
     #pragma endregion

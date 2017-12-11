@@ -8,12 +8,12 @@
 namespace intercept {
     class argument_accessor {
     public:
-        argument_accessor(const uint32_t index, const std::vector<std::string> & ar) : _index(index), _args(ar) { }
+        argument_accessor(const uint32_t index, const std::vector<std::string> & ar) noexcept : _index(index), _args(ar) { }
 
         const std::string & as_string() const { return _args[_index]; }
         operator const std::string &() const { return as_string(); }
 
-        float to_float(const std::string & val) const { float res = 0.0f; std::istringstream iss(val); iss >> res; return res; }
+        static float to_float(const std::string & val) { float res = 0.0f; std::istringstream iss(val); iss >> res; return res; }
         float as_float() const { return to_float(_args[_index]); }
         operator float() const { return as_float(); }
 
@@ -44,18 +44,18 @@ namespace intercept {
         //    }
         //}
 
-        size_t size() const { return _args.size(); }
+        size_t size() const noexcept { return _args.size(); }
 
-		const argument_accessor operator[] (int index) const { return argument_accessor(index, _args); }
-		//argument_accessor operator[] (int index) const { return argument_accessor(index, _args); }
+        const argument_accessor operator[] (int index) const noexcept { return argument_accessor(index, _args); }
+        //argument_accessor operator[] (int index) const { return argument_accessor(index, _args); }
 
 
-        float to_float(const std::string & val) const { float res = 0.0f; std::istringstream iss(val); iss >> res; return res; }
+        static float to_float(const std::string & val) { float res = 0.0f; std::istringstream iss(val); iss >> res; return res; }
 
-		const std::string & as_string() { return _args[_internal_index++]; }
-		float as_float() { return to_float(_args[_internal_index++]); }
-		int as_int() { return atoi(_args[_internal_index++].c_str()); }
-		int as_uint32() { return static_cast<uint32_t>(atoi(_args[_internal_index++].c_str())); }
+        const std::string & as_string() { return _args[_internal_index++]; }
+        float as_float() { return to_float(_args[_internal_index++]); }
+        int as_int() { return atoi(_args[_internal_index++].c_str()); }
+        int as_uint32() { return static_cast<uint32_t>(atoi(_args[_internal_index++].c_str())); }
 
         const std::string & as_string(uint32_t _index) const { return _args[_index]; }
         float as_float(uint32_t _index) const { return to_float(_args[_index]); }
@@ -63,7 +63,7 @@ namespace intercept {
         int as_uint32(uint32_t _index) const { return static_cast<uint32_t>(atoi(_args[_index].c_str())); }
 
 
-        const std::string & get() const {
+        const std::string & get() const noexcept {
             return _original;
         }
 
@@ -89,6 +89,6 @@ namespace intercept {
     protected:
         std::vector<std::string> _args;
         const std::string        _original;
-		uint32_t				 _internal_index;
+        uint32_t                 _internal_index;
     };
 }

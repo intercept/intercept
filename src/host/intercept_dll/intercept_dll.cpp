@@ -72,15 +72,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
 
     if (command == "init_patch"sv) {
-#if _WIN64 || __X86_64__
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x160);
-#else
-#if __linux__
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 0x264);
-#else
-        uintptr_t game_state_addr = *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(output) + outputSize + 8);
-#endif
-#endif
+        uintptr_t game_state_addr = intercept::loader::find_game_state(reinterpret_cast<uintptr_t>(output) + outputSize);
+
         //std::cout << "gameState " << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
         return;
@@ -96,24 +89,61 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 
 intercept::client_functions intercept::client::host::functions;
 
-void Init() {
-    intercept::client::host::functions = intercept::extensions::get().functions;
-    el::Configurations conf;
-
-    conf.setGlobally(el::ConfigurationType::Filename, "logs/intercept_dll.log");
-    conf.setGlobally(el::ConfigurationType::MaxLogFileSize, "10240");
-#ifdef _DEBUG
-    el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%datetime] - %level - {%loc}t:%thread- %msg");
-    conf.setGlobally(el::ConfigurationType::PerformanceTracking, "true");
-#else
-    el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "%datetime-{%level}- %msg");
+void 
+#ifdef __linux__
+__attribute__((constructor))
 #endif
-    el::Loggers::setDefaultConfigurations(conf, true);
+    InitLogging() {
+    intercept::client::host::functions = intercept::extensions::get().functions;
+    auto arg_line = intercept::search::plugin_searcher::get_command_line();
+    std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
+    
+    
+    if (arg_line.find("-interceptdebuglog"sv) != std::string::npos) {
+        spdlog::set_level(spdlog::level::debug);
+    } else {
+        spdlog::set_level(spdlog::level::info);
+    }
 
-    LOG(INFO) << "Intercept DLL Loaded";
+
+    spdlog::set_pattern("[%H:%M:%S]-{%l}- %v");
+    try {
+        auto logfile_it_ = arg_line.find("-interceptlogfile"sv);
+        if (logfile_it_ != std::string::npos) {
+            auto path_start_ = logfile_it_ + 17; // skip -interceptlogfile
+
+            //trim left
+            path_start_ = arg_line.find_first_not_of(" \t\"", path_start_);
+
+            //trim right
+            size_t path_end_ = arg_line.find("\"", path_start_); // find ending quotationmark
+
+            if (path_start_ == std::string::npos) {
+                logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+            } else {
+                std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
+                logging::logfile = spdlog::rotating_logger_mt("logfile", _path, 1024000, 3);
+            }
+        } else {
+            logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+        }
+
+        logging::logfile->flush_on(spdlog::level::debug);
+    } catch (const spdlog::spdlog_ex&) {
+        spdlog::set_level(spdlog::level::off);
+        logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
+    }
+
+    LOG(INFO, "Intercept DLL Loaded");
 }
 
-void Cleanup() {
+void
+#ifdef __linux__
+__attribute__((destructor))
+#endif
+CleanupLogging() {
+    logging::logfile->flush();
+    spdlog::drop_all();
 }
 
 #ifndef __linux__
@@ -122,12 +152,12 @@ BOOL APIENTRY DllMain(HMODULE hModule,
                       LPVOID lpReserved) {
     switch (ul_reason_for_call) {
         case DLL_PROCESS_ATTACH:
-            Init();
+            InitLogging();
             break;
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
         case DLL_PROCESS_DETACH:
-            Cleanup();
+            CleanupLogging();
             break;
     }
     return TRUE;

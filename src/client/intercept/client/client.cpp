@@ -11,7 +11,6 @@ namespace intercept {
         registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
             return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }
-
         registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, GameDataType return_arg_type, GameDataType right_arg_type) {
             return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
         }
@@ -21,7 +20,6 @@ namespace intercept {
         std::pair<GameDataType, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
-
         register_plugin_interface_result host::register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_) {
             if (!interface_class_) return register_plugin_interface_result::invalid_interface_class;
             auto result = functions.register_plugin_interface(module_name, name_, api_version_, interface_class_);
@@ -111,24 +109,22 @@ namespace intercept {
             game_data_rv_text::data_type_def = data_type_def;
 
             host::functions.get_type_structure("TEAM_MEMBER"sv, type_def, data_type_def);
-            game_data_team::type_def = type_def;
-            game_data_team::data_type_def = data_type_def;
+            game_data_team_member::type_def = type_def;
+            game_data_team_member::data_type_def = data_type_def;
 
             host::functions.get_type_structure("NAMESPACE"sv, type_def, data_type_def);
             game_data_rv_namespace::type_def = type_def;
             game_data_rv_namespace::data_type_def = data_type_def;
-
-
-
+            
+            host::functions.get_type_structure("NOTHING"sv, type_def, data_type_def);
+            game_data_nothing::type_def = type_def;
+            game_data_nothing::data_type_def = data_type_def;
+            
             host::functions.get_type_structure("GV"sv, type_def, data_type_def);
             intercept::types::__internal::set_game_value_vtable(type_def);
 
             host::functions.get_type_structure("SQF_SCRIPT_TYPE"sv, type_def, data_type_def);
             sqf_script_type::type_def = type_def;
-        }
-
-        void CDECL handle_unload() {
-
         }
 
         invoker_lock::invoker_lock(bool delayed_) : _locked(false) {
@@ -145,6 +141,13 @@ namespace intercept {
             if (!_locked) {
                 host::functions.invoker_lock();
                 _locked = true;
+            }
+        }
+
+        inline void invoker_lock::unlock() {
+            if (_locked) {
+                host::functions.invoker_unlock();
+                _locked = false;
             }
         }
 

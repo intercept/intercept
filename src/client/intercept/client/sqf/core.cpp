@@ -15,10 +15,10 @@ namespace intercept {
             game_value params_right({function_,
                                      std::move(arguments)});
 
-            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
+            return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
 
-        game_value call(const code &code_, game_value args_) {
+        game_value call2(const code &code_, game_value args_) {
             game_value args({args_, code_});
 
             set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
@@ -47,7 +47,7 @@ namespace intercept {
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
-        game_value call(const code &code_) {
+        game_value call2(const code &code_) {
             game_value args({game_value(), code_});
 
             set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
@@ -73,6 +73,47 @@ namespace intercept {
 
             // Sadly isNil doesn't return anything so we have to grab it from a variable.
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
+        }
+
+        game_value call(const code &code_, game_value args_) {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto sv = host::functions.get_engine_allocator()->setvar_func;
+            if (!ef || !sv) return call2(code_, args_);
+
+            auto missionNamespace = mission_namespace();
+ 
+            static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
+
+            auto data = static_cast<game_data_code*>(wrapper.data.get());
+
+            auto ns = missionNamespace.data.get();
+            static r_string fname = "interceptCall"sv;
+
+            sv("_i135_ar_", args_);
+            sv("_i135_cc_", code_);
+
+            auto ret = ef(*data, ns, fname);
+            return ret;
+        }
+
+        game_value call(const code &code_) {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            if (!ef) return call2(code_);
+
+            auto data = static_cast<game_data_code*>(code_.data.get());
+
+            auto ns = mission_namespace().data.get();
+            static r_string fname = "interceptCall"sv;
+            auto ret = ef(*data, ns, fname);
+            return ret;
+        }
+
+
+        script spawn(game_value args, const code& code_) {
+            return host::functions.invoke_raw_binary(
+                __sqf::binary__spawn__any__code__ret__script,
+                args,
+                code_);
         }
 
         bool is_nil_code(const code &code_) {
@@ -147,15 +188,11 @@ namespace intercept {
         }
 
         std::vector<game_value> apply(const std::vector<game_value> &array_, const code &code_) {
-            return __helpers::__convert_to_game_value_vector(host::functions.invoke_raw_binary(__sqf::binary__apply__array__code__ret__array, array_, code_));
+            return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__apply__array__code__ret__array, array_, code_));
         }
 
         bool can_suspend() {
             return host::functions.invoke_raw_nular(__sqf::nular__cansuspend__ret__bool);
-        }
-
-        bool is_equal_to(const object &l_, const object &r_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, l_, r_);
         }
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
@@ -280,16 +317,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__control__array__ret__nothing, control_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_)});
-        }
-
         void set_variable(const object &object_, sqf_string_const_ref variable_, game_value value_, bool public_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__object__array__ret__nothing, object_, {variable_, std::move(value_), public_});
         }
 
-        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, {variable_, std::move(value_)});
+        void set_variable(const group &group_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__group__array__ret__nothing, group_, {variable_, std::move(value_), public_ });
         }
 
         void set_variable(const team_member &team_member_, sqf_string_const_ref variable_, game_value value_) {
@@ -300,12 +333,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setvariable__task__array__ret__nothing, task_, {variable_, std::move(value_)});
         }
 
-        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, {variable_, std::move(value_)});
-        }
-
-        void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, {var_name_, std::move(value_)});
+        void set_variable(const location &location_, sqf_string_const_ref variable_, game_value value_, bool public_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvariable__location__array__ret__nothing, location_, {variable_, std::move(value_), public_ });
         }
 
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_) {
@@ -405,25 +434,25 @@ namespace intercept {
         }
 
         sqf_return_string_list all_variables(const object &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__object__ret__array, value_));
         }
         sqf_return_string_list all_variables(const team_member &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__team_member__ret__array, value_));
         }
         sqf_return_string_list all_variables(rv_namespace value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__namespace__ret__array, value_));
         }
 
         sqf_return_string_list all_variables(const task &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__task__ret__array, value_));
         }
 
         sqf_return_string_list all_variables(const control &value_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__control__ret__array, value_));
         }
 
@@ -549,57 +578,57 @@ namespace intercept {
         }
 
         sqf_return_string_list support_info(sqf_string_const_ref mask_) {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_unary(__sqf::unary__supportinfo__string__ret__array, mask_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__supportinfo__string__ret__array, mask_));
         }
 
         std::vector<object> all_simple_objects(sqf_string_list_const_ref params_) {
             auto_array<game_value> params(params_.begin(), params_.end());
 
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, std::move(params)));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__allsimpleobjects__array__ret__array, std::move(params)));
         }
 
         std::vector<object> all_mission_objects(sqf_string_const_ref type_) {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_unary(__sqf::unary__allmissionobjects__string__ret__array, type_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__allmissionobjects__string__ret__array, type_));
         }
 
         std::vector<object> all_curators() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allcurators__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allcurators__ret__array));
         }
 
         std::vector<object> all_dead() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__alldead__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__alldead__ret__array));
         }
 
         std::vector<object> all_deadmen() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__alldeadmen__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__alldeadmen__ret__array));
         }
 
         std::vector<display> all_displays() {
-            return __helpers::__convert_to_displays_vector(host::functions.invoke_raw_nular(__sqf::nular__alldisplays__ret__array));
+            return __helpers::__convert_to_vector<display>(host::functions.invoke_raw_nular(__sqf::nular__alldisplays__ret__array));
         }
 
         std::vector<group> all_groups() {
-            return __helpers::__convert_to_groups_vector(host::functions.invoke_raw_nular(__sqf::nular__allgroups__ret__array));
+            return __helpers::__convert_to_vector<group>(host::functions.invoke_raw_nular(__sqf::nular__allgroups__ret__array));
         }
 
         std::vector<object> all_mines() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allmines__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allmines__ret__array));
         }
 
         std::vector<object> all_players() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allplayers__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allplayers__ret__array));
         }
 
         std::vector<object> all_units() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allunits__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allunits__ret__array));
         }
 
         std::vector<object> all_units_uav() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__allunitsuav__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allunitsuav__ret__array));
         }
 
         sqf_return_string_list activated_addons() {
-            return __helpers::__convert_to_strings_vector(host::functions.invoke_raw_nular(__sqf::nular__activatedaddons__ret__array));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__activatedaddons__ret__array));
         }
 
         sqf_return_string image(sqf_string_const_ref value_) {
@@ -669,7 +698,7 @@ namespace intercept {
         }
 
         std::vector<object> playable_units() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__playableunits__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__playableunits__ret__array));
         }
 
         float player_respawn_time() {
@@ -681,7 +710,7 @@ namespace intercept {
         }
 
         std::vector<object> switchable_units() {
-            return __helpers::__convert_to_objects_vector(host::functions.invoke_raw_nular(__sqf::nular__switchableunits__ret__array));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__switchableunits__ret__array));
         }
 
         object player() {
@@ -745,7 +774,7 @@ namespace intercept {
         }
 
         std::vector<game_value> parse_simple_array(sqf_string_const_ref string_array_) {
-            return __helpers::__convert_to_game_value_vector(
+            return __helpers::__convert_to_vector<game_value>(
                 host::functions.invoke_raw_unary(__sqf::unary__parsesimplearray__string__ret__array, string_array_));
         }
 
@@ -862,6 +891,36 @@ namespace intercept {
 
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
         }
+
+        bool is_equal_to(game_value left_, game_value right_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, left_, right_);
+        }
+
+        bool is_equal_type(game_value left_, game_value right_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltype__any__any__ret__bool, left_, right_);
+        }
+
+        bool is_equal_type_all(game_value value_array_, game_value type_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeall__array__any__ret__bool, value_array_, type_);
+        }
+
+        bool is_equal_type_any(game_value value_, game_value types_array_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeany__any__array__ret__bool, value_, types_array_);
+        }
+
+        bool is_equal_type_array(game_value left_array_, game_value right_array_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypearray__array__array__ret__bool, left_array_, right_array_);
+        }
+
+        bool is_equal_type_params(game_value value_, game_value template_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeparams__any__array__ret__bool, value_, template_);
+        }
+
+        int get_mission_version() {
+            return host::functions.invoke_raw_nular(__sqf::nular__missionversion__ret__scalar);
+        }
+
+
 
     }  // namespace sqf
 }  // namespace intercept

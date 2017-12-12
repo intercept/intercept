@@ -293,6 +293,12 @@ namespace intercept {
         binary_function _get_variable_func;
 
         /*!
+        @brief main thread ID to prevent to mainthread to get locked by the invoker
+        */
+
+        std::thread::id _main_thread_id;
+
+        /*!
         @brief A RAII style mutex handler for access to the RV Engine
 
         Provides a safe way to unlock other threads or invokes to the RV engine. 

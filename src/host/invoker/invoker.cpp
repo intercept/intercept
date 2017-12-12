@@ -20,8 +20,8 @@ namespace intercept {
     unary_function invoker::_register_hook_trampoline = nullptr;
     uintptr_t invoker::sqf_game_state = 0;
 
-    invoker::invoker() : _thread_count(0), _patched(false), _attached(false) {
-
+    invoker::invoker() : _thread_count(0), _patched(false), _attached(false), _main_thread_id(std::this_thread::get_id()) {
+        
     }
 
     invoker::~invoker() {
@@ -421,30 +421,35 @@ namespace intercept {
 
 
     void invoker::lock() {
-        //If the thread is already locked. We don't want to check if we are allowed to lock.
-        //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
-        //lock the invoker again before it can unlock it's first lock.
-        //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
-        //But thread needs to lock it so it can unlock the first lock.
-        if (_thread_count == 0) {
-            std::unique_lock<std::mutex> lock(_state_mutex);
-            _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
-            _invoke_mutex.lock();
-        } else {
-            _invoke_mutex.lock();
+        if (std::this_thread::get_id() != _main_thread_id) {
+            //If the thread is already locked. We don't want to check if we are allowed to lock.
+            //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
+            //lock the invoker again before it can unlock it's first lock.
+            //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
+            //But thread needs to lock it so it can unlock the first lock.
+            if (_thread_count == 0) {
+                std::unique_lock<std::mutex> lock(_state_mutex);
+                _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
+                _invoke_mutex.lock();
+            }
+            else {
+                _invoke_mutex.lock();
+            }
+            ++_thread_count;
+#ifdef _DEBUG
+            LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
+#endif
         }
-        ++_thread_count;
-    #ifdef _DEBUG
-        LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
-    #endif
     }
 
     void invoker::unlock() {
-        --_thread_count;
-        _invoke_mutex.unlock();
-    #ifdef _DEBUG
-        LOG(DEBUG, "Client Thread RELEASE EXCLUSIVE");
-    #endif
+        if (std::this_thread::get_id() != _main_thread_id) {
+            --_thread_count;
+            _invoke_mutex.unlock();
+#ifdef _DEBUG
+            LOG(DEBUG, "Client Thread RELEASE EXCLUSIVE");
+#endif
+        }
     }
 
     invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _unlocked(false), _instance(instance_), _all(all_threads_) {

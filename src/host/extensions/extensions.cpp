@@ -53,9 +53,11 @@ namespace intercept {
     }
 
     extensions::~extensions() {
-        for (auto& kv : _modules) {
-            unload(kv.first);
-        }
+        while (!_modules.empty())
+            for (auto& kv : _modules) {
+                unload(kv.first);
+                break; //Have to restart loop because _modules get's modified
+            }
     }
 
     void extensions::attach_controller() {

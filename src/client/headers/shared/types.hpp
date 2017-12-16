@@ -480,12 +480,13 @@ namespace intercept {
                 copy(copy_);
             }
 
+        #pragma optimize ("ts", on)
             game_value(game_value&& move_) noexcept {
                 set_vtable(__vptr_def);//Whatever vtable move_ has.. if it's different then it's wrong
-                data = move_.data;
-                move_.data = nullptr;
+                data = nullptr;
+                data.swap(move_.data);
             }
-
+        #pragma optimize( "", on )
 
             //Conversions
             game_value(game_data* val_) noexcept {
@@ -583,9 +584,11 @@ namespace intercept {
             uintptr_t get_vtable() const noexcept {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
+        #pragma optimize ("ts", on)
             void set_vtable(uintptr_t vt) noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = vt;
             }
+        #pragma optimize ("", on)
 
         };
 

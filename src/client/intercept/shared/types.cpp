@@ -667,6 +667,16 @@ namespace intercept {
             return dummy;
         }
 
+        std::optional<game_value> game_value::get(size_t i_) const {
+            if (data) {
+                if (data->get_vtable() != game_data_array::type_def) return *this;
+                auto& array = data->get_as_array();
+                if (array.count() >= i_)
+                    return array[i_];
+            }
+            return {};
+        }
+
         uintptr_t game_value::type() const {
             if (data)
                 return *reinterpret_cast<uintptr_t*>(data.get()); //#TODO use GetType virtual func instead

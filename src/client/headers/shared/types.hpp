@@ -541,16 +541,26 @@ namespace intercept {
             operator vector2() const;
 
             /**
-            * \brief tries to convert the game_value to an array if possible
-            * \throws game_value_conversion_error {if game_value is not an array}
+            * @brief tries to convert the game_value to an array if possible
+            * @throws game_value_conversion_error {if game_value is not an array}
             */
             auto_array<game_value>& to_array() const;
 
             /**
-            * \brief tries to convert the game_value to an array if possible and return the element at given index.
-            * \throw game_value_conversion_error {if game_value is not an array}
+            * @brief tries to convert the game_value to an array if possible and return the element at given index.
+            * @throw game_value_conversion_error {if game_value is not an array}
             */
             game_value& operator [](size_t i_) const;
+
+            /**
+            * @brief tries to convert the game_value to an array if possible and return the element at given index.
+            * @description If value is not an array and index==0 it returns the value. 
+            * If the index is out of bounds it returns empty optional.
+            */
+            std::optional<game_value> get(size_t i_) const;
+
+
+
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
                                    /// doesn't handle all types. Will return GameDataType::ANY if not handled

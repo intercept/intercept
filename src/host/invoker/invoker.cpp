@@ -214,7 +214,9 @@ namespace intercept {
         return true;
     }
 
-    game_value invoker::invoke_raw_nolock(nular_function function_) {
+    game_value invoker::invoke_raw_nolock(nular_function function_) noexcept {
+        volatile uintptr_t arr[64];//artifical stackpushing
+        arr[13] = 5;
         return function_(invoker::sqf_game_state);
     }
 
@@ -226,7 +228,9 @@ namespace intercept {
         return game_value();
     }
 
-    game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) {
+    game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) noexcept {
+        volatile uintptr_t arr[64];//artifical stackpushing
+        arr[13] = 5;
         return function_(invoker::sqf_game_state, right_arg_);
     }
 
@@ -246,8 +250,9 @@ namespace intercept {
         return game_value();
     }
 
-
-    game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) {
+    game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) noexcept {
+        volatile uintptr_t arr[64];//artifical stackpushing
+        arr[13] = 5;
         return function_(invoker::sqf_game_state, left_arg_, right_arg_);
     }
 

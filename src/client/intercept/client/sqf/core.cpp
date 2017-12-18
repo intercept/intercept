@@ -75,6 +75,12 @@ namespace intercept {
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
+        bool _has_fast_call() {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto sv = host::functions.get_engine_allocator()->setvar_func;
+            return ef && sv;
+        }
+
         game_value call(const code &code_, game_value args_) {
             auto ef = host::functions.get_engine_allocator()->evaluate_func;
             auto sv = host::functions.get_engine_allocator()->setvar_func;
@@ -338,7 +344,10 @@ namespace intercept {
         }
 
         void set_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value value_, bool public_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_), public_ });
+            if (public_)
+                host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_), public_ });
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setvariable__namespace__array__ret__nothing, namespace_, { var_name_, std::move(value_)});
         }
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_) {

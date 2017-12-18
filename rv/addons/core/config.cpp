@@ -966,7 +966,7 @@ class Extended_PreStart_EventHandlers {
 
 class Extended_PreInit_EventHandlers {
     class Intercept_Core {
-        init = "call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\lib.sqf';";
+        init = "['pre_init',[]] call (uiNamespace getVariable 'intercept_fnc_event');";
     };
 };
 

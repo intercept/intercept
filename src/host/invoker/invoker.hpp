@@ -66,7 +66,7 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        static game_value invoke_raw_nolock(const nular_function function_);
+        static game_value invoke_raw_nolock(const nular_function function_) noexcept;
         game_value invoke_raw(std::string_view function_name_) const;
         //!@}
 
@@ -81,7 +81,7 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        static game_value invoke_raw_nolock(const unary_function function_, const game_value &right_);
+        static game_value invoke_raw_nolock(const unary_function function_, const game_value &right_) noexcept;
         game_value invoke_raw(std::string_view function_name_, const game_value &right_) const;
         game_value invoke_raw(std::string_view function_name_, const game_value &right_, const std::string &right_type_) const;
         //!@}
@@ -97,7 +97,7 @@ namespace intercept {
         return type, or passed to a complex argument constructor such as `object`
         or `group`, etc.
         */
-        static game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_);
+        static game_value invoke_raw_nolock(const binary_function function_, const game_value &left_, const game_value &right_) noexcept;
         game_value invoke_raw(std::string_view function_name_, const game_value &left_, const game_value &right_) const;
         game_value invoke_raw(std::string_view function_name_, const game_value &left_, const std::string &left_type_, const game_value &right_, const std::string &right_type_) const;
         //!@}

@@ -15,6 +15,7 @@ namespace intercept {
         if (!_initialized) {
             invoker::get().add_eventhandler("pre_start"sv, std::bind(&eventhandlers::pre_start, std::placeholders::_1));
             invoker::get().add_eventhandler("pre_init"sv, std::bind(&eventhandlers::pre_init, std::placeholders::_1));
+            invoker::get().add_eventhandler("pre_pre_init"sv, std::bind(&eventhandlers::pre_pre_init, std::placeholders::_1));
             invoker::get().add_eventhandler("post_init"sv, std::bind(&eventhandlers::post_init, std::placeholders::_1));
             invoker::get().add_eventhandler("mission_ended"sv, std::bind(&eventhandlers::mission_ended, std::placeholders::_1));
 
@@ -105,24 +106,27 @@ namespace intercept {
         }
         postStartCalled = true;
     }
-    void eventhandlers::pre_init(game_value_parameter)
-    {
+    void eventhandlers::pre_pre_init(game_value_parameter) {
+        LOG(INFO, "Pre-pre-init");
+        for (auto& module : extensions::get().modules()) {
+            module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set
+            if (module.second.functions.pre_pre_init) module.second.functions.pre_pre_init();
+        }
+    }
+    void eventhandlers::pre_init(game_value_parameter) {
         extensions::get().reload_all();
         LOG(INFO, "Pre-init");
         for (auto& module : extensions::get().modules()) {
-            module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set
             if (module.second.functions.pre_init) module.second.functions.pre_init();
         }
     }
-    void eventhandlers::post_init(game_value_parameter)
-    {
+    void eventhandlers::post_init(game_value_parameter) {
         LOG(INFO, "Post-init");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.post_init) module.second.functions.post_init();
         }
     }
-    void eventhandlers::mission_ended(game_value_parameter)
-    {
+    void eventhandlers::mission_ended(game_value_parameter) {
         LOG(INFO, "Mission Stopped");
         for (auto& module : extensions::get().modules()) {
             module.second.functions.client_eventhandlers_clear(); //Plugin loader enforces this one to be set

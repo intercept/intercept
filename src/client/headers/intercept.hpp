@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "client/eventhandlers.hpp"
@@ -14,6 +14,7 @@ namespace intercept {
         /// @brief CBA XEH_preStart
         DLLEXPORT void CDECL post_start();
         DLLEXPORT void CDECL pre_init();
+        DLLEXPORT void CDECL pre_pre_init();
         DLLEXPORT void CDECL post_init();
         DLLEXPORT void CDECL mission_ended();
         DLLEXPORT void CDECL on_frame();

@@ -22,6 +22,8 @@ namespace intercept {
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
 
+        ///Use this to check if fastCall is available. Which calls the engine function directly instead of going through a isNil wrapper
+        bool _has_fast_call();
         //This variant is special in that it works before preInit. The one without args doesn't
         game_value call(const code &code_, game_value args_);
         game_value call(const code &code_);

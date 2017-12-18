@@ -75,6 +75,12 @@ namespace intercept {
             return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
         }
 
+        bool _has_fast_call() {
+            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto sv = host::functions.get_engine_allocator()->setvar_func;
+            return ef && sv;
+        }
+
         game_value call(const code &code_, game_value args_) {
             auto ef = host::functions.get_engine_allocator()->evaluate_func;
             auto sv = host::functions.get_engine_allocator()->setvar_func;

@@ -6,5 +6,6 @@ if (!call (uiNamespace getVariable ["INTERCEPT_BOOT_DONE",{false}])) then {
 if (!isNil {_this}) then  {
 	_this call compile preProcessFileLineNumbers "\A3\functions_f\initFunctions.sqf";
 } else {
+	call compile preprocessFileLineNumbers '\z\intercept\rv\addons\core\lib.sqf';
 	call compile preProcessFileLineNumbers "\A3\functions_f\initFunctions.sqf";
 };

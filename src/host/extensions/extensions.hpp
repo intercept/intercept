@@ -74,6 +74,7 @@ namespace intercept {
             pre_start_func pre_start;
             pre_start_func post_start;
             pre_init_func pre_init;
+            pre_init_func pre_pre_init;
             post_init_func post_init;
             mission_ended_func mission_ended;
             on_frame_func on_frame;

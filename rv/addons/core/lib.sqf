@@ -40,7 +40,7 @@ if(intercept_invoker_ok) then {
 	
     diag_log text "Intercept Invoker initialized.";
     diag_log text format["Intercept Pre-Init..."];
-    ["pre_init",[]] call (uiNamespace getVariable "intercept_fnc_event");
+    ["pre_pre_init",[]] call (uiNamespace getVariable "intercept_fnc_event");
     diag_log text format["Intercept Pre-Init Completed."];
 } else {
 	diag_log text "Intercept Invoker initialization failed.";

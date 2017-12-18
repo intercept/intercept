@@ -29,6 +29,7 @@ namespace intercept {
         static game_value client_eventhandler(game_value_parameter left_arg, game_value_parameter right_arg);
 
         static void pre_init(game_value_parameter args_);
+        static void pre_pre_init(game_value_parameter args_);
         static void pre_start(game_value_parameter args_);
         static void post_start(game_value_parameter args_);
         static void post_init(game_value_parameter args_);

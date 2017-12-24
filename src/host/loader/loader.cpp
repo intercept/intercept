@@ -79,7 +79,7 @@ namespace intercept {
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {
-        game_state = reinterpret_cast<__internal::game_state*>(state_addr_);
+        game_state_ptr = reinterpret_cast<game_state*>(state_addr_);
 
     #ifdef __linux__
         std::ifstream maps("/proc/self/maps");
@@ -295,7 +295,7 @@ namespace intercept {
         We don't give a fuck about that though, we just want to iterate through all of the
         buckets and in turn each item in the bucket, because they are our operator entries.
         */
-        for (auto& it : game_state->_scriptFunctions) {
+        for (auto& it : game_state_ptr->_scriptFunctions) {
             for (auto& entry : it) {
                 unary_entry new_entry;
                 new_entry.op = entry._operator;
@@ -311,7 +311,7 @@ namespace intercept {
         /*
         Binary Hashmap
         */
-        for (auto& it : game_state->_scriptOperators) {
+        for (auto& it : game_state_ptr->_scriptOperators) {
             for (auto& entry : it) {
                 binary_entry new_entry;
                 new_entry.op = entry._operator;
@@ -327,7 +327,7 @@ namespace intercept {
         /*
         Nular Hashmap
         */
-        for (auto& entry : game_state->_scriptNulars) {
+        for (auto& entry : game_state_ptr->_scriptNulars) {
             nular_entry new_entry;
             new_entry.op = entry._operator;
             new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
@@ -365,7 +365,7 @@ namespace intercept {
         };
 
         //Game Types
-        for (auto& entry : game_state->_scriptTypes) {
+        for (auto& entry : game_state_ptr->_scriptTypes) {
             if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
         #if _WIN64 || __X86_64__
             auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + 0xB;
@@ -423,7 +423,7 @@ namespace intercept {
 
         if (evaluate_script_function && varset_function) {
             _allocator.evaluate_func = [](const game_data_code& code, void* ns, const r_string& name) -> game_value {
-                typedef game_value*(__thiscall *evaluate_func) (__internal::game_state* gs, game_value& ret, const r_string& code, void* instruction_list, void* context, void* ns, const r_string& name);
+                typedef game_value*(__thiscall *evaluate_func) (game_state* gs, game_value& ret, const r_string& code, void* instruction_list, void* context, void* ns, const r_string& name);
                 
                 evaluate_func func = reinterpret_cast<evaluate_func>(loader::get().evaluate_script_function);
                 
@@ -433,15 +433,15 @@ namespace intercept {
                     bool _nilerror;
                 } c{ false, true };
                 game_value ret;
-                func(loader::get().game_state, ret, code.code_string, (void*) &code.instructions, &c, ns, name);
+                func(loader::get().game_state_ptr, ret, code.code_string, (void*) &code.instructions, &c, ns, name);
                 return ret;
             };
 
             _allocator.setvar_func = [](const char* name, const game_value& val) -> void {
-                typedef void(__thiscall *varset) (__internal::game_state* gs, const char* name, const game_value& val, bool readonly, bool force);
+                typedef void(__thiscall *varset) (game_state* gs, const char* name, const game_value& val, bool readonly, bool force);
 
                 varset setvar = reinterpret_cast<varset>(loader::get().varset_function);
-                setvar(loader::get().game_state, name, val, false, true);
+                setvar(loader::get().game_state_ptr, name, val, false, true);
 
             };
 

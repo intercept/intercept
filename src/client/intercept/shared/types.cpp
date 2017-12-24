@@ -393,7 +393,7 @@ namespace intercept {
                 return nullptr;
             }
 
-            auto gs = reinterpret_cast<intercept::__internal::game_state *>(ar._parameters.front());
+            auto gs = reinterpret_cast<game_state *>(ar._parameters.front());
             return gs->create_gd_from_type(_type, &ar);
         }
 
@@ -590,20 +590,39 @@ namespace intercept {
         }
 
         game_value::operator int() const {
-            if (data)
+            if (data) {
+            #ifdef INTERCEPT_SAFE_CONVERSIONS
+                const auto type = data->get_vtable();
+                if (data->get_vtable() == game_data_number::type_def)
+                    throw game_value_conversion_error("Invalid conversion to scalar");
+            #endif
                 return static_cast<int>(data->get_as_number());
+            }
+                
             return 0;
         }
 
         game_value::operator float() const {
-            if (data)
+            if (data) {
+            #ifdef INTERCEPT_SAFE_CONVERSIONS
+                const auto type = data->get_vtable();
+                if (data->get_vtable() == game_data_number::type_def)
+                    throw game_value_conversion_error("Invalid conversion to scalar");
+            #endif
                 return data->get_as_number();
+            }
             return 0.f;
         }
 
         game_value::operator bool() const {
-            if (data)
+            if (data) {
+            #ifdef INTERCEPT_SAFE_CONVERSIONS
+                const auto type = data->get_vtable();
+                if (data->get_vtable() == game_data_bool::type_def)
+                    throw game_value_conversion_error("Invalid conversion to scalar");
+            #endif
                 return data->get_as_bool();
+            }
             return false;
         }
 
@@ -659,7 +678,7 @@ namespace intercept {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
                 auto& array = data->get_as_array();
-                if (array.count() >= i_)
+                if (array.count() > i_)
                     return array[i_];
             }
             static game_value dummy;//else we would return a temporary.
@@ -671,7 +690,7 @@ namespace intercept {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) return *this;
                 auto& array = data->get_as_array();
-                if (array.count() >= i_)
+                if (array.count() > i_)
                     return array[i_];
             }
             return {};

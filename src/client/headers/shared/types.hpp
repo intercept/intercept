@@ -21,6 +21,13 @@ namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
     class invoker;
+
+    namespace __internal {
+        class game_functions;
+        class game_operators;
+        class gsNular;
+    }
+
     namespace types {
         class game_value;
         using game_value_parameter = const game_value&;
@@ -392,6 +399,52 @@ namespace intercept {
             nular_operator *op;
         };
 
+        class vm_context;
+
+        class game_state {
+        public:
+            types::auto_array<const types::script_type_info *> _scriptTypes;
+
+            using game_functions = intercept::__internal::game_functions;
+            using game_operators = intercept::__internal::game_operators;
+            using gsNular = intercept::__internal::gsNular;
+
+            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
+            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
+            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
+
+
+            void* stuff[69];//verify on x64
+
+            class game_evaluator {//refcounted
+            public:
+                   //vtable
+                //refcount
+                //pointer to GameVarSpace //should be scope local variables
+                //int some number
+                //2 booleans
+                // error enum
+                //r_string error text
+                //sourcedocpos see ArmaDebugEngine
+            } *eval;
+
+             //global namespace 
+            //auto array of namespaces
+            //bool See ArmaDebugEngine I think it should have them
+            //bool
+            //VMContext*
+
+
+            game_data* create_gd_from_type(const sqf_script_type& type, param_archive* ar) const {
+                for (auto& it : _scriptTypes) {
+                    if (types::sqf_script_type(it) == type) {
+                        if (it->_createFunction) return it->_createFunction(ar);
+                        return nullptr;
+                    }
+                }
+                return nullptr;
+            }
+        };
 
 
 
@@ -611,6 +664,29 @@ namespace intercept {
             game_value_static operator=(const game_value& copy) { data = copy.data; return *this; }
             operator game_value() const { return *this; }
         };
+
+        class vm_context : public serialize_class {
+        public:
+            //fill with dummy
+            bool serialenabled;
+            void* dummyu;
+            //sourcdoc;
+            //sourcdocpos;
+            //bool uicontext
+            //local malloc stack  #TODO implement local malloc thingy static memory in class
+            r_string name;
+            bool scheduled;
+            bool dumm;
+            bool dumm2; //undefined variables allowed?
+            bool excp1;//throw break breakOut exitWith stuff
+            bool excp2;
+            bool excp3;
+            r_string somename;
+            game_value val1;
+            game_value val2;
+        };
+
+
 
     #pragma region GameData Types
 
@@ -1090,28 +1166,6 @@ namespace intercept {
         };
 
 
-    }
-    namespace __internal {
-        //#TODO move to types::__internal and make less ugly
-        class game_functions;
-        class game_operators;
-        class gsNular;
-        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
-        public:
-            types::auto_array<const types::script_type_info *> _scriptTypes;
-            types::map_string_to_class<game_functions, types::auto_array<game_functions>> _scriptFunctions;
-            types::map_string_to_class<game_operators, types::auto_array<game_operators>> _scriptOperators;
-            types::map_string_to_class<gsNular, types::auto_array<gsNular>> _scriptNulars;
-            types::game_data* create_gd_from_type(const types::sqf_script_type& type, types::param_archive* ar) const {
-                for (auto& it : _scriptTypes) {
-                    if (types::sqf_script_type(it) == type) {
-                        if (it->_createFunction) return it->_createFunction(ar);
-                        return nullptr;
-                    }
-                }
-                return nullptr;
-            }
-        };
     }
 }
 

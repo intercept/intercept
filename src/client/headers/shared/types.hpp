@@ -400,6 +400,7 @@ namespace intercept {
         };
 
         class vm_context;
+        class game_data_namespace;
 
         class game_state {
         public:
@@ -413,26 +414,34 @@ namespace intercept {
             map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
             map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
 
+            auto_array<void*, rv_allocator_local<void*, 64>> dummy1;
 
-            void* stuff[69];//verify on x64
-
-            class game_evaluator {//refcounted
+            class game_evaluator : public refcount {//refcounted
             public:
-                   //vtable
-                //refcount
+                //See ArmaDebugEngine
+                class game_var_space : public serialize_class {
+                    //see ArmaDebugEngine
+                    //map_string_to_class<game_variable, auto_array<game_variable>> varspace;
+                    game_var_space* parent;
+                    bool dummy;
+                } *varspace;
+
                 //pointer to GameVarSpace //should be scope local variables
-                //int some number
-                //2 booleans
+                int dummy1;
+                bool dummy2;
+                bool dummy3;
                 // error enum
                 //r_string error text
                 //sourcedocpos see ArmaDebugEngine
             } *eval;
 
-             //global namespace 
-            //auto array of namespaces
-            //bool See ArmaDebugEngine I think it should have them
-            //bool
-            //VMContext*
+            ref<game_data_namespace> varspace; //Maybe currentNamespace?
+            auto_array<game_data_namespace*> namespaces; //mission/parsing/... namespace
+            bool dummy2;
+            bool onscreen_script_errors;
+            vm_context* current_context;
+
+            //callstack item types. auto_array of struct {void* to func; r_string name}
 
 
             game_data* create_gd_from_type(const sqf_script_type& type, param_archive* ar) const {
@@ -667,15 +676,32 @@ namespace intercept {
 
         class vm_context : public serialize_class {
         public:
-            //fill with dummy
-            bool serialenabled;
-            void* dummyu;
-            //sourcdoc;
-            //sourcdocpos;
-            //bool uicontext
-            //local malloc stack  #TODO implement local malloc thingy static memory in class
-            r_string name;
-            bool scheduled;
+            auto_array<void*, rv_allocator_local<void*, 64>> dummy1;
+            bool serialenabled; //disableSerialization -> true
+            void* dummyu; //Check debug engine for this. This might be useful
+
+            class source_doc {//dedmen/ArmaDebugEngine
+                uintptr_t vtable;
+            public:
+                r_string _fileName;
+                r_string _content;
+            } sdoc;
+
+            class source_doc_pos {//dedmen/ArmaDebugEngine
+                uintptr_t vtable;
+            public:
+                r_string _sourceFile;
+                int _sourceLine;
+
+                r_string _content;
+                int _pos;
+            } sdocpos;
+
+            const bool is_ui_context; //no touchy
+            auto_array<game_value, rv_allocator_local<game_value, 32>> scriptStack;
+
+            r_string name; //profiler might like this
+            const bool scheduled; //canSuspend
             bool dumm;
             bool dumm2; //undefined variables allowed?
             bool excp1;//throw break breakOut exitWith stuff

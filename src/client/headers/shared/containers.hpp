@@ -124,7 +124,7 @@ namespace intercept::types {
 
 
     template<class Type, int Count, class Fallback = rv_allocator<Type>>
-    class rv_alloc_local : private Fallback {
+    class rv_allocator_local : private Fallback {
         //buffer will be aligned by this
         using buffer_type = int;
 

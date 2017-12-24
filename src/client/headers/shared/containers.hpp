@@ -121,6 +121,59 @@ namespace intercept::types {
         void deallocate(void* data);
 
     };
+
+
+    template<class Type, int Count, class Fallback = rv_allocator<Type>>
+    class rv_alloc_local : private Fallback {
+        //buffer will be aligned by this
+        using buffer_type = int;
+
+        //Raw size of buffer in bytes
+        static const size_t buffersize_bytes = (Count* sizeof(Type));
+        //Raw size in count of buffer_type elements
+        static const size_t buffersize_count = (buffersize_bytes + sizeof(buffer_type) - 1) / sizeof(buffer_type);
+
+        buffer_type buf[buffersize_count]{ 0 };
+        bool has_data{ false };
+    public:
+
+        Type* allocate(size_t count_) {
+            if (count_ <= Count && !has_data) {
+                has_data = true;
+                return buf;
+            }
+            return Fallback::allocate(size);
+        }
+        Type* reallocate(Type* ptr_, size_t count_) {
+            if (ptr_ == buf) {
+                if (size <= Count) return mem;
+                return nullptr;
+            }
+            return Fallback::reallocate(ptr_, count_);
+        }
+        void deallocate(Type* mem, size_t size) {
+            if (mem != buf) Fallback::deallocate(mem, size);
+            else has_data = false;
+        }
+
+        //Allocates and Initializes one Object
+        template<class... _Types>
+        static Type* create_single(_Types&&... _Args) {
+            auto ptr = allocate(1);
+            ::new (ptr) Type(std::forward<_Types>(_Args)...);
+            //Have to do a little more unfancy stuff for people that want to overload the new operator
+            return ptr;
+        }
+
+        static Type* create_uninitialized_array(const size_t count_) {
+            if (count_ == 1) return create_single();
+
+            auto ptr = allocate(count_);
+
+            return ptr;
+        }
+    };
+
 #pragma endregion
 
 
@@ -813,13 +866,13 @@ namespace intercept::types {
         }
     };
 
-    template<class Type, size_t growthFactor = 32>
-    class auto_array : public rv_array<Type> {
+    template<class Type, class Allocator = rv_allocator<Type>, size_t growthFactor = 32>
+    class auto_array : public rv_array<Type>, protected Allocator {
         typedef rv_array<Type> base;
     protected:
         int _maxItems;
         Type *try_realloc(Type *old_, size_t n_) {
-            Type *ret = rv_allocator<Type>::reallocate(old_, n_);
+            Type *ret = Allocator::reallocate(old_, n_);
             return ret;
         }
 
@@ -839,7 +892,7 @@ namespace intercept::types {
                 base::_data = newData;
                 return;
             }
-            newData = rv_allocator<Type>::create_uninitialized_array(size_);
+            newData = Allocator::create_uninitialized_array(size_);
             //memset(newData, 0, size * sizeof(Type));
             if (base::_data) {
             #ifdef __GNUC__
@@ -848,7 +901,7 @@ namespace intercept::types {
                 //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
                 memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
             #endif
-                rv_allocator<Type>::deallocate(base::_data);
+                Allocator::deallocate(base::_data);
             }
             base::_data = newData;
             _maxItems = static_cast<int>(size_);
@@ -1029,7 +1082,7 @@ namespace intercept::types {
         }
         void clear() {
             if (base::_data)
-                rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                Allocator::deallocate(rv_array<Type>::_data);
             base::_n = 0;
             _maxItems = 0;
         }

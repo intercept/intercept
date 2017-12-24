@@ -435,7 +435,7 @@ namespace intercept {
                 //sourcedocpos see ArmaDebugEngine
             } *eval;
 
-            ref<game_data_namespace> varspace; //Maybe currentNamespace?
+            game_data_namespace* varspace; //Maybe currentNamespace? is actually a ref<game_data_namespace>
             auto_array<game_data_namespace*> namespaces; //mission/parsing/... namespace
             bool dummy2;
             bool onscreen_script_errors;

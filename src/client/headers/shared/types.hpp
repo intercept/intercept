@@ -401,6 +401,8 @@ namespace intercept {
 
         class vm_context;
         class game_data_namespace;
+        class game_variable;
+
 
         class game_state {
         public:
@@ -420,8 +422,8 @@ namespace intercept {
             public:
                 //See ArmaDebugEngine
                 class game_var_space : public serialize_class {
-                    //see ArmaDebugEngine
-                    //map_string_to_class<game_variable, auto_array<game_variable>> varspace;
+                public:
+                    map_string_to_class<game_variable, auto_array<game_variable>> varspace;
                     game_var_space* parent;
                     bool dummy;
                 } *varspace;
@@ -674,11 +676,45 @@ namespace intercept {
             operator game_value() const { return *this; }
         };
 
+        class I_debug_variable {
+            //Don't use them...
+        public:
+            virtual ~I_debug_variable() {}
+            virtual void get_name(char *buffer, int len) const = 0;
+            virtual void* get_val() const = 0;
+        };
+
+        class game_variable : public I_debug_variable {
+        public:
+            r_string name;
+            game_value val;
+            bool read_only{ false };
+            game_variable() {}
+            game_variable(r_string name_, game_value&& val_, bool read_only_ = false) : name(std::move(name_)), val(std::move(val_)),
+                read_only(read_only_) {}
+            const char *get_map_key() const { return name.c_str(); }
+
+
+            void get_name(char *buffer, int len) const override {
+                strncpy_s(buffer, len, name.c_str(), len);
+                buffer[len - 1] = 0;
+            }
+
+            void* get_val() const override {
+                return val.data;
+            }
+
+        };
+
         class vm_context : public serialize_class {
         public:
-            auto_array<void*, rv_allocator_local<void*, 64>> dummy1;
+            auto_array<void*, rv_allocator_local<void*, 64>> dummy1; //#TODO check size on x64
             bool serialenabled; //disableSerialization -> true
-            void* dummyu; //Check debug engine for this. This might be useful
+            void* dummyu; //VMContextBattlEyeMonitor : VMContextCallback
+
+            //const bool is_ui_context; //no touchy
+            auto_array<game_value, rv_allocator_local<game_value, 32>> scriptStack;
+
 
             class source_doc {//dedmen/ArmaDebugEngine
                 uintptr_t vtable;
@@ -697,19 +733,26 @@ namespace intercept {
                 int _pos;
             } sdocpos;
 
-            const bool is_ui_context; //no touchy
-            auto_array<game_value, rv_allocator_local<game_value, 32>> scriptStack;
-
             r_string name; //profiler might like this
-            const bool scheduled; //canSuspend
+
+            //breakOut
+            r_string breakscopename;//0x258
+            //throw
+            game_value exception_value;//0x25c
+            //breakOut
+            game_value breakvalue;//0x264 
+
+            void* d[3];
             bool dumm;
             bool dumm2; //undefined variables allowed?
-            bool excp1;//throw break breakOut exitWith stuff
-            bool excp2;
-            bool excp3;
-            r_string somename;
-            game_value val1;
-            game_value val2;
+            const bool scheduled; //canSuspend 0xA
+            bool dumm3;//0xB
+            bool dumm4;//0xC
+            //throw
+            bool exception_state;//0x27D
+            bool break_;//0xE
+            bool breakout;//0xF
+
         };
 
 
@@ -943,7 +986,7 @@ namespace intercept {
             } sdp;
 
 
-            virtual bool exec(__internal::game_state* state, void* t) = 0;
+            virtual bool exec(game_state& state, vm_context& t) = 0;
             /// how data stack changes after the instruction is processed
             virtual int stack_size(void* t) const = 0;
             // returns position in source code

@@ -370,10 +370,19 @@ namespace intercept::types {
             return ret;
         }
 
+        //Doesn't clear memory. use create_zero if you want that
         static compact_array* create(size_t number_of_elements_) {
             const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
             compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
         #pragma warning(suppress: 26409) //don't use new/delete
+            new (buffer) compact_array(number_of_elements_);
+            return buffer;
+        }
+        static compact_array* create_zero(size_t number_of_elements_) {
+            const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+        #pragma warning(suppress: 26409) //don't use new/delete
+            std::memset(buffer, 0, size);
             new (buffer) compact_array(number_of_elements_);
             return buffer;
         }
@@ -535,7 +544,7 @@ namespace intercept::types {
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other_.data()) == 0;
+            return _strnicmp(data(), other_.data(), other_.length()) == 0;
         #endif
         }
 

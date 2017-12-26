@@ -977,21 +977,25 @@ namespace intercept {
 
         class game_instruction : public refcount {
         public:
-            struct sourcedocpos {//See ArmaDebugEngine for more info on this
-                uintptr_t vtable;
+            struct sourcedocpos : public serialize_class {//See ArmaDebugEngine for more info on this
                 r_string sourcefile;
                 uint32_t sourceline;
                 r_string content;
                 uint32_t pos;
+
+                serialization_return serialize(param_archive &ar) override {
+                    return serialization_return::unknown_error;
+                }
+
             } sdp;
 
 
             virtual bool exec(game_state& state, vm_context& t) = 0;
-            /// how data stack changes after the instruction is processed
             virtual int stack_size(void* t) const = 0;
-            // returns position in source code
+            //Leave this alone!
+        private:
             virtual bool bfunc() const { return false; }
-            /// text of the instruction (for disassembly, profiling etc.)
+        public:
             virtual r_string get_name() const = 0;
         };
 
@@ -1011,7 +1015,7 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, code_string); }
             r_string code_string;
             ref<compact_array<ref<game_instruction>>> instructions;
-            uint32_t _dummy1;
+            uint32_t _dummy1{1};
             uint32_t _dummy;
             bool is_final;
         };

@@ -17,7 +17,7 @@ namespace intercept::types {
     }
 
     template<class Type>
-    class rv_allocator : std::allocator<Type> {
+    class rv_allocator {
     public:
 
         using value_type = Type;
@@ -60,10 +60,23 @@ namespace intercept::types {
             _Ptr->~Type();
         }
 
-        static void destroy_deallocate(Type* _Ptr, size_t = 0) {
+        static void destroy(Type* _Ptr, size_t size_) {
+            for (size_t i = 0; i < size_; ++i) {
+            #pragma warning(suppress: 26409)
+                (_Ptr + i)->~Type();
+            }
+        }
+
+        static void destroy_deallocate(Type* _Ptr) {
             destroy(_Ptr);
             return __internal::rv_allocator_deallocate_generic(_Ptr);
         }
+
+        static void destroy_deallocate(Type* _Ptr, size_t size_) {
+            destroy(_Ptr, size_);
+            return __internal::rv_allocator_deallocate_generic(_Ptr);
+        }
+
         //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
         //use the create* Methods instead
         static Type* allocate(const size_t count_) {
@@ -132,7 +145,7 @@ namespace intercept::types {
         static const size_t buffersize_bytes = (Count* sizeof(Type));
         //Raw size in count of buffer_type elements
         static const size_t buffersize_count = (buffersize_bytes + sizeof(buffer_type) - 1) / sizeof(buffer_type);
-
+        int dummy;
         buffer_type buf[buffersize_count]{ 0 };
         bool has_data{ false };
     public:
@@ -140,32 +153,32 @@ namespace intercept::types {
         Type* allocate(size_t count_) {
             if (count_ <= Count && !has_data) {
                 has_data = true;
-                return buf;
+                return (Type*) buf;
             }
-            return Fallback::allocate(size);
+            return Fallback::allocate(count_);
         }
         Type* reallocate(Type* ptr_, size_t count_) {
-            if (ptr_ == buf) {
-                if (size <= Count) return mem;
+            if (ptr_ == (Type*)buf) {
+                if (count_ <= Count) return (Type*) buf;
                 return nullptr;
             }
             return Fallback::reallocate(ptr_, count_);
         }
-        void deallocate(Type* mem, size_t size) {
-            if (mem != buf) Fallback::deallocate(mem, size);
+        void deallocate(Type* ptr_, size_t count_ = 1) {
+            if (ptr_ != (Type*)buf) Fallback::deallocate(ptr_, count_);
             else has_data = false;
         }
 
         //Allocates and Initializes one Object
         template<class... _Types>
-        static Type* create_single(_Types&&... _Args) {
+        Type* create_single(_Types&&... _Args) {
             auto ptr = allocate(1);
             ::new (ptr) Type(std::forward<_Types>(_Args)...);
             //Have to do a little more unfancy stuff for people that want to overload the new operator
             return ptr;
         }
 
-        static Type* create_uninitialized_array(const size_t count_) {
+        Type* create_uninitialized_array(const size_t count_) {
             if (count_ == 1) return create_single();
 
             auto ptr = allocate(count_);
@@ -867,7 +880,12 @@ namespace intercept::types {
     };
 
     template<class Type, class Allocator = rv_allocator<Type>, size_t growthFactor = 32>
-    class auto_array : public rv_array<Type>, protected Allocator {
+    class
+    #ifdef _MSC_VER
+        __declspec(empty_bases)
+    #endif
+        //#TODO try GCC maybe __attribute__((__packed__)) or #pragma pack. But be careful of the bool in local alloc
+        auto_array : public rv_array<Type>, private Allocator {
         typedef rv_array<Type> base;
     protected:
         int _maxItems;
@@ -965,7 +983,7 @@ namespace intercept::types {
                 base::_n = static_cast<int>(n_);
             }
             if (n_ == 0 && base::_data) {
-                rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                Allocator::deallocate(rv_array<Type>::_data);
                 rv_array<Type>::_data = nullptr;
                 return;
             }
@@ -1342,6 +1360,76 @@ namespace intercept::types {
         }
 
         int count() const { return _count; }
+
+
+        //ArmaDebugEngine
+        void rebuild(int tableSize) {
+            auto oldTableCount = _tableCount;
+            _tableCount = tableSize;
+            auto newTable = rv_allocator<Container>::create_array(tableSize);
+            for (auto i = 0; i < _tableCount; i++) {
+                auto& container = newTable[i];
+                for (Type& item : container) {
+                    auto hashedKey = hash_key(item.get_map_key());
+                    auto it = newTable[hashedKey].emplace(newTable[hashedKey].end(), Type());
+                    *it = std::move(item);
+                }
+            }
+            std::swap(_table, newTable);
+            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+        }
+
+        Type& insert(const Type &value) {
+            //Check if key already exists
+            auto key = value.get_map_key();
+            Type &old = get(key);
+            if (!is_null(old)) {
+                return old;
+            }
+
+            //Are we full?
+            if (_count + 1 > (16 * _tableCount)) {
+                int tableSize = _tableCount + 1;
+                do {
+                    tableSize *= 2;
+                } while (_count + 1 > (16 * (tableSize - 1)));
+                rebuild(tableSize - 1);
+            }
+            auto hashedkey = hash_key(key);
+            auto &x = *(_table[hashedkey].emplace_back(value));
+            _count++;
+            return x;
+        }
+
+        Type& insert(Type &&value) {
+            //Check if key already exists
+            auto key = value.get_map_key();
+            Type &old = get(key);
+            if (!is_null(old)) {
+                return old;
+            }
+
+            //Are we full?
+            if (_count + 1 > (16 * _tableCount)) {
+                int tableSize = _tableCount + 1;
+                do {
+                    tableSize *= 2;
+                } while (_count + 1 > (16 * (tableSize - 1)));
+                rebuild(tableSize - 1);
+            }
+
+            if (!_table) {
+                _table = rv_allocator<Container>::create_array(_tableCount);
+            }
+
+            auto hashedkey = hash_key(key);
+            auto &x = *(_table[hashedkey].emplace_back(std::move(value)));
+            _count++;
+            return x;
+        }
+
+
+
     protected:
         int hash_key(const char* key_) const {
             return Traits::hash_key(key_) % _tableCount;

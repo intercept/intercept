@@ -393,6 +393,23 @@ namespace intercept::types {
             std::copy(other.data(), other.data() + other.size(), buffer->data());
             return buffer;
         }
+
+        template<class _InIt>
+        static compact_array* create(_InIt beg, _InIt end) {
+            const size_t size = sizeof(compact_array) + sizeof(Type)*(std::distance(beg,end)-1);
+            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            std::memset(buffer, 0, size);
+        #pragma warning(suppress: 26409) //don't use new/delete
+            new (buffer) compact_array(size);
+
+            size_t index = 0;
+            for (auto& i = beg; i < end; ++i) {
+                buffer->data()[index++] = *i;
+            }
+
+            return buffer;
+        }
+
         //Specialty function to copy less elements or to allocate more space
         static compact_array* create(const compact_array &other, size_t element_count) {
             const size_t size = other.size();

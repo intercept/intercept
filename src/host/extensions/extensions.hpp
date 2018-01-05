@@ -303,7 +303,9 @@ namespace intercept {
         */
         std::map<module::plugin_interface_identifier, module::plugin_interface> exported_interfaces;
 
-        bool do_reload;
+        bool do_reload = false;
+
+        bool ignore_cert_fail = false;
 
         cert::signing::security_class get_module_security_class(uintptr_t mod_base) {
             auto found = _module_security_classes.find(mod_base);

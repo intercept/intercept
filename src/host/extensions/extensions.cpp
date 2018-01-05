@@ -43,13 +43,16 @@ namespace intercept {
         };
         functions.get_pbo_files_list = client_function_defs::get_pbo_files_list;
 
-        std::string arg_line = _searcher.get_command_line();
+        std::string arg_line = search::plugin_searcher::get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
         if (arg_line.find("-intreloadall"sv) != std::string::npos) {
             do_reload = true;
-        } else {
-            do_reload = false;
         }
+
+        if (arg_line.find("-intignorecert"sv) != std::string::npos) {
+            ignore_cert_fail = true;
+        }
+
     }
 
     extensions::~extensions() {
@@ -126,6 +129,14 @@ namespace intercept {
                 LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
             }
         }
+    #ifdef _DEBUG 
+        if (ignore_cert_fail && security_class != cert::signing::security_class::core) {
+            security_class = cert::signing::security_class::core;
+            LOG(WARNING, "Ignoring Certificate and granting core-level access [{}]", path_);
+        }
+    #endif
+
+
     #endif
 
 

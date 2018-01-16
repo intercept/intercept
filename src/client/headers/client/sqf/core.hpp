@@ -153,15 +153,15 @@ namespace intercept {
         void on_map_single_click(const game_value &params_, std::variant<sqf_string_const_ref_wrapper, std::reference_wrapper<const code>> command_);
         game_value on_show_new_object(const object &control_, sqf_string_const_ref command_);
         //eventhandler
-        float add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_);
-        float add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_);
+        int add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_);
+        int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_);
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
-        float add_mission_event_handler(sqf_string_const_ref type_, const code &command_);
-        float add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
+        int add_mission_event_handler(sqf_string_const_ref type_, const code &command_);
+        int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
         void remove_all_mission_event_handlers(sqf_string_const_ref value_);
         void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_);
         void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_);
-        void remove_mission_event_handler(sqf_string_const_ref type_, float index_);
+        void remove_mission_event_handler(sqf_string_const_ref type_, int index_);
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_);
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_);
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);

@@ -822,14 +822,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, params_right);
         }
 
-        float add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_) {
+        int add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_) {
             game_value args({type_,
                              command_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
         }
 
-        float add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
+        int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
             game_value args({type_,
                              command_});
 
@@ -880,21 +880,21 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeallmpeventhandlers__object__string__ret__nothing, value0_, value1_);
         }
 
-        float add_mission_event_handler(sqf_string_const_ref type_, const code &command_) {
+        int add_mission_event_handler(sqf_string_const_ref type_, const code &command_) {
             game_value params({type_,
                                command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
         }
 
-        float add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
+        int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
             game_value params({type_,
                                command_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
         }
 
-        void remove_mission_event_handler(sqf_string_const_ref type_, float index_) {
+        void remove_mission_event_handler(sqf_string_const_ref type_, int index_) {
             game_value params({type_,
                                index_});
 

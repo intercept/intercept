@@ -162,9 +162,9 @@ inline std::shared_ptr<spdlog::logger> spdlog::stderr_color_st(const std::string
 
 #ifdef SPDLOG_ENABLE_SYSLOG
 // Create syslog logger
-inline std::shared_ptr<spdlog::logger> spdlog::syslog_logger(const std::string& logger_name, const std::string& syslog_ident, int syslog_option)
+inline std::shared_ptr<spdlog::logger> spdlog::syslog_logger(const std::string& logger_name, const std::string& syslog_ident, int syslog_option, int syslog_facility)
 {
-    return create<spdlog::sinks::syslog_sink>(logger_name, syslog_ident, syslog_option);
+    return create<spdlog::sinks::syslog_sink>(logger_name, syslog_ident, syslog_option, syslog_facility);
 }
 #endif
 
@@ -234,6 +234,11 @@ inline void spdlog::set_pattern(const std::string& format_string)
 inline void spdlog::set_level(level::level_enum log_level)
 {
     return details::registry::instance().set_level(log_level);
+}
+
+inline void spdlog::flush_on(level::level_enum log_level)
+{
+    return details::registry::instance().flush_on(log_level);
 }
 
 inline void spdlog::set_error_handler(log_err_handler handler)

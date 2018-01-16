@@ -348,13 +348,102 @@ namespace intercept::types {
         //static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
     public:
 
+        class const_iterator;
+
+        class iterator {
+            friend class const_iterator;
+            Type* p_;
+        public:
+            using _Unchecked_type = iterator;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type = Type;
+            using difference_type = ptrdiff_t;
+            using pointer = Type * ;
+            using reference = Type & ;
+
+            iterator() : p_(nullptr) {}
+            explicit iterator(Type* p) : p_(p) {}
+            iterator(const iterator& other) : p_(other.p_) {}
+            const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
+
+            iterator& operator++() { ++p_; return *this; } // prefix++
+            iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
+            iterator& operator--() { --p_; return *this; } // prefix--
+            iterator  operator--(int) { iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+            void     operator+=(const std::size_t& n) { p_ += n; }
+            void     operator+=(const iterator& other) { p_ += other.p_; }
+            iterator operator+ (const std::size_t& n) const { iterator tmp(*this); tmp += n; return tmp; }
+            iterator operator+ (const iterator& other) const { iterator tmp(*this); tmp += other; return tmp; }
+
+            void        operator-=(const std::size_t& n) { p_ -= n; }
+            void        operator-=(const iterator& other) { p_ -= other.p_; }
+            iterator    operator- (const std::size_t& n) const { iterator tmp(*this); tmp -= n; return tmp; }
+            std::size_t operator- (const iterator& other) const { return p_ - other.p_; }
+
+            bool operator< (const iterator& other) const { return (p_ - other.p_) < 0; }
+            bool operator<=(const iterator& other) const { return (p_ - other.p_) <= 0; }
+            bool operator> (const iterator& other) const { return (p_ - other.p_) > 0; }
+            bool operator>=(const iterator& other) const { return (p_ - other.p_) >= 0; }
+            bool operator==(const iterator& other) const { return  p_ == other.p_; }
+            bool operator!=(const iterator& other) const { return  p_ != other.p_; }
+
+            Type& operator*() const { return *p_; }
+            Type* operator->() { return  p_; }
+            explicit operator Type*() { return p_; }
+        };
+        class const_iterator {
+            const Type* p_;
+        public:
+            using _Unchecked_type = const_iterator;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type = Type;
+            using difference_type = ptrdiff_t;
+            using pointer = Type * ;
+            using reference = Type & ;
+
+            const_iterator() : p_(nullptr) {}
+            explicit const_iterator(const Type* p) noexcept : p_(p) {}
+            const_iterator(const typename compact_array<Type>::iterator& other) : p_(other.p_) {}
+            const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
+            const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
+            const const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return other; }
+
+            const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
+            const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
+            const_iterator& operator--() noexcept { --p_; return *this; } // prefix--
+            const_iterator  operator--(int) { const_iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+            void           operator+=(const std::size_t& n) { p_ += n; }
+            void           operator+=(const const_iterator& other) { p_ += other.p_; }
+            const_iterator operator+ (const std::size_t& n)        const { const_iterator tmp(*this); tmp += n; return tmp; }
+            const_iterator operator+ (const const_iterator& other) const { const_iterator tmp(*this); tmp += other; return tmp; }
+
+            void           operator-=(const std::size_t& n) noexcept { p_ -= n; }
+            void           operator-=(const const_iterator& other) noexcept { p_ -= other.p_; }
+            const_iterator operator- (const std::size_t& n)        const { const_iterator tmp(*this); tmp -= n; return tmp; }
+            std::size_t    operator- (const const_iterator& other) const noexcept { return p_ - other.p_; }
+
+            bool operator< (const const_iterator& other) const noexcept { return (p_ - other.p_) < 0; }
+            bool operator<=(const const_iterator& other) const noexcept { return (p_ - other.p_) <= 0; }
+            bool operator> (const const_iterator& other) const noexcept { return (p_ - other.p_) > 0; }
+            bool operator>=(const const_iterator& other) const noexcept { return (p_ - other.p_) >= 0; }
+            bool operator==(const const_iterator& other) const noexcept { return  p_ == other.p_; }
+            bool operator!=(const const_iterator& other) const noexcept { return  p_ != other.p_; }
+
+            const Type& operator*()  const noexcept { return *p_; }
+            const Type* operator->() const noexcept { return  p_; }
+            explicit operator const Type*() const noexcept { return p_; }
+        };
+
+
         size_t size() const noexcept { return _size; }
         Type* data() noexcept { return &_data; }
         const Type* data() const noexcept { return &_data; }
-        Type* begin() noexcept { return &_data; }
-        Type* end() noexcept { return (&_data) + _size; }
-        const Type* cbegin() const noexcept { return &_data; }
-        const Type* cend() const noexcept { return (&_data) + _size; }
+        iterator begin() noexcept { return iterator(&_data); }
+        iterator end() noexcept { return iterator((&_data) + _size); }
+        const_iterator cbegin() const noexcept { return const_iterator(&_data); }
+        const_iterator cend() const noexcept { return const_iterator((&_data) + _size); }
 
         const Type& operator[](const size_t index_) {
             return *(begin() + index_);
@@ -417,11 +506,9 @@ namespace intercept::types {
             new (buffer) compact_array(element_count);
             std::memset(buffer->data(), 0, element_count * sizeof(Type));
             const auto elements_to_copy = std::min(size, element_count);
-        #ifdef _MSC_VER
-            std::_Copy_no_deprecate(other.data(), other.data() + elements_to_copy, buffer->data());
-        #else
-            std::copy(other.data(), other.data() + elements_to_copy, buffer->data());
-        #endif
+
+            std::copy(other.begin(), other.begin() + elements_to_copy, buffer->begin());
+
             return buffer;
         }
         void del() const {
@@ -676,25 +763,22 @@ namespace intercept::types {
         r_string& to_lower() {
             if (!_ref) return *this;
             make_mutable();
-        #ifdef __linux__
+
             std::transform(_ref->begin(), _ref->end(), _ref->begin(), ::tolower);
-        #else
-            std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
-        #endif
 
             return *this;
         }
         ///Be careful! This returns nullptr on empty string
-        const char* begin() const noexcept {
+        compact_array<char>::const_iterator begin() const noexcept {
             if (_ref)
                 return _ref->begin();
-            return nullptr;
+            return {};
         }
         ///Be careful! This returns nullptr on empty string
-        const char* end() const noexcept {
+        compact_array<char>::const_iterator end() const noexcept {
             if (_ref)
                 return _ref->end();
-            return nullptr;
+            return {};
         }
         char front() const noexcept {
             if (_ref)

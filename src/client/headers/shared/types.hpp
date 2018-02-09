@@ -696,7 +696,7 @@ namespace intercept {
 
 
             void get_name(char *buffer, int len) const override {
-                strncpy_s(buffer, len, name.c_str(), len);
+                strncpy(buffer, name.c_str(), std::min(static_cast<size_t>(len),name.length()));
                 buffer[len - 1] = 0;
             }
 

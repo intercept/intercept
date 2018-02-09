@@ -31,7 +31,7 @@ namespace intercept::client {
     /// @private
     struct EHIdentifier {
         int32_t internal_id;
-        float arma_eh_id;
+        int arma_eh_id;
         uint32_t EHIteration;
         uint8_t EHType;
         bool already_deleted = false;

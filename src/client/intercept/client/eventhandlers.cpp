@@ -12,11 +12,11 @@ namespace intercept::client {
 
     //Not in header because these are Internal functions that shall not be messed with
     /// @private
-    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, intercept::types::game_value args);
+    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, int handle, intercept::types::game_value args);
     /// @private
     extern "C" DLLEXPORT void CDECL client_eventhandlers_clear();
     /// @private
-    void client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, float handle, game_value args) {
+    void client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, int handle, game_value args) {
         switch (static_cast<eventhandler_type>(ehType)) {
             case eventhandler_type::mission: {
                 auto found = funcMapMissionEH.find({uid, handle, EHIteration });
@@ -182,7 +182,7 @@ namespace intercept::client {
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), command);
+        int ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), command);
 
         return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
@@ -497,7 +497,7 @@ namespace intercept::client {
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::object)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), command);
+        int ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), command);
 
         return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
@@ -510,7 +510,7 @@ namespace intercept::client {
             case eventhandlers_object::HitPart: typeStr = "HitPart"sv; break;
         default:;
         }
-        sqf::remove_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), static_cast<int>(handle.arma_eh_id));
+        sqf::remove_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), handle.arma_eh_id);
     }
 #pragma endregion
 
@@ -572,7 +572,7 @@ namespace intercept::client {
                               + std::to_string(static_cast<uint32_t>(eventhandler_type::ctrl)) + ","
                               + std::to_string(uid) + ","
                               + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
+        int ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
         return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
@@ -631,7 +631,7 @@ namespace intercept::client {
             + std::to_string(static_cast<uint32_t>(eventhandler_type::mp)) + ","
             + std::to_string(uid) + ","
             + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
+        int ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
 
         return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
@@ -698,7 +698,7 @@ namespace intercept::client {
             + std::to_string(static_cast<uint32_t>(eventhandler_type::display)) + ","
             + std::to_string(uid) + ","
             + "_thisEventHandler] InterceptClientEvent [_this]";
-        float ehid = intercept::sqf::display_add_event_handler(disp, static_cast<sqf_string_const_ref>(typeStr), command);
+        int ehid = intercept::sqf::display_add_event_handler(disp, static_cast<sqf_string_const_ref>(typeStr), command);
 
         return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
     }
@@ -720,12 +720,12 @@ namespace intercept::client {
     std::unordered_map<EHIdentifier, std::shared_ptr<std::function<types::game_value(types::game_value_parameter)>>, EHIdentifier_hasher> customCallbackMap;
 
     std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<game_value(game_value_parameter)> fnc) {
-        static float ehId = -16777210.f;
+        static int ehId = -16777210;
         std::default_random_engine rng(std::random_device{}());
         std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
         auto uid = dist(rng);
 
-        ehId += 1.f;
+        ehId++;
         EHIdentifier ident{ uid, ehId, 0, 0 };
 
         customCallbackMap[ident] = std::make_shared<std::function<game_value(game_value_parameter)>>(fnc);

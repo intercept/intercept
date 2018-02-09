@@ -54,7 +54,7 @@ namespace intercept {
         typedef void(CDECL *on_signal_func)(game_value_parameter this_);
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
         typedef void(CDECL *register_interfaces_func)();
-        typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, float handle, game_value args);
+        typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, int handle, game_value args);
         typedef void(CDECL *client_eventhandlers_clear_func)();
         typedef bool(CDECL *is_signed_function)();
 
@@ -303,7 +303,9 @@ namespace intercept {
         */
         std::map<module::plugin_interface_identifier, module::plugin_interface> exported_interfaces;
 
-        bool do_reload;
+        bool do_reload = false;
+
+        bool ignore_cert_fail = false;
 
         cert::signing::security_class get_module_security_class(uintptr_t mod_base) {
             auto found = _module_security_classes.find(mod_base);

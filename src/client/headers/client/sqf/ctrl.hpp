@@ -153,8 +153,6 @@ namespace intercept {
         void ctrl_map_anim_clear(const control &value_);
         void ctrl_map_anim_commit(const control &value_);
         void ctrl_map_cursor(const control &ctrl_, sqf_string_const_ref default_cursor_, sqf_string_const_ref new_cursor_);
-        void ctrl_remove_all_event_handlers(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, float &id_);
         void ctrl_set_active_color(const control &ctrl_, const rv_color &color_);
         void ctrl_set_auto_scroll_delay(const control &value0_, float value1_);
         void ctrl_set_auto_scroll_rewind(const control &value0_, bool value1_);
@@ -188,8 +186,11 @@ namespace intercept {
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
 
         void ctrl_set_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
-        float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
-        float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_);
+        int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
+        int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_);
+        void ctrl_remove_all_event_handlers(const control &value0_, sqf_string_const_ref value1_);
+        void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, int id_);
+
 
         //listbox/combobox
         void lnb_delete_column(const control &ctrl_, float index_);

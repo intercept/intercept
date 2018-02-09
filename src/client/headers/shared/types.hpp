@@ -21,6 +21,13 @@ namespace intercept {
     class sqf_functions;
     class registered_sqf_function_impl;
     class invoker;
+
+    namespace __internal {
+        class game_functions;
+        class game_operators;
+        class gsNular;
+    }
+
     namespace types {
         class game_value;
         using game_value_parameter = const game_value&;
@@ -392,6 +399,63 @@ namespace intercept {
             nular_operator *op;
         };
 
+        class vm_context;
+        class game_data_namespace;
+        class game_variable;
+
+
+        class game_state {
+        public:
+            types::auto_array<const types::script_type_info *> _scriptTypes;
+
+            using game_functions = intercept::__internal::game_functions;
+            using game_operators = intercept::__internal::game_operators;
+            using gsNular = intercept::__internal::gsNular;
+
+            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
+            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
+            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
+
+            auto_array<void*, rv_allocator_local<void*, 64>> dummy1;
+
+            class game_evaluator : public refcount {//refcounted
+            public:
+                //See ArmaDebugEngine
+                class game_var_space : public serialize_class {
+                public:
+                    map_string_to_class<game_variable, auto_array<game_variable>> varspace;
+                    game_var_space* parent;
+                    bool dummy;
+                } *varspace;
+
+                //pointer to GameVarSpace //should be scope local variables
+                int dummy1;
+                bool dummy2;
+                bool dummy3;
+                // error enum
+                //r_string error text
+                //sourcedocpos see ArmaDebugEngine
+            } *eval;
+
+            game_data_namespace* varspace; //Maybe currentNamespace? is actually a ref<game_data_namespace>
+            auto_array<game_data_namespace*> namespaces; //mission/parsing/... namespace
+            bool dummy2;
+            bool onscreen_script_errors;
+            vm_context* current_context;
+
+            //callstack item types. auto_array of struct {void* to func; r_string name}
+
+
+            game_data* create_gd_from_type(const sqf_script_type& type, param_archive* ar) const {
+                for (auto& it : _scriptTypes) {
+                    if (types::sqf_script_type(it) == type) {
+                        if (it->_createFunction) return it->_createFunction(ar);
+                        return nullptr;
+                    }
+                }
+                return nullptr;
+            }
+        };
 
 
 
@@ -611,6 +675,87 @@ namespace intercept {
             game_value_static operator=(const game_value& copy) { data = copy.data; return *this; }
             operator game_value() const { return *this; }
         };
+
+        class I_debug_variable {
+            //Don't use them...
+        public:
+            virtual ~I_debug_variable() {}
+            virtual void get_name(char *buffer, int len) const = 0;
+            virtual void* get_val() const = 0;
+        };
+
+        class game_variable : public I_debug_variable {
+        public:
+            r_string name;
+            game_value val;
+            bool read_only{ false };
+            game_variable() {}
+            game_variable(r_string name_, game_value&& val_, bool read_only_ = false) : name(std::move(name_)), val(std::move(val_)),
+                read_only(read_only_) {}
+            const char *get_map_key() const { return name.c_str(); }
+
+
+            void get_name(char *buffer, int len) const override {
+                strncpy(buffer, name.c_str(), std::min(static_cast<size_t>(len),name.length()));
+                buffer[len - 1] = 0;
+            }
+
+            void* get_val() const override {
+                return val.data;
+            }
+
+        };
+
+        class vm_context : public serialize_class {
+        public:
+            auto_array<void*, rv_allocator_local<void*, 64>> dummy1; //#TODO check size on x64
+            bool serialenabled; //disableSerialization -> true
+            void* dummyu; //VMContextBattlEyeMonitor : VMContextCallback
+
+            //const bool is_ui_context; //no touchy
+            auto_array<game_value, rv_allocator_local<game_value, 32>> scriptStack;
+
+
+            class source_doc {//dedmen/ArmaDebugEngine
+                uintptr_t vtable;
+            public:
+                r_string _fileName;
+                r_string _content;
+            } sdoc;
+
+            class source_doc_pos {//dedmen/ArmaDebugEngine
+                uintptr_t vtable;
+            public:
+                r_string _sourceFile;
+                int _sourceLine;
+
+                r_string _content;
+                int _pos;
+            } sdocpos;
+
+            r_string name; //profiler might like this
+
+            //breakOut
+            r_string breakscopename;//0x258
+            //throw
+            game_value exception_value;//0x25c
+            //breakOut
+            game_value breakvalue;//0x264 
+
+            void* d[3];
+            bool dumm;
+            bool dumm2; //undefined variables allowed?
+            const bool scheduled; //canSuspend 0xA
+            bool dumm3;//0xB
+            bool dumm4;//0xC
+            //throw
+            bool exception_state;//0x27D
+            bool break_;//0xE
+            bool breakout;//0xF
+
+        };
+
+
 
     #pragma region GameData Types
 
@@ -832,21 +977,25 @@ namespace intercept {
 
         class game_instruction : public refcount {
         public:
-            struct sourcedocpos {//See ArmaDebugEngine for more info on this
-                uintptr_t vtable;
+            struct sourcedocpos : public serialize_class {//See ArmaDebugEngine for more info on this
                 r_string sourcefile;
                 uint32_t sourceline;
                 r_string content;
                 uint32_t pos;
+
+                serialization_return serialize(param_archive &ar) override {
+                    return serialization_return::unknown_error;
+                }
+
             } sdp;
 
 
-            virtual bool exec(__internal::game_state* state, void* t) = 0;
-            /// how data stack changes after the instruction is processed
+            virtual bool exec(game_state& state, vm_context& t) = 0;
             virtual int stack_size(void* t) const = 0;
-            // returns position in source code
+            //Leave this alone!
+        private:
             virtual bool bfunc() const { return false; }
-            /// text of the instruction (for disassembly, profiling etc.)
+        public:
             virtual r_string get_name() const = 0;
         };
 
@@ -866,7 +1015,7 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, code_string); }
             r_string code_string;
             ref<compact_array<ref<game_instruction>>> instructions;
-            uint32_t _dummy1;
+            uint32_t _dummy1{1};
             uint32_t _dummy;
             bool is_final;
         };
@@ -1090,28 +1239,6 @@ namespace intercept {
         };
 
 
-    }
-    namespace __internal {
-        //#TODO move to types::__internal and make less ugly
-        class game_functions;
-        class game_operators;
-        class gsNular;
-        class game_state {  //ArmaDebugEngine is thankful for being allowed to contribute this.
-        public:
-            types::auto_array<const types::script_type_info *> _scriptTypes;
-            types::map_string_to_class<game_functions, types::auto_array<game_functions>> _scriptFunctions;
-            types::map_string_to_class<game_operators, types::auto_array<game_operators>> _scriptOperators;
-            types::map_string_to_class<gsNular, types::auto_array<gsNular>> _scriptNulars;
-            types::game_data* create_gd_from_type(const types::sqf_script_type& type, types::param_archive* ar) const {
-                for (auto& it : _scriptTypes) {
-                    if (types::sqf_script_type(it) == type) {
-                        if (it->_createFunction) return it->_createFunction(ar);
-                        return nullptr;
-                    }
-                }
-                return nullptr;
-            }
-        };
     }
 }
 

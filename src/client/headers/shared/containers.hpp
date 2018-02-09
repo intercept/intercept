@@ -17,7 +17,7 @@ namespace intercept::types {
     }
 
     template<class Type>
-    class rv_allocator : std::allocator<Type> {
+    class rv_allocator {
     public:
 
         using value_type = Type;
@@ -60,10 +60,23 @@ namespace intercept::types {
             _Ptr->~Type();
         }
 
-        static void destroy_deallocate(Type* _Ptr, size_t = 0) {
+        static void destroy(Type* _Ptr, size_t size_) {
+            for (size_t i = 0; i < size_; ++i) {
+            #pragma warning(suppress: 26409)
+                (_Ptr + i)->~Type();
+            }
+        }
+
+        static void destroy_deallocate(Type* _Ptr) {
             destroy(_Ptr);
             return __internal::rv_allocator_deallocate_generic(_Ptr);
         }
+
+        static void destroy_deallocate(Type* _Ptr, size_t size_) {
+            destroy(_Ptr, size_);
+            return __internal::rv_allocator_deallocate_generic(_Ptr);
+        }
+
         //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
         //use the create* Methods instead
         static Type* allocate(const size_t count_) {
@@ -121,6 +134,59 @@ namespace intercept::types {
         void deallocate(void* data);
 
     };
+
+
+    template<class Type, int Count, class Fallback = rv_allocator<Type>>
+    class rv_allocator_local : private Fallback {
+        //buffer will be aligned by this
+        using buffer_type = int;
+
+        //Raw size of buffer in bytes
+        static const size_t buffersize_bytes = (Count* sizeof(Type));
+        //Raw size in count of buffer_type elements
+        static const size_t buffersize_count = (buffersize_bytes + sizeof(buffer_type) - 1) / sizeof(buffer_type);
+        int dummy;
+        buffer_type buf[buffersize_count]{ 0 };
+        bool has_data{ false };
+    public:
+
+        Type* allocate(size_t count_) {
+            if (count_ <= Count && !has_data) {
+                has_data = true;
+                return (Type*) buf;
+            }
+            return Fallback::allocate(count_);
+        }
+        Type* reallocate(Type* ptr_, size_t count_) {
+            if (ptr_ == (Type*)buf) {
+                if (count_ <= Count) return (Type*) buf;
+                return nullptr;
+            }
+            return Fallback::reallocate(ptr_, count_);
+        }
+        void deallocate(Type* ptr_, size_t count_ = 1) {
+            if (ptr_ != (Type*)buf) Fallback::deallocate(ptr_, count_);
+            else has_data = false;
+        }
+
+        //Allocates and Initializes one Object
+        template<class... _Types>
+        Type* create_single(_Types&&... _Args) {
+            auto ptr = allocate(1);
+            ::new (ptr) Type(std::forward<_Types>(_Args)...);
+            //Have to do a little more unfancy stuff for people that want to overload the new operator
+            return ptr;
+        }
+
+        Type* create_uninitialized_array(const size_t count_) {
+            if (count_ == 1) return create_single();
+
+            auto ptr = allocate(count_);
+
+            return ptr;
+        }
+    };
+
 #pragma endregion
 
 
@@ -282,13 +348,102 @@ namespace intercept::types {
         //static_assert(std::is_literal_type<Type>::value, "Type must be a literal type");
     public:
 
+        class const_iterator;
+
+        class iterator {
+            friend class const_iterator;
+            Type* p_;
+        public:
+            using _Unchecked_type = iterator;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type = Type;
+            using difference_type = ptrdiff_t;
+            using pointer = Type * ;
+            using reference = Type & ;
+
+            iterator() : p_(nullptr) {}
+            explicit iterator(Type* p) : p_(p) {}
+            iterator(const iterator& other) : p_(other.p_) {}
+            const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
+
+            iterator& operator++() { ++p_; return *this; } // prefix++
+            iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
+            iterator& operator--() { --p_; return *this; } // prefix--
+            iterator  operator--(int) { iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+            void     operator+=(const std::size_t& n) { p_ += n; }
+            void     operator+=(const iterator& other) { p_ += other.p_; }
+            iterator operator+ (const std::size_t& n) const { iterator tmp(*this); tmp += n; return tmp; }
+            iterator operator+ (const iterator& other) const { iterator tmp(*this); tmp += other; return tmp; }
+
+            void        operator-=(const std::size_t& n) { p_ -= n; }
+            void        operator-=(const iterator& other) { p_ -= other.p_; }
+            iterator    operator- (const std::size_t& n) const { iterator tmp(*this); tmp -= n; return tmp; }
+            std::size_t operator- (const iterator& other) const { return p_ - other.p_; }
+
+            bool operator< (const iterator& other) const { return (p_ - other.p_) < 0; }
+            bool operator<=(const iterator& other) const { return (p_ - other.p_) <= 0; }
+            bool operator> (const iterator& other) const { return (p_ - other.p_) > 0; }
+            bool operator>=(const iterator& other) const { return (p_ - other.p_) >= 0; }
+            bool operator==(const iterator& other) const { return  p_ == other.p_; }
+            bool operator!=(const iterator& other) const { return  p_ != other.p_; }
+
+            Type& operator*() const { return *p_; }
+            Type* operator->() { return  p_; }
+            explicit operator Type*() { return p_; }
+        };
+        class const_iterator {
+            const Type* p_;
+        public:
+            using _Unchecked_type = const_iterator;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type = Type;
+            using difference_type = ptrdiff_t;
+            using pointer = Type * ;
+            using reference = Type & ;
+
+            const_iterator() : p_(nullptr) {}
+            explicit const_iterator(const Type* p) noexcept : p_(p) {}
+            const_iterator(const typename compact_array<Type>::iterator& other) : p_(other.p_) {}
+            const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
+            const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
+            const const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return other; }
+
+            const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
+            const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
+            const_iterator& operator--() noexcept { --p_; return *this; } // prefix--
+            const_iterator  operator--(int) { const_iterator tmp(*this); --(*this); return tmp; } // postfix--
+
+            void           operator+=(const std::size_t& n) { p_ += n; }
+            void           operator+=(const const_iterator& other) { p_ += other.p_; }
+            const_iterator operator+ (const std::size_t& n)        const { const_iterator tmp(*this); tmp += n; return tmp; }
+            const_iterator operator+ (const const_iterator& other) const { const_iterator tmp(*this); tmp += other; return tmp; }
+
+            void           operator-=(const std::size_t& n) noexcept { p_ -= n; }
+            void           operator-=(const const_iterator& other) noexcept { p_ -= other.p_; }
+            const_iterator operator- (const std::size_t& n)        const { const_iterator tmp(*this); tmp -= n; return tmp; }
+            std::size_t    operator- (const const_iterator& other) const noexcept { return p_ - other.p_; }
+
+            bool operator< (const const_iterator& other) const noexcept { return (p_ - other.p_) < 0; }
+            bool operator<=(const const_iterator& other) const noexcept { return (p_ - other.p_) <= 0; }
+            bool operator> (const const_iterator& other) const noexcept { return (p_ - other.p_) > 0; }
+            bool operator>=(const const_iterator& other) const noexcept { return (p_ - other.p_) >= 0; }
+            bool operator==(const const_iterator& other) const noexcept { return  p_ == other.p_; }
+            bool operator!=(const const_iterator& other) const noexcept { return  p_ != other.p_; }
+
+            const Type& operator*()  const noexcept { return *p_; }
+            const Type* operator->() const noexcept { return  p_; }
+            explicit operator const Type*() const noexcept { return p_; }
+        };
+
+
         size_t size() const noexcept { return _size; }
         Type* data() noexcept { return &_data; }
         const Type* data() const noexcept { return &_data; }
-        Type* begin() noexcept { return &_data; }
-        Type* end() noexcept { return (&_data) + _size; }
-        const Type* cbegin() const noexcept { return &_data; }
-        const Type* cend() const noexcept { return (&_data) + _size; }
+        iterator begin() noexcept { return iterator(&_data); }
+        iterator end() noexcept { return iterator((&_data) + _size); }
+        const_iterator cbegin() const noexcept { return const_iterator(&_data); }
+        const_iterator cend() const noexcept { return const_iterator((&_data) + _size); }
 
         const Type& operator[](const size_t index_) {
             return *(begin() + index_);
@@ -304,10 +459,19 @@ namespace intercept::types {
             return ret;
         }
 
+        //Doesn't clear memory. use create_zero if you want that
         static compact_array* create(size_t number_of_elements_) {
             const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
             compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
         #pragma warning(suppress: 26409) //don't use new/delete
+            new (buffer) compact_array(number_of_elements_);
+            return buffer;
+        }
+        static compact_array* create_zero(size_t number_of_elements_) {
+            const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
+            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+        #pragma warning(suppress: 26409) //don't use new/delete
+            std::memset(buffer, 0, size);
             new (buffer) compact_array(number_of_elements_);
             return buffer;
         }
@@ -318,6 +482,23 @@ namespace intercept::types {
             std::copy(other.data(), other.data() + other.size(), buffer->data());
             return buffer;
         }
+
+        template<class _InIt>
+        static compact_array* create(_InIt beg, _InIt end) {
+            const size_t size = sizeof(compact_array) + sizeof(Type)*(std::distance(beg,end)-1);
+            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            std::memset(buffer, 0, size);
+        #pragma warning(suppress: 26409) //don't use new/delete
+            new (buffer) compact_array(size);
+
+            size_t index = 0;
+            for (auto& i = beg; i < end; ++i) {
+                buffer->data()[index++] = *i;
+            }
+
+            return buffer;
+        }
+
         //Specialty function to copy less elements or to allocate more space
         static compact_array* create(const compact_array &other, size_t element_count) {
             const size_t size = other.size();
@@ -325,11 +506,9 @@ namespace intercept::types {
             new (buffer) compact_array(element_count);
             std::memset(buffer->data(), 0, element_count * sizeof(Type));
             const auto elements_to_copy = std::min(size, element_count);
-        #ifdef _MSC_VER
-            std::_Copy_no_deprecate(other.data(), other.data() + elements_to_copy, buffer->data());
-        #else
-            std::copy(other.data(), other.data() + elements_to_copy, buffer->data());
-        #endif
+
+            std::copy(other.begin(), other.begin() + elements_to_copy, buffer->begin());
+
             return buffer;
         }
         void del() const {
@@ -469,7 +648,7 @@ namespace intercept::types {
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         #else
-            return _strcmpi(data(), other_.data()) == 0;
+            return _strnicmp(data(), other_.data(), other_.length()) == 0;
         #endif
         }
 
@@ -584,25 +763,22 @@ namespace intercept::types {
         r_string& to_lower() {
             if (!_ref) return *this;
             make_mutable();
-        #ifdef __linux__
+
             std::transform(_ref->begin(), _ref->end(), _ref->begin(), ::tolower);
-        #else
-            std::_Transform_no_deprecate(_ref->begin(), _ref->end(), _ref->begin(), ::tolower); //https://stackoverflow.com/questions/25716841/checked-array-iteratort-in-c11#comment40464386_25716929
-        #endif
 
             return *this;
         }
         ///Be careful! This returns nullptr on empty string
-        const char* begin() const noexcept {
+        compact_array<char>::const_iterator begin() const noexcept {
             if (_ref)
                 return _ref->begin();
-            return nullptr;
+            return {};
         }
         ///Be careful! This returns nullptr on empty string
-        const char* end() const noexcept {
+        compact_array<char>::const_iterator end() const noexcept {
             if (_ref)
                 return _ref->end();
-            return nullptr;
+            return {};
         }
         char front() const noexcept {
             if (_ref)
@@ -813,13 +989,18 @@ namespace intercept::types {
         }
     };
 
-    template<class Type, size_t growthFactor = 32>
-    class auto_array : public rv_array<Type> {
+    template<class Type, class Allocator = rv_allocator<Type>, size_t growthFactor = 32>
+    class
+    #ifdef _MSC_VER
+        __declspec(empty_bases)
+    #endif
+        //#TODO try GCC maybe __attribute__((__packed__)) or #pragma pack. But be careful of the bool in local alloc
+        auto_array : public rv_array<Type>, private Allocator {
         typedef rv_array<Type> base;
     protected:
         int _maxItems;
         Type *try_realloc(Type *old_, size_t n_) {
-            Type *ret = rv_allocator<Type>::reallocate(old_, n_);
+            Type *ret = Allocator::reallocate(old_, n_);
             return ret;
         }
 
@@ -839,7 +1020,7 @@ namespace intercept::types {
                 base::_data = newData;
                 return;
             }
-            newData = rv_allocator<Type>::create_uninitialized_array(size_);
+            newData = Allocator::create_uninitialized_array(size_);
             //memset(newData, 0, size * sizeof(Type));
             if (base::_data) {
             #ifdef __GNUC__
@@ -848,7 +1029,7 @@ namespace intercept::types {
                 //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
                 memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
             #endif
-                rv_allocator<Type>::deallocate(base::_data);
+                Allocator::deallocate(base::_data);
             }
             base::_data = newData;
             _maxItems = static_cast<int>(size_);
@@ -912,7 +1093,7 @@ namespace intercept::types {
                 base::_n = static_cast<int>(n_);
             }
             if (n_ == 0 && base::_data) {
-                rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                Allocator::deallocate(rv_array<Type>::_data);
                 rv_array<Type>::_data = nullptr;
                 return;
             }
@@ -1029,7 +1210,7 @@ namespace intercept::types {
         }
         void clear() {
             if (base::_data)
-                rv_allocator<Type>::deallocate(rv_array<Type>::_data);
+                Allocator::deallocate(rv_array<Type>::_data);
             base::_n = 0;
             _maxItems = 0;
         }
@@ -1289,6 +1470,76 @@ namespace intercept::types {
         }
 
         int count() const { return _count; }
+
+
+        //ArmaDebugEngine
+        void rebuild(int tableSize) {
+            auto oldTableCount = _tableCount;
+            _tableCount = tableSize;
+            auto newTable = rv_allocator<Container>::create_array(tableSize);
+            for (auto i = 0; i < _tableCount; i++) {
+                auto& container = newTable[i];
+                for (Type& item : container) {
+                    auto hashedKey = hash_key(item.get_map_key());
+                    auto it = newTable[hashedKey].emplace(newTable[hashedKey].end(), Type());
+                    *it = std::move(item);
+                }
+            }
+            std::swap(_table, newTable);
+            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+        }
+
+        Type& insert(const Type &value) {
+            //Check if key already exists
+            auto key = value.get_map_key();
+            Type &old = get(key);
+            if (!is_null(old)) {
+                return old;
+            }
+
+            //Are we full?
+            if (_count + 1 > (16 * _tableCount)) {
+                int tableSize = _tableCount + 1;
+                do {
+                    tableSize *= 2;
+                } while (_count + 1 > (16 * (tableSize - 1)));
+                rebuild(tableSize - 1);
+            }
+            auto hashedkey = hash_key(key);
+            auto &x = *(_table[hashedkey].emplace_back(value));
+            _count++;
+            return x;
+        }
+
+        Type& insert(Type &&value) {
+            //Check if key already exists
+            auto key = value.get_map_key();
+            Type &old = get(key);
+            if (!is_null(old)) {
+                return old;
+            }
+
+            //Are we full?
+            if (_count + 1 > (16 * _tableCount)) {
+                int tableSize = _tableCount + 1;
+                do {
+                    tableSize *= 2;
+                } while (_count + 1 > (16 * (tableSize - 1)));
+                rebuild(tableSize - 1);
+            }
+
+            if (!_table) {
+                _table = rv_allocator<Container>::create_array(_tableCount);
+            }
+
+            auto hashedkey = hash_key(key);
+            auto &x = *(_table[hashedkey].emplace_back(std::move(value)));
+            _count++;
+            return x;
+        }
+
+
+
     protected:
         int hash_key(const char* key_) const {
             return Traits::hash_key(key_) % _tableCount;

@@ -1259,21 +1259,21 @@ namespace intercept {
             return __helpers::__convert_to_vector<float>(ret);
         }
 
-        float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_) {
+        int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_) {
             game_value params({name_,
                                command_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params);
         }
 
-        float ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_) {
+        int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_) {
             game_value params({name_,
                                command_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__ctrladdeventhandler__control__array__ret__scalar, ctrl_, params);
         }
 
-        void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, float &id_) {
+        void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, int id_) {
             game_value params({name_,
                                id_});
 

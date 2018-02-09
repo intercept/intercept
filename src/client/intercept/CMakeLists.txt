@@ -12,7 +12,7 @@ if(USE_ENGINE_TYPES)
 endif()
 
 
-
+add_definitions(/DNOMINMAX)
 add_definitions(/DINTERCEPT_NO_THREAD_SAFETY)
 
 set(INTERCEPT_NAME "intercept_client")

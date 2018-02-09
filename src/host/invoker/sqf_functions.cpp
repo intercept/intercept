@@ -139,7 +139,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     const auto test = findBinary("getvariable", GameDataType::OBJECT, GameDataType::ARRAY);
 
     auto operators = findOperators(std::string(name));
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     if (!operators) {
         auto table = gs->_scriptOperators.get_table_for_key(lowerName.c_str());
@@ -230,7 +230,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
     auto functions = findFunctions(std::string(name));
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     if (!functions) {
         if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
@@ -307,7 +307,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
     if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
 
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
 
     sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
@@ -406,7 +406,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
         return false;
     }
 
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     switch (shared->_type) {
         case functionType::sqf_nular: {
             auto table = gs->_scriptNulars.get_table_for_key(shared->_name.c_str());
@@ -452,7 +452,7 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     if (name.length() > 128) throw std::length_error("intercept::sqf_functions::registerType name can maximum be 128 chars long");
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     auto newType = rv_allocator<script_type_info>::create_single(
     #ifdef __linux__
@@ -470,7 +470,7 @@ std::pair<types::GameDataType, sqf_script_type>  intercept::sqf_functions::regis
 }
 
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
     auto& found = gs->_scriptNulars.get(name.c_str());
@@ -518,7 +518,7 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
 }
 
 intercept::__internal::game_operators* intercept::sqf_functions::findOperators(std::string name) const {
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
     auto& found = gs->_scriptOperators.get(name.c_str());
@@ -527,7 +527,7 @@ intercept::__internal::game_operators* intercept::sqf_functions::findOperators(s
 }
 
 intercept::__internal::game_functions* intercept::sqf_functions::findFunctions(std::string name) const {
-    auto gs = reinterpret_cast<__internal::game_state*>(_registerFuncs._gameState);
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
     auto& found = gs->_scriptFunctions.get(name.c_str());

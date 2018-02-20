@@ -20,6 +20,20 @@ namespace intercept {
         std::pair<GameDataType, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
+
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
+            return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
+        }
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionUnary function_, GameDataType return_arg_type, GameDataType right_arg_type) {
+            return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
+        }
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, GameDataType return_arg_type) {
+            return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
+        }
+        std::pair<GameDataType, sqf_script_type> host::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+            return functions.register_sqf_type(name, localizedName, description, typeName, cf);
+        }
+
         register_plugin_interface_result host::register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_) {
             if (!interface_class_) return register_plugin_interface_result::invalid_interface_class;
             auto result = functions.register_plugin_interface(module_name, name_, api_version_, interface_class_);

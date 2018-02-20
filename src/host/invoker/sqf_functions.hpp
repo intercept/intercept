@@ -28,7 +28,7 @@ namespace intercept {
         };
 
         class registered_sqf_func_wrapper {
-            using GameDataType = types::GameDataType;
+            using GameDataType = types::game_data_type;
         public:
             struct undo_info {
                 r_string _description;
@@ -55,9 +55,9 @@ namespace intercept {
                 __internal::gsFunction* _func;
                 __internal::gsOperator* _op;
             };
-            const types::GameDataType _lArgType;
-            const types::GameDataType _rArgType;
-            const types::GameDataType _returnType;
+            const types::game_data_type _lArgType;
+            const types::game_data_type _rArgType;
+            const types::game_data_type _returnType;
             std::unique_ptr<undo_info> undo;
 
         };
@@ -93,34 +93,34 @@ namespace intercept {
         * @param name
         * @param description
         * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
-        * @param return_arg_type A value from intercept::types::GameDataType
-        * @param left_arg_type A value from intercept::types::GameDataType
-        * @param right_arg_type A value from intercept::types::GameDataType
+        * @param return_arg_type A value from intercept::types::game_data_type
+        * @param left_arg_type A value from intercept::types::game_data_type
+        * @param right_arg_type A value from intercept::types::game_data_type
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Unary Command
         * @param name
         * @param description
         * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
-        * @param return_arg_type A value from intercept::types::GameDataType
-        * @param right_arg_type A value from intercept::types::GameDataType
+        * @param return_arg_type A value from intercept::types::game_data_type
+        * @param right_arg_type A value from intercept::types::game_data_type
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Nular Command
         * @param name
         * @param description
         * @param function_ Your function wrapped into [userFunctionWrapper](https://github.com/intercept/intercept/wiki/Registered-Functions)
-        * @param return_arg_type A value from intercept::types::GameDataType
+        * @param return_arg_type A value from intercept::types::game_data_type
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type);
+        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
 
 
         bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
@@ -132,15 +132,15 @@ namespace intercept {
         * @param description
         * @param typeName
         * @param cf
-        * @return The resulting GameDataType enum value and a instantiated sqf_script_type
+        * @return The resulting game_data_type enum value and a instantiated sqf_script_type
         * @ingroup RSQF
         */
-        std::pair<types::GameDataType, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+        std::pair<types::game_data_type, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
     private:
         __internal::gsNular* findNular(std::string name) const;
-        __internal::gsFunction* findUnary(std::string name, types::GameDataType argument_type) const;
-        __internal::gsOperator* findBinary(std::string name, types::GameDataType left_argument_type, types::GameDataType right_argument_type) const;
+        __internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;
+        __internal::gsOperator* findBinary(std::string name, types::game_data_type left_argument_type, types::game_data_type right_argument_type) const;
         __internal::game_operators* findOperators(std::string name) const;
         __internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;

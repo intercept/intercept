@@ -8,29 +8,29 @@ namespace intercept {
         client_functions host::functions;
         r_string host::module_name;
 
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, game_data_type return_arg_type, game_data_type left_arg_type, game_data_type right_arg_type) {
             return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, GameDataType return_arg_type, GameDataType right_arg_type) {
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, game_data_type return_arg_type, game_data_type right_arg_type) {
             return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
         }
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, GameDataType return_arg_type) {
+        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, game_data_type return_arg_type) {
             return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
         }
-        std::pair<GameDataType, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+        std::pair<game_data_type, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
-        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionBinary function_, GameDataType return_arg_type, GameDataType left_arg_type, GameDataType right_arg_type) {
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionBinary function_, game_data_type return_arg_type, game_data_type left_arg_type, game_data_type right_arg_type) {
             return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }
-        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionUnary function_, GameDataType return_arg_type, GameDataType right_arg_type) {
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionUnary function_, game_data_type return_arg_type, game_data_type right_arg_type) {
             return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
         }
-        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, GameDataType return_arg_type) {
+        registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, game_data_type return_arg_type) {
             return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
         }
-        std::pair<GameDataType, sqf_script_type> host::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+        std::pair<game_data_type, sqf_script_type> host::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
@@ -63,18 +63,18 @@ namespace intercept {
             auto allocator_info = host::functions.get_engine_allocator();
             game_data_array::type_def = type_def;
             game_data_array::data_type_def = data_type_def;
-            game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::ARRAY)];
+            game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::ARRAY)];
 
 
             host::functions.get_type_structure("SCALAR"sv, type_def, data_type_def);
             game_data_number::type_def = type_def;
             game_data_number::data_type_def = data_type_def;
-            game_data_number::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::SCALAR)];
+            game_data_number::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::SCALAR)];
 
             host::functions.get_type_structure("STRING"sv, type_def, data_type_def);
             game_data_string::type_def = type_def;
             game_data_string::data_type_def = data_type_def;
-            game_data_string::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::STRING)];
+            game_data_string::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::STRING)];
 
             host::functions.get_type_structure("OBJECT"sv, type_def, data_type_def);
             game_data_object::type_def = type_def;
@@ -83,7 +83,7 @@ namespace intercept {
             host::functions.get_type_structure("BOOL"sv, type_def, data_type_def);
             game_data_bool::type_def = type_def;
             game_data_bool::data_type_def = data_type_def;
-            game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(GameDataType::BOOL)];
+            game_data_bool::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::BOOL)];
 
 
             host::functions.get_type_structure("CODE"sv, type_def, data_type_def);

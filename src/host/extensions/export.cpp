@@ -76,26 +76,26 @@ namespace intercept {
             return loader::get().get_allocator();
         }
 
-        registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::GameDataType return_arg_type, types::GameDataType left_arg_type, types::GameDataType right_arg_type) {
+        registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type) {
             CERT_ENTER;
             auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
             CERT_EXIT;
             return registered;
         }
 
-        registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::GameDataType return_arg_type, types::GameDataType right_arg_type) {
+        registered_sqf_function register_sqf_function_unary(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type) {
             CERT_ENTER;
             auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type, right_arg_type);
             CERT_EXIT;
             return registered;
         }
-        registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::GameDataType return_arg_type) {
+        registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type) {
             CERT_ENTER;
             auto registered = sqf_functions::get().registerFunction(name, description, function_, return_arg_type);
             CERT_EXIT;
             return registered;
         }
-        std::pair<types::GameDataType, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+        std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             CERT_ENTER;
             auto registered = sqf_functions::get().registerType(name, localizedName, description, typeName, cf);
             CERT_EXIT;

@@ -39,7 +39,7 @@ namespace intercept {
         using unary_function = game_value(*) (uintptr_t state, game_value_parameter);
         using binary_function = game_value(*) (uintptr_t state, game_value_parameter, game_value_parameter);
 
-        enum class GameDataType {
+        enum class [[deprecated("use game_data_type")]] GameDataType{
             SCALAR,
             BOOL,
             ARRAY,
@@ -67,6 +67,33 @@ namespace intercept {
             end
         };
 
+        enum class game_data_type {
+            SCALAR,
+            BOOL,
+            ARRAY,
+            STRING,
+            NOTHING,
+            ANY,
+            NAMESPACE,
+            NaN,
+            CODE,
+            OBJECT,
+            SIDE,
+            GROUP,
+            TEXT,
+            SCRIPT,
+            TARGET,
+            CONFIG,
+            DISPLAY,
+            CONTROL,
+            NetObject,
+            SUBGROUP,
+            TEAM_MEMBER,
+            TASK,
+            DIARY_RECORD,
+            LOCATION,
+            end
+        };
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -627,8 +654,8 @@ namespace intercept {
 
 
             uintptr_t type() const;//#TODO should this be renamed to type_vtable? and make the enum variant the default? We still want to use vtable internally cuz speed
-                                   /// doesn't handle all types. Will return GameDataType::ANY if not handled
-            types::GameDataType type_enum() const;
+                                   /// doesn't handle all types. Will return game_data_type::ANY if not handled
+            types::game_data_type type_enum() const;
 
             size_t size() const;
             //#TODO implement is_null. GameDataObject's objectLink == nullptr. Same for GameDataGroup and others.
@@ -1145,16 +1172,16 @@ namespace intercept {
         //#TODO add game_data_nothing
 
         namespace __internal {
-            GameDataType game_datatype_from_string(const r_string& name);
-            std::string to_string(GameDataType type);
+            game_data_type game_datatype_from_string(const r_string& name);
+            std::string to_string(game_data_type type);
             //Not public API!
-            void add_game_datatype(r_string name, GameDataType type);
+            void add_game_datatype(r_string name, game_data_type type);
 
             struct allocatorInfo {
                 uintptr_t genericAllocBase;
                 uintptr_t poolFuncAlloc;
                 uintptr_t poolFuncDealloc;
-                std::array<rv_pool_allocator*, static_cast<size_t>(GameDataType::end)> _poolAllocs;
+                std::array<rv_pool_allocator*, static_cast<size_t>(game_data_type::end)> _poolAllocs;
                 game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
                 void(*setvar_func) (const char* name, const game_value& val) { nullptr };
                 uintptr_t gameState;

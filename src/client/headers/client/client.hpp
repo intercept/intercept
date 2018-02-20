@@ -18,29 +18,29 @@ namespace intercept {
             static r_string module_name;
            
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionBinary, types::game_data_type, types::game_data_type, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionBinary, types::game_data_type, types::game_data_type, types::game_data_type)
             [[deprecated("use register_sqf_command")]] [[nodiscard]] static registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionUnary, types::game_data_type, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionUnary, types::game_data_type, types::game_data_type)
             [[deprecated("use register_sqf_command")]] [[nodiscard]] static registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
             [[deprecated("use register_sqf_command")]] [[nodiscard]] static registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
             
-            ///@copydoc intercept::sqf_functions::registerType
+            ///@copydoc intercept::sqf_functions::register_sqf_type
             [[deprecated("use register_sqf_type")]] [[nodiscard]] static std::pair<types::game_data_type, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionBinary, types::game_data_type, types::game_data_type, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionBinary, types::game_data_type, types::game_data_type, types::game_data_type)
             [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionUnary, types::game_data_type, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionUnary, types::game_data_type, types::game_data_type)
             [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
 
-            ///@copydoc intercept::sqf_functions::registerFunction(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
             [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
 
-            ///@copydoc intercept::sqf_functions::registerType
+            ///@copydoc intercept::sqf_functions::register_sqf_type
             [[nodiscard]] static std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
 

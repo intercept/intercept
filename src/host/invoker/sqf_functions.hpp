@@ -99,7 +99,7 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
+        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Unary Command
         * @param name
@@ -110,7 +110,7 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
+        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Nular Command
         * @param name
@@ -120,10 +120,10 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
+        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
 
 
-        bool unregisterFunction(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
+        bool unregister_sqf_function(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
 
         /**
         * @brief Registers a custom SQF script type
@@ -135,7 +135,7 @@ namespace intercept {
         * @return The resulting game_data_type enum value and a instantiated sqf_script_type
         * @ingroup RSQF
         */
-        std::pair<types::game_data_type, sqf_script_type> registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+        std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
     private:
         __internal::gsNular* findNular(std::string name) const;

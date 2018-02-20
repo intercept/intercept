@@ -100,7 +100,7 @@ intercept::registered_sqf_function_impl::registered_sqf_function_impl(std::share
 }
 intercept::registered_sqf_function_impl::~registered_sqf_function_impl() {
     if (sqf_functions::get()._canRegister) {
-        if (sqf_functions::get().unregisterFunction(_func))
+        if (sqf_functions::get().unregister_sqf_function(_func))
             return;
     }
     _func->setUnused();
@@ -124,10 +124,10 @@ void sqf_functions::setDisabled() noexcept {
     _canRegister = false;
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type) {
     //Core plugins can overwrite existing functions. Which is "safe". So they can pass along for now.
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
-    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
     sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
     sqf_script_type leftType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
@@ -170,7 +170,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
             found->_description = description;
         #endif
 
-            LOG(INFO, "sqf_functions::registerFunction binary OVERRIDE {} {} = {:x} {} = {:x} {} = {:x} @ {:x}", name,
+            LOG(INFO, "sqf_functions::register_sqf_function binary OVERRIDE {} {} = {:x} {} = {:x} {} = {:x} @ {:x}", name,
                 types::__internal::to_string(return_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
                 types::__internal::to_string(left_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),
                 types::__internal::to_string(right_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
@@ -204,7 +204,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findBinary(name, left_arg_type, right_arg_type);
     //std::stringstream stream;
-    LOG(INFO, "sqf_functions::registerFunction binary {} {} = {:x} {} = {:x} {} = {:x} @ {:x}", name,
+    LOG(INFO, "sqf_functions::register_sqf_function binary {} {} = {:x} {} = {:x} {} = {:x} @ {:x}", name,
         types::__internal::to_string(return_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
         types::__internal::to_string(left_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(left_arg_type)]),
         types::__internal::to_string(right_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
@@ -216,10 +216,10 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type) {
     //Core plugins can overwrite existing functions. Which is "safe". So they can pass along for now.
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
-    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
     sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
     sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
@@ -260,7 +260,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
             found->_description = description;
 #endif
 
-            LOG(INFO, "sqf_functions::registerFunction unary OVERRIDE {} {} = {:x} {} = {:x} @ {:x}", name,
+            LOG(INFO, "sqf_functions::register_sqf_function unary OVERRIDE {} {} = {:x} {} = {:x} @ {:x}", name,
                 types::__internal::to_string(return_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
                 types::__internal::to_string(right_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
                 reinterpret_cast<uintptr_t>(found)
@@ -291,7 +291,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
     //std::stringstream stream;
-    LOG(INFO, "sqf_functions::registerFunction unary {} {} = {:x} {} = {:x} @ {:x}", name,
+    LOG(INFO, "sqf_functions::register_sqf_function unary {} {} = {:x} {} = {:x} @ {:x}", name,
         types::__internal::to_string(return_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]),
         types::__internal::to_string(right_arg_type), reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(right_arg_type)]),
         reinterpret_cast<uintptr_t>(inserted)
@@ -302,10 +302,10 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-intercept::types::registered_sqf_function intercept::sqf_functions::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type) {
+intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type) {
     //Core plugins can overwrite existing functions. Which is "safe". So they can pass along for now.
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
-    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::registerFunction name can maximum be 256 chars long");
+    if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
     auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
@@ -330,7 +330,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
         undo._description = alreadyExists->_description;
         alreadyExists->_description = description;
 #endif
-        LOG(INFO, "sqf_functions::registerFunction nular OVERRIDE {} {} = {:x} @ {:x}", name, types::__internal::to_string(return_arg_type)
+        LOG(INFO, "sqf_functions::register_sqf_function nular OVERRIDE {} {} = {:x} @ {:x}", name, types::__internal::to_string(return_arg_type)
             , reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), reinterpret_cast<uintptr_t>(alreadyExists)
         );
         auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, alreadyExists, undo);
@@ -369,7 +369,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
     //std::stringstream stream;
-    LOG(INFO, "sqf_functions::registerFunction nular {} {} = {:x} @ {:x}", name, types::__internal::to_string(return_arg_type)
+    LOG(INFO, "sqf_functions::register_sqf_function nular {} {} = {:x} @ {:x}", name, types::__internal::to_string(return_arg_type)
         , reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), reinterpret_cast<uintptr_t>(inserted)
     );
     auto wrapper = std::make_shared<registered_sqf_func_wrapper>(return_arg_type, inserted);
@@ -377,7 +377,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::registerFunc
     return registered_sqf_function(std::make_shared<registered_sqf_function_impl>(wrapper));
 }
 
-bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func_wrapper>& shared) {
+bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf_func_wrapper>& shared) {
     //Undoing a override is "safe"
     if (!_canRegister && !shared->undo) throw std::runtime_error("Can only unregister SQF Commands on preStart");
 
@@ -449,9 +449,9 @@ bool sqf_functions::unregisterFunction(const std::shared_ptr<registered_sqf_func
 }
 
 
-std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
-    if (name.length() > 128) throw std::length_error("intercept::sqf_functions::registerType name can maximum be 128 chars long");
+    if (name.length() > 128) throw std::length_error("intercept::sqf_functions::register_sqf_type name can maximum be 128 chars long");
     auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     auto newType = rv_allocator<script_type_info>::create_single(
@@ -464,7 +464,7 @@ std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::reg
     gs->_scriptTypes.emplace_back(newType);
     const auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);
-    LOG(INFO, "sqf_functions::registerType {} {} {} ", name, localizedName, description, typeName);
+    LOG(INFO, "sqf_functions::register_sqf_type {} {} {} ", name, localizedName, description, typeName);
     types::__internal::add_game_datatype(name, static_cast<types::game_data_type>(newIndex));
     return { static_cast<types::game_data_type>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }

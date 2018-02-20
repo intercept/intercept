@@ -43,10 +43,10 @@ namespace intercept {
     bool invoker::invoker_begin_register(const arguments&, std::string&) {
 
         sqf_functions::get().initialize();
-        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper<_intercept_registerTypes>, types::game_data_type::BOOL, types::game_data_type::NAMESPACE);
-        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::game_data_type::BOOL, types::game_data_type::STRING, types::game_data_type::ARRAY);
-        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::game_data_type::BOOL);
-        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::game_data_type::BOOL, types::game_data_type::ARRAY, types::game_data_type::ARRAY);
+        _intercept_registerTypes_function = sqf_functions::get().register_sqf_function("interceptRegisterTypes"sv, "", userFunctionWrapper<_intercept_registerTypes>, types::game_data_type::BOOL, types::game_data_type::NAMESPACE);
+        _intercept_event_function = sqf_functions::get().register_sqf_function("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::game_data_type::BOOL, types::game_data_type::STRING, types::game_data_type::ARRAY);
+        _intercept_do_invoke_period_function = sqf_functions::get().register_sqf_function("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::game_data_type::BOOL);
+        _intercept_signal_function = sqf_functions::get().register_sqf_function("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::game_data_type::BOOL, types::game_data_type::ARRAY, types::game_data_type::ARRAY);
         return true;
     }
 

@@ -85,12 +85,126 @@ namespace intercept::types {
 
 
     std::vector<ref<game_data>> gv_threadsafe_garbage;
-    
-    game_value_threadsafe::~game_value_threadsafe() {
-        gv_threadsafe_garbage.emplace_back(std::move(data));
-    }
+ 
     void game_value_threadsafe::garbage_collect() {
         gv_threadsafe_garbage.clear();
+    }
+
+    game_value_threadsafe::~game_value_threadsafe() {
+        discard(std::move(data));
+    }
+
+    game_value_threadsafe::game_value_threadsafe(float val_) {
+        client::invoker_lock lock;
+        data = new game_data_number(val_);
+    }
+    game_value_threadsafe::game_value_threadsafe(int val_) : game_value_threadsafe(static_cast<float>(val_)) {}
+    game_value_threadsafe::game_value_threadsafe(size_t val_) : game_value_threadsafe(static_cast<float>(val_)) {}
+    game_value_threadsafe::game_value_threadsafe(bool val_) {
+        client::invoker_lock lock;
+        data = new game_data_bool(val_);
+    }
+    game_value_threadsafe::game_value_threadsafe(const std::string& val_) {
+        client::invoker_lock lock;
+        data = new game_data_string(val_);
+    }
+    game_value_threadsafe::game_value_threadsafe(const r_string& val_) {
+        client::invoker_lock lock;
+        data = new game_data_string(val_);
+    }
+    game_value_threadsafe::game_value_threadsafe(std::string_view val_) {
+        client::invoker_lock lock;
+        data = new game_data_string(val_);
+    }
+    game_value_threadsafe::game_value_threadsafe(const std::vector<game_value>& list_) {
+        client::invoker_lock lock;
+        data = new game_data_array(list_);
+    }
+    game_value_threadsafe::game_value_threadsafe(const std::initializer_list<game_value>& list_) {
+        client::invoker_lock lock;
+        data = new game_data_array(list_);
+    }
+    game_value_threadsafe::game_value_threadsafe(auto_array<game_value>&& array_) {
+        client::invoker_lock lock;
+        data = new game_data_array(std::move(array_));
+    }
+    game_value_threadsafe::game_value_threadsafe(const vector3& vec_) {
+        client::invoker_lock lock;
+        data = new game_data_array({ vec_.x, vec_.y, vec_.z });
+    }
+    game_value_threadsafe::game_value_threadsafe(const vector2& vec_) {
+        client::invoker_lock lock;
+        data = new game_data_array({ vec_.x, vec_.y });
+    }
+    game_value_threadsafe::game_value_threadsafe(const internal_object& internal_){
+        discard(std::move(data));
+        data = internal_.data;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(game_value&& move_) noexcept {
+        set_vtable(__vptr_def);
+        discard(std::move(data));
+        data = move_.data;
+        move_.data = nullptr;
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(float val_) {
+        client::invoker_lock lock;
+        game_value::operator=(val_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(bool val_) {
+        client::invoker_lock lock;
+        game_value::operator=(val_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const std::string& val_) {
+        client::invoker_lock lock;
+        game_value::operator=(val_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const r_string& val_) {
+        client::invoker_lock lock;
+        game_value::operator=(val_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(std::string_view val_) {
+        client::invoker_lock lock;
+        game_value::operator=(val_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const std::vector<game_value>& list_) {
+        client::invoker_lock lock;
+        game_value::operator=(list_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const vector3& vec_) {
+        client::invoker_lock lock;
+        game_value::operator=(vec_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const vector2& vec_) {
+        client::invoker_lock lock;
+        game_value::operator=(vec_);
+        return *this;
+    }
+    game_value_threadsafe& game_value_threadsafe::operator=(const internal_object& internal_) {
+        discard(std::move(data));
+        data = internal_.data;
+        return *this;
+    }
+
+    game_value_threadsafe & game_value_threadsafe::operator=(const game_value & copy_) {
+        discard(std::move(data));
+        data = copy_.data;
+        return *this;
+    }
+
+    void game_value_threadsafe::discard(ref<game_data>&& data) {
+        if (data.is_null()) return;
+        //Don't need to store data that won't get deleted anyway.
+        //But we also don't want to get into race-condition area. Number 5 was choosen by a fair dice roll.
+        if (data.ref_count() < 5)
+            gv_threadsafe_garbage.emplace_back(std::move(data));
     }
 
 }

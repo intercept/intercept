@@ -448,16 +448,58 @@ class internal_object : public game_value {
      */
     class game_value_threadsafe : public game_value {
     public:
-        ~game_value_threadsafe();
+
         static void garbage_collect();
+
+        ~game_value_threadsafe();
         game_value_threadsafe(const game_value& copy) : game_value(copy) {}
-        game_value_threadsafe(game_value&& move) : game_value(move) {}
-        game_value_threadsafe operator=(const game_value& copy) { data = copy.data; return *this; }
+        //Move constructor should never have data before it's assigned.
+        game_value_threadsafe(game_value&& move_) noexcept : game_value(move_) {};
         operator game_value() const { return *this; }
+
+        //allocations
+
+
+        game_value_threadsafe(float val_);
+        game_value_threadsafe(int val_);
+        game_value_threadsafe(size_t val_);
+        game_value_threadsafe(bool val_);
+        game_value_threadsafe(const std::string &val_);
+        game_value_threadsafe(const r_string &val_);
+        game_value_threadsafe(std::string_view val_);
+        game_value_threadsafe(const char* str_) : game_value(std::string_view(str_)) {}
+        game_value_threadsafe(const std::vector<game_value> &list_);
+        game_value_threadsafe(const std::initializer_list<game_value> &list_);
+        game_value_threadsafe(auto_array<game_value> &&array_);
+        template<class Type>
+        game_value_threadsafe(const auto_array<Type>& array_) {
+            static_assert(std::is_convertible<Type, game_value>::value);
+        }
+        template<class Type>
+        game_value_threadsafe(const std::vector<Type>& array_) : game_value(std::move(auto_array<game_value>(array_.begin(), array_.end()))) {
+            static_assert(std::is_convertible<Type, game_value>::value);
+        }
+        game_value_threadsafe(const vector3 &vec_);
+        game_value_threadsafe(const vector2 &vec_);
+        game_value_threadsafe(const internal_object &internal_);
+
+        game_value_threadsafe & operator = (const game_value &copy_);
+        game_value_threadsafe & operator = (game_value &&move_) noexcept;
+        game_value_threadsafe & operator = (float val_);
+        game_value_threadsafe & operator = (bool val_);
+        game_value_threadsafe & operator = (const std::string &val_);
+        game_value_threadsafe & operator = (const r_string &val_);
+        game_value_threadsafe & operator = (std::string_view val_);
+        game_value_threadsafe & operator = (const char* str_) {
+            return this->operator =(std::string_view(str_));
+        }
+        game_value_threadsafe & operator = (const std::vector<game_value> &list_);
+        game_value_threadsafe & operator = (const vector3 &vec_);
+        game_value_threadsafe & operator = (const vector2 &vec_);
+        game_value_threadsafe & operator = (const internal_object &internal_);
+    private:
+            static void discard(ref<game_data> && data);
     };
-
-
-
 
 }
 

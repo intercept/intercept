@@ -84,7 +84,7 @@ namespace intercept::types {
     }
 
 
-    std::vector<ref<game_data>> gv_threadsafe_garbage;
+    static std::vector<ref<game_data>> gv_threadsafe_garbage;
     static std::mutex gv_threadsafe_garbage_lock;
 
     void game_value_threadsafe::garbage_collect() {

@@ -89,6 +89,7 @@ namespace intercept::types {
 
     void game_value_threadsafe::garbage_collect() {
         std::unique_lock<std::mutex> lock(gv_threadsafe_garbage_lock);
+        client::invoker_lock invoke_lock;
         gv_threadsafe_garbage.clear();
     }
 

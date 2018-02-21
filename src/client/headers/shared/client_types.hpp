@@ -444,7 +444,6 @@ class internal_object : public game_value {
      * \brief A Deallocation Threadsafe variant of game_value.
      * \description When going out of scope it doesn't deallocate the data immediately but instead stores it
      * till game_value_threadsafe::garbage_collect() is called.
-     * Not threadsafe for allocations yet but planned.
      */
     class game_value_threadsafe : public game_value {
     public:
@@ -498,7 +497,7 @@ class internal_object : public game_value {
         game_value_threadsafe & operator = (const vector2 &vec_);
         game_value_threadsafe & operator = (const internal_object &internal_);
     private:
-            static void discard(ref<game_data> && data);
+        static void discard(ref<game_data> && data);
     };
 
 }

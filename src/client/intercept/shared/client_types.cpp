@@ -85,8 +85,10 @@ namespace intercept::types {
 
 
     std::vector<ref<game_data>> gv_threadsafe_garbage;
- 
+    static std::mutex gv_threadsafe_garbage_lock;
+
     void game_value_threadsafe::garbage_collect() {
+        std::unique_lock<std::mutex> lock(gv_threadsafe_garbage_lock);
         gv_threadsafe_garbage.clear();
     }
 
@@ -203,8 +205,10 @@ namespace intercept::types {
         if (data.is_null()) return;
         //Don't need to store data that won't get deleted anyway.
         //But we also don't want to get into race-condition area. Number 5 was choosen by a fair dice roll.
-        if (data.ref_count() < 5)
+        if (data.ref_count() < 5) {
+            std::unique_lock<std::mutex> lock(gv_threadsafe_garbage_lock);
             gv_threadsafe_garbage.emplace_back(std::move(data));
+        }
     }
 
 }

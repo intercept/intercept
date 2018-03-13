@@ -1979,6 +1979,10 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__dialog__ret__bool);
         }
 
+        void disable_serialization() {
+            __helpers::__empty_nular(__sqf::nular__disableserialization__ret__nothing);
+        }
+
         display display_null() {
             return __helpers::__retrieve_nular_display(__sqf::nular__displaynull__ret__display);
         }

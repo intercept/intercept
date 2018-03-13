@@ -136,6 +136,7 @@ namespace intercept {
         // binary__set__array__array__ret__nothing
         // binary__sort__array__bool__ret__nothing
 
+        // nular__disableserialization__ret__nothing
         // nular__allsites__ret__array (deprecated - source: BI Wiki)
         // nular__false__ret__bool
         // nular__netobjnull__ret__netobject ----------------------------------------------------------------------------------

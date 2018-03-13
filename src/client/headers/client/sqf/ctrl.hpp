@@ -412,7 +412,6 @@ namespace intercept {
         void create_gear_dialog(const object &unit_, sqf_string_const_ref resource_);
         bool dialog();
         display display_null();
-        void disable_serialization();
         void enable_end_dialog();
         void end_loading_screen();
         float pixel_h();

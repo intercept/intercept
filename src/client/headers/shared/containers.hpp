@@ -608,48 +608,31 @@ namespace intercept::types {
         ///== is case insensitive just like scripting
         bool operator == (const char *other_) const {
             if (!data())  return !other_ || !*other_; //empty?
-        #ifdef __GNUC__
+
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other_, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_) == 0;
-        #endif
-        }
-
-        ///== is case insensitive just like scripting
-        bool operator == (const r_string& other_) const {
-            if (!data()) return !other_.data() || !*other_.data(); //empty?
-            if (data() == other_.data()) return true;
-        #ifdef __GNUC__
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_.data()) == 0;
-        #endif
-        }
-
-        ///== is case insensitive just like scripting
-        bool operator == (const std::string& other_) const {
-            if (!data()) return other_.empty(); //empty?
-            if (other_.length() > _ref->size()) return false; //There is more data than we can even have
-        #ifdef __GNUC__
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_.data()) == 0;
-        #endif
         }
 
         ///== is case insensitive just like scripting
         bool operator == (std::string_view other_) const {
             if (!data()) return other_.empty(); //empty?
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
-        #ifdef __GNUC__
+
             return std::equal(_ref->cbegin(), _ref->cend(),
                 other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strnicmp(data(), other_.data(), other_.length()) == 0;
-        #endif
+        }
+
+        ///== is case insensitive just like scripting
+        bool operator == (const r_string& other_) const {
+            if (!data()) return !other_.data() || !*other_.data(); //empty?
+            if (data() == other_.data()) return true;
+
+            return operator==(std::string_view(other_));
+        }
+
+        ///== is case insensitive just like scripting
+        bool operator == (const std::string& other_) const {
+            return operator==(std::string_view(other_));
         }
 
         ///!= is case insensitive just like scripting
@@ -666,7 +649,6 @@ namespace intercept::types {
         bool operator != (const std::string_view other_) const {//#TODO templates would be nice here. But we don't want string_view by reference
             return !(*this == other_);
         }
-
 
         bool operator < (const r_string& other_) const {
             if (!data()) return false; //empty?
@@ -690,21 +672,13 @@ namespace intercept::types {
         }
 
         bool compare_case_sensitive(const char *other_) const {
-        #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
                 other_, [](unsigned char l, unsigned char r) {return l == r; });
-        #else
-            return strcmp(data(), other_) == 0;
-        #endif
         }
 
         bool compare_case_insensitive(const char *other_) const {//#TODO string_view variant with length checking
-        #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
                 other_, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
-        #else
-            return _stricmp(data(), other_) == 0;
-        #endif
         }
 
         size_t find(const char ch_, const size_t start_ = 0) const {
@@ -730,26 +704,20 @@ namespace intercept::types {
         r_string append(std::string_view right_) const {
             const auto my_length = length();
             auto new_data = create(my_length + right_.length() + 1);//Space for terminating nullchar
-        #if __GNUC__
+
             std::copy_n(data(), my_length, new_data->data());
             std::copy_n(right_.data(), right_.length(), new_data->data() + my_length);
-        #else
-            memcpy_s(new_data->data(), new_data->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(new_data->data() + my_length, new_data->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-        #endif
+
             new_data->data()[my_length + right_.length()] = 0;
             return r_string(new_data);
         }
         r_string& append_modify(std::string_view right_) {
             const auto my_length = length();
             auto newData = create(my_length + right_.length() + 1);//Space for terminating nullchar
-        #if __GNUC__
+            
             std::copy_n(data(), my_length, newData->data());
             std::copy_n(right_.data(), right_.length(), newData->data() + my_length);
-        #else
-            memcpy_s(newData->data(), newData->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(newData->data() + my_length, newData->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-        #endif
+
             newData->data()[my_length + right_.length()] = 0;
             _ref = newData;
             return *this;

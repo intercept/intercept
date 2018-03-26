@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <optional>
 #include <cstring>
+#include <vector>
 
 namespace intercept::types {
     
@@ -354,12 +355,12 @@ namespace intercept::types {
             friend class const_iterator;
             Type* p_;
         public:
-            using _Unchecked_type = iterator;
             using iterator_category = std::random_access_iterator_tag;
             using value_type = Type;
             using difference_type = ptrdiff_t;
             using pointer = Type * ;
             using reference = Type & ;
+            using _Unchecked_type = pointer;
 
             iterator() : p_(nullptr) {}
             explicit iterator(Type* p) : p_(p) {}
@@ -395,12 +396,12 @@ namespace intercept::types {
         class const_iterator {
             const Type* p_;
         public:
-            using _Unchecked_type = const_iterator;
             using iterator_category = std::random_access_iterator_tag;
             using value_type = Type;
             using difference_type = ptrdiff_t;
             using pointer = Type * ;
             using reference = Type & ;
+            using _Unchecked_type = pointer;
 
             const_iterator() : p_(nullptr) {}
             explicit const_iterator(const Type* p) noexcept : p_(p) {}
@@ -608,9 +609,10 @@ namespace intercept::types {
         ///== is case insensitive just like scripting
         bool operator == (const char *other_) const {
             if (!data())  return !other_ || !*other_; //empty?
-
+            std::vector<int> x;
+            
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         }
 
         ///== is case insensitive just like scripting
@@ -619,7 +621,7 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
 
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+                other_.cbegin(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         }
 
         ///== is case insensitive just like scripting
@@ -673,12 +675,12 @@ namespace intercept::types {
 
         bool compare_case_sensitive(const char *other_) const {
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return l == r; });
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return l == r; });
         }
 
         bool compare_case_insensitive(const char *other_) const {//#TODO string_view variant with length checking
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         }
 
         size_t find(const char ch_, const size_t start_ = 0) const {
@@ -705,8 +707,8 @@ namespace intercept::types {
             const auto my_length = length();
             auto new_data = create(my_length + right_.length() + 1);//Space for terminating nullchar
 
-            std::copy_n(data(), my_length, new_data->data());
-            std::copy_n(right_.data(), right_.length(), new_data->data() + my_length);
+            std::copy_n(begin(), my_length, new_data->begin());
+            std::copy_n(right_.data(), right_.length(), new_data->begin() + my_length);
 
             new_data->data()[my_length + right_.length()] = 0;
             return r_string(new_data);
@@ -715,8 +717,8 @@ namespace intercept::types {
             const auto my_length = length();
             auto newData = create(my_length + right_.length() + 1);//Space for terminating nullchar
             
-            std::copy_n(data(), my_length, newData->data());
-            std::copy_n(right_.data(), right_.length(), newData->data() + my_length);
+            std::copy_n(data(), my_length, newData->begin());
+            std::copy_n(right_.data(), right_.length(), newData->begin() + my_length);
 
             newData->data()[my_length + right_.length()] = 0;
             _ref = newData;

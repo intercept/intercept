@@ -424,7 +424,7 @@ class internal_object : public game_value {
         explicit rv_turret_path (game_value path) noexcept : pathRaw(std::move(path)) {}
 
         explicit operator std::vector<float>() const {
-            if (pathRaw.type_enum() != GameDataType::ARRAY) return std::vector<float>();
+            if (pathRaw.type_enum() != game_data_type::ARRAY) return std::vector<float>();
             std::vector<float> ret(pathRaw.to_array().begin(), pathRaw.to_array().end());
             return ret;
 

@@ -1709,10 +1709,6 @@ namespace intercept {
             return __helpers::__number_unary_number(__sqf::unary__lbsize__scalar__ret__scalar, value_);
         }
 
-        void lb_sort_by_value(const control &value_) {
-            __sqf::unary__lbsortbyvalue__control__ret__nothing, value_;
-        }
-
         float next_menu_item_index(const control &value_) {
             return __helpers::__number_unary_control(__sqf::unary__nextmenuitemindex__control__ret__scalar, value_);
         }
@@ -2499,7 +2495,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__scalar__ret__nothing, control_);
         }
 
-        void lb_sort_by_value(const control control_) {
+        void lb_sort_by_value(const control& control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__control__ret__nothing, control_);
         }
 

@@ -12,8 +12,6 @@ which is functions that lack a clear category.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 #include <vector>
 

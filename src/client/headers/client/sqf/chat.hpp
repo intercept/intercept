@@ -11,8 +11,6 @@ These are wrappers for the `sideChat`, `globalChat`, `commandChat`, etc SQF comm
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 #include "shared/types.hpp"
 

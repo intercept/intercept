@@ -11,8 +11,6 @@ Check the locality and other multiplayer related facets of objects and the envir
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;

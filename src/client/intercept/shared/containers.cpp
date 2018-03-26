@@ -65,14 +65,14 @@ namespace intercept::types {
         game_value::__vptr_def = vtable;
     }
 
-    void* __internal::rv_allocator_allocate_generic(size_t size) {
+    void* __internal::rv_allocator_allocate_generic(size_t _size) {
         static auto allocatorBase = GET_ENGINE_ALLOCATOR;
     #ifdef __linux__
         MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(reinterpret_cast<uintptr_t>(&(allocatorBase->genericAllocBase)));
     #else
         MemTableFunctions* alloc = reinterpret_cast<MemTableFunctions*>(allocatorBase->genericAllocBase);
     #endif
-        return alloc->New(size);
+        return alloc->New(_size);
     }
 
     void __internal::rv_allocator_deallocate_generic(void* _Ptr) {

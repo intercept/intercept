@@ -86,7 +86,7 @@ namespace intercept {
         using string_type = std::wstring;
         using string_view_type = std::wstring_view;
         static const string_view_type bad_chars = L".\\/:?\"<>|"sv;
-        int length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
+        auto length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
         std::wstring path;
         path.resize(length);
         MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);

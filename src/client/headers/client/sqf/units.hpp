@@ -11,8 +11,6 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -31,8 +29,8 @@ namespace intercept {
         };
 
         void set_user_mfd_value(const object &object_, int index_, float value_);
-        void forget_target(const object &unit_, const object target_);
-        void forget_target(const group &group_, const object target_);
+        void forget_target(const object &unit_, const object& target_);
+        void forget_target(const group &group_, const object& target_);
         void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
 
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);

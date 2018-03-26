@@ -8,11 +8,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setusermfdvalue__object__array__ret__nothing, object_, {index_, value_});
         }
 
-        void forget_target(const object &unit_, const object target_) {
+        void forget_target(const object &unit_, const object& target_) {
             host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, unit_, target_);
         }
 
-        void forget_target(const group &group_, const object target_) {
+        void forget_target(const group &group_, const object& target_) {
             host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, group_, target_);
         }
 

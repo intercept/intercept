@@ -1,5 +1,5 @@
 #pragma once
-#include <stdio.h>
+#include <cstdio>
 #include <set>
 #include <array>
 #include <mutex>
@@ -98,7 +98,6 @@ namespace intercept {
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
         namespace __internal {
-            class game_state;
             void set_game_value_vtable(uintptr_t vtable);
             template <typename T, typename U>
             std::size_t pairhash(const T& first, const U& second) {
@@ -108,7 +107,7 @@ namespace intercept {
             }
             class I_debug_value {  //ArmaDebugEngine is very helpful... (No advertising.. I swear!)
             public:
-                I_debug_value() noexcept {}
+                I_debug_value() = default;
                 virtual ~I_debug_value() = default;
                 // IDebugValue
                 virtual int IAddRef() = 0;
@@ -251,7 +250,7 @@ namespace intercept {
             serialization_return serialize(r_string name, bool& value, int min_version);
             serialization_return serialize(r_string name, bool& value, int min_version, bool default_value);
             template <class Type>
-            serialization_return serialize(r_string name, ref<Type> &value, int min_version) {
+            serialization_return serialize(const r_string &name, ref<Type> &value, int min_version) {
                 if (_version < min_version) return serialization_return::version_too_new;
                 if (_isExporting || _p3 == 2) {
                     if (!value) return serialization_return::no_error;
@@ -596,11 +595,11 @@ namespace intercept {
             game_value(const std::initializer_list<game_value> &list_);
             game_value(auto_array<game_value> &&array_);
             template<class Type>
-            game_value(const auto_array<Type>& array_) : game_value(std::move(auto_array<game_value>(array_.begin(), array_.end()))) {
+            game_value(const auto_array<Type>& array_) : game_value(auto_array<game_value>(array_.begin(), array_.end())) {
                 static_assert(std::is_convertible<Type, game_value>::value);
             }
             template<class Type>
-            game_value(const std::vector<Type>& array_) : game_value(std::move(auto_array<game_value>(array_.begin(), array_.end()))) {
+            game_value(const std::vector<Type>& array_) : game_value(auto_array<game_value>(array_.begin(), array_.end())) {
                 static_assert(std::is_convertible<Type, game_value>::value);
             }
             game_value(const vector3 &vec_);
@@ -677,7 +676,7 @@ namespace intercept {
             serialization_return serialize(param_archive& ar) override;
 
             ref<game_data> data;
-            [[deprecated]] static void* operator new(const std::size_t sz_); //Should never be used
+            [[deprecated]] static void* operator new(std::size_t sz_); //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
         #ifndef __linux__
         protected:
@@ -699,8 +698,8 @@ namespace intercept {
             ~game_value_static();
             game_value_static(const game_value& copy) : game_value(copy) {}
             game_value_static(game_value&& move) : game_value(move) {}
-            game_value_static operator=(const game_value& copy) { data = copy.data; return *this; }
-            operator game_value() const { return *this; }
+            game_value_static& operator=(const game_value& copy) { data = copy.data; return *this; }
+            operator game_value() const { return static_cast<game_value>(*this); }
         };
 
         class I_debug_variable {
@@ -843,7 +842,7 @@ namespace intercept {
             game_data_array& operator = (game_data_array &&move_) noexcept;
             ~game_data_array();
             auto_array<game_value> data;
-            auto length() { return data.count(); }
+            auto length() const { return data.count(); }
             size_t hash() const { return __internal::pairhash(type_def, data.hash()); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
@@ -999,7 +998,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return type_def; }
+            static size_t hash() { return 0x1337; }
         };
 
 
@@ -1125,7 +1124,7 @@ namespace intercept {
             #if _WIN64 || __X86_64__
                 uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xD0);
             #else
-                uintptr_t vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
+                const auto vbase = *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(object->object) + 0xA0);
             #endif
                 class v1 {
                     virtual void doStuff() noexcept {}
@@ -1138,7 +1137,7 @@ namespace intercept {
             #ifdef __GNUC__
                 auto test = typex.name();
             #else
-                auto test = typex.raw_name();
+                const auto test = typex.raw_name();
             #endif
 
                 const auto hash = typex.hash_code();
@@ -1194,7 +1193,7 @@ namespace intercept {
 
     #pragma region RSQF
         class registered_sqf_function {
-            friend class sqf_functions;
+            friend class intercept::sqf_functions;
         public:
             constexpr registered_sqf_function() noexcept {}
             explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;

@@ -12,8 +12,6 @@ Arma 3 release.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/types.hpp"
 #include "shared/client_types.hpp"
 

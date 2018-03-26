@@ -43,10 +43,10 @@ namespace intercept {
     bool invoker::invoker_begin_register(const arguments&, std::string&) {
 
         sqf_functions::get().initialize();
-        _intercept_registerTypes_function = sqf_functions::get().registerFunction("interceptRegisterTypes"sv, "", userFunctionWrapper<_intercept_registerTypes>, types::GameDataType::BOOL, types::GameDataType::NAMESPACE);
-        _intercept_event_function = sqf_functions::get().registerFunction("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::GameDataType::BOOL, types::GameDataType::STRING, types::GameDataType::ARRAY);
-        _intercept_do_invoke_period_function = sqf_functions::get().registerFunction("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::GameDataType::BOOL);
-        _intercept_signal_function = sqf_functions::get().registerFunction("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::GameDataType::BOOL, types::GameDataType::ARRAY, types::GameDataType::ARRAY);
+        _intercept_registerTypes_function = sqf_functions::get().register_sqf_function("interceptRegisterTypes"sv, "", userFunctionWrapper<_intercept_registerTypes>, types::game_data_type::BOOL, types::game_data_type::NAMESPACE);
+        _intercept_event_function = sqf_functions::get().register_sqf_function("interceptEvent"sv, "", userFunctionWrapper<_intercept_event>, types::game_data_type::BOOL, types::game_data_type::STRING, types::game_data_type::ARRAY);
+        _intercept_do_invoke_period_function = sqf_functions::get().register_sqf_function("interceptOnFrame"sv, "", userFunctionWrapper<_intercept_do_invoke_period>, types::game_data_type::BOOL);
+        _intercept_signal_function = sqf_functions::get().register_sqf_function("interceptSignal"sv, "", userFunctionWrapper<_intercept_signal>, types::game_data_type::BOOL, types::game_data_type::ARRAY, types::game_data_type::ARRAY);
         return true;
     }
 
@@ -281,7 +281,7 @@ namespace intercept {
     }
 
     game_value invoker::_intercept_registerTypes(game_value_parameter left_arg_) {
-        using GameDataType = types::GameDataType;
+        using GameDataType = types::game_data_type;
 
         auto regInfo = loader::get().get_register_sqf_info();
 
@@ -298,28 +298,28 @@ namespace intercept {
         invoker::get().type_structures["ARRAY"sv] = structure;
         game_data_array::type_def = structure.first;
         game_data_array::data_type_def = structure.second;
-        game_data_array::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::ARRAY)];
+        game_data_array::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::ARRAY)];
         ref<game_data> gd_sc(regInfo._types[static_cast<size_t>(GameDataType::SCALAR)]->_createFunction(nullptr));
         structure = { gd_sc->get_vtable(), gd_sc->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "SCALAR"sv;
         invoker::get().type_structures["SCALAR"sv] = structure;
         game_data_number::type_def = structure.first;
         game_data_number::data_type_def = structure.second;
-        game_data_number::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::SCALAR)];
+        game_data_number::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::SCALAR)];
         ref<game_data> gd_bo(regInfo._types[static_cast<size_t>(GameDataType::BOOL)]->_createFunction(nullptr));
         structure = { gd_bo->get_vtable(), gd_bo->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "BOOL"sv;
         invoker::get().type_structures["BOOL"sv] = structure;
         game_data_bool::type_def = structure.first;
         game_data_bool::data_type_def = structure.second;
-        game_data_bool::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::BOOL)];
+        game_data_bool::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::BOOL)];
         ref<game_data> gd_st(regInfo._types[static_cast<size_t>(GameDataType::STRING)]->_createFunction(nullptr));
         structure = { gd_st->get_vtable(), gd_st->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "STRING"sv;
         invoker::get().type_structures["STRING"sv] = structure;
         game_data_string::type_def = structure.first;
         game_data_string::data_type_def = structure.second;
-        game_data_string::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::GameDataType::STRING)];
+        game_data_string::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::STRING)];
         ref<game_data> gd_code(regInfo._types[static_cast<size_t>(GameDataType::CODE)]->_createFunction(nullptr));
         structure = { gd_code->get_vtable(), gd_code->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "CODE"sv;

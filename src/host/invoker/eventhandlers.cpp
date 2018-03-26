@@ -90,7 +90,7 @@ namespace intercept {
     void eventhandlers::pre_start(game_value_parameter) {
         static bool preStartCalled = false;
         if (preStartCalled) throw std::runtime_error("pre_start called twice");
-        get()._ehFunc = sqf_functions::get().registerFunction("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, GameDataType::ANY, GameDataType::ARRAY, GameDataType::ARRAY);
+        get()._ehFunc = sqf_functions::get().register_sqf_function("InterceptClientEvent"sv, "Forwarder used to call functions in Intercept Plugins"sv, userFunctionWrapper<client_eventhandler>, game_data_type::ANY, game_data_type::ARRAY, game_data_type::ARRAY);
         LOG(INFO, "Pre-start");
         for (auto& module : extensions::get().modules()) {
             if (module.second.functions.pre_start) module.second.functions.pre_start();

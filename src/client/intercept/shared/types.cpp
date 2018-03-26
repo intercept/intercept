@@ -397,64 +397,64 @@ namespace intercept {
             return gs->create_gd_from_type(_type, &ar);
         }
 
-        static std::map<std::string, types::GameDataType> additionalTypes;
-        types::GameDataType __internal::game_datatype_from_string(const r_string& name) {
+        static std::map<std::string, types::game_data_type> additionalTypes;
+        types::game_data_type __internal::game_datatype_from_string(const r_string& name) {
             //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR"sv) return types::GameDataType::SCALAR;
-            if (name == "BOOL"sv) return types::GameDataType::BOOL;
-            if (name == "ARRAY"sv) return types::GameDataType::ARRAY;
-            if (name == "STRING"sv) return types::GameDataType::STRING;
-            if (name == "NOTHING"sv) return types::GameDataType::NOTHING;
-            if (name == "ANY"sv) return types::GameDataType::ANY;
-            if (name == "NAMESPACE"sv) return types::GameDataType::NAMESPACE;
-            if (name == "NaN"sv) return types::GameDataType::NaN;
-            if (name == "CODE"sv) return types::GameDataType::CODE;
-            if (name == "OBJECT"sv) return types::GameDataType::OBJECT;
-            if (name == "SIDE"sv) return types::GameDataType::SIDE;
-            if (name == "GROUP"sv) return types::GameDataType::GROUP;
-            if (name == "TEXT"sv) return types::GameDataType::TEXT;
-            if (name == "SCRIPT"sv) return types::GameDataType::SCRIPT;
-            if (name == "TARGET"sv) return types::GameDataType::TARGET;
-            if (name == "CONFIG"sv) return types::GameDataType::CONFIG;
-            if (name == "DISPLAY"sv) return types::GameDataType::DISPLAY;
-            if (name == "CONTROL"sv) return types::GameDataType::CONTROL;
-            if (name == "NetObject"sv) return types::GameDataType::NetObject;
-            if (name == "SUBGROUP"sv) return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER"sv) return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK"sv) return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD"sv) return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION"sv) return types::GameDataType::LOCATION;
+            if (name == "SCALAR"sv) return types::game_data_type::SCALAR;
+            if (name == "BOOL"sv) return types::game_data_type::BOOL;
+            if (name == "ARRAY"sv) return types::game_data_type::ARRAY;
+            if (name == "STRING"sv) return types::game_data_type::STRING;
+            if (name == "NOTHING"sv) return types::game_data_type::NOTHING;
+            if (name == "ANY"sv) return types::game_data_type::ANY;
+            if (name == "NAMESPACE"sv) return types::game_data_type::NAMESPACE;
+            if (name == "NaN"sv) return types::game_data_type::NaN;
+            if (name == "CODE"sv) return types::game_data_type::CODE;
+            if (name == "OBJECT"sv) return types::game_data_type::OBJECT;
+            if (name == "SIDE"sv) return types::game_data_type::SIDE;
+            if (name == "GROUP"sv) return types::game_data_type::GROUP;
+            if (name == "TEXT"sv) return types::game_data_type::TEXT;
+            if (name == "SCRIPT"sv) return types::game_data_type::SCRIPT;
+            if (name == "TARGET"sv) return types::game_data_type::TARGET;
+            if (name == "CONFIG"sv) return types::game_data_type::CONFIG;
+            if (name == "DISPLAY"sv) return types::game_data_type::DISPLAY;
+            if (name == "CONTROL"sv) return types::game_data_type::CONTROL;
+            if (name == "NetObject"sv) return types::game_data_type::NetObject;
+            if (name == "SUBGROUP"sv) return types::game_data_type::SUBGROUP;
+            if (name == "TEAM_MEMBER"sv) return types::game_data_type::TEAM_MEMBER;
+            if (name == "TASK"sv) return types::game_data_type::TASK;
+            if (name == "DIARY_RECORD"sv) return types::game_data_type::DIARY_RECORD;
+            if (name == "LOCATION"sv) return types::game_data_type::LOCATION;
             auto found = additionalTypes.find(static_cast<std::string>(name));
             if (found != additionalTypes.end())
                 return found->second;
-            return types::GameDataType::end;
+            return types::game_data_type::end;
         }
 
-        std::string __internal::to_string(GameDataType type) {
+        std::string __internal::to_string(game_data_type type) {
             switch (type) {
-                case GameDataType::SCALAR: return "SCALAR";
-                case GameDataType::BOOL: return "BOOL";
-                case GameDataType::ARRAY: return "ARRAY";
-                case GameDataType::STRING: return "STRING";
-                case GameDataType::NOTHING: return "NOTHING";
-                case GameDataType::ANY: return "ANY";
-                case GameDataType::NAMESPACE: return "NAMESPACE";
-                case GameDataType::NaN: return "NaN";
-                case GameDataType::CODE: return "CODE";
-                case GameDataType::OBJECT: return "OBJECT";
-                case GameDataType::SIDE: return "SIDE";
-                case GameDataType::GROUP: return "GROUP";
-                case GameDataType::TEXT: return "TEXT";
-                case GameDataType::SCRIPT: return "SCRIPT";
-                case GameDataType::TARGET: return "TARGET";
-                case GameDataType::CONFIG: return "CONFIG";
-                case GameDataType::DISPLAY: return "DISPLAY";
-                case GameDataType::CONTROL: return "CONTROL";
-                case GameDataType::SUBGROUP:  return "SUBGROUP";
-                case GameDataType::TEAM_MEMBER:return "TEAM_MEMBER";
-                case GameDataType::TASK: return "TASK";
-                case GameDataType::DIARY_RECORD: return "DIARY_RECORD";
-                case GameDataType::LOCATION: return "LOCATION";
+                case game_data_type::SCALAR: return "SCALAR";
+                case game_data_type::BOOL: return "BOOL";
+                case game_data_type::ARRAY: return "ARRAY";
+                case game_data_type::STRING: return "STRING";
+                case game_data_type::NOTHING: return "NOTHING";
+                case game_data_type::ANY: return "ANY";
+                case game_data_type::NAMESPACE: return "NAMESPACE";
+                case game_data_type::NaN: return "NaN";
+                case game_data_type::CODE: return "CODE";
+                case game_data_type::OBJECT: return "OBJECT";
+                case game_data_type::SIDE: return "SIDE";
+                case game_data_type::GROUP: return "GROUP";
+                case game_data_type::TEXT: return "TEXT";
+                case game_data_type::SCRIPT: return "SCRIPT";
+                case game_data_type::TARGET: return "TARGET";
+                case game_data_type::CONFIG: return "CONFIG";
+                case game_data_type::DISPLAY: return "DISPLAY";
+                case game_data_type::CONTROL: return "CONTROL";
+                case game_data_type::SUBGROUP:  return "SUBGROUP";
+                case game_data_type::TEAM_MEMBER:return "TEAM_MEMBER";
+                case game_data_type::TASK: return "TASK";
+                case game_data_type::DIARY_RECORD: return "DIARY_RECORD";
+                case game_data_type::LOCATION: return "LOCATION";
                 default:;
             }
             for (auto& it : additionalTypes) {
@@ -464,7 +464,7 @@ namespace intercept {
             return "";
         }
 
-        void __internal::add_game_datatype(const r_string name_, const GameDataType type_) {
+        void __internal::add_game_datatype(const r_string name_, const game_data_type type_) {
             additionalTypes[static_cast<std::string>(name_)] = type_;
         }
 
@@ -702,42 +702,42 @@ namespace intercept {
             return 0x0;
         }
 
-        types::GameDataType game_value::type_enum() const {//#TODO make a static sorted table in the same order as enum. turns this search into a binary search
-            if (!data) return GameDataType::NOTHING;
+        types::game_data_type game_value::type_enum() const {//#TODO make a static sorted table in the same order as enum. turns this search into a binary search
+            if (!data) return game_data_type::NOTHING;
             const auto _type = data->get_vtable();
             if (_type == game_data_object::type_def)
-                return GameDataType::OBJECT;
+                return game_data_type::OBJECT;
             if (_type == game_data_number::type_def)
-                return GameDataType::SCALAR;
+                return game_data_type::SCALAR;
             if (_type == game_data_string::type_def)
-                return GameDataType::STRING;
+                return game_data_type::STRING;
             if (_type == game_data_array::type_def)
-                return GameDataType::ARRAY;
+                return game_data_type::ARRAY;
             if (_type == game_data_bool::type_def)
-                return GameDataType::BOOL;
+                return game_data_type::BOOL;
             if (_type == game_data_group::type_def)
-                return GameDataType::GROUP;
+                return game_data_type::GROUP;
             if (_type == game_data_config::type_def)
-                return GameDataType::CONFIG;
+                return game_data_type::CONFIG;
             if (_type == game_data_control::type_def)
-                return GameDataType::CONTROL;
+                return game_data_type::CONTROL;
             if (_type == game_data_display::type_def)
-                return GameDataType::DISPLAY;
+                return game_data_type::DISPLAY;
             if (_type == game_data_location::type_def)
-                return GameDataType::LOCATION;
+                return game_data_type::LOCATION;
             if (_type == game_data_script::type_def)
-                return GameDataType::SCRIPT;
+                return game_data_type::SCRIPT;
             if (_type == game_data_side::type_def)
-                return GameDataType::SIDE;
+                return game_data_type::SIDE;
             if (_type == game_data_rv_text::type_def)
-                return GameDataType::TEXT;
+                return game_data_type::TEXT;
             if (_type == game_data_rv_namespace::type_def)
-                return GameDataType::NAMESPACE;
+                return game_data_type::NAMESPACE;
             if (_type == game_data_code::type_def)
-                return GameDataType::CODE;
+                return game_data_type::CODE;
             if (_type == game_data_nothing::type_def)
-                return GameDataType::NOTHING;
-            return GameDataType::ANY;
+                return game_data_type::NOTHING;
+            return game_data_type::ANY;
         }
 
         size_t game_value::size() const {
@@ -757,30 +757,30 @@ namespace intercept {
             auto type = type_enum();
             switch (type) {
 
-                case GameDataType::SCALAR:      //[[fallthrough]] //#TODO fix when MSVC get's their stuff together
-                case GameDataType::BOOL:        //[[fallthrough]]
-                case GameDataType::ARRAY:       //[[fallthrough]]
-                case GameDataType::STRING:      //[[fallthrough]]
-                case GameDataType::NOTHING:     //[[fallthrough]]
-                case GameDataType::ANY:         //[[fallthrough]]
-                case GameDataType::NAMESPACE:   //[[fallthrough]]
-                case GameDataType::NaN:         //[[fallthrough]]
-                case GameDataType::CODE:        //[[fallthrough]]
-                case GameDataType::SIDE:        //[[fallthrough]]
-                case GameDataType::TEXT:        //[[fallthrough]]
-                case GameDataType::TARGET:      //[[fallthrough]]
-                case GameDataType::NetObject:   //[[fallthrough]]
-                case GameDataType::SUBGROUP:    //[[fallthrough]]
-                case GameDataType::DIARY_RECORD:
+                case game_data_type::SCALAR:      //[[fallthrough]] //#TODO fix when MSVC get's their stuff together
+                case game_data_type::BOOL:        //[[fallthrough]]
+                case game_data_type::ARRAY:       //[[fallthrough]]
+                case game_data_type::STRING:      //[[fallthrough]]
+                case game_data_type::NOTHING:     //[[fallthrough]]
+                case game_data_type::ANY:         //[[fallthrough]]
+                case game_data_type::NAMESPACE:   //[[fallthrough]]
+                case game_data_type::NaN:         //[[fallthrough]]
+                case game_data_type::CODE:        //[[fallthrough]]
+                case game_data_type::SIDE:        //[[fallthrough]]
+                case game_data_type::TEXT:        //[[fallthrough]]
+                case game_data_type::TARGET:      //[[fallthrough]]
+                case game_data_type::NetObject:   //[[fallthrough]]
+                case game_data_type::SUBGROUP:    //[[fallthrough]]
+                case game_data_type::DIARY_RECORD:
                     return false;
-                case GameDataType::OBJECT:      //[[fallthrough]] //SL
-                case GameDataType::GROUP:       //[[fallthrough]] //LL
-                case GameDataType::SCRIPT:      //[[fallthrough]] //LL
-                case GameDataType::DISPLAY:     //[[fallthrough]] //LL
-                case GameDataType::CONTROL:     //[[fallthrough]] //LL
-                case GameDataType::TEAM_MEMBER: //[[fallthrough]] //SLP
-                case GameDataType::TASK:        //[[fallthrough]] //LL
-                case GameDataType::LOCATION://LL
+                case game_data_type::OBJECT:      //[[fallthrough]] //SL
+                case game_data_type::GROUP:       //[[fallthrough]] //LL
+                case game_data_type::SCRIPT:      //[[fallthrough]] //LL
+                case game_data_type::DISPLAY:     //[[fallthrough]] //LL
+                case game_data_type::CONTROL:     //[[fallthrough]] //LL
+                case game_data_type::TEAM_MEMBER: //[[fallthrough]] //SLP
+                case game_data_type::TASK:        //[[fallthrough]] //LL
+                case game_data_type::LOCATION://LL
                 { 
                     const uintptr_t datax = reinterpret_cast<uintptr_t>(data.get());
                     const uintptr_t data_1 = datax + sizeof(uintptr_t) * 3;
@@ -792,7 +792,7 @@ namespace intercept {
                     }
                     return true;
                 }
-                case GameDataType::CONFIG: {
+                case game_data_type::CONFIG: {
                     return !reinterpret_cast<game_data_config*>(data.get())->path.is_empty();//#TODO test
                 }
 
@@ -820,38 +820,38 @@ namespace intercept {
             if (!data) return 0;
 
             switch(type_enum()) {
-                case GameDataType::SCALAR: return reinterpret_cast<game_data_number*>(data.get())->hash();
-                case GameDataType::BOOL: return reinterpret_cast<game_data_bool*>(data.get())->hash();
-                case GameDataType::ARRAY: return reinterpret_cast<game_data_array*>(data.get())->hash();
-                case GameDataType::STRING: return reinterpret_cast<game_data_string*>(data.get())->hash();
-                case GameDataType::NOTHING: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case GameDataType::NAMESPACE: return reinterpret_cast<game_data_rv_namespace*>(data.get())->hash();
-                case GameDataType::NaN: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case GameDataType::CODE: return reinterpret_cast<game_data_code*>(data.get())->hash();
-                case GameDataType::OBJECT: return reinterpret_cast<game_data_object*>(data.get())->hash();
-                case GameDataType::SIDE: return reinterpret_cast<game_data_side*>(data.get())->hash();
-                case GameDataType::GROUP: return reinterpret_cast<game_data_group*>(data.get())->hash();
-                case GameDataType::TEXT: return reinterpret_cast<game_data_rv_text*>(data.get())->hash();
-                case GameDataType::SCRIPT: return reinterpret_cast<game_data_script*>(data.get())->hash();
-                case GameDataType::TARGET: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case GameDataType::CONFIG: return reinterpret_cast<game_data_config*>(data.get())->hash();
-                case GameDataType::DISPLAY: return reinterpret_cast<game_data_display*>(data.get())->hash();
-                case GameDataType::CONTROL: return reinterpret_cast<game_data_control*>(data.get())->hash();
+                case game_data_type::SCALAR: return reinterpret_cast<game_data_number*>(data.get())->hash();
+                case game_data_type::BOOL: return reinterpret_cast<game_data_bool*>(data.get())->hash();
+                case game_data_type::ARRAY: return reinterpret_cast<game_data_array*>(data.get())->hash();
+                case game_data_type::STRING: return reinterpret_cast<game_data_string*>(data.get())->hash();
+                case game_data_type::NOTHING: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case game_data_type::NAMESPACE: return reinterpret_cast<game_data_rv_namespace*>(data.get())->hash();
+                case game_data_type::NaN: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case game_data_type::CODE: return reinterpret_cast<game_data_code*>(data.get())->hash();
+                case game_data_type::OBJECT: return reinterpret_cast<game_data_object*>(data.get())->hash();
+                case game_data_type::SIDE: return reinterpret_cast<game_data_side*>(data.get())->hash();
+                case game_data_type::GROUP: return reinterpret_cast<game_data_group*>(data.get())->hash();
+                case game_data_type::TEXT: return reinterpret_cast<game_data_rv_text*>(data.get())->hash();
+                case game_data_type::SCRIPT: return reinterpret_cast<game_data_script*>(data.get())->hash();
+                case game_data_type::TARGET: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
+                case game_data_type::CONFIG: return reinterpret_cast<game_data_config*>(data.get())->hash();
+                case game_data_type::DISPLAY: return reinterpret_cast<game_data_display*>(data.get())->hash();
+                case game_data_type::CONTROL: return reinterpret_cast<game_data_control*>(data.get())->hash();
 #if defined(_DEBUG) && defined(_MSC_VER)
                 //If you encounter any of these give Dedmen a repro.
-                case GameDataType::ANY: __debugbreak(); break;//ANY should never be seen as a value.
-                case GameDataType::NetObject: __debugbreak(); break;
-                case GameDataType::SUBGROUP: __debugbreak(); break;
+                case game_data_type::ANY: __debugbreak(); break;//ANY should never be seen as a value.
+                case game_data_type::NetObject: __debugbreak(); break;
+                case game_data_type::SUBGROUP: __debugbreak(); break;
 #else
-                case GameDataType::ANY: return 0;
-                case GameDataType::NetObject: return 0;
-                case GameDataType::SUBGROUP: return 0;
+                case game_data_type::ANY: return 0;
+                case game_data_type::NetObject: return 0;
+                case game_data_type::SUBGROUP: return 0;
 #endif
-                case GameDataType::TEAM_MEMBER: return reinterpret_cast<game_data_team_member*>(data.get())->hash();
-                case GameDataType::TASK: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"Task %s (id %d)" or "No Task"
-                case GameDataType::DIARY_RECORD: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"No diary record" or... The text of that record? Text might be long and make this hash heavy
-                case GameDataType::LOCATION: return reinterpret_cast<game_data_location*>(data.get())->hash();
-                case GameDataType::end: return 0;
+                case game_data_type::TEAM_MEMBER: return reinterpret_cast<game_data_team_member*>(data.get())->hash();
+                case game_data_type::TASK: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"Task %s (id %d)" or "No Task"
+                case game_data_type::DIARY_RECORD: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"No diary record" or... The text of that record? Text might be long and make this hash heavy
+                case game_data_type::LOCATION: return reinterpret_cast<game_data_location*>(data.get())->hash();
+                case game_data_type::end: return 0;
             }
 
             return types::__internal::pairhash<uintptr_t,uintptr_t>(data->get_vtable(),reinterpret_cast<uintptr_t>(data.get()));

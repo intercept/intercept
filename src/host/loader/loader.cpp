@@ -337,31 +337,31 @@ namespace intercept {
         }
 
         auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR"sv) return types::GameDataType::SCALAR;
-            if (name == "BOOL"sv) return types::GameDataType::BOOL;
-            if (name == "ARRAY"sv) return types::GameDataType::ARRAY;
-            if (name == "STRING"sv) return types::GameDataType::STRING;
-            if (name == "NOTHING"sv) return types::GameDataType::NOTHING;
-            if (name == "ANY"sv) return types::GameDataType::ANY;
-            if (name == "NAMESPACE"sv) return types::GameDataType::NAMESPACE;
-            if (name == "NaN"sv) return types::GameDataType::NaN;
-            if (name == "CODE"sv) return types::GameDataType::CODE;
-            if (name == "OBJECT"sv) return types::GameDataType::OBJECT;
-            if (name == "SIDE"sv) return types::GameDataType::SIDE;
-            if (name == "GROUP"sv) return types::GameDataType::GROUP;
-            if (name == "TEXT"sv) return types::GameDataType::TEXT;
-            if (name == "SCRIPT"sv) return types::GameDataType::SCRIPT;
-            if (name == "TARGET"sv) return types::GameDataType::TARGET;
-            if (name == "CONFIG"sv) return types::GameDataType::CONFIG;
-            if (name == "DISPLAY"sv) return types::GameDataType::DISPLAY;
-            if (name == "CONTROL"sv) return types::GameDataType::CONTROL;
-            if (name == "NetObject"sv) return types::GameDataType::NetObject;
-            if (name == "SUBGROUP"sv) return types::GameDataType::SUBGROUP;
-            if (name == "TEAM_MEMBER"sv) return types::GameDataType::TEAM_MEMBER;
-            if (name == "TASK"sv) return types::GameDataType::TASK;
-            if (name == "DIARY_RECORD"sv) return types::GameDataType::DIARY_RECORD;
-            if (name == "LOCATION"sv) return types::GameDataType::LOCATION;
-            return types::GameDataType::end;
+            if (name == "SCALAR"sv) return types::game_data_type::SCALAR;
+            if (name == "BOOL"sv) return types::game_data_type::BOOL;
+            if (name == "ARRAY"sv) return types::game_data_type::ARRAY;
+            if (name == "STRING"sv) return types::game_data_type::STRING;
+            if (name == "NOTHING"sv) return types::game_data_type::NOTHING;
+            if (name == "ANY"sv) return types::game_data_type::ANY;
+            if (name == "NAMESPACE"sv) return types::game_data_type::NAMESPACE;
+            if (name == "NaN"sv) return types::game_data_type::NaN;
+            if (name == "CODE"sv) return types::game_data_type::CODE;
+            if (name == "OBJECT"sv) return types::game_data_type::OBJECT;
+            if (name == "SIDE"sv) return types::game_data_type::SIDE;
+            if (name == "GROUP"sv) return types::game_data_type::GROUP;
+            if (name == "TEXT"sv) return types::game_data_type::TEXT;
+            if (name == "SCRIPT"sv) return types::game_data_type::SCRIPT;
+            if (name == "TARGET"sv) return types::game_data_type::TARGET;
+            if (name == "CONFIG"sv) return types::game_data_type::CONFIG;
+            if (name == "DISPLAY"sv) return types::game_data_type::DISPLAY;
+            if (name == "CONTROL"sv) return types::game_data_type::CONTROL;
+            if (name == "NetObject"sv) return types::game_data_type::NetObject;
+            if (name == "SUBGROUP"sv) return types::game_data_type::SUBGROUP;
+            if (name == "TEAM_MEMBER"sv) return types::game_data_type::TEAM_MEMBER;
+            if (name == "TASK"sv) return types::game_data_type::TASK;
+            if (name == "DIARY_RECORD"sv) return types::game_data_type::DIARY_RECORD;
+            if (name == "LOCATION"sv) return types::game_data_type::LOCATION;
+            return types::game_data_type::end;
         };
 
         //Game Types
@@ -385,7 +385,7 @@ namespace intercept {
             //OutputDebugStringA("\n");
 
             const auto type = typeToEnum(entry->_name);
-            if (poolAlloc && type != types::GameDataType::end) {
+            if (poolAlloc && type != types::game_data_type::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }

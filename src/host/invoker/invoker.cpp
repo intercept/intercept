@@ -444,19 +444,18 @@ namespace intercept {
             _invoke_mutex.lock();
         }
         ++_thread_count;
-#ifdef _DEBUG
+    #ifdef _DEBUG
         LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
-#endif
+    #endif
     }
 
     void invoker::unlock() {
-        if (!_main_thread) {
-            --_thread_count;
-            _invoke_mutex.unlock();
-#ifdef _DEBUG
-            LOG(DEBUG, "Client Thread RELEASE EXCLUSIVE");
-#endif
-        }
+        if (_main_thread) return;
+        --_thread_count;
+        _invoke_mutex.unlock();
+    #ifdef _DEBUG
+        LOG(DEBUG, "Client Thread RELEASE EXCLUSIVE");
+    #endif
     }
 
     invoker::_invoker_unlock::_invoker_unlock(invoker * instance_, bool all_threads_, bool delayed_) : _unlocked(false), _instance(instance_), _all(all_threads_) {

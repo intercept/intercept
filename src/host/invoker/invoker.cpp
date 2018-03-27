@@ -427,6 +427,7 @@ namespace intercept {
         return true;
     }
 
+
     void invoker::lock() {
         
         if (_main_thread) return;

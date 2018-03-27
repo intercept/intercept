@@ -627,8 +627,8 @@ namespace intercept::types {
             if (!data()) return other_.empty(); //empty?
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
 
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.cbegin(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+            return std::equal(other_.cbegin(), other_.cend(),
+                _ref->cbegin(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         }
 
         ///== is case insensitive just like scripting

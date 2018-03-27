@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include <utility>
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -6,7 +7,7 @@ namespace intercept {
     namespace sqf {
         config_entry::config_entry() : _initialized(false) {
         }
-        config_entry::config_entry(config entry_) : _config_entry(entry_), _initialized(true) {}
+        config_entry::config_entry(config entry_) : _config_entry(std::move(entry_)), _initialized(true) {}
         config_entry::config_entry(config_entry const &copy_) {
             _config_entry = copy_._config_entry;
             _initialized = copy_._initialized;
@@ -14,11 +15,6 @@ namespace intercept {
         config_entry::config_entry(config_entry &&move_) noexcept {
             _config_entry = std::move(move_._config_entry);
             _initialized = move_._initialized;
-        }
-        config_entry &config_entry::operator=(const config_entry &copy_) {
-            _config_entry = copy_._config_entry;
-            _initialized = copy_._initialized;
-            return *this;
         }
         config_entry &config_entry::operator=(config_entry &&move_) noexcept {
             if (this == &move_)

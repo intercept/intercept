@@ -24,7 +24,7 @@ namespace intercept {
             config_entry(types::config entry_);
             config_entry(config_entry const &copy_);
             config_entry(config_entry &&move_) noexcept;
-            config_entry &operator=(const config_entry &copy_);
+            config_entry &operator=(const config_entry &copy_) = default;
             config_entry &operator=(config_entry &&move_) noexcept;
             config_entry operator>>(sqf_string_const_ref entry_);
 

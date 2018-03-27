@@ -448,6 +448,8 @@ namespace intercept::types {
         size_t size() const noexcept { return _size; }
         Type* data() noexcept { return &_data; }
         const Type* data() const noexcept { return &_data; }
+        Type& front() noexcept { return _data; }
+        const Type& front() const noexcept { return _data; }
         iterator begin() noexcept { return iterator(&_data); }
         iterator end() noexcept { return iterator((&_data) + _size); }
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }

@@ -6,6 +6,11 @@
 #include <cstring>
 #include <vector>
 
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
 namespace intercept::types {
     
 #pragma region Allocator
@@ -505,12 +510,12 @@ namespace intercept::types {
         //Specialty function to copy less elements or to allocate more space
         static compact_array* create(const compact_array &other, size_t element_count) {
             const size_t size = other.size();
-            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
+            auto buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
             new (buffer) compact_array(element_count);
             std::memset(buffer->data(), 0, element_count * sizeof(Type));
             const auto elements_to_copy = std::min(size, element_count);
 
-            std::copy(other.begin(), other.begin() + elements_to_copy, buffer->begin());
+            std::copy(other.cbegin(), other.cbegin() + elements_to_copy, buffer->begin());
 
             return buffer;
         }
@@ -1522,7 +1527,7 @@ namespace intercept::types {
 
 #pragma endregion
 
-
-
-
 }
+
+#pragma pop_macro("min")
+#pragma pop_macro("max")

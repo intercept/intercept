@@ -15,6 +15,13 @@
 #include <memory>
 #include "containers.hpp"
 
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+
+
 using namespace std::literals::string_view_literals;
 
 namespace intercept {
@@ -38,34 +45,6 @@ namespace intercept {
         using nular_function = game_value(*) (uintptr_t state);
         using unary_function = game_value(*) (uintptr_t state, game_value_parameter);
         using binary_function = game_value(*) (uintptr_t state, game_value_parameter, game_value_parameter);
-
-        enum class [[deprecated("use game_data_type")]] GameDataType{
-            SCALAR,
-            BOOL,
-            ARRAY,
-            STRING,
-            NOTHING,
-            ANY,
-            NAMESPACE,
-            NaN,
-            CODE,
-            OBJECT,
-            SIDE,
-            GROUP,
-            TEXT,
-            SCRIPT,
-            TARGET,
-            CONFIG,
-            DISPLAY,
-            CONTROL,
-            NetObject,
-            SUBGROUP,
-            TEAM_MEMBER,
-            TASK,
-            DIARY_RECORD,
-            LOCATION,
-            end
-        };
 
         enum class game_data_type {
             SCALAR,
@@ -94,6 +73,8 @@ namespace intercept {
             LOCATION,
             end
         };
+
+        [[deprecated("use game_data_type")]] typedef game_data_type GameDataType;
 
         typedef std::set<std::string> value_types;
         typedef uintptr_t value_type;
@@ -1283,6 +1264,8 @@ namespace std {
 }
 
 
+#pragma pop_macro("min")
+#pragma pop_macro("max")
 
 
 

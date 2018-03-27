@@ -1179,6 +1179,7 @@ namespace intercept {
             constexpr registered_sqf_function() noexcept {}
             explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;
             void clear() noexcept { _function = nullptr; }
+            bool has_function() const noexcept { return _function.get() != nullptr; }
         private:
             std::shared_ptr<registered_sqf_function_impl> _function;
         };

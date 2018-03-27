@@ -1066,7 +1066,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctrlmapscreentoworld__control__array__ret__array, ctrl_, screen_pos_);
         }
 
-        void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
+        void draw_rectangle(const control &ctrl_, vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
             game_value args({center_pos_,
                              a_,
                              b_,

@@ -79,7 +79,7 @@ namespace intercept {
         void halt() {
             __helpers::__empty_nular(__sqf::nular__halt__ret__nothing);
         }
-        void throw_exception(const game_value exception_) {
+        void throw_exception(game_value exception_) {
             host::functions.invoke_raw_unary(__sqf::unary__throw__any__ret__nothing, exception_);
         }
     }  // namespace sqf

@@ -126,7 +126,7 @@ namespace intercept {
             return config(host::functions.invoke_raw_nular(__sqf::nular__missionconfigfile__ret__config));
         }
 
-        game_value get_array(const config config_) {
+        game_value get_array(config config_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getarray__config__ret__array, config_);
         }
 

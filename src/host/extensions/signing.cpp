@@ -296,7 +296,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
     switch (status.dwError) {
         case 0x0: {
             returnCode = coreSigned ? security_class::core : security_class::self_signed;
-        }
+        }break;
         case CRYPT_E_NO_REVOCATION_CHECK: {//No revocation list for cert
             if (chainContext->rgpChain[chainContext->cChain - 1]->cElement > 1 //have found parent cert
                 &&
@@ -308,8 +308,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
                 //#TODO warn
             }
             returnCode = coreSigned ? security_class::core : security_class::self_signed;
-        }
-            break;
+        }break;
         case CERT_E_REVOCATION_FAILURE:
         case CRYPT_E_REVOCATION_OFFLINE:
             returnCode = coreSigned ? security_class::core : security_class::self_signed;

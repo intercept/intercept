@@ -451,9 +451,9 @@ namespace intercept::types {
         Type& front() noexcept { return _data; }
         const Type& front() const noexcept { return _data; }
         iterator begin() noexcept { return iterator(&_data); }
-        iterator end() noexcept { return iterator((&_data) + _size); }
+        iterator end() noexcept { return iterator((&_data) + _size - 1); }
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }
-        const_iterator cend() const noexcept { return const_iterator((&_data) + _size); }
+        const_iterator cend() const noexcept { return const_iterator((&_data) + _size - 1); }
 
         const Type& operator[](const size_t index_) {
             return *(begin() + index_);

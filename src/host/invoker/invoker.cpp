@@ -429,26 +429,24 @@ namespace intercept {
 
     void invoker::lock() {
         
-        if (!_main_thread) {
+        if (_main_thread) return;
         
-            //If the thread is already locked. We don't want to check if we are allowed to lock.
-            //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
-            //lock the invoker again before it can unlock it's first lock.
-            //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
-            //But thread needs to lock it so it can unlock the first lock.
-            if (_thread_count == 0) {
-                std::unique_lock<std::mutex> lock(_state_mutex);
-                _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
-                _invoke_mutex.lock();
-            }
-            else {
-                _invoke_mutex.lock();
-            }
-            ++_thread_count;
-#ifdef _DEBUG
-            LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
-#endif
+        //If the thread is already locked. We don't want to check if we are allowed to lock.
+        //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
+        //lock the invoker again before it can unlock it's first lock.
+        //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
+        //But thread needs to lock it so it can unlock the first lock.
+        if (_thread_count == 0) {
+            std::unique_lock<std::mutex> lock(_state_mutex);
+            _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
+            _invoke_mutex.lock();
+        } else {
+            _invoke_mutex.lock();
         }
+        ++_thread_count;
+#ifdef _DEBUG
+        LOG(DEBUG, "Client Thread ACQUIRE EXCLUSIVE");
+#endif
     }
 
     void invoker::unlock() {

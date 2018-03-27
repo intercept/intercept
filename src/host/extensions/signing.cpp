@@ -215,7 +215,8 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
     ChainPara.RequestedUsage = CertUsage;
 
     CERT_CHAIN_ENGINE_CONFIG ChainConfig;
-    ChainConfig.cbSize = sizeof(CERT_CHAIN_ENGINE_CONFIG);
+    //- sizeof(DWORD) removes WIN8 only flag(dwExclusiveFlags) and makes this win7 compatible
+    ChainConfig.cbSize = sizeof(CERT_CHAIN_ENGINE_CONFIG) - sizeof(DWORD);
     ChainConfig.hRestrictedRoot = nullptr;
     ChainConfig.hRestrictedTrust = nullptr;
     ChainConfig.hRestrictedOther = nullptr;

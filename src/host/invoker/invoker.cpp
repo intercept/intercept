@@ -20,8 +20,16 @@ namespace intercept {
     unary_function invoker::_register_hook_trampoline = nullptr;
     uintptr_t invoker::sqf_game_state = 0;
 
-    invoker::invoker() : _thread_count(0), _patched(false), _attached(false) {
+    /*
+    *   thread_local means that an instance of this variable will exist in each thread.
+    *   Changes made to the variable will only apply in the very same thread.
+    *   In this case, the constructor of invoker is only called from mainthread,
+    *   thus the variable be only be true in main thread
+    */
+    static thread_local bool _main_thread = false;
 
+    invoker::invoker() : _thread_count(0), _patched(false), _attached(false) {
+        _main_thread = true;
     }
 
     invoker::~invoker() {
@@ -426,6 +434,9 @@ namespace intercept {
 
 
     void invoker::lock() {
+        
+        if (_main_thread) return;
+        
         //If the thread is already locked. We don't want to check if we are allowed to lock.
         //This would deadlock if the invoker wants to give control back to Engine but a thread needs to recursively
         //lock the invoker again before it can unlock it's first lock.
@@ -445,6 +456,7 @@ namespace intercept {
     }
 
     void invoker::unlock() {
+        if (_main_thread) return;
         --_thread_count;
         _invoke_mutex.unlock();
     #ifdef _DEBUG

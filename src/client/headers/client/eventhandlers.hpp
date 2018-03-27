@@ -46,7 +46,8 @@ namespace intercept::client {
     /// @private
     struct EHIdentifier_hasher {
         size_t operator()(const intercept::client::EHIdentifier& x) const {
-            return intercept::types::__internal::pairhash(x.internal_id, x.arma_eh_id);
+            using intercept::types::__internal::pairhash;
+            return pairhash(pairhash(x.internal_id, x.arma_eh_id), x.EHType);
         }
     };
 

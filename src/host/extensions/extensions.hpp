@@ -54,7 +54,7 @@ namespace intercept {
         typedef void(CDECL *on_signal_func)(game_value_parameter this_);
         typedef void(CDECL *on_interface_unload_func)(r_string name_);
         typedef void(CDECL *register_interfaces_func)();
-        typedef void(CDECL *client_eventhandler_func)(game_value& retVal, int ehType, int32_t uid, int handle, game_value args);
+        typedef void(CDECL *client_eventhandler_func)(game_value& retVal, uint8_t ehType, int32_t uid, int handle, game_value args);
         typedef void(CDECL *client_eventhandlers_clear_func)();
         typedef bool(CDECL *is_signed_function)();
 

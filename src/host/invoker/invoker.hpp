@@ -291,7 +291,7 @@ namespace intercept {
         std::queue<game_data *> _to_delete;
 
         binary_function _get_variable_func;
-        
+
         /*!
         @brief A RAII style mutex handler for access to the RV Engine
 

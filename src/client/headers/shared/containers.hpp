@@ -414,8 +414,8 @@ namespace intercept::types {
             explicit const_iterator(const Type* p) noexcept : p_(p) {}
             const_iterator(const typename compact_array<Type>::iterator& other) : p_(other.p_) {}
             const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
-            const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
-            const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return other; }
+            const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return *this; }
+            const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return *this; }
 
             const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
             const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++

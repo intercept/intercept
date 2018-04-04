@@ -664,6 +664,11 @@ namespace intercept::types {
             return strcmp(data(), other_.data()) < 0;
         }
 
+        bool operator > (const r_string& other_) const {
+            if (!data()) return false; //empty?
+            return strcmp(data(), other_.data()) < 0;
+        }
+
         friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
             _os << _s.data();
             return _os;

@@ -315,14 +315,14 @@ namespace intercept::types {
         ~unique_ref() { clear(); }
 
         unique_ref& operator = (Type* other) {
-            if (_ref == other) return;
+            if (_ref == other) return *this;
             clear();
             _ref = other;
             return *this;
         }
 
         unique_ref& operator = (const unique_ref& other) {
-            if (other._ref == _ref) return;
+            if (other._ref == _ref) return *this;
             clear();
             _ref = other._ref;
             other._ref = nullptr;//We take ownership
@@ -616,8 +616,7 @@ namespace intercept::types {
         ///== is case insensitive just like scripting
         bool operator == (const char *other_) const {
             if (!data())  return !other_ || !*other_; //empty?
-            std::vector<int> x;
-            
+
             return std::equal(_ref->cbegin(), _ref->cend(),
                 compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         }
@@ -666,7 +665,7 @@ namespace intercept::types {
 
         bool operator > (const r_string& other_) const {
             if (!data()) return false; //empty?
-            return strcmp(data(), other_.data()) < 0;
+            return strcmp(data(), other_.data()) > 0;
         }
 
         friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {

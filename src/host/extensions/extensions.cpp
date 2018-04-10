@@ -180,11 +180,20 @@ namespace intercept {
             return false;
         }
 #else
+
+        wchar_t buf[MAX_PATH]{0};
+        GetDllDirectoryW(MAX_PATH, buf); //#TODO check if arma puts anything in here
+        SetDllDirectoryW(L"path here OwO");
+
         auto dllHandle = LoadLibraryW(full_path->c_str());
         if (!dllHandle) {
             LOG(ERROR, "LoadLibrary() failed, e={} [{}]", GetLastError(), path_);
             return false;
         }
+        if (buf[0] == 0)
+            SetDllDirectoryW(nullptr);
+        else
+            SetDllDirectoryW(buf);
 #endif
 
     #ifndef __linux__

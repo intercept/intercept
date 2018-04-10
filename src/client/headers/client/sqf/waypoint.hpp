@@ -12,8 +12,7 @@ associated structs and enumerations.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
+#include <utility>
 #include "shared/types.hpp"
 #include "shared/client_types.hpp"
 
@@ -26,8 +25,8 @@ namespace intercept {
             group wgroup;
             float windex;
 
-            waypoint(const group &rv_game_value, uint32_t windex)
-                : wgroup(rv_game_value),
+            waypoint(group rv_game_value, uint32_t windex)
+                : wgroup(std::move(rv_game_value)),
                   windex(static_cast<float>(windex)) {}
 
             waypoint(const game_value &from_)
@@ -35,7 +34,7 @@ namespace intercept {
                   windex(from_[1]) {}
 
             operator game_value() const {
-                return {wgroup, windex};
+                return {static_cast<game_value>(wgroup), windex};
             }
 
             static const std::string_view __speed_lookup[4];

@@ -12,8 +12,6 @@ These are used to Manipulate Player or Vehicle Inventories.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -73,7 +71,7 @@ namespace intercept {
             explicit rv_container(const game_value &from_gv_) : type(from_gv_[0]),
                                                        container(from_gv_[1]) {}
             operator game_value() const {
-                return game_value({type, container});
+                return game_value({type, static_cast<game_value>(container)});
             }
         };
         struct rv_weapon_accessories {
@@ -403,7 +401,7 @@ namespace intercept {
             rv_magazine_info secondary_muzzle_magazine;
             std::string bipod;
 
-            rv_weapon_info() {}
+            rv_weapon_info() = default;
 
             rv_weapon_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
@@ -420,7 +418,7 @@ namespace intercept {
             }
 
             explicit operator game_value() const {
-                if (weapon != "") {
+                if (!weapon.empty()) {
                     return game_value({weapon,
                                        silencer,
                                        laser,
@@ -458,7 +456,7 @@ namespace intercept {
             std::string container;
             std::vector<rv_magazine_info> items;
 
-            rv_container_info() {}
+            rv_container_info() = default;
 
             rv_container_info(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() > 0) {
@@ -466,14 +464,14 @@ namespace intercept {
                     auto &arr = ret_game_value_[1].to_array();
                     items.reserve(arr.count());
                     for (auto &it : arr)
-                        items.push_back(it);
+                        items.emplace_back(it);
                 } else {
                     container = "";
                 }
             }
 
             explicit operator game_value() const {
-                if (container != "") {
+                if (!container.empty()) {
                     return game_value({container,
                                        auto_array<game_value>(items.begin(), items.end())});
                 } else {
@@ -506,7 +504,7 @@ namespace intercept {
             rv_weapon_info binocular;
             std::vector<std::string> assigned_items;
             
-            rv_unit_loadout() {}
+            rv_unit_loadout() = default;
 
             rv_unit_loadout(const game_value &ret_game_value_) {
                 if (ret_game_value_.size() == 0) return;

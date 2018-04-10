@@ -99,8 +99,7 @@ namespace intercept {
 
                 T theta = std::acos(dot) * percent;
                 vector3_base relative = end - start*dot;
-                relative.normalize();
-                return ((start * std::cos(theta)) + (relative*std::sin(theta)));
+                return ((start * std::cos(theta)) + (relative.normalize()*std::sin(theta)));
             }
             /// @brief spherical linear interpolate
             constexpr vector3_base slerp(const vector3_base& B, const T p) const noexcept {
@@ -186,8 +185,7 @@ namespace intercept {
 
                 T theta = std::acos(dot) * percent;
                 vector2_base relative = end - start*dot;
-                relative.normalize();
-                return ((start * std::cos(theta)) + (relative*std::sin(theta)));
+                return ((start * std::cos(theta)) + (relative.normalize()*std::sin(theta)));
             }
             /// @brief spherical linear interpolate
             constexpr vector2_base slerp(const vector2_base& B, const T p) const noexcept {

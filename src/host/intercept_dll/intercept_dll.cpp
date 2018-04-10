@@ -142,7 +142,8 @@ void
 __attribute__((destructor))
 #endif
 CleanupLogging() {
-    logging::logfile->flush();
+    if (logging::logfile)
+        logging::logfile->flush();
     spdlog::drop_all();
 }
 

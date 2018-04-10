@@ -45,7 +45,7 @@ namespace intercept::cert {
 #define CERT_ENTER
 #define CERT_EXIT
 
-    static const signing::security_class current_security_class = signing::security_class::not_signed;
+    static const signing::security_class current_security_class = signing::security_class::core;
 #endif
 
 

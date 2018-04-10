@@ -11,8 +11,6 @@ These are functions used to handle AI or player groups.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -84,7 +82,7 @@ namespace intercept {
         std::vector<bool> group_icons_visible();
         rv_group_icon get_group_icon(const group &group_, int &id_);
         void group_select_unit(const object &player_, const object &unit_, bool select_);
-        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_);
+        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, vector2 offset_);
         void set_formation(const group &group_, sqf_string_const_ref formation_);
         void set_form_dir(const group &group_, float heading_);
         void set_group_icon(const group &group_, int id_, sqf_string_const_ref icon_, const vector2 &offset_);

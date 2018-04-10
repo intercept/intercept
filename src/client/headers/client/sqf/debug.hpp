@@ -11,8 +11,6 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -39,6 +37,6 @@ namespace intercept {
 
         void enable_diag_legend(bool value_);
         void halt();  //only in dev version - at least wiki says so
-        void throw_exception(const game_value exception_);
+        void throw_exception(game_value exception_);
     }  // namespace sqf
 }  // namespace intercept

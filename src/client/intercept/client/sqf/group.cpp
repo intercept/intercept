@@ -168,7 +168,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
         }
 
-        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, const vector2 offset_) {
+        void set_group_icon(const group &group_, float icon_id, sqf_string_const_ref icon_path_, vector2 offset_) {
             host::functions.invoke_raw_binary(__sqf::binary__setgroupicon__group__array__ret__nothing, group_, {icon_id, icon_path_, offset_});
         }
         void set_formation(const group &group_, sqf_string_const_ref formation_) {

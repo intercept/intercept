@@ -1,5 +1,4 @@
 #pragma once
-#include "../shared.hpp"
 #include "types.hpp"
 #include <variant>
 namespace intercept::types {
@@ -85,11 +84,13 @@ class internal_object : public game_value {
             });
         }
 
-        explicit rv_color(const game_value &ret_game_value_) :
-            red(ret_game_value_[0]),
-            green(ret_game_value_[1]),
-            blue(ret_game_value_[2]),
-            alpha(ret_game_value_[3]) {}
+          rv_color() = default;
+
+          explicit rv_color(const game_value &ret_game_value_) :
+              red(ret_game_value_[0]),
+              green(ret_game_value_[1]),
+              blue(ret_game_value_[2]),
+              alpha(ret_game_value_[3]) {}
 
         rv_color(float red_, float green_, float blue_, float alpha_) noexcept :
             red(red_),
@@ -104,7 +105,7 @@ class internal_object : public game_value {
         sqf_string_const_ref(const std::string& ref) noexcept : _var(std::string_view(ref)) {}
         sqf_string_const_ref(r_string ref) noexcept : _var(std::move(ref)) {}
         sqf_string_const_ref(const game_value& ref) : _var(r_string(ref)) {}
-        sqf_string_const_ref(std::string_view ref) noexcept : _var(std::move(ref)) {}
+        sqf_string_const_ref(std::string_view ref) noexcept : _var(ref) {}
         sqf_string_const_ref(const char* ref) noexcept : _var(std::string_view(ref)) {}
         operator std::string_view() const {
             if (std::holds_alternative<std::string_view>(_var))
@@ -201,47 +202,12 @@ class internal_object : public game_value {
         float bounce_on_surface;
         std::vector<rv_color> emissive_color;
 
-        operator game_value() {
-            std::vector<game_value> color_gv, emissive_color_gv;
-            for (auto c : color) {
-                color_gv.push_back(c);
-            }
-            for (auto ec : emissive_color) {
-                emissive_color_gv.push_back(ec);
-            }
-            return game_value(std::vector<game_value>({
-                shape,
-                animation_name,
-                type,
-                timer_period,
-                lifetime,
-                position,
-                move_velocity,
-                rotation_velocity,
-                weight,
-                volume,
-                rubbing,
-                size,
-                color_gv,
-                animation_phase,
-                rand_dir_period,
-                rand_dir_intensity,
-                on_timer,
-                before_destroy,
-                follow,
-                angle,
-                on_surface,
-                bounce_on_surface,
-                emissive_color_gv
-            }));
-        }
-
         operator game_value() const {
             std::vector<game_value> color_gv, emissive_color_gv;
-            for (auto c : color) {
+            for (const auto& c : color) {
                 color_gv.push_back(c);
             }
-            for (auto ec : emissive_color) {
+            for (const auto& ec : emissive_color) {
                 emissive_color_gv.push_back(ec);
             }
             return game_value(std::vector<game_value>({
@@ -263,7 +229,7 @@ class internal_object : public game_value {
                 rand_dir_intensity,
                 on_timer,
                 before_destroy,
-                follow,
+                static_cast<game_value>(follow),
                 angle,
                 on_surface,
                 bounce_on_surface,

@@ -896,7 +896,7 @@ class CfgFunctions {
 #define EH_CLASS_DEF(x,y) class Extended_##y##_EventHandlers { \
     class All { \
         class Intercept { \
-            y = QUOTE(isNil{[ARR_2(QUOTE(QUOTE(x)), _this)] call (uiNamespace getVariable 'intercept_fnc_event');};); \
+            y = QUOTE([ARR_2('x', _this)] call (uiNamespace getVariable 'intercept_fnc_event');); \
         }; \
     }; \
 }

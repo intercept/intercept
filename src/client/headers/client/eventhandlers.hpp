@@ -46,7 +46,8 @@ namespace intercept::client {
     /// @private
     struct EHIdentifier_hasher {
         size_t operator()(const intercept::client::EHIdentifier& x) const {
-            return intercept::types::__internal::pairhash(x.internal_id, x.arma_eh_id);
+            using intercept::types::__internal::pairhash;
+            return pairhash(pairhash(x.internal_id, x.arma_eh_id), x.EHType);
         }
     };
 
@@ -58,7 +59,7 @@ namespace intercept::client {
      */
     class EHIdentifierHandle {
     public:
-        constexpr EHIdentifierHandle() noexcept {}
+        constexpr EHIdentifierHandle() = default;
         EHIdentifierHandle(EHIdentifier ident, std::function<void(EHIdentifier&)> onDelete) : handle(std::make_shared<impl>(std::move(ident), std::move(onDelete))) {}
         EHIdentifierHandle& operator=(const EHIdentifierHandle& other){
             //This is extra protection against deleting already deleted EHs.

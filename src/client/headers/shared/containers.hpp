@@ -4,6 +4,12 @@
 #include <algorithm>
 #include <optional>
 #include <cstring>
+#include <vector>
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
 
 namespace intercept::types {
     
@@ -44,7 +50,7 @@ namespace intercept::types {
         template<class Other>
         using rebind_traits = std::allocator_traits<rv_allocator<Other>>;
 
-        rv_allocator() {}
+        rv_allocator() = default;
         template<class Other>
         rv_allocator(const rv_allocator<Other>&) {}
         template<class Other>
@@ -120,7 +126,7 @@ namespace intercept::types {
     };
 
     class rv_pool_allocator {
-        char pad_0x0000[0x24]; //0x0000
+        [[maybe_unused]] char pad_0x0000[0x24]; //0x0000
     public:
         const char* _allocName;
 
@@ -145,7 +151,7 @@ namespace intercept::types {
         static const size_t buffersize_bytes = (Count* sizeof(Type));
         //Raw size in count of buffer_type elements
         static const size_t buffersize_count = (buffersize_bytes + sizeof(buffer_type) - 1) / sizeof(buffer_type);
-        int dummy;
+        int dummy{0};
         buffer_type buf[buffersize_count]{ 0 };
         bool has_data{ false };
     public:
@@ -153,19 +159,19 @@ namespace intercept::types {
         Type* allocate(size_t count_) {
             if (count_ <= Count && !has_data) {
                 has_data = true;
-                return (Type*) buf;
+                return reinterpret_cast<Type*>(buf);
             }
             return Fallback::allocate(count_);
         }
         Type* reallocate(Type* ptr_, size_t count_) {
-            if (ptr_ == (Type*)buf) {
-                if (count_ <= Count) return (Type*) buf;
+            if (ptr_ == reinterpret_cast<Type*>(buf)) {
+                if (count_ <= Count) return reinterpret_cast<Type*>(buf);
                 return nullptr;
             }
             return Fallback::reallocate(ptr_, count_);
         }
         void deallocate(Type* ptr_, size_t count_ = 1) {
-            if (ptr_ != (Type*)buf) Fallback::deallocate(ptr_, count_);
+            if (ptr_ != reinterpret_cast<Type*>(buf)) Fallback::deallocate(ptr_, count_);
             else has_data = false;
         }
 
@@ -237,7 +243,7 @@ namespace intercept::types {
         static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
         Type* _ref{ nullptr };
     public:
-        constexpr ref() noexcept {}
+        constexpr ref() noexcept = default;
         ~ref() { free(); }
 
         //Construct from Pointer
@@ -246,7 +252,7 @@ namespace intercept::types {
             _ref = other_;
         }
         //Copy from pointer
-        const ref &operator = (Type *source_) noexcept {
+        ref &operator = (Type *source_) noexcept {
             Type *old = _ref;
             if (source_) source_->add_ref();
             _ref = source_;
@@ -261,7 +267,7 @@ namespace intercept::types {
             _ref = source;
         }
         //Copy from reference.
-        const ref &operator = (const ref &other_) {
+        ref &operator = (const ref &other_) {
             Type *source = other_._ref;
             Type *old = _ref;
             if (source) source->add_ref();
@@ -296,7 +302,7 @@ namespace intercept::types {
     template<class Type>
     class unique_ref {
     protected:
-        mutable Type* _ref;
+        Type* _ref;
     public:
         unique_ref() { _ref = NULL; }
         unique_ref(Type* source) {
@@ -308,17 +314,19 @@ namespace intercept::types {
         }
         ~unique_ref() { clear(); }
 
-        void operator = (Type* other) {
-            if (_ref == other) return;
+        unique_ref& operator = (Type* other) {
+            if (_ref == other) return *this;
             clear();
             _ref = other;
+            return *this;
         }
 
-        void operator = (const unique_ref& other) {
-            if (other._ref == _ref) return;
+        unique_ref& operator = (const unique_ref& other) {
+            if (other._ref == _ref) return *this;
             clear();
             _ref = other._ref;
             other._ref = nullptr;//We take ownership
+            return *this;
         }
 
         bool is_null() const { return _ref == nullptr; }
@@ -354,17 +362,17 @@ namespace intercept::types {
             friend class const_iterator;
             Type* p_;
         public:
-            using _Unchecked_type = iterator;
             using iterator_category = std::random_access_iterator_tag;
             using value_type = Type;
             using difference_type = ptrdiff_t;
             using pointer = Type * ;
             using reference = Type & ;
+            using _Unchecked_type = pointer;
 
             iterator() : p_(nullptr) {}
             explicit iterator(Type* p) : p_(p) {}
             iterator(const iterator& other) : p_(other.p_) {}
-            const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
+            iterator& operator=(const iterator& other) { p_ = other.p_; return *this; }
 
             iterator& operator++() { ++p_; return *this; } // prefix++
             iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
@@ -395,19 +403,19 @@ namespace intercept::types {
         class const_iterator {
             const Type* p_;
         public:
-            using _Unchecked_type = const_iterator;
             using iterator_category = std::random_access_iterator_tag;
             using value_type = Type;
             using difference_type = ptrdiff_t;
             using pointer = Type * ;
             using reference = Type & ;
+            using _Unchecked_type = pointer;
 
             const_iterator() : p_(nullptr) {}
             explicit const_iterator(const Type* p) noexcept : p_(p) {}
             const_iterator(const typename compact_array<Type>::iterator& other) : p_(other.p_) {}
             const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
-            const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
-            const const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return other; }
+            const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return *this; }
+            const_iterator& operator=(const typename compact_array<Type>::iterator& other) { p_ = other.p_; return *this; }
 
             const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
             const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
@@ -440,10 +448,12 @@ namespace intercept::types {
         size_t size() const noexcept { return _size; }
         Type* data() noexcept { return &_data; }
         const Type* data() const noexcept { return &_data; }
+        Type& front() noexcept { return _data; }
+        const Type& front() const noexcept { return _data; }
         iterator begin() noexcept { return iterator(&_data); }
-        iterator end() noexcept { return iterator((&_data) + _size); }
+        iterator end() noexcept { return iterator((&_data) + _size - 1); }
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }
-        const_iterator cend() const noexcept { return const_iterator((&_data) + _size); }
+        const_iterator cend() const noexcept { return const_iterator((&_data) + _size - 1); }
 
         const Type& operator[](const size_t index_) {
             return *(begin() + index_);
@@ -462,14 +472,14 @@ namespace intercept::types {
         //Doesn't clear memory. use create_zero if you want that
         static compact_array* create(size_t number_of_elements_) {
             const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
-            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
         #pragma warning(suppress: 26409) //don't use new/delete
             new (buffer) compact_array(number_of_elements_);
             return buffer;
         }
         static compact_array* create_zero(size_t number_of_elements_) {
             const size_t size = sizeof(compact_array) + sizeof(Type)*(number_of_elements_ - 1);//-1 because we already have one element in compact_array
-            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
         #pragma warning(suppress: 26409) //don't use new/delete
             std::memset(buffer, 0, size);
             new (buffer) compact_array(number_of_elements_);
@@ -477,7 +487,7 @@ namespace intercept::types {
         }
         static compact_array* create(const compact_array &other) {
             const size_t size = other.size();
-            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
             new (buffer) compact_array(size);
             std::copy(other.data(), other.data() + other.size(), buffer->data());
             return buffer;
@@ -486,7 +496,7 @@ namespace intercept::types {
         template<class _InIt>
         static compact_array* create(_InIt beg, _InIt end) {
             const size_t size = sizeof(compact_array) + sizeof(Type)*(std::distance(beg,end)-1);
-            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
             std::memset(buffer, 0, size);
         #pragma warning(suppress: 26409) //don't use new/delete
             new (buffer) compact_array(size);
@@ -502,12 +512,12 @@ namespace intercept::types {
         //Specialty function to copy less elements or to allocate more space
         static compact_array* create(const compact_array &other, size_t element_count) {
             const size_t size = other.size();
-            compact_array* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
+            auto buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeof(compact_array) + sizeof(Type)*(element_count - 1)));
             new (buffer) compact_array(element_count);
             std::memset(buffer->data(), 0, element_count * sizeof(Type));
             const auto elements_to_copy = std::min(size, element_count);
 
-            std::copy(other.begin(), other.begin() + elements_to_copy, buffer->begin());
+            std::copy(other.cbegin(), other.cbegin() + elements_to_copy, buffer->begin());
 
             return buffer;
         }
@@ -562,10 +572,8 @@ namespace intercept::types {
             return *this;
         }
 
-        r_string& operator = (const r_string& copy_) {
-            _ref = copy_._ref;
-            return *this;
-        }
+        r_string& operator = (const r_string& copy_) = default;
+
         r_string& operator = (std::string_view copy_) {
             _ref = create(copy_.data(), copy_.length());
             return *this;
@@ -608,48 +616,31 @@ namespace intercept::types {
         ///== is case insensitive just like scripting
         bool operator == (const char *other_) const {
             if (!data())  return !other_ || !*other_; //empty?
-        #ifdef __GNUC__
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_) == 0;
-        #endif
-        }
 
-        ///== is case insensitive just like scripting
-        bool operator == (const r_string& other_) const {
-            if (!data()) return !other_.data() || !*other_.data(); //empty?
-            if (data() == other_.data()) return true;
-        #ifdef __GNUC__
             return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_.data()) == 0;
-        #endif
-        }
-
-        ///== is case insensitive just like scripting
-        bool operator == (const std::string& other_) const {
-            if (!data()) return other_.empty(); //empty?
-            if (other_.length() > _ref->size()) return false; //There is more data than we can even have
-        #ifdef __GNUC__
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strcmpi(data(), other_.data()) == 0;
-        #endif
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
         }
 
         ///== is case insensitive just like scripting
         bool operator == (std::string_view other_) const {
             if (!data()) return other_.empty(); //empty?
             if (other_.length() > _ref->size()) return false; //There is more data than we can even have
-        #ifdef __GNUC__
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                other_.data(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
-            return _strnicmp(data(), other_.data(), other_.length()) == 0;
-        #endif
+
+            return std::equal(other_.cbegin(), other_.cend(),
+                _ref->cbegin(), [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
+        }
+
+        ///== is case insensitive just like scripting
+        bool operator == (const r_string& other_) const {
+            if (!data()) return !other_.data() || !*other_.data(); //empty?
+            if (data() == other_.data()) return true;
+
+            return operator==(std::string_view(other_));
+        }
+
+        ///== is case insensitive just like scripting
+        bool operator == (const std::string& other_) const {
+            return operator==(std::string_view(other_));
         }
 
         ///!= is case insensitive just like scripting
@@ -667,10 +658,14 @@ namespace intercept::types {
             return !(*this == other_);
         }
 
-
         bool operator < (const r_string& other_) const {
             if (!data()) return false; //empty?
             return strcmp(data(), other_.data()) < 0;
+        }
+
+        bool operator > (const r_string& other_) const {
+            if (!data()) return false; //empty?
+            return strcmp(data(), other_.data()) > 0;
         }
 
         friend std::ostream& operator << (std::ostream& _os, const r_string& _s) {
@@ -690,21 +685,13 @@ namespace intercept::types {
         }
 
         bool compare_case_sensitive(const char *other_) const {
-        #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return l == r; });
-        #else
-            return strcmp(data(), other_) == 0;
-        #endif
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return l == r; });
         }
 
         bool compare_case_insensitive(const char *other_) const {//#TODO string_view variant with length checking
-        #ifdef __GNUC__
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                other_, [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
-        #else
-            return _stricmp(data(), other_) == 0;
-        #endif
+                compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         }
 
         size_t find(const char ch_, const size_t start_ = 0) const {
@@ -730,26 +717,20 @@ namespace intercept::types {
         r_string append(std::string_view right_) const {
             const auto my_length = length();
             auto new_data = create(my_length + right_.length() + 1);//Space for terminating nullchar
-        #if __GNUC__
-            std::copy_n(data(), my_length, new_data->data());
-            std::copy_n(right_.data(), right_.length(), new_data->data() + my_length);
-        #else
-            memcpy_s(new_data->data(), new_data->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(new_data->data() + my_length, new_data->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-        #endif
+
+            std::copy_n(begin(), my_length, new_data->begin());
+            std::copy_n(right_.data(), right_.length(), new_data->begin() + my_length);
+
             new_data->data()[my_length + right_.length()] = 0;
             return r_string(new_data);
         }
         r_string& append_modify(std::string_view right_) {
             const auto my_length = length();
             auto newData = create(my_length + right_.length() + 1);//Space for terminating nullchar
-        #if __GNUC__
-            std::copy_n(data(), my_length, newData->data());
-            std::copy_n(right_.data(), right_.length(), newData->data() + my_length);
-        #else
-            memcpy_s(newData->data(), newData->size(), data(), my_length);//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-            memcpy_s(newData->data() + my_length, newData->size() - my_length, right_.data(), right_.length());//#TODO better use memcpy? does strncpy_s check for null chars? we don't want that
-        #endif
+            
+            std::copy_n(data(), my_length, newData->begin());
+            std::copy_n(right_.data(), right_.length(), newData->begin() + my_length);
+
             newData->data()[my_length + right_.length()] = 0;
             _ref = newData;
             return *this;
@@ -851,7 +832,7 @@ namespace intercept::types {
             iterator() : p_(nullptr) {}
             explicit iterator(Type* p) : p_(p) {}
             iterator(const iterator& other) : p_(other.p_) {}
-            const iterator& operator=(const iterator& other) { p_ = other.p_; return other; }
+            iterator& operator=(const iterator& other) { p_ = other.p_; return *this; }
 
             iterator& operator++() { ++p_; return *this; } // prefix++
             iterator  operator++(int) { iterator tmp(*this); ++(*this); return tmp; } // postfix++
@@ -892,8 +873,8 @@ namespace intercept::types {
             explicit const_iterator(const Type* p) noexcept : p_(p) {}
             const_iterator(const typename rv_array<Type>::iterator& other) : p_(other.p_) {}
             const_iterator(const const_iterator& other) noexcept : p_(other.p_) {}
-            const const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
-            const const_iterator& operator=(const typename rv_array<Type>::iterator& other) { p_ = other.p_; return other; }
+            const_iterator& operator=(const const_iterator& other) { p_ = other.p_; return other; }
+            const_iterator& operator=(const typename rv_array<Type>::iterator& other) { p_ = other.p_; return other; }
 
             const_iterator& operator++() noexcept { ++p_; return *this; } // prefix++
             const_iterator  operator++(int) { const_iterator tmp(*this); ++(*this); return tmp; } // postfix++
@@ -1552,7 +1533,7 @@ namespace intercept::types {
 
 #pragma endregion
 
-
-
-
 }
+
+#pragma pop_macro("min")
+#pragma pop_macro("max")

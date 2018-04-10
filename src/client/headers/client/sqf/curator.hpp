@@ -11,8 +11,6 @@ These are functions for working with the Zeus game master system.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 #include "client/sqf/waypoint.hpp"
 
@@ -30,9 +28,11 @@ namespace intercept {
                 std::vector<group> _g,
                 std::vector<intercept::sqf::waypoint> _wps,
                 std::vector<marker> _m
-            ) {
-                _objects = _objects; _groups = _g; _waypoints = _wps; _marker = _m;
-            };
+            ): _objects(std::move(_objs)),
+                _groups(std::move(_g)),
+                _waypoints(std::move(_wps)),
+                _marker(std::move(_m)) {}
+
             std::vector<object> _objects;
             std::vector<group> _groups;
             std::vector<intercept::sqf::waypoint> _waypoints;

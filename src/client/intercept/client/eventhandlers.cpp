@@ -12,34 +12,34 @@ namespace intercept::client {
 
     //Not in header because these are Internal functions that shall not be messed with
     /// @private
-    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, int handle, intercept::types::game_value args);
+    extern "C" DLLEXPORT void CDECL client_eventhandler(intercept::types::game_value& retVal, uint8_t ehType, int32_t uid, int handle, intercept::types::game_value args);
     /// @private
     extern "C" DLLEXPORT void CDECL client_eventhandlers_clear();
     /// @private
-    void client_eventhandler(intercept::types::game_value& retVal, int ehType, int32_t uid, int handle, game_value args) {
+    void client_eventhandler(intercept::types::game_value& retVal, uint8_t ehType, int32_t uid, int handle, game_value args) {
         switch (static_cast<eventhandler_type>(ehType)) {
             case eventhandler_type::mission: {
-                auto found = funcMapMissionEH.find({uid, handle, EHIteration });
+                auto found = funcMapMissionEH.find({uid, handle, EHIteration, ehType });
                 if (found != funcMapMissionEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::object: {
-                auto found = funcMapObjectEH.find({uid, handle, EHIteration });
+                auto found = funcMapObjectEH.find({uid, handle, EHIteration, ehType });
                 if (found != funcMapObjectEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::ctrl: {
-                auto found = funcMapCtrlEH.find({uid, handle, EHIteration });
+                auto found = funcMapCtrlEH.find({uid, handle, EHIteration, ehType });
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::mp: {
-                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration });
+                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration, ehType });
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::display: {
-                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration });
+                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration, ehType });
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;

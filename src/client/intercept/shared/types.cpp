@@ -189,7 +189,7 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_number::operator new(std::size_t) {
+        void * game_data_number::operator new(std::size_t) {
         #ifdef __linux__
             return pool_alloc_base->allocate(sizeof(game_data_number));
         #else
@@ -197,7 +197,7 @@ namespace intercept {
         #endif
         }
 
-        inline void game_data_number::operator delete(void * ptr_, std::size_t) {
+        void game_data_number::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 
@@ -241,7 +241,7 @@ namespace intercept {
             return *this;
         }
 
-        inline void * game_data_bool::operator new(std::size_t) {
+        void * game_data_bool::operator new(std::size_t) {
         #ifdef __linux__
             return pool_alloc_base->allocate(sizeof(game_data_bool));
         #else
@@ -249,7 +249,7 @@ namespace intercept {
         #endif
         }
 
-        inline void game_data_bool::operator delete(void * ptr_, std::size_t) {
+        void game_data_bool::operator delete(void * ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 

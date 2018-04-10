@@ -11,8 +11,6 @@ These are all part of the RV Engine UI system.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -27,14 +25,14 @@ namespace intercept {
 
             operator game_value() {
                 std::vector<game_value> texts_gv, values_gv, datas_gv;
-                for (auto item : texts) {
-                    texts_gv.push_back(game_value(item));
+                for (auto& item : texts) {
+                    texts_gv.emplace_back(item);
                 }
-                for (auto item : values) {
-                    values_gv.push_back(game_value(item));
+                for (auto& item : values) {
+                    values_gv.emplace_back(item);
                 }
-                for (auto item : datas) {
-                    datas_gv.push_back(game_value(item));
+                for (auto& item : datas) {
+                    datas_gv.emplace_back(item);
                 }
                 return game_value(std::vector<game_value>({texts_gv,
                                                            values_gv,
@@ -44,13 +42,13 @@ namespace intercept {
             operator game_value() const {
                 std::vector<game_value> texts_gv, values_gv, datas_gv;
                 for (auto item : texts) {
-                    texts_gv.push_back(game_value(item));
+                    texts_gv.emplace_back(item);
                 }
                 for (auto item : values) {
-                    values_gv.push_back(game_value(item));
+                    values_gv.emplace_back(item);
                 }
                 for (auto item : datas) {
-                    datas_gv.push_back(game_value(item));
+                    datas_gv.emplace_back(item);
                 }
                 return game_value(std::vector<game_value>({texts_gv,
                                                            values_gv,
@@ -77,8 +75,8 @@ namespace intercept {
             }
 
             static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
-                vector2 resolution = {resolution_vector_[0], resolution_vector_[1]};
-                vector2 viewport = {resolution_vector_[2], resolution_vector_[3]};
+                const vector2 resolution = {resolution_vector_[0], resolution_vector_[1]};
+                const vector2 viewport = {resolution_vector_[2], resolution_vector_[3]};
                 return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
             }
 
@@ -510,7 +508,7 @@ namespace intercept {
         void draw_icon(const control &ctrl_, sqf_string_const_ref texture_, const rv_color &color_, const vector2 &pos_, float width_, float height_, float angle_, sqf_string_const_ref text_, uint32_t shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref align_);
         void draw_icon(const control &ctrl_, sqf_string_const_ref texture_, const rv_color &color_, const object &pos_, float width_, float height_, float angle_, sqf_string_const_ref text_, uint32_t shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref align_);
 
-        void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_);
+        void draw_rectangle(const control &ctrl_, vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_);
 
         void collapse_object_tree(const control &value_);
         void import_all_groups(const control &value_);
@@ -594,9 +592,8 @@ namespace intercept {
         void lb_sort(const control &control_, sqf_string_const_ref sort_order_);
         void lb_sort(int control_, sqf_string_const_ref sort_order_);
         void lb_sort(int control_);
-        void lb_sort_by_value(const control control_);
+        void lb_sort_by_value(const control& control_);
         void lb_sort_by_value(int control_);
-        void lb_sort_by_value(const control &value_);
 
         sqf_return_string ct_data(const control &control_, int index_);
         std::vector<float> ct_find_header_rows(const control &control_, int index_);

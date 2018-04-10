@@ -1066,7 +1066,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctrlmapscreentoworld__control__array__ret__array, ctrl_, screen_pos_);
         }
 
-        void draw_rectangle(const control &ctrl_, const vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
+        void draw_rectangle(const control &ctrl_, vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
             game_value args({center_pos_,
                              a_,
                              b_,
@@ -1707,10 +1707,6 @@ namespace intercept {
 
         float lb_size(float value_) {
             return __helpers::__number_unary_number(__sqf::unary__lbsize__scalar__ret__scalar, value_);
-        }
-
-        void lb_sort_by_value(const control &value_) {
-            __sqf::unary__lbsortbyvalue__control__ret__nothing, value_;
         }
 
         float next_menu_item_index(const control &value_) {
@@ -2503,7 +2499,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__scalar__ret__nothing, control_);
         }
 
-        void lb_sort_by_value(const control control_) {
+        void lb_sort_by_value(const control& control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__control__ret__nothing, control_);
         }
 

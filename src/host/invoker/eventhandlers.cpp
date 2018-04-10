@@ -72,7 +72,7 @@ namespace intercept {
 
     game_value eventhandlers::client_eventhandler(game_value_parameter left_arg, game_value_parameter right_arg) {
         r_string moduleName = left_arg[0];
-        const int ehType = left_arg[1];
+        const uint8_t ehType = static_cast<int>(left_arg[1]);
         const float uidf = left_arg[2];
         const int32_t uid = static_cast<int32_t>(uidf);
         //uint32_t handle = static_cast<uint32_t>(static_cast<float>(left_arg[3]));

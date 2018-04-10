@@ -45,15 +45,15 @@ class __inline_sqf_helper_launcher {
 protected:
     class __inline_sqf_helper {
     public:
-        __inline_sqf_helper(std::string sqf_) : _sqf(sqf_), _do_return(false), _capture_return(nullptr) {
+        __inline_sqf_helper(std::string&& sqf_) : _sqf(std::move(sqf_)), _do_return(false), _capture_return(nullptr) {
             _capture_args = game_value();
         }
 
         ~__inline_sqf_helper() {
-            std::regex escape("\\\\(.)");
+            const std::regex escape("\\\\(.)");
             _sqf = std::regex_replace(_sqf, escape, "$1");
-            code sqf_fnc = intercept::sqf::compile(_sqf);
-            if (_do_return) {
+            const auto sqf_fnc = intercept::sqf::compile(_sqf);
+            if (_capture_return) {
                 *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
             } else {
                 intercept::sqf::call(sqf_fnc, _capture_args);
@@ -61,11 +61,11 @@ protected:
         }
 
         void capture(game_value capture_args_) {
-            _capture_args = capture_args_;
+            _capture_args = std::move(capture_args_);
         }
 
         void capture(game_value capture_args_, game_value &capture_return_) {
-            _capture_args = capture_args_;
+            _capture_args = std::move(capture_args_);
             _capture_return = &capture_return_;
             _do_return = true;
         }
@@ -79,6 +79,6 @@ protected:
 
 public:
     static __inline_sqf_helper generate(std::string sqf_) {
-        return __inline_sqf_helper(sqf_);
+        return __inline_sqf_helper(std::move(sqf_));
     }
 };

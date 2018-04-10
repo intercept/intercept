@@ -10,8 +10,8 @@
 #include <windows.h>
 #else
 #endif
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include <list>

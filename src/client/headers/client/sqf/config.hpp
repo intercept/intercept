@@ -12,8 +12,6 @@ Engine.
 
 https://github.com/NouberNou/intercept
 */
-#include "shared.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
 
 using namespace intercept::types;
@@ -26,7 +24,7 @@ namespace intercept {
             config_entry(types::config entry_);
             config_entry(config_entry const &copy_);
             config_entry(config_entry &&move_) noexcept;
-            config_entry &operator=(const config_entry &copy_);
+            config_entry &operator=(const config_entry &copy_) = default;
             config_entry &operator=(config_entry &&move_) noexcept;
             config_entry operator>>(sqf_string_const_ref entry_);
 
@@ -59,7 +57,7 @@ namespace intercept {
         config config_file();
         config config_null();
         config mission_config_file();
-        game_value get_array(const config config_);
+        game_value get_array(config config_);
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_);
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_);

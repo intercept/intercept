@@ -86,7 +86,7 @@ namespace intercept {
         using string_type = std::wstring;
         using string_view_type = std::wstring_view;
         static const string_view_type bad_chars = L".\\/:?\"<>|"sv;
-        auto length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), 0, 0);
+        auto length = MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), nullptr, 0);
         std::wstring path;
         path.resize(length);
         MultiByteToWideChar(CP_UTF8, 0, path_.data(), path_.length(), path.data(), length);
@@ -123,7 +123,7 @@ namespace intercept {
         cert::signing::security_class security_class = cert::signing::security_class::not_signed;
     #ifndef __linux__
         if (certPath && certPath->length() != 0) { //certificate check
-            r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
+            const r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
             security_class = _signTool.verifyCert(*full_path, certData);
             if (security_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
                 LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
@@ -216,7 +216,7 @@ namespace intercept {
         new_module.functions.api_version = reinterpret_cast<module::api_version_func>(GET_PROC_ADDR(dllHandle, "api_version"));
         new_module.functions.assign_functions = reinterpret_cast<module::assign_functions_func>(GET_PROC_ADDR(dllHandle, "assign_functions"));
         new_module.functions.client_eventhandlers_clear = reinterpret_cast<module::client_eventhandlers_clear_func>(GET_PROC_ADDR(dllHandle, "client_eventhandlers_clear"));
-        auto is_signed_function = reinterpret_cast<module::is_signed_function>(GET_PROC_ADDR(dllHandle, "is_signed"));
+        const auto is_signed_function = reinterpret_cast<module::is_signed_function>(GET_PROC_ADDR(dllHandle, "is_signed"));
 
         //First verify that this is a valid Plugin before we initialize the rest.
 

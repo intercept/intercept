@@ -10,7 +10,6 @@ if (NOT CMAKE_BUILD_TYPE AND CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
 
@@ -20,14 +19,13 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(CMAKE_SHARED_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Wl,-rpath,$ORIGIN")
 else()
-    set(CMAKE_CXX_FLAGS_DEBUG "/D _DEBUG /MTd /Zi /Ob0 /Od /RTC1 /EHsc")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL     "/MT /Ox /Ob1 /D /EHsc NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELEASE       "/MT /Ox /Ob2 /D /EHsc NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /Zi /Ox /Ob2 /D /EHsc NDEBUG")
+    set(CMAKE_CXX_FLAGS_DEBUG           "/MTd /Zi /Ob0 /Od /RTC1 /EHsc /D_DEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE         "/MT /Zi /Ox /Ob2 /EHsc")
     set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/OPT:REF /LTCG") 
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/OPT:REF") 
     set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/OPT:REF /DEBUG:FULL") 
 endif()
+
 include_directories("common")
 include_directories("controller")
 include_directories("loader")
@@ -35,11 +33,6 @@ include_directories("invoker")
 include_directories("extensions")
 include_directories("../client/headers")
 include_directories("intercept_dll")
-
-
-if(DEVEL)
-    add_definitions(-DDEVEL)
-endif()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/common)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/controller)

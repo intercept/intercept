@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 namespace intercept {
     class argument_accessor {

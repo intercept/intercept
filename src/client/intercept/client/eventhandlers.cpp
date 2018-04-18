@@ -2,6 +2,18 @@
 #include "eventhandlers.hpp"
 #include "sqf.hpp"
 
+#if defined(_DEBUG)
+    #if defined(_DEBUG) && defined(_WIN32)
+        #define MISSING_EH_CATCH __debugbreak()
+    #else
+        #include <cassert>
+        #define MISSING_EH_CATCH assert(false)
+    #endif
+#else
+    #define MISSING_EH_CATCH return {}
+#endif
+
+
 namespace intercept::types {
     extern bool exiting;
 };
@@ -471,7 +483,7 @@ namespace intercept::client {
             }
                 break;
 
-            default: assert(false);
+            default: MISSING_EH_CATCH;
         }
         return {};
     }
@@ -547,7 +559,7 @@ namespace intercept::client {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
             }
                 break;
-            default: assert(false);
+            default: MISSING_EH_CATCH;
         }
         return {};
     }
@@ -607,7 +619,7 @@ namespace intercept::client {
                 return newPos;
             }
                 break;
-            default: assert(false);
+            default: MISSING_EH_CATCH;
         }
         return {};
     }
@@ -674,7 +686,7 @@ namespace intercept::client {
             case eventhandlers_display::MouseZChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseZChanged)>*>(func.get()))(args[0], args[1]);
             }break;
-            default: assert(false);
+            default: MISSING_EH_CATCH;
         }
         return {};
     }

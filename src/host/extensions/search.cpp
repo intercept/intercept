@@ -1,10 +1,9 @@
 #include "search.hpp"
-#include <sstream>
-#include <iterator>
 #include <algorithm>
 #include <regex>
 #include <experimental/filesystem>
 #include <string_view>
+#include <fstream>
 
 using namespace std::literals::string_view_literals;
 
@@ -124,6 +123,8 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
 }
 
 #else
+
+#include <bcrypt.h>
 
 #define NT_SUCCESS(x) ((x) >= 0)
 #define STATUS_INFO_LENGTH_MISMATCH 0xc0000004
@@ -249,8 +250,8 @@ std::vector<std::wstring> intercept::search::plugin_searcher::generate_pbo_list(
     if (!NtQuerySystemInformation || !NtDuplicateObject || !NtQueryObject)
         return _active_pbo_list;
 
-    HANDLE pid = reinterpret_cast<HANDLE>(GetCurrentProcessId());
-    HANDLE processHandle = GetCurrentProcess();
+    const auto pid = reinterpret_cast<HANDLE>(GetCurrentProcessId());
+    const auto processHandle = GetCurrentProcess();
 
     PSYSTEM_HANDLE_INFORMATION_EX handleInfo = static_cast<PSYSTEM_HANDLE_INFORMATION_EX>(malloc(handleInfoSize));
     while ((status = NtQuerySystemInformation(

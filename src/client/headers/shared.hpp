@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // This is a warning normally for returning references to local/stack allocated variables
 // It is so dangerous though that we need to force it as a warning because it can break
@@ -10,20 +10,6 @@
 #include <windows.h>
 #else
 #endif
-#include <cassert>
-#include <cstdio>
-#include <string>
-#include <vector>
-#include <list>
-#include <map>
-#include <unordered_map>
-#include <memory>
-#include <cmath>
-#include <cstdint>
-#include <streambuf>
-#include <istream>
-#include <variant>
-#include <optional>
 
 #ifdef _DEBUG
 #define ZERO_OUTPUT()    { memset(output, 0x00, outputSize); }

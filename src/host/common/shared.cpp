@@ -1,9 +1,5 @@
 #include "shared.hpp"
-
-#include <algorithm> 
-#include <functional> 
-#include <cctype>
-#include <locale>
+#include <sstream>
 
 namespace intercept {
     std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {

@@ -15,11 +15,8 @@ else()
     set(INTERCEPT_LINK_TYPE "dynamic")
 endif()
 
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" AND "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
-    set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /std:c++latest" )
-    set( USE_64BIT_BUILD ON)
-elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-    set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /std:c++latest" )
+if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
+    set(USE_64BIT_BUILD ON)
 endif()
 
 message("GENERATOR USED: '${CMAKE_GENERATOR}'")
@@ -50,3 +47,7 @@ if(INTERCEPT_EXAMPLE_SRC)
 
     add_subdirectory("${INTERCEPT_EXAMPLE_SRC}/src" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 endif()
+
+#We only have debug and Release with debug info.
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
+

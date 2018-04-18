@@ -1,7 +1,6 @@
 #include "shared/types.hpp"
-#include "client/client.hpp"
 #include "shared/client_types.hpp"
-#include <assert.h>
+#include <map>
 #include <future>
 #include <sstream> //Debugging
 
@@ -9,6 +8,7 @@
 #include "loader.hpp"
 #define GET_ENGINE_ALLOCATOR intercept::loader::get().get_allocator();
 #else
+#include "client/client.hpp"
 #define GET_ENGINE_ALLOCATOR client::host::functions.get_engine_allocator()
 #endif
 

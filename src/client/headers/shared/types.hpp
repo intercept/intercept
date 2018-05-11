@@ -41,6 +41,7 @@ namespace intercept {
         class game_data_array;
         class internal_object;
         class game_data;
+        class game_state;
 
         using nular_function = game_value(*) (uintptr_t state);
         using unary_function = game_value(*) (uintptr_t state, game_value_parameter);
@@ -217,7 +218,7 @@ namespace intercept {
         class param_archive {
         public:
             static game_state* get_game_state();  //Kinda missplaced here...
-            param_archive(param_archive_entry* p1) : _p1(p1) { _parameters.push_back(get_game_state()); }
+            param_archive(param_archive_entry* p1) : _p1(p1) { _parameters.push_back(reinterpret_cast<uintptr_t>(get_game_state())); }
             virtual ~param_archive() { if (_p1) rv_allocator<param_archive_entry>::destroy_deallocate(_p1); }
             //#TODO add SRef class
             param_archive_entry* _p1{ rv_allocator<param_archive_entry>::create_single() }; //pointer to classEntry. vtable something
@@ -1167,6 +1168,9 @@ namespace intercept {
                 std::array<rv_pool_allocator*, static_cast<size_t>(game_data_type::end)> _poolAllocs;
                 game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
                 game_state* gameState;
+                void* reserved1;
+                void* reserved2;
+                void* reserved3;
             };
         }
 

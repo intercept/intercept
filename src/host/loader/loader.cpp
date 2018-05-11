@@ -414,7 +414,7 @@ namespace intercept {
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     #endif
-        _allocator.gameState = state_addr_;
+        _allocator.gameState = game_state_ptr;
 
     #if _WIN32
         //via profile context "scrpt"

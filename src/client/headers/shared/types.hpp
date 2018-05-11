@@ -216,7 +216,7 @@ namespace intercept {
         class serialize_class;
         class param_archive {
         public:
-            static uintptr_t get_game_state();//Kinda missplaced here...
+            static game_state* get_game_state();  //Kinda missplaced here...
             param_archive(param_archive_entry* p1) : _p1(p1) { _parameters.push_back(get_game_state()); }
             virtual ~param_archive() { if (_p1) rv_allocator<param_archive_entry>::destroy_deallocate(_p1); }
             //#TODO add SRef class
@@ -699,6 +699,8 @@ namespace intercept {
             game_variable() {}
             game_variable(r_string name_, game_value&& val_, bool read_only_ = false) : name(std::move(name_)), val(std::move(val_)),
                 read_only(read_only_) {}
+            game_variable(r_string name_, const game_value& val_, bool read_only_ = false) : name(std::move(name_)), val(val_),
+                read_only(read_only_) {}
             const char *get_map_key() const { return name.c_str(); }
 
 
@@ -1164,8 +1166,7 @@ namespace intercept {
                 uintptr_t poolFuncDealloc;
                 std::array<rv_pool_allocator*, static_cast<size_t>(game_data_type::end)> _poolAllocs;
                 game_value(*evaluate_func) (const game_data_code&, void* ns, const r_string& name) { nullptr };
-                void(*setvar_func) (const char* name, const game_value& val) { nullptr };
-                uintptr_t gameState;
+                game_state* gameState;
             };
         }
 

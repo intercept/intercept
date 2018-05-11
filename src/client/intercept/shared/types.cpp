@@ -878,7 +878,7 @@ namespace intercept {
     #pragma endregion
 
     #pragma region Serialization
-        uintptr_t param_archive::get_game_state() {
+        game_state* param_archive::get_game_state() {
             auto allocinfo = GET_ENGINE_ALLOCATOR;
             return allocinfo->gameState;
         }

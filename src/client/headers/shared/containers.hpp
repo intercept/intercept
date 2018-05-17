@@ -1497,6 +1497,7 @@ namespace intercept::types {
             auto key = value.get_map_key();
             Type &old = get(key);
             if (!is_null(old)) {
+                old = std::move(value);
                 return old;
             }
 

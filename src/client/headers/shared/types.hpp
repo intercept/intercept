@@ -1029,8 +1029,6 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, code_string); }
             r_string code_string;
             ref<compact_array<ref<game_instruction>>> instructions;
-            uint32_t _dummy1{1};
-            uint32_t _dummy;
             bool is_final;
         };
 

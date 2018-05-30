@@ -521,11 +521,11 @@ namespace intercept::types {
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }
         const_iterator cend() const noexcept { return const_iterator((&_data) + _size - 1); }
 
-        const Type& operator[](const size_t index_) {
-            return *(begin() + index_);
+        const Type& operator[](const size_t index_) const {
+            return *(cbegin() + index_);
         }
-        const Type& get(const size_t index_) {
-            return *(begin() + index_);
+        const Type& get(const size_t index_) const {
+            return *(cbegin() + index_);
         }
 
         //We delete ourselves! After release no one should have a pointer to us anymore!
@@ -762,7 +762,7 @@ namespace intercept::types {
 
         std::string_view substr(size_t offset, size_t length) const {
             if (_ref)
-                return std::string_view(data() + offset, length);
+                return std::string_view(data() + offset, std::min(length, size()));
             return std::string_view();
         } 
 
@@ -1201,7 +1201,7 @@ namespace intercept::types {
             if (element_ < base::begin() || element_ > base::end()) throw std::runtime_error("Invalid Iterator");
             const size_t index = std::distance(base::cbegin(), element_);
             if (static_cast<int>(index) > base::_n) return;
-            auto item = (*this)[index];
+            auto&& item = (*this)[index];
             item.~Type();
         #ifdef __GNUC__
             memmove(&(*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));

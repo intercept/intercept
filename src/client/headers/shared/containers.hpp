@@ -409,6 +409,11 @@ namespace intercept::types {
         uintptr_t _vtable{ 0 };
     };
 
+    class dummy_vtable_class {
+    public:
+        virtual void dummy(){};
+    };
+
     class _refcount_vtable_dummy : public __vtable, public refcount_base {};
 
 #pragma region Containers
@@ -755,6 +760,12 @@ namespace intercept::types {
                 compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         }
 
+        std::string_view substr(size_t offset, size_t length) const {
+            if (_ref)
+                return std::string_view(data() + offset, length);
+            return std::string_view();
+        } 
+
         size_t find(const char ch_, const size_t start_ = 0) const {
             if (length() == 0) return -1;
             const char *pos = strchr(_ref->data() + start_, ch_);
@@ -997,6 +1008,7 @@ namespace intercept::types {
         Type &back() { return get(_n - 1); }
 
         bool is_empty() const { return _n == 0; }
+        bool empty() const { return _n == 0; }
 
         template <class Func>
         void for_each(const Func &f_) const {

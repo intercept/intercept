@@ -728,9 +728,6 @@ namespace intercept {
                 virtual __internal::I_debug_value::RefType EvaluateExpression(const char* code, unsigned int rad) = 0;
                 virtual void getSourceDocPosition(char* file, int fileSize, int& line) = 0;
                 virtual IDebugScope* getParent() = 0;
-
-                void printAllVariables();            //Not implemented in Intercept core
-                std::string allVariablesToString();  //Not implemented in Intercept core
             };
 
             //ArmaDebugEngine. Usual Intercept users won't need this and shouldn't use this

@@ -125,7 +125,11 @@ std::vector<std::string> intercept::search::plugin_searcher::generate_pbo_list()
 
 #else
 
-#define NT_SUCCESS(x) ((x) >= 0)
+#undef ERROR //Silence macro overwrite warning
+#include <windows.h>
+#include <Winternl.h>
+#undef ERROR  //Don't want to use a different ERROR macro than intended
+
 #define STATUS_INFO_LENGTH_MISMATCH 0xc0000004
 
 #define SystemHandleInformation 16
@@ -157,12 +161,6 @@ typedef NTSTATUS(NTAPI *_NtQueryObject)(
     ULONG ObjectInformationLength,
     PULONG ReturnLength
     );
-
-typedef struct _UNICODE_STRING {
-    USHORT Length;
-    USHORT MaximumLength;
-    PWSTR Buffer;
-} UNICODE_STRING, *PUNICODE_STRING;
 
 typedef struct _SYSTEM_HANDLE {
     ULONG ProcessId;

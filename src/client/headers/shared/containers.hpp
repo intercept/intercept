@@ -1593,6 +1593,26 @@ namespace intercept::types {
             return x;
         }
 
+        bool remove(const char* key) {
+            if (_count <= 0) return false;
+
+            int hashedKey = hash_key(key);
+            for (size_t i = 0; i < _table[hashedKey].size(); i++) {
+                Type& item = _table[hashedKey][i];
+                if (Traits::compare_keys(item.get_map_key(), key) == 0) {
+                    _table[hashedKey].erase(_table[hashedKey].begin() + i);
+                    _count--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        //Is empty?
+        bool empty() {
+            return (!_table || !_count);
+        }
 
 
     protected:

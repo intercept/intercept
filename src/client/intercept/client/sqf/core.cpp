@@ -94,8 +94,8 @@ namespace intercept {
             auto ns = missionNamespace.data.get();
             static r_string fname = "interceptCall"sv;
 
-            gs->eval->varspace->varspace.insert({"_i135_ar_"sv, args_});
-            gs->eval->varspace->varspace.insert({"_i135_cc_"sv, code_});
+            gs->eval->local->variables.insert({"_i135_ar_"sv, args_});
+            gs->eval->local->variables.insert({"_i135_cc_"sv, code_});
 
             auto ret = ef(*data, ns, fname);
             return ret;

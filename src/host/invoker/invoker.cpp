@@ -409,8 +409,8 @@ namespace intercept {
         structure = { left_arg_.data->get_vtable(), left_arg_.data->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "NAMESPACE"sv;
         invoker::get().type_structures["NAMESPACE"sv] = structure;
-        game_data_rv_namespace::type_def = structure.first;
-        game_data_rv_namespace::data_type_def = structure.second;
+        game_data_namespace::type_def = structure.first;
+        game_data_namespace::data_type_def = structure.second;
 
         sqf_script_type::type_def = loader::get().get_register_sqf_info()._type_vtable;
         structure = { sqf_script_type::type_def, sqf_script_type::type_def };

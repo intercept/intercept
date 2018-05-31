@@ -1282,6 +1282,16 @@ namespace intercept::types {
         }
     };
 
+    template <class Type, class Allocator = rv_allocator<Type>>
+    class stack_array : public auto_array<Type, Allocator> {
+        using base = auto_array<Type, Allocator>;
+    public:
+        void push(const Type& src) { base::push_back(src); }
+        const Type& top() const { return *(base::end()-1); }
+        void pop() { base::erase(base::end() - 1); }
+    };
+
+
     template <class Type>
     struct find_key_array_traits {
         using key_type = const Type&;

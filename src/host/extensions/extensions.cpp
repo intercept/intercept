@@ -125,8 +125,9 @@ namespace intercept {
         if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
             security_class = _signTool.verifyCert(*full_path, certData);
-            if (security_class == cert::signing::security_class::not_signed) {//certpath was set so a certificate was certainly wanted
+            if (security_class == cert::signing::security_class::not_signed && !ignore_cert_fail) {  //certpath was set so a certificate was certainly wanted
                 LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
+                return false;
             }
         }
     #ifdef _DEBUG 

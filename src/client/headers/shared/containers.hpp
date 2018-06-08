@@ -1502,7 +1502,7 @@ namespace intercept::types {
         const Type &get(const char* key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (int i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
                 const Type &item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;

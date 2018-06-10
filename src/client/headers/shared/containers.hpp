@@ -1362,42 +1362,76 @@ namespace intercept::types {
         bool find(const ref<Type>& src_) const { return base::find_by_key(traits::get_key(src_)); }
     };
 
-
-
-    static unsigned int rv_map_hash_string_case_sensitive(const char *key, int hashValue = 0) noexcept {
+    /*
+    static unsigned int rv_map_hash_string_case_sensitive(const char* key, int hashValue = 0) noexcept {
         while (*key) {
             hashValue = hashValue * 33 + static_cast<unsigned char>(*key++);
         }
         return hashValue;
     }
-    static unsigned int rv_map_hash_string_case_insensitive(const char *key, int hashValue = 0) noexcept {
+    static unsigned int rv_map_hash_string_case_insensitive(const char* key, int hashValue = 0) noexcept {
         while (*key) {
             hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(*key++));
         }
         return hashValue;
     }
+    */
+
+    static unsigned int rv_map_hash_string_case_sensitive(std::string_view key, int hashValue = 0) noexcept {
+        for (auto& it : key) {
+            hashValue = hashValue * 33 + static_cast<unsigned char>(it);
+        }
+        return hashValue;
+    }
+    static unsigned int rv_map_hash_string_case_insensitive(std::string_view key, int hashValue = 0) noexcept {
+        for (auto& it : key) {
+            hashValue = hashValue * 33 + static_cast<unsigned char>(tolower(it));
+        }
+        return hashValue;
+    }
 
     struct map_string_to_class_trait {
-        static unsigned int hash_key(const char * key) noexcept {
+        /*
+        static unsigned int hash_key(const char* key) noexcept {
             return rv_map_hash_string_case_sensitive(key);
         }
-        static bool compare_keys(const char * k1, const char * k2) noexcept {
+        static bool compare_keys(const char* k1, const char* k2) noexcept {
             return strcmp(k1, k2) == 0;
+        }
+        */
+        static unsigned int hash_key(std::string_view key) noexcept {
+            return rv_map_hash_string_case_sensitive(key);
+        }
+        static bool compare_keys(std::string_view k1, std::string_view k2) noexcept {
+            if (k1.length() != k2.length()) return false;
+            return k1.compare(k2) == 0;
         }
     };
 
     struct map_string_to_class_trait_caseinsensitive : map_string_to_class_trait {
-        static unsigned int hash_key(const char * key) noexcept {
+        /*
+        static unsigned int hash_key(const char* key) noexcept {
             return rv_map_hash_string_case_insensitive(key);
         }
 
-        static bool compare_keys(const char * k1, const char * k2) noexcept {
-        #ifdef __GNUC__
+        static bool compare_keys(const char* k1, const char* k2) noexcept {
+#ifdef __GNUC__
             return std::equal(k1, k1 + strlen(k1),
-                k2, [](unsigned char l, unsigned char r) {return l == r || tolower(l) == tolower(r); });
-        #else
+                              k2, [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
+#else
             return _strcmpi(k1, k2) == 0;
-        #endif
+#endif
+        }
+        */
+
+        static unsigned int hash_key(std::string_view key) noexcept {
+            return rv_map_hash_string_case_insensitive(key);
+        }
+        static bool compare_keys(std::string_view k1, std::string_view k2) noexcept {
+            if (k1.length() != k2.length()) return false;
+
+            return std::equal(k1.begin(), k1.end(),
+                              k2.begin(), [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
         }
     };
 
@@ -1405,15 +1439,15 @@ namespace intercept::types {
     class map_string_to_class {
     protected:
         Container* _table;
-        int _tableCount{ 0 };
-        int _count{ 0 };
+        int _tableCount{0};
+        int _count{0};
         static Type _null_entry;
-    public:
 
+    public:
         class iterator {
             size_t _table;
             size_t _item;
-            const map_string_to_class<Type, Container, Traits> *_map;
+            const map_string_to_class<Type, Container, Traits>* _map;
             size_t number_of_tables() {
                 return _map->_table ? static_cast<size_t>(_map->_tableCount) : 0u;
             }
@@ -1423,16 +1457,20 @@ namespace intercept::types {
                     _item = 0;
                 }
             }
+
         public:
-            iterator(const map_string_to_class<Type, Container, Traits> &base_) {
-                _table = 0; _item = 0; _map = &base_;
+            iterator(const map_string_to_class<Type, Container, Traits>& base_) {
+                _table = 0;
+                _item = 0;
+                _map = &base_;
                 get_next();
             }
-            iterator(const map_string_to_class<Type, Container, Traits> &base_, bool) { //Creates end Iterator
-                _item = 0; _map = &base_;
+            iterator(const map_string_to_class<Type, Container, Traits>& base_, bool) {  //Creates end Iterator
+                _item = 0;
+                _map = &base_;
                 _table = number_of_tables();
             }
-            iterator& operator++ () {
+            iterator& operator++() {
                 if (_table >= number_of_tables()) return *this;
                 ++_item;
                 get_next();
@@ -1449,16 +1487,16 @@ namespace intercept::types {
             bool operator!=(const iterator& _other) {
                 return _table != _other._table || _item != _other._item;
             }
-            const Type &operator * () const {
+            const Type& operator*() const {
                 return _map->_table[_table][_item];
             }
-            const Type *operator-> () const {
+            const Type* operator->() const {
                 return &_map->_table[_table][_item];
             }
-            Type &operator * () {
+            Type& operator*() {
                 return _map->_table[_table][_item];
             }
-            Type *operator-> () {
+            Type* operator->() {
                 return &_map->_table[_table][_item];
             }
         };
@@ -1481,7 +1519,7 @@ namespace intercept::types {
         void for_each(Func func_) const {
             if (!_table || !_count) return;
             for (int i = 0; i < _tableCount; i++) {
-                const Container &container = _table[i];
+                const Container& container = _table[i];
                 for (int j = 0; j < container.count(); j++) {
                     func_(container[j]);
                 }
@@ -1492,49 +1530,48 @@ namespace intercept::types {
         void for_each_backwards(Func func_) const {
             if (!_table || !_count) return;
             for (int i = _tableCount - 1; i >= 0; i--) {
-                const Container &container = _table[i];
+                const Container& container = _table[i];
                 for (int j = container.count() - 1; j >= 0; j--) {
                     func_(container[j]);
                 }
             }
         }
 
-        const Type &get(const char* key_) const {
+        const Type& get(std::string_view key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
-                const Type &item = _table[hashed_key][i];
+                const Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
             }
             return _null_entry;
         }
 
-        Container* get_table_for_key(const char* key_) {
+        Container* get_table_for_key(std::string_view key_) {
             if (!_table || !_count) return nullptr;
             const int hashed_key = hash_key(key_);
             return &_table[hashed_key];
         }
 
-        Type &get(const char* key_) {
+        Type& get(std::string_view key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
-                Type &item = _table[hashed_key][i];
+                Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
             }
             return _null_entry;
         }
 
-        static bool is_null(const Type &value_) { return &value_ == &_null_entry; }
+        static bool is_null(const Type& value_) { return &value_ == &_null_entry; }
 
-        bool has_key(const char* key_) const {
+        bool has_key(std::string_view key_) const {
             return !is_null(get(key_));
         }
 
         int count() const { return _count; }
-
 
         //ArmaDebugEngine
         void rebuild(int tableSize) {
@@ -1553,10 +1590,10 @@ namespace intercept::types {
             rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
         }
 
-        Type& insert(const Type &value) {
+        Type& insert(const Type& value) {
             //Check if key already exists
             auto key = value.get_map_key();
-            Type &old = get(key);
+            Type& old = get(key);
             if (!is_null(old)) {
                 return old;
             }
@@ -1570,15 +1607,15 @@ namespace intercept::types {
                 rebuild(tableSize - 1);
             }
             auto hashedkey = hash_key(key);
-            auto &x = *(_table[hashedkey].emplace_back(value));
+            auto& x = *(_table[hashedkey].emplace_back(value));
             _count++;
             return x;
         }
 
-        Type& insert(Type &&value) {
+        Type& insert(Type&& value) {
             //Check if key already exists
             auto key = value.get_map_key();
-            Type &old = get(key);
+            Type& old = get(key);
             if (!is_null(old)) {
                 old = std::move(value);
                 return old;
@@ -1598,12 +1635,12 @@ namespace intercept::types {
             }
 
             auto hashedkey = hash_key(key);
-            auto &x = *(_table[hashedkey].emplace_back(std::move(value)));
+            auto& x = *(_table[hashedkey].emplace_back(std::move(value)));
             _count++;
             return x;
         }
 
-        bool remove(const char* key) {
+        bool remove(std::string_view key) {
             if (_count <= 0) return false;
 
             int hashedKey = hash_key(key);
@@ -1618,25 +1655,21 @@ namespace intercept::types {
             return false;
         }
 
-
         //Is empty?
         bool empty() {
             return (!_table || !_count);
         }
 
-
     protected:
-        int hash_key(const char* key_) const {
+        int hash_key(std::string_view key_) const {
             return Traits::hash_key(key_) % _tableCount;
         }
     };
 
-    template<class Type, class Container, class Traits>
+    template <class Type, class Container, class Traits>
     Type map_string_to_class<Type, Container, Traits>::_null_entry;
 
-
 #pragma endregion
-
 }
 
 #pragma pop_macro("min")

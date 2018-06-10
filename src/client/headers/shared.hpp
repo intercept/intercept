@@ -1,15 +1,10 @@
-﻿#pragma once
+#pragma once
 
 // This is a warning normally for returning references to local/stack allocated variables
 // It is so dangerous though that we need to force it as a warning because it can break
 // everything.
 #pragma warning( error : 4172 )
 
-#ifdef _WIN32
-//    #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-#endif
 #include <cassert>
 #include <cstdio>
 #include <string>

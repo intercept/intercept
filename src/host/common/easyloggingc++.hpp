@@ -1,6 +1,8 @@
 #pragma once
 #include <sstream>
 #include <fstream>
+#include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
 #ifdef _DEBUG
 #define SPDLOG_TRACE_ON
@@ -23,8 +25,7 @@
 #define INITIALIZE_EASYLOGGINGPP std::shared_ptr<spdlog::logger> logging::logfile{};
 //#define SPDLOG_FMT_PRINTF
 
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+
 namespace logging {
     extern std::shared_ptr<spdlog::logger> logfile;
 }

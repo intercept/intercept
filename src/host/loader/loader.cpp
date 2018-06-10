@@ -414,14 +414,14 @@ namespace intercept {
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();
     #endif
-        _allocator.gameState = state_addr_;
+        _allocator.gameState = game_state_ptr;
 
     #if _WIN32
         //via profile context "scrpt"
         evaluate_script_function = future_evaluateScript.get();
         varset_function = future_varSetLocal.get();
 
-        if (evaluate_script_function && varset_function) {
+        if (evaluate_script_function) {
             _allocator.evaluate_func = [](const game_data_code& code, void* ns, const r_string& name) -> game_value {
                 typedef game_value*(__thiscall *evaluate_func) (game_state* gs, game_value& ret, const r_string& code, void* instruction_list, void* context, void* ns, const r_string& name);
                 
@@ -436,17 +436,8 @@ namespace intercept {
                 func(loader::get().game_state_ptr, ret, code.code_string, (void*) &code.instructions, &c, ns, name);
                 return ret;
             };
-
-            _allocator.setvar_func = [](const char* name, const game_value& val) -> void {
-                typedef void(__thiscall *varset) (game_state* gs, const char* name, const game_value& val, bool readonly, bool force);
-
-                varset setvar = reinterpret_cast<varset>(loader::get().varset_function);
-                setvar(loader::get().game_state_ptr, name, val, false, true);
-
-            };
-
         }
-            
+
     #endif
 
 

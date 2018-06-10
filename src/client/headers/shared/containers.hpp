@@ -243,6 +243,8 @@ namespace intercept::types {
         static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
         Type* _ref{ nullptr };
     public:
+        using baseType = Type;
+
         constexpr ref() noexcept = default;
         ~ref() { free(); }
 
@@ -297,6 +299,65 @@ namespace intercept::types {
         size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
     };
 
+    //specialization for I_debug_value. You should not be using this.
+    template <class Type>
+    class i_ref {
+        Type* _ref{nullptr};
+    public:
+        using baseType = Type;
+        constexpr i_ref() noexcept = default;
+        ~i_ref() { free(); }
+
+        //Construct from Pointer
+        constexpr i_ref(Type* other_) noexcept {
+            if (other_) other_->IaddRef();
+            _ref = other_;
+        }
+        //Copy from pointer
+        i_ref& operator=(Type* source_) noexcept {
+            Type* old = _ref;
+            if (source_) source_->IaddRef();
+            _ref = source_;
+            if (old) old->release();  //decrement reference and delete object if refcount == 0
+            return *this;
+        }
+
+        //Construct from reference
+        constexpr i_ref(const i_ref& source_ref_) noexcept {
+            Type* source = source_ref_._ref;
+            if (source) source->IaddRef();
+            _ref = source;
+        }
+        //Copy from reference.
+        i_ref& operator=(const i_ref& other_) {
+            Type* source = other_._ref;
+            Type* old = _ref;
+            if (source) source->IaddRef();
+            _ref = source;
+            if (old) old->Irelease();  //decrement reference and delete object if refcount == 0
+            return *this;
+        }
+        void swap(i_ref& other_) noexcept {
+            auto temp = other_._ref;
+            other_._ref = _ref;
+            _ref = temp;
+        }
+        constexpr bool is_null() const noexcept { return _ref == nullptr; }
+        void free() noexcept {
+            if (!_ref) return;
+            _ref->Irelease();
+            _ref = nullptr;
+        }
+        //This returns a pointer to the underlying object. Use with caution!
+
+        [[deprecated]] constexpr Type* getRef() const noexcept { return _ref; }
+        ///This returns a pointer to the underlying object. Use with caution!
+        constexpr Type* get() const noexcept { return _ref; }
+        constexpr Type* operator->() const noexcept { return _ref; }
+        operator Type*() const noexcept { return _ref; }
+        bool operator!=(const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
+        size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
+    };
 
     ///When this goes out of scope. The pointer is deleted. This takes ownership of the pointer
     template<class Type>
@@ -346,6 +407,11 @@ namespace intercept::types {
     class __vtable {
     public:
         uintptr_t _vtable{ 0 };
+    };
+
+    class dummy_vtable_class {
+    public:
+        virtual void dummy(){};
     };
 
     class _refcount_vtable_dummy : public __vtable, public refcount_base {};
@@ -455,11 +521,11 @@ namespace intercept::types {
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }
         const_iterator cend() const noexcept { return const_iterator((&_data) + _size - 1); }
 
-        const Type& operator[](const size_t index_) {
-            return *(begin() + index_);
+        const Type& operator[](const size_t index_) const {
+            return *(cbegin() + index_);
         }
-        const Type& get(const size_t index_) {
-            return *(begin() + index_);
+        const Type& get(const size_t index_) const {
+            return *(cbegin() + index_);
         }
 
         //We delete ourselves! After release no one should have a pointer to us anymore!
@@ -693,6 +759,12 @@ namespace intercept::types {
             return !std::equal(_ref->cbegin(), _ref->cend(),
                 compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) {return ::tolower(l) == ::tolower(r); });
         }
+
+        std::string_view substr(size_t offset, size_t length) const {
+            if (_ref)
+                return std::string_view(data() + offset, std::min(length, size()));
+            return std::string_view();
+        } 
 
         size_t find(const char ch_, const size_t start_ = 0) const {
             if (length() == 0) return -1;
@@ -936,6 +1008,7 @@ namespace intercept::types {
         Type &back() { return get(_n - 1); }
 
         bool is_empty() const { return _n == 0; }
+        bool empty() const { return _n == 0; }
 
         template <class Func>
         void for_each(const Func &f_) const {
@@ -1128,7 +1201,7 @@ namespace intercept::types {
             if (element_ < base::begin() || element_ > base::end()) throw std::runtime_error("Invalid Iterator");
             const size_t index = std::distance(base::cbegin(), element_);
             if (static_cast<int>(index) > base::_n) return;
-            auto item = (*this)[index];
+            auto&& item = (*this)[index];
             item.~Type();
         #ifdef __GNUC__
             memmove(&(*this)[index], &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
@@ -1208,6 +1281,16 @@ namespace intercept::types {
             return true;
         }
     };
+
+    template <class Type, class Allocator = rv_allocator<Type>>
+    class stack_array : public auto_array<Type, Allocator> {
+        using base = auto_array<Type, Allocator>;
+    public:
+        void push(const Type& src) { base::push_back(src); }
+        const Type& top() const { return *(base::end()-1); }
+        void pop() { base::erase(base::end() - 1); }
+    };
+
 
     template <class Type>
     struct find_key_array_traits {
@@ -1419,7 +1502,7 @@ namespace intercept::types {
         const Type &get(const char* key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (int i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
                 const Type &item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
@@ -1497,6 +1580,7 @@ namespace intercept::types {
             auto key = value.get_map_key();
             Type &old = get(key);
             if (!is_null(old)) {
+                old = std::move(value);
                 return old;
             }
 
@@ -1519,6 +1603,26 @@ namespace intercept::types {
             return x;
         }
 
+        bool remove(const char* key) {
+            if (_count <= 0) return false;
+
+            int hashedKey = hash_key(key);
+            for (size_t i = 0; i < _table[hashedKey].size(); i++) {
+                Type& item = _table[hashedKey][i];
+                if (Traits::compare_keys(item.get_map_key(), key) == 0) {
+                    _table[hashedKey].erase(_table[hashedKey].begin() + i);
+                    _count--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        //Is empty?
+        bool empty() {
+            return (!_table || !_count);
+        }
 
 
     protected:

@@ -77,14 +77,13 @@ namespace intercept {
 
         bool _has_fast_call() {
             auto ef = host::functions.get_engine_allocator()->evaluate_func;
-            auto sv = host::functions.get_engine_allocator()->setvar_func;
-            return ef && sv;
+            return ef;
         }
 
         game_value call(const code &code_, game_value args_) {
             auto ef = host::functions.get_engine_allocator()->evaluate_func;
-            auto sv = host::functions.get_engine_allocator()->setvar_func;
-            if (!ef || !sv) return call2(code_, args_);
+            auto gs = host::functions.get_engine_allocator()->gameState;
+            if (!_has_fast_call()) return call2(code_, args_);
 
             auto missionNamespace = mission_namespace();
  
@@ -95,8 +94,8 @@ namespace intercept {
             auto ns = missionNamespace.data.get();
             static r_string fname = "interceptCall"sv;
 
-            sv("_i135_ar_", args_);
-            sv("_i135_cc_", code_);
+            gs->eval->local->variables.insert({"_i135_ar_"sv, args_});
+            gs->eval->local->variables.insert({"_i135_cc_"sv, code_});
 
             auto ret = ef(*data, ns, fname);
             return ret;

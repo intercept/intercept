@@ -111,8 +111,8 @@ namespace intercept {
         uintptr_t game_data_team_member::type_def;
         uintptr_t game_data_team_member::data_type_def;
 
-        uintptr_t game_data_rv_namespace::type_def;
-        uintptr_t game_data_rv_namespace::data_type_def;
+        uintptr_t game_data_namespace::type_def;
+        uintptr_t game_data_namespace::data_type_def;
 
         uintptr_t game_data_nothing::type_def;
         uintptr_t game_data_nothing::data_type_def;
@@ -731,7 +731,7 @@ namespace intercept {
                 return game_data_type::SIDE;
             if (_type == game_data_rv_text::type_def)
                 return game_data_type::TEXT;
-            if (_type == game_data_rv_namespace::type_def)
+            if (_type == game_data_namespace::type_def)
                 return game_data_type::NAMESPACE;
             if (_type == game_data_code::type_def)
                 return game_data_type::CODE;
@@ -825,7 +825,7 @@ namespace intercept {
                 case game_data_type::ARRAY: return reinterpret_cast<game_data_array*>(data.get())->hash();
                 case game_data_type::STRING: return reinterpret_cast<game_data_string*>(data.get())->hash();
                 case game_data_type::NOTHING: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case game_data_type::NAMESPACE: return reinterpret_cast<game_data_rv_namespace*>(data.get())->hash();
+                case game_data_type::NAMESPACE: return reinterpret_cast<game_data_namespace*>(data.get())->hash();
                 case game_data_type::NaN: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
                 case game_data_type::CODE: return reinterpret_cast<game_data_code*>(data.get())->hash();
                 case game_data_type::OBJECT: return reinterpret_cast<game_data_object*>(data.get())->hash();
@@ -878,7 +878,7 @@ namespace intercept {
     #pragma endregion
 
     #pragma region Serialization
-        uintptr_t param_archive::get_game_state() {
+        game_state* param_archive::get_game_state() {
             auto allocinfo = GET_ENGINE_ALLOCATOR;
             return allocinfo->gameState;
         }

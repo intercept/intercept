@@ -296,7 +296,7 @@ namespace intercept {
             r_string _category; //0x4d
         #endif
             void* placeholder11{ nullptr };//0x50 JNI probably
-            const char *get_map_key() const noexcept { return _name2.data(); }
+            std::string_view get_map_key() const noexcept { return _name2; }
         };
 
         class game_functions : public auto_array<gsFunction>, public gsFuncBase {
@@ -304,7 +304,7 @@ namespace intercept {
             game_functions(std::string name) : _name(name.c_str()) {}
             r_string _name;
             game_functions() noexcept {}
-            const char *get_map_key() const noexcept { return _name.data(); }
+            std::string_view get_map_key() const noexcept { return _name; }
         };
 
         class game_operators : public auto_array<gsOperator>, public gsFuncBase {
@@ -313,7 +313,7 @@ namespace intercept {
             r_string _name;
             int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
             game_operators() noexcept {}
-            const char *get_map_key() const noexcept { return _name.data(); }
+            std::string_view get_map_key() const noexcept { return _name; }
         };
     }
 

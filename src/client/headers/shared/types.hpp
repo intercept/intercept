@@ -684,7 +684,7 @@ namespace intercept {
             game_variable() {}
             game_variable(r_string name_, game_value&& val_, bool read_only_ = false) : name(std::move(name_)), value(std::move(val_)), read_only(read_only_) {}
             game_variable(r_string name_, const game_value& val_, bool read_only_ = false) : name(std::move(name_)), value(val_), read_only(read_only_) {}
-            const char* get_map_key() const { return name.c_str(); }
+            std::string_view get_map_key() const { return name; }
 
             void get_name(char* buffer, int len) const override {
                 std::copy(name.begin(), std::min(name.begin() + static_cast<size_t>(len), name.end()),

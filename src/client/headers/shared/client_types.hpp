@@ -153,16 +153,16 @@ class internal_object : public game_value {
     struct rv_particle_shape {
         std::string file;
         int ntieth;
-        int row;
-        int column;
+        int index;
+        int count;
         int loop;
 
         operator game_value() {
             return game_value(std::vector<game_value>({
                 file,
                 static_cast<float>(ntieth),
-                static_cast<float>(row),
-                static_cast<float>(column),
+                static_cast<float>(index),
+                static_cast<float>(count),
                 static_cast<float>(loop)
             }));
         }
@@ -171,8 +171,8 @@ class internal_object : public game_value {
             return game_value(std::vector<game_value>({
                 file,
                 static_cast<float>(ntieth),
-                static_cast<float>(row),
-                static_cast<float>(column),
+                static_cast<float>(index),
+                static_cast<float>(count),
                 static_cast<float>(loop)
             }));
         }

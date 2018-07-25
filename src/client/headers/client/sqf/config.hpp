@@ -104,9 +104,8 @@ namespace intercept {
             config_entry operator[](sqf_string_const_ref entry_) const { return *this >> entry_; }
             config_entry operator[](size_t index_) const;
             size_t count() const;
-            iterator begin() const { return iterator(*this); }
-            iterator end() const { return iterator(*this,count()-1); }
-
+            iterator begin() const;
+            iterator end() const;
 
 
             operator config &() const;

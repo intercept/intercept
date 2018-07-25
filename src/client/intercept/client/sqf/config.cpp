@@ -47,6 +47,9 @@ namespace intercept {
             return sqf::count(_config_entry);
         }
 
+        config_entry::iterator config_entry::begin() const { return iterator(*this); }
+        config_entry::iterator config_entry::end() const { return iterator(*this, count() - 1); }
+
         config_entry::operator config &() const {
             return _config_entry;
         }

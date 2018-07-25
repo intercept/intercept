@@ -86,8 +86,6 @@ namespace intercept {
             auto gs = allo->gameState;
             if (!_has_fast_call()) return call2(code_, std::move(args_));
 
-            auto missionNamespace = mission_namespace();
- 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
 
             auto data = static_cast<game_data_code*>(wrapper.data.get());

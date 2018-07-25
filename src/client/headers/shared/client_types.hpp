@@ -152,17 +152,17 @@ class internal_object : public game_value {
 
     struct rv_particle_shape {
         std::string file;
-        int ntieth = 16; //this param is a const internally
-        int row;
-        int column;
+        int ntieth;
+        int index;
+        int count;
         int loop;
 
         operator game_value() {
             return game_value(std::vector<game_value>({
                 file,
-                16.0f,
-                static_cast<float>(row),
-                static_cast<float>(column),
+                static_cast<float>(ntieth),
+                static_cast<float>(index),
+                static_cast<float>(count),
                 static_cast<float>(loop)
             }));
         }
@@ -170,9 +170,9 @@ class internal_object : public game_value {
         operator game_value() const {
             return game_value(std::vector<game_value>({
                 file,
-                16.0f,
-                static_cast<float>(row),
-                static_cast<float>(column),
+                static_cast<float>(ntieth),
+                static_cast<float>(index),
+                static_cast<float>(count),
                 static_cast<float>(loop)
             }));
         }
@@ -189,9 +189,9 @@ class internal_object : public game_value {
         float weight;
         float volume;
         float rubbing;
-        float size;
+        std::vector<float> size;
         std::vector<rv_color> color;
-        float animation_phase;
+        std::vector<float> animation_speed;
         float rand_dir_period;
         float rand_dir_intensity;
         std::string on_timer;
@@ -203,13 +203,18 @@ class internal_object : public game_value {
         std::vector<rv_color> emissive_color;
 
         operator game_value() const {
-            std::vector<game_value> color_gv, emissive_color_gv;
+            std::vector<game_value> color_gv, emissive_color_gv,
+                size_gv, animation_speed_gv;
             for (const auto& c : color) {
                 color_gv.push_back(c);
             }
             for (const auto& ec : emissive_color) {
                 emissive_color_gv.push_back(ec);
             }
+            for (const auto& s : size)
+                size_gv.push_back(s);
+            for (const auto& a : animation_speed)
+                animation_speed_gv.push_back(a);
             return game_value(std::vector<game_value>({
                 shape,
                 animation_name,
@@ -222,9 +227,9 @@ class internal_object : public game_value {
                 weight,
                 volume,
                 rubbing,
-                size,
+                size_gv,
                 color_gv,
-                animation_phase,
+                animation_speed_gv,
                 rand_dir_period,
                 rand_dir_intensity,
                 on_timer,

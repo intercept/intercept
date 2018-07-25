@@ -1130,7 +1130,7 @@ namespace intercept {
             return display(host::functions.invoke_raw_binary(__sqf::binary__createmissiondisplay__display__string__ret__display, value0_, value1_));
         }
 
-        control display_ctrl(float value0_, const display &value1_) {
+        control display_ctrl(const display &value0_, float value1_) {
             return control(host::functions.invoke_raw_binary(__sqf::binary__displayctrl__display__scalar__ret__control, value0_, value1_));
         }
 

@@ -559,7 +559,7 @@ namespace intercept {
         display create_mission_display(sqf_string_const_ref value0_, const display &value1_);
         control control_null();
         control controls_group_ctrl(const control &value0_, float value1_);
-        control display_ctrl(float value0_, const display &value1_);
+        control display_ctrl(const display &value0_, float value1_);
         vector3 map_center_on_camera(const control &mini_map_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);

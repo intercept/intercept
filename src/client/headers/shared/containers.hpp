@@ -832,14 +832,16 @@ namespace intercept::types {
             return _in;
         }
 
-        bool compare_case_sensitive(const char* other_) const {
+        bool compare_case_sensitive(std::string_view other_) const {
+            if (length()  != other_.length()) return false;
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                               compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) { return l == r; });
+                               other_.cbegin(), [](unsigned char l, unsigned char r) { return l == r; });
         }
 
-        bool compare_case_insensitive(const char* other_) const {  //#TODO string_view variant with length checking
+        bool compare_case_insensitive(std::string_view other_) const {
+            if (length() != other_.length()) return false;
             return !std::equal(_ref->cbegin(), _ref->cend(),
-                               compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) { return ::tolower(l) == ::tolower(r); });
+                               other_.cbegin(), [](unsigned char l, unsigned char r) { return ::tolower(l) == ::tolower(r); });
         }
 
         std::string_view substr(size_t offset, size_t length) const {

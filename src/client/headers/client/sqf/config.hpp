@@ -20,19 +20,98 @@ namespace intercept {
     namespace sqf {
         class config_entry {
         public:
+
+
+            class iterator {
+                const config_entry* p_;
+                size_t index{0};
+
+            public:
+                using iterator_category = std::random_access_iterator_tag;
+                using value_type = config_entry;
+                using difference_type = ptrdiff_t;
+                using pointer = config_entry *;
+                using reference = config_entry &;
+
+                iterator() : p_(nullptr) {}
+                explicit iterator(const config_entry &p) noexcept : p_(&p) {}
+                explicit iterator(const config_entry &p, size_t index_) noexcept : p_(&p), index(index_) {}
+                iterator(const iterator &other) noexcept : p_(other.p_) {}
+                iterator &operator=(const iterator &other) {
+                    p_ = other.p_;
+                    return *this;
+                }
+                iterator &operator++() noexcept {
+                    ++index;
+                    return *this;
+                }  // prefix++
+                iterator operator++(int) {
+                    iterator tmp(*this);
+                    ++(*this);
+                    return tmp;
+                }  // postfix++
+                iterator &operator--() noexcept {
+                    --index;
+                    return *this;
+                }  // prefix--
+                iterator operator--(int) {
+                    iterator tmp(*this);
+                    --(*this);
+                    return tmp;
+                }  // postfix--
+
+                void operator+=(const std::size_t &n) { index += n; }
+                void operator+=(const iterator &other) { index += other.index; }
+                iterator operator+(const std::size_t &n) const {
+                    iterator tmp(*this);
+                    tmp += n;
+                    return tmp;
+                }
+                iterator operator+(const iterator &other) const {
+                    iterator tmp(*this);
+                    tmp += other;
+                    return tmp;
+                }
+
+                void operator-=(const std::size_t &n) noexcept { index -= n; }
+                void operator-=(const iterator &other) noexcept { index -= other.index; }
+                iterator operator-(const std::size_t &n) const {
+                    iterator tmp(*this);
+                    tmp -= n;
+                    return tmp;
+                }
+                std::size_t operator-(const iterator &other) const noexcept { return index - other.index; }
+
+                bool operator<(const iterator &other) const noexcept { return (index - other.index) < 0; }
+                bool operator<=(const iterator &other) const noexcept { return (index - other.index) <= 0; }
+                bool operator>(const iterator &other) const noexcept { return (index - other.index) > 0; }
+                bool operator>=(const iterator &other) const noexcept { return (index - other.index) >= 0; }
+                bool operator==(const iterator &other) const noexcept { return index == other.index; }
+                bool operator!=(const iterator &other) const noexcept { return index != other.index; }
+
+                const config_entry &operator*() const noexcept { return p_[index]; }
+                const config_entry *operator->() const noexcept { return &(p_[index]); }
+            };
+
             config_entry();
             config_entry(types::config entry_);
             config_entry(config_entry const &copy_);
             config_entry(config_entry &&move_) noexcept;
             config_entry &operator=(const config_entry &copy_) = default;
             config_entry &operator=(config_entry &&move_) noexcept;
-            config_entry operator>>(sqf_string_const_ref entry_);
+            bool operator==(const config_entry &other_) const;
+            config_entry operator>>(sqf_string_const_ref entry_) const;
+            config_entry operator[](sqf_string_const_ref entry_) const { return *this >> entry_; }
+            config_entry operator[](size_t index_) const;
+            size_t count() const;
+            iterator begin() const;
+            iterator end() const;
 
-            operator config &();
 
+            operator config &() const;
         protected:
-            types::config _config_entry;
-            bool _initialized;
+            mutable types::config _config_entry;
+            mutable bool _initialized;
         };
 
         std::vector<config> config_hierarchy(const config &config_entry_);

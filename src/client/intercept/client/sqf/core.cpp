@@ -81,33 +81,36 @@ namespace intercept {
         }
 
         game_value call(const code &code_, game_value args_) {
-            auto ef = host::functions.get_engine_allocator()->evaluate_func;
-            auto gs = host::functions.get_engine_allocator()->gameState;
-            if (!_has_fast_call()) return call2(code_, args_);
+            auto allo = host::functions.get_engine_allocator();
+            auto ef = allo->evaluate_func;
+            auto gs = allo->gameState;
+            if (!_has_fast_call()) return call2(code_, std::move(args_));
 
-            auto missionNamespace = mission_namespace();
- 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
 
             auto data = static_cast<game_data_code*>(wrapper.data.get());
-
-            auto ns = missionNamespace.data.get();
+            
+            auto ns = gs->namespaces[3];
             static r_string fname = "interceptCall"sv;
+            static r_string arname = "_i135_ar_"sv;
+            static r_string codename = "_i135_cc_"sv;
 
-            gs->eval->local->variables.insert({"_i135_ar_"sv, args_});
-            gs->eval->local->variables.insert({"_i135_cc_"sv, code_});
+            gs->eval->local->variables.insert({arname, std::move(args_)});
+            gs->eval->local->variables.insert({codename, code_});
 
             auto ret = ef(*data, ns, fname);
             return ret;
         }
 
         game_value call(const code &code_) {
-            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto allo = host::functions.get_engine_allocator();
+            auto ef = allo->evaluate_func;
+            auto gs = allo->gameState;
             if (!ef) return call2(code_);
 
             auto data = static_cast<game_data_code*>(code_.data.get());
 
-            auto ns = mission_namespace().data.get();
+            auto ns = gs->namespaces[3];
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return ret;

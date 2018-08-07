@@ -641,6 +641,30 @@ namespace intercept {
             serialization_return serialize(param_archive& ar) override;
 
             ref<game_data> data;
+
+            //template<class T>
+            //std::enable_if_t<std::is_convertible_v<game_data, T>, ref<T>> get_as() {
+            //    return static_cast<ref<T>>(data);
+            //}
+            //template <class T>
+            //std::enable_if_t<std::is_convertible_v<game_data, T>, const ref<T>> get_as() const {
+            //    return static_cast<const ref<T>>(data);
+            //}
+
+            template <class T>
+            ref<T> get_as() {
+                static_assert(std::is_convertible_v<T, game_data>, "game_value::get_as() can only convert to game_data types");
+                return static_cast<ref<T>>(data);
+            }
+            template <class T>
+            const ref<T> get_as() const {
+                static_assert(std::is_convertible_v<T, game_data>, "game_value::get_as() can only convert to game_data types");
+                return static_cast<const ref<T>>(data);
+            }
+
+
+
+
             [[deprecated]] static void* operator new(std::size_t sz_);  //Should never be used
             static void operator delete(void* ptr_, std::size_t sz_);
 #ifndef __linux__

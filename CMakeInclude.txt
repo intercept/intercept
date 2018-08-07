@@ -1,0 +1,30 @@
+#You can use include this file in your Intercept Plugins CMakeFile to add Intercept sources to your project.
+
+#Example:
+# set(INTERCEPT_NETWORK_NAME "intercept-network")
+# add_library(${INTERCEPT_NETWORK_NAME} SHARED)
+# set_property(GLOBAL PROPERTY INTERCEPT_CLIENT_TARGET ${INTERCEPT_NETWORK_NAME})
+# include(3rdParty/intercept/CMakeInclude.txt)
+
+
+
+get_property(INTERCEPT_CLIENT_TARGET GLOBAL PROPERTY INTERCEPT_CLIENT_TARGET)
+
+message("Including Intercept for project: '${INTERCEPT_CLIENT_TARGET}'")
+
+set(INTERCEPT_CLIENT_PATH "${CMAKE_CURRENT_LIST_DIR}/src/client")
+
+set(INTERCEPT_INCLUDE_PATH "${INTERCEPT_CLIENT_PATH}/headers" "${INTERCEPT_CLIENT_PATH}/headers/shared" "${INTERCEPT_CLIENT_PATH}/headers/client/" "${INTERCEPT_CLIENT_PATH}/headers/client/sqf")
+
+file(GLOB INTERCEPT_CLIENT_SOURCES "${INTERCEPT_CLIENT_PATH}/intercept/client/*.cpp"  "${INTERCEPT_CLIENT_PATH}/intercept/client/sqf/*.cpp" "${INTERCEPT_CLIENT_PATH}/intercept/shared/*.cpp")
+SOURCE_GROUP("intercept" FILES ${INTERCEPT_CLIENT_SOURCES})
+
+target_include_directories(${INTERCEPT_CLIENT_TARGET} PUBLIC ${INTERCEPT_INCLUDE_PATH})
+target_sources(${INTERCEPT_CLIENT_TARGET} PUBLIC ${INTERCEPT_CLIENT_SOURCES})
+target_compile_definitions(${INTERCEPT_CLIENT_TARGET} PUBLIC INTERCEPT_NO_THREAD_SAFETY)
+
+
+
+if(USE_ENGINE_TYPES)
+    target_compile_definitions(${INTERCEPT_CLIENT_TARGET} PUBLIC INTERCEPT_SQF_STRTYPE_RSTRING)
+endif()

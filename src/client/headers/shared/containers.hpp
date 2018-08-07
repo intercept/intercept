@@ -1313,6 +1313,12 @@ namespace intercept::types {
                 grow(res_ - _maxItems);
             }
         }
+        /**
+        * @brief Constructs a value at where_
+        * @param where_ the iterator where to start inserting
+        * @param val_ the arguments passed to the values constructor
+        * @return A iterator pointing to the inserted value
+        */
         template <class... _Valty>
         iterator emplace(iterator where_, _Valty&&... val_) {
             if (where_ < base::begin() || where_ > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
@@ -1393,8 +1399,13 @@ namespace intercept::types {
                 erase(begin() + index_, begin() + index_ + (count_ - 1));
         }
 
-        //This is sooo not threadsafe!
-        template <class _InIt>
+        /**
+        * @brief Inserts a range of values at _where
+        * @param _first start of the range
+        * @param _last end of the range
+        * @return A iterator pointing to the first inserted value
+        */
+        template <class _InIt>//This is sooo not threadsafe!
         iterator insert(iterator _where, _InIt _first, _InIt _last) {
             if (_first == _last) return _where;                                                                //Boogie!
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
@@ -1417,6 +1428,17 @@ namespace intercept::types {
             std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
             return base::begin() + insertOffset;
         }
+
+        /**
+        * @brief Inserts a "range" of values at _where
+        * @param where_ the iterator where to start inserting
+        * @param values_ the iterator where to start inserting
+        * @return A iterator pointing to the first inserted element
+        */
+        iterator insert(iterator where_, const std::initializer_list<Type>& values_) {
+            return insert(where_, values_.begin(), values_.end());
+        }
+
         void clear() {
             if (base::_data)
                 Allocator::deallocate(rv_array<Type>::_data);

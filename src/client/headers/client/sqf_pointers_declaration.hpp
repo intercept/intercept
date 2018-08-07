@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 182.144685 - Profile
+//Exported Pointer Definitions For: Arma 3 184.144923 - Profile
 
 
 // Unary Functions
@@ -83,6 +83,7 @@ static unary_function unary__buldozer_loadnewroads__string__ret__bool;
 static unary_function unary__buttonaction__control__ret__string;
 static unary_function unary__buttonaction__scalar__ret__string;
 static unary_function unary__buttonsetaction__array__ret__nothing;
+static unary_function unary__calculateplayervisibilitybyfriendly__bool__ret__nothing;
 static unary_function unary__call__code__ret__any;
 static unary_function unary__camcommitted__object__ret__bool;
 static unary_function unary__camdestroy__object__ret__nothing;
@@ -1373,6 +1374,8 @@ static binary_function binary__ctheadercontrols__control__scalar__ret__array;
 static binary_function binary__ctremoveheaders__control__array__ret__nothing;
 static binary_function binary__ctremoverows__control__array__ret__nothing;
 static binary_function binary__ctrladdeventhandler__control__array__ret__scalar;
+static binary_function binary__ctrlanimatemodel__control__array__ret__nothing;
+static binary_function binary__ctrlanimationphasemodel__control__string__ret__scalar;
 static binary_function binary__ctrlchecked__control__scalar__ret__nothing;
 static binary_function binary__ctrlcommit__control__scalar__ret__nothing;
 static binary_function binary__ctrlcreate__display__array__ret__control;
@@ -2381,6 +2384,7 @@ static nular_function nular__get3deniconsvisible__ret__array;
 static nular_function nular__get3denlinesvisible__ret__array;
 static nular_function nular__get3denmouseover__ret__array;
 static nular_function nular__getartillerycomputersettings__ret__array;
+static nular_function nular__getcalculateplayervisibilitybyfriendly__ret__bool;
 static nular_function nular__getclientstate__ret__string;
 static nular_function nular__getclientstatenumber__ret__string;
 static nular_function nular__getcursorobjectparams__ret__array;

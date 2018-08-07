@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 182.144685 - Profile
+//Exported Pointer Assignments For: Arma 3 184.144923 - Profile
 
 
 // Unary Functions
@@ -83,6 +83,7 @@ __sqf::unary__buldozer_loadnewroads__string__ret__bool = (unary_function)host::f
 __sqf::unary__buttonaction__control__ret__string = (unary_function)host::functions.get_unary_function_typed("buttonaction"sv, "CONTROL"sv);
 __sqf::unary__buttonaction__scalar__ret__string = (unary_function)host::functions.get_unary_function_typed("buttonaction"sv, "SCALAR"sv);
 __sqf::unary__buttonsetaction__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("buttonsetaction"sv, "ARRAY"sv);
+__sqf::unary__calculateplayervisibilitybyfriendly__bool__ret__nothing = (unary_function)host::functions.get_unary_function_typed("calculateplayervisibilitybyfriendly"sv, "BOOL"sv);
 __sqf::unary__call__code__ret__any = (unary_function)host::functions.get_unary_function_typed("call"sv, "CODE"sv);
 __sqf::unary__camcommitted__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("camcommitted"sv, "OBJECT"sv);
 __sqf::unary__camdestroy__object__ret__nothing = (unary_function)host::functions.get_unary_function_typed("camdestroy"sv, "OBJECT"sv);
@@ -1373,6 +1374,8 @@ __sqf::binary__ctheadercontrols__control__scalar__ret__array = (binary_function)
 __sqf::binary__ctremoveheaders__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctremoveheaders"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctremoverows__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctremoverows"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrladdeventhandler__control__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrladdeventhandler"sv, "CONTROL"sv, "ARRAY"sv);
+__sqf::binary__ctrlanimatemodel__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlanimatemodel"sv, "CONTROL"sv, "ARRAY"sv);
+__sqf::binary__ctrlanimationphasemodel__control__string__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrlanimationphasemodel"sv, "CONTROL"sv, "STRING"sv);
 __sqf::binary__ctrlchecked__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlchecked"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcommit__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlcommit"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcreate__display__array__ret__control = (binary_function)host::functions.get_binary_function_typed("ctrlcreate"sv, "DISPLAY"sv, "ARRAY"sv);
@@ -2381,6 +2384,7 @@ __sqf::nular__get3deniconsvisible__ret__array = (nular_function)host::functions.
 __sqf::nular__get3denlinesvisible__ret__array = (nular_function)host::functions.get_nular_function("get3denlinesvisible"sv);
 __sqf::nular__get3denmouseover__ret__array = (nular_function)host::functions.get_nular_function("get3denmouseover"sv);
 __sqf::nular__getartillerycomputersettings__ret__array = (nular_function)host::functions.get_nular_function("getartillerycomputersettings"sv);
+__sqf::nular__getcalculateplayervisibilitybyfriendly__ret__bool = (nular_function)host::functions.get_nular_function("getcalculateplayervisibilitybyfriendly"sv);
 __sqf::nular__getclientstate__ret__string = (nular_function)host::functions.get_nular_function("getclientstate"sv);
 __sqf::nular__getclientstatenumber__ret__string = (nular_function)host::functions.get_nular_function("getclientstatenumber"sv);
 __sqf::nular__getcursorobjectparams__ret__array = (nular_function)host::functions.get_nular_function("getcursorobjectparams"sv);

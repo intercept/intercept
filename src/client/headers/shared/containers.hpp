@@ -1274,6 +1274,9 @@ namespace intercept::types {
             if (base::_data == nullptr) return;
             resize(0);
         }
+        /**
+        * @brief Reduces capacity to minimum required to store current content
+        */
         void shrink_to_fit() {
             resize(base::_n);
         }
@@ -1294,6 +1297,9 @@ namespace intercept::types {
             return *this;
         }
 
+        /**
+        * @brief Makes sure the capacity is exactly _n. Destructs and deallocates all elements past n_
+        */
         void resize(const size_t n_) {
             if (static_cast<int>(n_) < base::_n) {
                 for (int i = static_cast<int>(n_); i < base::_n; i++) {
@@ -1308,11 +1314,17 @@ namespace intercept::types {
             }
             reallocate(n_);
         }
+        
+        /**
+        * @brief Makes sure the capacity is big enough to contain res_ elements
+        * @param res_ new minimum buffer size
+        */
         void reserve(const size_t res_) {
             if (_maxItems < static_cast<int>(res_)) {
                 grow(res_ - _maxItems);
             }
         }
+
         /**
         * @brief Constructs a value at where_
         * @param where_ the iterator where to start inserting
@@ -1335,6 +1347,12 @@ namespace intercept::types {
 
             return base::begin() + insertOffset;
         }
+
+        /**
+        * @brief Constructs a new value at the end of the array
+        * @param val_ the arguments passed to the values constructor
+        * @return A iterator pointing to the inserted value
+        */
         template <class... _Valty>
         iterator emplace_back(_Valty&&... val_) {
             if (_maxItems < base::_n + 1) {
@@ -1345,9 +1363,21 @@ namespace intercept::types {
             ++base::_n;
             return iterator(&item);
         }
+
+        /**
+        * @brief Adds a new value at the end of the array
+        * @param val_ the value to be copied into the array
+        * @return A iterator pointing to the inserted value
+        */
         iterator push_back(const Type& val_) {
             return emplace_back(val_);
         }
+
+        /**
+        * @brief Adds a new value at the end of the array
+        * @param val_ the value to be moved into the array
+        * @return A iterator pointing to the inserted value
+        */
         iterator push_back(Type&& val_) {
             return emplace_back(std::move(val_));
         }

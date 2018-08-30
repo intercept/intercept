@@ -10,7 +10,7 @@ namespace intercept {
         const std::string_view waypoint::__type_lookup[22] = {"MOVE"sv, "DESTROY"sv, "GETIN"sv, "SAD"sv, "JOIN"sv, "LEADER"sv, "GETOUT"sv, "CYCLE"sv, "LOAD"sv, "UNLOAD"sv, "TR UNLOAD"sv, "HOLD"sv, "SENTRY"sv, "GUARD"sv, "TALK"sv, "SCRIPTED"sv, "SUPPORT"sv, "GETIN NEAREST"sv, "DISMISS"sv, "LOITER"sv, "AND"sv, "OR"sv};
         const std::string_view waypoint::__behaviour_lookup[6] = {"UNCHANGED"sv, "CARELESS"sv, "SAFE"sv, "AWARE"sv, "COMBAT"sv, "STEALTH"sv};
         const std::string_view waypoint::__combat_mode_lookup[6] = {"NO CHANGE"sv, "BLUE"sv, "GREEN"sv, "WHITE"sv, "YELLOW"sv, "RED"sv};
-        const std::string_view waypoint::__formation_lookup[10] = {"NO_CHANGE"sv, "COLUMN"sv, "STAG_COLUMN"sv, "WEDGE"sv, "ECH_LEFT"sv, "ECH_RIGHT"sv, "VEE"sv, "LINE"sv, "FILE"sv, "DIAMOND"sv};
+        const std::string_view waypoint::__formation_lookup[10] = {"NO CHANGE"sv, "COLUMN"sv, "STAG COLUMN"sv, "WEDGE"sv, "ECH LEFT"sv, "ECH RIGHT"sv, "VEE"sv, "LINE"sv, "FILE"sv, "DIAMOND"sv};
         const std::string_view waypoint::__loiter_lookup[2] = {"CIRCLE"sv, "CIRCLE_L"sv};
 
         waypoint add_waypoint(group &gp_, const vector3 &center_, float radius_, int index_, sqf_string_const_ref name_) {

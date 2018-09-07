@@ -235,7 +235,6 @@ namespace intercept::types {
     template <class Type>
     class ref {
         friend class game_value_static;  //Overrides _ref to nullptr in destructor when Arma is exiting
-        friend class ref;
         static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
         Type* _ref{nullptr};
 
@@ -278,16 +277,16 @@ namespace intercept::types {
         //Construct from reference and convert
         template <typename T>
         constexpr ref(const ref<T>& source_ref_) noexcept {
-            static_assert(std::is_constructible_v<T*, Type*>, "Cannot convert intercept::types::ref to incompatible type");
-            T* source = source_ref_._ref;
+            static_assert(std::is_constructible_v<Type*, T*>, "Cannot convert intercept::types::ref to incompatible type");
+            T* source = source_ref_.get();
             if (source) source->add_ref();
             _ref = static_cast<Type*>(source);
         }
         //Copy from reference.
         template <class T>
         ref& operator=(const ref<T>& other_) {
-            static_assert(std::is_constructible_v<T*, Type*>, "Cannot convert intercept::types::ref to incompatible type");
-            T* source = other_._ref;
+            static_assert(std::is_constructible_v<Type*, T*>, "Cannot convert intercept::types::ref to incompatible type");
+            T* source = other_.get();
             Type* old = _ref;
             if (source) source->add_ref();
             _ref = source;

@@ -26,9 +26,10 @@ matrix:
         fi
 
     ###############################################################################
-    # Job #2 - Building intercept
+    # Job #2 - Building intercept with GCC
     ###############################################################################
     - language: cpp
+      compiler: gcc
       addons:
         apt:
           packages:
@@ -42,6 +43,27 @@ matrix:
       script:
         - cd vcproj
         - CC=gcc-7 CXX=g++-7 cmake .. && make -j 3
+
+    ###############################################################################
+    # Job #3 - Building intercept with clang
+    ###############################################################################
+    - language: cpp
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-7
+            - g++-7-multilib
+            - libstdc++-7-dev
+            - linux-libc-dev:i386  # asm/errno.h
+
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
+
+      script:
+        - cd vcproj
+        - CC=clang-7 CXX=clang++-7 cmake .. && make -j 3
 
 notifications:
   email:

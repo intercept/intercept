@@ -14,7 +14,7 @@ option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
     #remove -s to enable debug symbols. Also maybe add -g or -g3
     SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive -pthread")
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
@@ -62,3 +62,7 @@ add_subdirectory(intercept_dll)
 
 
 message("Build Type: ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    message("clang is unsupported for usage with Arma")
+endif()

@@ -16,3 +16,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set_target_properties(extensions_static PROPERTIES LINK_SEARCH_START_STATIC 1)
     set_target_properties(extensions_static PROPERTIES LINK_SEARCH_END_STATIC 1)
 endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_link_libraries(extensions_static ${CMAKE_DL_LIBS})
+endif()

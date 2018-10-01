@@ -1,4 +1,4 @@
-﻿#include "group.hpp"
+#include "group.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "waypoint.hpp"
@@ -188,11 +188,15 @@ namespace intercept {
         }
 
         void set_group_id(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupid__object_group__array__ret__nothing, group_, {name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end()))});
+            auto_array<game_value> params(params_.begin(), params_.end());
+            params.emplace(params.begin(), name_format_.operator game_value());
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupid__object_group__array__ret__nothing, group_, std::move(params));
         }
 
         void set_group_id_global(const group &group_, sqf_string_const_ref name_format_, sqf_string_list_const_ref params_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, {name_format_, std::move(auto_array<game_value>(params_.begin(), params_.end()))});
+            auto_array<game_value> params(params_.begin(), params_.end());
+            params.emplace(params.begin(), name_format_.operator game_value());
+            host::functions.invoke_raw_binary(__sqf::binary__setgroupidglobal__object_group__array__ret__nothing, group_, std::move(params));
         }
         void set_speed_mode(const group &group_, sqf_string_const_ref speed_mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setspeedmode__object_group__string__ret__nothing, group_, speed_mode_);

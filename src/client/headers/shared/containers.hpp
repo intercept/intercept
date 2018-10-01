@@ -235,7 +235,6 @@ namespace intercept::types {
     template <class Type>
     class ref {
         friend class game_value_static;  //Overrides _ref to nullptr in destructor when Arma is exiting
-        friend class ref;
         static_assert(std::is_base_of<refcount_base, Type>::value, "Type must inherit refcount_base");
         Type* _ref{nullptr};
 
@@ -278,16 +277,16 @@ namespace intercept::types {
         //Construct from reference and convert
         template <typename T>
         constexpr ref(const ref<T>& source_ref_) noexcept {
-            static_assert(std::is_constructible_v<T*, Type*>, "Cannot convert intercept::types::ref to incompatible type");
-            T* source = source_ref_._ref;
+            static_assert(std::is_constructible_v<Type*, T*>, "Cannot convert intercept::types::ref to incompatible type");
+            T* source = source_ref_.get();
             if (source) source->add_ref();
             _ref = static_cast<Type*>(source);
         }
         //Copy from reference.
         template <class T>
         ref& operator=(const ref<T>& other_) {
-            static_assert(std::is_constructible_v<T*, Type*>, "Cannot convert intercept::types::ref to incompatible type");
-            T* source = other_._ref;
+            static_assert(std::is_constructible_v<Type*, T*>, "Cannot convert intercept::types::ref to incompatible type");
+            T* source = other_.get();
             Type* old = _ref;
             if (source) source->add_ref();
             _ref = source;
@@ -1274,6 +1273,9 @@ namespace intercept::types {
             if (base::_data == nullptr) return;
             resize(0);
         }
+        /**
+        * @brief Reduces capacity to minimum required to store current content
+        */
         void shrink_to_fit() {
             resize(base::_n);
         }
@@ -1294,6 +1296,9 @@ namespace intercept::types {
             return *this;
         }
 
+        /**
+        * @brief Makes sure the capacity is exactly _n. Destructs and deallocates all elements past n_
+        */
         void resize(const size_t n_) {
             if (static_cast<int>(n_) < base::_n) {
                 for (int i = static_cast<int>(n_); i < base::_n; i++) {
@@ -1308,11 +1313,23 @@ namespace intercept::types {
             }
             reallocate(n_);
         }
+        
+        /**
+        * @brief Makes sure the capacity is big enough to contain res_ elements
+        * @param res_ new minimum buffer size
+        */
         void reserve(const size_t res_) {
             if (_maxItems < static_cast<int>(res_)) {
                 grow(res_ - _maxItems);
             }
         }
+
+        /**
+        * @brief Constructs a value at where_
+        * @param where_ the iterator where to start inserting
+        * @param val_ the arguments passed to the values constructor
+        * @return A iterator pointing to the inserted value
+        */
         template <class... _Valty>
         iterator emplace(iterator where_, _Valty&&... val_) {
             if (where_ < base::begin() || where_ > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
@@ -1329,6 +1346,12 @@ namespace intercept::types {
 
             return base::begin() + insertOffset;
         }
+
+        /**
+        * @brief Constructs a new value at the end of the array
+        * @param val_ the arguments passed to the values constructor
+        * @return A iterator pointing to the inserted value
+        */
         template <class... _Valty>
         iterator emplace_back(_Valty&&... val_) {
             if (_maxItems < base::_n + 1) {
@@ -1339,9 +1362,21 @@ namespace intercept::types {
             ++base::_n;
             return iterator(&item);
         }
+
+        /**
+        * @brief Adds a new value at the end of the array
+        * @param val_ the value to be copied into the array
+        * @return A iterator pointing to the inserted value
+        */
         iterator push_back(const Type& val_) {
             return emplace_back(val_);
         }
+
+        /**
+        * @brief Adds a new value at the end of the array
+        * @param val_ the value to be moved into the array
+        * @return A iterator pointing to the inserted value
+        */
         iterator push_back(Type&& val_) {
             return emplace_back(std::move(val_));
         }
@@ -1393,8 +1428,13 @@ namespace intercept::types {
                 erase(begin() + index_, begin() + index_ + (count_ - 1));
         }
 
-        //This is sooo not threadsafe!
-        template <class _InIt>
+        /**
+        * @brief Inserts a range of values at _where
+        * @param _first start of the range
+        * @param _last end of the range
+        * @return A iterator pointing to the first inserted value
+        */
+        template <class _InIt>//This is sooo not threadsafe!
         iterator insert(iterator _where, _InIt _first, _InIt _last) {
             if (_first == _last) return _where;                                                                //Boogie!
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
@@ -1417,6 +1457,17 @@ namespace intercept::types {
             std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
             return base::begin() + insertOffset;
         }
+
+        /**
+        * @brief Inserts a "range" of values at _where
+        * @param where_ the iterator where to start inserting
+        * @param values_ the iterator where to start inserting
+        * @return A iterator pointing to the first inserted element
+        */
+        iterator insert(iterator where_, const std::initializer_list<Type>& values_) {
+            return insert(where_, values_.begin(), values_.end());
+        }
+
         void clear() {
             if (base::_data)
                 Allocator::deallocate(rv_array<Type>::_data);

@@ -34,13 +34,13 @@ namespace intercept::client {
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::mp: {
-                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration, ehType });
-                if (found != funcMapCtrlEH.end())
+                auto found = funcMapMPEH.find({ uid, handle, EHIteration, ehType });
+                if (found != funcMapMPEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::display: {
-                auto found = funcMapCtrlEH.find({ uid, handle, EHIteration, ehType });
-                if (found != funcMapCtrlEH.end())
+                auto found = funcMapDisplayEH.find({ uid, handle, EHIteration, ehType });
+                if (found != funcMapDisplayEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
             case eventhandler_type::custom: {
@@ -178,13 +178,13 @@ namespace intercept::client {
         auto uid = dist(rng);
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\""sv)
-                              + intercept::client::host::module_name.data() + "\","
-                              + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + ","
-                              + std::to_string(uid) + ","
+                              + intercept::client::host::module_name.data() + "\"," //modulename
+                              + std::to_string(static_cast<uint32_t>(eventhandler_type::mission)) + "," //EHType
+                              + std::to_string(uid) + "," //UID
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         int ehid = intercept::sqf::add_mission_event_handler(static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::mission)};
     }
 
     void delScriptEH(eventhandlers_mission type, EHIdentifier& handle) {
@@ -499,7 +499,7 @@ namespace intercept::client {
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         int ehid = intercept::sqf::add_event_handler(obj, static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::object)};
     }
 
     void delScriptEH(types::object obj, eventhandlers_object type, EHIdentifier& handle) {
@@ -574,7 +574,7 @@ namespace intercept::client {
                               + "_thisEventHandler] InterceptClientEvent [_this]";
         int ehid = intercept::sqf::ctrl_add_event_handler(ctrl, static_cast<sqf_string>(typeStr), command);
 
-        return {uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::ctrl)};
     }
 
     void delScriptEH(types::control ctrl, eventhandlers_ctrl type, EHIdentifier& handle) {
@@ -633,7 +633,7 @@ namespace intercept::client {
             + "_thisEventHandler] InterceptClientEvent [_this]";
         int ehid = intercept::sqf::add_mp_event_handler(unit, static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::mp)};
     }
 
     void delScriptEH(types::object unit, eventhandlers_mp type, EHIdentifier& handle) {
@@ -700,7 +700,7 @@ namespace intercept::client {
             + "_thisEventHandler] InterceptClientEvent [_this]";
         int ehid = intercept::sqf::display_add_event_handler(disp, static_cast<sqf_string_const_ref>(typeStr), command);
 
-        return { uid, ehid, EHIteration, static_cast<uint8_t>(type) };
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::display)};
     }
 
     void delScriptEH(types::display disp, eventhandlers_display type, EHIdentifier& handle) {

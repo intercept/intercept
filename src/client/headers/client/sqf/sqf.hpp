@@ -1,6 +1,7 @@
-﻿#pragma once
+#pragma once
 
 #include "ai.hpp"
+#include "actions.hpp"
 #include "chat.hpp"
 #include "core.hpp"
 #include "position.hpp"

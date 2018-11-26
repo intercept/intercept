@@ -520,7 +520,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__countside__side__array__ret__scalar, side_, std::move(objects));
         }
 
-        void reveal_mine(const object &value0_, const side &value1_) {
+        void reveal_mine(const side &value0_, const object &value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__revealmine__side__object__ret__nothing, value0_, value1_);
         }
 

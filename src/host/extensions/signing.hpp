@@ -19,7 +19,7 @@ namespace intercept::cert {
             self_signed,
             core
         };
-        security_class verifyCert(std::wstring_view file_path, types::r_string ca_cert);
+        std::pair<intercept::cert::signing::security_class, std::optional<std::string>> verifyCert(std::wstring_view file_path, types::r_string ca_cert);
     private:
         static void debug_certs_in_store(void* store);
     };

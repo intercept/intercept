@@ -779,7 +779,7 @@ namespace intercept::types {
 
         ///== is case insensitive just like scripting
         bool operator==(const r_string& other_) const {
-            if (!data()) return !other_.data() || !*other_.data();  //empty?
+            if (!data() || !other_.data()) return data() == other_.data();  //empty?
             if (data() == other_.data()) return true;
 
             return operator==(std::string_view(other_));

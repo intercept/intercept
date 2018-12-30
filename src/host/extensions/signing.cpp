@@ -80,7 +80,7 @@ typedef struct {
     LPWSTR lpszMoreInfoLink;
 } SPROG_PUBLISHERINFO, *PSPROG_PUBLISHERINFO;
 
-template <class T, typename R, typename A, R (*D)(A)>
+template <class T, typename R, typename A, R (__stdcall *D)(A)>
 class ManagedObject {
 public:
     T obj = nullptr;
@@ -104,7 +104,7 @@ public:
     }
 };
 
-template <class T, typename R, typename A, R (*D)(A, DWORD)>
+template <class T, typename R, typename A, R(__stdcall *D)(A, DWORD)>
 class ManagedObject2 {
 public:
     T obj = nullptr;
@@ -403,6 +403,6 @@ void intercept::cert::signing::debug_certs_in_store([[maybe_unused]] HCERTSTORE 
 
 #else
 
-intercept::cert::signing::security_class intercept::cert::signing::verifyCert(std::wstring_view, types::r_string) {}
+std::pair<intercept::cert::signing::security_class, std::optional<std::string>> intercept::cert::signing::verifyCert(std::wstring_view, types::r_string) {return {security_class::core, std::nullopt}}
 void intercept::cert::signing::debug_certs_in_store(void*) {}
 #endif

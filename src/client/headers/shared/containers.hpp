@@ -893,6 +893,16 @@ namespace intercept::types {
         r_string operator+(const std::string_view right_) const {
             return append(right_);
         }
+        friend r_string operator+(const char* left, const r_string& right_) {
+            const auto my_length = strlen(left);
+            auto new_data = create(my_length + right_.length() + 1);  //Space for terminating nullchar
+
+            std::copy_n(left, my_length, new_data->begin());
+            std::copy_n(right_.data(), right_.length(), new_data->begin() + my_length);
+
+            new_data->data()[my_length + right_.length()] = 0;
+            return r_string(new_data);
+        }
         r_string& operator+=(const std::string_view right_) {
             return append_modify(right_);
         }

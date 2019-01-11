@@ -760,10 +760,9 @@ namespace intercept {
             public:
                 callstack_item* _parent;
                 game_var_space _varSpace;
-                /// number of values on the data stack when item was created
-                int _stackBottom;
-                /// number of values on the data stack before the current instruction processing
-                int _stackLast;
+
+                int _stackEndAtStart;
+                int _stackEnd;
                 r_string _scopeName;
 
                 virtual game_instruction* next(int& d1, const game_state* s) { return nullptr; };
@@ -772,7 +771,7 @@ namespace intercept {
 
                 virtual r_string get_type() const = 0;
 
-                virtual void dummy(void* ar);  //Might be serializer
+                virtual serialization_return serialize(param_archive& ar) { return serialization_return::no_error; }
 
                 virtual void on_before_exec() {}
             };

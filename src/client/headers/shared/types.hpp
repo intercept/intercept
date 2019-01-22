@@ -1232,7 +1232,43 @@ namespace intercept {
 
                 bool _1{false};
                 bool _2;
-                uint32_t _errorType;
+
+                //https://github.com/dedmen/ArmaDebugEngine/blob/6270d5d6a30c948a3768ae1a31703099082b5280/BIDebugEngine/BIDebugEngine/RVClasses.cpp#L190
+                enum class evaluator_error_type {
+                    ok,
+                    gen,
+                    expo,
+                    num,
+                    var,
+                    bad_var,
+                    div_zero,
+                    tg90,
+                    openparenthesis,
+                    closeparenthesis,
+                    open_brackets,
+                    close_brackets,
+                    open_braces,
+                    close_braces,
+                    equ,
+                    semocolon,
+                    quote,
+                    single_quote,
+                    line_long,
+                    name_space,
+                    dim,
+                    unexpected_closebracket,
+                    assertion_failed,//engine says "assertation"
+                    halt_function,
+                    freign,
+                    scope_name_defined_twice,
+                    scope_not_found,
+                    invalid_try_block,
+                    unhandled_exception, //scripted "throw" command has no catch
+                    stack_overflow,
+                    handled
+                };
+
+                evaluator_error_type _errorType;
                 r_string _errorMessage;
                 sourcedocpos _errorPosition;
 

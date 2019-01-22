@@ -193,13 +193,11 @@ namespace intercept {
             virtual operator int64_t() const { return 0; }
 
         private:
-            //https://stackoverflow.com/questions/19356232/why-is-explicit-not-compatible-with-virtual
-            //https://connect.microsoft.com/VisualStudio/feedback/details/805301/explicit-cannot-be-used-with-virtual
-            virtual
-#ifndef _MSC_VER
-                explicit
-#endif
-                operator const r_string() const {
+            struct r_string_dummy : public r_string {
+                r_string_dummy(const r_string& o) : r_string(o) {}
+            };
+
+            virtual operator const r_string_dummy() const {
                 return operator r_string();
             }
 

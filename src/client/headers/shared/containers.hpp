@@ -135,6 +135,10 @@ namespace intercept::types {
         void deallocate(void* data);
     };
 
+#ifdef __linux__
+    template <class Type, int Count, class Fallback = rv_allocator<Type>>
+    class rv_allocator_local : public Fallback {};
+#else
     template <class Type, int Count, class Fallback = rv_allocator<Type>>
     class rv_allocator_local : private Fallback {
         //buffer will be aligned by this
@@ -187,6 +191,7 @@ namespace intercept::types {
             return ptr;
         }
     };
+#endif
 
 #pragma endregion
 

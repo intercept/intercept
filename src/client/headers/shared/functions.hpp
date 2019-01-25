@@ -24,36 +24,36 @@ namespace intercept {
 
     class WrapperFunctionBinary {
     public:
-        WrapperFunctionBinary(game_value (*func)(uintptr_t state, game_value_parameter, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionBinary(game_value (*func)(const game_state& state, game_value_parameter, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionBinary(game_value (*func)(game_state* state, game_value_parameter, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
+        WrapperFunctionBinary(game_value (*func)(uintptr_t state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionBinary(game_value (*func)(const game_state& state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionBinary(game_value (*func)(game_state* state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
 
         operator intercept::types::binary_function() const {
-            return static_cast<intercept::types::binary_function>(fnc);
+            return reinterpret_cast<intercept::types::binary_function>(fnc);
         }
         void* fnc;
     };
 
     class WrapperFunctionUnary {
     public:
-        WrapperFunctionUnary(game_value (*func)(uintptr_t state, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionUnary(game_value (*func)(const game_state& state, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionUnary(game_value (*func)(game_state* state, game_value_parameter)) : fnc(static_cast<void*>(func)) {}
+        WrapperFunctionUnary(game_value (*func)(uintptr_t state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionUnary(game_value (*func)(const game_state& state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionUnary(game_value (*func)(game_state* state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
 
         operator intercept::types::unary_function() const {
-            return static_cast<intercept::types::unary_function>(fnc);
+            return reinterpret_cast<intercept::types::unary_function>(fnc);
         }
         void* fnc;
     };
 
     class WrapperFunctionNular {
     public:
-        WrapperFunctionNular(game_value (*func)(uintptr_t state)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionNular(game_value (*func)(const game_state& state)) : fnc(static_cast<void*>(func)) {}
-        WrapperFunctionNular(game_value (*func)(game_state* state)) : fnc(static_cast<void*>(func)) {}
+        WrapperFunctionNular(game_value (*func)(uintptr_t state)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionNular(game_value (*func)(const game_state& state)) : fnc(reinterpret_cast<void*>(func)) {}
+        WrapperFunctionNular(game_value (*func)(game_state* state)) : fnc(reinterpret_cast<void*>(func)) {}
 
         operator intercept::types::nular_function() const {
-            return static_cast<intercept::types::nular_function>(fnc);
+            return reinterpret_cast<intercept::types::nular_function>(fnc);
         }
         void* fnc;
     };

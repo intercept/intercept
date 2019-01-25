@@ -301,7 +301,7 @@ namespace intercept {
 
         class game_functions : public auto_array<gsFunction>, public gsFuncBase {
         public:
-            game_functions(std::string name) : _name(name.c_str()) {}
+            game_functions(r_string name) : _name(std::move(name)) {}
             r_string _name;
             game_functions() noexcept {}
             std::string_view get_map_key() const noexcept { return _name; }
@@ -309,7 +309,7 @@ namespace intercept {
 
         class game_operators : public auto_array<gsOperator>, public gsFuncBase {
         public:
-            game_operators(std::string name) : _name(name.c_str()) {}
+            game_operators(r_string name) : _name(std::move(name)) {}
             r_string _name;
             int32_t placeholder10{ 4 }; //0x2C Small int 0-5  priority
             game_operators() noexcept {}

@@ -18,9 +18,9 @@ https://github.com/NouberNou/intercept
 using namespace intercept::types;
 
 namespace intercept {
-    using WrapperFunctionBinary = intercept::types::binary_function;
-    using WrapperFunctionUnary = intercept::types::unary_function;
-    using WrapperFunctionNular = intercept::types::nular_function;
+    class WrapperFunctionNular;
+    class WrapperFunctionUnary;
+    class WrapperFunctionBinary;
 
     namespace client_function_defs {
         /*!

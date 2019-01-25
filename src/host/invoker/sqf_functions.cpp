@@ -151,7 +151,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
             *table = std::move(backup);
         }
 
-        operators = static_cast<game_operators*>(table->push_back(game_operators(lowerName.c_str())));
+        operators = static_cast<game_operators*>(table->push_back(game_operators(r_string(lowerName))));
         operators->copyPH(test);
     } else {  //Name already exists
 
@@ -243,7 +243,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
             *table = std::move(backup);
         }
 
-        functions = static_cast<game_functions*>(table->push_back(game_functions(lowerName.c_str())));
+        functions = static_cast<game_functions*>(table->push_back(game_functions(r_string(lowerName))));
         functions->copyPH(test);
     } else { //Name already exists
         if (auto found = findUnary(std::string(name), right_arg_type); found) {//Function with same arg types already exists

@@ -43,9 +43,9 @@ namespace intercept {
         class game_data;
         class game_state;
 
-        using nular_function = game_value (*)(game_state& state) noexcept;
-        using unary_function = game_value (*)(game_state& state, game_value_parameter) noexcept;
-        using binary_function = game_value (*)(game_state& state, game_value_parameter, game_value_parameter) noexcept;
+        using nular_function = game_value (*)(game_state& state);
+        using unary_function = game_value (*)(game_state& state, game_value_parameter);
+        using binary_function = game_value (*)(game_state& state, game_value_parameter, game_value_parameter);
 
         enum class game_data_type {
             SCALAR,
@@ -1297,12 +1297,12 @@ namespace intercept {
             };
 
             ///Equivalent to currentNamespace SQF command
-            ref<game_data_namespace> getCurrentNamespace(namespace_type type) const {
+            ref<game_data_namespace> get_current_namespace(namespace_type type) const {
                 return varspace;
             }
 
 
-            ref<game_data_namespace> getGlobalNamespace(namespace_type type) const {
+            ref<game_data_namespace> get_global_namespace(namespace_type type) const {
                 return namespaces[static_cast<int>(type)];
             }
 
@@ -1311,7 +1311,7 @@ namespace intercept {
             * @details Walks through the scope's from current to the topmost scope and tries to find a local variable.
             * @return Returns the value of the variable. Returns nil if not found.
             */
-            game_value getLocalVariable(std::string_view name) const {
+            game_value get_local_variable(std::string_view name) const {
                 if (!eval || !eval->local) return {};
                 auto var = eval->local->get_variable(name);
                 if (!var) return {};
@@ -1323,7 +1323,7 @@ namespace intercept {
             * @param editExisting Check if variable exists in any parent scope, and edit that one (SQF behaviour as without private keyword)\n
                 If you don't set editExisting then the variable will still be overwritten if it already exists in the current scope
             */
-            void setLocalVariable(const r_string &name, game_value value, bool editExisting = true) const {
+            void set_local_variable(const r_string &name, game_value value, bool editExisting = true) const {
                 if (!eval || !eval->local) return;
                 if (editExisting) {
                    auto var = eval->local->get_variable(name);
@@ -1446,7 +1446,7 @@ namespace intercept {
 #if defined _MSC_VER && !defined _WIN64
 #pragma warning(disable : 4731)  //ebp was changed in assembly
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1460,7 +1460,7 @@ namespace intercept {
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1472,7 +1472,7 @@ namespace intercept {
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(game_value&) noexcept {
+        static game_value userFunctionWrapper(game_value&) {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1483,17 +1483,17 @@ namespace intercept {
 #pragma warning(default : 4731)  //ebp was changed in assembly
 #else
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(game_state&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter left_arg_, game_value_parameter right_arg_) {
             return T(left_arg_, right_arg_);
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(game_state&, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter right_arg_) {
             return T(right_arg_);
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(game_state&) noexcept {
+        static game_value userFunctionWrapper(game_state&) {
             return T();
         }
 #endif

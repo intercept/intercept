@@ -24,6 +24,7 @@ using namespace std::literals::string_view_literals;
 class IDebugVariable;
 
 namespace intercept {
+    class loader;
     class sqf_functions;
     class registered_sqf_function_impl;
     class invoker;
@@ -42,9 +43,9 @@ namespace intercept {
         class game_data;
         class game_state;
 
-        using nular_function = game_value (*)(game_state& state);
-        using unary_function = game_value (*)(game_state& state, game_value_parameter);
-        using binary_function = game_value (*)(game_state& state, game_value_parameter, game_value_parameter);
+        using nular_function = game_value (*)(game_state& state) noexcept;
+        using unary_function = game_value (*)(game_state& state, game_value_parameter) noexcept;
+        using binary_function = game_value (*)(game_state& state, game_value_parameter, game_value_parameter) noexcept;
 
         enum class game_data_type {
             SCALAR,
@@ -725,8 +726,8 @@ namespace intercept {
             game_var_space* parent;
             bool dummy;
 
-            const game_variable* get_variable(const std::string& varName) const {
-                auto& var = variables.get(varName.c_str());
+            game_variable* get_variable(std::string_view varName) {
+                auto& var = variables.get(varName.data());
                 if (!variables.is_null(var)) {
                     return &var;
                 }
@@ -734,6 +735,19 @@ namespace intercept {
                     return parent->get_variable(varName);
                 }
                 return nullptr;
+            }
+            void set_variable(r_string varName, game_value newValue) {
+                auto& var = variables.get(varName.data());
+                if (!variables.is_null(var)) {
+                    var.value = newValue;
+                }
+                variables.insert(game_variable(varName, newValue));
+            }
+            void delete_variable(std::string_view varName) {
+                auto& var = variables.get(varName.data());
+                if (!variables.remove(varName) && parent) {
+                    parent->delete_variable(varName);
+                }
             }
         };
 
@@ -794,7 +808,7 @@ namespace intercept {
             game_value exception_value;  //0x25c
             //breakOut
             game_value breakvalue;  //0x264
-
+        private:
             uint32_t d[3];
             bool dumm;
             bool dumm2;            //undefined variables allowed?
@@ -1183,7 +1197,7 @@ namespace intercept {
 
         namespace __internal {
             game_data_type game_datatype_from_string(const r_string& name);
-            std::string to_string(game_data_type type);
+            std::string_view to_string(game_data_type type);
             //Not public API!
             void add_game_datatype(r_string name, game_data_type type);
 
@@ -1203,17 +1217,13 @@ namespace intercept {
 #pragma endregion
 
         class game_state {
+            friend class game_data;
+            friend class ::intercept::loader;
+            friend class ::intercept::sqf_functions;
         public:
-            types::auto_array<const types::script_type_info*> _scriptTypes;
 
-            using game_functions = intercept::__internal::game_functions;
-            using game_operators = intercept::__internal::game_operators;
-            using gsNular = intercept::__internal::gsNular;
 
-            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
-            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
-            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
-
+            
             class game_evaluator : public refcount {  //refcounted
             public:
                 game_evaluator(game_var_space* var = nullptr) {
@@ -1226,42 +1236,45 @@ namespace intercept {
 
                 //ArmaDebugEngine
                 game_var_space* local;  // local variables
-                int handle;             // for debug purposes to test the Begin/EndContext matching pairs
+                int handle;             //
 
                 bool _1{false};
                 bool _2;
 
                 //https://github.com/dedmen/ArmaDebugEngine/blob/6270d5d6a30c948a3768ae1a31703099082b5280/BIDebugEngine/BIDebugEngine/RVClasses.cpp#L190
+                //dta languagecore_f.pbo stringtable STR_EVAL_<name>
                 enum class evaluator_error_type {
                     ok,
-                    gen,
-                    expo,
-                    num,
-                    var,
-                    bad_var,
-                    div_zero,
-                    tg90,
-                    openparenthesis,
-                    closeparenthesis,
-                    open_brackets,
-                    close_brackets,
-                    open_braces,
-                    close_braces,
-                    equ,
-                    semocolon,
-                    quote,
-                    single_quote,
-                    line_long,
-                    name_space,
-                    dim,
-                    unexpected_closebracket,
-                    assertion_failed,//engine says "assertation"
-                    halt_function,
-                    freign,
-                    scope_name_defined_twice,
+                    gen,                        //Generic error in expression
+                    expo,                       //Exponent out of range or invalid
+                    num,                        //Invalid number in expression
+                    var,                        //Undefined variable in expression: %s
+                    bad_var,                    //Reserved variable in expression
+                    div_zero,                   //Zero divisor
+                    tg90,                       //Tangents of 90 degrees
+                    openparenthesis,            //Missing (
+                    closeparenthesis,           //Missing )
+                    open_brackets,              //Missing [
+                    close_brackets,             //Missing ]
+                    open_braces,                //Missing {
+                    close_braces,               //Missing }
+                    equ,                        //Missing =
+                    semicolon,                  //Missing ;
+                    quote,                      //Missing ""
+                    single_quote,               //Missing '
+                    oper,                       //Unknown operator %s
+                    line_long,                  //Line is too long
+                    type,                       //Type %s, expected %s
+                    name_space,                 //Local variable in global space
+                    dim,                        //%d elements provided, %d expected
+                    unexpected_closeb,          //unexpected )
+                    assertion_failed,           //Assertation failed
+                    halt_function,              //Debugger breakpoint hit
+                    foreign,                    //Foreign error: %s
+                    scope_name_defined_twice,   //Scope name defined twice
                     scope_not_found,
                     invalid_try_block,
-                    unhandled_exception, //scripted "throw" command has no catch
+                    unhandled_exception,        //Unhandled exception: %s
                     stack_overflow,
                     handled
                 };
@@ -1271,10 +1284,122 @@ namespace intercept {
                 sourcedocpos _errorPosition;
 
                 void operator delete(void* ptr_, std::size_t) {
-                    rv_allocator<game_evaluator>::destroy_deallocate((game_evaluator*)ptr_);
+                    rv_allocator<game_evaluator>::destroy_deallocate(static_cast<game_evaluator*>(ptr_));
                 }
 
             };
+
+            enum class namespace_type {
+                parsing = 0,
+                ui = 1,
+                profile = 2,
+                mission = 3
+            };
+
+            ///Equivalent to currentNamespace SQF command
+            ref<game_data_namespace> getCurrentNamespace(namespace_type type) const {
+                return varspace;
+            }
+
+
+            ref<game_data_namespace> getGlobalNamespace(namespace_type type) const {
+                return namespaces[static_cast<int>(type)];
+            }
+
+            /**
+            * @brief Retrieve a local variable
+            * @details Walks through the scope's from current to the topmost scope and tries to find a local variable.
+            * @return Returns the value of the variable. Returns nil if not found.
+            */
+            game_value getLocalVariable(std::string_view name) const {
+                if (!eval || !eval->local) return {};
+                auto var = eval->local->get_variable(name);
+                if (!var) return {};
+                return var->value;
+            }
+
+            /**
+            * @brief Set a local variable in the current scope
+            * @param editExisting Check if variable exists in any parent scope, and edit that one (SQF behaviour as without private keyword)\n
+                If you don't set editExisting then the variable will still be overwritten if it already exists in the current scope
+            */
+            void setLocalVariable(const r_string &name, game_value value, bool editExisting = true) const {
+                if (!eval || !eval->local) return;
+                if (editExisting) {
+                   auto var = eval->local->get_variable(name);
+                    if (var) {
+                        var->value = std::move(value);
+                        return;
+                    }
+                }
+                eval->local->set_variable(name, std::move(value));
+            }
+
+            void delete_local_variable(std::string_view name) {
+                if (!eval || !eval->local) return;
+                eval->local->delete_variable(name);
+            }
+
+            ///I hope you know what you are doing...
+            vm_context* get_vm_context() const {
+                return current_context;
+            }
+
+            
+            /**
+            * @brief Sets a script error at current position.
+            * @param type This type is actually irrelevant, it just needs to be !=ok and !=handled though it's still recommended to use a sensible type
+            */
+            void set_script_error(game_evaluator::evaluator_error_type type, r_string message) {
+                if (!eval) return; //Don't know why or how this could happen, but better safe than sorry.
+                eval->_errorType = type;
+                eval->_errorMessage = message;
+                if (current_context)
+                    eval->_errorPosition = current_context->sdocpos;
+            }
+
+            /**
+            * @brief Sets a script error at custom position.
+            * @param type This type is actually irrelevant, it just needs to be !=ok and !=handled though it's still recommended to use a sensible type
+            */
+            void set_script_error(game_evaluator::evaluator_error_type type, r_string message, sourcedocpos position) {
+                if (!eval) return; //Don't know why or how this could happen, but better safe than sorry.
+                eval->_errorType = type;
+                eval->_errorMessage = message;
+                eval->_errorPosition = position;
+            }
+
+            ///Checks whether value is array of appropriate size, if not it set's the appropriate error message and returns false
+            bool error_check_size(game_value value, size_t min_size) {
+                if (value.size() >= min_size) return true;
+                auto message = std::to_string(value.size())+" elements provided, "+std::to_string(min_size)+" expected";
+
+                set_script_error(game_evaluator::evaluator_error_type::dim, static_cast<r_string>(message));
+                return false;
+            }
+
+            ///Checks whether value is of expected type, if not it set's the appropriate error message and returns false
+            bool error_check_type(game_value value, game_data_type expected_type) {
+                if (value.type_enum() == expected_type) return true;
+
+                auto actualName = intercept::types::__internal::to_string(value.type_enum());
+                auto expectedName = intercept::types::__internal::to_string(expected_type);
+                auto message = r_string("Type ")+actualName+", expected "+expectedName;
+                set_script_error(game_evaluator::evaluator_error_type::type, message);
+                return false;
+            }
+
+        private:
+            types::auto_array<const types::script_type_info*> _scriptTypes;
+
+            using game_functions = intercept::__internal::game_functions;
+            using game_operators = intercept::__internal::game_operators;
+            using gsNular = intercept::__internal::gsNular;
+
+            map_string_to_class<game_functions, auto_array<game_functions>> _scriptFunctions;
+            map_string_to_class<game_operators, auto_array<game_operators>> _scriptOperators;
+            map_string_to_class<gsNular, auto_array<gsNular>> _scriptNulars;
+
 
             auto_array<ref<game_evaluator>, rv_allocator_local<ref<game_evaluator>, 64>> context;
 
@@ -1358,17 +1483,17 @@ namespace intercept {
 #pragma warning(default : 4731)  //ebp was changed in assembly
 #else
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
             return T(left_arg_, right_arg_);
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter right_arg_) noexcept {
             return T(right_arg_);
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(game_value&) noexcept {
+        static game_value userFunctionWrapper(game_state&) noexcept {
             return T();
         }
 #endif

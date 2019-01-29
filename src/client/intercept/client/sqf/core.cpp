@@ -90,13 +90,13 @@ namespace intercept {
 
             auto data = static_cast<game_data_code*>(wrapper.data.get());
             
-            auto ns = gs->namespaces[3];
+            auto ns = gs->getGlobalNamespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
 
-            gs->eval->local->variables.insert({arname, std::move(args_)});
-            gs->eval->local->variables.insert({codename, code_});
+            gs->setLocalVariable(arname, std::move(args_));
+            gs->setLocalVariable(codename, code_);
 
             auto ret = ef(*data, ns, fname);
             return ret;
@@ -110,7 +110,7 @@ namespace intercept {
 
             auto data = static_cast<game_data_code*>(code_.data.get());
 
-            auto ns = gs->namespaces[3];
+            auto ns = gs->getGlobalNamespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return ret;

@@ -42,9 +42,9 @@ namespace intercept {
         class game_data;
         class game_state;
 
-        using nular_function = game_value (*)(uintptr_t state);
-        using unary_function = game_value (*)(uintptr_t state, game_value_parameter);
-        using binary_function = game_value (*)(uintptr_t state, game_value_parameter, game_value_parameter);
+        using nular_function = game_value (*)(game_state& state);
+        using unary_function = game_value (*)(game_state& state, game_value_parameter);
+        using binary_function = game_value (*)(game_state& state, game_value_parameter, game_value_parameter);
 
         enum class game_data_type {
             SCALAR,
@@ -1309,7 +1309,7 @@ namespace intercept {
             friend class intercept::sqf_functions;
 
         public:
-            constexpr registered_sqf_function() noexcept {}
+            constexpr registered_sqf_function() noexcept = default;
             explicit registered_sqf_function(std::shared_ptr<registered_sqf_function_impl> func_) noexcept;
             void clear() noexcept { _function = nullptr; }
             bool has_function() const noexcept { return _function.get() != nullptr; }
@@ -1321,7 +1321,7 @@ namespace intercept {
 #if defined _MSC_VER && !defined _WIN64
 #pragma warning(disable : 4731)  //ebp was changed in assembly
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1335,7 +1335,7 @@ namespace intercept {
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) noexcept {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1347,7 +1347,7 @@ namespace intercept {
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(uintptr_t) noexcept {
+        static game_value userFunctionWrapper(game_value&) noexcept {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1358,17 +1358,17 @@ namespace intercept {
 #pragma warning(default : 4731)  //ebp was changed in assembly
 #else
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(uintptr_t, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) noexcept {
             return T(left_arg_, right_arg_);
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(uintptr_t, game_value_parameter right_arg_) noexcept {
+        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) noexcept {
             return T(right_arg_);
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(uintptr_t) noexcept {
+        static game_value userFunctionWrapper(game_value&) noexcept {
             return T();
         }
 #endif

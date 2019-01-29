@@ -22,41 +22,9 @@ namespace intercept {
         class registered_sqf_function;
     }
 
-    class WrapperFunctionBinary {
-    public:
-        WrapperFunctionBinary(game_value (*func)(uintptr_t state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionBinary(game_value (*func)(const game_state& state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionBinary(game_value (*func)(game_state* state, game_value_parameter, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-
-        operator intercept::types::binary_function() const {
-            return reinterpret_cast<intercept::types::binary_function>(fnc);
-        }
-        void* fnc;
-    };
-
-    class WrapperFunctionUnary {
-    public:
-        WrapperFunctionUnary(game_value (*func)(uintptr_t state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionUnary(game_value (*func)(const game_state& state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionUnary(game_value (*func)(game_state* state, game_value_parameter)) : fnc(reinterpret_cast<void*>(func)) {}
-
-        operator intercept::types::unary_function() const {
-            return reinterpret_cast<intercept::types::unary_function>(fnc);
-        }
-        void* fnc;
-    };
-
-    class WrapperFunctionNular {
-    public:
-        WrapperFunctionNular(game_value (*func)(uintptr_t state)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionNular(game_value (*func)(const game_state& state)) : fnc(reinterpret_cast<void*>(func)) {}
-        WrapperFunctionNular(game_value (*func)(game_state* state)) : fnc(reinterpret_cast<void*>(func)) {}
-
-        operator intercept::types::nular_function() const {
-            return reinterpret_cast<intercept::types::nular_function>(fnc);
-        }
-        void* fnc;
-    };
+    using WrapperFunctionBinary = intercept::types::binary_function;
+    using WrapperFunctionUnary = intercept::types::unary_function;
+    using WrapperFunctionNular = intercept::types::nular_function;
 
     namespace client {
         class host;

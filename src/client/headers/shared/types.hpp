@@ -1466,7 +1466,7 @@ namespace intercept {
 #if defined _MSC_VER && !defined _WIN64
 #pragma warning(disable : 4731)  //ebp was changed in assembly
         template <game_value (*T)(game_value_parameter, game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter left_arg_, game_value_parameter right_arg_) {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter left_arg_, game_value_parameter right_arg_) {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1480,7 +1480,7 @@ namespace intercept {
         }
 
         template <game_value (*T)(game_value_parameter)>
-        static game_value userFunctionWrapper(game_value&, game_value_parameter right_arg_) {
+        static game_value userFunctionWrapper(game_state&, game_value_parameter right_arg_) {
             void* func = (void*)T;
             __asm {
                 pop ecx;
@@ -1492,7 +1492,7 @@ namespace intercept {
         }
 
         template <game_value (*T)()>
-        static game_value userFunctionWrapper(game_value&) {
+        static game_value userFunctionWrapper(game_state&) {
             void* func = (void*)T;
             __asm {
                 pop ecx;

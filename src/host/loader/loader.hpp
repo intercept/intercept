@@ -22,11 +22,11 @@ using namespace intercept::types;
 
 namespace intercept {
     //! Nular function map.
-    typedef std::unordered_map<std::string_view, std::vector<nular_entry>> nular_map;
+    typedef std::unordered_map<r_string, std::vector<nular_entry>> nular_map;
     //! Unary function map.
-    typedef std::unordered_map<std::string_view, std::vector<unary_entry>> unary_map;
+    typedef std::unordered_map<r_string, std::vector<unary_entry>> unary_map;
     //! Binary functon map.
-    typedef std::unordered_map<std::string_view, std::vector<binary_entry>> binary_map;
+    typedef std::unordered_map<r_string, std::vector<binary_entry>> binary_map;
 
     struct sqf_register_functions {
         sqf_register_functions() : _types(static_cast<size_t>(types::game_data_type::end)) {}
@@ -104,7 +104,7 @@ namespace intercept {
         bool found2 = get_function("random", random_function2, "ARRAY");
         @endcode
         */
-        bool get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_);
+        bool get_function(std::string_view function_name_, unary_function & function_, std::string_view arg_signature_);
 
         /*!
         @brief Returns a binary SQF function from the loaders library of found SQF functions.
@@ -152,7 +152,7 @@ namespace intercept {
         bool found2 = get_function("removemenuitem", remove_menu_item2, "CONTROL", "STRING");
         @endcode
         */
-        bool get_function(std::string_view function_name_, binary_function &function_, std::string arg1_signature_, std::string arg2_signature_);
+        bool get_function(std::string_view function_name_, binary_function &function_, std::string_view arg1_signature_, std::string_view arg2_signature_);
 
         /*!
         @brief Returns a nular SQF function from the loaders library of found SQF functions.

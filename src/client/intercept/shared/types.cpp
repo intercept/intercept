@@ -128,23 +128,23 @@ namespace intercept {
 
         value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
-                return{ static_cast<std::string>(single_type->_name) };
+                return{ single_type->_name };
             }
 
             return{
-                static_cast<std::string>(compound_type->types->first->_name),
-                static_cast<std::string>(compound_type->types->second->_name)
+                compound_type->types->first->_name,
+                compound_type->types->second->_name
             };
         }
 
-        std::string sqf_script_type::type_str() const {
+        r_string sqf_script_type::type_str() const {
             if (single_type != nullptr) {
-                return static_cast<std::string>(single_type->_name);
+                return single_type->_name;
             }
 
             return
-                static_cast<std::string>(compound_type->types->first->_name) + "_" +
-                static_cast<std::string>(compound_type->types->second->_name);
+                compound_type->types->first->_name + "_" +
+                compound_type->types->second->_name;
 
         }
 

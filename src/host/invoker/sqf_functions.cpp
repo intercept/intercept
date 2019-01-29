@@ -485,7 +485,7 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     //});
     auto funcs = findFunctions(name);
     if (!funcs) return nullptr;
-    std::string argTypeString = types::__internal::to_string(argument_type);
+    auto argTypeString = types::__internal::to_string(argument_type);
     for (auto& it : *funcs) {
         auto types = it._operator->arg_type.type();
         if (types.find(argTypeString) != types.end()) {
@@ -503,8 +503,8 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
 
     auto operators = findOperators(name);
     if (!operators) return nullptr;
-    std::string left_argTypeString = types::__internal::to_string(left_argument_type);
-    std::string right_argTypeString = types::__internal::to_string(right_argument_type);
+    auto left_argTypeString = types::__internal::to_string(left_argument_type);
+    auto right_argTypeString = types::__internal::to_string(right_argument_type);
     for (auto& it : *operators) {
         auto left_types = it._operator->arg1_type.type();
         if (left_types.find(left_argTypeString) != left_types.end()) {

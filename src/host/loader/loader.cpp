@@ -23,7 +23,7 @@ namespace intercept {
 
     }
 
-    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_) {
+    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string_view arg_signature_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
@@ -55,7 +55,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_) {
+    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string_view arg1_signature_, std::string_view arg2_signature_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
@@ -397,7 +397,7 @@ namespace intercept {
             //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
     #endif
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
 
         _sqf_register_funcs._gameState = state_addr_;
 

@@ -77,7 +77,7 @@ namespace intercept {
 
         [[deprecated("use game_data_type")]] typedef game_data_type GameDataType;
 
-        typedef std::set<std::string> value_types;
+        typedef std::set<r_string> value_types;
         typedef uintptr_t value_type;
         namespace __internal {
             void set_game_value_vtable(uintptr_t vtable);
@@ -370,7 +370,7 @@ namespace intercept {
             const script_type_info* single_type{nullptr};
             compound_script_type_info* compound_type{nullptr};
             value_types type() const;
-            std::string type_str() const;
+            r_string type_str() const;
             bool operator==(const sqf_script_type& other) const noexcept {
                 return single_type == other.single_type && compound_type == other.compound_type;
             }
@@ -1339,12 +1339,6 @@ namespace intercept {
                 if (!eval || !eval->local) return;
                 eval->local->delete_variable(name);
             }
-
-            ///I hope you know what you are doing...
-            vm_context* get_vm_context() const {
-                return current_context;
-            }
-
             
             /**
             * @brief Sets a script error at current position.
@@ -1388,6 +1382,32 @@ namespace intercept {
                 set_script_error(game_evaluator::evaluator_error_type::type, message);
                 return false;
             }
+
+            ///I hope you know what you are doing...
+            vm_context* get_vm_context() const {
+                return current_context;
+            }
+
+            ///I hope you know what you are doing...
+            game_evaluator* get_evaluator() const {
+                return eval;
+            }
+
+            const auto& get_script_types() {
+                return _scriptTypes;
+            }
+            const auto& get_script_functions() {
+                return _scriptFunctions;
+            }
+            const auto& get_script_operators() {
+                return _scriptOperators;
+            }
+            const auto& get_script_nulars() {
+                return _scriptNulars;
+            }
+
+
+
 
         private:
             types::auto_array<const types::script_type_info*> _scriptTypes;

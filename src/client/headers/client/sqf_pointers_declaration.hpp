@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 184.144923 - Profile
+//Exported Pointer Definitions For: Arma 3 188.145302 - Profile
 
 
 // Unary Functions
@@ -385,6 +385,8 @@ static unary_function unary__getcenterofmass__object__ret__array;
 static unary_function unary__getconnecteduav__object__ret__object;
 static unary_function unary__getcontainermaxload__string__ret__scalar;
 static unary_function unary__getcustomaimcoef__object__ret__scalar;
+static unary_function unary__getcustomsoundcontroller__array__ret__scalar;
+static unary_function unary__getcustomsoundcontrollercount__object__ret__scalar;
 static unary_function unary__getdammage__object__ret__scalar;
 static unary_function unary__getdescription__object__ret__array;
 static unary_function unary__getdir__object__ret__scalar;
@@ -927,6 +929,7 @@ static unary_function unary__setcamshakeparams__array__ret__nothing;
 static unary_function unary__setcompassoscillation__array__ret__nothing;
 static unary_function unary__setcurrentchannel__scalar__ret__bool;
 static unary_function unary__setcustommissiondata__array__ret__nothing;
+static unary_function unary__setcustomsoundcontroller__array__ret__bool;
 static unary_function unary__setdate__array__ret__nothing;
 static unary_function unary__setdefaultcamera__array__ret__nothing;
 static unary_function unary__setdetailmapblendpars__array__ret__nothing;

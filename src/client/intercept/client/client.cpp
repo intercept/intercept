@@ -54,7 +54,9 @@ namespace intercept {
             host::functions = funcs;
             host::module_name = module_name;
 
+#ifndef INTERCEPT_NO_SQF
             __sqf::__initialize();
+#endif
 
             uintptr_t type_def;
             uintptr_t data_type_def;

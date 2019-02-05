@@ -798,6 +798,10 @@ namespace intercept {
                 exception_value = std::move(value);
             }
 
+            bool is_scheduled() const {
+                return scheduled;
+            }
+
             bool is_serialization_enabled() const {
                 return serialenabled;
             }

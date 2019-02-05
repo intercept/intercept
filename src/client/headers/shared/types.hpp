@@ -1317,9 +1317,9 @@ namespace intercept {
             };
 
             enum class namespace_type {
-                parsing = 0,
+                def = 0, //Default
                 ui = 1,
-                profile = 2,
+                parsing = 2,
                 mission = 3
             };
 

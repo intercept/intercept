@@ -1,6 +1,8 @@
 #include <random>
 #include "eventhandlers.hpp"
+#ifndef INTERCEPT_NO_SQF
 #include "sqf.hpp"
+#endif
 
 namespace intercept::types {
     extern bool exiting;
@@ -16,7 +18,8 @@ namespace intercept::client {
     /// @private
     extern "C" DLLEXPORT void CDECL client_eventhandlers_clear();
     /// @private
-    void client_eventhandler(intercept::types::game_value& retVal, uint8_t ehType, int32_t uid, int handle, game_value args) {
+    void client_eventhandler(intercept::types::game_value& retVal, uint8_t ehType, int32_t uid, int handle, intercept::types::game_value args) {
+#ifndef INTERCEPT_NO_SQF
         switch (static_cast<eventhandler_type>(ehType)) {
             case eventhandler_type::mission: {
                 auto found = funcMapMissionEH.find({uid, handle, EHIteration, ehType });
@@ -50,18 +53,22 @@ namespace intercept::client {
             } break;
             default:;
         }
+#endif
         return;
     }
     /// @private
     void client_eventhandlers_clear() {
+#ifndef INTERCEPT_NO_SQF
         funcMapMissionEH.clear();
         funcMapObjectEH.clear();
         funcMapCtrlEH.clear();
         funcMapMPEH.clear();
         funcMapDisplayEH.clear();
-
+#endif
         EHIteration++;
     }
+
+#ifndef INTERCEPT_NO_SQF
 #pragma region Mission Eventhandlers
     std::unordered_map<EHIdentifier, std::pair<eventhandlers_mission, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapMissionEH;
 
@@ -741,4 +748,5 @@ namespace intercept::client {
 
 #pragma endregion
 
+#endif
 }  // namespace intercept::client

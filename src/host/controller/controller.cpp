@@ -67,7 +67,7 @@ namespace intercept {
 
     bool controller::fetch_result(const arguments &, std::string & result_) {
         result_ = "";
-        if (_results.size() > 0) {
+        if (!_results.empty()) {
             std::lock_guard<std::mutex> _lock(_results_lock);
             dispatch_result res = _results.front();
             std::stringstream ss;
@@ -92,23 +92,23 @@ namespace intercept {
         assignments << "\n// Unary Functions\n"sv;
 
         auto unary_list = loader::get().unary();
-        std::list<std::string_view> sorted_unary_list;
-        for (auto unary : unary_list) {
+        std::vector<r_string> sorted_unary_list;//#TODO just keep iterators and only sort the iterators. That way we don't need map lookups later
+        sorted_unary_list.reserve(unary_list.size());
+        for (const auto &unary : unary_list) {
             sorted_unary_list.push_back(unary.first);
         }
-        sorted_unary_list.sort();
+        std::sort(sorted_unary_list.begin(), sorted_unary_list.end());
 
-        for (auto unary_entry : sorted_unary_list) {
-            std::string op_name(unary_entry);
+        for (const auto &op_name : sorted_unary_list) {
             std::regex name_test = std::regex("[a-z]+?.*");
-            if (std::regex_match(op_name, name_test)) {
-                for (auto op : unary_list[unary_entry]) {
-                    std::string arg_types = op.op->arg_type.type_str();
-                    std::transform(arg_types.begin(), arg_types.end(), arg_types.begin(), ::tolower);
-                    std::string return_type = op.op->return_type.type_str();
-                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
-                    std::string first_arg_type = *op.op->arg_type.type().begin();
-                    std::string pointer_name = "unary__" + op_name + "__" + arg_types + "__ret__" + return_type;
+            if (std::regex_match(static_cast<std::string>(op_name), name_test)) {
+                for (auto op : unary_list[op_name]) {
+                    auto arg_types = op.op->arg_type.type_str();
+                    arg_types.to_lower();
+                    auto return_type = op.op->return_type.type_str();
+                    return_type.to_lower();
+                    auto first_arg_type = *op.op->arg_type.type().begin();
+                    auto pointer_name = "unary__" + op_name + "__" + arg_types + "__ret__" + return_type;
                     pointers_def << "unary_function __sqf::"sv << pointer_name << ";\n";
                     pointers << "static unary_function "sv << pointer_name << ";\n";
                     //__sqf::unary_random_scalar_raw = (unary_function)functions.get_unary_function_typed("random", "SCALAR");
@@ -123,29 +123,29 @@ namespace intercept {
         assignments << "\n// Binary Functions\n"sv;
 
         auto binary_list = loader::get().binary();
-        std::list<std::string_view> sorted_binary_list;
-        for (auto binary : binary_list) {
+        std::vector<r_string> sorted_binary_list;
+        sorted_binary_list.reserve(binary_list.size());
+        for (const auto &binary : binary_list) {
             sorted_binary_list.push_back(binary.first);
         }
-        sorted_binary_list.sort();
+        std::sort(sorted_binary_list.begin(), sorted_binary_list.end());
 
-        for (auto binary_entry : sorted_binary_list) {
-            std::string op_name(binary_entry);
+        for (auto& op_name : sorted_binary_list) {
             std::regex name_test = std::regex("[a-z]+?.*");
-            if (std::regex_match(op_name, name_test)) {
-                for (auto op : binary_list[binary_entry]) {
-                    std::string arg1_types = op.op->arg1_type.type_str();
-                    std::transform(arg1_types.begin(), arg1_types.end(), arg1_types.begin(), ::tolower);
-                    std::string arg2_types = op.op->arg2_type.type_str();
-                    std::transform(arg2_types.begin(), arg2_types.end(), arg2_types.begin(), ::tolower);
+            if (std::regex_match(static_cast<std::string>(op_name), name_test)) {
+                for (auto op : binary_list[op_name]) {
+                    auto arg1_types = op.op->arg1_type.type_str();
+                    arg1_types.to_lower();
+                    auto arg2_types = op.op->arg2_type.type_str();
+                    arg2_types.to_lower();
 
-                    std::string return_type = op.op->return_type.type_str();
-                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
+                    auto return_type = op.op->return_type.type_str();
+                    return_type.to_lower();
 
-                    std::string first_arg1_type = *op.op->arg1_type.type().begin();
-                    std::string first_arg2_type = *op.op->arg2_type.type().begin();
+                    auto first_arg1_type = *op.op->arg1_type.type().begin();
+                    auto first_arg2_type = *op.op->arg2_type.type().begin();
 
-                    std::string pointer_name = "binary__" + op_name + "__" + arg1_types + "__" + arg2_types + "__ret__" + return_type;
+                    auto pointer_name = "binary__" + op_name + "__" + arg1_types + "__" + arg2_types + "__ret__" + return_type;
                     pointers_def << "binary_function __sqf::"sv << pointer_name << ";\n"sv;
                     pointers << "static binary_function "sv << pointer_name << ";\n"sv;
 
@@ -161,20 +161,20 @@ namespace intercept {
         assignments << "\n// Nular Functions\n";
 
         auto nular_list = loader::get().nular();
-        std::list<std::string_view> sorted_nular_list;
-        for (auto nular : nular_list) {
+        std::vector<r_string> sorted_nular_list;
+        sorted_nular_list.reserve(nular_list.size());
+        for (const auto &nular : nular_list) {
             sorted_nular_list.push_back(nular.first);
         }
-        sorted_nular_list.sort();
+        std::sort(sorted_nular_list.begin(), sorted_nular_list.end());
 
-        for (auto nular_entry : sorted_nular_list) {
-            std::string op_name(nular_entry);
+        for (auto op_name : sorted_nular_list) {
             std::regex name_test = std::regex("[a-z]+?.*");
-            if (std::regex_match(op_name, name_test)) {
-                for (auto op : nular_list[nular_entry]) {
-                    std::string return_type = op.op->return_type.type_str();
-                    std::transform(return_type.begin(), return_type.end(), return_type.begin(), ::tolower);
-                    std::string pointer_name = "nular__" + op_name + "__ret__" + return_type;
+            if (std::regex_match(static_cast<std::string>(op_name), name_test)) {
+                for (auto op : nular_list[op_name]) {
+                    auto return_type = op.op->return_type.type_str();
+                    return_type.to_lower();
+                    auto pointer_name = "nular__" + op_name + "__ret__" + return_type;
                     pointers_def << "nular_function __sqf::"sv << pointer_name << ";\n";
                     pointers << "static nular_function "sv << pointer_name << ";\n";
 

@@ -209,7 +209,7 @@ namespace intercept {
         void unlock();
 
         //static game_data_string_pool<> string_pool;
-        static uintptr_t sqf_game_state;
+        static game_state* sqf_game_state;
 
         static bool invoker_accessible;
         static bool invoker_accessible_all;

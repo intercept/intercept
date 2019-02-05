@@ -18,7 +18,7 @@ namespace intercept {
     bool invoker::invoker_accessible_all = false;
 
     unary_function invoker::_register_hook_trampoline = nullptr;
-    uintptr_t invoker::sqf_game_state = 0;
+    game_state* invoker::sqf_game_state = nullptr;
 
     /*
     *   thread_local means that an instance of this variable will exist in each thread.
@@ -225,7 +225,7 @@ namespace intercept {
     game_value invoker::invoke_raw_nolock(nular_function function_) noexcept {
         volatile uintptr_t arr[64];//artifical stackpushing
         arr[13] = 5;
-        return function_(invoker::sqf_game_state);
+        return function_(*invoker::sqf_game_state);
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_) const {
@@ -239,7 +239,7 @@ namespace intercept {
     game_value invoker::invoke_raw_nolock(unary_function function_, const game_value &right_arg_) noexcept {
         volatile uintptr_t arr[64];//artifical stackpushing
         arr[13] = 5;
-        return function_(invoker::sqf_game_state, right_arg_);
+        return function_(*invoker::sqf_game_state, right_arg_);
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_, const game_value &right_, const std::string &right_type_) const {
@@ -261,7 +261,7 @@ namespace intercept {
     game_value invoker::invoke_raw_nolock(binary_function function_, const game_value &left_arg_, const game_value &right_arg_) noexcept {
         volatile uintptr_t arr[64];//artifical stackpushing
         arr[13] = 5;
-        return function_(invoker::sqf_game_state, left_arg_, right_arg_);
+        return function_(*invoker::sqf_game_state, left_arg_, right_arg_);
     }
 
     game_value invoker::invoke_raw(std::string_view function_name_, const game_value &left_, const game_value &right_) const {
@@ -296,7 +296,7 @@ namespace intercept {
         LOG(INFO, "Registration Hook Function Called: {}", invoker::get()._registration_type);
         auto step = invoker::get()._registration_type;
         invoker::get()._sqf_game_state = regInfo._gameState;
-        sqf_game_state = regInfo._gameState;
+        sqf_game_state = reinterpret_cast<game_state*>(regInfo._gameState);
 
         game_value::__vptr_def = left_arg_.get_vtable();
         invoker::get().type_structures["GV"sv] = { game_value::__vptr_def ,game_value::__vptr_def };

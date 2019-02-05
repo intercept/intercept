@@ -23,7 +23,7 @@ namespace intercept {
 
     }
 
-    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_) {
+    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string_view arg_signature_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
@@ -55,7 +55,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_) {
+    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string_view arg1_signature_, std::string_view arg2_signature_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
@@ -288,6 +288,20 @@ namespace intercept {
         });
     #endif
 
+        //We need the allocator before we run the command scanning because the logging calls need r_string allocations
+
+        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+#ifdef __linux__
+        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        assert(strcmp(test, "12MemFunctions") == 0);
+#else
+        const char* test = getRTTIName(allocatorVtablePtr);
+        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+#endif
+        _allocator.genericAllocBase = allocatorVtablePtr;
+
+
+
         /*
         Unary Hashmap
 
@@ -336,35 +350,7 @@ namespace intercept {
             _nular_operators[entry._name2].push_back(new_entry);
         }
 
-        auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR"sv) return types::game_data_type::SCALAR;
-            if (name == "BOOL"sv) return types::game_data_type::BOOL;
-            if (name == "ARRAY"sv) return types::game_data_type::ARRAY;
-            if (name == "STRING"sv) return types::game_data_type::STRING;
-            if (name == "NOTHING"sv) return types::game_data_type::NOTHING;
-            if (name == "ANY"sv) return types::game_data_type::ANY;
-            if (name == "NAMESPACE"sv) return types::game_data_type::NAMESPACE;
-            if (name == "NaN"sv) return types::game_data_type::NaN;
-            if (name == "CODE"sv) return types::game_data_type::CODE;
-            if (name == "OBJECT"sv) return types::game_data_type::OBJECT;
-            if (name == "SIDE"sv) return types::game_data_type::SIDE;
-            if (name == "GROUP"sv) return types::game_data_type::GROUP;
-            if (name == "TEXT"sv) return types::game_data_type::TEXT;
-            if (name == "SCRIPT"sv) return types::game_data_type::SCRIPT;
-            if (name == "TARGET"sv) return types::game_data_type::TARGET;
-            if (name == "CONFIG"sv) return types::game_data_type::CONFIG;
-            if (name == "DISPLAY"sv) return types::game_data_type::DISPLAY;
-            if (name == "CONTROL"sv) return types::game_data_type::CONTROL;
-            if (name == "NetObject"sv) return types::game_data_type::NetObject;
-            if (name == "SUBGROUP"sv) return types::game_data_type::SUBGROUP;
-            if (name == "TEAM_MEMBER"sv) return types::game_data_type::TEAM_MEMBER;
-            if (name == "TASK"sv) return types::game_data_type::TASK;
-            if (name == "DIARY_RECORD"sv) return types::game_data_type::DIARY_RECORD;
-            if (name == "LOCATION"sv) return types::game_data_type::LOCATION;
-            return types::game_data_type::end;
-        };
-
-        //Game Types
+        //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {
             if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
         #if _WIN64 || __X86_64__
@@ -384,7 +370,7 @@ namespace intercept {
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
-            const auto type = typeToEnum(entry->_name);
+            const auto type = types::__internal::game_datatype_from_string(entry->_name);
             if (poolAlloc && type != types::game_data_type::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
@@ -397,19 +383,10 @@ namespace intercept {
             //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
     #endif
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
 
         _sqf_register_funcs._gameState = state_addr_;
 
-        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
-    #ifdef __linux__
-        const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
-        assert(strcmp(test, "12MemFunctions") == 0);
-    #else
-        const char* test = getRTTIName(allocatorVtablePtr);
-        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
-    #endif
-        _allocator.genericAllocBase = allocatorVtablePtr;
     #ifndef __linux__
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();

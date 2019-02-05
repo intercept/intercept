@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Nou (korewananda@gmail.com)
 
@@ -21,9 +21,11 @@ namespace intercept {
     namespace types {
         class registered_sqf_function;
     }
+
     using WrapperFunctionBinary = intercept::types::binary_function;
     using WrapperFunctionUnary = intercept::types::unary_function;
     using WrapperFunctionNular = intercept::types::nular_function;
+
     namespace client {
         class host;
     }

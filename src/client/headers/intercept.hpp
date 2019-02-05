@@ -3,7 +3,9 @@
 #include "client/client.hpp"
 #include "client/eventhandlers.hpp"
 #include "shared/functions.hpp"
+#ifndef INTERCEPT_NO_SQF
 #include "client/sqf/sqf.hpp"
+#endif
 #include "shared/client_types.hpp"
 
 namespace intercept {

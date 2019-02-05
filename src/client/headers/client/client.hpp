@@ -40,6 +40,22 @@ namespace intercept {
             ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
             [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
 
+            //Tmp for old syntax taking uintptr_t
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionBinary, types::game_data_type, types::game_data_type, types::game_data_type)
+            [[deprecated("use new game_state& syntax instead of uintptr_t")]] [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, game_value (*function_)(uintptr_t, game_value_parameter, game_value_parameter), types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type) {
+                return register_sqf_command(name, description, reinterpret_cast<WrapperFunctionBinary>(function_), return_arg_type, left_arg_type, right_arg_type);
+            }
+
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionUnary, types::game_data_type, types::game_data_type)
+            [[deprecated("use new game_state& syntax instead of uintptr_t")]] [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, game_value (*function_)(uintptr_t, game_value_parameter), types::game_data_type return_arg_type, types::game_data_type right_arg_type) {
+                return register_sqf_command(name, description, reinterpret_cast<WrapperFunctionUnary>(function_), return_arg_type, right_arg_type);
+            }
+
+            ///@copydoc intercept::sqf_functions::register_sqf_function(std::string_view, std::string_view, WrapperFunctionNular, types::game_data_type)
+            [[deprecated("use new game_state& syntax instead of uintptr_t")]] [[nodiscard]] static registered_sqf_function register_sqf_command(std::string_view name, std::string_view description, game_value (*function_)(uintptr_t), types::game_data_type return_arg_type) {
+                return register_sqf_command(name, description, reinterpret_cast<WrapperFunctionNular>(function_), return_arg_type);
+            }
+
             ///@copydoc intercept::sqf_functions::register_sqf_type
             [[nodiscard]] static std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 

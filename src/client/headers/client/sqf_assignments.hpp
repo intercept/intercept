@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 184.144923 - Profile
+//Exported Pointer Assignments For: Arma 3 188.145302 - Profile
 
 
 // Unary Functions
@@ -385,6 +385,8 @@ __sqf::unary__getcenterofmass__object__ret__array = (unary_function)host::functi
 __sqf::unary__getconnecteduav__object__ret__object = (unary_function)host::functions.get_unary_function_typed("getconnecteduav"sv, "OBJECT"sv);
 __sqf::unary__getcontainermaxload__string__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcontainermaxload"sv, "STRING"sv);
 __sqf::unary__getcustomaimcoef__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcustomaimcoef"sv, "OBJECT"sv);
+__sqf::unary__getcustomsoundcontroller__array__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcustomsoundcontroller"sv, "ARRAY"sv);
+__sqf::unary__getcustomsoundcontrollercount__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcustomsoundcontrollercount"sv, "OBJECT"sv);
 __sqf::unary__getdammage__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getdammage"sv, "OBJECT"sv);
 __sqf::unary__getdescription__object__ret__array = (unary_function)host::functions.get_unary_function_typed("getdescription"sv, "OBJECT"sv);
 __sqf::unary__getdir__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getdir"sv, "OBJECT"sv);
@@ -927,6 +929,7 @@ __sqf::unary__setcamshakeparams__array__ret__nothing = (unary_function)host::fun
 __sqf::unary__setcompassoscillation__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("setcompassoscillation"sv, "ARRAY"sv);
 __sqf::unary__setcurrentchannel__scalar__ret__bool = (unary_function)host::functions.get_unary_function_typed("setcurrentchannel"sv, "SCALAR"sv);
 __sqf::unary__setcustommissiondata__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("setcustommissiondata"sv, "ARRAY"sv);
+__sqf::unary__setcustomsoundcontroller__array__ret__bool = (unary_function)host::functions.get_unary_function_typed("setcustomsoundcontroller"sv, "ARRAY"sv);
 __sqf::unary__setdate__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("setdate"sv, "ARRAY"sv);
 __sqf::unary__setdefaultcamera__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("setdefaultcamera"sv, "ARRAY"sv);
 __sqf::unary__setdetailmapblendpars__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("setdetailmapblendpars"sv, "ARRAY"sv);

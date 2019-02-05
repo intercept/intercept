@@ -1,5 +1,6 @@
 #include "pointers.hpp"
 
+#ifndef INTERCEPT_NO_SQF
 namespace intercept {
     namespace client {
 #include "sqf_pointers_definitions.hpp"
@@ -13,3 +14,4 @@ namespace intercept {
 
     
 }
+#endif

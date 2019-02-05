@@ -769,8 +769,7 @@ namespace intercept::types {
         bool operator==(const char* other_) const {
             if (!data()) return !other_ || !*other_;  //empty?
 
-            return std::equal(_ref->cbegin(), _ref->cend(),
-                              compact_array<char>::const_iterator(other_), [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
+            return operator==(std::string_view(other_));
         }
 
         ///== is case insensitive just like scripting
@@ -779,7 +778,8 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false;  //There is more data than we can even have
 
             return std::equal(other_.cbegin(), other_.cend(),
-                              _ref->cbegin(), [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
+                              _ref->cbegin(), _ref->cend(),
+                [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
         }
 
         ///== is case insensitive just like scripting

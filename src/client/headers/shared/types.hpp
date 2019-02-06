@@ -688,7 +688,6 @@ namespace intercept {
                 data = copy.data;
                 return *this;
             }
-            operator game_value() const { return static_cast<game_value>(*this); }
         };
 
         class I_debug_variable {

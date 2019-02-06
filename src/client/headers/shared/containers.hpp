@@ -121,7 +121,11 @@ namespace intercept::types {
     };
 
     class rv_pool_allocator {
-        [[maybe_unused]] char pad_0x0000[0x24];  //0x0000
+    #ifndef __GNUC__
+        //It is required, but GCC doesn't care about unused members and ignores the attribute, and thus warns about a ignored attribute
+        [[maybe_unused]] 
+    #endif
+        char pad_0x0000[0x24];  //0x0000
     public:
         const char* _allocName;
 

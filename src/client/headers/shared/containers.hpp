@@ -138,11 +138,6 @@ namespace intercept::types {
         void* allocate(size_t count);
         void deallocate(void* data);
     };
-
-#ifdef __linux__
-    template <class Type, int Count, class Fallback = rv_allocator<Type>>
-    class rv_allocator_local : public Fallback {};
-#else
     template <class Type, int Count, class Fallback = rv_allocator<Type>>
     class rv_allocator_local : private Fallback {
         //buffer will be aligned by this
@@ -152,7 +147,9 @@ namespace intercept::types {
         static const size_t buffersize_bytes = (Count * sizeof(Type));
         //Raw size in count of buffer_type elements
         static const size_t buffersize_count = (buffersize_bytes + sizeof(buffer_type) - 1) / sizeof(buffer_type);
+        #ifndef __linux__
         int dummy{0};
+        #endif
         buffer_type buf[buffersize_count]{0};
         bool has_data{false};
 
@@ -195,7 +192,6 @@ namespace intercept::types {
             return ptr;
         }
     };
-#endif
 
 #pragma endregion
 

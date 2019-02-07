@@ -49,7 +49,7 @@ namespace intercept::search {
         std::string line;
         while (std::getline(cmdline, line, '\0')) {
             file_contents += line;
-            file_contents.push_back(' '); //#TODO can linux even have more than one line?
+            file_contents.push_back(' ');
         }
         return file_contents;
     #else

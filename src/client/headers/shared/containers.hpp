@@ -861,11 +861,11 @@ namespace intercept::types {
             return pos - _ref->data();
         }
 
-        size_t find(const char* substring_, const size_t start_ = 0) const {
+        size_t find(std::string_view substring_, const size_t start_ = 0) const {
             if (_ref == nullptr || length() == 0) return -1;
-            const char* pos = strstr(_ref->data() + start_, substring_);
-            if (pos == nullptr) return -1;
-            return pos - _ref->data();
+            auto res = std::search(begin(), end(), substring_.begin(), substring_.end());
+            if (res == end()) return -1;
+            return std::distance(begin(), res);
         }
         void clear() {
             _ref = nullptr;

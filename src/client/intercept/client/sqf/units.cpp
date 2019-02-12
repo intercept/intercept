@@ -840,7 +840,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeownedmine__object__object__ret__nothing, unit_, mine_);
         }
 
-        void reveal(std::variant<object, group> &unit_, const object &target_) {
+        void reveal(std::variant<object, group> unit_, const object &target_) {
             game_value param_left;
             switch (unit_.index()) {
                 case 0: param_left = std::move(std::get<0>(unit_)); break;
@@ -850,7 +850,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__reveal__object_group__object__ret__nothing, param_left, target_);
         }
 
-        void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_) {
+        void reveal(std::variant<object, group> unit_, const std::vector<object> &targets_) {
             auto_array<game_value> targets({targets_.begin(), targets_.end()});
 
             game_value param_left;

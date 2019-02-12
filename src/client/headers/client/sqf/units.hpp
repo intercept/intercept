@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -236,8 +236,8 @@ namespace intercept {
         object get_connected_uav(const object &value_);
         float get_custom_aim_coef(const object &value_);
         void remove_owned_mine(const object &unit_, const object &mine_);
-        void reveal(std::variant<object, group> &unit_, const object &target_);
-        void reveal(std::variant<object, group> &unit_, const std::vector<object> &targets_);
+        void reveal(std::variant<object, group> unit_, const object &target_);
+        void reveal(std::variant<object, group> unit_, const std::vector<object> &targets_);
         float get_aiming_coef(const object &value_);
     }  // namespace sqf
 }  // namespace intercept

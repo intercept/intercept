@@ -507,7 +507,7 @@ namespace intercept::types {
                 tmp -= n;
                 return tmp;
             }
-            std::size_t operator-(const iterator& other) const { return p_ - other.p_; }
+            difference_type operator-(const iterator& other) const { return p_ - other.p_; }
 
             bool operator<(const iterator& other) const { return (p_ - other.p_) < 0; }
             bool operator<=(const iterator& other) const { return (p_ - other.p_) <= 0; }
@@ -583,7 +583,7 @@ namespace intercept::types {
                 tmp -= n;
                 return tmp;
             }
-            std::size_t operator-(const const_iterator& other) const noexcept { return p_ - other.p_; }
+            difference_type operator-(const const_iterator& other) const noexcept { return p_ - other.p_; }
 
             bool operator<(const const_iterator& other) const noexcept { return (p_ - other.p_) < 0; }
             bool operator<=(const const_iterator& other) const noexcept { return (p_ - other.p_) <= 0; }

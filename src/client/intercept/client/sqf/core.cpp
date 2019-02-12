@@ -658,7 +658,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__text__string__ret__text, value_);
         }
 
-        sqf_return_string text(location &value_) {
+        sqf_return_string text(const location &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
         }
 

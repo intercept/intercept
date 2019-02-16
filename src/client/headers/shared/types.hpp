@@ -1334,6 +1334,7 @@ namespace intercept {
 
             /**
             * @brief Retrieve a local variable
+            * @param name The lowercase name of the variable. Has to be lowercase.
             * @details Walks through the scope's from current to the topmost scope and tries to find a local variable.
             * @return Returns the value of the variable. Returns nil if not found.
             */
@@ -1346,6 +1347,7 @@ namespace intercept {
 
             /**
             * @brief Set a local variable in the current scope
+            * @param name The lowercase name of the variable. Has to be lowercase.
             * @param editExisting Check if variable exists in any parent scope, and edit that one (SQF behaviour as without private keyword)\n
                 If you don't set editExisting then the variable will still be overwritten if it already exists in the current scope
             */
@@ -1361,6 +1363,11 @@ namespace intercept {
                 eval->local->set_variable(name, std::move(value));
             }
 
+
+            /**
+            * @brief Deletes a local variable in the current scope
+            * @param name The lowercase name of the variable. Has to be lowercase.
+            */
             void delete_local_variable(std::string_view name) {
                 if (!eval || !eval->local) return;
                 eval->local->delete_variable(name);

@@ -125,7 +125,11 @@ namespace intercept::types {
         //It is required, but GCC doesn't care about unused members and ignores the attribute, and thus warns about a ignored attribute
         [[maybe_unused]] 
     #endif
+        #ifdef _WIN64
+        char pad_0x0000[0x48];  //0x0000
+        #else
         char pad_0x0000[0x24];  //0x0000
+        #endif
     public:
         const char* _allocName;
 
@@ -767,14 +771,14 @@ namespace intercept::types {
 
         ///== is case insensitive just like scripting
         bool operator==(const char* other_) const {
-            if (!data()) return !other_ || !*other_;  //empty?
+            if (empty()) return !other_ || !*other_;  //empty?
 
             return operator==(std::string_view(other_));
         }
 
         ///== is case insensitive just like scripting
         bool operator==(std::string_view other_) const {
-            if (!data()) return other_.empty();                //empty?
+            if (empty()) return other_.empty();
             if (other_.length() > _ref->size()) return false;  //There is more data than we can even have
 
             return std::equal(other_.cbegin(), other_.cend(),
@@ -784,7 +788,7 @@ namespace intercept::types {
 
         ///== is case insensitive just like scripting
         bool operator==(const r_string& other_) const {
-            if (!data() || !other_.data()) return data() == other_.data();  //empty?
+            if (empty() || other_.empty()) return data() == other_.data();
             if (data() == other_.data()) return true;
 
             return operator==(std::string_view(other_));
@@ -811,12 +815,12 @@ namespace intercept::types {
         }
 
         bool operator<(const r_string& other_) const {
-            if (!data()) return false;  //empty?
+            if (empty()) return false; 
             return strcmp(data(), other_.data()) < 0;
         }
 
         bool operator>(const r_string& other_) const {
-            if (!data()) return false;  //empty?
+            if (empty()) return false;
             return strcmp(data(), other_.data()) > 0;
         }
 

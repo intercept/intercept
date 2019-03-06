@@ -40,6 +40,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 
 add_subdirectory(src/host)
 add_subdirectory(src/client)

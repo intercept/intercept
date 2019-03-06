@@ -1781,6 +1781,12 @@ namespace intercept::types {
             return &_table[hashed_key];
         }
 
+        const Container* get_table_for_key(std::string_view key_) const {
+            if (!_table || !_count) return nullptr;
+            const int hashed_key = hash_key(key_);
+            return &_table[hashed_key];
+        }
+
         Type& get(std::string_view key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);

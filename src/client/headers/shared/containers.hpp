@@ -1448,6 +1448,29 @@ namespace intercept::types {
         }
 
         /**
+        * @brief Inserts a single value at _where
+        * @param _value the value to insert
+        * @return A iterator pointing to the inserted value
+        */
+        template <class _InType>  //This is sooo not threadsafe!
+        iterator insert(iterator _where, _InType&& _value) {
+            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            const size_t insertOffset = std::distance(base::begin(), _where);
+            const size_t previousEnd = static_cast<size_t>(base::_n);
+            const size_t oldSize = base::count();
+            reserve(oldSize + 1);
+
+            //emplace_back(_value);
+            //custom inlined version of emplace_back. No capacity checks and only incrementing _n once.
+            auto& item = base::_data[base::_n];
+            ::new (&item) Type(std::forward<decltype(_value)>(_value));
+            ++base::_n;
+
+            std::rotate(base::begin() + insertOffset, base::begin() + previousEnd, base::end());
+            return base::begin() + insertOffset;
+        }
+
+        /**
         * @brief Inserts a range of values at _where
         * @param _first start of the range
         * @param _last end of the range

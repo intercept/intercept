@@ -1310,6 +1310,7 @@ namespace intercept::types {
 
         auto_array& operator=(const auto_array& copy_) {
             if (copy_._n) {
+                clear();
                 insert(base::end(), copy_.begin(), copy_.end());
             }
             return *this;

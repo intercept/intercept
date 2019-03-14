@@ -40,6 +40,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
+      before_install:
+        # CMake 3.14. If you find a whitelisted backport for trusty, remove the lines below
+        # and put the backport to `sources:` and `packages:` above instead.
+        - wget https://cmake.org/files/v3.14/cmake-3.14.0-Linux-x86_64.sh
+        - chmod +x cmake-*-Linux-x86_64.sh
+        - mkdir /opt/cmake
+        - sudo ./cmake-*-Linux-x86_64.sh --prefix=/opt/cmake --exclude-subdir --skip-license
+        - export PATH=/opt/cmake/bin:$PATH
+
       script:
         - cd vcproj
         - CC=gcc-7 CXX=g++-7 cmake .. && make -j 3
@@ -60,6 +69,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
+
+      before_install:
+        # CMake 3.14. If you find a whitelisted backport for trusty, remove the lines below
+        # and put the backport to `sources:` and `packages:` above instead.
+        - wget https://cmake.org/files/v3.14/cmake-3.14.0-Linux-x86_64.sh
+        - chmod +x cmake-*-Linux-x86_64.sh
+        - mkdir /opt/cmake
+        - sudo ./cmake-*-Linux-x86_64.sh --prefix=/opt/cmake --exclude-subdir --skip-license
+        - export PATH=/opt/cmake/bin:$PATH
 
       script:
         - cd vcproj

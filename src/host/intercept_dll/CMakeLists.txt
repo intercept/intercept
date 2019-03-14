@@ -39,8 +39,8 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
 		"-m32"
 		"-Wno-ignored-attributes"
 		"-static"
-		"$<$<CONFIG:Release>>:-ffunction-sections>"
-		"$<$<CONFIG:Release>>:-fdata-sections>"
+		"$<$<CONFIG:Release>:-ffunction-sections>"
+		"$<$<CONFIG:Release>:-fdata-sections>"
 	)
 	target_link_options(${INTERCEPT_EXTENSION_NAME} PRIVATE "-m32" "-fPIC" "-static" "-static-libgcc" "-static-libstdc++"
 	"$<$<CONFIG:Release>:-Wl,--gc-sections>"

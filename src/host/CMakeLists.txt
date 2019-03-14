@@ -13,6 +13,10 @@ endif()
 option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
+    add_compile_options(-m32)
+endif()
+
 include_directories("common")
 include_directories("controller")
 include_directories("loader")

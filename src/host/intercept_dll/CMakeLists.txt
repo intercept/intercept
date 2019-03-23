@@ -50,6 +50,8 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 	target_link_libraries(${INTERCEPT_EXTENSION_NAME} "libstdc++.a")
+	find_package (Threads)
+	target_link_libraries (${INTERCEPT_EXTENSION_NAME} ${CMAKE_THREAD_LIBS_INIT})
 else()
 	target_compile_options(
 		${INTERCEPT_EXTENSION_NAME} PRIVATE 

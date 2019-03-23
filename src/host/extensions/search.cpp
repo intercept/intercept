@@ -294,6 +294,11 @@ std::vector<std::wstring> intercept::search::plugin_searcher::generate_pbo_list(
             continue;
         }
 
+        if (GetFileType(dupHandle) != FILE_TYPE_DISK) { //Don't want to query pipes or network resources
+            CloseHandle(dupHandle);
+            continue;
+        }
+
         /* Query the object type. */
         objectTypeInfo = static_cast<POBJECT_TYPE_INFORMATION>(malloc(0x1000));
         if (!NT_SUCCESS(NtQueryObject(

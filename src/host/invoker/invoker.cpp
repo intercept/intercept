@@ -79,6 +79,7 @@ namespace intercept {
     bool invoker::do_invoke_period() {
         {
             _invoker_unlock period_lock(this, true);
+            if (_thread_waiting_for_lock_count) std::this_thread::sleep_for(std::chrono::nanoseconds(10)); //Sleep some, to allow other threads to catch the lock
             const long timeout = clock() + 3;
             while (_thread_count > 0 && clock() < timeout) std::this_thread::sleep_for(std::chrono::microseconds(20));
         }
@@ -443,9 +444,11 @@ namespace intercept {
         //It waits on the second lock but can't lock because invoker_unlock is trying to give control to engine. So it forbids new locks.
         //But thread needs to lock it so it can unlock the first lock.
         if (_thread_count == 0) {
+            ++_thread_waiting_for_lock_count; //Make sure that invoker gives us atleast SOME time to catch the open window
             std::unique_lock<std::mutex> lock(_state_mutex);
             _invoke_condition.wait(lock, [] {return invoker_accessible_all; });
             _invoke_mutex.lock();
+            --_thread_waiting_for_lock_count;
         } else {
             _invoke_mutex.lock();
         }

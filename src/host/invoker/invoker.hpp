@@ -222,6 +222,7 @@ namespace intercept {
 
 
         std::atomic<uint32_t> _thread_count;
+        std::atomic<uint32_t> _thread_waiting_for_lock_count;
 
         /*!
         @brief The interceptEvent SQF Function that's used to get events with arguments

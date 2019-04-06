@@ -34,6 +34,10 @@ namespace intercept {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
+        sqf_script_type host::register_compound_sqf_type(auto_array<game_data_type> types) {
+            return functions.register_compound_sqf_type(types);
+        }
+
         register_plugin_interface_result host::register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_) {
             if (!interface_class_) return register_plugin_interface_result::invalid_interface_class;
             auto result = functions.register_plugin_interface(module_name, name_, api_version_, interface_class_);

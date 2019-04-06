@@ -120,21 +120,17 @@ namespace intercept {
         uintptr_t game_data_object::type_def;
         uintptr_t game_data_object::data_type_def;
 
-
-
         uintptr_t game_value::__vptr_def;
         uintptr_t sqf_script_type::type_def;
 
-
         value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
-                return{ single_type->_name };
+                return {single_type->_name};
             }
-
-            return{
-                compound_type->types->first->_name,
-                compound_type->types->second->_name
-            };
+            value_types x;
+            for (auto &it : *compound_type)
+                x.insert(it->_name);
+            return x;
         }
 
         r_string sqf_script_type::type_str() const {

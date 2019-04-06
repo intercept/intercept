@@ -7,7 +7,7 @@
 #include <link.h>
 #endif
 
-#define PLUGIN_MIN_API_VERSION 1
+#define PLUGIN_MIN_API_VERSION 2
 
 namespace intercept {
 
@@ -28,6 +28,7 @@ namespace intercept {
         functions.register_sqf_function_unary = client_function_defs::register_sqf_function_unary;
         functions.register_sqf_function_nular = client_function_defs::register_sqf_function_nular;
         functions.register_sqf_type = client_function_defs::register_sqf_type;
+        functions.register_compound_sqf_type = client_function_defs::register_compound_sqf_type;
 
         functions.register_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_) {
             CERT_ENTER;

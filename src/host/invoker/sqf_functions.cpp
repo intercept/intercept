@@ -469,6 +469,28 @@ std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::reg
     return { static_cast<types::game_data_type>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
 }
 
+sqf_script_type sqf_functions::register_compound_sqf_type(auto_array<types::game_data_type> types) {
+    if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
+    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+
+    auto_array<const script_type_info*> resolvedTypes;
+
+    for (auto& it : types) {
+        auto argTypeString = types::__internal::to_string(it);
+        for (auto& type : gs->get_script_types()) {
+            if (type->_name == argTypeString)
+                resolvedTypes.emplace_back(type);
+        }
+    }
+
+    auto newType = rv_allocator<compound_script_type_info>::create_single(
+        resolvedTypes
+    );
+
+    LOG(INFO, "sqf_functions::register_compound_sqf_type");
+    return {_registerFuncs._type_vtable, nullptr, newType};
+}
+
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {
     auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);

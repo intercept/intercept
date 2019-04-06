@@ -1094,11 +1094,14 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_code() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
             size_t hash() const { return __internal::pairhash(type_def, code_string); }
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
             auto_array<ref<game_instruction>> instructions;
             bool is_final;

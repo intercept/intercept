@@ -83,6 +83,7 @@ namespace intercept {
 
         uintptr_t game_data_code::type_def;
         uintptr_t game_data_code::data_type_def;
+        rv_pool_allocator *game_data_code::pool_alloc_base;
 
         uintptr_t game_data_group::type_def;
         uintptr_t game_data_group::data_type_def;
@@ -303,6 +304,18 @@ namespace intercept {
         }
 
         void game_data_string::operator delete(void * ptr_, std::size_t) {
+            return pool_alloc_base->deallocate(ptr_);
+        }
+
+        void *game_data_code::operator new(std::size_t) {
+#ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_code));
+#else
+            return pool_alloc_base->allocate(1);
+#endif
+        }
+
+        void game_data_code::operator delete(void *ptr_, std::size_t) {
             return pool_alloc_base->deallocate(ptr_);
         }
 

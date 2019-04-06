@@ -95,6 +95,7 @@ namespace intercept {
             host::functions.get_type_structure("CODE"sv, type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
+            game_data_code::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::CODE)];
 
             host::functions.get_type_structure("GROUP"sv, type_def, data_type_def);
             game_data_group::type_def = type_def;

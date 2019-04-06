@@ -336,9 +336,13 @@ namespace intercept {
             script_type_info* second;
         };
 
-        struct compound_script_type_info {
-            uintptr_t v_table;
-            compound_value_pair* types;
+        struct compound_script_type_info : public auto_array<const script_type_info*>, public dummy_vtable_class {
+        public:
+            compound_script_type_info(std::initializer_list<const script_type_info*> types) {
+                resize(types.size());
+                insert(begin(), types.begin(), types.end());
+            }
+            void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
         };
 
         class sqf_script_type : public serialize_class {

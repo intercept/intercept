@@ -138,10 +138,7 @@ namespace intercept {
                 return single_type->_name;
             }
 
-            return
-                compound_type->types->first->_name + "_" +
-                compound_type->types->second->_name;
-
+            return (*compound_type)[0]->_name + "_" + (*compound_type)[1]->_name;
         }
 
     #pragma region GameData Types

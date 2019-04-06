@@ -384,6 +384,7 @@ namespace intercept {
     #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
+        _sqf_register_funcs._compoundtype_vtable = _unary_operators["isnil"sv].front().op->arg1_type.compound_type->v_table;
 
         _sqf_register_funcs._gameState = state_addr_;
 

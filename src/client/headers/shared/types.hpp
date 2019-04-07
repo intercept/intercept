@@ -475,7 +475,11 @@ namespace intercept {
                 dummy.clear();
                 return dummy;
             }
+
+        public:
             virtual game_data* copy() const { return nullptr; }
+
+        protected:
             virtual void set_readonly(bool) {}  //No clue what this does...
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }

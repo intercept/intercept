@@ -457,6 +457,8 @@ namespace intercept {
         void synchronize_waypoint(waypoint &wp_, const std::vector<waypoint> &others_);
         void synchronize_waypoint(object &trigger_, const std::vector<waypoint> &others_);
 
+        std::vector<object> synchronized_trigger(waypoint& wp_);
+
         void waypoint_attach_object(waypoint &wp_, int obj_id_);
         void waypoint_attach_object(waypoint &wp_, object &obj_);
 

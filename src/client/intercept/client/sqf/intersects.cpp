@@ -5,6 +5,23 @@
 namespace intercept {
     namespace sqf {
         namespace __helpers {
+            intersect_result_list __intersects(const game_value &intersects_value_) {
+                intersect_result_list output;
+                output.reserve(intersects_value_.size());
+
+                for (uint32_t i = 0; i < intersects_value_.size(); ++i) {
+                    game_value element = intersects_value_[i];
+                    intersect_result result;
+
+                    result.selection_name = element[0];
+                    result.intersect_distance = element[1];
+
+                    output.push_back(result);
+                }
+
+                return output;
+            }
+
             intersect_surfaces_list __line_intersects_surfaces(const game_value &intersects_value_) {
                 intersect_surfaces_list output;
                 output.reserve(intersects_value_.size());
@@ -25,13 +42,12 @@ namespace intercept {
             }
         }  // namespace __helpers
 
-        bool intersect(const object &obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
-            game_value params1({obj_,
-                                lodname_});
-            game_value params2({begin_pos_,
-                                end_pos_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, params1, params2);
+        intersect_result_list intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3& begin_pos_, const vector3& end_pos_) {
+            game_value left ({ obj_, lodname_ });
+            game_value right ({ begin_pos_, end_pos_ });
+            
+            game_value intersects_value = host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, left, right);
+            return __helpers::__intersects(intersects_value);
         }
 
         intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_) {

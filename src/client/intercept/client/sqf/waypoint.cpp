@@ -112,11 +112,6 @@ namespace intercept {
             return __helpers::__convert_to_vector<waypoint>(ret);
         }
 
-        std::vector<object> synchronized_trigger(waypoint& wp_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedtriggers__array__ret__array, wp_);
-            return __helpers::__convert_to_vector<object>(ret);
-        }
-
         void set_waypoint_behaviour(waypoint &wp_, waypoint::behaviour mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointbehaviour__array__string__ret__nothing, wp_, waypoint::__get_enum_as_str(mode_));
         }
@@ -360,6 +355,11 @@ namespace intercept {
             for (auto &waypoint : waypoints_) waypoints.push_back({waypoint.wgroup, waypoint.windex});
 
             host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
+        }
+
+        std::vector<object> synchronized_triggers(const waypoint& wp_) {
+            const game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedtriggers__array__ret__array, wp_);
+            return __helpers::__convert_to_vector<object>(ret);
         }
 
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {

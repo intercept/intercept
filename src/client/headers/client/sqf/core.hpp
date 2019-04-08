@@ -194,7 +194,7 @@ namespace intercept {
         bool is_localized(sqf_string_const_ref value_);
         sqf_return_string localize(sqf_string_const_ref value_);
         game_value text(sqf_string_const_ref value_);
-        sqf_return_string text(location& value_);
+        sqf_return_string text(const location &value_);
         sqf_return_string format(const std::vector<game_value> &params_);
         sqf_return_string compose_text(sqf_string_list_const_ref texts_);
         sqf_return_string endl();

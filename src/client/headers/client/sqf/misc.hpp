@@ -194,7 +194,7 @@ namespace intercept {
         float count_side(const side &side_, std::vector<object> &objects_);
         void set_airport_side(float value0_, const side &value1_);
         void set_airport_side(const object &target_, const side &value1_);
-        void reveal_mine(const object &value0_, const side &value1_);
+        void reveal_mine(const side &value0_, const object &value1_);
         bool mine_detected_by(const object &value0_, const side &value1_);
         void add_score_side(const side &value0_, float value1_);
         void airport_side(int id_);

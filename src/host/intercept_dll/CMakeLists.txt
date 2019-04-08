@@ -24,6 +24,54 @@ target_link_libraries(${INTERCEPT_EXTENSION_NAME} common_static loader_static co
 set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES PREFIX "")
 set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES FOLDER intercept)
 
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
+	target_compile_options(
+		${INTERCEPT_EXTENSION_NAME} PRIVATE 
+		"-std=c++1z"
+		"$<$<CONFIG:Release>:-O3>"
+		"-s" #remove -s to enable debug symbols. Also maybe add -g or -g3
+		"-fPIC"
+		"-fpermissive"
+		"-pthread"
+		"-static-libgcc"
+		"-static-libstdc++"
+		"-march=i686"
+		"-m32"
+		"-Wno-ignored-attributes"
+		"-static"
+		"$<$<CONFIG:Release>:-ffunction-sections>"
+		"$<$<CONFIG:Release>:-fdata-sections>"
+	)
+	target_link_options(${INTERCEPT_EXTENSION_NAME} PRIVATE "-m32" "-fPIC" "-static" "-static-libgcc" "-static-libstdc++"
+	"$<$<CONFIG:Release>:-Wl,--gc-sections>"
+	"$<$<OR:$<CONFIG:Release>>:-Wl,--strip-all>"
+    "-Wl,-rpath,$ORIGIN"
+	) 
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+
+	target_link_libraries(${INTERCEPT_EXTENSION_NAME} "libstdc++.a")
+	find_package (Threads)
+	target_link_libraries (${INTERCEPT_EXTENSION_NAME} ${CMAKE_THREAD_LIBS_INIT})
+else()
+	target_compile_options(
+		${INTERCEPT_EXTENSION_NAME} PRIVATE 
+		"/MP" "/Zi" "/EHsc"
+		"$<$<CONFIG:Release>:/MT>"
+		"$<$<CONFIG:Debug>:/MTd>"
+		"$<$<CONFIG:Release>:/Ox>"
+		"$<$<CONFIG:Release>:/Ob2>"
+		"$<$<CONFIG:Debug>:/Ob0>"
+		"$<$<CONFIG:Release>:/Oi>"
+		"$<$<CONFIG:Debug>:/Od>"
+		"$<$<CONFIG:Debug>:/RTC1>"
+		"$<$<CONFIG:Release>:/Ot>"
+		"$<$<CONFIG:Release>:/DNDEBUG>"
+		"$<$<CONFIG:Debug>:/D_DEBUG>"
+	)
+	target_link_options(${INTERCEPT_EXTENSION_NAME} PRIVATE "/OPT:REF" "/OPT:ICF" "/DEBUG:FULL") 
+endif()
+
+
 if(INTERCEPT_BUILD2RV)
     set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/rv")
     set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/rv")

@@ -18,6 +18,8 @@ Provides the ability to assign Eventhandlers without going through SQF
 #endif
 
 #include "../shared/client_types.hpp"
+
+#ifndef INTERCEPT_NO_SQF
 #include <functional>
 #include <vector>
 namespace intercept::client {
@@ -748,3 +750,4 @@ namespace intercept::client {
     [[nodiscard]] std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<types::game_value(types::game_value_parameter)> fnc);
 #pragma endregion
 }  // namespace intercept::client                                                                                    
+#endif

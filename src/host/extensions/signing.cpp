@@ -80,11 +80,40 @@ typedef struct {
     LPWSTR lpszMoreInfoLink;
 } SPROG_PUBLISHERINFO, *PSPROG_PUBLISHERINFO;
 
+template <class T, auto D>
+class ManagedObject {
+public:
+    T obj = nullptr;
+
+    ManagedObject() = default;
+    ManagedObject(T s) : obj(s) {}
+
+    ~ManagedObject() {
+        if (!obj) return;
+
+        //Special case for CertCloseStore
+        if constexpr (std::is_invocable_v<decltype(D), T, DWORD>)
+            D(obj, 0);
+        else
+            D(obj);
+    }
+
+    T operator->() { return obj; }
+    T* operator&() { return &obj; }
+    T& operator*() { return *obj; }
+    operator T() { return obj; }
+
+    ManagedObject& operator=(T* s) {
+        obj = s;
+        return *this;
+    }
+};
+
 thread_local intercept::cert::signing::security_class intercept::cert::current_security_class = intercept::cert::signing::security_class::not_signed;
 
-intercept::cert::signing::security_class intercept::cert::signing::verifyCert(std::wstring_view file_path, types::r_string ca_cert) {
-    HCERTSTORE hStore = nullptr;
-    HCRYPTMSG hMsg = nullptr;
+std::pair<intercept::cert::signing::security_class, std::optional<std::string>> intercept::cert::signing::verifyCert(std::wstring_view file_path, types::r_string ca_cert) {
+    ManagedObject<HCERTSTORE, CertCloseStore> hStore;
+    ManagedObject<HCRYPTMSG, CryptMsgClose> hMsg;
     DWORD dwEncoding, dwContentType, dwFormatType;
     DWORD dwSignerInfo;
     CERT_INFO CertInfo;
@@ -100,7 +129,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         &hStore,
         &hMsg,
         nullptr);
-    if (!fResult) return security_class::not_signed;
+    if (!fResult) return {security_class::not_signed, fmt::format("CryptQueryObject failed: {}", GetLastError())};
 
     // Get signer information size.
     fResult = CryptMsgGetParam(hMsg,
@@ -109,16 +138,14 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         nullptr,
         &dwSignerInfo);
     if (!fResult) {
-        if (hMsg) CryptMsgClose(hMsg);
-        if (hStore) CertCloseStore(hStore, 0);
-        return security_class::not_signed;
+        auto errmsg = fmt::format("CryptMsgGetParam failed: {}", GetLastError());
+        return {security_class::not_signed, errmsg};
     }
 
     // Allocate memory for signer information.
-    PCMSG_SIGNER_INFO pSignerInfo = static_cast<PCMSG_SIGNER_INFO>(LocalAlloc(LPTR, dwSignerInfo));
+    ManagedObject<PCMSG_SIGNER_INFO, LocalFree> pSignerInfo = static_cast<PCMSG_SIGNER_INFO>(LocalAlloc(LPTR, dwSignerInfo));
     if (!pSignerInfo) {
-        if (hStore) CertCloseStore(hStore, 0);
-        return security_class::not_signed;
+        return {security_class::not_signed, "LocalAlloc for signerInfo failed"};
     }
 
     // Get Signer Information.
@@ -127,24 +154,22 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         0,
         static_cast<PVOID>(pSignerInfo),
         &dwSignerInfo);
-    if (hMsg) CryptMsgClose(hMsg);
+
     if (!fResult) {
-        if (hStore) CertCloseStore(hStore, 0);
-        if (pSignerInfo) LocalFree(pSignerInfo);
-        return security_class::not_signed;
+        auto errmsg = fmt::format("CryptMsgGetParam failed: {}", GetLastError());
+        return {security_class::not_signed, "LocalAlloc for signerInfo failed"};
     }
 
-    // Search for the signer certificate in the temporary 
+    // Search for the signer certificate in the temporary
     // certificate store.
     CertInfo.Issuer = pSignerInfo->Issuer;
     CertInfo.SerialNumber = pSignerInfo->SerialNumber;
 
     //create in-memory CertStore to hold our CA
-    HCERTSTORE hMemoryStore = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, 0, nullptr);
+    ManagedObject<HCERTSTORE, CertCloseStore> hMemoryStore = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, 0, nullptr);
     if (!hMemoryStore) {
-        if (hStore) CertCloseStore(hStore, 0);
-        if (pSignerInfo) LocalFree(pSignerInfo);
-        return security_class::not_signed;
+        auto errmsg = fmt::format("CertOpenStore failed: {}", GetLastError());
+        return {security_class::not_signed, errmsg};
     }
 
     std::vector<unsigned char> data;
@@ -152,8 +177,7 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
     DWORD derPubKeyLen = 2048;
     //This can fail if the key is invalid. But it can be invalid and still be signed with core key
     if (ca_cert.length() != 0 && CryptStringToBinaryA(ca_cert.data(), 0, CRYPT_STRING_BASE64HEADER, data.data(), &derPubKeyLen, nullptr, nullptr)) {
-
-        PCCERT_CONTEXT ct = CertCreateCertificateContext(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+        ManagedObject<PCCERT_CONTEXT, CertFreeCertificateContext> ct = CertCreateCertificateContext(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
             data.data(),
             derPubKeyLen);
 
@@ -168,12 +192,10 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
             CERT_STORE_ADD_ALWAYS,
             nullptr
         );
-
-        if (ct) CertFreeCertificateContext(ct);
     }
 
     //Add the core cert
-    auto ct = CertCreateCertificateContext(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+    ManagedObject<PCCERT_CONTEXT, CertFreeCertificateContext> ct = CertCreateCertificateContext(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
         coreCACert,
         sizeof(coreCACert));
 
@@ -184,12 +206,10 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         nullptr
     );
 
-
     debug_certs_in_store(hMemoryStore);
     debug_certs_in_store(hStore);
 
-
-    PCCERT_CONTEXT pCertContext = CertFindCertificateInStore(hStore,
+    ManagedObject<PCCERT_CONTEXT, CertFreeCertificateContext> pCertContext = CertFindCertificateInStore(hStore,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
         0,
         CERT_FIND_SUBJECT_CERT,
@@ -197,12 +217,11 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         nullptr);
 
     if (!pCertContext) {
-        if (hStore) CertCloseStore(hStore, 0);
-        if (pSignerInfo) LocalFree(pSignerInfo);
-        return security_class::not_signed;
+        auto errmsg = fmt::format("CertFindCertificateInStore failed: {}", GetLastError());
+        return {security_class::not_signed, errmsg};
     }
 
-    PCCERT_CHAIN_CONTEXT chainContext;
+    ManagedObject<PCCERT_CHAIN_CONTEXT, CertFreeCertificateChain> chainContext;
     CERT_ENHKEY_USAGE        EnhkeyUsage;
     CERT_USAGE_MATCH         CertUsage;
     CERT_CHAIN_PARA          ChainPara;
@@ -234,12 +253,9 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         &hChainEngine);
     //auto err = GetLastError();
     if (!ret4) {
-        if (pSignerInfo) LocalFree(pSignerInfo);
-        if (hStore) CertCloseStore(hStore, 0);
-        if (pCertContext) CertFreeCertificateContext(pCertContext);
-        return security_class::not_signed;
+        auto errmsg = fmt::format("CertCreateCertificateChainEngine failed: {}", GetLastError());
+        return {security_class::not_signed, errmsg};
     }
-
 
     const auto ret = CertGetCertificateChain(
         hChainEngine,
@@ -274,60 +290,51 @@ intercept::cert::signing::security_class intercept::cert::signing::verifyCert(st
         &policy,
         &status);
 
-    if (hStore) CertCloseStore(hStore, 0);
-    if (pSignerInfo) LocalFree(pSignerInfo);
-    if (pCertContext) CertFreeCertificateContext(pCertContext);
-    if (!chainContext) return security_class::not_signed;
-
-    if (!verified) return security_class::not_signed;
+    if (!chainContext) return {security_class::not_signed, "CertVerifyCertificateChainPolicy failed to create chainContext"};
+    if (!verified) return {security_class::not_signed, "CertVerifyCertificateChainPolicy failed to verify"};
 
     bool coreSigned = false;
-    if (chainContext->cChain >= 1 && chainContext->rgpChain[chainContext->cChain - 1]->cElement >1) {
-        auto CAContext = chainContext->rgpChain[chainContext->cChain - 1]->
-            rgpElement[chainContext->rgpChain[chainContext->cChain - 1]->cElement - 1]->pCertContext;
+
+    //If chain has more than a single element, grab the root cert and compare to our core CA
+    if (chainContext->cChain >= 1 && chainContext->rgpChain[chainContext->cChain - 1]->cElement > 1) {
+        auto CAContext = chainContext->rgpChain[chainContext->cChain - 1]->rgpElement[chainContext->rgpChain[chainContext->cChain - 1]->cElement - 1]->pCertContext;
         if (CAContext && ct && ct->cbCertEncoded == CAContext->cbCertEncoded) {
             //Check if the CA of this plugin matches the core CA
-            coreSigned = std::memcmp(CAContext->pbCertEncoded,ct->pbCertEncoded, ct->cbCertEncoded) == 0;
+            coreSigned = std::memcmp(CAContext->pbCertEncoded, ct->pbCertEncoded, ct->cbCertEncoded) == 0;
         }
-
-
     }
-    security_class returnCode = security_class::not_signed;
-    
+    std::pair<security_class, std::optional<std::string>> returnCode = {security_class::not_signed, std::nullopt};
+
     switch (status.dwError) {
         case 0x0: {
-            returnCode = coreSigned ? security_class::core : security_class::self_signed;
-        }break;
-        case CRYPT_E_NO_REVOCATION_CHECK: {//No revocation list for cert
-            if (chainContext->rgpChain[chainContext->cChain - 1]->cElement > 1 //have found parent cert
-                &&
-                chainContext->rgpChain[chainContext->cChain - 1]->rgpElement[1]->pRevocationInfo //has revocation info
-                &&
-                chainContext->rgpChain[chainContext->cChain - 1]->rgpElement[1]->pRevocationInfo->pCrlInfo //has CRL!
-                ) {
+            returnCode.first = coreSigned ? security_class::core : security_class::self_signed;
+        } break;
+        case CRYPT_E_NO_REVOCATION_CHECK: {                                                                    //No revocation list for cert
+            if (chainContext->rgpChain[chainContext->cChain - 1]->cElement > 1                                 //have found parent cert
+                && chainContext->rgpChain[chainContext->cChain - 1]->rgpElement[1]->pRevocationInfo            //has revocation info
+                && chainContext->rgpChain[chainContext->cChain - 1]->rgpElement[1]->pRevocationInfo->pCrlInfo  //has CRL!
+            ) {
                 //parent has CRL but you don't!
                 //#TODO warn
             }
-            returnCode = coreSigned ? security_class::core : security_class::self_signed;
-        }break;
+            returnCode.first = coreSigned ? security_class::core : security_class::self_signed;
+        } break;
         case CERT_E_REVOCATION_FAILURE:
         case CRYPT_E_REVOCATION_OFFLINE:
-            returnCode = coreSigned ? security_class::core : security_class::self_signed;
+            returnCode.first = coreSigned ? security_class::core : security_class::self_signed;
             break;
         case CRYPT_E_REVOKED: //cert actively revoked
-            returnCode = security_class::not_signed;
+            returnCode.first = security_class::not_signed;
+            returnCode.second = "Certificate Revoked";
             break;
         case CERT_E_CHAINING: //Couldn't build chain
-            returnCode = security_class::not_signed;
+            returnCode.first = security_class::not_signed;
+            returnCode.second = "Couldn't build chain";
             break;
     }
 
-
-    if (ct) CertFreeCertificateContext(ct);
-    CertFreeCertificateChain(chainContext);
     return returnCode;
 }
-
 
 /*
 #include "Windows.h"
@@ -365,6 +372,8 @@ void intercept::cert::signing::debug_certs_in_store([[maybe_unused]] HCERTSTORE 
 
 #else
 
-intercept::cert::signing::security_class intercept::cert::signing::verifyCert(std::wstring_view, types::r_string) {}
+std::pair<intercept::cert::signing::security_class, std::optional<std::string>> intercept::cert::signing::verifyCert(std::wstring_view, types::r_string) {
+    return {security_class::core, std::nullopt};
+}
 void intercept::cert::signing::debug_certs_in_store(void*) {}
 #endif

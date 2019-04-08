@@ -1,4 +1,5 @@
 #pragma once
+#ifndef INTERCEPT_NO_SQF
 #include "../shared.hpp"
 #include "client.hpp"
 #include "../shared/functions.hpp"
@@ -20,3 +21,4 @@ namespace intercept {
         
     }
 }
+#endif

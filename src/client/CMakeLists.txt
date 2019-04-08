@@ -11,7 +11,7 @@ option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
     SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive")
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++")

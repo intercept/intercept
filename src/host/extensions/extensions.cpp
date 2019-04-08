@@ -115,17 +115,27 @@ namespace intercept {
 
         auto full_path = _searcher.find_extension(path);
         if (!full_path) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Client plugin: {} was not found.", path_));
             LOG(ERROR, "Client plugin: {} was not found.", path_);
             return false;
         }
             
 
-        cert::signing::security_class security_class = cert::signing::security_class::not_signed;
+        cert::signing::security_class security_class = cert::signing::security_class::core;
     #ifndef __linux__
         if (certPath && certPath->length() != 0) { //certificate check
             r_string certData = invoker::get().invoke_raw("loadfile", *certPath);
-            security_class = _signTool.verifyCert(*full_path, certData);
+            auto res = _signTool.verifyCert(*full_path, certData);
+            security_class = res.first;
             if (security_class == cert::signing::security_class::not_signed && !ignore_cert_fail) {  //certpath was set so a certificate was certainly wanted
+                if (res.second) {
+                    invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {} because {}", path_, *res.second));
+                    LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}] because {}", path_, *res.second);
+                } else {
+                    invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {} because {}", path_));
+                    LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
+                }
+                invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {}", path_));
                 LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
                 return false;
             }
@@ -177,12 +187,14 @@ namespace intercept {
 #ifdef __linux__
         auto dllHandle = dlopen(full_path->c_str(), RTLD_NOW | RTLD_GLOBAL);
         if (!dllHandle) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: LoadLibrary() failed, e={} [{}]", dlerror(), path_));
             LOG(ERROR, "LoadLibrary() failed, e={} [{}]", dlerror(), path_);
             return false;
         }
 #else
         auto dllHandle = LoadLibraryW(full_path->c_str());
         if (!dllHandle) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: LoadLibrary() failed, e={} [{}]", GetLastError(), path_));
             LOG(ERROR, "LoadLibrary() failed, e={} [{}]", GetLastError(), path_);
             return false;
         }
@@ -213,26 +225,31 @@ namespace intercept {
         //First verify that this is a valid Plugin before we initialize the rest.
 
         if (!new_module.functions.api_version) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Module {} failed to define the api_version function.", path_));
             LOG(ERROR, "Module {} failed to define the api_version function.", path_);
             return false;
         }
 
         if (new_module.functions.api_version() < PLUGIN_MIN_API_VERSION) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Module {} has invalid API Version. Has: {} Need: {}", path_, new_module.functions.api_version(), PLUGIN_MIN_API_VERSION));
             LOG(ERROR, "Module {} has invalid API Version. Has: {} Need: {}", path_, new_module.functions.api_version(), PLUGIN_MIN_API_VERSION);
             return false;
         }
 
         if (!new_module.functions.assign_functions) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Module {} failed to define the assign_functions function.", path_));
             LOG(ERROR, "Module {} failed to define the assign_functions function.", path_);
             return false;
         }
         //Defined in client lib. So plugin MUST have this
         if (!new_module.functions.client_eventhandlers_clear) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Module {} failed to define the client_eventhandlers_clear function.", path_));
             LOG(ERROR, "Module {} failed to define the client_eventhandlers_clear function.", path_);
             return false;
         }
 #ifndef __linux__
         if (security_class == cert::signing::security_class::not_signed && is_signed_function && is_signed_function()) {
+            invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Module {} is not code signed but says it should be.", path_));
             LOG(ERROR, "Module {} is not code signed but says it should be.", path_);
             return false;
         }
@@ -271,6 +288,8 @@ namespace intercept {
         if (new_module.functions.register_interfaces)
             new_module.functions.register_interfaces();
 
+
+        invoker::get().invoke_raw("diag_log", fmt::format("Intercept: Load completed [{}]", path_));
         LOG(INFO, "Load completed [{}]", path_);
         return false;
     }
@@ -304,7 +323,6 @@ namespace intercept {
 
         if (module->second.functions.handle_unload_internal) module->second.functions.handle_unload_internal();
         if (module->second.functions.handle_unload) module->second.functions.handle_unload();
-
 
 #ifdef __linux
         if (dlclose(module->second.handle)) {  //returms 0 on success

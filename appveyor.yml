@@ -12,7 +12,7 @@ branches:
   - develop
 
 configuration:
-- RelWithDebInfo
+- Release
 
 before_build:
   - mkdir build
@@ -35,15 +35,15 @@ on_success:
   - ps: .\tools\ci_publish_artifacts.ps1
 
 artifacts:
-- path: build\win32\intercept_client\RelWithDebInfo\intercept_client.lib
+- path: build\win32\intercept_client\Release\intercept_client.lib
   name: win32_client_lib
-- path: build\win32\intercept\RelWithDebInfo\intercept.dll
+- path: build\win32\intercept\Release\intercept.dll
   name: win32_host_lib
-- path: build\win32\intercept\RelWithDebInfo\intercept.pdb
+- path: build\win32\intercept\Release\intercept.pdb
   name: win32_host_pdb
-- path: build\win64\intercept_client\RelWithDebInfo\intercept_client.lib
+- path: build\win64\intercept_client\Release\intercept_client.lib
   name: win64_client_lib
-- path: build\win64\intercept\RelWithDebInfo\intercept_x64.dll
+- path: build\win64\intercept\Release\intercept_x64.dll
   name: win64_host_lib
-- path: build\win64\intercept\RelWithDebInfo\intercept_x64.pdb
+- path: build\win64\intercept\Release\intercept_x64.pdb
   name: win32_host_pdb

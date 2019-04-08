@@ -66,3 +66,7 @@ namespace intercept {
 #else
 #define INTERCEPT_ASSERT intercept::runtime_assert()
 #endif
+
+#ifdef __clang__
+#pragma message "clang is unsupported for usage with Arma"
+#endif

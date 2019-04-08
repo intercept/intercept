@@ -47,9 +47,9 @@ namespace intercept::search {
         std::ifstream cmdline("/proc/self/cmdline");
         std::string file_contents;
         std::string line;
-        while (std::getline(cmdline, line)) {
+        while (std::getline(cmdline, line, '\0')) {
             file_contents += line;
-            file_contents.push_back('\n'); //#TODO can linux even have more than one line?
+            file_contents.push_back(' ');
         }
         return file_contents;
     #else
@@ -291,6 +291,11 @@ std::vector<std::wstring> intercept::search::plugin_searcher::generate_pbo_list(
             0
         ))) {
             //LOG(INFO) << "FAILED TO DUPLICATE OJBECT";
+            continue;
+        }
+
+        if (GetFileType(dupHandle) != FILE_TYPE_DISK) { //Don't want to query pipes or network resources
+            CloseHandle(dupHandle);
             continue;
         }
 

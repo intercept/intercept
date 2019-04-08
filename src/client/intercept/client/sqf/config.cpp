@@ -23,14 +23,34 @@ namespace intercept {
             _initialized = move_._initialized;
             return *this;
         }
-        config_entry config_entry::operator>>(sqf_string_const_ref entry_) {
+
+        bool config_entry::operator==(const config_entry& other_) const {
+            if (_initialized != other_._initialized) return false;
+            if (!_initialized) return true;
+            return _config_entry == other_._config_entry;
+        }
+
+        config_entry config_entry::operator>>(sqf_string_const_ref entry_) const {
             if (!_initialized) {
                 _config_entry = host::functions.invoke_raw_nular(__sqf::nular__configfile__ret__config);
                 _initialized = true;
             }
             return config_entry(config(host::functions.invoke_raw_binary(__sqf::binary__configaccessor__config__string__ret__config, _config_entry, entry_)));
         }
-        config_entry::operator config &() {
+
+        config_entry config_entry::operator[](size_t index_) const {
+            return sqf::select(*this, index_);
+        }
+
+        size_t config_entry::count() const {
+            if (!_initialized) return 0;
+            return sqf::count(_config_entry);
+        }
+
+        config_entry::iterator config_entry::begin() const { return iterator(*this); }
+        config_entry::iterator config_entry::end() const { return iterator(*this, count() - 1); }
+
+        config_entry::operator config &() const {
             return _config_entry;
         }
 

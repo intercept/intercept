@@ -209,7 +209,7 @@ namespace intercept {
         void unlock();
 
         //static game_data_string_pool<> string_pool;
-        static uintptr_t sqf_game_state;
+        static game_state* sqf_game_state;
 
         static bool invoker_accessible;
         static bool invoker_accessible_all;
@@ -222,6 +222,7 @@ namespace intercept {
 
 
         std::atomic<uint32_t> _thread_count;
+        std::atomic<uint32_t> _thread_waiting_for_lock_count;
 
         /*!
         @brief The interceptEvent SQF Function that's used to get events with arguments

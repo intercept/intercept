@@ -527,8 +527,8 @@ namespace intercept {
 
         std::vector<vector3> building_pos(const object &building_, int index_) {
             if (index_ > -1) {
-                return std::vector<vector3>({host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_))});
-            } else { 
+                return {vector3(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)))};
+            } else {
                 return __helpers::__convert_to_vector<vector3>(host::functions.invoke_raw_binary(__sqf::binary__buildingpos__object__scalar__ret__array, building_, static_cast<float>(index_)));
             }
         }

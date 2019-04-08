@@ -23,7 +23,7 @@ namespace intercept {
 
     }
 
-    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string arg_signature_) {
+    bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string_view arg_signature_) {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
@@ -55,7 +55,7 @@ namespace intercept {
         return false;
     }
 
-    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string arg1_signature_, std::string arg2_signature_) {
+    bool loader::get_function(std::string_view function_name_, binary_function & function_, std::string_view arg1_signature_, std::string_view arg2_signature_) {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
@@ -218,11 +218,11 @@ namespace intercept {
     #if _WIN64 || __X86_64__
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x40\x53\x48\x83\xEC\x20\xFF\x41\x60\x48\x8B\x41\x08\x48\x8B\xD9\x48\x3B\xC1\x74\x0B\x48\x85\xC0\x74\x06\x48\x83\xC0\xE0\x75\x2B\x48\x8D\x41\x18\x48\x8B\x49\x20\x48\x3B\xC8\x74\x0E\x48\x85\xC9\x74\x09\x48\x8D\x41\xE0\x48\x85\xC0\x75\x10\x48\x8B\xCB\xE8\x00\x00\x00\x00\x84\xC0\x0F\x84\x00\x00\x00\x00\x4C\x8B\x43\x08\x32\xC9\x45\x33\xD2\x4C\x3B\xC3\x74\x0B\x4D\x85\xC0\x74\x06\x49\x83\xC0\xE0\x75\x2A\x4C\x8B\x43\x20\x48\x8D\x43\x18\x4C\x3B\xC0", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x48\x85\xD2\x0F\x84\x00\x00\x00\x00\x53\x48\x83\xEC\x20\x48\x63\x41\x58\x48\x89\x7C\x24\x00\x48\x8B\xFA\x48\xFF\xC8\x48\x8B\xD9\x48\x23\xC2\x48\x2B\xF8\x83\x3F\x00\x74\x28\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x44\x8B\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\xD7\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5B\xE9\x00\x00\x00\x00\x48\x8B\x47\x18\x48\x89\x02\x48\x83\x7F\x00\x00\x48\x89\x57\x18\x0F\x94\xC0\x48\x89\x7A\x08\xFF\x4F\x10\x41\x0F\x94\xC0\x84\xC0\x74\x46\x48\x8B\x4F\x28\x48\x8B\x47\x20\x48\x8D\x57\x20\x48\x89\x01\x48\x8B\x42\x08\x48\x8B\x0A", "xxxxx????xxxxxxxxxxxxx?xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxx????xxxxxxx?xxxxxx????xxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
-        auto future_fileBanks = std::async([&]() {
-            auto patternFindLoc = findInMemoryPattern("\x48\x83\xEC\x28\x48\x8B\x0D\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x08\x33\xC9\x48\x85\xC0\x74\x18\x48\x89\x08\x89\x48\x10\x89\x48\x08\x48\x89\x48\x28\x89\x48\x38\x89\x48\x30\x88\x48\x21\xEB\x03\x48\x8B\xC1\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x83\xC4\x28\xE9", "xxxxxxx????x????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxx");
-            auto offs = *reinterpret_cast<uint32_t*>(patternFindLoc + 0x42);
-            return patternFindLoc + 0x46 + offs;
-        });
+        //auto future_fileBanks = std::async([&]() {
+        //    auto patternFindLoc = findInMemoryPattern("\x48\x83\xEC\x28\x48\x8B\x0D\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\x01\xFF\x50\x08\x33\xC9\x48\x85\xC0\x74\x18\x48\x89\x08\x89\x48\x10\x89\x48\x08\x48\x89\x48\x28\x89\x48\x38\x89\x48\x30\x88\x48\x21\xEB\x03\x48\x8B\xC1\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x83\xC4\x28\xE9", "xxxxxxx????x????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxx");
+        //    auto offs = *reinterpret_cast<uint32_t*>(patternFindLoc + 0x42);
+        //    return patternFindLoc + 0x46 + offs;
+        //});
     #else
 
     #ifdef __linux__
@@ -231,11 +231,11 @@ namespace intercept {
     #else
         auto future_poolFuncAlloc = std::async([&]() {return findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() {return findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
-        auto future_fileBanks = std::async([&]() {
-            auto patternFindLoc = findInMemoryPattern("\x8b\x0d\x00\x00\x00\x00\x6a\x00\x8b\x01\xff\x50\x00\x85\xc0\x74\x00\xc7\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc6\x40\x00\x00\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3\x33\xc0\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3", "xx????x?xxxx?xxx?xx????xx?????xx?????xx?????xx?????xx?????xx??x????x????x????xxxxx????x????x????xx");
-            return *reinterpret_cast<uintptr_t*>(patternFindLoc) + 0x44;
-            //prntscr gli4fh dedmen sharex/eko4AXiY.png
-        });
+        //auto future_fileBanks = std::async([&]() {
+        //    auto patternFindLoc = findInMemoryPattern("\x8b\x0d\x00\x00\x00\x00\x6a\x00\x8b\x01\xff\x50\x00\x85\xc0\x74\x00\xc7\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc7\x40\x00\x00\x00\x00\x00\xc6\x40\x00\x00\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3\x33\xc0\x68\x00\x00\x00\x00\xa3\x00\x00\x00\x00\xe8\x00\x00\x00\x00\x59\xc3", "xx????x?xxxx?xxx?xx????xx?????xx?????xx?????xx?????xx?????xx??x????x????x????xxxxx????x????x????xx");
+        //    return *reinterpret_cast<uintptr_t*>(patternFindLoc) + 0x44;
+        //    //prntscr gli4fh dedmen sharex/eko4AXiY.png
+        //});
     #endif
 
     #endif
@@ -288,6 +288,20 @@ namespace intercept {
         });
     #endif
 
+        //We need the allocator before we run the command scanning because the logging calls need r_string allocations
+
+        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+#ifdef __linux__
+        const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
+        assert(strcmp(test, "12MemFunctions") == 0);
+#else
+        const char* test = getRTTIName(allocatorVtablePtr);
+        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
+#endif
+        _allocator.genericAllocBase = allocatorVtablePtr;
+
+
+
         /*
         Unary Hashmap
 
@@ -336,35 +350,7 @@ namespace intercept {
             _nular_operators[entry._name2].push_back(new_entry);
         }
 
-        auto typeToEnum = [](const r_string& name) {     //I know this is ugly. Feel free to make it better
-            if (name == "SCALAR"sv) return types::game_data_type::SCALAR;
-            if (name == "BOOL"sv) return types::game_data_type::BOOL;
-            if (name == "ARRAY"sv) return types::game_data_type::ARRAY;
-            if (name == "STRING"sv) return types::game_data_type::STRING;
-            if (name == "NOTHING"sv) return types::game_data_type::NOTHING;
-            if (name == "ANY"sv) return types::game_data_type::ANY;
-            if (name == "NAMESPACE"sv) return types::game_data_type::NAMESPACE;
-            if (name == "NaN"sv) return types::game_data_type::NaN;
-            if (name == "CODE"sv) return types::game_data_type::CODE;
-            if (name == "OBJECT"sv) return types::game_data_type::OBJECT;
-            if (name == "SIDE"sv) return types::game_data_type::SIDE;
-            if (name == "GROUP"sv) return types::game_data_type::GROUP;
-            if (name == "TEXT"sv) return types::game_data_type::TEXT;
-            if (name == "SCRIPT"sv) return types::game_data_type::SCRIPT;
-            if (name == "TARGET"sv) return types::game_data_type::TARGET;
-            if (name == "CONFIG"sv) return types::game_data_type::CONFIG;
-            if (name == "DISPLAY"sv) return types::game_data_type::DISPLAY;
-            if (name == "CONTROL"sv) return types::game_data_type::CONTROL;
-            if (name == "NetObject"sv) return types::game_data_type::NetObject;
-            if (name == "SUBGROUP"sv) return types::game_data_type::SUBGROUP;
-            if (name == "TEAM_MEMBER"sv) return types::game_data_type::TEAM_MEMBER;
-            if (name == "TASK"sv) return types::game_data_type::TASK;
-            if (name == "DIARY_RECORD"sv) return types::game_data_type::DIARY_RECORD;
-            if (name == "LOCATION"sv) return types::game_data_type::LOCATION;
-            return types::game_data_type::end;
-        };
-
-        //Game Types
+        //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {
             if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
         #if _WIN64 || __X86_64__
@@ -384,7 +370,7 @@ namespace intercept {
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");
 
-            const auto type = typeToEnum(entry->_name);
+            const auto type = types::__internal::game_datatype_from_string(entry->_name);
             if (poolAlloc && type != types::game_data_type::end) {
                 _allocator._poolAllocs[static_cast<size_t>(type)] = reinterpret_cast<rv_pool_allocator*>(poolAlloc);
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
@@ -397,19 +383,10 @@ namespace intercept {
             //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
     #endif
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"].front().op->arg1_type.get_vtable();
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
 
         _sqf_register_funcs._gameState = state_addr_;
 
-        const uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
-    #ifdef __linux__
-        const char* test = getRTTIName((uintptr_t) (&allocatorVtablePtr));
-        assert(strcmp(test, "12MemFunctions") == 0);
-    #else
-        const char* test = getRTTIName(allocatorVtablePtr);
-        assert(strcmp(test, ".?AVMemTableFunctions@@") == 0);
-    #endif
-        _allocator.genericAllocBase = allocatorVtablePtr;
     #ifndef __linux__
         _allocator.poolFuncAlloc = future_poolFuncAlloc.get();
         _allocator.poolFuncDealloc = future_poolFuncDealloc.get();

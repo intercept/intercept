@@ -13,21 +13,10 @@ endif()
 option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 
-
-if(CMAKE_COMPILER_IS_GNUCXX)
-    #remove -s to enable debug symbols. Also maybe add -g or -g3
-    SET(CMAKE_CXX_FLAGS "-std=c++1z -march=i686 -m32 -O2 -s -fPIC -fpermissive -pthread")
-    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-    set(CMAKE_SHARED_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Wl,-rpath,$ORIGIN")
-else()
-    set(CMAKE_CXX_FLAGS_DEBUG "/D _DEBUG /MTd /Zi /Ob0 /Od /RTC1 /EHsc")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL     "/MT /Ox /Ob1 /D /EHsc NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELEASE       "/MT /Ox /Ob2 /D /EHsc NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /Zi /Ox /Ob2 /D /EHsc NDEBUG")
-    set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/OPT:REF /LTCG") 
-    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/OPT:REF") 
-    set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/OPT:REF /DEBUG:FULL") 
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
+    add_compile_options(-m32)
 endif()
+
 include_directories("common")
 include_directories("controller")
 include_directories("loader")
@@ -35,7 +24,6 @@ include_directories("invoker")
 include_directories("extensions")
 include_directories("../client/headers")
 include_directories("intercept_dll")
-
 
 if(DEVEL)
     add_definitions(-DDEVEL)
@@ -62,3 +50,7 @@ add_subdirectory(intercept_dll)
 
 
 message("Build Type: ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    message("clang is unsupported for usage with Arma")
+endif()

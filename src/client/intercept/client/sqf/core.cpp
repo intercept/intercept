@@ -81,33 +81,36 @@ namespace intercept {
         }
 
         game_value call(const code &code_, game_value args_) {
-            auto ef = host::functions.get_engine_allocator()->evaluate_func;
-            auto gs = host::functions.get_engine_allocator()->gameState;
-            if (!_has_fast_call()) return call2(code_, args_);
+            auto allo = host::functions.get_engine_allocator();
+            auto ef = allo->evaluate_func;
+            auto gs = allo->gameState;
+            if (!_has_fast_call()) return call2(code_, std::move(args_));
 
-            auto missionNamespace = mission_namespace();
- 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
 
             auto data = static_cast<game_data_code*>(wrapper.data.get());
-
-            auto ns = missionNamespace.data.get();
+            
+            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
+            static r_string arname = "_i135_ar_"sv;
+            static r_string codename = "_i135_cc_"sv;
 
-            gs->eval->local->variables.insert({"_i135_ar_"sv, args_});
-            gs->eval->local->variables.insert({"_i135_cc_"sv, code_});
+            gs->set_local_variable(arname, std::move(args_));
+            gs->set_local_variable(codename, code_);
 
             auto ret = ef(*data, ns, fname);
             return ret;
         }
 
         game_value call(const code &code_) {
-            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            auto allo = host::functions.get_engine_allocator();
+            auto ef = allo->evaluate_func;
+            auto gs = allo->gameState;
             if (!ef) return call2(code_);
 
             auto data = static_cast<game_data_code*>(code_.data.get());
 
-            auto ns = mission_namespace().data.get();
+            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return ret;
@@ -655,7 +658,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__text__string__ret__text, value_);
         }
 
-        sqf_return_string text(location &value_) {
+        sqf_return_string text(const location &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__text__location__ret__string, value_);
         }
 

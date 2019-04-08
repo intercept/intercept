@@ -67,7 +67,7 @@ namespace intercept {
             constexpr vector3_base& operator *=(const vector3_base& v) noexcept { x *= v.x; y *= v.y; z *= v.z; return *this; }
             constexpr vector3_base& operator *=(T mag) noexcept { x *= mag; y *= mag; z *= mag; return *this; }
             constexpr vector3_base& operator /=(const vector3_base& v) noexcept { x /= v.x; y /= v.y; z /= v.z; return *this; }
-            constexpr vector3_base& operator /=(T mag) noexcept { x /= mag; y /= mag; y /= mag; return *this; }
+            constexpr vector3_base& operator /=(T mag) noexcept { x /= mag; y /= mag; z /= mag; return *this; }
             constexpr vector3_base& operator +=(const vector3_base& v) noexcept { x += v.x; y += v.y; z += v.z; return *this; }
             constexpr vector3_base& operator -=(const vector3_base& v) noexcept { x -= v.x; y -= v.y; z -= v.z; return *this; }
 
@@ -84,7 +84,7 @@ namespace intercept {
             constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
             constexpr T distance_2d(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_2d_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
-            constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
+            constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3_base(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
             constexpr vector3_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f && z == 0.0f) ? true : false); }
 
@@ -169,7 +169,6 @@ namespace intercept {
             constexpr T dot(const vector2_base& v) const noexcept { return (x * v.x + y * v.y); }
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
-            constexpr vector2_base cross(const vector2_base& v) const noexcept{ return vector2_base(v.y, -v.x); }
             constexpr vector2_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f) ? true : false); }
             

@@ -101,7 +101,7 @@ namespace intercept::types {
 
     void* rv_pool_allocator::allocate(size_t count) {
     #ifdef __linux__
-        __internal::rv_allocator_allocate_generic(count);
+        return __internal::rv_allocator_allocate_generic(count);
     #else
         static auto allocatorBase = GET_ENGINE_ALLOCATOR;
         typedef void*(__thiscall *allocFunc)(rv_pool_allocator*, size_t /*count*/);

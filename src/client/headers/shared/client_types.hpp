@@ -424,8 +424,7 @@ class internal_object : public game_value {
         ~game_value_threadsafe();
         game_value_threadsafe(const game_value& copy) : game_value(copy) {}
         //Move constructor should never have data before it's assigned.
-        game_value_threadsafe(game_value&& move_) noexcept : game_value(move_) {};
-        operator game_value() const { return *this; }
+        game_value_threadsafe(game_value&& move_) noexcept : game_value(move_) {}
 
         //allocations
 

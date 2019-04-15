@@ -27,7 +27,7 @@ namespace intercept {
         typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 
         struct intersect_result {
-            std::string selection_name;
+            sqf_string selection_name;
             float intersect_distance;
         };
         typedef std::vector<intersect_result> intersect_result_list;

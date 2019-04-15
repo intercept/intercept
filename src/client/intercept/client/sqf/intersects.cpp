@@ -5,12 +5,11 @@
 namespace intercept {
     namespace sqf {
         namespace __helpers {
-            intersect_result_list __intersects(const game_value &intersects_value_) {
+            intersect_result_list __intersects(const game_value& intersects_value_) {
                 intersect_result_list output;
                 output.reserve(intersects_value_.size());
 
-                for (uint32_t i = 0; i < intersects_value_.size(); ++i) {
-                    game_value element = intersects_value_[i];
+                for (game_value& element : intersects_value_.to_array()) {
                     intersect_result result;
 
                     result.selection_name = element[0];

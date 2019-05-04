@@ -12,7 +12,7 @@ namespace intercept {
                 for (game_value& element : intersects_value_.to_array()) {
                     intersect_result result;
 
-                    result.selection_name = element[0];
+                    result.selection_name = static_cast<sqf_string>(element[0]);
                     result.intersect_distance = element[1];
 
                     output.emplace_back(std::move(result));

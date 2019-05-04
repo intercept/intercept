@@ -15,7 +15,7 @@ namespace intercept {
                     result.selection_name = element[0];
                     result.intersect_distance = element[1];
 
-                    output.push_back(result);
+                    output.emplace_back(std::move(result));
                 }
 
                 return output;
@@ -35,7 +35,7 @@ namespace intercept {
                     surfaces.intersect_object = element[2];  // the object the surface belongs to (could be proxy object)
                     surfaces.parent_object = element[3];     // the object proxy object belongs to (not always the same as intersect object)
 
-                    output.push_back(surfaces);  // Store the surfaces for our return
+                    output.emplace_back(std::move(surfaces));  // Store the surfaces for our return
                 }
                 return output;
             }

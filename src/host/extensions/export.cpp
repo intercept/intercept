@@ -102,6 +102,13 @@ namespace intercept {
             return registered;
         }
 
+        sqf_script_type register_compound_sqf_type(auto_array<types::game_data_type> types) {
+            CERT_ENTER;
+            auto registered = sqf_functions::get().register_compound_sqf_type(types);
+            CERT_EXIT;
+            return registered;
+        }
+
         const auto_array<r_string>* get_pbo_files_list() {
             return &invoker::get().files_in_pbo_banks;
         }

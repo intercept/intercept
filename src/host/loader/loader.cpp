@@ -354,8 +354,11 @@ namespace intercept {
         for (auto& entry : game_state_ptr->_scriptTypes) {
             if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
         #if _WIN64 || __X86_64__
-            auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + 0xB;
-            auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x7);
+            auto baseOffset = 0x7;
+            if (entry->_name == "CODE"sv) baseOffset += 2;
+
+            auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + baseOffset + 0x4;
+            auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + baseOffset);
             uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer + offset);
         #else
         #ifdef __linux__
@@ -384,6 +387,7 @@ namespace intercept {
     #endif
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
+        _sqf_register_funcs._compoundtype_vtable = _unary_operators["isnil"sv].front().op->arg_type.compound_type->get_vtable();
 
         _sqf_register_funcs._gameState = state_addr_;
 

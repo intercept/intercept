@@ -335,6 +335,7 @@ namespace intercept {
         invoker::get().type_structures["CODE"sv] = structure;
         game_data_code::type_def = structure.first;
         game_data_code::data_type_def = structure.second;
+        game_data_code::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::CODE)];
         ref<game_data> gd_ob(regInfo._types[static_cast<size_t>(GameDataType::OBJECT)]->_createFunction(nullptr));
         structure = { gd_ob->get_vtable(), gd_ob->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "OBJECT"sv;

@@ -336,9 +336,14 @@ namespace intercept {
             script_type_info* second;
         };
 
-        struct compound_script_type_info {
-            uintptr_t v_table;
-            compound_value_pair* types;
+        struct compound_script_type_info : public auto_array<const script_type_info*>, public dummy_vtable_class {
+        public:
+            compound_script_type_info(const auto_array<const script_type_info*>& types) {
+                resize(types.size());
+                insert(begin(), types.begin(), types.end());
+            }
+            void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
+            uintptr_t get_vtable() const noexcept { return *reinterpret_cast<const uintptr_t*>(this); }
         };
 
         class sqf_script_type : public serialize_class {
@@ -470,7 +475,11 @@ namespace intercept {
                 dummy.clear();
                 return dummy;
             }
+
+        public:
             virtual game_data* copy() const { return nullptr; }
+
+        protected:
             virtual void set_readonly(bool) {}  //No clue what this does...
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
@@ -1089,11 +1098,14 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
             game_data_code() noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
             size_t hash() const { return __internal::pairhash(type_def, code_string); }
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
             auto_array<ref<game_instruction>> instructions;
             bool is_final;

@@ -137,6 +137,15 @@ namespace intercept {
         */
         std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
+        /**
+        * @brief Registers a custom SQF Compound script type
+        * @param types
+        * @return a instantiated sqf_script_type
+        * @ingroup RSQF
+        */
+        sqf_script_type register_compound_sqf_type(auto_array<types::game_data_type> types);
+
+
     private:
         __internal::gsNular* findNular(std::string name) const;
         __internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;

@@ -16,6 +16,8 @@ https://github.com/NouberNou/intercept
 
 using namespace intercept::types;
 
+#define INTERCEPT_SDK_API_VERSION 2
+
 namespace intercept {
     class extensions;
     namespace types {
@@ -110,8 +112,8 @@ namespace intercept {
             types::registered_sqf_function(*register_sqf_function)(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type) { nullptr };
             types::registered_sqf_function(*register_sqf_function_unary)(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type) { nullptr };
             types::registered_sqf_function(*register_sqf_function_nular)(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type) { nullptr };
-            std::pair<types::game_data_type, sqf_script_type>(*register_sqf_type)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) { nullptr };
-
+            std::pair<types::game_data_type, sqf_script_type> (*register_sqf_type)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf){nullptr};
+            sqf_script_type (*register_compound_sqf_type)(auto_array<types::game_data_type> types){nullptr};
 
             //only reachable through wrapper that also passes module_name
             register_plugin_interface_result(*register_plugin_interface)(r_string module_name_, std::string_view name_, uint32_t api_version_, void* interface_class_);

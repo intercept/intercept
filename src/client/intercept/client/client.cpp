@@ -34,6 +34,10 @@ namespace intercept {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
+        sqf_script_type host::register_compound_sqf_type(auto_array<game_data_type> types) {
+            return functions.register_compound_sqf_type(types);
+        }
+
         register_plugin_interface_result host::register_plugin_interface(std::string_view name_, uint32_t api_version_, void* interface_class_) {
             if (!interface_class_) return register_plugin_interface_result::invalid_interface_class;
             auto result = functions.register_plugin_interface(module_name, name_, api_version_, interface_class_);
@@ -91,6 +95,7 @@ namespace intercept {
             host::functions.get_type_structure("CODE"sv, type_def, data_type_def);
             game_data_code::type_def = type_def;
             game_data_code::data_type_def = data_type_def;
+            game_data_code::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::CODE)];
 
             host::functions.get_type_structure("GROUP"sv, type_def, data_type_def);
             game_data_group::type_def = type_def;

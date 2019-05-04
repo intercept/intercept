@@ -36,6 +36,7 @@ namespace intercept {
         uintptr_t _unary_construct{};
         uintptr_t _unary_insert{};
         uintptr_t _type_vtable{};
+        uintptr_t _compoundtype_vtable{};
         uintptr_t _file_banks{};
         std::vector<const script_type_info *> _types;
     };

@@ -357,6 +357,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizetrigger__object__array__ret__nothing, trigger_, std::move(waypoints));
         }
 
+        std::vector<object> synchronized_triggers(const waypoint& wp_) {
+            const game_value ret = host::functions.invoke_raw_unary(__sqf::unary__synchronizedtriggers__array__ret__array, wp_);
+            return __helpers::__convert_to_vector<object>(ret);
+        }
+
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__triggerattachvehicle__object__array__ret__nothing, trigger_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }

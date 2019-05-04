@@ -5,6 +5,22 @@
 namespace intercept {
     namespace sqf {
         namespace __helpers {
+            intersect_result_list __intersects(const game_value& intersects_value_) {
+                intersect_result_list output;
+                output.reserve(intersects_value_.size());
+
+                for (game_value& element : intersects_value_.to_array()) {
+                    intersect_result result;
+
+                    result.selection_name = static_cast<sqf_string>(element[0]);
+                    result.intersect_distance = element[1];
+
+                    output.emplace_back(std::move(result));
+                }
+
+                return output;
+            }
+
             intersect_surfaces_list __line_intersects_surfaces(const game_value &intersects_value_) {
                 intersect_surfaces_list output;
                 output.reserve(intersects_value_.size());
@@ -19,19 +35,18 @@ namespace intercept {
                     surfaces.intersect_object = element[2];  // the object the surface belongs to (could be proxy object)
                     surfaces.parent_object = element[3];     // the object proxy object belongs to (not always the same as intersect object)
 
-                    output.push_back(surfaces);  // Store the surfaces for our return
+                    output.emplace_back(std::move(surfaces));  // Store the surfaces for our return
                 }
                 return output;
             }
         }  // namespace __helpers
 
-        bool intersect(const object &obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
-            game_value params1({obj_,
-                                lodname_});
-            game_value params2({begin_pos_,
-                                end_pos_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, params1, params2);
+        intersect_result_list intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3& begin_pos_, const vector3& end_pos_) {
+            game_value left ({ obj_, lodname_ });
+            game_value right ({ begin_pos_, end_pos_ });
+            
+            game_value intersects_value = host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, left, right);
+            return __helpers::__intersects(intersects_value);
         }
 
         intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_) {

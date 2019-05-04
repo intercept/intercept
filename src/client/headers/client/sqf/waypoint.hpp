@@ -528,7 +528,10 @@ namespace intercept {
         void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
         void set_trigger_statements(const object &trigger_, sqf_string_const_ref condition_, sqf_string_const_ref activation_, sqf_string_const_ref deactivation_);
         void set_trigger_timeout(const object &trigger_, float min_, float mid_, float max_, bool interruptable_);
+
         void synchronize_trigger(const object &trigger_, const std::vector<waypoint> &waypoints_);
+        std::vector<object> synchronized_triggers(const waypoint& wp_);
+
         void trigger_attach_vehicle(const object &trigger_, const std::vector<object> &objects_);
 
         //both

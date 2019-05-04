@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -26,14 +26,22 @@ namespace intercept {
         };
         typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 
+        struct intersect_result {
+            sqf_string selection_name;
+            float intersect_distance;
+        };
+        typedef std::vector<intersect_result> intersect_result_list;
+
         namespace __helpers {
+            intersect_result_list __intersects(const game_value& intersects_value_);
+
             intersect_surfaces_list __line_intersects_surfaces(const game_value &intersects_value_);
         }
 
         /**
         * Finds named selections in object which are in specified LOD, intersected by given section of a line
         */
-        bool intersect(const object &obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_);
+        intersect_result_list intersect(const object& obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3& end_pos_);
 
         /**
         * Returns list of intersections with surfaces from begPosASL to endPosASL.

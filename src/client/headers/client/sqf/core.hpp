@@ -31,6 +31,8 @@ namespace intercept {
         game_value call2(const code &code_);
         script spawn(game_value args, const code &code_);
 
+        game_value call_raw(const code& code_, game_value args_);
+
 
         bool is_nil_code(const code &code_);
         code compile(sqf_string_const_ref sqf_);

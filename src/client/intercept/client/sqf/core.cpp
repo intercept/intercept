@@ -124,6 +124,14 @@ namespace intercept {
                 code_);
         }
 
+        game_value call_raw(const code &code_, game_value args_) {
+            return host::functions.invoke_raw_binary(
+                __sqf::binary__call__any__code__ret__any,
+                code_,
+                args_
+            );
+        }
+
         bool is_nil_code(const code &code_) {
             return host::functions.invoke_raw_unary(
                 __sqf::unary__isnil__code_string__ret__bool,

@@ -158,14 +158,14 @@ namespace intercept {
                 host::functions.invoker_unlock();
         }
 
-        inline void invoker_lock::lock() {
+        void invoker_lock::lock() {
             if (!_locked) {
                 host::functions.invoker_lock();
                 _locked = true;
             }
         }
 
-        inline void invoker_lock::unlock() {
+        void invoker_lock::unlock() {
             if (_locked) {
                 host::functions.invoker_unlock();
                 _locked = false;

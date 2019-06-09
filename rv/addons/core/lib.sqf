@@ -47,7 +47,7 @@ if(intercept_invoker_ok) then {
     diag_log text "Intercept Invoker initialization failed.";
     intercept_fnc_signal =  compileFinal "";
 
-    if (isNull (uiNamespace getVariable ["intercept_fnc_event", scriptNull])) then {
+    if ((uiNamespace getVariable ["intercept_fnc_event", scriptNull]) isEqualType scriptNull) then {
         uiNamespace setVariable ["intercept_fnc_event", compileFinal ""];
     };
 };

@@ -267,7 +267,7 @@ namespace intercept {
         }
 
         void create_vehicle_crew(const object &veh_) {
-            __helpers::__empty_unary_object(__sqf::unary__createvehiclecrew__object__ret__nothing, veh_);
+            __helpers::__empty_unary_object(__sqf::unary__createvehiclecrew__object__ret__group, veh_);
         }
 
         float damage(const object &object_) {

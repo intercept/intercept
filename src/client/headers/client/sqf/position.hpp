@@ -131,7 +131,10 @@ namespace intercept {
         float distance_2d(std::variant<object, vector3> start_, std::variant<object, vector3> end_);
         float distance_sqr(std::variant<object, vector3, location> start_, std::variant<object, vector3, location> end_);
         //#Categorize is this really position category? Sounds more worldish
+        std::vector<object> near_entities(const object &position, sqf_string_list_const_ref types_, float range_);
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_);
+        std::vector<object> near_entities(const object &position, sqf_string_const_ref type_, float range_);
+        std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_const_ref type_, float range_);
         float distance(object start_, vector3 end_);
         float distance(object start_, object end_);
         float distance(vector3 start_, vector3 end_);

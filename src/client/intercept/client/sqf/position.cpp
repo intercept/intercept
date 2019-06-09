@@ -483,10 +483,33 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__distancesqr__object_array__object_array__ret__scalar, from, to);
         }
 
+        std::vector<object> near_entities(const object &position, sqf_string_list_const_ref types_, float range_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value args({std::move(types),
+                             range_});
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, position, args));
+        }
+
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
             game_value args({std::move(types),
+                             range_});
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));
+        }
+
+        std::vector<object> near_entities(const object &position, sqf_string_const_ref type_, float range_) {
+            game_value args({std::move(type_),
+                             range_});
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, position, args));
+        }
+
+        std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_const_ref type_, float range_) {
+            game_value args({std::move(type_),
                              range_});
 
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object_array__scalar_array__ret__array, pos_agl_, args));

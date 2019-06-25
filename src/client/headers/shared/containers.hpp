@@ -2,6 +2,7 @@
 #include <string_view>
 #include <iostream>
 #include <algorithm>
+#include <atomic>
 #include <optional>
 #include <cstring>
 #include <vector>
@@ -216,7 +217,7 @@ namespace intercept::types {
         constexpr int ref_count() const noexcept {
             return _refcount;
         }
-        mutable int _refcount;
+        mutable std::atomic_uint32_t _refcount;
     };
 
     //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable

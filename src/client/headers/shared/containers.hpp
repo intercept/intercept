@@ -866,8 +866,8 @@ namespace intercept::types {
         }
 
         size_t find(std::string_view substring_, const size_t start_ = 0) const {
-            if (_ref == nullptr || length() == 0) return -1;
-            auto res = std::search(begin(), end(), substring_.begin(), substring_.end());
+            if (_ref == nullptr || length() == 0 || start_ > length()) return -1;
+            auto res = std::search(begin() + start_, end(), substring_.begin(), substring_.end());
             if (res == end()) return -1;
             return std::distance(begin(), res);
         }

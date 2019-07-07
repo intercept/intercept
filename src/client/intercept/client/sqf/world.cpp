@@ -445,6 +445,30 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
         }
 
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({pos_,
+                               std::move(types),
+                               radius_,
+                               sort_,
+                               mode_});
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+        }
+
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+
+            game_value params({obj_,
+                               std::move(types),
+                               radius_,
+                               sort_,
+                               mode_});
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+        }
+
         std::vector<object> units_below_height(const group &group_, float height_) {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__group__scalar__ret__array, group_, height_));
         }

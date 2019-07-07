@@ -193,6 +193,8 @@ namespace intercept {
         std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
         std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
         std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_);
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
         bool surface_is_water(const vector3 &pos_);

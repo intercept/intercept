@@ -23,6 +23,11 @@ intercept_fnc_isNilWrapper = {
     missionNamespace setVariable ["INTERCEPT_CALL_RETURN", if (isNil "_args") then {call _code} else {_args call _code}];
 };
 
+intercept_fnc_voidWrapper = {
+    (missionNamespace getVariable "INTERCEPT_CALL_ARGS") params ["_args", "_code"];
+    if (isNil "_args") then {call _code} else {_args call _code};
+};
+
 diag_log text "Intercept Invoker SQF handler initializing...";
 private _res = "intercept" callExtension "init_invoker:";
 

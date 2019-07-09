@@ -313,7 +313,7 @@ namespace intercept {
             const auto gs = allo->gameState;
 
             if (!_has_fast_call()) {
-                return call2<T>(code_, _STD move(args_));
+                return call2<T>(code_, std::move(args_));
             }
 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
@@ -360,7 +360,7 @@ namespace intercept {
             const auto gs = allo->gameState;
 
             if (!_has_fast_call()) {
-                return call2<void>(code_, _STD move(args_));
+                return call2<void>(code_, std::move(args_));
             }
 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");

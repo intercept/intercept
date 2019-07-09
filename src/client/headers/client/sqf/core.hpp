@@ -324,7 +324,7 @@ namespace intercept {
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
 
-            gs->set_local_variable(arname, _STD move(args_));
+            gs->set_local_variable(arname, std::move(args_));
             gs->set_local_variable(codename, code_);
 
             auto ret = ef(*data, ns, fname);
@@ -371,7 +371,7 @@ namespace intercept {
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
 
-            gs->set_local_variable(arname, _STD move(args_));
+            gs->set_local_variable(arname, std::move(args_));
             gs->set_local_variable(codename, code_);
 
             // Only invoke, no return

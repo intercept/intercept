@@ -55,7 +55,7 @@ protected:
             _sqf = std::regex_replace(_sqf, escape, "$1");
             const auto sqf_fnc = intercept::sqf::compile(_sqf);
             if (_capture_return) {
-                *_capture_return = intercept::sqf::call<game_value>(sqf_fnc, _capture_args);
+                *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
             } else {
                 intercept::sqf::call<void>(sqf_fnc, _capture_args);
             }

@@ -236,88 +236,90 @@ namespace intercept {
 
 #include "client/pointers.hpp"
 
+/**
+* We need other functions do be defined in header before we can template call functions
+*  Otherwise we need forward declaration
+*/
 namespace intercept {
     namespace sqf {
-
         /**
-         * We need other functions do be defined in header before we can template call functions
-         *  Otherwise we need forward declaration
+         * anonymous namespace will restrict access, so only methods of intercept::sqf namespace can invoke
          */
-        template<typename T>
-        T call2(const code &code_, game_value args_) {
-            game_value args({ args_, code_ });
+        namespace {
+            template<typename T>
+            T call2(const code &code_, game_value args_) {
+                game_value args({ args_, code_ });
 
-            sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
+                sqf::set_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
 
-            code wrapper = sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_isNilWrapper"sv);
-            if (wrapper.is_nil()) {
-                //Can happen when executed before preInit
-                wrapper = sqf::compile(
-                    "\
-                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                    "sv);
-                sqf::set_variable(sqf::mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
-            }
-            host::functions.invoke_raw_unary(
-                __sqf::unary__isnil__code_string__ret__bool,
-                wrapper);
-            return static_cast<T>(sqf::get_variable(sqf::mission_namespace(), "INTERCEPT_CALL_RETURN"sv));
-        }
-
-        template<typename T>
-        T call2(const code& code_)
-        {
-            return call2<T>(code_, game_value());
-        }
-
-        /**
-         * Special treatment for void type
-         *  Void inherent modifies and uses other wrapper to avoid fetching return values
-         */
-        template<>
-        inline void call2<void>(const code& code_, game_value args_)
-        {
-            const game_value args({ args_, code_ });
-
-            sqf::set_variable(sqf::mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
-
-            code wrapper = sqf::get_variable(sqf::mission_namespace(), "intercept_fnc_voidWrapper"sv);
-            if (wrapper.is_nil()) {
-                //Can happen when executed before preInit
-                wrapper = sqf::compile(
-                    "(missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                    if (isNil \"_args\") then {call _code} else {_args call _code};"sv);
-                sqf::set_variable(sqf::mission_namespace(), "intercept_fnc_voidWrapper"sv, static_cast<game_value>(wrapper));
+                code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_isNilWrapper"sv);
+                if (wrapper.is_nil()) {
+                    //Can happen when executed before preInit
+                    wrapper = sqf::compile(
+                        "\
+                        (parsingNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                        parsingNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
+                        "sv);
+                    sqf::set_variable(sqf::parsing_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
+                }
+                host::functions.invoke_raw_unary(
+                    __sqf::unary__isnil__code_string__ret__bool,
+                    wrapper);
+                return static_cast<T>(sqf::get_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_RETURN"sv));
             }
 
-            host::functions.invoke_raw_unary(
-                __sqf::unary__isnil__code_string__ret__bool,
-                wrapper);
+            template<typename T>
+            T call2(const code& code_) {
+                return call2<T>(code_, game_value());
+            }
+
+            /**
+             * Special treatment for void type
+             *  Void is equal to no return value so we avoid fetching return values
+             */
+            template<>
+            void call2<void>(const code& code_, game_value args_) {
+                const game_value args({ args_, code_ });
+
+                sqf::set_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
+
+                code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_voidWrapper"sv);
+                if (wrapper.is_nil()) {
+                    //Can happen when executed before preInit
+                    wrapper = sqf::compile(
+                        "(parsingNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
+                        if (isNil \"_args\") then {call _code} else {_args call _code};"sv);
+                    sqf::set_variable(sqf::parsing_namespace(), "intercept_fnc_voidWrapper"sv, static_cast<game_value>(wrapper));
+                }
+
+                host::functions.invoke_raw_unary(
+                    __sqf::unary__isnil__code_string__ret__bool,
+                    wrapper);
+            }
+            /*
+             * Void type is already handled by template, cause we don't need any extra logic
+             *
+            template<>
+            inline void call2<void>(const code& code_) {
+                call2<void>(code_, game_value());
+            }
+            */
         }
 
-        template<>
-        inline void call2<void>(const code& code_)
-        {
-            call2<void>(code_, game_value());
-        }
+        template <typename T = game_value, typename = std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
+        T call(const code& code_, game_value args_) {
+            const auto allo = host::functions.get_engine_allocator();
+            const auto ef = allo->evaluate_func;
+            const auto gs = allo->gameState;
 
-        template<typename T>
-        T call(const code& code_, game_value args_)
-        {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
-
-            if (!_has_fast_call())
-            {
+            if (!_has_fast_call()) {
                 return call2<T>(code_, _STD move(args_));
             }
 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
-            auto data = static_cast<game_data_code*>(wrapper.data.get());
+            const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
             static r_string fname = "interceptCall"sv;
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
@@ -329,39 +331,42 @@ namespace intercept {
             return static_cast<T>(ret);
         }
 
-        template<typename T>
-        T call(const code& code_)
-        {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
-            if (!ef) { return call2<T>(code_); }
+        template<typename T = game_value, typename = std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
+        T call(const code& code_) {
+            const auto allo = host::functions.get_engine_allocator();
+            const auto ef = allo->evaluate_func;
+            const auto gs = allo->gameState;
 
-            auto data = static_cast<game_data_code*>(code_.data.get());
+            if (!ef) {
+                return call2<T>(code_);
+            }
 
-            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
+            const auto data = static_cast<game_data_code*>(code_.data.get());
+
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return static_cast<T>(ret);
         }
 
+        /**
+         * Special treatment for void type
+         *  Void is equal to no return value so we avoid fetching return values
+         */
         template<>
-        inline void call<void>(const code& code_, game_value args_)
-        {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
+        inline void call<void>(const code& code_, game_value args_) {
+            const auto allo = host::functions.get_engine_allocator();
+            const auto ef = allo->evaluate_func;
+            const auto gs = allo->gameState;
 
-            if (!_has_fast_call())
-            {
-                call2<void>(code_, _STD move(args_));
-                return;
+            if (!_has_fast_call()) {
+                return call2<void>(code_, _STD move(args_));
             }
 
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
-            auto data = static_cast<game_data_code*>(wrapper.data.get());
+            const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
             static r_string fname = "interceptCall"sv;
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
@@ -374,21 +379,19 @@ namespace intercept {
         }
 
         template<>
-        inline void call<void>(const code& code_)
-        {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
-            if (!ef)
-            {
-                call2<void>(code_);
-                return;
+        inline void call<void>(const code& code_) {
+            const auto allo = host::functions.get_engine_allocator();
+            const auto ef = allo->evaluate_func;
+            const auto gs = allo->gameState;
+
+            if (!ef) {
+                return call2<void>(code_);
             }
 
             static game_value_static wrapper = sqf::compile("call _i135_cc_");
-            auto data = static_cast<game_data_code*>(wrapper.data.get());
+            const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
             static r_string fname = "interceptCall"sv;
             static r_string codename = "_i135_cc_"sv;
 

@@ -11,6 +11,7 @@ These are functions that are determined to be "core" functionality to the RV Eng
 https://github.com/NouberNou/intercept
 */
 #pragma once
+#include <type_traits>
 #include "shared.hpp"
 #include "client/client.hpp"
 #include "shared/client_types.hpp"

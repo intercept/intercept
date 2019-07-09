@@ -307,7 +307,7 @@ namespace intercept {
             */
         }
 
-        template <typename T = game_value, typename = std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
+        template <typename T = game_value, typename = typename std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
         T call(const code& code_, game_value args_) {
             const auto allo = host::functions.get_engine_allocator();
             const auto ef = allo->evaluate_func;
@@ -332,7 +332,7 @@ namespace intercept {
             return static_cast<T>(ret);
         }
 
-        template<typename T = game_value, typename = std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
+        template<typename T = game_value, typename = typename std::enable_if<std::is_convertible<T, game_value>{} || std::is_void<T>{}>::type>
         T call(const code& code_) {
             const auto allo = host::functions.get_engine_allocator();
             const auto ef = allo->evaluate_func;

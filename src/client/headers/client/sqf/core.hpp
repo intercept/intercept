@@ -298,7 +298,7 @@ namespace intercept {
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
             const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
@@ -322,7 +322,7 @@ namespace intercept {
 
             const auto data = static_cast<game_data_code*>(code_.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             auto ret = ef(*data, ns, fname);
             return static_cast<T>(ret);
@@ -345,7 +345,7 @@ namespace intercept {
             static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
             const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             static r_string arname = "_i135_ar_"sv;
             static r_string codename = "_i135_cc_"sv;
@@ -370,7 +370,7 @@ namespace intercept {
             static game_value_static wrapper = sqf::compile("call _i135_cc_");
             const auto data = static_cast<game_data_code*>(wrapper.data.get());
 
-            const auto ns = gs->get_global_namespace(game_state::namespace_type::parsing);
+            const auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
             static r_string fname = "interceptCall"sv;
             static r_string codename = "_i135_cc_"sv;
 

@@ -252,26 +252,12 @@ namespace intercept {
                 game_value args({ args_, code_ });
 
                 sqf::set_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
+                const code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_isNilWrapper"sv);
 
-                code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_isNilWrapper"sv);
-                if (wrapper.is_nil()) {
-                    //Can happen when executed before preInit
-                    wrapper = sqf::compile(
-                        "\
-                        (parsingNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                        parsingNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                        "sv);
-                    sqf::set_variable(sqf::parsing_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
-                }
                 host::functions.invoke_raw_unary(
                     __sqf::unary__isnil__code_string__ret__bool,
                     wrapper);
                 return static_cast<T>(sqf::get_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_RETURN"sv));
-            }
-
-            template<typename T>
-            T call2(const code& code_) {
-                return call2<T>(code_, game_value());
             }
 
             /**
@@ -283,15 +269,7 @@ namespace intercept {
                 const game_value args({ args_, code_ });
 
                 sqf::set_variable(sqf::parsing_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
-
-                code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_voidWrapper"sv);
-                if (wrapper.is_nil()) {
-                    //Can happen when executed before preInit
-                    wrapper = sqf::compile(
-                        "(parsingNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                        if (isNil \"_args\") then {call _code} else {_args call _code};"sv);
-                    sqf::set_variable(sqf::parsing_namespace(), "intercept_fnc_voidWrapper"sv, static_cast<game_value>(wrapper));
-                }
+                const code wrapper = sqf::get_variable(sqf::parsing_namespace(), "intercept_fnc_voidWrapper"sv);
 
                 host::functions.invoke_raw_unary(
                     __sqf::unary__isnil__code_string__ret__bool,
@@ -339,7 +317,7 @@ namespace intercept {
             const auto gs = allo->gameState;
 
             if (!ef) {
-                return call2<T>(code_);
+                return call2<T>(code_, game_value());
             }
 
             const auto data = static_cast<game_data_code*>(code_.data.get());
@@ -386,7 +364,7 @@ namespace intercept {
             const auto gs = allo->gameState;
 
             if (!ef) {
-                return call2<void>(code_);
+                return call2<void>(code_, game_value());
             }
 
             static game_value_static wrapper = sqf::compile("call _i135_cc_");

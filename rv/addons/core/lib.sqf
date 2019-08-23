@@ -15,12 +15,17 @@ intercept_fnc_callWrapper = {
     scopeName "main";
     params ["_args", "_code"];
     private _res = [_x] apply {_args call _code} select 0;
-    missionNamespace setVariable ["INTERCEPT_CALL_RETURN", _res];
+    parsingNamespace setVariable ["INTERCEPT_CALL_RETURN", _res];
 };
 
 intercept_fnc_isNilWrapper = {
-    (missionNamespace getVariable "INTERCEPT_CALL_ARGS") params ["_args", "_code"];
-    missionNamespace setVariable ["INTERCEPT_CALL_RETURN", if (isNil "_args") then {call _code} else {_args call _code}];
+    (parsingNamespace getVariable "INTERCEPT_CALL_ARGS") params ["_args", "_code"];
+    parsingNamespace setVariable ["INTERCEPT_CALL_RETURN", if (isNil "_args") then {call _code} else {_args call _code}];
+};
+
+intercept_fnc_voidWrapper = {
+    (parsingNamespace getVariable "INTERCEPT_CALL_ARGS") params ["_args", "_code"];
+    if (isNil "_args") then {call _code} else {_args call _code};
 };
 
 diag_log text "Intercept Invoker SQF handler initializing...";

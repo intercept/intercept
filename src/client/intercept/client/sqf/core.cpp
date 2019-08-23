@@ -18,110 +18,24 @@ namespace intercept {
             return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
 
-        game_value call2(const code &code_, game_value args_) {
-            game_value args({args_, code_});
-
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
-            /*
-            Why is this in a wrapper? Because calling the code would only add a new item to the script
-            stack. Meaning it will only get executed after we return back to the engine but we want 
-            the call to be done after this function returns.
-            isNil is executing the whole code inside it's function and it's done executing when it returns,
-            which makes it suitable for us.
-            */
-            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
-            if (wrapper.is_nil()) {  //Can happen when executed before preInit
-                wrapper = sqf::compile(
-                    "\
-                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                    "sv);
-                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
-            }
-
-            host::functions.invoke_raw_unary(
-                __sqf::unary__isnil__code_string__ret__bool,
-                wrapper);
-
-            // Sadly isNil doesn't return anything so we have to grab it from a variable.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
-        }
-
-        game_value call2(const code &code_) {
-            game_value args({game_value(), code_});
-
-            set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
-            /*
-            Why is this in a wrapper? Because calling the code would only add a new item to the script
-            stack. Meaning it will only get executed after we return back to the engine but we want
-            the call to be done after this function returns.
-            isNil is executing the whole code inside it's function and it's done executing when it returns,
-            which makes it suitable for us.
-            */
-            code wrapper = get_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv);
-            if (wrapper.is_nil()) {  //Can happen when executed before preInit
-                wrapper = sqf::compile(
-                    "\
-                    (missionNamespace getVariable \"INTERCEPT_CALL_ARGS\") params[\"_args\", \"_code\"];\
-                    missionNamespace setVariable[\"INTERCEPT_CALL_RETURN\", if (isNil \"_args\") then {call _code} else {_args call _code}];\
-                    "sv);
-                set_variable(mission_namespace(), "intercept_fnc_isNilWrapper"sv, static_cast<game_value>(wrapper));
-            }
-            host::functions.invoke_raw_unary(
-                __sqf::unary__isnil__code_string__ret__bool,
-                wrapper);
-
-            // Sadly isNil doesn't return anything so we have to grab it from a variable.
-            return get_variable(mission_namespace(), "INTERCEPT_CALL_RETURN"sv);
-        }
-
         bool _has_fast_call() {
-            auto ef = host::functions.get_engine_allocator()->evaluate_func;
+            const auto ef = host::functions.get_engine_allocator()->evaluate_func;
             return ef;
         }
-
-        game_value call(const code &code_, game_value args_) {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
-            if (!_has_fast_call()) return call2(code_, std::move(args_));
-
-            static game_value_static wrapper = sqf::compile("_i135_ar_ call _i135_cc_");
-
-            auto data = static_cast<game_data_code*>(wrapper.data.get());
-            
-            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
-            static r_string fname = "interceptCall"sv;
-            static r_string arname = "_i135_ar_"sv;
-            static r_string codename = "_i135_cc_"sv;
-
-            gs->set_local_variable(arname, std::move(args_));
-            gs->set_local_variable(codename, code_);
-
-            auto ret = ef(*data, ns, fname);
-            return ret;
-        }
-
-        game_value call(const code &code_) {
-            auto allo = host::functions.get_engine_allocator();
-            auto ef = allo->evaluate_func;
-            auto gs = allo->gameState;
-            if (!ef) return call2(code_);
-
-            auto data = static_cast<game_data_code*>(code_.data.get());
-
-            auto ns = gs->get_global_namespace(game_state::namespace_type::mission);
-            static r_string fname = "interceptCall"sv;
-            auto ret = ef(*data, ns, fname);
-            return ret;
-        }
-
 
         script spawn(game_value args, const code& code_) {
             return host::functions.invoke_raw_binary(
                 __sqf::binary__spawn__any__code__ret__script,
                 args,
                 code_);
+        }
+
+        game_value call_raw(const code &code_, game_value args_) {
+            return host::functions.invoke_raw_binary(
+                __sqf::binary__call__any__code__ret__any,
+                code_,
+                args_
+            );
         }
 
         bool is_nil_code(const code &code_) {

@@ -57,7 +57,7 @@ protected:
             if (_capture_return) {
                 *_capture_return = intercept::sqf::call(sqf_fnc, _capture_args);
             } else {
-                intercept::sqf::call(sqf_fnc, _capture_args);
+                intercept::sqf::call<void>(sqf_fnc, _capture_args);
             }
         }
 

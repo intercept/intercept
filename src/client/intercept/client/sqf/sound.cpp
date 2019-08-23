@@ -239,5 +239,9 @@ namespace intercept {
         float radio_volume() {
             return host::functions.invoke_raw_nular(__sqf::nular__radiovolume__ret__scalar);
         }
+
+        rv_audio_options get_audio_option_volumes() {
+            return rv_audio_options(host::functions.invoke_raw_nular(__sqf::nular__getaudiooptionvolumes__ret__array));
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -215,5 +215,7 @@ namespace intercept {
 
         void set_unload_in_combat(const object &unit_, bool allowCargo, bool allowTurrets);
         void swim_in_depth(const object &unit_, float depth_);
+
+        object calculate_path(sqf_string_const_ref type_, sqf_string_const_ref behaviour_, const vector3& from_, const vector3& to_);
     }  // namespace sqf
 }  // namespace intercept

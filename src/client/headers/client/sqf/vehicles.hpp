@@ -101,7 +101,7 @@ namespace intercept {
         object assigned_gunner(const object &veh_);
         object assigned_target(const object &veh_);
         object commander(const object &veh_);
-        void create_vehicle_crew(const object &veh_);
+        group create_vehicle_crew(const object &veh_);
         float damage(const object &object_);
         object driver(const object &value_);
         object effective_commander(const object &value_);
@@ -129,6 +129,7 @@ namespace intercept {
         bool is_hidden(const object &value_);
         bool is_in_remains_collector(const object &value_);
         bool is_light_on(const object &value_);
+        bool is_light_on(const object &value_, const auto_array<float> &turret_);
         bool is_manual_fire(const object &value_);
         bool is_marked_for_collection(const object &value_);
         bool is_object_hidden(const object &value_);

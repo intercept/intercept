@@ -93,20 +93,34 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkershapelocal__string__string__ret__nothing, marker_, shape_);
         }
 
-        void set_marker_pos(sqf_string_const_ref marker_, const vector3 &pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__array__ret__nothing, marker_, pos_);
+        /**
+         * set_marker_pos
+         */
+        void set_marker_pos(sqf_string_const_ref marker_, const vector2 &pos_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_pos(sqf_string_const_ref marker_, const vector3& pos_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, pos_);
+        }
+
+        void set_marker_pos(sqf_string_const_ref marker_, const object& target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, target_);
+        }
+
+        /**
+         * set_marker_pos_local
+         */
+        void set_marker_pos_local(sqf_string_const_ref marker_, const vector2 &pos_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, pos_);
         }
 
         void set_marker_pos_local(sqf_string_const_ref marker_, const vector3 &pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__array__ret__nothing, marker_, pos_);
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, pos_);
         }
 
-        void set_marker_pos(sqf_string_const_ref marker_, const vector2 &pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__array__ret__nothing, marker_, pos_);
-        }
-
-        void set_marker_pos_local(sqf_string_const_ref marker_, const vector2 &pos_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__array__ret__nothing, marker_, pos_);
+        void set_marker_pos_local(sqf_string_const_ref marker_, const object& target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, target_);
         }
 
         void set_marker_brush(sqf_string_const_ref marker_, sqf_string_const_ref brush_) {

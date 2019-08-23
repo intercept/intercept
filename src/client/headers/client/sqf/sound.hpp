@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -65,6 +65,22 @@ namespace intercept {
         float radio_volume();
         float music_volume();
 
+        struct rv_audio_options {
+            float effects;
+            float music;
+            float radio;
+            float von;
+
+            rv_audio_options(const game_value& data_) :
+                effects(data_[0]),
+                music(data_[1]),
+                radio(data_[2]),
+                von(data_[3]) {
+            }
+        };
+
+        rv_audio_options get_audio_option_volumes();
+        
         void remove_all_music_event_handlers(sqf_string_const_ref value_);
         float add_music_event_handler(sqf_string_const_ref type_, const code &command_);
         float add_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);

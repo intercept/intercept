@@ -135,6 +135,24 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
+        void add_weapon_with_attachments_cargo(const object& obj_, const rv_weapon_items& weapons_items_, size_t count_) {
+            game_value params({
+                weapons_items_.operator game_value(),
+                count_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addweaponwithattachmentscargo__object__array__ret__nothing, obj_, params);
+        }
+
+        void add_weapon_with_attachments_cargo_global(const object& obj_, const rv_weapon_items& weapons_items_, size_t count_) {
+            game_value params({
+                weapons_items_.operator game_value(),
+                count_
+            });
+
+            host::functions.invoke_raw_binary(__sqf::binary__addweaponwithattachmentscargoglobal__object__array__ret__nothing, obj_, params);
+        }
+
         sqf_return_string_list magazine_cargo(const object &obj_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinecargo__object__ret__array, obj_));
         }

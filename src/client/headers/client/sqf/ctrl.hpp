@@ -412,8 +412,20 @@ namespace intercept {
         bool open_dlc_page(float value_);
         bool open_map(bool value_);
         bool open_youtube_video(sqf_string_const_ref value_);
-        bool show_subtitles(bool value_);
         bool open_map(bool show_, bool forced_);
+        bool show_subtitles(bool value_);
+
+        struct rv_subtitle_options {
+            bool subtitles;
+            bool radioSubtitles;
+
+            rv_subtitle_options(const game_value& data_) :
+                subtitles(data_[0]),
+                radioSubtitles(data_[1]) {
+            }
+        };
+
+        rv_subtitle_options get_subtitle_options();
 
         void create_gear_dialog(const object &unit_, sqf_string_const_ref resource_);
         bool dialog();

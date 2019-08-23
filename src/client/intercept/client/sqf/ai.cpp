@@ -773,5 +773,11 @@ namespace intercept {
         void swim_in_depth(const object &unit_, float depth_) {
             host::functions.invoke_raw_binary(__sqf::binary__swimindepth__object__scalar__ret__nothing, unit_, depth_);
         }
+
+        object calculate_path(sqf_string_const_ref type_, sqf_string_const_ref behaviour_, const vector3 &from_, const vector3 &to_) {
+            game_value params({ type_, behaviour_, from_, to_ });
+            return host::functions.invoke_raw_unary(__sqf::unary__calculatepath__array__ret__object, params);
+        }
+
     }  // namespace sqf
 }  // namespace intercept

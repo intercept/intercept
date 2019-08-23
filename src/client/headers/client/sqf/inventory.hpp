@@ -95,6 +95,40 @@ namespace intercept {
                                                                  ammo_count(ret_game_value_[4]) {}
         };
 
+        struct rv_magazine {
+            std::string name;
+            int ammo;
+
+            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
+                                                             ammo(ret_game_value_[1]) {}
+
+            explicit operator game_value() const {
+                return game_value({name, ammo});
+            }
+        };
+
+        struct rv_weapon_items {
+            std::string weapon;
+            std::string muzzle;
+            std::string laser;
+            std::string optics;
+            rv_magazine magazine;
+            std::optional<rv_magazine> grenade_launcher_magazine;
+            std::string bipod;
+
+            rv_weapon_items(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
+                                                                 muzzle(ret_game_value_[1]),
+                                                                 laser(ret_game_value_[2]),
+                                                                 optics(ret_game_value_[3]),
+                                                                 magazine(ret_game_value_[4]),
+                                                                 grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
+                                                                 bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
+
+            explicit operator game_value() const {
+                return game_value({weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod});
+            }
+        };
+
         /* potential namespace: items, inventory, campaign */
         void add_item_pool(sqf_string_const_ref item_name_, int item_count_);
         void add_magazine_pool(sqf_string_const_ref mag_name_, int mag_count_);
@@ -114,6 +148,8 @@ namespace intercept {
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_);
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_, int ammo_count_);
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_, int ammo_count_, sqf_string_const_ref muzzle_name_);
+        void add_weapon_with_attachments_cargo(const object& obj_, const rv_weapon_items& weapon_items_, size_t count_);
+        void add_weapon_with_attachments_cargo_global(const object &obj_, const rv_weapon_items &weapon_items_, size_t count_);
         sqf_return_string_list magazine_cargo(const object &obj_);
         sqf_return_string_list magazines(const object &obj_);
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_);
@@ -248,40 +284,6 @@ namespace intercept {
         sqf_return_string_list primary_weapon_magazine(const object &unit_);
         sqf_return_string_list secondary_weapon_items(const object &unit_);
         sqf_return_string_list secondary_weapon_magazine(const object &unit_);
-
-        struct rv_magazine {
-            std::string name;
-            int ammo;
-
-            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
-                                                             ammo(ret_game_value_[1]) {}
-
-            explicit operator game_value() const {
-                return game_value({name, ammo});
-            }
-        };
-
-        struct rv_weapon_items {
-            std::string weapon;
-            std::string muzzle;
-            std::string laser;
-            std::string optics;
-            rv_magazine magazine;
-            std::optional<rv_magazine> grenade_launcher_magazine;
-            std::string bipod;
-
-            rv_weapon_items(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
-                                                                 muzzle(ret_game_value_[1]),
-                                                                 laser(ret_game_value_[2]),
-                                                                 optics(ret_game_value_[3]),
-                                                                 magazine(ret_game_value_[4]),
-                                                                 grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
-                                                                 bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
-
-            explicit operator game_value() const {
-                return game_value({weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod});
-            }
-        };
 
         std::vector<rv_weapon_items> weapons_items(const object &obj_);
         std::vector<rv_weapon_items> weapons_items_cargo(const object &veh_);

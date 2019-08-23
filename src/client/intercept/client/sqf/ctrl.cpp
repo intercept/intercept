@@ -2002,6 +2002,10 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__showsubtitles__bool__ret__bool, value_);
         }
 
+        rv_subtitle_options get_subtitle_options() {
+            return rv_subtitle_options(host::functions.invoke_raw_nular(__sqf::nular__getsubtitleoptions__ret__array));
+        }
+
         void create_gear_dialog(const object &unit_, sqf_string_const_ref resource_) {
             game_value params({unit_,
                                resource_});

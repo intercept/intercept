@@ -1,4 +1,4 @@
-﻿#include "marker.hpp"
+#include "marker.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -175,6 +175,11 @@ namespace intercept {
         vector3 get_marker_pos(sqf_string_const_ref value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getmarkerpos__string__ret__array, value_);
             // Identical: unary__markerpos__string__ret__array
+        }
+
+        vector3 get_marker_pos(sqf_string_const_ref marker_name_, bool preserveElevation) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getmarkerpos__array__ret__array, {marker_name_, preserveElevation});
+            // Identical: unary__markerpos__array__ret__array
         }
 
         vector2 get_marker_size(sqf_string_const_ref value_) {

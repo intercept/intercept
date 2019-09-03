@@ -542,5 +542,7 @@ namespace intercept {
         void set_title_effect(const object &trigger_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
         void set_title_effect(const group &group_, int index_, sqf_string_const_ref type_, sqf_string_const_ref effect_, sqf_string_const_ref text_);
 
+        vector3 custom_waypoint_position();
+
     }  // namespace sqf
 }  // namespace intercept

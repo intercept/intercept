@@ -391,5 +391,9 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__settitleeffect__object_array__array__ret__nothing, {group_, index_}, {type_, effect_, text_});
         }
 
+        vector3 custom_waypoint_position() {
+            return __helpers::__retrieve_nular_vector3(__sqf::nular__customwaypointposition__ret__array);
+        }
+
     }  // namespace sqf
 }  // namespace intercept

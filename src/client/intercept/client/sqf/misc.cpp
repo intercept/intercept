@@ -551,6 +551,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__scoreside__side__ret__scalar, value_);
         }
 
+
         bool is_key_active(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__iskeyactive__string__ret__bool, value_);
         }
@@ -565,6 +566,21 @@ namespace intercept {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__decaygraphvalues__array__ret__array, {lower_bound_values_, graph_values_, coef_}));
         }
 
+        game_value get_graph_values(const rv_graph_value_par &graph_val_par, const std::vector<float> &xy_) {
+            auto_array<game_value> parameter;
+            parameter.reserve(xy_.size()+1);
+            parameter.push_back({
+                    graph_val_par.graph_min_x,
+                    graph_val_par.graph_min_y,
+                    graph_val_par.graph_max_x,
+                    graph_val_par.graph_max_y,
+                    graph_val_par.valueCount,
+                    graph_val_par.randomOffset,
+                });
+            parameter.insert(parameter.end(), xy_.begin(), xy_.end());
+
+            return host::functions.invoke_raw_unary(__sqf::unary__getgraphvalues__array__ret__array,parameter);
+        }
 
     }  // namespace sqf
 }  // namespace intercept

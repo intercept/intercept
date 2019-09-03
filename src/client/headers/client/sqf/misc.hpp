@@ -213,7 +213,7 @@ namespace intercept {
         float score_side(const side &value_);
 
         //From contact DLC
-        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, floet coef_);
+        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, float coef_);
         //#TODO not actually sure what this returns
         game_value get_graph_values(const rv_graph_value_par& graph_val_par, const std::vector<float>& xy_);
 

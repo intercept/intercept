@@ -93,9 +93,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkershapelocal__string__string__ret__nothing, marker_, shape_);
         }
 
-        /**
-         * set_marker_pos
-         */
         void set_marker_pos(sqf_string_const_ref marker_, const vector2 &pos_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, pos_);
         }
@@ -108,9 +105,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, target_);
         }
 
-        /**
-         * set_marker_pos_local
-         */
         void set_marker_pos_local(sqf_string_const_ref marker_, const vector2 &pos_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, pos_);
         }

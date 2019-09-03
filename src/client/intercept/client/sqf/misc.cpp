@@ -559,5 +559,12 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__reversedmousey__ret__bool);
         }
 
+
+        //From contact DLC
+        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, float coef_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__decaygraphvalues__array__ret__array, {lower_bound_values_, graph_values_, coef_}));
+        }
+
+
     }  // namespace sqf
 }  // namespace intercept

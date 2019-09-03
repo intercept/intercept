@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -200,5 +200,9 @@ namespace intercept {
         void airport_side(int id_);
         void airport_side(const object &target_);
         float score_side(const side &value_);
+
+        //From contact DLC
+        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, floet coef_);
+
     }  // namespace sqf
 }  // namespace intercept

@@ -998,6 +998,27 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsettext__control__array__ret__nothing, ctrl_, params);
         }
 
+        void lnb_set_tooltip(float idc_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                 column_});
+
+            game_value params({idc_,
+                               item,
+                               data_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsettooltip__array__ret__nothing, params);
+        }
+
+        void lnb_set_tooltip(const control &ctrl_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                 column_});
+
+            game_value params({item,
+                               data_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsettooltip__control__array__ret__nothing, ctrl_, params);
+        }
+
         void lnb_set_value(float idc_, float row_, float column_, float value_) {
             game_value item({row_,
                              column_});

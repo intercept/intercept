@@ -207,6 +207,8 @@ namespace intercept {
         void lnb_set_picture(const control &ctrl_, float row_, float column_, sqf_string_const_ref name_);
         void lnb_set_text(float idc_, float row_, float column_, const game_value &data_);
         void lnb_set_text(const control &ctrl_, float row_, float column_, const game_value &data_);
+        void lnb_set_tooltip(float idc_, float row_, float column_, const game_value &data_);
+        void lnb_set_tooltip(const control &ctrl_, float row_, float column_, const game_value &data_);
         void lnb_set_value(float idc_, float row_, float column_, float value_);
         void lnb_set_value(const control &ctrl_, float row_, float column_, float value_);
         void lnb_clear(const control &value_);

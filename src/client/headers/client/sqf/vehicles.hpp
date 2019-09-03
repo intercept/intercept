@@ -137,6 +137,8 @@ namespace intercept {
         sqf_return_string light_is_on(const object &value_);
         float locked(const object &value_);
         bool mine_active(const object &value_);
+        object missile_target(const object &value_);
+        vector3 missile_target_pos(const object &value_);
         bool locked_driver(const object &value_);
         object object_parent(const object &value_);
         float score(const object &value_);

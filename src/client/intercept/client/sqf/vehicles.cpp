@@ -402,6 +402,14 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__mineactive__object__ret__bool, value_);
         }
 
+        object missile_target(const object &value_) {
+            return __helpers::__object_unary_object(__sqf::unary__missiletarget__object__ret__object, value_);
+        }
+
+        vector3 missile_target_pos(const object &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__missiletargetpos__object__ret__array, value_);
+        }
+
         object object_parent(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__objectparent__object__ret__object, value_);
         }

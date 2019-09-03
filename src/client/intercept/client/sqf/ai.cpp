@@ -638,8 +638,15 @@ namespace intercept {
         void set_behaviour(std::variant<group, object> group_, sqf_string_const_ref behaviour_) {
             if (group_.index() == 0)
                 host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<0>(group_), behaviour_);
-            return;
-            host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<1>(group_), behaviour_);
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setbehaviour__object_group__string__ret__nothing, std::get<1>(group_), behaviour_);
+        }
+
+        void set_behaviour_strong(std::variant<group, object> group_, sqf_string_const_ref behaviour_) {
+            if (group_.index() == 0)
+                host::functions.invoke_raw_binary(__sqf::binary__setbehaviourstrong__object_group__string__ret__nothing, std::get<0>(group_), behaviour_);
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__setbehaviourstrong__object_group__string__ret__nothing, std::get<1>(group_), behaviour_);
         }
 
         void set_combat_mode(std::variant<group, object, team_member> group_, sqf_string_const_ref mode_) {

@@ -267,7 +267,7 @@ namespace intercept {
         }
 
         void create_vehicle_crew(const object &veh_) {
-            __helpers::__empty_unary_object(__sqf::unary__createvehiclecrew__object__ret__nothing, veh_);
+            __helpers::__empty_unary_object(__sqf::unary__createvehiclecrew__object__ret__group, veh_);
         }
 
         float damage(const object &object_) {
@@ -400,6 +400,22 @@ namespace intercept {
 
         bool mine_active(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__mineactive__object__ret__bool, value_);
+        }
+
+        object missile_target(const object &value_) {
+            return __helpers::__object_unary_object(__sqf::unary__missiletarget__object__ret__object, value_);
+        }
+
+        vector3 missile_target_pos(const object &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__missiletargetpos__object__ret__array, value_);
+        }
+
+        bool set_missile_target(const object &value_, const object &target_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object__ret__bool, value_, target_);
+        }
+
+        void set_missile_target_pos(const object &value_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmissiletargetpos__object__array__ret__nothing, value_, position_);
         }
 
         object object_parent(const object &value_) {
@@ -859,6 +875,10 @@ namespace intercept {
         }
         void add_torque(const object& object_, vector3 torque_) {
             host::functions.invoke_raw_binary(__sqf::binary__addtorque__object__array__ret__nothing, object_, torque_);
+        }
+
+        void trigger_ammo(const object &object_) {
+            __helpers::__empty_unary_object(__sqf::unary__triggerammo__object__ret__nothing, object_);
         }
 
         side get_side(const object &object_) {

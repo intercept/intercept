@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -61,6 +61,7 @@ namespace intercept {
         sqf_return_string get_marker_color(sqf_string_const_ref value_);
         sqf_return_string get_marker_type(sqf_string_const_ref value_);
         vector3 get_marker_pos(sqf_string_const_ref value_);
+        vector3 get_marker_pos(sqf_string_const_ref marker_name_, bool preserveElevation);
         vector2 get_marker_size(sqf_string_const_ref value_);
 
         std::vector<marker> all_map_markers();

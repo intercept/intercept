@@ -94,6 +94,18 @@ namespace intercept {
 
         rv_bounding_box bounding_box(const object &model_);
         rv_bounding_box bounding_box_real(const object &model_);
+
+        enum class bounding_box_clipping_type {
+            clip_visual = 0,
+            clip_shadow = 1,
+            clip_geometry = 2,
+            clip_general = 3
+        };
+        
+        rv_bounding_box bounding_box(bounding_box_clipping_type type_, const object &model_);
+        rv_bounding_box bounding_box_real(bounding_box_clipping_type type_, const object &model_);
+
+
         vector3 bounding_center(const object &obj_);
         void set_dir(const object &value0_, float value1_);
         float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);

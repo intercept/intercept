@@ -1,6 +1,5 @@
-#include "chat.hpp"
-#include "client/pointers.hpp"
 #include "position.hpp"
+#include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
 namespace intercept {
@@ -219,6 +218,15 @@ namespace intercept {
 
         rv_bounding_box bounding_box_real(const object &model_) {
             game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
+            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+        }
+
+        rv_bounding_box bounding_box(bounding_box_clipping_type type_, const object &model_) {
+            game_value rgv(host::functions.invoke_raw_binary(__sqf::binary__boundingbox__scalar__object__ret__array, static_cast<int>(type_), model_));
+            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+        }
+        rv_bounding_box bounding_box_real(bounding_box_clipping_type type_, const object &model_) {
+            game_value rgv(host::functions.invoke_raw_binary(__sqf::binary__boundingboxreal__scalar__object__ret__array, static_cast<int>(type_), model_));
             return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
         }
 

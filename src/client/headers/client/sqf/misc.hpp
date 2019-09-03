@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -56,6 +56,17 @@ namespace intercept {
                   mods(rv_game_value_[5]),
                   platform(rv_game_value_[6]) {}
         };
+        struct rv_graph_value_par {
+            float graph_min_x;
+            float graph_min_y;
+            float graph_max_x;
+            float graph_max_y;
+            float valueCount;
+            float randomOffset;
+        };
+
+
+
         //simulation
         //NULAR -- https://github.com/intercept/intercept/issues/13
         bool can_trigger_dynamic_simulation(const object &unit_);
@@ -200,5 +211,14 @@ namespace intercept {
         void airport_side(int id_);
         void airport_side(const object &target_);
         float score_side(const side &value_);
+
+        //From contact DLC
+        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, float coef_);
+        //#TODO not actually sure what this returns
+        game_value get_graph_values(const rv_graph_value_par& graph_val_par, const std::vector<float>& xy_);
+
+
+
+
     }  // namespace sqf
 }  // namespace intercept

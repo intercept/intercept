@@ -194,6 +194,7 @@ namespace intercept {
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
 
         void set_behaviour(std::variant<group, object> group_, sqf_string_const_ref behaviour_);
+        void set_behaviour_strong(std::variant<group, object> group_, sqf_string_const_ref behaviour_);
         void set_combat_mode(std::variant<group, object, team_member> group_, sqf_string_const_ref mode_);
         void set_formation(std::variant<group, object> group_, sqf_string_const_ref mode_);
         void set_convoy_seperation(const object &object_, float distance_);

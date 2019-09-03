@@ -998,6 +998,27 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsettext__control__array__ret__nothing, ctrl_, params);
         }
 
+        void lnb_set_tooltip(float idc_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                 column_});
+
+            game_value params({idc_,
+                               item,
+                               data_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsettooltip__array__ret__nothing, params);
+        }
+
+        void lnb_set_tooltip(const control &ctrl_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                 column_});
+
+            game_value params({item,
+                               data_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsettooltip__control__array__ret__nothing, ctrl_, params);
+        }
+
         void lnb_set_value(float idc_, float row_, float column_, float value_) {
             game_value item({row_,
                              column_});
@@ -1053,6 +1074,19 @@ namespace intercept {
                              width_,
                              height_});
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsetposition__control__array__ret__nothing, ctrl_, args);
+        }
+
+        void ctrl_set_positionh(const control &ctrl_, float height_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetpositionh__control__scalar__ret__nothing, ctrl_, height_);
+        }
+        void ctrl_set_positionw(const control &ctrl_, float width_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetpositionw__control__scalar__ret__nothing, ctrl_, width_);
+        }
+        void ctrl_set_positionx(const control &ctrl_, float x_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetpositionx__control__scalar__ret__nothing, ctrl_, x_);
+        }
+        void ctrl_set_positiony(const control &ctrl_, float y_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetpositiony__control__scalar__ret__nothing, ctrl_, y_);
         }
 
         void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_) {

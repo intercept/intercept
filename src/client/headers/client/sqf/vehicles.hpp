@@ -137,6 +137,10 @@ namespace intercept {
         sqf_return_string light_is_on(const object &value_);
         float locked(const object &value_);
         bool mine_active(const object &value_);
+        object missile_target(const object &value_);
+        vector3 missile_target_pos(const object &value_);
+        bool set_missile_target(const object &value_, const object &target_);
+        void set_missile_target_pos(const object &value_, const vector3 &position_);
         bool locked_driver(const object &value_);
         object object_parent(const object &value_);
         float score(const object &value_);
@@ -259,6 +263,8 @@ namespace intercept {
         sqf_return_string_list list_vehicle_sensors(const object &vehicle_);
         void add_force(const object &object_, vector3 force_, vector3 position_);
         void add_torque(const object &object_, vector3 torque_);
+
+        void trigger_ammo(const object& object_);
 
     }  // namespace sqf
 }  // namespace intercept

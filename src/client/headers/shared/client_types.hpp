@@ -126,6 +126,7 @@ class internal_object : public game_value {
     };
 
 
+    //#TODO make a typedef for std::vector and let it be replaced by auto_array for using engine types
 #ifdef INTERCEPT_SQF_STRTYPE_RSTRING
     using sqf_string = r_string;
     using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type

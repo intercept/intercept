@@ -266,8 +266,8 @@ namespace intercept {
             return __helpers::__object_unary_object(__sqf::unary__commander__object__ret__object, veh_);
         }
 
-        void create_vehicle_crew(const object &veh_) {
-            __helpers::__empty_unary_object(__sqf::unary__createvehiclecrew__object__ret__group, veh_);
+        group create_vehicle_crew(const object &veh_) {
+            return group(host::functions.invoke_raw_unary(__sqf::unary__createvehiclecrew__object__ret__group, veh_));
         }
 
         float damage(const object &object_) {
@@ -363,7 +363,12 @@ namespace intercept {
         }
 
         bool is_light_on(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__islighton__object__ret__bool, value_);
+            return __helpers::__bool_unary_object(__sqf::unary__islighton__object_array__ret__bool, value_);
+        }
+
+        bool is_light_on(const object &value_, const auto_array<float>& turret_) {
+            game_value params({ value_, turret_ });
+            return host::functions.invoke_raw_unary(__sqf::unary__islighton__object_array__ret__bool, params);
         }
 
         bool is_manual_fire(const object &value_) {

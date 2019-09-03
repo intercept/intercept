@@ -37,10 +37,14 @@ namespace intercept {
         void set_marker_text_local(sqf_string_const_ref marker_, sqf_string_const_ref text_);
         void set_marker_shape(sqf_string_const_ref marker_, sqf_string_const_ref shape_);
         void set_marker_shape_local(sqf_string_const_ref marker_, sqf_string_const_ref shape_);
-        void set_marker_pos(sqf_string_const_ref marker_, const vector3 &pos_);
-        void set_marker_pos_local(sqf_string_const_ref marker_, const vector3 &pos_);
+
         void set_marker_pos(sqf_string_const_ref marker_, const vector2 &pos_);
+        void set_marker_pos(sqf_string_const_ref marker_, const vector3 &pos_);
+        void set_marker_pos(sqf_string_const_ref marker_, const object& target_);
+        void set_marker_pos_local(sqf_string_const_ref marker_, const vector3 &pos_);
         void set_marker_pos_local(sqf_string_const_ref marker_, const vector2 &pos_);
+        void set_marker_pos_local(sqf_string_const_ref marker_, const object& target_);
+
         void set_marker_brush(sqf_string_const_ref marker_, sqf_string_const_ref brush_);
         void set_marker_brush_local(sqf_string_const_ref marker_, sqf_string_const_ref brush_);
         void set_marker_color(sqf_string_const_ref marker_, sqf_string_const_ref color_);

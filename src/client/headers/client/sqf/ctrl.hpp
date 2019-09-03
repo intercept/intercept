@@ -66,23 +66,22 @@ namespace intercept {
             vector2 viewport;
             float aspect_ratio;
             float ui_scale;
+            vector2 fov;
+            bool tripleHead = false;
 
-            rv_resolution(const vector2 &resolution_, const vector2 &viewport_, float aspect_ratio_, float ui_scale_) {
-                resolution = resolution_;
-                viewport = viewport_;
-                aspect_ratio = aspect_ratio_;
-                ui_scale = ui_scale_;
-            }
+            static rv_resolution from_game_value(game_value_parameter resolution_result_) {
+                const vector2 resolution = {resolution_result_[0], resolution_result_[1]};
+                const vector2 viewport = {resolution_result_[2], resolution_result_[3]};
+                const float aspectRatio = resolution_result_[4];
+                const float uiScale = resolution_result_[5];
 
-            static rv_resolution from_vector(const std::vector<float> &resolution_vector_) {
-                const vector2 resolution = {resolution_vector_[0], resolution_vector_[1]};
-                const vector2 viewport = {resolution_vector_[2], resolution_vector_[3]};
-                return rv_resolution(resolution, viewport, resolution_vector_[4], resolution_vector_[5]);
-            }
+                if (resolution_result_.size() > 6) {
+                    const vector2 fov = {resolution_result_[6], resolution_result_[7]};
+                    const bool tripleHead = resolution_result_[8];
+                    return rv_resolution{resolution, viewport, aspectRatio, uiScale, fov, tripleHead};
+                }
 
-            std::vector<float> to_vector() const {
-                std::vector<float> ret_val{resolution.x, resolution.y, viewport.x, viewport.y, aspect_ratio, ui_scale};
-                return ret_val;
+                return rv_resolution{resolution, viewport, aspectRatio, uiScale};
             }
         };
 
@@ -412,8 +411,20 @@ namespace intercept {
         bool open_dlc_page(float value_);
         bool open_map(bool value_);
         bool open_youtube_video(sqf_string_const_ref value_);
-        bool show_subtitles(bool value_);
         bool open_map(bool show_, bool forced_);
+        bool show_subtitles(bool value_);
+
+        struct rv_subtitle_options {
+            bool subtitles;
+            bool radioSubtitles;
+
+            rv_subtitle_options(const game_value& data_) :
+                subtitles(data_[0]),
+                radioSubtitles(data_[1]) {
+            }
+        };
+
+        rv_subtitle_options get_subtitle_options();
 
         void create_gear_dialog(const object &unit_, sqf_string_const_ref resource_);
         bool dialog();

@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 192.145649 - Profile
+//Exported Pointer Assignments For: Arma 3 194.145999 - Profile
 
 
 // Unary Functions
@@ -83,6 +83,7 @@ __sqf::unary__buldozer_loadnewroads__string__ret__bool = (unary_function)host::f
 __sqf::unary__buttonaction__control__ret__string = (unary_function)host::functions.get_unary_function_typed("buttonaction"sv, "CONTROL"sv);
 __sqf::unary__buttonaction__scalar__ret__string = (unary_function)host::functions.get_unary_function_typed("buttonaction"sv, "SCALAR"sv);
 __sqf::unary__buttonsetaction__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("buttonsetaction"sv, "ARRAY"sv);
+__sqf::unary__calculatepath__array__ret__object = (unary_function)host::functions.get_unary_function_typed("calculatepath"sv, "ARRAY"sv);
 __sqf::unary__calculateplayervisibilitybyfriendly__bool__ret__nothing = (unary_function)host::functions.get_unary_function_typed("calculateplayervisibilitybyfriendly"sv, "BOOL"sv);
 __sqf::unary__call__code__ret__any = (unary_function)host::functions.get_unary_function_typed("call"sv, "CODE"sv);
 __sqf::unary__camcommitted__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("camcommitted"sv, "OBJECT"sv);
@@ -525,7 +526,7 @@ __sqf::unary__ishidden__object__ret__bool = (unary_function)host::functions.get_
 __sqf::unary__isinremainscollector__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("isinremainscollector"sv, "OBJECT"sv);
 __sqf::unary__iskeyactive__string__ret__bool = (unary_function)host::functions.get_unary_function_typed("iskeyactive"sv, "STRING"sv);
 __sqf::unary__islaseron__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("islaseron"sv, "OBJECT"sv);
-__sqf::unary__islighton__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("islighton"sv, "OBJECT"sv);
+__sqf::unary__islighton__object_array__ret__bool = (unary_function)host::functions.get_unary_function_typed("islighton"sv, "ARRAY"sv);
 __sqf::unary__islocalized__string__ret__bool = (unary_function)host::functions.get_unary_function_typed("islocalized"sv, "STRING"sv);
 __sqf::unary__ismanualfire__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("ismanualfire"sv, "OBJECT"sv);
 __sqf::unary__ismarkedforcollection__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("ismarkedforcollection"sv, "OBJECT"sv);
@@ -1260,6 +1261,8 @@ __sqf::binary__addweaponcargoglobal__object__array__ret__nothing = (binary_funct
 __sqf::binary__addweaponglobal__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponglobal"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__addweaponitem__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponitem"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__addweaponturret__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponturret"sv, "OBJECT"sv, "ARRAY"sv);
+__sqf::binary__addweaponwithattachmentscargo__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponwithattachmentscargo"sv, "OBJECT"sv, "ARRAY"sv);
+__sqf::binary__addweaponwithattachmentscargoglobal__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponwithattachmentscargoglobal"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__aimedattarget__object__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("aimedattarget"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__allow3dmode__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allow3dmode"sv, "CONTROL"sv, "BOOL"sv);
 __sqf::binary__allowcrewinimmobile__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allowcrewinimmobile"sv, "OBJECT"sv, "BOOL"sv);
@@ -1392,7 +1395,7 @@ __sqf::binary__ctremoverows__control__array__ret__nothing = (binary_function)hos
 __sqf::binary__ctrladdeventhandler__control__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrladdeventhandler"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrlanimatemodel__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlanimatemodel"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrlanimationphasemodel__control__string__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrlanimationphasemodel"sv, "CONTROL"sv, "STRING"sv);
-__sqf::binary__ctrlchecked__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlchecked"sv, "CONTROL"sv, "SCALAR"sv);
+__sqf::binary__ctrlchecked__control__scalar__ret__bool = (binary_function)host::functions.get_binary_function_typed("ctrlchecked"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcommit__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlcommit"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcreate__display__array__ret__control = (binary_function)host::functions.get_binary_function_typed("ctrlcreate"sv, "DISPLAY"sv, "ARRAY"sv);
 __sqf::binary__ctrlenable__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlenable"sv, "CONTROL"sv, "BOOL"sv);
@@ -2059,8 +2062,8 @@ __sqf::binary__setmarkercolor__string__string__ret__nothing = (binary_function)h
 __sqf::binary__setmarkercolorlocal__string__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkercolorlocal"sv, "STRING"sv, "STRING"sv);
 __sqf::binary__setmarkerdir__string__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerdir"sv, "STRING"sv, "SCALAR"sv);
 __sqf::binary__setmarkerdirlocal__string__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerdirlocal"sv, "STRING"sv, "SCALAR"sv);
-__sqf::binary__setmarkerpos__string__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerpos"sv, "STRING"sv, "ARRAY"sv);
-__sqf::binary__setmarkerposlocal__string__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerposlocal"sv, "STRING"sv, "ARRAY"sv);
+__sqf::binary__setmarkerpos__string__object_array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerpos"sv, "STRING"sv, "ARRAY"sv);
+__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkerposlocal"sv, "STRING"sv, "ARRAY"sv);
 __sqf::binary__setmarkershape__string__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkershape"sv, "STRING"sv, "STRING"sv);
 __sqf::binary__setmarkershapelocal__string__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkershapelocal"sv, "STRING"sv, "STRING"sv);
 __sqf::binary__setmarkersize__string__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setmarkersize"sv, "STRING"sv, "ARRAY"sv);
@@ -2410,6 +2413,7 @@ __sqf::nular__get3deniconsvisible__ret__array = (nular_function)host::functions.
 __sqf::nular__get3denlinesvisible__ret__array = (nular_function)host::functions.get_nular_function("get3denlinesvisible"sv);
 __sqf::nular__get3denmouseover__ret__array = (nular_function)host::functions.get_nular_function("get3denmouseover"sv);
 __sqf::nular__getartillerycomputersettings__ret__array = (nular_function)host::functions.get_nular_function("getartillerycomputersettings"sv);
+__sqf::nular__getaudiooptionvolumes__ret__array = (nular_function)host::functions.get_nular_function("getaudiooptionvolumes"sv);
 __sqf::nular__getcalculateplayervisibilitybyfriendly__ret__bool = (nular_function)host::functions.get_nular_function("getcalculateplayervisibilitybyfriendly"sv);
 __sqf::nular__getclientstate__ret__string = (nular_function)host::functions.get_nular_function("getclientstate"sv);
 __sqf::nular__getclientstatenumber__ret__string = (nular_function)host::functions.get_nular_function("getclientstatenumber"sv);
@@ -2424,6 +2428,7 @@ __sqf::nular__getobjectviewdistance__ret__array = (nular_function)host::function
 __sqf::nular__getremotesensorsdisabled__ret__bool = (nular_function)host::functions.get_nular_function("getremotesensorsdisabled"sv);
 __sqf::nular__getresolution__ret__array = (nular_function)host::functions.get_nular_function("getresolution"sv);
 __sqf::nular__getshadowdistance__ret__scalar = (nular_function)host::functions.get_nular_function("getshadowdistance"sv);
+__sqf::nular__getsubtitleoptions__ret__array = (nular_function)host::functions.get_nular_function("getsubtitleoptions"sv);
 __sqf::nular__getterraingrid__ret__scalar = (nular_function)host::functions.get_nular_function("getterraingrid"sv);
 __sqf::nular__gettotaldlcusagetime__ret__scalar = (nular_function)host::functions.get_nular_function("gettotaldlcusagetime"sv);
 __sqf::nular__groupiconselectable__ret__bool = (nular_function)host::functions.get_nular_function("groupiconselectable"sv);

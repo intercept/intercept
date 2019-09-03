@@ -174,6 +174,12 @@ namespace intercept {
         sqf_return_string ctrl_text(float value_);
         sqf_return_string ctrl_text_secondary(const control &value_);
         void ctrl_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
+
+        void ctrl_set_positionh(const control &ctrl_, float height_);
+        void ctrl_set_positionw(const control &ctrl_, float width_);
+        void ctrl_set_positionx(const control &ctrl_, float x_);
+        void ctrl_set_positiony(const control &ctrl_, float y_);
+
         std::vector<float> ctrl_position(const control &ctrl_);
         void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_);
         display ctrl_parent(const control &value_);

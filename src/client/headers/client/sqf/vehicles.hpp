@@ -139,6 +139,8 @@ namespace intercept {
         bool mine_active(const object &value_);
         object missile_target(const object &value_);
         vector3 missile_target_pos(const object &value_);
+        bool set_missile_target(const object &value_, const object &target_);
+        void set_missile_target_pos(const object &value_, const vector3 &position_);
         bool locked_driver(const object &value_);
         object object_parent(const object &value_);
         float score(const object &value_);

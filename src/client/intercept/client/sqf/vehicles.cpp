@@ -410,6 +410,14 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__missiletargetpos__object__ret__array, value_);
         }
 
+        bool set_missile_target(const object &value_, const object &target_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object__ret__bool, value_, target_);
+        }
+
+        void set_missile_target_pos(const object &value_, const vector3 &position_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmissiletargetpos__object__array__ret__nothing, value_, position_);
+        }
+
         object object_parent(const object &value_) {
             return __helpers::__object_unary_object(__sqf::unary__objectparent__object__ret__object, value_);
         }

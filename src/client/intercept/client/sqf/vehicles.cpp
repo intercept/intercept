@@ -869,6 +869,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addtorque__object__array__ret__nothing, object_, torque_);
         }
 
+        void trigger_ammo(const object &object_) {
+            __helpers::__empty_unary_object(__sqf::unary__triggerammo__object__ret__nothing, object_);
+        }
+
         side get_side(const object &object_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__object__ret__side, object_));
         }

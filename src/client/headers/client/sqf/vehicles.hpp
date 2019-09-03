@@ -262,5 +262,7 @@ namespace intercept {
         void add_force(const object &object_, vector3 force_, vector3 position_);
         void add_torque(const object &object_, vector3 torque_);
 
+        void trigger_ammo(const object& object_);
+
     }  // namespace sqf
 }  // namespace intercept

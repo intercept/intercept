@@ -1080,13 +1080,13 @@ namespace intercept {
         public:
             sourcedocpos sdp;
 
-            virtual bool exec(game_state& state, vm_context& t) = 0;
-            virtual int stack_size(void* t) const = 0;
+            virtual bool exec(game_state& state, vm_context& t) { return false; };
+            virtual int stack_size(void* t) const { return 0; };
 
             virtual bool bfunc() const { return false; }
 
         public:
-            virtual r_string get_name() const = 0;
+            virtual r_string get_name() const { return ""sv; }
         };
 
         class game_instruction_constant : public game_instruction {
@@ -1109,6 +1109,8 @@ namespace intercept {
             r_string code_string;
             //auto_array<ref<game_instruction>> instructions;
             ref<compact_array<ref<game_instruction>>> instructions; //1.96 part of the script caching which is leaking memory
+            void* spacing;
+            uint32_t spacing2;
             bool is_final;
         };
 

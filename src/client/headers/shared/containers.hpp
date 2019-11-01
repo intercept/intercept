@@ -642,20 +642,22 @@ namespace intercept::types {
             return buffer;
         }
         static compact_array* create(const compact_array& other) {
-            const size_t size = other.size();
-            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-            new (buffer) compact_array(size);
+            const size_t sizeElements = other.size();
+            const size_t sizeBytes = sizeof(compact_array) + sizeof(Type) * (sizeElements-1);
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeBytes));
+            new (buffer) compact_array(sizeElements);
             std::copy(other.data(), other.data() + other.size(), buffer->data());
             return buffer;
         }
 
         template <class _InIt>
         static compact_array* create(_InIt beg, _InIt end) {
-            const size_t size = sizeof(compact_array) + sizeof(Type) * (std::distance(beg, end) - 1);
-            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-            std::memset(buffer, 0, size);
+            const size_t sizeElements = (std::distance(beg, end));
+            const size_t sizeBytes = sizeof(compact_array) + sizeof(Type) * (sizeElements-1);
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeBytes));
+            std::memset(buffer, 0, sizeBytes);
 #pragma warning(suppress : 26409)  //don't use new/delete
-            new (buffer) compact_array(size);
+            new (buffer) compact_array(sizeElements);
 
             size_t index = 0;
             for (auto& i = beg; i < end; ++i) {

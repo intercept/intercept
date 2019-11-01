@@ -131,7 +131,7 @@ namespace intercept {
         }
 
         code compile(sqf_string_const_ref sqf_) {
-            return code(host::functions.invoke_raw_unary(__sqf::unary__compile__string__ret__code, sqf_));
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compile__string_array__ret__code, sqf_));
         }
 
         code compile_final(sqf_string_const_ref sqf_) {

@@ -1107,7 +1107,8 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
-            auto_array<ref<game_instruction>> instructions;
+            //auto_array<ref<game_instruction>> instructions;
+            ref<compact_array<ref<game_instruction>>> instructions; //1.96 part of the script caching which is leaking memory
             bool is_final;
         };
 

@@ -4,7 +4,7 @@ branches:
   - develop
 
 sudo: required
-dist: trusty
+dist: bionic
 language: python
 
 matrix:

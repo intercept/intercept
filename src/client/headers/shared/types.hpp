@@ -1080,13 +1080,13 @@ namespace intercept {
         public:
             sourcedocpos sdp;
 
-            virtual bool exec(game_state& state, vm_context& t) { return false; };
-            virtual int stack_size(void* t) const { return 0; };
+            virtual bool exec(game_state& state, vm_context& t) = 0;
+            virtual int stack_size(void* t) const = 0;
 
             virtual bool bfunc() const { return false; }
 
         public:
-            virtual r_string get_name() const { return ""sv; }
+            virtual r_string get_name() const = 0;
         };
 
         class game_instruction_constant : public game_instruction {

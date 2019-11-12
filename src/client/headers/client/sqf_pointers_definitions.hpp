@@ -128,7 +128,7 @@ unary_function __sqf::unary__commandgetout__object_array__ret__nothing;
 unary_function __sqf::unary__commandstop__object_array__ret__nothing;
 unary_function __sqf::unary__comment__string__ret__nothing;
 unary_function __sqf::unary__commitoverlay__control__ret__nothing;
-unary_function __sqf::unary__compile__string_array__ret__code;
+unary_function __sqf::unary__compile__string__ret__code;
 unary_function __sqf::unary__compilefinal__string__ret__code;
 unary_function __sqf::unary__completedfsm__scalar__ret__bool;
 unary_function __sqf::unary__composetext__array__ret__text;

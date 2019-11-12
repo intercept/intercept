@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 196.146083 - Profile
+//Exported Pointer Assignments For: Arma 3 196.146114 - Profile
 
 
 // Unary Functions
@@ -130,7 +130,7 @@ __sqf::unary__commandgetout__object_array__ret__nothing = (unary_function)host::
 __sqf::unary__commandstop__object_array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("commandstop"sv, "ARRAY"sv);
 __sqf::unary__comment__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("comment"sv, "STRING"sv);
 __sqf::unary__commitoverlay__control__ret__nothing = (unary_function)host::functions.get_unary_function_typed("commitoverlay"sv, "CONTROL"sv);
-__sqf::unary__compile__string_array__ret__code = (unary_function)host::functions.get_unary_function_typed("compile"sv, "ARRAY"sv);
+__sqf::unary__compile__string__ret__code = (unary_function)host::functions.get_unary_function_typed("compile"sv, "STRING"sv);
 __sqf::unary__compilefinal__string__ret__code = (unary_function)host::functions.get_unary_function_typed("compilefinal"sv, "STRING"sv);
 __sqf::unary__completedfsm__scalar__ret__bool = (unary_function)host::functions.get_unary_function_typed("completedfsm"sv, "SCALAR"sv);
 __sqf::unary__composetext__array__ret__text = (unary_function)host::functions.get_unary_function_typed("composetext"sv, "ARRAY"sv);

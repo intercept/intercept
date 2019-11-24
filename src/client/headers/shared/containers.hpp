@@ -1516,6 +1516,7 @@ namespace intercept::types {
         void clear() {
             if (base::_data)
                 Allocator::deallocate(rv_array<Type>::_data);
+            base::_data = nullptr;
             base::_n = 0;
             _maxItems = 0;
         }

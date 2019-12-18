@@ -784,8 +784,10 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false;  //There is more data than we can even have
 
             return std::equal(other_.cbegin(), other_.cend(),
-                              _ref->cbegin(), _ref->cend(),
-                [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
+                              begin(), end(),
+                              [](unsigned char l, unsigned char r) {
+                                  return l == r || tolower(l) == tolower(r);
+                              });
         }
 
         ///== is case insensitive just like scripting
@@ -843,14 +845,14 @@ namespace intercept::types {
         }
 
         bool compare_case_sensitive(std::string_view other_) const {
-            if (length()  != other_.length()) return false;
-            return !std::equal(_ref->cbegin(), _ref->cend(),
+            if (length() != other_.length()) return false;
+            return !std::equal(begin(), end(),
                                other_.cbegin(), [](unsigned char l, unsigned char r) { return l == r; });
         }
 
         bool compare_case_insensitive(std::string_view other_) const {
             if (length() != other_.length()) return false;
-            return !std::equal(_ref->cbegin(), _ref->cend(),
+            return !std::equal(begin(), end(),
                                other_.cbegin(), [](unsigned char l, unsigned char r) { return ::tolower(l) == ::tolower(r); });
         }
 
@@ -933,8 +935,9 @@ namespace intercept::types {
         }
         ///Be careful! This returns nullptr on empty string
         compact_array<char>::const_iterator end() const noexcept {
+            //#TODO could use sentinel here, would spare us the strlen call.
             if (_ref)
-                return _ref->end();
+                return _ref->begin() + length(); //Cannot use compact array end, as that is the whole buffer including null chars or end garbage
             return {};
         }
         char front() const noexcept {

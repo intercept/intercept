@@ -1337,8 +1337,15 @@ namespace intercept::types {
                 return;
             }
             reallocate(n_);
+            if (n_ > base::_n) { //adding elements, need to default init
+                for (size_t i = base::_n; i < n_; ++i) {
+                #pragma warning(suppress : 26409)
+                    ::new (base::_data + i) Type();
+                }
+            }
+
         }
-        
+
         /**
         * @brief Makes sure the capacity is big enough to contain res_ elements
         * @param res_ new minimum buffer size

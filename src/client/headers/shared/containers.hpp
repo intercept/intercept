@@ -1695,7 +1695,7 @@ namespace intercept::types {
     template <class Type, class Container, class Traits = map_string_to_class_trait>
     class map_string_to_class {
     protected:
-        Container* _table;
+        Container* _table = nullptr;
         int _tableCount{0};
         int _count{0};
         static Type _null_entry;

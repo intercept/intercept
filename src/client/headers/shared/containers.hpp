@@ -1329,10 +1329,10 @@ namespace intercept::types {
                 for (int i = static_cast<int>(n_); i < base::_n; i++) {
                     (*this)[i].~Type();
                 }
-                base::_n = static_cast<int>(n_);
             }
             if (n_ == 0 && base::_data) {
                 Allocator::deallocate(rv_array<Type>::_data);
+                base::_n = 0;
                 rv_array<Type>::_data = nullptr;
                 return;
             }
@@ -1343,7 +1343,7 @@ namespace intercept::types {
                     ::new (base::_data + i) Type();
                 }
             }
-
+            base::_n = static_cast<int>(n_);
         }
 
         /**

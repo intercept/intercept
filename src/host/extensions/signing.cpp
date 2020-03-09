@@ -235,7 +235,7 @@ std::pair<intercept::cert::signing::security_class, std::optional<std::string>> 
 
     CERT_CHAIN_ENGINE_CONFIG ChainConfig;
     //- sizeof(DWORD) removes WIN8 only flag(dwExclusiveFlags) and makes this win7 compatible
-    ChainConfig.cbSize = sizeof(CERT_CHAIN_ENGINE_CONFIG) - sizeof(DWORD);
+    ChainConfig.cbSize = 80; //Hardcoded sizeof(CERT_CHAIN_ENGINE_CONFIG) for Win7
     ChainConfig.hRestrictedRoot = nullptr;
     ChainConfig.hRestrictedTrust = nullptr;
     ChainConfig.hRestrictedOther = nullptr;

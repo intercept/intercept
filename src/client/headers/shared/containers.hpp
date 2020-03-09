@@ -607,9 +607,9 @@ namespace intercept::types {
         Type& front() noexcept { return _data; }
         const Type& front() const noexcept { return _data; }
         iterator begin() noexcept { return iterator(&_data); }
-        iterator end() noexcept { return iterator((&_data) + _size - 1); }
+        iterator end() noexcept { return iterator((&_data) + _size); }
         const_iterator cbegin() const noexcept { return const_iterator(&_data); }
-        const_iterator cend() const noexcept { return const_iterator((&_data) + _size - 1); }
+        const_iterator cend() const noexcept { return const_iterator((&_data) + _size); }
 
         const Type& operator[](const size_t index_) const {
             return *(cbegin() + index_);
@@ -642,20 +642,22 @@ namespace intercept::types {
             return buffer;
         }
         static compact_array* create(const compact_array& other) {
-            const size_t size = other.size();
-            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-            new (buffer) compact_array(size);
+            const size_t sizeElements = other.size();
+            const size_t sizeBytes = sizeof(compact_array) + sizeof(Type) * (sizeElements-1);
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeBytes));
+            new (buffer) compact_array(sizeElements);
             std::copy(other.data(), other.data() + other.size(), buffer->data());
             return buffer;
         }
 
         template <class _InIt>
         static compact_array* create(_InIt beg, _InIt end) {
-            const size_t size = sizeof(compact_array) + sizeof(Type) * (std::distance(beg, end) - 1);
-            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(size));
-            std::memset(buffer, 0, size);
+            const size_t sizeElements = (std::distance(beg, end));
+            const size_t sizeBytes = sizeof(compact_array) + sizeof(Type) * (sizeElements-1);
+            auto* buffer = reinterpret_cast<compact_array*>(Allocator::allocate(sizeBytes));
+            std::memset(buffer, 0, sizeBytes);
 #pragma warning(suppress : 26409)  //don't use new/delete
-            new (buffer) compact_array(size);
+            new (buffer) compact_array(sizeElements);
 
             size_t index = 0;
             for (auto& i = beg; i < end; ++i) {
@@ -782,8 +784,10 @@ namespace intercept::types {
             if (other_.length() > _ref->size()) return false;  //There is more data than we can even have
 
             return std::equal(other_.cbegin(), other_.cend(),
-                              _ref->cbegin(), _ref->cend(),
-                [](unsigned char l, unsigned char r) { return l == r || tolower(l) == tolower(r); });
+                              begin(), end(),
+                              [](unsigned char l, unsigned char r) {
+                                  return l == r || tolower(l) == tolower(r);
+                              });
         }
 
         ///== is case insensitive just like scripting
@@ -841,14 +845,14 @@ namespace intercept::types {
         }
 
         bool compare_case_sensitive(std::string_view other_) const {
-            if (length()  != other_.length()) return false;
-            return !std::equal(_ref->cbegin(), _ref->cend(),
+            if (length() != other_.length()) return false;
+            return !std::equal(begin(), end(),
                                other_.cbegin(), [](unsigned char l, unsigned char r) { return l == r; });
         }
 
         bool compare_case_insensitive(std::string_view other_) const {
             if (length() != other_.length()) return false;
-            return !std::equal(_ref->cbegin(), _ref->cend(),
+            return !std::equal(begin(), end(),
                                other_.cbegin(), [](unsigned char l, unsigned char r) { return ::tolower(l) == ::tolower(r); });
         }
 
@@ -931,8 +935,9 @@ namespace intercept::types {
         }
         ///Be careful! This returns nullptr on empty string
         compact_array<char>::const_iterator end() const noexcept {
+            //#TODO could use sentinel here, would spare us the strlen call.
             if (_ref)
-                return _ref->end();
+                return _ref->begin() + length(); //Cannot use compact array end, as that is the whole buffer including null chars or end garbage
             return {};
         }
         char front() const noexcept {
@@ -1324,16 +1329,23 @@ namespace intercept::types {
                 for (int i = static_cast<int>(n_); i < base::_n; i++) {
                     (*this)[i].~Type();
                 }
-                base::_n = static_cast<int>(n_);
             }
             if (n_ == 0 && base::_data) {
                 Allocator::deallocate(rv_array<Type>::_data);
+                base::_n = 0;
                 rv_array<Type>::_data = nullptr;
                 return;
             }
             reallocate(n_);
+            if (n_ > base::_n) { //adding elements, need to default init
+                for (size_t i = base::_n; i < n_; ++i) {
+                #pragma warning(suppress : 26409)
+                    ::new (base::_data + i) Type();
+                }
+            }
+            base::_n = static_cast<int>(n_);
         }
-        
+
         /**
         * @brief Makes sure the capacity is big enough to contain res_ elements
         * @param res_ new minimum buffer size
@@ -1514,6 +1526,7 @@ namespace intercept::types {
         void clear() {
             if (base::_data)
                 Allocator::deallocate(rv_array<Type>::_data);
+            base::_data = nullptr;
             base::_n = 0;
             _maxItems = 0;
         }
@@ -1689,7 +1702,7 @@ namespace intercept::types {
     template <class Type, class Container, class Traits = map_string_to_class_trait>
     class map_string_to_class {
     protected:
-        Container* _table;
+        Container* _table = nullptr;
         int _tableCount{0};
         int _count{0};
         static Type _null_entry;

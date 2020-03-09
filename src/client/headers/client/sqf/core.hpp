@@ -234,7 +234,7 @@ namespace intercept {
         bool is_equal_type_array(game_value left_array_, game_value right_array_);
         bool is_equal_type_params(game_value value_, game_value template_);
         int get_mission_version();
-
+        sqf_return_string get_mission_path(sqf_string_const_ref path_);
 
 
 

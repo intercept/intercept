@@ -930,7 +930,9 @@ namespace intercept {
         int get_mission_version() {
             return host::functions.invoke_raw_nular(__sqf::nular__missionversion__ret__scalar);
         }
-
+        sqf_return_string get_mission_path(sqf_string_const_ref path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getmissionpath__string__ret__string, path_);
+        }
 
 
     }  // namespace sqf

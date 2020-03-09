@@ -690,6 +690,7 @@ namespace intercept {
 
         class game_value_static : public game_value {
         public:
+            game_value_static() : game_value() {}
             ~game_value_static();
             game_value_static(const game_value& copy) : game_value(copy) {}
             game_value_static(game_value&& move) : game_value(move) {}

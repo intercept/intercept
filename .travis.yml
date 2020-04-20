@@ -33,8 +33,8 @@ matrix:
       addons:
         apt:
           packages:
-            - g++-7
-            - g++-7-multilib
+            - g++-8
+            - g++-8-multilib
             - linux-libc-dev:i386  # asm/errno.h
 
           sources:
@@ -51,7 +51,7 @@ matrix:
 
       script:
         - cd vcproj
-        - CC=gcc-7 CXX=g++-7 cmake .. && make -j 3
+        - CC=gcc-8 CXX=g++-8 cmake .. && make -j 3
 
     ###############################################################################
     # Job #3 - Building intercept with clang
@@ -61,14 +61,13 @@ matrix:
       addons:
         apt:
           packages:
-            - clang-7
-            - g++-7-multilib
-            - libstdc++-7-dev
+            - clang-8
+            - g++-8-multilib
             - linux-libc-dev:i386  # asm/errno.h
 
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-xenial-8
 
       before_install:
         # CMake 3.14. If you find a whitelisted backport for trusty, remove the lines below
@@ -81,7 +80,7 @@ matrix:
 
       script:
         - cd vcproj
-        - CC=clang-7 CXX=clang++-7 cmake .. && make -j 3
+        - CC=clang-8 CXX=clang++-8 cmake .. && make -j 3
 
 notifications:
   email:

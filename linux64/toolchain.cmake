@@ -1,0 +1,1 @@
+set(USE_64BIT_BUILD ON)

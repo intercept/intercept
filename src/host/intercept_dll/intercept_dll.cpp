@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -119,13 +120,20 @@ __attribute__((constructor))
             size_t path_end_ = arg_line.find("\"", path_start_); // find ending quotationmark
 
             if (path_start_ == std::string::npos) {
-                logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+                if (std::filesystem::is_directory("logs")) {
+                    logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+                } else {
+                    logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
+                }
             } else {
                 std::string _path = arg_line.substr(path_start_, path_end_ - path_start_);
                 logging::logfile = spdlog::rotating_logger_mt("logfile", _path, 1024000, 3);
             }
-        } else {
+        } else if (std::filesystem::is_directory("logs")) {
             logging::logfile = spdlog::rotating_logger_mt("logfile", "logs/intercept_dll.log", 1024000, 3);
+        } else {
+            spdlog::set_level(spdlog::level::off);
+            logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
         }
 
         logging::logfile->flush_on(spdlog::level::debug);

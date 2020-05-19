@@ -1,0 +1,11 @@
+name = "Intercept"
+prefix = "intercept"
+version = "1.0.0"
+author = "intercept"
+files = [
+    "mod.cpp"
+]
+key_name = "intercept"
+reuse_private_key = false
+authority = "intercept"
+sig_version = 3

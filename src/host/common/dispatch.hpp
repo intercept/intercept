@@ -13,7 +13,7 @@ using namespace std::literals::chrono_literals;
 namespace intercept {
     class controller_module {
     public:
-        constexpr controller_module() noexcept : _stopped(false) { }
+        controller_module() noexcept : _stopped(false) { }
         ~controller_module() { }
 
         void stop() {

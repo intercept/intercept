@@ -193,6 +193,9 @@ namespace intercept {
             uintptr_t stringOffset = future_stringOffset.get();
         #ifndef __linux__
             return (findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));
+        #elif _LINUX64
+          uintptr_t vtableStart = stringOffset + 0x20;
+          return vtableStart;
         #else
             uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
             return vtableStart;

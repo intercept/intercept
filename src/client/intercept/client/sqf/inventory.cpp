@@ -158,7 +158,7 @@ namespace intercept {
         }
 
         sqf_return_string_list magazines(const object &obj_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazines__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazines__object_array__ret__array, obj_));
         }
 
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_) {
@@ -167,7 +167,7 @@ namespace intercept {
         }
 
         std::vector<rv_magazine_ammo> magazines_ammo(const object &obj_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammo__object__ret__array, obj_);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammo__object_array__ret__array, obj_);
             return __helpers::__convert_to_vector<rv_magazine_ammo>(ret);
         }
 
@@ -177,24 +177,24 @@ namespace intercept {
         }
 
         std::vector<rv_magazine_ammo_full> magazines_ammo_full(const object &obj_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammofull__object__ret__array, obj_);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesammofull__object_array__ret__array, obj_);
             return __helpers::__convert_to_vector<rv_magazine_ammo_full>(ret);
         }
 
         sqf_return_string_list magazines_detail(const object &obj_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetail__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetail__object_array__ret__array, obj_));
         }
 
         sqf_return_string_list magazines_detail_backpack(const object &obj_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailbackpack__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailbackpack__object_array__ret__array, obj_));
         }
 
         sqf_return_string_list magazines_detail_uniform(const object &obj_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailuniform__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailuniform__object_array__ret__array, obj_));
         }
 
         sqf_return_string_list magazines_detail_vest(const object &obj_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailvest__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__magazinesdetailvest__object_array__ret__array, obj_));
         }
 
         sqf_return_string_list backpack_cargo(const object &box_) {

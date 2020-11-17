@@ -49,19 +49,19 @@ namespace intercept {
         }
 
         void say_3d(const object &from_, sqf_string_const_ref sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, from_, sound_classname_);
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__object, from_, sound_classname_);
         }
 
         void say_3d(const object &from_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, from_, {sound_classname_, max_tiles_distance, speed});
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__object, from_, {sound_classname_, max_tiles_distance, speed});
         }
 
         void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__nothing, {from_, to_}, sound_classname_);
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__string__ret__object, {from_, to_}, sound_classname_);
         }
 
         void say_3d(const object &from_, const object &to_, sqf_string_const_ref sound_classname_, float max_tiles_distance, float speed) {
-            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__nothing, {from_, to_}, {sound_classname_, max_tiles_distance, speed});
+            host::functions.invoke_raw_binary(__sqf::binary__say3d__object_array__array__ret__object, {from_, to_}, {sound_classname_, max_tiles_distance, speed});
         }
 
         void play_music(sqf_string_const_ref class_) {
@@ -76,14 +76,14 @@ namespace intercept {
         }
 
         void play_sound(sqf_string_const_ref name_) {
-            __helpers::__empty_unary_string(__sqf::unary__playsound__string__ret__nothing, name_);
+            __helpers::__empty_unary_string(__sqf::unary__playsound__string__ret__object, name_);
         }
 
         void play_sound(sqf_string_const_ref name_, bool force_) {
             game_value params({name_,
                                force_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound__array__ret__nothing, params);
+            host::functions.invoke_raw_unary(__sqf::unary__playsound__array__ret__object, params);
         }
 
         sqf_return_string pitch(const object &value_) {

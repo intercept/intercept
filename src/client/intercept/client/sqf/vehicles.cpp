@@ -915,7 +915,7 @@ namespace intercept {
         }
 
         std::vector<object> roads_connected_to(const object &obj_) {
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object__ret__array, obj_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object_array__ret__array, obj_));
         }
 
     }  // namespace sqf

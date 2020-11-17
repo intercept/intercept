@@ -440,6 +440,10 @@ namespace intercept {
             }
         };
 
+        struct sourcedocposref : public sourcedocpos, refcount {};
+
+
+
         class vm_context;
         class game_variable;
 
@@ -1079,7 +1083,7 @@ namespace intercept {
 
         class game_instruction : public refcount {
         public:
-            sourcedocpos sdp;
+            ref<sourcedocposref> sdp;
 
             virtual bool exec(game_state& state, vm_context& t) = 0;
             virtual int stack_size(void* t) const = 0;

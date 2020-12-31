@@ -17,3 +17,7 @@ add_library(common_static STATIC ${COMMON_SOURCES})
 set_target_properties(common_static PROPERTIES FOLDER intercept)
 
 target_link_libraries(common_static)
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(common_static PRIVATE "-fPIC")
+endif()

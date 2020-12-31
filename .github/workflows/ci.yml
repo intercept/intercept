@@ -34,7 +34,13 @@ jobs:
           sudo apt-get install -y g++-8-multilib
 
       - name: Build Linux 32 bit
-        run: mkdir build-linux32 && cd build-linux32 && cmake -DCMAKE_BUILD_TYPE=Release .. && make
+        run: mkdir build-linux32 && cd build-linux32 && cmake -DCMAKE_TOOLCHAIN_FILE=../linux/toolchain.cmake -DCMAKE_BUILD_TYPE=Release .. && make
+        env:
+          CC: gcc-8
+          CXX: g++-8
+
+      - name: Build Linux 64 bit
+        run: mkdir build-linux64 && cd build-linux64 && cmake -DCMAKE_TOOLCHAIN_FILE=../linux64/toolchain.cmake -DCMAKE_BUILD_TYPE=Release .. && make
         env:
           CC: gcc-8
           CXX: g++-8
@@ -44,6 +50,12 @@ jobs:
         with:
           name: intercept.so
           path: build-linux32/src/host/intercept_dll/intercept.so
+
+      - name: Upload Linux 64 bit
+        uses: actions/upload-artifact@v1
+        with:
+          name: intercept_x64.so
+          path: build-linux64/src/host/intercept_dll/intercept_x64.so
 
   extension-windows:
     runs-on: windows-2019
@@ -86,6 +98,12 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: intercept.so
+          path: '@intercept'
+
+      - name: Download Linux 64 bit
+        uses: actions/download-artifact@v1
+        with:
+          name: intercept_x64.so
           path: '@intercept'
 
       - name: Download Windows 32 bit

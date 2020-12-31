@@ -50,8 +50,10 @@ matrix:
         - export PATH=/opt/cmake/bin:$PATH
 
       script:
-        - cd vcproj
-        - CC=gcc-8 CXX=g++-8 cmake .. && make -j 3
+        - cd linux
+        - CC=gcc-8 CXX=g++-8 cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake .. && make -j 3
+        - cd ../linux64
+        - CC=gcc-8 CXX=g++-8 cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake .. && make -j 3
 
     ###############################################################################
     # Job #3 - Building intercept with clang
@@ -79,8 +81,8 @@ matrix:
         - export PATH=/opt/cmake/bin:$PATH
 
       script:
-        - cd vcproj
-        - CC=clang-8 CXX=clang++-8 cmake .. && make -j 3
+        - cd linux
+        - CC=clang-8 CXX=clang++-8 cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake .. && make -j 3
 
 notifications:
   email:

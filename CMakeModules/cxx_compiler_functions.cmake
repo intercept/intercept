@@ -1,8 +1,8 @@
 function (intercept_set_linker_options)
 	if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
 		# This target defaults to 32-bit on linux
-		SET(CMAKE_CXX_FLAGS "-std=c++11 -march=i686 -m32 -O2 -s -fPIC -fpermissive")
-		
+		SET(CMAKE_CXX_FLAGS "-std=c++11 -O2 -s -fPIC -fpermissive")
+
 		if(INTERCEPT_LINK_TYPE STREQUAL "static")
 			set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 			set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++")

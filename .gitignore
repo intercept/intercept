@@ -6,6 +6,9 @@ rv/*.dll
 rv/carma_dll.*
 build
 !.gitkeep
+!toolchain.cmake
+linux/*
+linux64/*
 vcproj/*
 vcproj64/*
 .vs

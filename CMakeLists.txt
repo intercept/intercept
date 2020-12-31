@@ -4,6 +4,12 @@ project (Intercept)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 include(${PROJECT_SOURCE_DIR}/CMakeModules/cxx_compiler_functions.cmake)
 
+if (NOT CMAKE_VERSION VERSION_LESS "3.13")
+    # CMP0077: option() honors normal variables
+    # https://cmake.org/cmake/help/latest/policy/CMP0077.html
+    cmake_policy(SET CMP0077 NEW)
+endif()
+
 option(USE_64BIT_BUILD "USE_64BIT_BUILD" OFF)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
 

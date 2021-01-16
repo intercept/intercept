@@ -133,7 +133,7 @@ namespace intercept {
                     invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {} because {}", path_, *res.second));
                     LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}] because {}", path_, *res.second);
                 } else {
-                    invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {} because {}", path_));
+                    invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {}", path_));
                     LOG(ERROR, "PluginLoad failed, code signing certificate invalid [{}]", path_);
                 }
                 invoker::get().invoke_raw("diag_log", fmt::format("Signature check failed on {}", path_));

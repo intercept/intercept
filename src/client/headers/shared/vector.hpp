@@ -83,9 +83,11 @@ namespace intercept {
             constexpr T cos(const vector3_base& v) const noexcept {
                 T mag1 = magnitude();
                 T mag2 = v.magnitude();
-                if (mag1 * mag2 == 0) return 0;
+                if (mag1 * mag2 == 0.0f) return 0.0f;
                 return dot(v) / mag1 / mag2;
             }
+            constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / std::acos(-1) * 180.f; }
+            constexpr T distance(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y + dist.z); }
             constexpr T distance(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y + dist.z); }
             constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
             constexpr T distance_2d(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
@@ -179,9 +181,10 @@ namespace intercept {
             constexpr T cos(const vector2_base& v) const noexcept {
                 T mag1 = magnitude();
                 T mag2 = v.magnitude();
-                if (mag1 * mag2 == 0) return 0;
+                if (mag1 * mag2 == 0.0f) return 0.0f;
                 return dot(v) / mag1 / mag2;
             }
+            constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / std::acos(-1) * 180.f; }
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             constexpr vector2_base normalize() const noexcept { return (*this / std::abs(magnitude())); }

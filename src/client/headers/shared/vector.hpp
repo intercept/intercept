@@ -1,6 +1,7 @@
 #pragma once
 #include "../shared.hpp"
 namespace intercept {
+    constexpr float pi = 3.14159265358979323846f;
     namespace types {
 
         template<class _Ty> //Copy from STL headers. Because GCC6 doesn't support it
@@ -88,9 +89,12 @@ namespace intercept {
             constexpr T distance_2d_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3_base(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
             constexpr vector3_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
-            constexpr vector3_base rotate_x(const T& deg) const noexcept { T rad = deg * std::acos(-1.0f) / 180.0f; return vector3_base(x, y * std::cos(rad) - z * std::sin(rad), y * std::sin(rad) + z * std::cos(rad)); }
-            constexpr vector3_base rotate_y(const T& deg) const noexcept { T rad = deg * std::acos(-1.0f) / 180.0f; return vector3_base(x * std::cos(rad) + z * std::sin(rad), y, z * std::cos(rad) - x * std::sin(rad)); }
-            constexpr vector3_base rotate_z(const T& deg) const noexcept { T rad = deg * std::acos(-1.0f) / 180.0f; return vector3_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad), z); }
+            constexpr vector3_base rotate_x(const T& rad) const noexcept { return vector3_base(x, y * std::cos(rad) - z * std::sin(rad), y * std::sin(rad) + z * std::cos(rad)); }
+            constexpr vector3_base rotate_y(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) + z * std::sin(rad), y, z * std::cos(rad) - x * std::sin(rad)); }
+            constexpr vector3_base rotate_z(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad), z); }
+            constexpr vector3_base rotate_x_deg(const T& deg) const noexcept { return rotate_x(deg * pi / 180.0f); }
+            constexpr vector3_base rotate_y_deg(const T& deg) const noexcept { return rotate_y(deg * pi / 180.0f); }
+            constexpr vector3_base rotate_z_deg(const T& deg) const noexcept { return rotate_z(deg * pi / 180.0f); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f && z == 0.0f) ? true : false); }
 
             static constexpr vector3_base lerp(const vector3_base& A, const vector3_base& B, const T t) noexcept { return A*t + B*(1.f - t); }
@@ -142,6 +146,11 @@ namespace intercept {
                 y = buffer[1];
             }
 
+            constexpr vector2_base(const vector3_base<T>& copy_) noexcept {
+                x = copy_.x;
+                y = copy_.y;
+            }
+
             constexpr vector2_base(const vector2_base<T>& copy_) noexcept {
                 x = copy_.x;
                 y = copy_.y;
@@ -177,7 +186,8 @@ namespace intercept {
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             constexpr vector2_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
-            constexpr vector2_base rotate(const T& deg) const noexcept { T rad = deg * std::acos(-1.0f) / 180.0f; return vector2_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad)); }
+            constexpr vector2_base rotate(const T& rad) const noexcept { return vector2_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad)); }
+            constexpr vector2_base rotate_deg(const T& deg) const noexcept { return rotate(deg * pi / 180.0f); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f) ? true : false); }
             
             /// @brief linear interpolate

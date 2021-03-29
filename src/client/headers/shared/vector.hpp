@@ -146,7 +146,7 @@ namespace intercept {
                 y = buffer[1];
             }
 
-            constexpr vector2_base(const vector3_base<T>& copy_) noexcept {
+            constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept {
                 x = copy_.x;
                 y = copy_.y;
             }

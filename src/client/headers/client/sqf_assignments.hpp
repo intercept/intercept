@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 203.147490 - Development
+//Exported Pointer Assignments For: Arma 3 203.147490 - Diag
 
 
 // Unary Functions
@@ -281,12 +281,27 @@ __sqf::unary__deletevehicle__object__ret__nothing = (unary_function)host::functi
 __sqf::unary__deletewaypoint__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("deletewaypoint"sv, "ARRAY"sv);
 __sqf::unary__detach__object__ret__nothing = (unary_function)host::functions.get_unary_function_typed("detach"sv, "OBJECT"sv);
 __sqf::unary__detectedmines__side__ret__array = (unary_function)host::functions.get_unary_function_typed("detectedmines"sv, "SIDE"sv);
+__sqf::unary__diag_captureframe__scalar__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_captureframe"sv, "SCALAR"sv);
+__sqf::unary__diag_captureframetofile__scalar__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_captureframetofile"sv, "SCALAR"sv);
+__sqf::unary__diag_captureslowframe__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_captureslowframe"sv, "ARRAY"sv);
 __sqf::unary__diag_codeperformance__array__ret__array = (unary_function)host::functions.get_unary_function_typed("diag_codeperformance"sv, "ARRAY"sv);
+__sqf::unary__diag_drawmode__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_drawmode"sv, "STRING"sv);
+__sqf::unary__diag_dumpscriptassembly__code__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_dumpscriptassembly"sv, "CODE"sv);
 __sqf::unary__diag_dynamicsimulationend__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_dynamicsimulationend"sv, "STRING"sv);
+__sqf::unary__diag_enabled__string__ret__bool = (unary_function)host::functions.get_unary_function_typed("diag_enabled"sv, "STRING"sv);
+__sqf::unary__diag_exportconfig__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_exportconfig"sv, "ARRAY"sv);
+__sqf::unary__diag_exportterrainsvg__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_exportterrainsvg"sv, "ARRAY"sv);
+__sqf::unary__diag_getterrainheight__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_getterrainheight"sv, "ARRAY"sv);
+__sqf::unary__diag_getterrainsegmentoffset__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_getterrainsegmentoffset"sv, "ARRAY"sv);
 __sqf::unary__diag_lightnewload__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_lightnewload"sv, "STRING"sv);
+__sqf::unary__diag_list__string__ret__array = (unary_function)host::functions.get_unary_function_typed("diag_list"sv, "STRING"sv);
 __sqf::unary__diag_localized__string__ret__array = (unary_function)host::functions.get_unary_function_typed("diag_localized"sv, "STRING"sv);
 __sqf::unary__diag_log__any__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_log"sv, "ANY"sv);
+__sqf::unary__diag_logslowframe__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_logslowframe"sv, "ARRAY"sv);
+__sqf::unary__diag_mergeconfigfile__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_mergeconfigfile"sv, "ARRAY"sv);
+__sqf::unary__diag_recordturretlimits__bool__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_recordturretlimits"sv, "BOOL"sv);
 __sqf::unary__diag_setlightnew__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_setlightnew"sv, "STRING"sv);
+__sqf::unary__diag_toggle__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("diag_toggle"sv, "STRING"sv);
 __sqf::unary__didjipowner__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("didjipowner"sv, "OBJECT"sv);
 __sqf::unary__difficultyenabled__string__ret__bool = (unary_function)host::functions.get_unary_function_typed("difficultyenabled"sv, "STRING"sv);
 __sqf::unary__difficultyoption__string__ret__scalar = (unary_function)host::functions.get_unary_function_typed("difficultyoption"sv, "STRING"sv);
@@ -1573,6 +1588,8 @@ __sqf::binary__deletegroupwhenempty__group__bool__ret__nothing = (binary_functio
 __sqf::binary__deleterange__array__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("deleterange"sv, "ARRAY"sv, "ARRAY"sv);
 __sqf::binary__deleteresources__team_member__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("deleteresources"sv, "TEAM_MEMBER"sv, "ARRAY"sv);
 __sqf::binary__deletevehiclecrew__object__object__ret__nothing = (binary_function)host::functions.get_binary_function_typed("deletevehiclecrew"sv, "OBJECT"sv, "OBJECT"sv);
+__sqf::binary__diag_enable__string__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("diag_enable"sv, "STRING"sv, "BOOL"sv);
+__sqf::binary__diag_setterrainheight__array__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("diag_setterrainheight"sv, "ARRAY"sv, "SCALAR"sv);
 __sqf::binary__diarysubjectexists__object__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("diarysubjectexists"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__directsay__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("directsay"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__disableai__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("disableai"sv, "OBJECT"sv, "STRING"sv);
@@ -2516,9 +2533,14 @@ __sqf::nular__diag_activesqfscripts__ret__array = (nular_function)host::function
 __sqf::nular__diag_activesqsscripts__ret__array = (nular_function)host::functions.get_nular_function("diag_activesqsscripts"sv);
 __sqf::nular__diag_allmissioneventhandlers__ret__array = (nular_function)host::functions.get_nular_function("diag_allmissioneventhandlers"sv);
 __sqf::nular__diag_deltatime__ret__scalar = (nular_function)host::functions.get_nular_function("diag_deltatime"sv);
+__sqf::nular__diag_dumpcalltracetolog__ret__bool = (nular_function)host::functions.get_nular_function("diag_dumpcalltracetolog"sv);
+__sqf::nular__diag_dumpterrainsynth__ret__array = (nular_function)host::functions.get_nular_function("diag_dumpterrainsynth"sv);
 __sqf::nular__diag_fps__ret__scalar = (nular_function)host::functions.get_nular_function("diag_fps"sv);
 __sqf::nular__diag_fpsmin__ret__scalar = (nular_function)host::functions.get_nular_function("diag_fpsmin"sv);
 __sqf::nular__diag_frameno__ret__scalar = (nular_function)host::functions.get_nular_function("diag_frameno"sv);
+__sqf::nular__diag_getterraingrid__ret__array = (nular_function)host::functions.get_nular_function("diag_getterraingrid"sv);
+__sqf::nular__diag_resetfsm__ret__nothing = (nular_function)host::functions.get_nular_function("diag_resetfsm"sv);
+__sqf::nular__diag_resetshapes__ret__nothing = (nular_function)host::functions.get_nular_function("diag_resetshapes"sv);
 __sqf::nular__diag_scope__ret__scalar = (nular_function)host::functions.get_nular_function("diag_scope"sv);
 __sqf::nular__diag_ticktime__ret__scalar = (nular_function)host::functions.get_nular_function("diag_ticktime"sv);
 __sqf::nular__dialog__ret__bool = (nular_function)host::functions.get_nular_function("dialog"sv);

@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 202.147359 - Stable
+//Exported Pointer Assignments For: Arma 3 202.147514 - Stable
 
 
 // Unary Functions
@@ -2040,7 +2040,7 @@ __sqf::binary__select__array__array__ret__array = (binary_function)host::functio
 __sqf::binary__select__array__code__ret__array = (binary_function)host::functions.get_binary_function_typed("select"sv, "ARRAY"sv, "CODE"sv);
 __sqf::binary__select__config__scalar__ret__config = (binary_function)host::functions.get_binary_function_typed("select"sv, "CONFIG"sv, "SCALAR"sv);
 __sqf::binary__select__string__array__ret__string = (binary_function)host::functions.get_binary_function_typed("select"sv, "STRING"sv, "ARRAY"sv);
-__sqf::binary__selectdiarysubject__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("selectdiarysubject"sv, "OBJECT"sv, "STRING"sv);
+__sqf::binary__selectdiarysubject__object__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("selectdiarysubject"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__selecteditorobject__control__string__ret__any = (binary_function)host::functions.get_binary_function_typed("selecteditorobject"sv, "CONTROL"sv, "STRING"sv);
 __sqf::binary__selectionnames__object__string_scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("selectionnames"sv, "OBJECT"sv, "SCALAR"sv);
 __sqf::binary__selectionposition__object__string_array__ret__array = (binary_function)host::functions.get_binary_function_typed("selectionposition"sv, "OBJECT"sv, "ARRAY"sv);

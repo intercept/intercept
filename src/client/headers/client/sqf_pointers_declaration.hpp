@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 202.147359 - Stable
+//Exported Pointer Definitions For: Arma 3 202.147514 - Stable
 
 
 // Unary Functions
@@ -2040,7 +2040,7 @@ static binary_function binary__select__array__array__ret__array;
 static binary_function binary__select__array__code__ret__array;
 static binary_function binary__select__config__scalar__ret__config;
 static binary_function binary__select__string__array__ret__string;
-static binary_function binary__selectdiarysubject__object__string__ret__nothing;
+static binary_function binary__selectdiarysubject__object__string__ret__bool;
 static binary_function binary__selecteditorobject__control__string__ret__any;
 static binary_function binary__selectionnames__object__string_scalar__ret__array;
 static binary_function binary__selectionposition__object__string_array__ret__array;

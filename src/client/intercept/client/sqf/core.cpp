@@ -472,10 +472,6 @@ namespace intercept {
                 __sqf::unary__allvariables__display__ret__array, value_));
         }
 
-        bool __sqfassert(bool test_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isnull__script__ret__bool, test_);
-        }
-
         side blufor() {
             return __helpers::__retrieve_nular_side(__sqf::nular__blufor__ret__side);
         }

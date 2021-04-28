@@ -189,7 +189,6 @@ namespace intercept {
         rv_namespace profile_namespace();
         sqf_return_string profile_namesteam();
         rv_namespace local_namespace();
-        bool __sqfassert(bool test_);
 
         object obj_null();
         side blufor();

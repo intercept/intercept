@@ -79,6 +79,11 @@ namespace intercept {
             std::string flashlight_laserpointer;
             std::string optics;
             std::string bipod;
+            explicit rv_weapon_accessories(const game_value &gv_)
+                : silencer(gv_[0]),
+                  flashlight_laserpointer(gv_[1]),
+                  optics(gv_[2]),
+                  bipod(gv_[3]) {}
         };
 
         struct rv_weapon_state {
@@ -616,5 +621,14 @@ namespace intercept {
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
         std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
+        void add_binocular_item(const object &unit_, sqf_string_const_ref classname_);
+        void lock_inventory(const object &vehicle_, bool locked_);
+        void remove_binocular_item(const object &unit_, sqf_string_const_ref classname_);
+        rv_weapon_accessories binocular_items(const object &unit_);
+        sqf_return_string binocular_magazine(const object &unit_);
+        bool locked_inventory(const object &vehicle_);
+        void remove_all_binocular_items(const object &unit_);
+        void remove_all_secondary_weapon_items(const object &unit_);
+        
     }  // namespace sqf
 }  // namespace intercept

@@ -1,4 +1,4 @@
-﻿#include "camera.hpp"
+#include "camera.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 #include "position.hpp"
@@ -321,5 +321,11 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__haspilotcamera__object__ret__bool, object_);
         }
 
+        void cam_set_dir(const object& camera_, const vector3& direction_) {
+            host::functions.invoke_raw_binary(__sqf::binary__camsetdir__object__array__ret__nothing, camera_, direction_);
+        }
+        rv_apperture_params aperture_params() {
+            return host::functions.invoke_raw_nular(__sqf::nular__apertureparams__ret__bool);
+        }
     }  // namespace sqf
 }  // namespace intercept

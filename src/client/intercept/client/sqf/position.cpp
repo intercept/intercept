@@ -152,7 +152,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getposworld__object__ret__array, unit_);
         }
 
-        float get_terrain_height_asl(vector3 position_) {
+        float get_terrain_height_asl(const vector3& position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getterrainheightasl__array__ret__scalar, position_);
         }
         vector3 world_to_model(const object &object_, const vector3 &position_) {
@@ -581,6 +581,10 @@ namespace intercept {
             auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
 
             return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
+        }
+
+        vector3 get_pos_world_visual(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getposworldvisual__object__ret__array, object_);
         }
 
     }  // namespace sqf

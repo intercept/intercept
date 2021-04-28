@@ -17,7 +17,43 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        struct rv_remote_target_info {
+            object target;
+            float last_detected;
+            explicit rv_remote_target_info(const game_value &gv_)
+                : target(gv_[0]),
+                  last_detected(gv_[1]) {}
+        };
 
+        struct rv_named_properties {
+            sqf_return_string property;
+            sqf_return_string value;
+            explicit rv_named_properties(const game_value &gv_)
+                : property(gv_[0]),
+                  value(gv_[1]) {}
+        };
+        struct rv_pylon_info {
+            float pylon_index{};
+            sqf_return_string pylon_name;
+            rv_turret_path assigned_turret;
+            sqf_return_string magazine_classname;
+            sqf_return_string magazine_ammo_count;
+            sqf_return_string magazine_detail;
+            explicit rv_pylon_info(const game_value &gv_)
+                : pylon_index(gv_[0]),
+                  pylon_name(gv_[1]),
+                  assigned_turret(gv_[2]),
+                  magazine_classname(gv_[3]),
+                  magazine_ammo_count(gv_[4]),
+                  magazine_detail(gv_[5]) {}
+        };
+        enum class rv_selection_lods {
+            Memory,
+            Geometry,
+            FireGeometry,
+            LandContact,
+            HitPoints
+        };
         struct rv_crew_member {
             object unit;
             std::string role;
@@ -25,7 +61,7 @@ namespace intercept {
             rv_turret_path turret_path;
             bool person_turret;
 
-            rv_crew_member(game_value gv_)
+            rv_crew_member(const game_value &gv_)
                 : unit(gv_[0]),
                 role(gv_[1]),
                 cargo_index(gv_[2]),
@@ -38,6 +74,38 @@ namespace intercept {
                   cargo_index(cargo_index_),
                   turret_path(std::move(turret_path_)),
                   person_turret(person_turret_) {}
+        };
+
+        struct rv_periscope_state {
+            float elevation{};
+            bool is_locked{};
+            explicit rv_periscope_state(const game_value &gv_)
+                : elevation(gv_[0]), is_locked(gv_[1]) {}
+        };
+
+        struct rv_vehicle_sensor {
+            sqf_return_string sensor_name{};
+            bool is_enabled{};
+            explicit rv_vehicle_sensor(const game_value &gv_)
+                : sensor_name(gv_[0]), is_enabled(gv_[1]) {}
+        };
+
+        struct rv_info_panel {
+            sqf_return_string class_name{};
+            sqf_return_string component_type{};
+            explicit rv_info_panel(const game_value &gv_)
+                : class_name(gv_[0]),
+                  component_type(gv_[1]) {}
+        };
+
+        struct rv_info_panel_component {
+            sqf_return_string class_name{};
+            sqf_return_string component_type{};
+            bool is_accessible{};
+            explicit rv_info_panel_component(const game_value &gv_)
+                : class_name(gv_[0]),
+                component_type(gv_[1]),
+                is_accessible(gv_[2]) {}
         };
 
         int airplane_throttle(const object &airplane_);
@@ -196,6 +264,7 @@ namespace intercept {
         rv_shot_parents get_shot_parents(const object &projectile_);
         bool is_simple_object(const object &object_);
         sqf_return_string_list selection_names(const object &object_);
+        sqf_return_string_list selection_names(const object &object_, rv_selection_lods lod_);
         void switch_camera(const object &target_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, float speed_);
@@ -267,5 +336,42 @@ namespace intercept {
 
         void trigger_ammo(const object& object_);
 
+        void elevate_periscope(const object &vehicle_, const rv_turret_path &turret_, float elevation_, float speed_ = -1, bool blockuser_ = false);
+        void elevate_periscope(const object &vehicle_, const rv_turret_path &turret_, float elevation_, bool instant_ = false, bool blockuser_ = false);
+        rv_periscope_state periscope_elevation(const object &vehicle_, const rv_turret_path &turret_);
+
+        bool enable_info_panel_component(const object &vehicle_, const rv_turret_path &turret_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_, bool enable_);
+        bool enable_info_panel_component(const object &vehicle_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_, bool enable_);
+        bool info_panel_component_enabled(const object &vehicle_, const rv_turret_path &turret_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_);
+        bool info_panel_component_enabled(const object &vehicle_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_);
+        std::vector<rv_info_panel_component> info_panel_components(const object &vehicle_, sqf_string_const_ref panel_id_);
+        std::vector<rv_info_panel_component> info_panel_components(const object &vehicle_, const rv_turret_path &turret_, sqf_string_const_ref panel_id_);
+
+        void enable_vehicle_sensor(const object &vehicle_, sqf_string_const_ref component_, bool enable_);
+        std::vector<rv_vehicle_sensor> is_vehicle_sensor_enabled(const object &vehicle_, sqf_string_const_ref component_);
+
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(const object &vehicle_, sqf_string_const_ref pylon_);
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(const object &vehicle_, sqf_string_const_ref pylon_);
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, float pylon_);
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, float pylon_);
+        void set_effective_commander(const object &vehicle_, const object &commander_);
+        void set_plate_number(const object &vehicle_, sqf_string_const_ref str_number_);
+        rv_turret_path unit_turret(const object &vehicle_, const object &gunner_);
+        sqf_return_string_list animation_names(const object &vehicle_);
+        object current_pilot(const object &vehicle_);
+        bool set_weapon_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_, float zeroing_index_);
+        std::vector<rv_pylon_info> get_all_pylons_info(const object &vehicle_);
+        void set_user_mfd_text(const object &vehicle_, float index_, sqf_string_const_ref text_);
+        sqf_return_string get_plate_number(const object &vehicle_);
+        sqf_return_string_list get_user_mfd_text(const object &vehicle_);
+        std::vector<float> get_user_mfd_value(const object &vehicle_);
+        std::vector<float> get_vehicle_ti_pars(const object &vehicle_);
+        void set_vehicle_ti_pars(const object &vehicle_, const std::vector<float> &pars_);
+        std::vector<rv_info_panel> info_panels(const object &vehicle_);
+        std::vector<rv_info_panel> info_panels(const object &vehicle_, const rv_turret_path &turret_);
+        bool is_laser_on(const object &vehicle_);
+        std::vector<rv_remote_target_info> list_remote_targets(side side_);
+        std::vector<rv_named_properties> named_properties(const object &vehicle_);
+        bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_);
     }  // namespace sqf
 }  // namespace intercept

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -76,5 +76,7 @@ namespace intercept {
         int admin(int owner_id_);
         int remote_executed_owner();
 
+        void connect_to_server(sqf_string_const_ref ip_, float port, sqf_string_const_ref password_);
+        std::vector<float> get_player_scores(const object &player_);
     }  // namespace sqf
 }  // namespace intercept

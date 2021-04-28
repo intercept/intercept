@@ -17,6 +17,11 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        struct rv_zeroing {
+            float distance{};
+            int zeroing_index{};
+        };
+
         struct rv_target_knowledge {
             //example [true,true,0,-2.14748e+006,WEST,0,[4556.26,5862.7,6.22729]]
             bool known_by_group;
@@ -239,5 +244,12 @@ namespace intercept {
         void reveal(std::variant<object, group> unit_, const object &target_);
         void reveal(std::variant<object, group> unit_, const std::vector<object> &targets_);
         float get_aiming_coef(const object &value_);
+        
+        void calculate_player_visibility_by_friendly(bool calc_);
+        bool get_calculate_player_visibility_by_friendly();
+
+        bool get_diver_state(const object &unit_);
+        float get_object_fov(const object &unit_);
+        vector2 weapon_inertia(const object &unit_);
     }  // namespace sqf
 }  // namespace intercept

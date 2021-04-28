@@ -66,7 +66,7 @@ namespace intercept {
             return __helpers::__line_intersects_surfaces(intersects_value);
         }
 
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_, const object &ignore_obj2_, bool sort_mode_, int max_results_, sqf_string_const_ref lod1_, sqf_string_const_ref lod2_) {
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_, const object &ignore_obj2_, bool sort_mode_, int max_results_, sqf_string_const_ref lod1_, sqf_string_const_ref lod2_, bool unique_objs_) {
             game_value array_input = game_value({begin_pos_asl_,
                                                  end_pos_asl_,
                                                  ignore_obj1_,
@@ -74,7 +74,8 @@ namespace intercept {
                                                  sort_mode_,
                                                  static_cast<float>(max_results_),
                                                  lod1_,
-                                                 lod2_});
+                                                 lod2_,
+                                                 unique_objs_});
 
             game_value intersects_value = host::functions.invoke_raw_unary(__sqf::unary__lineintersectssurfaces__array__ret__array, array_input);
             return __helpers::__line_intersects_surfaces(intersects_value);

@@ -508,7 +508,7 @@ namespace intercept::client {
             break;
             case eventhandlers_object::PathCalculated: {
                 auto& arr_ = args[1].to_array();
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PathCalculated)>*>(func.get()))(args[0], std::vector<types::vector3>(arr_.begin(), arr_.end()));
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PathCalculated)>*>(func.get()))(args[0], auto_array<types::vector3>(arr_.begin(), arr_.end()));
             }
             break;
             case eventhandlers_object::PeriscopeElevationChanged : {

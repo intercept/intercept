@@ -26,19 +26,19 @@ namespace intercept {
         };
 
         struct rv_named_properties {
-            sqf_return_string property;
-            sqf_return_string value;
+            sqf_string property;
+            sqf_string value;
             explicit rv_named_properties(const game_value &gv_)
                 : property(gv_[0]),
                   value(gv_[1]) {}
         };
         struct rv_pylon_info {
-            float pylon_index{};
-            sqf_return_string pylon_name;
+            sqf_string pylon_name;
+            sqf_string magazine_classname;
+            sqf_string magazine_ammo_count;
+            sqf_string magazine_detail;
             rv_turret_path assigned_turret;
-            sqf_return_string magazine_classname;
-            sqf_return_string magazine_ammo_count;
-            sqf_return_string magazine_detail;
+            float pylon_index{};
             explicit rv_pylon_info(const game_value &gv_)
                 : pylon_index(gv_[0]),
                   pylon_name(gv_[1]),
@@ -56,9 +56,9 @@ namespace intercept {
         };
         struct rv_crew_member {
             object unit;
-            std::string role;
-            float cargo_index;
+            sqf_string role;
             rv_turret_path turret_path;
+            float cargo_index;
             bool person_turret;
 
             rv_crew_member(const game_value &gv_)
@@ -84,23 +84,23 @@ namespace intercept {
         };
 
         struct rv_vehicle_sensor {
-            sqf_return_string sensor_name{};
+            sqf_string sensor_name{};
             bool is_enabled{};
             explicit rv_vehicle_sensor(const game_value &gv_)
                 : sensor_name(gv_[0]), is_enabled(gv_[1]) {}
         };
 
         struct rv_info_panel {
-            sqf_return_string class_name{};
-            sqf_return_string component_type{};
+            sqf_string class_name{};
+            sqf_string component_type{};
             explicit rv_info_panel(const game_value &gv_)
                 : class_name(gv_[0]),
                   component_type(gv_[1]) {}
         };
 
         struct rv_info_panel_component {
-            sqf_return_string class_name{};
-            sqf_return_string component_type{};
+            sqf_string class_name{};
+            sqf_string component_type{};
             bool is_accessible{};
             explicit rv_info_panel_component(const game_value &gv_)
                 : class_name(gv_[0]),

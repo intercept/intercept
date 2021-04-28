@@ -20,14 +20,14 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         struct rv_mod_info {
-            std::string modname{};
-            std::string modDir{};
+            sqf_string modname{};
+            sqf_string modDir{};
             bool isDefault{};
             bool isOfficial{};
-            std::string origin{};
-            std::string hash{};
-            std::string hashShort{};
-            std::string itemID{};
+            sqf_string origin{};
+            sqf_string hash{};
+            sqf_string hashShort{};
+            sqf_string itemID{};
             explicit rv_mod_info(const game_value &gv_)
                 : modname(gv_[0]),
                   modDir(gv_[1]),
@@ -39,15 +39,15 @@ namespace intercept {
                   itemID(gv_[7]) {}
         };
         struct rv_friend_servers {
-            std::string ip_address{};
-            std::string name{};
+            sqf_string ip_address{};
+            sqf_string name{};
             explicit rv_friend_servers(const game_value &gv_)
                 : ip_address(gv_[0]),
                   name(gv_[1]) {}
         };
         struct rv_addon_info {
-            std::string prefix{};
-            std::string version_str{};
+            sqf_string prefix{};
+            sqf_string version_str{};
             bool is_patched{};
             explicit rv_addon_info(const game_value &gv_)
                 : prefix(gv_[0]),
@@ -55,8 +55,8 @@ namespace intercept {
                   is_patched(gv_[2]) {}
         };
         struct rv_dlc_usage_stats {
-            std::string name{};
-            std::string dlcAppId{};
+            sqf_string name{};
+            sqf_string dlcAppId{};
             float sessionTime{};
             float totalTime{};
             explicit rv_dlc_usage_stats(const game_value &gv_)
@@ -70,8 +70,8 @@ namespace intercept {
             bool isOwned;               //
             bool isInstalled;           //
             bool isAvailable;           //
-            sqf_return_string appID;    // - actual steam item ID or "0" for none or "-1" for unknown
-            sqf_return_string DLCName;  // - actual DLC name or ""
+            sqf_string appID;           // - actual steam item ID or "0" for none or "-1" for unknown
+            sqf_string DLCName;         // - actual DLC name or ""
             explicit rv_dlc_asset_info(const game_value &gv_)
                 : isDlc(gv_[0]),
                   isOwned(gv_[1]),

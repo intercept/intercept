@@ -23,8 +23,8 @@ namespace intercept {
         }
         struct rv_channel_info {
             rv_color colour;
-            sqf_return_string label;
-            sqf_return_string callSign;
+            sqf_string label;
+            sqf_string callSign;
             std::vector<object> units{};
             bool isProtocol;
             bool exists;

@@ -18,7 +18,7 @@ namespace intercept {
     namespace sqf {
         /* ai */
         struct rv_unit_trait {
-            sqf_return_string trait;
+            sqf_string trait;
             float value;
             explicit rv_unit_trait(const game_value &gv_)
                 : trait(gv_[0]),

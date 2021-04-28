@@ -356,7 +356,7 @@ namespace intercept::client {
 #define EH_Func_Args_Object_WeaponDeployed types::object unit, bool isDeployed
 #define EH_Func_Args_Object_WeaponRested types::object unit, bool isRested
 #define EH_Func_Args_Object_Disassembled types::object entity, types::object primaryBag, types::object secondaryBag
-#define EH_Func_Args_Object_PathCalculated types::object agent, std::vector<types::vector3> path
+#define EH_Func_Args_Object_PathCalculated types::object agent, types::auto_array<types::vector3> path
 #define EH_Func_Args_Object_PeriscopeElevationChanged types::object vehicle, types::rv_turret_path turret, float elevation, float direction, bool userIsBlocked
 #define EH_Func_Args_Object_Suppressed types::object unit, float distance, types::object shooter, types::object instigator, types::object ammoObject, types::r_string ammoClassName, types::config ammoConfig
 
@@ -576,8 +576,8 @@ namespace intercept::client {
     class event_handlers_listbox_info {
     public:
         types::r_string text_lb{};
-        float value_lb{};
         types::r_string data_lb{};
+        float value_lb{};
         explicit event_handlers_listbox_info(const types::game_value& gv) :
             text_lb(gv[0]),
             value_lb(gv[1]),

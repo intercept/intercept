@@ -18,14 +18,14 @@ namespace intercept {
     namespace sqf {
         /* World */
         struct rv_road_info {
-            sqf_return_string mapType;     // - road segment type, could be "ROAD", "MAIN ROAD", "TRACK", "TRAIL" (see nearestTerrainObjects)
-            float width;                   // - road segment width
-            bool isPedestrian;             // - when true road is for pedestrian use only
-            sqf_return_string texture;     // - road segment surface texture
-            sqf_return_string textureEnd;  // - road segment surface texture
-            sqf_return_string material;    // - road segment surface material
+            sqf_string mapType;            // - road segment type, could be "ROAD", "MAIN ROAD", "TRACK", "TRAIL" (see nearestTerrainObjects)
+            sqf_string texture;            // - road segment surface texture
+            sqf_string textureEnd;         // - road segment surface texture
+            sqf_string material;           // - road segment surface material
             vector3 begPos;                // - start of the road segment in ASL
             vector3 endPos;                // - finish of the road segment in ASL
+            float width;                   // - road segment width
+            bool isPedestrian;             // - when true road is for pedestrian use only
             bool isBridge;                 // - when true road segment is a bridge
             explicit rv_road_info(const game_value &gv_)
                 : mapType(gv_[0]),
@@ -62,26 +62,26 @@ namespace intercept {
 
         struct rv_world_lighting {
             rv_color_rgb light;
-            float brightness;
             vector3 direction;
+            float brightness;
             float starts_visibility;
             explicit rv_world_lighting(const game_value &gv_)
                 : light(gv_[0]),
                   brightness(gv_[1]),
                   direction(gv_[2]),
-                  starts_visibility(gv_[2]) {}
+                  starts_visibility(gv_[3]) {}
         };
 
         struct rv_object_lighting {
             rv_color_rgb ambient_light;
-            float ambient_brightness;
             rv_color_rgb dynamic_light;
+            float ambient_brightness;
             float dynamic_brightness;
             explicit rv_object_lighting(const game_value &gv_)
                 : ambient_light(gv_[0]),
                   ambient_brightness(gv_[1]),
                   dynamic_light(gv_[2]),
-                  dynamic_brightness(gv_[2]) {}
+                  dynamic_brightness(gv_[3]) {}
         };
 
         struct rv_date {

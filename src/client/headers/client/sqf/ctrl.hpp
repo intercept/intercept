@@ -35,16 +35,16 @@ namespace intercept {
         struct rv_ctrl_text_selection {
             float start_pos{};
             float length{};
-            sqf_return_string text{};
+            sqf_string text{};
             explicit rv_ctrl_text_selection(const game_value &gv_)
                 : start_pos(gv_[0]),
                   length(gv_[1]),
                   text(gv_[2]) {}
         };
         struct rv_lnb_array {
-            sqf_return_string_list texts;
+            sqf_string texts;
             std::vector<float> values;
-            sqf_return_string_list datas;
+            sqf_string datas;
 
             operator game_value() {
                 std::vector<game_value> texts_gv, values_gv, datas_gv;

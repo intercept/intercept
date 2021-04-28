@@ -19,7 +19,7 @@ namespace intercept {
     namespace sqf {
         class waypoint;
         struct rv_group_icon {
-            std::string icon;
+            sqf_string icon;
             vector2 offset;
         };
         sqf_return_string combat_mode(const group &loc_);

@@ -251,5 +251,6 @@ namespace intercept {
         bool get_diver_state(const object &unit_);
         float get_object_fov(const object &unit_);
         vector2 weapon_inertia(const object &unit_);
+        rv_zeroing current_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_);
     }  // namespace sqf
 }  // namespace intercept

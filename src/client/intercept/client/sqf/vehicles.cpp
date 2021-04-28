@@ -1090,5 +1090,6 @@ namespace intercept {
         bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_) {
             return host::functions.invoke_raw_unary(__sqf::unary__setinfopanel__array__ret__bool, {infopanelId_, componentClassOrType_});
         }
+
     }  // namespace sqf
 }  // namespace intercept

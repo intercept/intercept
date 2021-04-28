@@ -23,20 +23,22 @@ namespace intercept {
             vector3 surface_normal;     ///< a normal to the intersected surface
             object intersect_object;    ///< the object the surface belongs to(could be proxy object)
             object parent_object;       ///< the object proxy object belongs to(not always the same as intersect object)
+            explicit intersect_surfaces(const game_value &gv_)
+                : intersect_pos_asl(gv_[0]),
+                  surface_normal(gv_[1]),
+                  intersect_object(gv_[2]),
+                  parent_object(gv_[3]) {}
         };
         typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 
         struct intersect_result {
             sqf_string selection_name;
             float intersect_distance;
+            explicit intersect_result(const game_value &gv_)
+                : selection_name(gv_[0]),
+                  intersect_distance(gv_[1]) {}
         };
         typedef std::vector<intersect_result> intersect_result_list;
-
-        namespace __helpers {
-            intersect_result_list __intersects(const game_value& intersects_value_);
-
-            intersect_surfaces_list __line_intersects_surfaces(const game_value &intersects_value_);
-        }
 
         /**
         * Finds named selections in object which are in specified LOD, intersected by given section of a line

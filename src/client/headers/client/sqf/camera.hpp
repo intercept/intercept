@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -16,7 +16,29 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
-
+        struct rv_apperture_params {
+            float current_aperture{};  //Current aperture
+            bool forced{};             //Whether aperture was forced by setAperture
+            float approx_aperture{};   //Engine estimated aperture for the scene
+            float approx_luminance{};  //Engine estimated luminance
+            float min_aperture{};      //Minimal custom aperture{}; see setApertureNew
+            float std_aperture{};      //Standard custom aperture{}; see setApertureNew
+            float max_aperture{};      //Maximal custom aperture {}; see setApertureNew
+            float custom_lumi{};       //Custom luminance{}; see setApertureNew
+            bool custom_forced{};      //Whether custom values were forced
+            float light_intensity{};   //Blinding intensity of the light
+            rv_apperture_params(const game_value &gv_)
+                : current_aperture(gv_[0]),
+                  forced(gv_[1]),
+                  approx_aperture(gv_[2]),
+                  approx_luminance(gv_[3]),
+                  min_aperture(gv_[4]),
+                  std_aperture(gv_[5]),
+                  max_aperture(gv_[6]),
+                  custom_lumi(gv_[7]),
+                  custom_forced(gv_[8]),
+                  light_intensity(gv_[9]) {}
+        };
         /* potential namespace: camera */
         void add_cam_shake(float power_, float duration_, float frequency_);
         void reset_cam_shake();
@@ -135,5 +157,7 @@ namespace intercept {
         rv_camera_target get_pilot_camera_target(const object &object_);
         bool has_pilot_camera(const object &object_);
 
+        void cam_set_dir(const object &camera_, const vector3 &direction_);
+        rv_apperture_params aperture_params();
     }  // namespace sqf
 }  // namespace intercept

@@ -5,6 +5,7 @@
 namespace intercept {
     namespace sqf {
         /* World */
+
         float world_size() {
             return sqf::__helpers::__retrieve_nular_number(__sqf::nular__worldsize__ret__scalar);
         }
@@ -571,5 +572,36 @@ namespace intercept {
             return __helpers::__retrieve_nular_number(__sqf::nular__getelevationoffset__ret__scalar);
         }
 
+        float get_object_scale(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getobjectscale__object__ret__scalar, obj_);
+        }
+
+        void set_object_scale(const object &obj_, float scale_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setobjectscale__object__scalar__ret__nothing, obj_, scale_);
+        }
+
+        rv_world_airports all_airports() {
+            return rv_world_airports(host::functions.invoke_raw_nular(__sqf::nular__allairports__ret__array));
+        }
+
+        rv_world_lighting get_lighting() {
+            return rv_world_lighting(host::functions.invoke_raw_nular(__sqf::nular__getlighting__ret__array));
+        }
+
+        rv_object_lighting get_lighting_at(const object& obj_) {
+            return rv_object_lighting(host::functions.invoke_raw_unary(__sqf::unary__getlightingat__object__ret__array, obj_));
+        }
+
+        rv_road_info get_road_info(const object& road_obj_) {
+            return rv_road_info(host::functions.invoke_raw_unary(__sqf::unary__getroadinfo__object__ret__array, road_obj_));
+        }
+
+        void set_wind_dir(const vector2 &dir_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setwinddir__array__ret__nothing, dir_);
+        }
+
+        sqf_return_string surface_texture(const vector2& pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, pos_);
+        }
     }  // namespace sqf
 }  // namespace intercept

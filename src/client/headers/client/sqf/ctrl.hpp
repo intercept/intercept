@@ -17,7 +17,30 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        enum class pixel_precision_types {
+            AUTO,  //control position (x, y, w, h) is always rounded to whole pixels (game default)
+            ON,    //control position (x, y, w, h) is rounded to whole pixels only when not animating
+            OFF    //control position (x, y, w, h) is always precise, no pixel rounding applies here
+        };
 
+        struct rv_ctrl_angle {
+            float angle {};
+            float x_center{};
+            float y_center{};
+            rv_ctrl_angle(const game_value &gv_)
+                : angle(gv_[0]),
+                  x_center(gv_[1]),
+                  y_center(gv_[2]) {}
+        };
+        struct rv_ctrl_text_selection {
+            float start_pos{};
+            float length{};
+            sqf_return_string text{};
+            explicit rv_ctrl_text_selection(const game_value &gv_)
+                : start_pos(gv_[0]),
+                  length(gv_[1]),
+                  text(gv_[2]) {}
+        };
         struct rv_lnb_array {
             sqf_return_string_list texts;
             std::vector<float> values;
@@ -92,6 +115,7 @@ namespace intercept {
 
         bool ctrl_auto_scroll_rewind(const control &value_);
         bool ctrl_checked(const control &value_);
+        bool ctrl_checked(const control &control_, int index_);
         bool ctrl_committed(const control &value_);
         bool ctrl_delete(const control &value_);
         bool ctrl_enabled(const control &value_);
@@ -133,7 +157,7 @@ namespace intercept {
         void ctrl_set_model(const control &value0_, sqf_string_const_ref value1_);
         void ctrl_set_model_scale(const control &value0_, float value1_);
         void ctrl_set_scale(const control &value0_, float value1_);
-        void ctrl_set_structured_text(const control &value0_, sqf_string_const_ref value1_);
+        void ctrl_set_structured_text(const control &value0_, const rv_text &value1_);
         void ctrl_set_text(const control &value0_, sqf_string_const_ref value1_);
         void ctrl_set_text(int control_id_, sqf_string_const_ref text_);
         void ctrl_set_text_secondary(const control &value0_, sqf_string_const_ref value1_);
@@ -156,6 +180,7 @@ namespace intercept {
         void ctrl_set_auto_scroll_speed(const control &value0_, float value1_);
         void ctrl_set_background_color(const control &ctrl_, const rv_color &color_);
         void ctrl_set_checked(const control &value0_, bool value1_);
+        void ctrl_set_checked(const control &control_, int index_, bool checked_);
         void ctrl_set_focus(const control &value_);
         float ctrl_auto_scroll_delay(const control &value_);
         float ctrl_auto_scroll_speed(const control &value_);
@@ -204,14 +229,20 @@ namespace intercept {
         void lnb_delete_row(float idc_, float index_);
         void lnb_set_color(float idc_, float row_, float column_, const rv_color &color_);
         void lnb_set_color(const control &ctrl_, float row_, float column_, const rv_color &color_);
+        void lnb_set_color_right(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_color_right(const control &ctrl_, float row_, float column_, const rv_color &color_);
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_);
         void lnb_set_columns_pos(const control &ctrl_, std::vector<float> positions_);
         void lnb_set_data(float idc_, float row_, float column_, sqf_string_const_ref data_);
         void lnb_set_data(const control &ctrl_, float row_, float column_, sqf_string_const_ref data_);
         void lnb_set_picture(float idc_, float row_, float column_, sqf_string_const_ref name_);
         void lnb_set_picture(const control &ctrl_, float row_, float column_, sqf_string_const_ref name_);
+        void lnb_set_picture_right(float idc_, float row_, float column_, sqf_string_const_ref name_);
+        void lnb_set_picture_right(const control &ctrl_, float row_, float column_, sqf_string_const_ref name_);
         void lnb_set_text(float idc_, float row_, float column_, const game_value &data_);
         void lnb_set_text(const control &ctrl_, float row_, float column_, const game_value &data_);
+        void lnb_set_text_right(float idc_, float row_, float column_, const game_value &data_);
+        void lnb_set_text_right(const control &ctrl_, float row_, float column_, const game_value &data_);
         void lnb_set_tooltip(float idc_, float row_, float column_, const game_value &data_);
         void lnb_set_tooltip(const control &ctrl_, float row_, float column_, const game_value &data_);
         void lnb_set_value(float idc_, float row_, float column_, float value_);
@@ -233,12 +264,18 @@ namespace intercept {
         sqf_return_string lnb_picture(const control &ctrl_, float row_, float column_);
         sqf_return_string lnb_text(float idc_, float row_, float column_);
         sqf_return_string lnb_text(const control &ctrl_, float row_, float column_);
+        sqf_return_string lnb_text_right(float idc_, float row_, float column_);
+        sqf_return_string lnb_text_right(const control &ctrl_, float row_, float column_);
         std::vector<float> lnb_get_columns_position(float idc_);
         std::vector<float> lnb_get_columns_position(const control &ctrl_);
         std::vector<float> lnb_size(float idc_);
         std::vector<float> lnb_size(const control &ctrl_);
         rv_color lnb_color(float idc_, float row_, float column_);
         rv_color lnb_color(const control &ctrl_, float row_, float column_);
+        rv_color lnb_color_right(float idc_, float row_, float column_);
+        rv_color lnb_color_right(const control &ctrl_, float row_, float column_);
+        sqf_return_string lnb_picture_right(float idc_, float row_, float column_);
+        sqf_return_string lnb_picture_right(const control &ctrl_, float row_, float column_);
         void lnb_sort(float idc_, int column_, bool reversed_ = false);
         void lnb_sort(const control &ctrl_, int column_, bool reversed_ = false);
         void lnb_sort_by_value(float idc_, int column_, bool reversed_ = false);
@@ -271,12 +308,11 @@ namespace intercept {
         void lb_set_picture_right_color_disabled(const control &control_, int index_, const rv_color &color_);
         void lb_set_picture_right_color_selected(const control &control_, int index_, const rv_color &color_);
         void lb_set_text(const control &control_, int index_, sqf_string_const_ref text_);
+        void lb_set_text_right(const control &control_, int index_, sqf_string_const_ref text_);
         void lb_set_tooltip(int control_id_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
         void lb_set_value(const control &control_, int index_, float val_);
-        void lb_set_select_color(int idc_, int index_, const rv_color &color_);
-        void lb_set_select_color_right(int idc_, int index_, const rv_color &color_);
         void lb_clear(const control &value_);
         void lb_clear(float value_);
         float lb_add(int control_id_, sqf_string_const_ref text_);
@@ -584,6 +620,7 @@ namespace intercept {
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
         std::vector<control> all_controls(const display &display_);
+        std::vector<control> all_controls(const control &ctrl_);
         object get_editor_camera(const control &value_);
         object get_object_proxy(const control &value0_, sqf_string_const_ref value1_);
 
@@ -630,6 +667,100 @@ namespace intercept {
         rv_resolution get_resolution();
         vector2 get_mouse_position();
         bool is_ui_context();
+        void ctrl_animate_model(const control &control_, sqf_string_const_ref source_, float phase_);
+        float ctrl_animation_phase_model(const control &control_, sqf_string_const_ref source_);
+        void ctrl_set_angle(const control &control_, float angle_, float centerX_, float centerY_, bool now_ = true);
+        void ctrl_set_mouse_position(const control &control_, float x_, float y_);
+        void ctrl_set_pixel_precision(const control &control_, pixel_precision_types type_);
+        void ctrl_set_scroll_values(const control &control_, float vScroll_, float hScroll_);
+        void ctrl_set_text_selection(const control &control_, float start_, float length_);
+        void ctrl_set_url(const control &control_, sqf_string_const_ref url_);
+        void draw_triangle(const control &mapCtrl_, const auto_array<vector3>& vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_ = "");
+        float get_text_width(sqf_string_const_ref string_, sqf_string_const_ref font_, float fontSize_);
+        void lb_set_select_color(const control &control_, int index_, const rv_color &color_);
+        void lb_set_select_color(float idc_, int index_, const rv_color &color_);
+        void lb_set_select_color_right(const control &control_, int index_, const rv_color &color_);
+        void lb_set_select_color_right(float idc_, int index_, const rv_color &color_);
+        void lb_set_selected(const control &control_, int index_, bool selected_);
+        void lnb_set_picture_color(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color(const control &ctrl_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_right(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_right(const control &ctrl_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_selected(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_selected(const control &ctrl_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_selected_right(float idc_, float row_, float column_, const rv_color &color_);
+        void lnb_set_picture_color_selected_right(const control &ctrl_, float row_, float column_, const rv_color &color_);
+        bool tv_is_selected(const control &ctrl_, const std::vector<int> &path_);
+        void tv_set_selected(const control &ctrl_, const std::vector<int> &path_, bool select_);
+        void tv_sort_all(const control &ctrl_, const std::vector<int> &path_, bool reversed_);
+        void tv_sort_by_value_all(const control &ctrl_, const std::vector<int> &path_, bool reversed_);
+        std::vector<float> all_active_title_effects();
+        bool is_action_menu_visible();
+        rv_ctrl_angle ctrl_angle(const control &ctrl_);
+        float ctrl_font_height(const control &ctrl_);
+        vector2 ctrl_mouse_position(const control &ctrl_);
+        vector2 ctrl_scroll_values(const control &ctrl_);
+        float ctrl_style(const control &ctrl_);
+        rv_color ctrl_text_color(const control &ctrl_);
+        rv_ctrl_text_selection ctrl_text_selection(const control &ctrl_);
+        float ctrl_text_width(const control &ctrl_);
+        sqf_return_string ctrl_tooltip(const control &ctrl_);
+        sqf_return_string ctrl_url(const control &ctrl_);
+        control focused_ctrl(const display &disp_);
+        std::vector<float> lb_selection(const control &ctrl_);
+        bool open_gps(bool show_);
+
+        //Menu
+        sqf_return_string menu_action(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_action(float idc_, const std::vector<int> &path_);
+        void menu_add(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_add(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        bool menu_checked(const control &ctrl_, const std::vector<int> &path_);
+        bool menu_checked(float idc_, const std::vector<int> &path_);
+        void menu_collapse(const control &ctrl_, const std::vector<int> &path_);
+        void menu_collapse(float idc_, const std::vector<int> &path_);
+        sqf_return_string menu_data(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_data(float idc_, const std::vector<int> &path_);
+        void menu_delete(const control &ctrl_, const std::vector<int> &path_);
+        void menu_delete(float idc_, const std::vector<int> &path_);
+        void menu_enable(const control &ctrl_, const std::vector<int> &path_, bool value_);
+        void menu_enable(float idc_, const std::vector<int> &path_, bool value_);
+        bool menu_enabled(const control &ctrl_, const std::vector<int> &path_);
+        bool menu_enabled(float idc_, const std::vector<int> &path_);
+        void menu_expand(const control &ctrl_, const std::vector<int> &path_);
+        void menu_expand(float idc_, const std::vector<int> &path_);
+        sqf_return_string menu_picture(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_picture(float idc_, const std::vector<int> &path_);
+        void menu_set_action(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_action(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_check(const control &ctrl_, const std::vector<int> &path_, bool value_);
+        void menu_set_check(float idc_, const std::vector<int> &path_, bool value_);
+        void menu_set_data(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_data(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_picture(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_picture(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_shortcut(const control &ctrl_, const std::vector<int> &path_, int value_);
+        void menu_set_shortcut(float idc_, const std::vector<int> &path_, int value_);
+        void menu_set_text(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_text(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_url(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_url(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_);
+        void menu_set_value(const control &ctrl_, const std::vector<int> &path_, float value_);
+        void menu_set_value(float idc_, const std::vector<int> &path_, float value_);
+        float menu_shortcut(const control &ctrl_, const std::vector<int> &path_);
+        float menu_shortcut(float idc_, const std::vector<int> &path_);
+        sqf_return_string menu_shortcut_text(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_shortcut_text(float idc_, const std::vector<int> &path_);
+        float menu_size(const control &ctrl_, const std::vector<int> &path_);
+        float menu_size(float idc_, const std::vector<int> &path_);
+        void menu_sort(const control &ctrl_, const std::vector<int> &path_, bool value_);
+        void menu_sort(float idc_, const std::vector<int> &path_, bool value_);
+        sqf_return_string menu_text(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_text(float idc_, const std::vector<int> &path_);
+        sqf_return_string menu_url(const control &ctrl_, const std::vector<int> &path_);
+        sqf_return_string menu_url(float idc_, const std::vector<int> &path_);
+        float menu_value(const control &ctrl_, const std::vector<int> &path_);
+        float menu_value(float idc_, const std::vector<int> &path_);
 
     }  // namespace sqf
 }  // namespace intercept

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -68,6 +68,7 @@ namespace intercept {
         void join_as_silent(const object &unit_, const group &group_, int pos_id_);
 
         std::vector<object> units(const group &gp_);
+        std::vector<object> units(const side &side_);
         side get_side(const group &group_);
         side side_get(const group& group_);
         sqf_return_string_list all_variables(const group &value_);

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -81,7 +81,7 @@ namespace intercept {
         float create_diary_subject(const object &object_, sqf_string_const_ref subject_, sqf_string_const_ref name_, sqf_string_const_ref picture_);
         void process_diary_link(sqf_string_const_ref value_);
         bool diary_subject_exists(const object &value0_, sqf_string_const_ref value1_);
-        void select_diary_subject(const object &value0_, sqf_string_const_ref value1_);
+        bool select_diary_subject(const object &value0_, sqf_string_const_ref value1_);
 
         //(de-)briefing
         void set_debriefing_text(sqf_string_const_ref endType_, sqf_string_const_ref title_, sqf_string_const_ref description_);
@@ -94,6 +94,8 @@ namespace intercept {
         void on_briefing_plan(sqf_string_const_ref value_);
         void on_briefing_team_switch(sqf_string_const_ref value_);
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_);
-
+        std::vector<task> task_children(const task &task_);
+        sqf_return_string task_name(const task &task_);
+        
     }  // namespace sqf
 }  // namespace intercept

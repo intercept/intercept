@@ -17,6 +17,28 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* ai */
+        struct rv_unit_trait {
+            sqf_return_string trait;
+            float value;
+            explicit rv_unit_trait(const game_value &gv_)
+                : trait(gv_[0]),
+                  value(gv_[1]) {}
+        };
+
+        enum class ai_behavior {
+            CARELESS,
+            SAFE,
+            AWARE,
+            COMBAT,
+            STEALTH
+        };
+        enum class ai_combat_modes {
+            BLUE,    // Never fire, keep formation
+            GREEN,   // Hold fire, keep formation
+            WHITE,   // Hold fire, engage at will/loose formation
+            YELLOW,  // Fire at will, keep formation
+            RED      // Fire at will, engage at will/loose formation
+        };
         bool attack_enabled(const object &unit_);
         bool attack_enabled(const group &group_);
         void command_artillery_fire(const object &unit_, const vector3 &pos_, sqf_string_const_ref type_, int rounds_);
@@ -146,6 +168,7 @@ namespace intercept {
             AUTOTARGET,    // Prevent the unit from assigning a target independently and watching unknown objects / no automatic target selection
             MOVE,          // Disable the AI's movement / do not move
             ANIM,          // Disable ability of AI to change animation.
+            WEAPONAIM,     // Disabled weapon aiming.
             TEAMSWITCH,    // AI disabled because of Team Switch
             FSM,           // Disable the execution of AI behavior scripts.
             AIMINGERROR,   // Prevents AI's aiming from being distracted by its shooting, moving, turning, reloading, hit, injury, fatigue, suppression or concealed/lost target.
@@ -154,6 +177,10 @@ namespace intercept {
             COVER,         // Disables usage of cover positions by the AI.
             AUTOCOMBAT,    // Disables autonomous switching to COMBAT when in danger.
             PATH,          // Stops the AI’s movement but not the target alignment.
+            MINEDETECTION, // Disable AI's mine detection.
+            NVG,           // Stops AI from putting NVGs on but not taking them off.
+            LIGHTS,        // Stops AI from operating vehicle headlights as well as collision lights.
+            RADIOPROTOCOL, // Stops AI from talking and texting while still being able to issue orders.
             ALL            // All of the above.
         };
 
@@ -218,5 +245,21 @@ namespace intercept {
         void swim_in_depth(const object &unit_, float depth_);
 
         object calculate_path(sqf_string_const_ref type_, sqf_string_const_ref behaviour_, const vector3& from_, const vector3& to_);
+
+        bool check_ai_feature(ai_feature_types feature_);
+        bool check_ai_feature(const object &unit_, ai_behaviour_types feature_);
+        void enable_aifeature(const object &unit_, ai_behaviour_types feature_, bool enable_);
+        void set_combat_behaviour(const object &unit_, ai_behavior behavior_);
+        void set_combat_behaviour(const group &group_, ai_behavior behavior_);
+        void set_combat_behaviour(const object &unit_, sqf_string_const_ref behavior_);
+        void set_combat_behaviour(const group &group_, sqf_string_const_ref behavior_);
+        sqf_return_string combat_behaviour(const object &unit_);
+        sqf_return_string combat_behaviour(const group &group_);
+        void set_unit_combat_mode(const object &unit_, ai_combat_modes mode_);
+        void set_unit_combat_mode(const object &unit_, sqf_string_const_ref mode_);
+        sqf_return_string unit_combat_mode(const object &unit_);
+        std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_);
+        object get_attack_target(const object &unit_);
+        std::pair<sqf_return_string, sqf_return_string> vehicle_move_info(const object &vehicle_);
     }  // namespace sqf
 }  // namespace intercept

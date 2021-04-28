@@ -87,7 +87,7 @@ namespace intercept {
         *
         * @returns vector of intersections in format [[intersectPosASL, surfaceNormal, intersectObj, parentObject],...]
         */
-        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_, const object &ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, sqf_string_const_ref lod1_ = "VIEW", sqf_string_const_ref lod2_ = "FIRE");
+        intersect_surfaces_list line_intersects_surfaces(const vector3 &begin_pos_asl_, const vector3 &end_pos_asl_, const object &ignore_obj1_, const object &ignore_obj2_, bool sort_mode_ = true, int max_results_ = 1, sqf_string_const_ref lod1_ = "VIEW", sqf_string_const_ref lod2_ = "FIRE", bool unique_objs_ = true);
 
         /**
         * Returns objects intersecting with the virtual line from begPos to endPos

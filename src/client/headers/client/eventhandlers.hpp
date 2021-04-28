@@ -100,8 +100,9 @@ namespace intercept::client {
 
 #pragma region Mission Eventhandlers
 
-#define EH_Func_Args_Mission_Draw3D void
+#define EH_Func_Args_Mission_Draw3D
 #define EH_Func_Args_Mission_Ended types::r_string end_type
+#define EH_Func_Args_Mission_MPEnded
 #define EH_Func_Args_Mission_Loaded loaded_saveType save_type
 #define EH_Func_Args_Mission_Map bool mapIsOpened, bool mapIsForced
 #define EH_Func_Args_Mission_HandleDisconnect types::object unit, int id, types::r_string uid, types::r_string name
@@ -121,59 +122,82 @@ namespace intercept::client {
 #define EH_Func_Args_Mission_PreloadFinished
 #define EH_Func_Args_Mission_PlayerViewChanged types::object oldBody, types::object newBody, types::object vehicleIn, types::object oldCameraOn, types::object newCameraOn, types::object UAV
 #define EH_Func_Args_Mission_BuildingChanged types::object from, types::object to, bool isRuin
+#define EH_Func_Args_Mission_ControlsShifted types::object newController, types::object oldController, types::object vehicle, bool copilotEnabled, bool controlsUnlocked
+#define EH_Func_Args_Mission_ExtensionCallback types::r_string name, types::r_string function, types::r_string data
+#define EH_Func_Args_Mission_HandleAccTime float currentTimeAcc, float prevTimeAcc, bool messageSuppressed
+#define EH_Func_Args_Mission_HandleChatMessage int channel, int owner, types::r_string from, types::r_string text, types::object person, types::r_string name, types::r_string strID, bool forcedDisplay, bool isPlayerMessage, int sentenceType, int chatMessageType
+#define EH_Func_Args_Mission_MarkerCreated types::r_string marker, int channelNumber, types::object owner, bool local
+#define EH_Func_Args_Mission_MarkerDeleted types::r_string marker, bool local
+#define EH_Func_Args_Mission_MarkerUpdated types::r_string marker, bool local
+#define EH_Func_Ret_Mission_HandleChatMessage std::optional<std::variant<bool, types::sqf_string, types::auto_array<types::sqf_string>>>
+    //Name,Function return value, Function Arguments
 
-//Name,Function return value, Function Arguments
+#define EHDEF_MISSION(XX)                                                                                \
+    XX(BuildingChanged, void, EH_Func_Args_Mission_BuildingChanged)                                      \
+    XX(CommandModeChanged, void, EH_Func_Args_Mission_CommandModeChanged)                                \
+    XX(ControlsShifted, void, EH_Func_Args_Mission_ControlsShifted)                                      \
+    XX(Draw3D, void, EH_Func_Args_Mission_Draw3D)                                                        \
+    XX(EachFrame, void, EH_Func_Args_Mission_EachFrame)                                                  \
+    XX(Ended, void, EH_Func_Args_Mission_Ended)                                                          \
+    XX(MPEnded, void, EH_Func_Args_Mission_MPEnded)                                                      \
+    XX(EntityKilled, void, EH_Func_Args_Mission_EntityKilled)                                            \
+    XX(EntityRespawned, void, EH_Func_Args_Mission_EntityRespawned)                                      \
+    XX(ExtensionCallback, void, EH_Func_Args_Mission_ExtensionCallback)                                  \
+    XX(GroupIconClick, void, EH_Func_Args_Mission_GroupIconClick)                                        \
+    XX(GroupIconOverEnter, void, EH_Func_Args_Mission_GroupIconOverEnter)                                \
+    XX(GroupIconOverLeave, void, EH_Func_Args_Mission_GroupIconOverLeave)                                \
+    XX(HandleAccTime, std::optional<bool>, EH_Func_Args_Mission_HandleAccTime)                           \
+    XX(HandleChatMessage, EH_Func_Ret_Mission_HandleChatMessage, EH_Func_Args_Mission_HandleChatMessage) \
+    XX(HandleDisconnect, std::optional<bool>, EH_Func_Args_Mission_HandleDisconnect)                     \
+    XX(HCGroupSelectionChanged, void, EH_Func_Args_Mission_HCGroupSelectionChanged)                      \
+    XX(Loaded, void, EH_Func_Args_Mission_Loaded)                                                        \
+    XX(Map, void, EH_Func_Args_Mission_Map)                                                              \
+    XX(MapSingleClick, void, EH_Func_Args_Mission_MapSingleClick)                                        \
+    XX(MarkerCreated, void, EH_Func_Args_Mission_MarkerCreated)                                          \
+    XX(MarkerDeleted, void, EH_Func_Args_Mission_MarkerDeleted)                                          \
+    XX(MarkerUpdated, void, EH_Func_Args_Mission_MarkerUpdated)                                          \
+    XX(PlayerConnected, void, EH_Func_Args_Mission_PlayerConnected)                                      \
+    XX(PlayerDisconnected, void, EH_Func_Args_Mission_PlayerDisconnected)                                \
+    XX(PlayerViewChanged, void, EH_Func_Args_Mission_PlayerViewChanged)                                  \
+    XX(PreloadStarted, void, EH_Func_Args_Mission_PreloadStarted)                                        \
+    XX(PreloadFinished, void, EH_Func_Args_Mission_PreloadFinished)                                      \
+    XX(TeamSwitch, void, EH_Func_Args_Mission_TeamSwitch)
 
-#define EHDEF_MISSION(XX)                                                            \
-    XX(Draw3D, void, EH_Func_Args_Mission_Draw3D)                                    \
-    XX(Ended, void, EH_Func_Args_Mission_Ended)                                      \
-    XX(Loaded, void, EH_Func_Args_Mission_Loaded)                                    \
-    XX(Map, void, EH_Func_Args_Mission_Map)                                          \
-    XX(HandleDisconnect, std::optional<bool>, EH_Func_Args_Mission_HandleDisconnect) \
-    XX(EntityRespawned, void, EH_Func_Args_Mission_EntityRespawned)                  \
-    XX(EntityKilled, void, EH_Func_Args_Mission_EntityKilled)                        \
-    XX(EachFrame, void, EH_Func_Args_Mission_EachFrame)                              \
-    XX(MapSingleClick, void, EH_Func_Args_Mission_MapSingleClick)                    \
-    XX(HCGroupSelectionChanged, void, EH_Func_Args_Mission_HCGroupSelectionChanged)  \
-    XX(CommandModeChanged, void, EH_Func_Args_Mission_CommandModeChanged)            \
-    XX(GroupIconClick, void, EH_Func_Args_Mission_GroupIconClick)                    \
-    XX(GroupIconOverEnter, void, EH_Func_Args_Mission_GroupIconOverEnter)            \
-    XX(GroupIconOverLeave, void, EH_Func_Args_Mission_GroupIconOverLeave)            \
-    XX(PlayerConnected, void, EH_Func_Args_Mission_PlayerConnected)                  \
-    XX(PlayerDisconnected, void, EH_Func_Args_Mission_PlayerDisconnected)            \
-    XX(TeamSwitch, void, EH_Func_Args_Mission_TeamSwitch)                            \
-    XX(PreloadStarted, void, EH_Func_Args_Mission_PreloadStarted)                    \
-    XX(PreloadFinished, void, EH_Func_Args_Mission_PreloadFinished)                  \
-    XX(PlayerViewChanged, void, EH_Func_Args_Mission_PlayerViewChanged)              \
-    XX(BuildingChanged, void, EH_Func_Args_Mission_BuildingChanged)
-
-#define COMPILETIME_CHECK_ENUM_MISSION(name, retVal, funcArg) static_assert(eventhandlers_mission::name >= eventhandlers_mission::Draw3D);
+#define COMPILETIME_CHECK_ENUM_MISSION(name, retVal, funcArg) static_assert(eventhandlers_mission::name >= eventhandlers_mission::BuildingChanged);
     //DOC https://stackoverflow.com/a/25235815
     /** @enum eventhandlers_mission
 @brief Mission event handlers are specific EHs that are anchored to the running mission and automatically removed when mission is over.
 */
     enum class eventhandlers_mission {
-        Draw3D,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Draw3D">Draw3D</a>
-        Ended,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Ended">Ended</a>
-        Loaded,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Loaded">Game loading from save event</a>
-        Map,                     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Map">Map open / close event</a>
-        HandleDisconnect,        ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HandleDisconnect">Player disconnect in MP event</a>
-        EntityRespawned,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityRespawned">Some entity respawn event</a>
-        EntityKilled,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityKilled">Some entity death event</a>
-        EachFrame,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EachFrame">Per frame event</a>
-        MapSingleClick,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MapSingleClick">Map click event</a>
-        HCGroupSelectionChanged, ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HCGroupSelectionChanged">High Command group select event</a>
-        CommandModeChanged,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#CommandModeChanged">High Command mode change event</a>
-        GroupIconClick,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconClick">High Command icon click event</a>
-        GroupIconOverEnter,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverEnter">High Command icon enter event</a>
-        GroupIconOverLeave,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverLeave">High Command icon leave event</a>
-        PlayerConnected,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerConnected">Client joining MP mission event</a>
-        PlayerDisconnected,      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerDisconnected">Client leaving MP mission event</a>
-        TeamSwitch,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#TeamSwitch">Player teamswitch event</a>
-        PreloadStarted,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadStarted">Mission preload start event</a>
-        PreloadFinished,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadFinished">Mission preload finish event</a>
-        PlayerViewChanged,       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerViewChanged">Player view change event</a>
-        BuildingChanged          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#BuildingChanged">Building model change event</a>
+        BuildingChanged,                 ///< <a href=https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#BuildingChanged">See the wiki</a>
+        CommandModeChanged,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#CommandModeChanged">See the wiki</a>
+        ControlsShifted,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#ControlsShifted">See the wiki</a>
+        Draw3D,                          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Draw3D">See the wiki</a>
+        EachFrame,                       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EachFrame">See the wiki</a>
+        Ended,                           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Ended">See the wiki</a>
+        MPEnded,                         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MPEnded">See the wiki</a>
+        EntityKilled,                    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityKilled">See the wiki</a>
+        EntityRespawned,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#EntityRespawned">See the wiki</a>
+        ExtensionCallback,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#ExtensionCallback">See the wiki</a>
+        GroupIconClick,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconClick">See the wiki</a>
+        GroupIconOverEnter,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverEnter">See the wiki</a>
+        GroupIconOverLeave,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#GroupIconOverLeave">See the wiki</a>
+        HandleAccTime,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HandleAccTime">See the wiki</a>
+        HandleChatMessage,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HandleChatMessage">See the wiki</a>
+        HandleDisconnect,                ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HandleDisconnect">See the wiki</a>
+        HCGroupSelectionChanged,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#HCGroupSelectionChanged">See the wiki</a>
+        Loaded,                          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Loaded">See the wiki</a>
+        Map,                             ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#Map">See the wiki</a>
+        MapSingleClick,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MapSingleClick">See the wiki</a>
+        MarkerCreated,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MarkerCreated">See the wiki</a>
+        MarkerDeleted,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MarkerDeleted">See the wiki</a>
+        MarkerUpdated,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#MarkerUpdated">See the wiki</a>
+        PlayerConnected,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerConnected">See the wiki</a>
+        PlayerDisconnected,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerDisconnected">See the wiki</a>
+        PlayerViewChanged,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PlayerViewChanged">See the wiki</a>
+        PreloadStarted,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadStarted">See the wiki</a>
+        PreloadFinished,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#PreloadFinished">See the wiki</a>
+        TeamSwitch                       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers/addMissionEventHandler#TeamSwitch">See the wiki</a>
     };
     /*
     @var eventhandlers_mission::Loaded
@@ -331,68 +355,75 @@ namespace intercept::client {
 #define EH_Func_Args_Object_WeaponDisassembled types::object unit, types::object primaryBag, types::object secondarybag
 #define EH_Func_Args_Object_WeaponDeployed types::object unit, bool isDeployed
 #define EH_Func_Args_Object_WeaponRested types::object unit, bool isRested
+#define EH_Func_Args_Object_Disassembled types::object entity, types::object primaryBag, types::object secondaryBag
+#define EH_Func_Args_Object_PathCalculated types::object agent, std::vector<types::vector3> path
+#define EH_Func_Args_Object_PeriscopeElevationChanged types::object vehicle, types::rv_turret_path turret, float elevation, float direction, bool userIsBlocked
+#define EH_Func_Args_Object_Suppressed types::object unit, float distance, types::object shooter, types::object instigator, types::object ammoObject, types::r_string ammoClassName, types::config ammoConfig
+
 
 //Name,Function return value, Function Arguments
-#define EHDEF_OBJECT(XX)                                                        \
-    XX(AnimChanged, void, EH_Func_Args_Object_AnimChanged)                      \
-    XX(AnimDone, void, EH_Func_Args_Object_AnimDone)                            \
-    XX(AnimStateChanged, void, EH_Func_Args_Object_AnimStateChanged)            \
-    XX(ContainerClosed, void, EH_Func_Args_Object_ContainerClosed)              \
-    XX(ContainerOpened, void, EH_Func_Args_Object_ContainerOpened)              \
-    XX(ControlsShifted, void, EH_Func_Args_Object_ControlsShifted)              \
-    XX(Dammaged, void, EH_Func_Args_Object_Dammaged)                            \
-    XX(Deleted, void, EH_Func_Args_Object_Deleted)                              \
-    XX(Engine, void, EH_Func_Args_Object_Engine)                                \
-    XX(EpeContact, void, EH_Func_Args_Object_EpeContact)                        \
-    XX(EpeContactEnd, void, EH_Func_Args_Object_EpeContactEnd)                  \
-    XX(EpeContactStart, void, EH_Func_Args_Object_EpeContactStart)              \
-    XX(Explosion, void, EH_Func_Args_Object_Explosion)                          \
-    XX(Fired, void, EH_Func_Args_Object_Fired)                                  \
-    XX(FiredMan, void, EH_Func_Args_Object_FiredMan)                            \
-    XX(FiredNear, void, EH_Func_Args_Object_FiredNear)                          \
-    XX(Fuel, void, EH_Func_Args_Object_Fuel)                                    \
-    XX(Gear, void, EH_Func_Args_Object_Gear)                                    \
-    XX(GetIn, void, EH_Func_Args_Object_GetIn)                                  \
-    XX(GetInMan, void, EH_Func_Args_Object_GetInMan)                            \
-    XX(GetOut, void, EH_Func_Args_Object_GetOut)                                \
-    XX(GetOutMan, void, EH_Func_Args_Object_GetOutMan)                          \
-    XX(HandleDamage, std::optional<float>, EH_Func_Args_Object_HandleDamage)    \
-    XX(HandleHeal, void, EH_Func_Args_Object_HandleHeal)                        \
-    XX(HandleRating, std::optional<float>, EH_Func_Args_Object_HandleRating)    \
-    XX(HandleScore, std::optional<bool>, EH_Func_Args_Object_HandleScore)       \
-    XX(Hit, void, EH_Func_Args_Object_Hit)                                      \
-    XX(Init, void, EH_Func_Args_Object_Init)                                    \
-    XX(HandleIdentity, std::optional<bool>, EH_Func_Args_Object_HandleIdentity) \
-    XX(IncomingMissile, void, EH_Func_Args_Object_IncomingMissile)              \
-    XX(InventoryClosed, void, EH_Func_Args_Object_InventoryClosed)              \
-    XX(InventoryOpened, void, EH_Func_Args_Object_InventoryOpened)              \
-    XX(Killed, void, EH_Func_Args_Object_Killed)                                \
-    XX(LandedTouchDown, void, EH_Func_Args_Object_LandedTouchDown)              \
-    XX(LandedStopped, void, EH_Func_Args_Object_LandedStopped)                  \
-    XX(Landing, void, EH_Func_Args_Object_Landing)                              \
-    XX(LandingCanceled, void, EH_Func_Args_Object_LandingCanceled)              \
-    XX(Local, void, EH_Func_Args_Object_Local)                                  \
-    XX(PostReset, void, EH_Func_Args_Object_PostReset)                          \
-    XX(Put, void, EH_Func_Args_Object_Put)                                      \
-    XX(Reloaded, void, EH_Func_Args_Object_Reloaded)                            \
-    XX(Respawn, void, EH_Func_Args_Object_Respawn)                              \
-    XX(RopeAttach, void, EH_Func_Args_Object_RopeAttach)                        \
-    XX(RopeBreak, void, EH_Func_Args_Object_RopeBreak)                          \
-    XX(SeatSwitched, void, EH_Func_Args_Object_SeatSwitched)                    \
-    XX(SeatSwitchedMan, void, EH_Func_Args_Object_SeatSwitchedMan)              \
-    XX(SoundPlayed, void, EH_Func_Args_Object_SoundPlayed)                      \
-    XX(Take, void, EH_Func_Args_Object_Take)                                    \
-    XX(TaskSetAsCurrent, void, EH_Func_Args_Object_TaskSetAsCurrent)            \
-    XX(TurnIn, void, EH_Func_Args_Object_TurnIn)                                \
-    XX(TurnOut, void, EH_Func_Args_Object_TurnOut)                              \
-    XX(WeaponAssembled, void, EH_Func_Args_Object_WeaponAssembled)              \
-    XX(WeaponDisassembled, void, EH_Func_Args_Object_WeaponDisassembled)        \
-    XX(WeaponDeployed, void, EH_Func_Args_Object_WeaponDeployed)                \
+#define EHDEF_OBJECT(XX)                                                               \
+    XX(AnimChanged, void, EH_Func_Args_Object_AnimChanged)                             \
+    XX(AnimDone, void, EH_Func_Args_Object_AnimDone)                                   \
+    XX(AnimStateChanged, void, EH_Func_Args_Object_AnimStateChanged)                   \
+    XX(ContainerClosed, void, EH_Func_Args_Object_ContainerClosed)                     \
+    XX(ContainerOpened, void, EH_Func_Args_Object_ContainerOpened)                     \
+    XX(ControlsShifted, void, EH_Func_Args_Object_ControlsShifted)                     \
+    XX(Dammaged, void, EH_Func_Args_Object_Dammaged)                                   \
+    XX(Deleted, void, EH_Func_Args_Object_Deleted)                                     \
+    XX(Disassembled, void, EH_Func_Args_Object_Disassembled)                           \
+    XX(Engine, void, EH_Func_Args_Object_Engine)                                       \
+    XX(EpeContact, void, EH_Func_Args_Object_EpeContact)                               \
+    XX(EpeContactEnd, void, EH_Func_Args_Object_EpeContactEnd)                         \
+    XX(EpeContactStart, void, EH_Func_Args_Object_EpeContactStart)                     \
+    XX(Explosion, void, EH_Func_Args_Object_Explosion)                                 \
+    XX(Fired, void, EH_Func_Args_Object_Fired)                                         \
+    XX(FiredMan, void, EH_Func_Args_Object_FiredMan)                                   \
+    XX(FiredNear, void, EH_Func_Args_Object_FiredNear)                                 \
+    XX(Fuel, void, EH_Func_Args_Object_Fuel)                                           \
+    XX(Gear, void, EH_Func_Args_Object_Gear)                                           \
+    XX(GetIn, void, EH_Func_Args_Object_GetIn)                                         \
+    XX(GetInMan, void, EH_Func_Args_Object_GetInMan)                                   \
+    XX(GetOut, void, EH_Func_Args_Object_GetOut)                                       \
+    XX(GetOutMan, void, EH_Func_Args_Object_GetOutMan)                                 \
+    XX(HandleDamage, std::optional<float>, EH_Func_Args_Object_HandleDamage)           \
+    XX(HandleHeal, void, EH_Func_Args_Object_HandleHeal)                               \
+    XX(HandleIdentity, std::optional<bool>, EH_Func_Args_Object_HandleIdentity)        \
+    XX(HandleRating, std::optional<float>, EH_Func_Args_Object_HandleRating)           \
+    XX(HandleScore, std::optional<bool>, EH_Func_Args_Object_HandleScore)              \
+    XX(Hit, void, EH_Func_Args_Object_Hit)                                             \
+    XX(Init, void, EH_Func_Args_Object_Init)                                           \
+    XX(IncomingMissile, void, EH_Func_Args_Object_IncomingMissile)                     \
+    XX(InventoryClosed, void, EH_Func_Args_Object_InventoryClosed)                     \
+    XX(InventoryOpened, void, EH_Func_Args_Object_InventoryOpened)                     \
+    XX(Killed, void, EH_Func_Args_Object_Killed)                                       \
+    XX(LandedTouchDown, void, EH_Func_Args_Object_LandedTouchDown)                     \
+    XX(LandedStopped, void, EH_Func_Args_Object_LandedStopped)                         \
+    XX(Landing, void, EH_Func_Args_Object_Landing)                                     \
+    XX(LandingCanceled, void, EH_Func_Args_Object_LandingCanceled)                     \
+    XX(Local, void, EH_Func_Args_Object_Local)                                         \
+    XX(PathCalculated, void, EH_Func_Args_Object_PathCalculated)                       \
+    XX(PeriscopeElevationChanged, void, EH_Func_Args_Object_PeriscopeElevationChanged) \
+    XX(PostReset, void, EH_Func_Args_Object_PostReset)                                 \
+    XX(Put, void, EH_Func_Args_Object_Put)                                             \
+    XX(Reloaded, void, EH_Func_Args_Object_Reloaded)                                   \
+    XX(Respawn, void, EH_Func_Args_Object_Respawn)                                     \
+    XX(RopeAttach, void, EH_Func_Args_Object_RopeAttach)                               \
+    XX(RopeBreak, void, EH_Func_Args_Object_RopeBreak)                                 \
+    XX(SeatSwitched, void, EH_Func_Args_Object_SeatSwitched)                           \
+    XX(SeatSwitchedMan, void, EH_Func_Args_Object_SeatSwitchedMan)                     \
+    XX(SoundPlayed, void, EH_Func_Args_Object_SoundPlayed)                             \
+    XX(Suppressed, void, EH_Func_Args_Object_Suppressed)                               \
+    XX(Take, void, EH_Func_Args_Object_Take)                                           \
+    XX(TaskSetAsCurrent, void, EH_Func_Args_Object_TaskSetAsCurrent)                   \
+    XX(TurnIn, void, EH_Func_Args_Object_TurnIn)                                       \
+    XX(TurnOut, void, EH_Func_Args_Object_TurnOut)                                     \
+    XX(WeaponAssembled, void, EH_Func_Args_Object_WeaponAssembled)                     \
+    XX(WeaponDisassembled, void, EH_Func_Args_Object_WeaponDisassembled)               \
+    XX(WeaponDeployed, void, EH_Func_Args_Object_WeaponDeployed)                       \
     XX(WeaponRested, void, EH_Func_Args_Object_WeaponRested)
 
-   // XX(HitPart, void, EH_Func_Args_Object_HitPart)                              \
-
-
+// XX(HitPart, void, EH_Func_Args_Object_HitPart)
 
 #define COMPILETIME_CHECK_ENUM_OBJECT(name, retVal, funcArg) static_assert(eventhandlers_object::name >= eventhandlers_object::AnimChanged);
 
@@ -401,62 +432,66 @@ namespace intercept::client {
 */
     //#TODO doc
     enum class eventhandlers_object {
-        AnimChanged,
-        AnimDone,
-        AnimStateChanged,
-        ContainerClosed,
-        ContainerOpened,
-        ControlsShifted,
-        Dammaged,
-        Deleted,
-        Engine,
-        EpeContact,
-        EpeContactEnd,
-        EpeContactStart,
-        Explosion,
-        Fired,
-        FiredMan,
-        FiredNear,
-        Fuel,
-        Gear,
-        GetIn,
-        GetInMan,
-        GetOut,
-        GetOutMan,
-        HandleDamage,
-        HandleHeal,
-        HandleRating,
-        HandleScore,
-        Hit,
-        HitPart,
-        Init,
-        HandleIdentity,
-        IncomingMissile,
-        InventoryClosed,
-        InventoryOpened,
-        Killed,
-        LandedTouchDown,
-        LandedStopped,
-        Landing,
-        LandingCanceled,
-        Local,
-        PostReset,
-        Put,
-        Reloaded,
-        Respawn,
-        RopeAttach,
-        RopeBreak,
-        SeatSwitched,
-        SeatSwitchedMan,
-        SoundPlayed,
-        Take,
-        TaskSetAsCurrent,
-        TurnIn,
-        TurnOut,
-        WeaponAssembled,
-        WeaponDisassembled,
-        WeaponDeployed,
-        WeaponRested
+        AnimChanged,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#AnimChanged">see the wiki</a>
+        AnimDone,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#AnimDone">see the wiki</a>
+        AnimStateChanged,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#AnimStateChanged">see the wiki</a>
+        ContainerClosed,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#ContainerClosed">see the wiki</a>
+        ContainerOpened,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#ContainerOpened">see the wiki</a>
+        ControlsShifted,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#ControlsShifted">see the wiki</a>
+        Dammaged,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Dammaged">see the wiki</a>
+        Deleted,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Deleted">see the wiki</a>
+        Disassembled,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Disassembled">see the wiki</a>
+        Engine,                    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Engine">see the wiki</a>
+        EpeContact,                ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#EpeContact">see the wiki</a>
+        EpeContactEnd,             ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#EpeContactEnd">see the wiki</a>
+        EpeContactStart,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#EpeContactStart">see the wiki</a>
+        Explosion,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Explosion">see the wiki</a>
+        Fired,                     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Fired">see the wiki</a>
+        FiredMan,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#FiredMan">see the wiki</a>
+        FiredNear,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#FiredNear">see the wiki</a>
+        Fuel,                      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Fuel">see the wiki</a>
+        Gear,                      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Gear">see the wiki</a>
+        GetIn,                     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#GetIn">see the wiki</a>
+        GetInMan,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#GetInMan">see the wiki</a>
+        GetOut,                    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#GetOut">see the wiki</a>
+        GetOutMan,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#GetOutMan">see the wiki</a>
+        HandleDamage,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HandleDamage">see the wiki</a>
+        HandleHeal,                ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HandleHeal">see the wiki</a>
+        HandleIdentity,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HandleIdentity">see the wiki</a>
+        HandleRating,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HandleRating">see the wiki</a>
+        HandleScore,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HandleScore">see the wiki</a>
+        Hit,                       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Hit">see the wiki</a>
+        HitPart,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#HitPart">see the wiki</a>
+        Init,                      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Init">see the wiki</a>
+        IncomingMissile,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#IncomingMissile">see the wiki</a>
+        InventoryClosed,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#InventoryClosed">see the wiki</a>
+        InventoryOpened,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#InventoryOpened">see the wiki</a>
+        Killed,                    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Killed">see the wiki</a>
+        LandedTouchDown,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#LandedTouchDown">see the wiki</a>
+        LandedStopped,             ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#LandedStopped">see the wiki</a>
+        Landing,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Landing">see the wiki</a>
+        LandingCanceled,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#LandingCanceled">see the wiki</a>
+        Local,                     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Local">see the wiki</a>
+        PathCalculated,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#PathCalculated">see the wiki</a>
+        PeriscopeElevationChanged, ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#PeriscopeElevationChanged">see the wiki</a>
+        PostReset,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#PostReset">see the wiki</a>
+        Put,                       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Put">see the wiki</a>
+        Reloaded,                  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Reloaded">see the wiki</a>
+        Respawn,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Respawn">see the wiki</a>
+        RopeAttach,                ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#RopeAttach">see the wiki</a>
+        RopeBreak,                 ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#RopeBreak">see the wiki</a>
+        SeatSwitched,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#SeatSwitched">see the wiki</a>
+        SeatSwitchedMan,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#SeatSwitchedMan">see the wiki</a>
+        SoundPlayed,               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#SoundPlayed">see the wiki</a>
+        Suppressed,                ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Suppressed">see the wiki</a>
+        Take,                      ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Take">see the wiki</a>
+        TaskSetAsCurrent,          ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#TaskSetAsCurrent">see the wiki</a>
+        TurnIn,                    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#TurnIn">see the wiki</a>
+        TurnOut,                   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#TurnOut">see the wiki</a>
+        WeaponAssembled,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#WeaponAssembled">see the wiki</a>
+        WeaponDisassembled,        ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#WeaponDisassembled">see the wiki</a>
+        WeaponDeployed,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#WeaponDeployed">see the wiki</a>
+        WeaponRested               ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#WeaponRested">see the wiki</a>
     };
 
     EHDEF_OBJECT(COMPILETIME_CHECK_ENUM_OBJECT)
@@ -516,37 +551,169 @@ namespace intercept::client {
 #pragma region CTRL Eventhandlers
 
 #define EH_Func_Args_Ctrl_Draw types::control map
-#define EH_Func_Args_Ctrl_MouseButtonDown types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
-#define EH_Func_Args_Ctrl_MouseButtonUp types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
-#define EH_Func_Args_Ctrl_MouseButtonClick types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
-#define EH_Func_Args_Ctrl_MouseButtonDblClick types::control ctrl, int button, types::vector2 pos, bool Shift, bool Ctrl, bool Alt
-#define EH_Func_Args_Ctrl_MouseMoving types::control map, types::vector2 pos
-#define EH_Func_Args_Ctrl_MouseHolding types::control map, types::vector2 pos
+#define EH_Func_Args_Ctrl_MouseButtonDown types::control ctrl, int button, float x_pos, float y_pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonUp types::control ctrl, int button, float x_pos, float y_pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonClick types::control ctrl, int button, float x_pos, float y_pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseButtonDblClick types::control ctrl, int button, float x_pos, float y_pos, bool Shift, bool Ctrl, bool Alt
+#define EH_Func_Args_Ctrl_MouseMoving types::control ctrl, float x_pos, float y_pos, bool mouse_over
+#define EH_Func_Args_Ctrl_MouseHolding types::control ctrl, float x_pos, float y_pos, bool mouse_over
+#define EH_Func_Args_Ctrl_ButtonClick types::control ctrl
+#define EH_Func_Args_Ctrl_ButtonDblClick types::control ctrl
+#define EH_Func_Args_Ctrl_ButtonDown types::control ctrl
+#define EH_Func_Args_Ctrl_ButtonUp types::control ctrl
+#define EH_Func_Args_Ctrl_CanDestroy types::control ctrl, float exitCode
+#define EH_Func_Args_Ctrl_Char types::control ctrl, int charCode 
+#define EH_Func_Args_Ctrl_CheckBoxesSelChanged types::control ctrl, int selectedIndex, int currentIndex
+#define EH_Func_Args_Ctrl_CheckedChanged types::control checkBox, bool checked
+#define EH_Func_Args_Ctrl_Destroy types::control ctrl, float exitCode
+#define EH_Func_Args_Ctrl_HTMLLink types::control ctrl, types::r_string url
+#define EH_Func_Args_Ctrl_IMEChar types::control ctrl, int char_code
+#define EH_Func_Args_Ctrl_IMEComposition types::control ctrl, int char_code
+#define EH_Func_Args_Ctrl_KeyDown types::control ctrl, int keyCode, bool shift_held, bool ctrl_held, bool alt_held
+#define EH_Func_Args_Ctrl_KeyUp types::control ctrl, int keyCode, bool shift_held, bool ctrl_held, bool alt_held
+#define EH_Func_Args_Ctrl_KillFocus types::control ctrl
+#define EH_Func_Args_Ctrl_LBDblClick types::control ctrl, int selected_index
+    class event_handlers_listbox_info {
+    public:
+        types::r_string text_lb{};
+        float value_lb{};
+        types::r_string data_lb{};
+        explicit event_handlers_listbox_info(const types::game_value& gv) :
+            text_lb(gv[0]),
+            value_lb(gv[1]),
+            data_lb(gv[2])
+            
+        {
+        }
+    };
+#define EH_Func_Args_Ctrl_LBDrag types::control ctrl, types::auto_array<event_handlers_listbox_info> listBoxInfo
+#define EH_Func_Args_Ctrl_LBDragging types::control ctrl, float x_pos, float y_pos, int ctrlIDC, types::auto_array<event_handlers_listbox_info> listBoxInfo
+#define EH_Func_Args_Ctrl_LBDrop types::control ctrl, float x_pos, float y_pos, int ctrlIDC, types::auto_array<event_handlers_listbox_info> listBoxInfo
+#define EH_Func_Args_Ctrl_LBListSelChanged types::control ctrl, int selected_index
+#define EH_Func_Args_Ctrl_LBSelChanged types::control ctrl, int selected_index
+#define EH_Func_Args_Ctrl_Load types::control ctrl, types::config ctrl_config
+#define EH_Func_Args_Ctrl_MenuSelected types::control ctrl, int menu_id
+#define EH_Func_Args_Ctrl_MouseEnter types::control ctrl
+#define EH_Func_Args_Ctrl_MouseExit types::control ctrl
+#define EH_Func_Args_Ctrl_MouseZChanged types::control ctrl, float scroll_val
+#define EH_Func_Args_Ctrl_ObjectMoved types::control ctrl, types::vector3 offset_vector
+#define EH_Func_Args_Ctrl_SetFocus types::control ctrl
+#define EH_Func_Args_Ctrl_SliderPosChanged types::control ctrl, float new_value
+#define EH_Func_Args_Ctrl_ToolBoxSelChanged types::control ctrl, int selected_index
+#define EH_Func_Args_Ctrl_TreeCollapsed types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_TreeDblClick types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_TreeExpanded types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_TreeLButtonDown types::control ctrl
+#define EH_Func_Args_Ctrl_TreeMouseExit types::control ctrl
+#define EH_Func_Args_Ctrl_TreeMouseHold types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_TreeMouseMove types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_TreeSelChanged types::control ctrl, types::auto_array<int> tree_path
+#define EH_Func_Args_Ctrl_VideoStopped types::control ctrl
+
+
 
 //Name,Function return value, Function Arguments
-#define EHDEF_CTRL(XX)                                                   \
-    XX(Draw, void, EH_Func_Args_Ctrl_Draw)                               \
-    XX(MouseButtonDown, void, EH_Func_Args_Ctrl_MouseButtonDown)         \
-    XX(MouseButtonUp, void, EH_Func_Args_Ctrl_MouseButtonUp)             \
-    XX(MouseButtonClick, void, EH_Func_Args_Ctrl_MouseButtonClick)       \
-    XX(MouseButtonDblClick, void, EH_Func_Args_Ctrl_MouseButtonDblClick) \
-    XX(MouseMoving, void, EH_Func_Args_Ctrl_MouseMoving)                 \
-    XX(MouseHolding, void, EH_Func_Args_Ctrl_MouseHolding)
+#define EHDEF_CTRL(XX)                                                                  \
+    XX(ButtonClick, std::optional<bool>, EH_Func_Args_Ctrl_ButtonClick)                 \
+    XX(ButtonDblClick, void, EH_Func_Args_Ctrl_ButtonDblClick)                          \
+    XX(ButtonDown, void, EH_Func_Args_Ctrl_ButtonDown)                                  \
+    XX(ButtonUp, void, EH_Func_Args_Ctrl_ButtonUp)                                      \
+    XX(CanDestroy, std::optional<bool>, EH_Func_Args_Ctrl_CanDestroy)                   \
+    XX(Char, void, EH_Func_Args_Ctrl_Char)                                              \
+    XX(CheckBoxesSelChanged, void, EH_Func_Args_Ctrl_CheckBoxesSelChanged)              \
+    XX(CheckedChanged, void, EH_Func_Args_Ctrl_CheckedChanged)                          \
+    XX(Destroy, void, EH_Func_Args_Ctrl_Destroy)                                        \
+    XX(Draw, void, EH_Func_Args_Ctrl_Draw)                                              \
+    XX(HTMLLink, void, EH_Func_Args_Ctrl_HTMLLink)                                      \
+    XX(IMEChar, void, EH_Func_Args_Ctrl_IMEChar)                                        \
+    XX(IMEComposition, void, EH_Func_Args_Ctrl_IMEComposition)                          \
+    XX(KeyDown, std::optional<bool>, EH_Func_Args_Ctrl_KeyDown)                         \
+    XX(KeyUp, std::optional<bool>, EH_Func_Args_Ctrl_KeyUp)                             \
+    XX(KillFocus, void, EH_Func_Args_Ctrl_KillFocus)                                    \
+    XX(LBDblClick, void, EH_Func_Args_Ctrl_LBDblClick)                                  \
+    XX(LBDrag, void, EH_Func_Args_Ctrl_LBDrag)                                          \
+    XX(LBDragging, void, EH_Func_Args_Ctrl_LBDragging)                                  \
+    XX(LBDrop, void, EH_Func_Args_Ctrl_LBDrop)                                          \
+    XX(LBListSelChanged, void, EH_Func_Args_Ctrl_LBListSelChanged)                      \
+    XX(LBSelChanged, void, EH_Func_Args_Ctrl_LBSelChanged)                              \
+    XX(Load, void, EH_Func_Args_Ctrl_Load)                                              \
+    XX(MenuSelected, void, EH_Func_Args_Ctrl_MenuSelected)                              \
+    XX(MouseButtonClick, std::optional<bool>, EH_Func_Args_Ctrl_MouseButtonClick)       \
+    XX(MouseButtonDblClick, std::optional<bool>, EH_Func_Args_Ctrl_MouseButtonDblClick) \
+    XX(MouseButtonDown, std::optional<bool>, EH_Func_Args_Ctrl_MouseButtonDown)         \
+    XX(MouseButtonUp, std::optional<bool>, EH_Func_Args_Ctrl_MouseButtonUp)             \
+    XX(MouseEnter, void, EH_Func_Args_Ctrl_MouseEnter)                                  \
+    XX(MouseExit, void, EH_Func_Args_Ctrl_MouseExit)                                    \
+    XX(MouseHolding, void, EH_Func_Args_Ctrl_MouseHolding)                              \
+    XX(MouseMoving, void, EH_Func_Args_Ctrl_MouseMoving)                                \
+    XX(MouseZChanged, void, EH_Func_Args_Ctrl_MouseZChanged)                            \
+    XX(ObjectMoved, void, EH_Func_Args_Ctrl_ObjectMoved)                                \
+    XX(SetFocus, void, EH_Func_Args_Ctrl_SetFocus)                                      \
+    XX(SliderPosChanged, void, EH_Func_Args_Ctrl_SliderPosChanged)                      \
+    XX(ToolBoxSelChanged, void, EH_Func_Args_Ctrl_ToolBoxSelChanged)                    \
+    XX(TreeCollapsed, void, EH_Func_Args_Ctrl_TreeCollapsed)                            \
+    XX(TreeDblClick, void, EH_Func_Args_Ctrl_TreeDblClick)                              \
+    XX(TreeExpanded, void, EH_Func_Args_Ctrl_TreeExpanded)                              \
+    XX(TreeLButtonDown, void, EH_Func_Args_Ctrl_TreeLButtonDown)                        \
+    XX(TreeMouseExit, void, EH_Func_Args_Ctrl_TreeMouseExit)                            \
+    XX(TreeMouseHold, void, EH_Func_Args_Ctrl_TreeMouseHold)                            \
+    XX(TreeMouseMove, void, EH_Func_Args_Ctrl_TreeMouseMove)                            \
+    XX(TreeSelChanged, void, EH_Func_Args_Ctrl_TreeSelChanged)                          \
+    XX(VideoStopped, void, EH_Func_Args_Ctrl_VideoStopped)
 
-#define COMPILETIME_CHECK_ENUM_CTRL(name, retVal, funcArg) static_assert(eventhandlers_ctrl::name >= eventhandlers_ctrl::Draw);
+#define COMPILETIME_CHECK_ENUM_CTRL(name, retVal, funcArg) static_assert(eventhandlers_ctrl::name >= eventhandlers_ctrl::ButtonClick);
 
     /** @enum eventhandlers_object
     @brief #TODO
     */
     //#TODO doc
     enum class eventhandlers_ctrl {
-        Draw,
-        MouseButtonDown,
-        MouseButtonUp,
-        MouseButtonClick,
-        MouseButtonDblClick,
-        MouseMoving,
-        MouseHolding
+        ButtonClick,          ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onButtonClick">see the wiki</a>
+        ButtonDblClick,       ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onButtonDblClick">see the wiki</a>
+        ButtonDown,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onButtonDown">see the wiki</a>
+        ButtonUp,             ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onButtonUp">see the wiki</a>
+        CanDestroy,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onCanDestroy">see the wiki</a>
+        Char,                 ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onChar">see the wiki</a>
+        CheckBoxesSelChanged, ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onCheckBoxesSelChanged">see the wiki</a>
+        CheckedChanged,       ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onCheckedChanged">see the wiki</a>
+        Destroy,              ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onDestroy">see the wiki</a>
+        Draw,                 ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onDraw">see the wiki</a>
+        HTMLLink,             ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onHTMLLink">see the wiki</a>
+        IMEChar,              ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onIMEChar">see the wiki</a>
+        IMEComposition,       ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onIMEComposition">see the wiki</a>
+        KeyDown,              ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onKeyDown">see the wiki</a>
+        KeyUp,                ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onKeyUp">see the wiki</a>
+        KillFocus,            ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onKillFocus">see the wiki</a>
+        LBDblClick,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBDblClick">see the wiki</a>
+        LBDrag,               ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBDrag">see the wiki</a>
+        LBDragging,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBDragging">see the wiki</a>
+        LBDrop,               ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBDrop">see the wiki</a>
+        LBListSelChanged,     ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBListSelChanged">see the wiki</a>
+        LBSelChanged,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLBSelChanged">see the wiki</a>
+        Load,                 ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLoad">see the wiki</a>
+        MenuSelected,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMenuSelected">see the wiki</a>
+        MouseButtonClick,     ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonClick">see the wiki</a>
+        MouseButtonDblClick,  ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonDblClick">see the wiki</a>
+        MouseButtonDown,      ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonDown">see the wiki</a>
+        MouseButtonUp,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonUp">see the wiki</a>
+        MouseEnter,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseEnter">see the wiki</a>
+        MouseExit,            ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseExit">see the wiki</a>
+        MouseHolding,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseHolding">see the wiki</a>
+        MouseMoving,          ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseMoving">see the wiki</a>
+        MouseZChanged,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseZChanged">see the wiki</a>
+        ObjectMoved,          ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onObjectMoved">see the wiki</a>
+        SetFocus,             ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onSetFocus">see the wiki</a>
+        SliderPosChanged,     ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onSliderPosChanged">see the wiki</a>
+        ToolBoxSelChanged,    ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onToolBoxSelChanged">see the wiki</a>
+        TreeCollapsed,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeCollapsed">see the wiki</a>
+        TreeDblClick,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeDblClick">see the wiki</a>
+        TreeExpanded,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeExpanded">see the wiki</a>
+        TreeLButtonDown,      ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeLButtonDown">see the wiki</a>
+        TreeMouseExit,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeMouseExit">see the wiki</a>
+        TreeMouseHold,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeMouseHold">see the wiki</a>
+        TreeMouseMove,        ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeMouseMove">see the wiki</a>
+        TreeSelChanged,       ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onTreeSelChanged">see the wiki</a>
+        VideoStopped          ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onVideoStopped">see the wiki</a>
     };
 
     EHDEF_CTRL(COMPILETIME_CHECK_ENUM_CTRL)
@@ -597,9 +764,9 @@ namespace intercept::client {
 #define EH_Func_Args_MP_MPRespawn types::object unit, types::object corpse
 
     //Name,Function return value, Function Arguments
-#define EHDEF_MP(XX)                                                   \
-    XX(MPHit, void, EH_Func_Args_MP_MPHit)                               \
-    XX(MPKilled, void, EH_Func_Args_MP_MPKilled)         \
+#define EHDEF_MP(XX)                             \
+    XX(MPHit, void, EH_Func_Args_MP_MPHit)       \
+    XX(MPKilled, void, EH_Func_Args_MP_MPKilled) \
     XX(MPRespawn, types::vector3, EH_Func_Args_MP_MPRespawn)
 
 #define COMPILETIME_CHECK_ENUM_MP(name, retVal, funcArg) static_assert(eventhandlers_mp::name >= eventhandlers_mp::MPHit);
@@ -658,38 +825,51 @@ namespace intercept::client {
 
 #pragma region Display Eventhandlers
 
-#define EH_Func_Args_Display_onLoad types::display disp
-#define EH_Func_Args_Display_onUnload types::display disp, float exit_code
-#define EH_Func_Args_Display_onChildDestroyed types::display disp, types::display closed_disp, float exit_code
-#define EH_Func_Args_Display_onKeyDown types::display disp, int dik, bool shift, bool ctrl, bool alt
-#define EH_Func_Args_Display_onKeyUp types::display disp, int dik, bool shift, bool ctrl, bool alt
-#define EH_Func_Args_Display_onMouseMoving types::display disp, float delta_x, float delta_y
-#define EH_Func_Args_Display_onMouseZChanged types::display disp, float change
+#define EH_Func_Args_Display_Load types::display disp
+#define EH_Func_Args_Display_Unload types::display disp, float exit_code
+#define EH_Func_Args_Display_ChildDestroyed types::display disp, types::display closed_disp, float exit_code
+#define EH_Func_Args_Display_KeyDown types::display disp, int dik, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_KeyUp types::display disp, int dik, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_MouseMoving types::display disp, float delta_x, float delta_y
+#define EH_Func_Args_Display_MouseZChanged types::display disp, float change
+#define EH_Func_Args_Display_MouseButtonDown types::display disp, int button, float x_pos, float y_pos, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_MouseButtonUp types::display disp, int button, float x_pos, float y_pos, bool shift, bool ctrl, bool alt
+#define EH_Func_Args_Display_MouseHolding types::display disp, float x_pos, float y_pos
+#define EH_Func_Args_Display_Char types::display disp, int char_code
+    
 
     //Name,Function return value, Function Arguments
-#define EHDEF_Display(XX)                                                   \
-    XX(Load, void, EH_Func_Args_Display_onLoad)                               \
-    XX(Unload, void, EH_Func_Args_Display_onUnload)                           \
-    XX(ChildDestroyed, void, EH_Func_Args_Display_onChildDestroyed)           \
-    XX(KeyDown, bool, EH_Func_Args_Display_onKeyDown)                         \
-    XX(KeyUp, void, EH_Func_Args_Display_onKeyUp)                             \
-    XX(MouseMoving, void, EH_Func_Args_Display_onMouseMoving)                 \
-    XX(MouseZChanged, void, EH_Func_Args_Display_onMouseZChanged)
+#define EHDEF_Display(XX)                                                          \
+    XX(Char, void, EH_Func_Args_Display_Char)                                      \
+    XX(ChildDestroyed, void, EH_Func_Args_Display_ChildDestroyed)                  \
+    XX(KeyDown, std::optional<bool>, EH_Func_Args_Display_KeyDown)                 \
+    XX(KeyUp, std::optional<bool>, EH_Func_Args_Display_KeyUp)                     \
+    XX(Load, void, EH_Func_Args_Display_Load)                                      \
+    XX(MouseButtonDown, std::optional<bool>, EH_Func_Args_Display_MouseButtonDown) \
+    XX(MouseButtonUp, std::optional<bool>, EH_Func_Args_Display_MouseButtonUp)     \
+    XX(MouseHolding, void, EH_Func_Args_Display_MouseHolding)                      \
+    XX(MouseMoving, void, EH_Func_Args_Display_MouseMoving)                        \
+    XX(MouseZChanged, void, EH_Func_Args_Display_MouseZChanged)                    \
+    XX(Unload, void, EH_Func_Args_Display_Unload)
 
-#define COMPILETIME_CHECK_ENUM_Display(name, retVal, funcArg) static_assert(eventhandlers_display::name >= eventhandlers_display::Load);
+#define COMPILETIME_CHECK_ENUM_Display(name, retVal, funcArg) static_assert(eventhandlers_display::name >= eventhandlers_display::Char);
 
     /** @enum eventhandlers_display
     @brief #TODO
     */
     //#TODO doc
     enum class eventhandlers_display {
-        Load,
-        Unload,
-        ChildDestroyed,
-        KeyDown,
-        KeyUp,
-        MouseMoving,
-        MouseZChanged
+        Char,            ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onChar">see the wiki</a>
+        ChildDestroyed,  ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onChildDestroyed">see the wiki</a>
+        KeyDown,         ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onKeyDown">see the wiki</a>
+        KeyUp,           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onKeyUp">see the wiki</a>
+        Load,            ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onLoad">see the wiki</a>
+        MouseButtonDown, ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonDown">see the wiki</a>
+        MouseButtonUp,   ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseButtonUp">see the wiki</a>
+        MouseHolding,    ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseHolding">see the wiki</a>
+        MouseMoving,     ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseMoving">see the wiki</a>
+        MouseZChanged,   ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onMouseZChanged">see the wiki</a>
+        Unload           ///< <a href="https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onUnload">see the wiki</a>
     };
 
     EHDEF_Display(COMPILETIME_CHECK_ENUM_Display)

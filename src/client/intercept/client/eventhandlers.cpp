@@ -82,6 +82,7 @@ namespace intercept::client {
             case eventhandlers_mission::PreloadStarted: //[[fallthrough]]
             case eventhandlers_mission::PreloadFinished: //[[fallthrough]]
             case eventhandlers_mission::EachFrame: //[[fallthrough]]
+            case eventhandlers_mission::MPEnded: //[[fallthrough]]
             case eventhandlers_mission::Draw3D: {
                 (*func)();
             }
@@ -163,7 +164,32 @@ namespace intercept::client {
             case eventhandlers_mission::BuildingChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_BuildingChanged)>*>(func.get()))(args[0], args[1], args[2]);
             }
-                break;
+            case eventhandlers_mission::ControlsShifted: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_ControlsShifted)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }
+            case eventhandlers_mission::ExtensionCallback: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_ExtensionCallback)>*>(func.get()))(args[0], args[1], args[2]);
+            }
+            case eventhandlers_mission::HandleAccTime : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HandleAccTime)>*>(func.get()))(args[0], args[1], args[2]);
+            }
+            break;
+            case eventhandlers_mission::HandleChatMessage : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HandleChatMessage)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+            }
+            break;
+            case eventhandlers_mission::MarkerCreated : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerCreated)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            }
+            break;
+            case eventhandlers_mission::MarkerDeleted : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerDeleted)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_mission::MarkerUpdated : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerUpdated)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
             default: ;
         }
         return {};
@@ -476,8 +502,23 @@ namespace intercept::client {
             case eventhandlers_object::WeaponRested: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponRested)>*>(func.get()))(args[0], args[1]);
             }
-                break;
-
+            case eventhandlers_object::Disassembled : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Disassembled)>*>(func.get()))(args[0], args[1], args[2]);
+            }
+            break;
+            case eventhandlers_object::PathCalculated: {
+                auto& arr_ = args[1].to_array();
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PathCalculated)>*>(func.get()))(args[0], std::vector<types::vector3>(arr_.begin(), arr_.end()));
+            }
+            break;
+            case eventhandlers_object::PeriscopeElevationChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PeriscopeElevationChanged)>*>(func.get()))(args[0], types::rv_turret_path(args[1]), args[2], args[3], args[4]);
+            }
+            break;
+            case eventhandlers_object::Suppressed : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Suppressed)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            }
+            break;
             default: assert(false);
         }
         return {};
@@ -526,34 +567,98 @@ namespace intercept::client {
 
     intercept::types::game_value callEHHandler(eventhandlers_ctrl ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
         switch (ehType) {
-            case eventhandlers_ctrl::Draw: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            case eventhandlers_ctrl::Draw : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Draw)>*>(func.get()))(args[0]);
             }
-                break;
-            case eventhandlers_ctrl::MouseButtonDown: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
             }
-                break;
-            case eventhandlers_ctrl::MouseButtonUp: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
             }
-                break;
-            case eventhandlers_ctrl::MouseButtonClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseButtonClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonClick)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
             }
-                break;
-            case eventhandlers_ctrl::MouseButtonDblClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseButtonDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonDblClick)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
             }
-                break;
-            case eventhandlers_ctrl::MouseMoving: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseMoving : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseMoving)>*>(func.get()))(args[0], args[1], args[2], args[3]);
             }
-                break;
-            case eventhandlers_ctrl::MouseHolding: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
+            break;
+            case eventhandlers_ctrl::MouseHolding : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseHolding)>*>(func.get()))(args[0], args[1], args[2], args[3]);
             }
-                break;
+            break;
+            case eventhandlers_ctrl::ButtonClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonClick)>*>(func.get()))(args[0]);
+            }
+            break;
+            case eventhandlers_ctrl::ButtonDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonDblClick)>*>(func.get()))(args[0]);
+            }
+            break;
+            case eventhandlers_ctrl::ButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonDown)>*>(func.get()))(args[0]);
+            }
+            break;
+            case eventhandlers_ctrl::ButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonUp)>*>(func.get()))(args[0]);
+            }
+            break;
+            case eventhandlers_ctrl::CanDestroy : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CanDestroy)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::Char : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Char)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::CheckBoxesSelChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CheckBoxesSelChanged)>*>(func.get()))(args[0], args[1], args[2]);
+            }
+            break;
+            case eventhandlers_ctrl::CheckedChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CheckedChanged)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::Destroy : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Destroy)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::HTMLLink : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_HTMLLink)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::IMEChar : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_IMEChar)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::IMEComposition : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_IMEComposition)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
+            case eventhandlers_ctrl::KeyDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_KeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }
+            break;
+            case eventhandlers_ctrl::KeyUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_KeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            }
+            break;
+            case eventhandlers_ctrl::KillFocus : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_KillFocus)>*>(func.get()))(args[0]);
+            }
+            break;
+            case eventhandlers_ctrl::LBDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_LBDblClick)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
             default: assert(false);
         }
         return {};
@@ -661,26 +766,42 @@ namespace intercept::client {
         switch (ehType) {
 
             case eventhandlers_display::Load: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onLoad)>*>(func.get()))(args);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Load)>*>(func.get()))(args);
             }break;
             case eventhandlers_display::Unload: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onUnload)>*>(func.get()))(args[0], args[1]);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Unload)>*>(func.get()))(args[0], args[1]);
             }break;
             case eventhandlers_display::ChildDestroyed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_ChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
             }break;
             case eventhandlers_display::KeyDown: {
-                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Display_onKeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Display_KeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
             }
             case eventhandlers_display::KeyUp: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_KeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
             }break;
             case eventhandlers_display::MouseMoving: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseMoving)>*>(func.get()))(args[0], args[1], args[2]);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseMoving)>*>(func.get()))(args[0], args[1], args[2]);
             }break;
             case eventhandlers_display::MouseZChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseZChanged)>*>(func.get()))(args[0], args[1]);
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseZChanged)>*>(func.get()))(args[0], args[1]);
             }break;
+            case eventhandlers_display::MouseButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseButtonDown)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            }
+            break;
+            case eventhandlers_display::MouseButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseButtonUp)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            }
+            break;
+                case eventhandlers_display::MouseHolding : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseHolding)>*>(func.get()))(args[0], args[1], args[2]);
+            }
+            break;
+            case eventhandlers_display::Char : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Char)>*>(func.get()))(args[0], args[1]);
+            }
+            break;
             default: assert(false);
         }
         return {};

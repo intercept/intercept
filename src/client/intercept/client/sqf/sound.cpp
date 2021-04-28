@@ -243,5 +243,45 @@ namespace intercept {
         rv_audio_options get_audio_option_volumes() {
             return rv_audio_options(host::functions.invoke_raw_nular(__sqf::nular__getaudiooptionvolumes__ret__array));
         }
+
+        void fade_environment(float time_, float volume_) {
+            host::functions.invoke_raw_binary(__sqf::binary__fadeenvironment__scalar__scalar__ret__nothing, time_, volume_);
+        }
+
+        void set_player_von_volume(const object& unit_, float vol_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setplayervonvolume__object__scalar__ret__nothing, unit_, vol_);
+        }
+
+        float environment_volume() {
+            return host::functions.invoke_raw_nular(__sqf::nular__environmentvolume__ret__scalar);
+        }
+
+        float get_music_played_time() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmusicplayedtime__ret__scalar);
+        }
+
+        float speech_volume() {
+            return host::functions.invoke_raw_nular(__sqf::nular__speechvolume__ret__scalar);
+        }
+
+        void enable_audio_feature(sqf_string_const_ref feature_, bool enable_) {
+            host::functions.invoke_raw_unary(__sqf::unary__enableaudiofeature__array__ret__bool, {feature_, enable_});
+        }
+
+        float get_custom_sound_controller(const object& vehicle_, sqf_string_const_ref controller_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getcustomsoundcontroller__array__ret__scalar, {vehicle_, controller_});
+        }
+
+        float get_custom_sound_controller_count(const object& vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getcustomsoundcontroller__array__ret__scalar, vehicle_);
+        }
+
+        float get_player_von_volume(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getplayervonvolume__object__ret__scalar, unit_);
+        }
+
+        bool set_custom_sound_controller(const object& vehicle_, sqf_string_const_ref controller_, float value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__setcustomsoundcontroller__array__ret__bool, {vehicle_, controller_, value_});
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -748,15 +748,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setunitloadout__object__string__ret__nothing, obj_, cfg_);
         }
         rv_weapon_accessories weapon_accessories(const object &unit_, sqf_string_const_ref weapon_class_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessories__object__string__ret__array, unit_, weapon_class_);
-
-            return rv_weapon_accessories({res[0], res[1], res[2], res[3]});
+            return rv_weapon_accessories(host::functions.invoke_raw_binary(__sqf::binary__weaponaccessories__object__string__ret__array, unit_, weapon_class_));
         }
 
         rv_weapon_accessories weapon_accessories_cargo(const object &container_, int weapon_id_, int creator_id_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__weaponaccessoriescargo__object__array__ret__array, container_, {weapon_id_, creator_id_});
-
-            return rv_weapon_accessories({res[0], res[1], res[2], res[3]});
+            return rv_weapon_accessories(host::functions.invoke_raw_binary(__sqf::binary__weaponaccessoriescargo__object__array__ret__array, container_, {weapon_id_, creator_id_}));
         }
         sqf_return_string_list magazines_turret(const object &vehicle_, rv_turret_path turret_path_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__magazinesturret__object__array__ret__array, vehicle_, std::move(turret_path_)));
@@ -884,6 +880,38 @@ namespace intercept {
         std::pair<float, float> backpack_space_for(const object& backpack_, sqf_string_const_ref weapon_) {
             auto res = host::functions.invoke_raw_binary(__sqf::binary__backpackspacefor__object__string__ret__array, backpack_, weapon_);
             return  { res[0], res[1] };
+        }
+
+        void add_binocular_item(const object& unit_, sqf_string_const_ref classname_) {
+            host::functions.invoke_raw_binary(__sqf::binary__addbinocularitem__object__string__ret__nothing, unit_, classname_);
+        }
+
+        void remove_binocular_item(const object& unit_, sqf_string_const_ref classname_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removebinocularitem__object__string__ret__nothing, unit_, classname_);
+        }
+        
+        void lock_inventory(const object& vehicle_, bool locked_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lockinventory__object__bool__ret__nothing, vehicle_, locked_);
+        }
+
+        rv_weapon_accessories binocular_items(const object& unit_) {
+            return rv_weapon_accessories(host::functions.invoke_raw_unary(__sqf::unary__binocularitems__object__ret__array, unit_));
+        }
+
+        sqf_return_string binocular_magazine(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__binocularmagazine__object__ret__string, unit_);
+        }
+
+        bool locked_inventory(const object& vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__lockedinventory__object__ret__bool, vehicle_);
+        }
+
+        void remove_all_binocular_items(const object& unit_) {
+            host::functions.invoke_raw_unary(__sqf::unary__removeallbinocularitems__object__ret__nothing, unit_);
+        }
+
+        void remove_all_secondary_weapon_items(const object& unit_) {
+            host::functions.invoke_raw_unary(__sqf::unary__removeallsecondaryweaponitems__object__ret__nothing, unit_);
         }
     }  // namespace sqf
 }  // namespace intercept

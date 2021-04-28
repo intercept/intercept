@@ -65,7 +65,7 @@ namespace intercept {
 
         void set_pos_world(const object &object_, const vector3 &position_);
         vector3 get_pos_world(const object &unit_);
-        float get_terrain_height_asl(vector3 position_);
+        float get_terrain_height_asl(const vector3 &position_);
 
         vector3 world_to_model(const object &object_, const vector3 &position_);
         vector3 world_to_model_visual(const object &object_, const vector3 &position_);
@@ -161,12 +161,12 @@ namespace intercept {
         */
         std::vector<vector3> building_pos(const object &building_, int index_);
 
-        vector3 vector_model_to_world(const object &object_, vector3 modelDir_);
-        vector3 vector_model_to_world_visual(const object &object_, vector3 modelDir_);
-        vector3 vector_world_to_model(const object &object_, vector3 worldDir_);
-        vector3 vector_world_to_model_visual(const object &object_, vector3 worldDir_);
+        vector3 vector_model_to_world(const object &object_, const vector3& modelDir_);
+        vector3 vector_model_to_world_visual(const object &object_, const vector3 &modelDir_);
+        vector3 vector_world_to_model(const object &object_, const vector3 &worldDir_);
+        vector3 vector_world_to_model_visual(const object &object_, const vector3 &worldDir_);
 
-
+        vector3 get_pos_world_visual(const object &object_);
 
     }  // namespace sqf
 }  // namespace intercept

@@ -150,5 +150,9 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(__sqf::binary__enablechannel__scalar__array__ret__nothing, channel_, params_right);
         }
+
+        rv_channel_info radio_channel_info(float channelID_) {
+            return rv_channel_info(host::functions.invoke_raw_unary(__sqf::unary__radiochannelinfo__scalar__ret__array, channelID_));
+        }
     }  // namespace sqf
 }  // namespace intercept

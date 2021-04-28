@@ -77,7 +77,6 @@ namespace intercept {
         void halt();  //only in dev version - at least wiki says so
         void throw_exception(game_value exception_);
         void diag_enable(debug_toggles mode_, bool enable_);
-        void diag_set_terrain_height(const vector3 &position_, float height_);
         void diag_set_terrain_height(const vector2 &position_, float height_);
         bool diag_dump_call_trace_to_log();
         auto_array<game_value> diag_dump_terrain_synth();

@@ -273,7 +273,7 @@ namespace intercept {
         }
 
         float get_custom_sound_controller_count(const object& vehicle_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getcustomsoundcontroller__array__ret__scalar, vehicle_);
+            return host::functions.invoke_raw_unary(__sqf::unary__getcustomsoundcontrollercount__object__ret__scalar, vehicle_);
         }
 
         float get_player_von_volume(const object& unit_) {

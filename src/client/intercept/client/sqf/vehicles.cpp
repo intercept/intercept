@@ -1003,11 +1003,11 @@ namespace intercept {
             RETURN_PYLON_MAGS
         }
         std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, sqf_string_const_ref pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
+            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
             RETURN_PYLON_MAGS
         }
         std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, float pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
+            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
             RETURN_PYLON_MAGS
         }
 

@@ -2832,7 +2832,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlseturl__control__string__ret__nothing, control_, url_);
         }
 
-        void draw_triangle(const control &mapCtrl_, const auto_array<vector3> &vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
+        void draw_triangle(const control &mapCtrl_, const std::vector<vector3> &vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
             host::functions.invoke_raw_binary(__sqf::binary__drawtriangle__control__array__ret__nothing, mapCtrl_, {vertices_, color_, fill_texture_});
         }
 

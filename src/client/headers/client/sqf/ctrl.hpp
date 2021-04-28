@@ -675,7 +675,7 @@ namespace intercept {
         void ctrl_set_scroll_values(const control &control_, float vScroll_, float hScroll_);
         void ctrl_set_text_selection(const control &control_, float start_, float length_);
         void ctrl_set_url(const control &control_, sqf_string_const_ref url_);
-        void draw_triangle(const control &mapCtrl_, const auto_array<vector3>& vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_ = "");
+        void draw_triangle(const control &mapCtrl_, const std::vector<vector3>& vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_ = "");
         float get_text_width(sqf_string_const_ref string_, sqf_string_const_ref font_, float fontSize_);
         void lb_set_select_color(const control &control_, int index_, const rv_color &color_);
         void lb_set_select_color(float idc_, int index_, const rv_color &color_);

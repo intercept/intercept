@@ -114,10 +114,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__diag_enable__string__bool__ret__nothing, std::move(mode), enable_);
         }
 
-        void diag_set_terrain_height(const vector3& position_, float height_) {
-            host::functions.invoke_raw_binary(__sqf::binary__diag_setterrainheight__array__scalar__ret__nothing, position_, height_);
-        }
-
         void diag_set_terrain_height(const vector2& position_, float height_) {
             host::functions.invoke_raw_binary(__sqf::binary__diag_setterrainheight__array__scalar__ret__nothing, position_, height_);
         }

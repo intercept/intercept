@@ -865,8 +865,7 @@ namespace intercept {
                     behavior = "STEALTH"sv;
                     break;
                 default:
-                    behavior = ""sv;
-                    break;
+                    return;
             }
             host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__group__string__ret__nothing, group_, std::move(behavior));
         }
@@ -889,8 +888,7 @@ namespace intercept {
                     behavior = "STEALTH"sv;
                     break;
                 default:
-                    behavior = ""sv;
-                    break;
+                    return;
             }
             host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__object__string__ret__nothing, unit_, std::move(behavior));
         }
@@ -922,8 +920,7 @@ namespace intercept {
                     behavior = "RED"sv;
                     break;
                 default:
-                    behavior = ""sv;
-                    break;
+                    return;
             }
             host::functions.invoke_raw_binary(__sqf::binary__setunitcombatmode__object__string__ret__nothing, unit_, std::move(behavior));
         }
@@ -937,7 +934,7 @@ namespace intercept {
         }
 
         std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_) {
-            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__unitcombatmode__object__ret__string, unit_));
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object__ret__array, unit_));
         }
 
         object get_attack_target(const object& unit_) {

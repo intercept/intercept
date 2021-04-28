@@ -469,7 +469,7 @@ namespace intercept {
 
         sqf_return_string_list all_variables(const display &value_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
-                __sqf::unary__allvariables__control__ret__array, value_));
+                __sqf::unary__allvariables__display__ret__array, value_));
         }
 
         bool __sqfassert(bool test_) {
@@ -895,14 +895,14 @@ namespace intercept {
             game_value params({type_,
                                command_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
         }
 
         int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
             game_value params({type_,
                                command_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__addmusiceventhandler__array__ret__scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
         }
 
         void remove_mission_event_handler(sqf_string_const_ref type_, int index_) {

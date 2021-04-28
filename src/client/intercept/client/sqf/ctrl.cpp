@@ -3096,7 +3096,7 @@ namespace intercept {
             return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__scalar__ret__array, idc_));
         }
 
-        void ctrl_set_text_color_secondary(const control& ctrl_, rv_color color_) {
+        void ctrl_set_text_color_secondary(const control &ctrl_, const rv_color &color_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsettextcolorsecondary__control__array__ret__nothing, ctrl_, color_);
         }
     }  // namespace sqf

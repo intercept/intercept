@@ -560,11 +560,11 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__markershadow__string__ret__bool, marker_);
         }
 
-        void set_marker_polyline(marker marker_, std::vector<float> polyline_) {
+        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolyline__string__array__ret__nothing, marker_, polyline_);
         }
 
-        void set_marker_polyline_local(marker marker_, std::vector<float> polyline_) {
+        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolylinelocal__string__array__ret__nothing, marker_, polyline_);
         }
 

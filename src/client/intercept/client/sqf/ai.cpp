@@ -901,6 +901,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__object__string__ret__nothing, unit_, behavior_);
         }
 
+        sqf_return_string combat_behaviour(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__combatbehaviour__object__ret__string, unit_);
+        }
+
+        sqf_return_string combat_behaviour(const group &group_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__combatbehaviour__group__ret__string, group_);
+        }
+
         void set_unit_combat_mode(const object& unit_, ai_combat_modes mode_) {
             game_value behavior;
             switch (mode_) {

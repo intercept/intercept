@@ -133,6 +133,7 @@ namespace intercept {
         bool pp_effect_committed(float value_);
         void pp_effect_destroy(float value_);
         bool pp_effect_enabled(float value_);
+        bool pp_effect_enabled(sqf_string_const_ref value_);
 
         void pp_effect_commit(float value0_, sqf_string_const_ref value1_);
         void pp_effect_enable(bool value0_, sqf_string_const_ref value1_);

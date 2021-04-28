@@ -3083,5 +3083,21 @@ namespace intercept {
         float menu_value(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuvalue__array__ret__scalar, {idc_, path_});
         }
+        void menu_clear(const control& ctrl_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuclear__control__ret__nothing, ctrl_);
+        }
+        void menu_clear(float idc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuclear__scalar__ret__nothing, idc_);
+        }
+        std::vector<int> menu_hover(const control& ctrl_) {
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__control__ret__array, ctrl_));
+        }
+        std::vector<int> menu_hover(float idc_) {
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__scalar__ret__array, idc_));
+        }
+
+        void ctrl_set_text_color_secondary(const control& ctrl_, rv_color color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsettextcolorsecondary__control__array__ret__nothing, ctrl_, color_);
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -262,6 +262,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__diag_toggle__string__ret__nothing, std::move(mode));
         }
 
+        bool diag_enabled(sqf_string_const_ref mode_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__diag_enabled__string__ret__bool, mode_);
+        }
+
 
     }  // namespace sqf
 }  // namespace intercept

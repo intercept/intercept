@@ -761,7 +761,7 @@ namespace intercept {
         sqf_return_string menu_url(float idc_, const std::vector<int> &path_);
         float menu_value(const control &ctrl_, const std::vector<int> &path_);
         float menu_value(float idc_, const std::vector<int> &path_);
-        void ctrl_set_text_color_secondary(const control &ctrl_, rv_color color_);
+        void ctrl_set_text_color_secondary(const control &ctrl_, const rv_color &color_);
         void menu_clear(const control &ctrl_);
         void menu_clear(float idc_);
         std::vector<int> menu_hover(const control &ctrl_);

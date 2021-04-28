@@ -134,8 +134,8 @@ namespace intercept {
         sqf_return_string get_player_id(const object &player_);
         sqf_return_string marker_channel(marker marker_);
         std::vector<float> marker_polyline(marker marker_);
-        void set_marker_polyline(marker marker_, std::vector<float> polyline_);
-        void set_marker_polyline_local(marker marker_, std::vector<float> polyline_);
+        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_);
+        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_);
         void set_marker_shadow(marker marker_, bool shadow_);
         void set_marker_shadow_local(marker marker_, bool shadow_);
         bool marker_shadow(marker marker_);

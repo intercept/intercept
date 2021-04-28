@@ -22,12 +22,12 @@ namespace intercept {
         struct rv_mod_info {
             sqf_string modname{};
             sqf_string modDir{};
-            bool isDefault{};
-            bool isOfficial{};
             sqf_string origin{};
             sqf_string hash{};
             sqf_string hashShort{};
             sqf_string itemID{};
+            bool isDefault{};
+            bool isOfficial{};
             explicit rv_mod_info(const game_value &gv_)
                 : modname(gv_[0]),
                   modDir(gv_[1]),
@@ -66,12 +66,12 @@ namespace intercept {
                   totalTime(gv_[3]) {}
         };
         struct rv_dlc_asset_info {
+            sqf_string appID;           // - actual steam item ID or "0" for none or "-1" for unknown
+            sqf_string DLCName;         // - actual DLC name or ""
             bool isDlc;                 // - the asset belongs to a DLC
             bool isOwned;               //
             bool isInstalled;           //
             bool isAvailable;           //
-            sqf_string appID;           // - actual steam item ID or "0" for none or "-1" for unknown
-            sqf_string DLCName;         // - actual DLC name or ""
             explicit rv_dlc_asset_info(const game_value &gv_)
                 : isDlc(gv_[0]),
                   isOwned(gv_[1]),

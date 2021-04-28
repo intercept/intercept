@@ -18,15 +18,15 @@ namespace intercept {
     namespace sqf {
         struct rv_apperture_params {
             float current_aperture{};  //Current aperture
-            bool forced{};             //Whether aperture was forced by setAperture
             float approx_aperture{};   //Engine estimated aperture for the scene
             float approx_luminance{};  //Engine estimated luminance
             float min_aperture{};      //Minimal custom aperture{}; see setApertureNew
             float std_aperture{};      //Standard custom aperture{}; see setApertureNew
             float max_aperture{};      //Maximal custom aperture {}; see setApertureNew
             float custom_lumi{};       //Custom luminance{}; see setApertureNew
-            bool custom_forced{};      //Whether custom values were forced
             float light_intensity{};   //Blinding intensity of the light
+            bool forced{};             //Whether aperture was forced by setAperture
+            bool custom_forced{};      //Whether custom values were forced
             rv_apperture_params(const game_value &gv_)
                 : current_aperture(gv_[0]),
                   forced(gv_[1]),

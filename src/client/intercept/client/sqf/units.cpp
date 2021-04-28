@@ -82,9 +82,7 @@ namespace intercept {
         }
 
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__targetknowledge__object__object__ret__array, unit_, target_);
-
-            return rv_target_knowledge({res[0], res[1], res[2], res[3], res[4], res[5], res[6]});
+            return rv_target_knowledge(host::functions.invoke_raw_binary(__sqf::binary__targetknowledge__object__object__ret__array, unit_, target_));
         }
 
         //#TODO: Find out how this function works

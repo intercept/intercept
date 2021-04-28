@@ -24,13 +24,21 @@ namespace intercept {
 
         struct rv_target_knowledge {
             //example [true,true,0,-2.14748e+006,WEST,0,[4556.26,5862.7,6.22729]]
-            bool known_by_group;
-            bool known_by_unit;
+            side target_side;
             float last_seen_by_unit;
             float last_endangered_by_unit;
-            side target_side;
             float position_error;
             vector3 target_position;
+            bool known_by_group;
+            bool known_by_unit;
+            explicit rv_target_knowledge(const game_value &gv_)
+                : known_by_group(gv_[0]),
+                  known_by_unit(gv_[1]),
+                  last_seen_by_unit(gv_[2]),
+                  last_endangered_by_unit(gv_[3]),
+                  target_side(gv_[4]),
+                  position_error(gv_[5]),
+                  target_position(gv_[6]) {}
         };
 
         void set_user_mfd_value(const object &object_, int index_, float value_);

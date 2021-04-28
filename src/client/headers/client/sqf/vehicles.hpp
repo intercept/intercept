@@ -37,8 +37,8 @@ namespace intercept {
             sqf_string magazine_classname;
             sqf_string magazine_ammo_count;
             sqf_string magazine_detail;
-            rv_turret_path assigned_turret;
             float pylon_index{};
+            rv_turret_path assigned_turret;
             explicit rv_pylon_info(const game_value &gv_)
                 : pylon_index(gv_[0]),
                   pylon_name(gv_[1]),

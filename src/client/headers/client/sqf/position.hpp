@@ -90,6 +90,11 @@ namespace intercept {
         struct rv_bounding_box {
             vector3 min;
             vector3 max;
+            float bounding_radius;
+            explicit rv_bounding_box(const game_value &gv_) : min(gv_[0]),
+                                                              max(gv_[1]),
+                                                              bounding_radius(gv_[2]) {}
+
         };
 
         rv_bounding_box bounding_box(const object &model_);
@@ -119,8 +124,8 @@ namespace intercept {
         vector3 unit_aim_position_visual(const object &unit_);
 
         //position
-        vector3 model_to_world_visual_world(const object &object_, vector3 model_pos_);
-        vector3 model_to_world_world(const object &object_, vector3 model_pos_);
+        vector3 model_to_world_visual_world(const object &object_, const vector3 &model_pos_);
+        vector3 model_to_world_world(const object &object_, const vector3 &model_pos_);
 
         vector3 screen_to_world(const vector2 &pos_);
         vector3 model_to_world(const object &object_, const vector3 &offset_);

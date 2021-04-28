@@ -982,33 +982,48 @@ namespace intercept {
             return __helpers::__convert_to_vector<rv_vehicle_sensor>(host::functions.invoke_raw_binary(__sqf::binary__isvehiclesensorenabled__object__string__ret__array, vehicle_, component_));
         }
 
-        #define RETURN_PYLON_MAGS if (game_return.is_empty()) return sqf_return_string_list(); \
-        switch (game_return[0].type_enum()) { \
-            case (game_data_type::STRING): { \
-                return __helpers::__convert_to_vector<sqf_return_string>(game_return); \
-            } \
-            case (game_data_type::ARRAY): { \
-                return __helpers::__convert_to_vector<sqf_return_string>(__helpers::__convert_to_vector<sqf_return_string>(game_return)); \
-            } \
-            default: \
-                return sqf_return_string_list(); \
-        }
-
-        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(const object& vehicle_, sqf_string_const_ref pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, vehicle_, pylon_).to_array();
-            RETURN_PYLON_MAGS
-        }
-        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(const object &vehicle_, float pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, vehicle_, pylon_).to_array();
-            RETURN_PYLON_MAGS
-        }
-        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, sqf_string_const_ref pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
-            RETURN_PYLON_MAGS
-        }
-        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(sqf_string_const_ref vehicle_class_, float pylon_) {
-            auto game_return = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, vehicle_class_, pylon_).to_array();
-            RETURN_PYLON_MAGS
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(std::variant<const object, sqf_string_const_ref> vehicle_, std::variant<float, sqf_string_const_ref> pylon_) {
+            if (vehicle_.index() == 0) {
+                game_value gv;
+                if (pylon_.index() == 0) {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, std::get<0>(vehicle_), std::get<0>(pylon_));
+                } else {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, std::get<0>(vehicle_), std::get<1>(pylon_));
+                }
+                auto& game_return = gv.to_array();
+                if (game_return.is_empty()) return sqf_return_string_list();
+                try {
+                    std::vector<sqf_return_string_list> temp_return{};
+                    temp_return.reserve(game_return.size());
+                    for (auto &item : game_return) {
+                        auto& temp_array = item.to_array();
+                        temp_return.emplace_back(std::vector<sqf_return_string>(temp_array.begin(), temp_array.end()));
+                    }
+                    return temp_return;
+                } catch (const game_value_conversion_error &) {
+                    return __helpers::__convert_to_vector<sqf_return_string>(game_return);
+                }
+            } else {
+                game_value gv;
+                if (pylon_.index() == 0) {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, std::get<1>(vehicle_), std::get<0>(pylon_));
+                } else {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, std::get<1>(vehicle_), std::get<1>(pylon_));
+                }
+                auto& game_return = gv.to_array();
+                if (game_return.is_empty()) return sqf_return_string_list();
+                try {
+                    std::vector<sqf_return_string_list> temp_return{};
+                    temp_return.reserve(game_return.size());
+                    for (auto &item : game_return) {
+                        auto &temp_array = item.to_array();
+                        temp_return.emplace_back(std::vector<sqf_return_string>(temp_array.begin(), temp_array.end()));
+                    }
+                    return temp_return;
+                } catch (const game_value_conversion_error &) {
+                    return __helpers::__convert_to_vector<sqf_return_string>(game_return);
+                }
+            }
         }
 
         void set_effective_commander(const object& vehicle_, const object& commander_) {

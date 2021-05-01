@@ -82,9 +82,7 @@ namespace intercept {
         }
 
         rv_target_knowledge target_knowledge(const object &unit_, const object &target_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__targetknowledge__object__object__ret__array, unit_, target_);
-
-            return rv_target_knowledge({res[0], res[1], res[2], res[3], res[4], res[5], res[6]});
+            return rv_target_knowledge(host::functions.invoke_raw_binary(__sqf::binary__targetknowledge__object__object__ret__array, unit_, target_));
         }
 
         //#TODO: Find out how this function works
@@ -162,6 +160,11 @@ namespace intercept {
 
         float current_zeroing(const object &gunner_) {
             return __helpers::__number_unary_object(__sqf::unary__currentzeroing__object__ret__scalar, gunner_);
+        }
+
+        rv_zeroing current_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_) {
+            game_value ret = host::functions.invoke_raw_binary(__sqf::binary__currentzeroing__object__array__ret__array, vehicle_, {weapon_class_, muzzle_class_});
+            return rv_zeroing({ret[0], ret[1]});
         }
 
         sqf_return_string face(const object &value_) {
@@ -889,5 +892,24 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__dogetout__object_array__ret__nothing, std::move(units));
         }
 
+        void calculate_player_visibility_by_friendly(bool calc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__calculateplayervisibilitybyfriendly__bool__ret__nothing, calc_);
+        }
+
+        bool get_calculate_player_visibility_by_friendly() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getcalculateplayervisibilitybyfriendly__ret__bool);
+        }
+
+        bool get_diver_state(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getdiverstate__object__ret__bool, unit_);
+        }
+
+        float get_object_fov(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getobjectfov__object__ret__scalar, unit_);
+        }
+
+        vector2 weapon_inertia(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__weaponinertia__object__ret__array, unit_);
+        }
     }  // namespace sqf
 }  // namespace intercept

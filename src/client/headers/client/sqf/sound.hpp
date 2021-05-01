@@ -86,6 +86,15 @@ namespace intercept {
         float add_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
         void remove_music_event_handler(sqf_string_const_ref type_, float id_);
         float set_music_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
-
+        void fade_environment(float time_, float volume_);
+        void set_player_von_volume(const object &unit_, float vol_);
+        float environment_volume();
+        float get_music_played_time();
+        float speech_volume();
+        void enable_audio_feature(sqf_string_const_ref feature_, bool enable_);
+        float get_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_);
+        float get_custom_sound_controller_count(const object &vehicle_);
+        float get_player_von_volume(const object &unit_);
+        bool set_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_, float value_);
     }  // namespace sqf
 }  // namespace intercept

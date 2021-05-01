@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -21,6 +21,25 @@ namespace intercept {
         namespace __helpers {
             void chat_message(binary_function fnc_, const object &obj_, sqf_string_const_ref message_);
         }
+        struct rv_channel_info {
+            rv_color colour;
+            sqf_string label;
+            sqf_string callSign;
+            std::vector<object> units{};
+            bool isProtocol;
+            bool exists;
+            explicit rv_channel_info(const game_value &gv_)
+                : colour(gv_[0]),
+                  label(gv_[1]),
+                  callSign(gv_[2]),
+                  isProtocol(gv_[4]),
+                  exists(gv_[5])
+            {
+                auto &arr = gv_[3].to_array();
+                units = std::vector<object>(arr.begin(), arr.end());
+            }
+        };
+
         void side_chat(const object &obj_, sqf_string_const_ref message_);
         void global_chat(const object &obj_, sqf_string_const_ref message_);
         void group_chat(const object &obj_, sqf_string_const_ref message_);
@@ -59,6 +78,8 @@ namespace intercept {
         void sideradio(const object &unit_, sqf_string_const_ref radio_name_);
         void sideradio(const side &side_, sqf_string_const_ref identity_, sqf_string_const_ref radio_name_);
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
+
+        rv_channel_info radio_channel_info(float channelID_);
 
     }  // namespace sqf
 }  // namespace intercept

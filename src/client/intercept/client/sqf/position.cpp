@@ -152,7 +152,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getposworld__object__ret__array, unit_);
         }
 
-        float get_terrain_height_asl(vector3 position_) {
+        float get_terrain_height_asl(const vector3& position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getterrainheightasl__array__ret__scalar, position_);
         }
         vector3 world_to_model(const object &object_, const vector3 &position_) {
@@ -212,22 +212,18 @@ namespace intercept {
         }
 
         rv_bounding_box bounding_box(const object &model_) {
-            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
-            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingbox__object__ret__array, model_));
         }
 
         rv_bounding_box bounding_box_real(const object &model_) {
-            game_value rgv(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
-            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
         }
 
         rv_bounding_box bounding_box(bounding_box_clipping_type type_, const object &model_) {
-            game_value rgv(host::functions.invoke_raw_binary(__sqf::binary__boundingbox__scalar__object__ret__array, static_cast<int>(type_), model_));
-            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+            return rv_bounding_box(host::functions.invoke_raw_binary(__sqf::binary__boundingbox__scalar__object__ret__array, static_cast<int>(type_), model_));
         }
         rv_bounding_box bounding_box_real(bounding_box_clipping_type type_, const object &model_) {
-            game_value rgv(host::functions.invoke_raw_binary(__sqf::binary__boundingboxreal__scalar__object__ret__array, static_cast<int>(type_), model_));
-            return rv_bounding_box({vector3(rgv[0][0], rgv[0][1], rgv[0][2]), vector3(rgv[1][0], rgv[1][1], rgv[1][2])});
+            return rv_bounding_box(host::functions.invoke_raw_binary(__sqf::binary__boundingboxreal__scalar__object__ret__array, static_cast<int>(type_), model_));
         }
 
         vector3 bounding_center(const object &obj_) {
@@ -281,11 +277,11 @@ namespace intercept {
         vector3 unit_aim_position_visual(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_);
         }
-        vector3 model_to_world_visual_world(const object &object_, vector3 model_pos_) {
+        vector3 model_to_world_visual_world(const object &object_, const vector3& model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_);
         }
 
-        vector3 model_to_world_world(const object &object_, vector3 model_pos_) {
+        vector3 model_to_world_world(const object &object_, const vector3& model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_);
         }
         vector3 screen_to_world(const vector2 &pos_) {
@@ -564,16 +560,16 @@ namespace intercept {
             }
         }
 
-        vector3 vector_model_to_world(const object& object_, vector3 modelDir_) {
+        vector3 vector_model_to_world(const object &object_, const vector3& modelDir_) {
             return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworld__object__array__ret__array, object_, modelDir_);
         }
-        vector3 vector_model_to_world_visual(const object& object_, vector3 modelDir_) {
+        vector3 vector_model_to_world_visual(const object &object_, const vector3& modelDir_) {
             return host::functions.invoke_raw_binary(__sqf::binary__vectormodeltoworldvisual__object__array__ret__array, object_, modelDir_);
         }
-        vector3 vector_world_to_model(const object& object_, vector3 worldDir_) {
+        vector3 vector_world_to_model(const object &object_, const vector3& worldDir_) {
             return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodel__object__array__ret__array, object_, worldDir_);
         }
-        vector3 vector_world_to_model_visual(const object& object_, vector3 worldDir_) {
+        vector3 vector_world_to_model_visual(const object& object_, const vector3& worldDir_) {
             return host::functions.invoke_raw_binary(__sqf::binary__vectorworldtomodelvisual__object__array__ret__array, object_, worldDir_);
         }
 
@@ -581,6 +577,10 @@ namespace intercept {
             auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
 
             return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
+        }
+
+        vector3 get_pos_world_visual(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getposworldvisual__object__ret__array, object_);
         }
 
     }  // namespace sqf

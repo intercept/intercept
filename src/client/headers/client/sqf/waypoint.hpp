@@ -430,6 +430,27 @@ namespace intercept {
 
         @sa https://community.bistudio.com/wiki/waypointVisible
         */
+
+        struct rv_trigger_activation {
+            sqf_string activated_by;
+            sqf_string activation_type;
+            bool repeating;
+            explicit rv_trigger_activation(const game_value &gv_)
+                : activated_by(gv_[0]),
+                  activation_type(gv_[1]),
+                  repeating(gv_[2]) {}
+        };
+
+        struct rv_trigger_statements {
+            sqf_string condition;
+            sqf_string on_activation;
+            sqf_string on_deactivation;
+            explicit rv_trigger_statements(const game_value &gv_)
+                : condition(gv_[0]),
+                  on_activation(gv_[1]),
+                  on_deactivation(gv_[2]) {}
+        };
+
         bool waypoint_visible(waypoint &wp_);
 
         std::vector<waypoint> synchronized_waypoints(waypoint &wp_);
@@ -544,5 +565,11 @@ namespace intercept {
 
         vector3 custom_waypoint_position();
 
+        void set_trigger_interval(const object &trigger_, float interval_);
+        void set_waypoint_loiter_altitude(waypoint wp_, float alt_);
+        rv_trigger_activation trigger_activation(const object &trigger_);
+        float trigger_interval(const object &trigger_);
+        rv_trigger_statements trigger_statements(const object &trigger_);
+        float waypoint_loiter_altitude(const waypoint &wp_);
     }  // namespace sqf
 }  // namespace intercept

@@ -395,5 +395,28 @@ namespace intercept {
             return __helpers::__retrieve_nular_vector3(__sqf::nular__customwaypointposition__ret__array);
         }
 
+        void set_trigger_interval(const object& trigger_, float interval_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settriggerinterval__object__scalar__ret__nothing, trigger_, interval_);
+        }
+
+        void set_waypoint_loiter_altitude(waypoint wp_, float alt_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaypointloiteraltitude__array__scalar__ret__nothing, wp_, alt_);
+        }
+
+        rv_trigger_activation trigger_activation(const object& trigger_) {
+            return rv_trigger_activation(host::functions.invoke_raw_unary(__sqf::unary__triggeractivation__object__ret__array, trigger_));
+        }
+
+        float trigger_interval(const object& trigger_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__triggerinterval__object__ret__scalar, trigger_);
+        }
+
+        rv_trigger_statements trigger_statements(const object& trigger_) {
+            return rv_trigger_statements(host::functions.invoke_raw_unary(__sqf::unary__triggerstatements__object__ret__array, trigger_));
+        }
+
+        float waypoint_loiter_altitude(const waypoint& wp_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__waypointloiteraltitude__array__ret__scalar, wp_);
+        }
     }  // namespace sqf
 }  // namespace intercept

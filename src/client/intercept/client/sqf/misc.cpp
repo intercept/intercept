@@ -5,7 +5,7 @@
 
 namespace intercept {
     namespace sqf {
-
+        
         //simulation
         void enable_dynamic_simulation(const object &object_, bool enable_) {
             host::functions.invoke_raw_binary(__sqf::binary__enabledynamicsimulation__object__bool__ret__nothing, object_, enable_);

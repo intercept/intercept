@@ -65,7 +65,7 @@ namespace intercept {
 
         void set_pos_world(const object &object_, const vector3 &position_);
         vector3 get_pos_world(const object &unit_);
-        float get_terrain_height_asl(vector3 position_);
+        float get_terrain_height_asl(const vector3 &position_);
 
         vector3 world_to_model(const object &object_, const vector3 &position_);
         vector3 world_to_model_visual(const object &object_, const vector3 &position_);
@@ -90,6 +90,11 @@ namespace intercept {
         struct rv_bounding_box {
             vector3 min;
             vector3 max;
+            float bounding_radius;
+            explicit rv_bounding_box(const game_value &gv_) : min(gv_[0]),
+                                                              max(gv_[1]),
+                                                              bounding_radius(gv_[2]) {}
+
         };
 
         rv_bounding_box bounding_box(const object &model_);
@@ -119,8 +124,8 @@ namespace intercept {
         vector3 unit_aim_position_visual(const object &unit_);
 
         //position
-        vector3 model_to_world_visual_world(const object &object_, vector3 model_pos_);
-        vector3 model_to_world_world(const object &object_, vector3 model_pos_);
+        vector3 model_to_world_visual_world(const object &object_, const vector3 &model_pos_);
+        vector3 model_to_world_world(const object &object_, const vector3 &model_pos_);
 
         vector3 screen_to_world(const vector2 &pos_);
         vector3 model_to_world(const object &object_, const vector3 &offset_);
@@ -161,12 +166,12 @@ namespace intercept {
         */
         std::vector<vector3> building_pos(const object &building_, int index_);
 
-        vector3 vector_model_to_world(const object &object_, vector3 modelDir_);
-        vector3 vector_model_to_world_visual(const object &object_, vector3 modelDir_);
-        vector3 vector_world_to_model(const object &object_, vector3 worldDir_);
-        vector3 vector_world_to_model_visual(const object &object_, vector3 worldDir_);
+        vector3 vector_model_to_world(const object &object_, const vector3& modelDir_);
+        vector3 vector_model_to_world_visual(const object &object_, const vector3 &modelDir_);
+        vector3 vector_world_to_model(const object &object_, const vector3 &worldDir_);
+        vector3 vector_world_to_model_visual(const object &object_, const vector3 &worldDir_);
 
-
+        vector3 get_pos_world_visual(const object &object_);
 
     }  // namespace sqf
 }  // namespace intercept

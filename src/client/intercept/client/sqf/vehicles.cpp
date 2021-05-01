@@ -651,6 +651,31 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
         }
 
+        sqf_return_string_list selection_names(const object &object_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+                case intercept::sqf::rv_selection_lods::Memory:
+                    lod_name = "Memory"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::Geometry:
+                    lod_name = "Geometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::FireGeometry:
+                    lod_name = "FireGeometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::LandContact:
+                    lod_name = "LandContact"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::HitPoints:
+                    lod_name = "HitPoints"sv;
+                    break;
+                default:
+                    lod_name = ""sv;
+                    break;
+            }
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
+        }
+
         void switch_camera(const object &target_) {
             host::functions.invoke_raw_unary(__sqf::unary__switchcamera__object__ret__nothing, target_);
         }
@@ -916,6 +941,169 @@ namespace intercept {
 
         std::vector<object> roads_connected_to(const object &obj_) {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__roadsconnectedto__object_array__ret__array, obj_));
+        }
+
+        void elevate_periscope(const object& vehicle_, const rv_turret_path& turret_, float elevation_, float speed_, bool blockuser_) {
+            host::functions.invoke_raw_binary(__sqf::binary__elevateperiscope__object__array__ret__nothing, vehicle_, {turret_, elevation_, speed_, blockuser_});
+        }
+        void elevate_periscope(const object& vehicle_, const rv_turret_path& turret_, float elevation_, bool instant_, bool blockuser_) {
+            host::functions.invoke_raw_binary(__sqf::binary__elevateperiscope__object__array__ret__nothing, vehicle_, {turret_, elevation_, instant_, blockuser_});
+        }
+
+        rv_periscope_state periscope_elevation(const object& vehicle_, const rv_turret_path& turret_) {
+            return rv_periscope_state(host::functions.invoke_raw_binary(__sqf::binary__periscopeelevation__object__array__ret__nothing, vehicle_, turret_));
+        }
+
+        bool enable_info_panel_component(const object& vehicle_, const rv_turret_path& turret_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_, bool enable_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__enableinfopanelcomponent__object_array__array__ret__bool, {vehicle_, turret_}, {panel_id_, componentClassOrType_, enable_});
+        }
+        bool enable_info_panel_component(const object& vehicle_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_, bool enable_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__enableinfopanelcomponent__object_array__array__ret__bool, vehicle_, {panel_id_, componentClassOrType_, enable_});
+        }
+        bool info_panel_component_enabled(const object &vehicle_, const rv_turret_path &turret_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__infopanelcomponentenabled__object_array__array__ret__bool, {vehicle_, turret_}, {panel_id_, componentClassOrType_});
+        }
+        bool info_panel_component_enabled(const object &vehicle_, sqf_string_const_ref panel_id_, sqf_string_const_ref componentClassOrType_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__infopanelcomponentenabled__object_array__array__ret__bool, vehicle_, {panel_id_, componentClassOrType_});
+        }
+
+        std::vector<rv_info_panel_component> info_panel_components(const object& vehicle_, sqf_string_const_ref panel_id_) {
+            return __helpers::__convert_to_vector<rv_info_panel_component>(host::functions.invoke_raw_binary(__sqf::binary__infopanelcomponents__object_array__string__ret__array, vehicle_, panel_id_));
+        }
+        std::vector<rv_info_panel_component> info_panel_components(const object& vehicle_, const rv_turret_path& turret_, sqf_string_const_ref panel_id_) {
+            return __helpers::__convert_to_vector<rv_info_panel_component>(host::functions.invoke_raw_binary(__sqf::binary__infopanelcomponents__object_array__string__ret__array, {vehicle_, turret_}, panel_id_));
+        }
+
+        void enable_vehicle_sensor(const object& vehicle_, sqf_string_const_ref component_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enablevehiclesensor__object__array__ret__nothing, vehicle_, {component_, enable_});
+        }
+
+        std::vector<rv_vehicle_sensor> is_vehicle_sensor_enabled(const object &vehicle_, sqf_string_const_ref component_) {
+            return __helpers::__convert_to_vector<rv_vehicle_sensor>(host::functions.invoke_raw_binary(__sqf::binary__isvehiclesensorenabled__object__string__ret__array, vehicle_, component_));
+        }
+
+        std::variant<sqf_return_string_list, std::vector<sqf_return_string_list>> get_compatible_pylon_magazines(std::variant<const object, sqf_string_const_ref> vehicle_, std::variant<float, sqf_string_const_ref> pylon_) {
+            if (vehicle_.index() == 0) {
+                game_value gv;
+                if (pylon_.index() == 0) {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, std::get<0>(vehicle_), std::get<0>(pylon_));
+                } else {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__object__string_scalar__ret__array, std::get<0>(vehicle_), std::get<1>(pylon_));
+                }
+                auto& game_return = gv.to_array();
+                if (game_return.is_empty()) return sqf_return_string_list();
+                try {
+                    std::vector<sqf_return_string_list> temp_return{};
+                    temp_return.reserve(game_return.size());
+                    for (auto &item : game_return) {
+                        auto& temp_array = item.to_array();
+                        temp_return.emplace_back(std::vector<sqf_return_string>(temp_array.begin(), temp_array.end()));
+                    }
+                    return temp_return;
+                } catch (const game_value_conversion_error &) {
+                    return __helpers::__convert_to_vector<sqf_return_string>(game_return);
+                }
+            } else {
+                game_value gv;
+                if (pylon_.index() == 0) {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, std::get<1>(vehicle_), std::get<0>(pylon_));
+                } else {
+                    gv = host::functions.invoke_raw_binary(__sqf::binary__getcompatiblepylonmagazines__string__string_scalar__ret__array, std::get<1>(vehicle_), std::get<1>(pylon_));
+                }
+                auto& game_return = gv.to_array();
+                if (game_return.is_empty()) return sqf_return_string_list();
+                try {
+                    std::vector<sqf_return_string_list> temp_return{};
+                    temp_return.reserve(game_return.size());
+                    for (auto &item : game_return) {
+                        auto &temp_array = item.to_array();
+                        temp_return.emplace_back(std::vector<sqf_return_string>(temp_array.begin(), temp_array.end()));
+                    }
+                    return temp_return;
+                } catch (const game_value_conversion_error &) {
+                    return __helpers::__convert_to_vector<sqf_return_string>(game_return);
+                }
+            }
+        }
+
+        void set_effective_commander(const object& vehicle_, const object& commander_) {
+            host::functions.invoke_raw_binary(__sqf::binary__seteffectivecommander__object__object__ret__nothing, vehicle_, commander_);
+        }
+
+        void set_plate_number(const object& vehicle_, sqf_string_const_ref str_number_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setplatenumber__object__string__ret__nothing, vehicle_, str_number_);
+        }
+
+        rv_turret_path unit_turret(const object& vehicle_, const object& gunner_) {
+            return rv_turret_path(host::functions.invoke_raw_binary(__sqf::binary__unitturret__object__object__ret__array, vehicle_, gunner_));
+        }
+
+        sqf_return_string_list animation_names(const object& vehicle_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__animationnames__object__ret__array, vehicle_));
+        }
+
+        object current_pilot(const object& vehicle_) {
+            return __helpers::__object_unary_object(__sqf::unary__currentpilot__object__ret__object, vehicle_);
+        }
+
+        std::vector<rv_pylon_info> get_all_pylons_info(const object& vehicle_) {
+            return __helpers::__convert_to_vector<rv_pylon_info>(host::functions.invoke_raw_unary(__sqf::unary__getallpylonsinfo__object__ret__array, vehicle_));
+        }
+
+        bool set_weapon_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_, float zeroing_index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setweaponzeroing__object__array__ret__bool, vehicle_, {weapon_class_, muzzle_class_, zeroing_index_});
+        }
+
+        void set_user_mfd_text(const object &vehicle_, float index_, sqf_string_const_ref text_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setusermfdtext__object__array__ret__nothing, vehicle_, {index_, text_});
+        }
+
+        sqf_return_string get_plate_number(const object& vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getplatenumber__object__ret__string, vehicle_);
+        }
+
+        sqf_return_string_list get_user_mfd_text(const object &vehicle_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getusermfdtext__object__ret__array, vehicle_));
+        }
+
+        std::vector<float> get_user_mfd_value(const object &vehicle_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getusermfdvalue__object__ret__array, vehicle_));
+        }
+
+        std::vector<float> get_vehicle_ti_pars(const object& vehicle_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getvehicletipars__object__ret__array, vehicle_));
+        }
+
+        void set_vehicle_ti_pars(const object &vehicle_, const std::vector<float>& pars_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setvehicletipars__object__array__ret__nothing, vehicle_, pars_);
+        }
+
+        rv_info_panel info_panel(sqf_string_const_ref panel_id_) {
+            return rv_info_panel(host::functions.invoke_raw_unary(__sqf::unary__infopanel__string__ret__array, panel_id_));
+        }
+
+        std::vector<rv_info_panel> info_panels(const object& vehicle_) {
+            return __helpers::__convert_to_vector<rv_info_panel>(host::functions.invoke_raw_unary(__sqf::unary__infopanels__object_array__ret__array, vehicle_));
+        }
+
+        std::vector<rv_info_panel> info_panels(const object& vehicle_, const rv_turret_path& turret_) {
+            return __helpers::__convert_to_vector<rv_info_panel>(host::functions.invoke_raw_unary(__sqf::unary__infopanels__object_array__ret__array, {vehicle_, turret_}));
+        }
+
+        bool is_laser_on(const object& vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__islaseron__object__ret__bool, vehicle_);
+        }
+
+        std::vector<rv_remote_target_info> list_remote_targets(side side_) {
+            return __helpers::__convert_to_vector<rv_remote_target_info>(host::functions.invoke_raw_unary(__sqf::unary__listremotetargets__side__ret__array, side_));
+        }
+
+        std::vector<rv_named_properties> named_properties(const object &vehicle_) {
+            return __helpers::__convert_to_vector<rv_named_properties>(host::functions.invoke_raw_unary(__sqf::unary__namedproperties__object__ret__array, vehicle_));
+        }
+
+        bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__setinfopanel__array__ret__bool, {infopanelId_, componentClassOrType_});
         }
 
     }  // namespace sqf

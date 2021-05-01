@@ -529,16 +529,21 @@ namespace intercept {
             switch (type_) {
                 case ai_behaviour_types::TARGET: type = "TARGET"sv; break;
                 case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
                 case ai_behaviour_types::MOVE: type = "MOVE"sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"sv; break;
                 case ai_behaviour_types::ANIM: type = "ANIM"sv; break;
-                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
-                case ai_behaviour_types::FSM: type = "FSM"sv; break;
                 case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"sv; break;
                 case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"sv; break;
                 case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"sv; break;
+                case ai_behaviour_types::WEAPONAIM: type = "WEAPONAIM"sv; break;
                 case ai_behaviour_types::COVER: type = "COVER"sv; break;
-                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
-                case ai_behaviour_types::PATH: type = "PATH"sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
+                case ai_behaviour_types::RADIOPROTOCOL: type = "RADIOPROTOCOL"sv; break;
+                case ai_behaviour_types::LIGHTS: type = "LIGHTS"sv; break;
+                case ai_behaviour_types::MINEDETECTION: type = "MINEDETECTION"sv; break;
+                case ai_behaviour_types::NVG: type = "NVG"sv; break;
                 case ai_behaviour_types::ALL: type = "ALL"sv; break;
                 default: return;
             }
@@ -779,5 +784,174 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__calculatepath__array__ret__object, params);
         }
 
+        bool check_ai_feature(ai_feature_types feature_) {
+            game_value type;
+            switch (feature_) {
+                case ai_feature_types::AwareFormationSoft: type = "AwareFormationSoft"sv; break;
+                case ai_feature_types::CombatFormationSoft: type = "CombatFormationSoft"sv; break;
+                default: return false;
+            }
+            return host::functions.invoke_raw_unary(__sqf::unary__checkaifeature__string__ret__bool, std::move(type));
+        }
+
+        bool check_ai_feature(const object& unit_, ai_behaviour_types feature_) {
+            game_value type;
+            switch (feature_) {
+                case ai_behaviour_types::TARGET: type = "TARGET"sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"sv; break;
+                case ai_behaviour_types::WEAPONAIM: type = "WEAPONAIM"sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
+                case ai_behaviour_types::RADIOPROTOCOL: type = "RADIOPROTOCOL"sv; break;
+                case ai_behaviour_types::LIGHTS: type = "LIGHTS"sv; break;
+                case ai_behaviour_types::MINEDETECTION: type = "MINEDETECTION"sv; break;
+                case ai_behaviour_types::NVG: type = "NVG"sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"sv; break;
+                default: return false;
+            }
+
+            return host::functions.invoke_raw_binary(__sqf::binary__checkaifeature__object__string__ret__bool, unit_, std::move(type));
+        }
+
+        void enable_aifeature(const object &unit_, ai_behaviour_types feature_, bool enable_) {
+            game_value type;
+            switch (feature_) {
+                case ai_behaviour_types::TARGET: type = "TARGET"sv; break;
+                case ai_behaviour_types::AUTOTARGET: type = "AUTOTARGET"sv; break;
+                case ai_behaviour_types::AUTOCOMBAT: type = "AUTOCOMBAT"sv; break;
+                case ai_behaviour_types::MOVE: type = "MOVE"sv; break;
+                case ai_behaviour_types::PATH: type = "PATH"sv; break;
+                case ai_behaviour_types::ANIM: type = "ANIM"sv; break;
+                case ai_behaviour_types::AIMINGERROR: type = "AIMINGERROR"sv; break;
+                case ai_behaviour_types::SUPPRESSION: type = "SUPPRESSION"sv; break;
+                case ai_behaviour_types::CHECKVISIBLE: type = "CHECKVISIBLE"sv; break;
+                case ai_behaviour_types::FSM: type = "FSM"sv; break;
+                case ai_behaviour_types::WEAPONAIM: type = "WEAPONAIM"sv; break;
+                case ai_behaviour_types::COVER: type = "COVER"sv; break;
+                case ai_behaviour_types::TEAMSWITCH: type = "TEAMSWITCH"sv; break;
+                case ai_behaviour_types::RADIOPROTOCOL: type = "RADIOPROTOCOL"sv; break;
+                case ai_behaviour_types::LIGHTS: type = "LIGHTS"sv; break;
+                case ai_behaviour_types::MINEDETECTION: type = "MINEDETECTION"sv; break;
+                case ai_behaviour_types::NVG: type = "NVG"sv; break;
+                case ai_behaviour_types::ALL: type = "ALL"sv; break;
+                default: return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__enableaifeature__object__array__ret__nothing, unit_, {std::move(type), enable_});
+        }
+        void set_combat_behaviour(const group &group_, ai_behavior behavior_) {
+            game_value behavior;
+            switch (behavior_) {
+                case intercept::sqf::ai_behavior::CARELESS:
+                    behavior = "CARELESS"sv;
+                    break;
+                case intercept::sqf::ai_behavior::SAFE:
+                    behavior = "SAFE"sv;
+                    break;
+                case intercept::sqf::ai_behavior::AWARE:
+                    behavior = "AWARE"sv;
+                    break;
+                case intercept::sqf::ai_behavior::COMBAT:
+                    behavior = "COMBAT"sv;
+                    break;
+                case intercept::sqf::ai_behavior::STEALTH:
+                    behavior = "STEALTH"sv;
+                    break;
+                default:
+                    return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__group__string__ret__nothing, group_, std::move(behavior));
+        }
+        void set_combat_behaviour(const object& unit_, ai_behavior behavior_) {
+            game_value behavior;
+            switch (behavior_) {
+                case intercept::sqf::ai_behavior::CARELESS:
+                    behavior = "CARELESS"sv;
+                    break;
+                case intercept::sqf::ai_behavior::SAFE:
+                    behavior = "SAFE"sv;
+                    break;
+                case intercept::sqf::ai_behavior::AWARE:
+                    behavior = "AWARE"sv;
+                    break;
+                case intercept::sqf::ai_behavior::COMBAT:
+                    behavior = "COMBAT"sv;
+                    break;
+                case intercept::sqf::ai_behavior::STEALTH:
+                    behavior = "STEALTH"sv;
+                    break;
+                default:
+                    return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__object__string__ret__nothing, unit_, std::move(behavior));
+        }
+
+        void set_combat_behaviour(const group &group_, sqf_string_const_ref behavior_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__group__string__ret__nothing, group_, behavior_);
+        }
+
+        void set_combat_behaviour(const object &unit_, sqf_string_const_ref behavior_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcombatbehaviour__object__string__ret__nothing, unit_, behavior_);
+        }
+
+        sqf_return_string combat_behaviour(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__combatbehaviour__object__ret__string, unit_);
+        }
+
+        sqf_return_string combat_behaviour(const group &group_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__combatbehaviour__group__ret__string, group_);
+        }
+
+        void set_unit_combat_mode(const object& unit_, ai_combat_modes mode_) {
+            game_value behavior;
+            switch (mode_) {
+                case intercept::sqf::ai_combat_modes::BLUE:
+                    behavior = "BLUE"sv;
+                    break;
+                case intercept::sqf::ai_combat_modes::GREEN:
+                    behavior = "GREEN"sv;
+                    break;
+                case intercept::sqf::ai_combat_modes::WHITE:
+                    behavior = "WHITE"sv;
+                    break;
+                case intercept::sqf::ai_combat_modes::YELLOW:
+                    behavior = "YELLOW"sv;
+                    break;
+                case intercept::sqf::ai_combat_modes::RED:
+                    behavior = "RED"sv;
+                    break;
+                default:
+                    return;
+            }
+            host::functions.invoke_raw_binary(__sqf::binary__setunitcombatmode__object__string__ret__nothing, unit_, std::move(behavior));
+        }
+
+        void set_unit_combat_mode(const object &unit_, sqf_string_const_ref mode_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunitcombatmode__object__string__ret__nothing, unit_, mode_);
+        }
+
+        sqf_return_string unit_combat_mode(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__unitcombatmode__object__ret__string, unit_);
+        }
+
+        std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_) {
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object__ret__array, unit_));
+        }
+
+        object get_attack_target(const object& unit_) {
+            return __helpers::__object_unary_object(__sqf::unary__getattacktarget__object__ret__object, unit_);
+        }
+
+        std::pair<sqf_return_string, sqf_return_string> vehicle_move_info(const object& vehicle_) {
+            auto mov_info = host::functions.invoke_raw_unary(__sqf::unary__vehiclemoveinfo__object__ret__array, vehicle_);
+            return {mov_info[0], mov_info[1]};
+        }
     }  // namespace sqf
 }  // namespace intercept

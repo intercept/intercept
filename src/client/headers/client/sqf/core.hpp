@@ -19,6 +19,67 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        struct rv_mod_info {
+            sqf_string modname{};
+            sqf_string modDir{};
+            sqf_string origin{};
+            sqf_string hash{};
+            sqf_string hashShort{};
+            sqf_string itemID{};
+            bool isDefault{};
+            bool isOfficial{};
+            explicit rv_mod_info(const game_value &gv_)
+                : modname(gv_[0]),
+                  modDir(gv_[1]),
+                  isDefault(gv_[2]),
+                  isOfficial(gv_[3]),
+                  origin(gv_[4]),
+                  hash(gv_[5]),
+                  hashShort(gv_[6]),
+                  itemID(gv_[7]) {}
+        };
+        struct rv_friend_servers {
+            sqf_string ip_address{};
+            sqf_string name{};
+            explicit rv_friend_servers(const game_value &gv_)
+                : ip_address(gv_[0]),
+                  name(gv_[1]) {}
+        };
+        struct rv_addon_info {
+            sqf_string prefix{};
+            sqf_string version_str{};
+            bool is_patched{};
+            explicit rv_addon_info(const game_value &gv_)
+                : prefix(gv_[0]),
+                  version_str(gv_[1]),
+                  is_patched(gv_[2]) {}
+        };
+        struct rv_dlc_usage_stats {
+            sqf_string name{};
+            sqf_string dlcAppId{};
+            float sessionTime{};
+            float totalTime{};
+            explicit rv_dlc_usage_stats(const game_value &gv_)
+                : name(gv_[0]),
+                  dlcAppId(gv_[1]),
+                  sessionTime(gv_[2]),
+                  totalTime(gv_[3]) {}
+        };
+        struct rv_dlc_asset_info {
+            sqf_string appID;           // - actual steam item ID or "0" for none or "-1" for unknown
+            sqf_string DLCName;         // - actual DLC name or ""
+            bool isDlc;                 // - the asset belongs to a DLC
+            bool isOwned;               //
+            bool isInstalled;           //
+            bool isAvailable;           //
+            explicit rv_dlc_asset_info(const game_value &gv_)
+                : isDlc(gv_[0]),
+                  isOwned(gv_[1]),
+                  isInstalled(gv_[2]),
+                  isAvailable(gv_[3]),
+                  appID(gv_[4]),
+                  DLCName(gv_[5]) {}
+        };
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
 
@@ -76,6 +137,7 @@ namespace intercept {
         sqf_return_string str(game_value data_);
 
         sqf_return_string to_fixed(float number_, int decimals_);
+        void to_fixed(int decimals_);
 
         void set_variable(const display &display_, sqf_string_const_ref variable_, game_value value_);
         void set_variable(const control &control_, sqf_string_const_ref variable_, game_value value_);
@@ -118,6 +180,7 @@ namespace intercept {
         sqf_return_string_list all_variables(rv_namespace value_);
         sqf_return_string_list all_variables(const task &value_);
         sqf_return_string_list all_variables(const control &value_);
+        sqf_return_string_list all_variables(const display &value_);
         rv_namespace current_namespace();
         sqf_return_string mission_name();
         rv_namespace mission_namespace();
@@ -125,7 +188,7 @@ namespace intercept {
         rv_namespace parsing_namespace();
         rv_namespace profile_namespace();
         sqf_return_string profile_namesteam();
-        bool __sqfassert(bool test_);
+        rv_namespace local_namespace();
 
         object obj_null();
         side blufor();
@@ -193,10 +256,10 @@ namespace intercept {
         sqf_return_string image(sqf_string_const_ref value_);
         bool is_localized(sqf_string_const_ref value_);
         sqf_return_string localize(sqf_string_const_ref value_);
-        game_value text(sqf_string_const_ref value_);
+        rv_text text(sqf_string_const_ref value_);
         sqf_return_string text(const location &value_);
         sqf_return_string format(const std::vector<game_value> &params_);
-        sqf_return_string compose_text(sqf_string_list_const_ref texts_);
+        rv_text compose_text(sqf_string_list_const_ref texts_);
         sqf_return_string endl();
         bool verify_signature(sqf_string_const_ref value_);
         void script_name(sqf_string_const_ref value_);
@@ -226,7 +289,6 @@ namespace intercept {
         int count_unknown(const object &unit_, const std::vector<object> &units_);
         rv_cursor_object_params get_cursor_object_params();
 
-
         bool is_equal_to(game_value left_, game_value right_);
         bool is_equal_type(game_value left_, game_value right_);
         bool is_equal_type_all(game_value value_array_, game_value type_);
@@ -234,10 +296,25 @@ namespace intercept {
         bool is_equal_type_array(game_value left_array_, game_value right_array_);
         bool is_equal_type_params(game_value value_, game_value template_);
         int get_mission_version();
+
         sqf_return_string get_mission_path(sqf_string_const_ref path_);
-
-
-
-
+        sqf_return_string mission_name_source();
+        std::vector<rv_addon_info> all_addons_info();
+        std::vector<rv_dlc_usage_stats> get_dlc_assets_usage();
+        std::vector<rv_mod_info> get_loaded_mods_info();
+        sqf_return_string_list get_mission_dlcs();
+        std::vector<rv_friend_servers> get_steam_friends_servers();
+        bool is_3den_preview();
+        bool is_game_focused();
+        bool is_game_paused();
+        sqf_return_string_list addon_files(sqf_string_const_ref pboPrefix_, sqf_string_const_ref fileExt_);
+        code compile_script(sqf_string_const_ref path_, bool final_ = false, sqf_string_const_ref prefix_header_ = "");
+        bool file_exists(sqf_string_const_ref path_);
+        std::pair<bool,bool> force_cadet_difficulty(bool showCadetHints_, bool showCadetWP_);
+        rv_dlc_asset_info get_asset_dlc_info(const object &asset_);
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref model_);
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config& config_);
+        std::pair<float, float> get_dlc_assets_usage_by_name(sqf_string_const_ref asset_);
+        bool is_final(const code &code_);
     }  // namespace sqf
 }  // namespace intercept

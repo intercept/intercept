@@ -17,15 +17,28 @@ using namespace intercept::types;
 
 namespace intercept {
     namespace sqf {
+        struct rv_zeroing {
+            float distance{};
+            int zeroing_index{};
+        };
+
         struct rv_target_knowledge {
             //example [true,true,0,-2.14748e+006,WEST,0,[4556.26,5862.7,6.22729]]
-            bool known_by_group;
-            bool known_by_unit;
+            side target_side;
             float last_seen_by_unit;
             float last_endangered_by_unit;
-            side target_side;
             float position_error;
             vector3 target_position;
+            bool known_by_group;
+            bool known_by_unit;
+            explicit rv_target_knowledge(const game_value &gv_)
+                : known_by_group(gv_[0]),
+                  known_by_unit(gv_[1]),
+                  last_seen_by_unit(gv_[2]),
+                  last_endangered_by_unit(gv_[3]),
+                  target_side(gv_[4]),
+                  position_error(gv_[5]),
+                  target_position(gv_[6]) {}
         };
 
         void set_user_mfd_value(const object &object_, int index_, float value_);
@@ -239,5 +252,13 @@ namespace intercept {
         void reveal(std::variant<object, group> unit_, const object &target_);
         void reveal(std::variant<object, group> unit_, const std::vector<object> &targets_);
         float get_aiming_coef(const object &value_);
+        
+        void calculate_player_visibility_by_friendly(bool calc_);
+        bool get_calculate_player_visibility_by_friendly();
+
+        bool get_diver_state(const object &unit_);
+        float get_object_fov(const object &unit_);
+        vector2 weapon_inertia(const object &unit_);
+        rv_zeroing current_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_);
     }  // namespace sqf
 }  // namespace intercept

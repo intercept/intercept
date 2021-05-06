@@ -130,6 +130,14 @@ namespace intercept {
         void draw_link(const control &map_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> from_, std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>, std::reference_wrapper<const object>> to_, sqf_string_const_ref param_type_, sqf_string_const_ref line_type_, rv_color &color_);
         void draw_location(const control &map_, const location &location_);
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
-
+        void disable_map_indicators(bool disableFriendly_, bool disableEnemy_, bool disableMines_, bool disablePing_);
+        sqf_return_string get_player_id(const object &player_);
+        sqf_return_string marker_channel(marker marker_);
+        std::vector<float> marker_polyline(marker marker_);
+        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_);
+        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_);
+        void set_marker_shadow(marker marker_, bool shadow_);
+        void set_marker_shadow_local(marker marker_, bool shadow_);
+        bool marker_shadow(marker marker_);
     }  // namespace sqf
 }  // namespace intercept

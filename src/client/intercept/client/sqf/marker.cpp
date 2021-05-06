@@ -97,11 +97,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, pos_);
         }
 
-        void set_marker_pos(sqf_string_const_ref marker_, const vector3& pos_) {
+        void set_marker_pos(sqf_string_const_ref marker_, const vector3 &pos_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, pos_);
         }
 
-        void set_marker_pos(sqf_string_const_ref marker_, const object& target_) {
+        void set_marker_pos(sqf_string_const_ref marker_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpos__string__object_array__ret__nothing, marker_, target_);
         }
 
@@ -113,7 +113,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, pos_);
         }
 
-        void set_marker_pos_local(sqf_string_const_ref marker_, const object& target_) {
+        void set_marker_pos_local(sqf_string_const_ref marker_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerposlocal__string__object_array__ret__nothing, marker_, target_);
         }
 
@@ -540,5 +540,40 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setdrawicon__control__array__ret__nothing, map_, params_right);
         }
 
+        void disable_map_indicators(bool disableFriendly_, bool disableEnemy_, bool disableMines_, bool disablePing_) {
+            host::functions.invoke_raw_unary(__sqf::unary__disablemapindicators__array__ret__nothing, {disableFriendly_, disableEnemy_, disableMines_, disablePing_});
+        }
+
+        sqf_return_string get_player_id(const object &player_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getplayerid__object__ret__string, player_);
+        }
+
+        sqf_return_string marker_channel(marker marker_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__markerchannel__string__ret__string, marker_);
+        }
+
+        std::vector<float> marker_polyline(marker marker_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__markerpolyline__string__ret__array, marker_));
+        }
+
+        bool marker_shadow(marker marker_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__markershadow__string__ret__bool, marker_);
+        }
+
+        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolyline__string__array__ret__nothing, marker_, polyline_);
+        }
+
+        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolylinelocal__string__array__ret__nothing, marker_, polyline_);
+        }
+
+        void set_marker_shadow(marker marker_, bool shadow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkershadow__string__bool__ret__nothing, marker_, shadow_);
+        }
+
+        void set_marker_shadow_local(marker marker_, bool shadow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkershadowlocal__string__bool__ret__nothing, marker_, shadow_);
+        }
     }  // namespace sqf
 }  // namespace intercept

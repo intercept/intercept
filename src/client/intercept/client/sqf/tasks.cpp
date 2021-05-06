@@ -187,8 +187,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__diarysubjectexists__object__string__ret__bool, value0_, value1_);
         }
 
-        void select_diary_subject(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__selectdiarysubject__object__string__ret__nothing, value0_, value1_);
+        bool select_diary_subject(const object &value0_, sqf_string_const_ref value1_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectdiarysubject__object__string__ret__bool, value0_, value1_);
         }
 
         sqf_return_string create_diary_link(sqf_string_const_ref subject_, const object &object_, sqf_string_const_ref text_) {
@@ -311,6 +311,14 @@ namespace intercept {
 
         void obj_status(sqf_string_const_ref objective_number_, sqf_string_const_ref status_) {
             host::functions.invoke_raw_binary(__sqf::binary__objstatus__string__string__ret__nothing, objective_number_, status_);
+        }
+
+        std::vector<task> task_children(const task &task_) {
+            return __helpers::__convert_to_vector<task>(host::functions.invoke_raw_unary(__sqf::unary__taskchildren__task__ret__array, task_));
+        }
+
+        sqf_return_string task_name(const task &task_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__taskname__task__ret__string, task_);
         }
     }  // namespace sqf
 }  // namespace intercept

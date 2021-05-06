@@ -659,7 +659,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsetscale__control__scalar__ret__nothing, value0_, value1_);
         }
 
-        void ctrl_set_structured_text(const control &value0_, sqf_string_const_ref value1_) {
+        void ctrl_set_structured_text(const control &value0_, const rv_text &value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsetstructuredtext__control__text__ret__nothing, value0_, value1_);
         }
 
@@ -783,11 +783,26 @@ namespace intercept {
             return rv_color(host::functions.invoke_raw_binary(__sqf::binary__lnbcolor__control__array__ret__array, ctrl_, params));
         }
 
+        rv_color lnb_color_right(float idc_, float row_, float column_) {
+            game_value params({idc_,
+                               {row_,
+                                column_}});
+
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__lnbcolorright__array__ret__array, params));
+        }
+
+        rv_color lnb_color_right(const control &ctrl_, float row_, float column_) {
+            game_value params({row_,
+                               column_});
+
+            return rv_color(host::functions.invoke_raw_binary(__sqf::binary__lnbcolorright__control__array__ret__array, ctrl_, params));
+        }
+
         void lnb_sort(float idc_, int column_, bool reversed_) {
             host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ , column_ ,reversed_ });
         }
 
-        void lnb_sort(const control& ctrl_, int column_, bool reversed_) {
+        void lnb_sort(const control &ctrl_, int column_, bool reversed_) {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsort__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
         }
 
@@ -795,7 +810,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__lnbdata__array__ret__string, { idc_ ,column_ ,reversed_ });
         }
 
-        void lnb_sort_by_value(const control& ctrl_, int column_, bool reversed_) {
+        void lnb_sort_by_value(const control &ctrl_, int column_, bool reversed_) {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsortbyvalue__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
         }
 
@@ -855,6 +870,23 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lnbpicture__control__array__ret__string, ctrl_, params);
         }
 
+        sqf_return_string lnb_picture_right(float idc_, float row_, float column_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item});
+
+            return host::functions.invoke_raw_unary(__sqf::unary__lnbpictureright__array__ret__string, params);
+        }
+
+        sqf_return_string lnb_picture_right(const control &ctrl_, float row_, float column_) {
+            game_value params({row_,
+                               column_});
+
+            return host::functions.invoke_raw_binary(__sqf::binary__lnbpictureright__control__array__ret__string, ctrl_, params);
+        }
+
         std::vector<float> lnb_size(float idc_) {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lnbsize__control__ret__array, idc_));
         }
@@ -878,6 +910,23 @@ namespace intercept {
                                column_});
 
             return host::functions.invoke_raw_binary(__sqf::binary__lnbtext__control__array__ret__string, ctrl_, params);
+        }
+
+        sqf_return_string lnb_text_right(float idc_, float row_, float column_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item});
+
+            return host::functions.invoke_raw_unary(__sqf::unary__lnbtextright__array__ret__string, params);
+        }
+
+        sqf_return_string lnb_text_right(const control &ctrl_, float row_, float column_) {
+            game_value params({row_,
+                               column_});
+
+            return host::functions.invoke_raw_binary(__sqf::binary__lnbtextright__control__array__ret__string, ctrl_, params);
         }
 
         float lnb_value(float idc_, float row_, float column_) {
@@ -918,6 +967,111 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsetcolor__control__array__ret__nothing, ctrl_, params);
         }
 
+        void lnb_set_picture_color(float idc_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               color_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetpicturecolor__array__ret__nothing, params);
+        }
+
+        void lnb_set_picture_color(const control &ctrl_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               color_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetpicturecolor__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void lnb_set_picture_color_right(float idc_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               color_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetpicturecolorright__array__ret__nothing, params);
+        }
+
+        void lnb_set_picture_color_right(const control &ctrl_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               color_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetpicturecolorright__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void lnb_set_picture_color_selected(float idc_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               color_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetpicturecolorselected__array__ret__nothing, params);
+        }
+
+        void lnb_set_picture_color_selected(const control &ctrl_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               color_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetpicturecolorselected__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void lnb_set_picture_color_selected_right(float idc_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               color_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetpicturecolorselectedright__array__ret__nothing, params);
+        }
+
+        void lnb_set_picture_color_selected_right(const control &ctrl_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               color_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetpicturecolorselectedright__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void lnb_set_color_right(float idc_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               color_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetcolorright__array__ret__nothing, params);
+        }
+
+        void lnb_set_color_right(const control &ctrl_, float row_, float column_, const rv_color &color_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               color_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetcolorright__control__array__ret__nothing, ctrl_, params);
+        }
+
         void lnb_set_columns_pos(float idc_, std::vector<float> positions_) {
             auto_array<game_value> positions(positions_.begin(), positions_.end());
 
@@ -948,11 +1102,10 @@ namespace intercept {
             game_value item({row_,
                              column_});
 
-            game_value params({ctrl_,
-                               item,
+            game_value params({item,
                                data_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__lnbsetdata__array__ret__nothing, params);
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetdata__control__array__ret__nothing, ctrl_, params);
             // Same as: binary__lnbsetdata__control__array__ret__nothing
         }
 
@@ -977,6 +1130,27 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsetpicture__control__array__ret__nothing, ctrl_, params);
         }
 
+        void lnb_set_picture_right(float idc_, float row_, float column_, sqf_string_const_ref name_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               name_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsetpictureright__array__ret__nothing, params);
+        }
+
+        void lnb_set_picture_right(const control &ctrl_, float row_, float column_, sqf_string_const_ref name_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               name_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsetpictureright__control__array__ret__nothing, ctrl_, params);
+        }
+
         void lnb_set_text(float idc_, float row_, float column_, const game_value &data_) {
             game_value item({row_,
                              column_});
@@ -996,6 +1170,27 @@ namespace intercept {
                                data_});
 
             host::functions.invoke_raw_binary(__sqf::binary__lnbsettext__control__array__ret__nothing, ctrl_, params);
+        }
+
+        void lnb_set_text_right(float idc_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({idc_,
+                               item,
+                               data_});
+
+            host::functions.invoke_raw_unary(__sqf::unary__lnbsettextright__array__ret__nothing, params);
+        }
+
+        void lnb_set_text_right(const control &ctrl_, float row_, float column_, const game_value &data_) {
+            game_value item({row_,
+                             column_});
+
+            game_value params({item,
+                               data_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsettextright__control__array__ret__nothing, ctrl_, params);
         }
 
         void lnb_set_tooltip(float idc_, float row_, float column_, const game_value &data_) {
@@ -1408,8 +1603,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lbpictureright__control__scalar__ret__string, control_, static_cast<float>(index_));
         }
 
-        //#TODO std::vector<float> lb_selection(const control &control_) { ... }; // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
-
         void lb_set_color(int control_id_, int index_, rv_color color_) {
             game_value args({static_cast<float>(control_id_),
                              static_cast<float>(index_),
@@ -1568,6 +1761,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lbsettext__control__array__ret__nothing, control_, params_right);
         }
 
+        void lb_set_text_right(const control &control_, int index_, sqf_string_const_ref text_) {
+            game_value params_right({index_,
+                                     text_});
+
+            host::functions.invoke_raw_binary(__sqf::binary__lbsettextright__control__array__ret__nothing, control_, params_right);
+        }
+
         void lb_set_tooltip(int control_id_, int index_, sqf_string_const_ref tooltip_) {
             game_value args({static_cast<float>(control_id_),
                              static_cast<float>(index_),
@@ -1631,24 +1831,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, static_cast<float>(index_));
         }
 
-        void lb_set_select_color(int idc_, int index_, const rv_color &color_) {
-            game_value params({static_cast<float>(idc_),
-                               static_cast<float>(index_),
-                               color_});
-
-            host::functions.invoke_raw_unary(__sqf::unary__lbsetselectcolor__array__ret__nothing, params);
-            // Alt syntax binary__lbsetselectcolor__control__array__ret__nothing
-        }
-
-        void lb_set_select_color_right(int idc_, int index_, const rv_color &color_) {
-            game_value params({static_cast<float>(idc_),
-                               static_cast<float>(index_),
-                               color_});
-
-            host::functions.invoke_raw_unary(__sqf::unary__lbsetselectcolorright__array__ret__nothing, params);
-            // Alt syntax binary__lbsetselectcolorright__control__array__ret__nothing
-        }
-
         void load_overlay(const control &a_control_, const config &a_config_) {
             host::functions.invoke_raw_binary(__sqf::binary__loadoverlay__control__config__ret__nothing, a_control_, a_config_);
         }
@@ -1658,8 +1840,11 @@ namespace intercept {
         }
 
         std::vector<control> all_controls(const display &display_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_);
-            return __helpers::__convert_to_vector<control>(ret);
+            return __helpers::__convert_to_vector<control>(host::functions.invoke_raw_unary(__sqf::unary__allcontrols__display__ret__array, display_));
+        }
+
+        std::vector<control> all_controls(const control &ctrl_) {
+            return __helpers::__convert_to_vector<control>(host::functions.invoke_raw_unary(__sqf::unary__allcontrols__control__ret__array, ctrl_));
         }
 
         control control_null() {
@@ -2537,7 +2722,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__lbsort__scalar__ret__nothing, control_);
         }
 
-        void lb_sort_by_value(const control& control_) {
+        void lb_sort_by_value(const control &control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__control__ret__nothing, control_);
         }
 
@@ -2605,6 +2790,314 @@ namespace intercept {
 
         bool is_ui_context() {
             return host::functions.invoke_raw_nular(__sqf::nular__isuicontext__ret__bool);
+        }
+
+        void ctrl_animate_model(const control &control_, sqf_string_const_ref source_, float phase_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlanimatemodel__control__array__ret__nothing, control_, {source_, phase_});
+        }
+
+        float ctrl_animation_phase_model(const control &control_, sqf_string_const_ref source_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctrlanimationphasemodel__control__string__ret__scalar, control_, source_);
+        }
+
+        bool ctrl_checked(const control &control_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctrlchecked__control__scalar__ret__bool, control_, index_);
+        }
+
+        void ctrl_set_angle(const control &control_, float angle_, float centerX_, float centerY_, bool now_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetangle__control__array__ret__nothing, control_, {angle_, centerX_, centerY_, now_});
+        }
+
+        void ctrl_set_checked(const control &control_, int index_, bool checked_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetchecked__control__array__ret__nothing, control_, {index_, checked_});
+        }
+
+        void ctrl_set_mouse_position(const control &control_, float x_, float y_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetmouseposition__control__array__ret__nothing, control_, {x_, y_});
+        }
+
+        void ctrl_set_pixel_precision(const control &control_, pixel_precision_types type_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetpixelprecision__control__scalar__ret__nothing, control_, static_cast<int>(type_));
+        }
+
+        void ctrl_set_scroll_values(const control &control_, float vScroll_, float hScroll_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetscrollvalues__control__array__ret__nothing, control_, {vScroll_, hScroll_});
+        }
+
+        void ctrl_set_text_selection(const control &control_, float start_, float length_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsettextselection__control__array__ret__nothing, control_, {start_, length_});
+        }
+
+        void ctrl_set_url(const control &control_, sqf_string_const_ref url_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlseturl__control__string__ret__nothing, control_, url_);
+        }
+
+        void draw_triangle(const control &mapCtrl_, const std::vector<vector3> &vertices_, const rv_color &color_, sqf_string_const_ref fill_texture_) {
+            host::functions.invoke_raw_binary(__sqf::binary__drawtriangle__control__array__ret__nothing, mapCtrl_, {vertices_, color_, fill_texture_});
+        }
+
+        float get_text_width(sqf_string_const_ref string_, sqf_string_const_ref font_, float fontSize_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__gettextwidth__string__array__ret__scalar, string_, {font_, fontSize_});
+        }
+
+        void lb_set_select_color(const control &control_, int index_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lbsetselectcolor__control__array__ret__nothing, control_, {index_, color_});
+        }
+        void lb_set_select_color(float idc_, int index_, const rv_color &color_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsetselectcolor__array__ret__nothing, {idc_, index_, color_});
+        }
+        void lb_set_select_color_right(const control &control_, int index_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lbsetselectcolorright__control__array__ret__nothing, control_, {index_, color_});
+        }
+        void lb_set_select_color_right(float idc_, int index_, const rv_color &color_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lbsetselectcolorright__array__ret__nothing, {idc_, index_, color_});
+        }
+        void lb_set_selected(const control &control_, int index_, bool selected_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lbsetselected__control__array__ret__nothing, control_, {index_, selected_});
+        }
+
+        bool tv_is_selected(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__tvisselected__control__array__ret__bool, ctrl_, path_);
+        }
+
+        void tv_set_selected(const control &ctrl_, const std::vector<int> &path_, bool select_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsetselected__control__array__ret__nothing, ctrl_, {path_, select_});
+        }
+
+        void tv_sort_all(const control &ctrl_, const std::vector<int> &path_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsortall__control__array__ret__nothing, ctrl_, {path_, reversed_});
+        }
+
+        void tv_sort_by_value_all(const control &ctrl_, const std::vector<int> &path_, bool reversed_) {
+            host::functions.invoke_raw_binary(__sqf::binary__tvsortbyvalueall__control__array__ret__nothing, ctrl_, {path_, reversed_});
+        }
+
+        std::vector<float> all_active_title_effects() {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_nular(__sqf::nular__allactivetitleeffects__ret__array));
+        }
+
+        bool is_action_menu_visible() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isactionmenuvisible__ret__bool);
+        }
+
+        rv_ctrl_angle ctrl_angle(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlangle__control__ret__array, ctrl_);
+        }
+
+        float ctrl_font_height(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlfontheight__control__ret__scalar, ctrl_);
+        }
+
+        vector2 ctrl_mouse_position(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlmouseposition__control__ret__array, ctrl_);
+        }
+
+        vector2 ctrl_scroll_values(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlscrollvalues__control__ret__array, ctrl_);
+        }
+
+        float ctrl_style(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlstyle__control__ret__scalar, ctrl_);
+        }
+
+        rv_color ctrl_text_color(const control &ctrl_) {
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrltextcolor__control__ret__scalar, ctrl_));
+        }
+
+        rv_ctrl_text_selection ctrl_text_selection(const control &ctrl_) {
+            return rv_ctrl_text_selection(host::functions.invoke_raw_unary(__sqf::unary__ctrltextselection__control__ret__array, ctrl_));
+        }
+
+        float ctrl_text_width(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrltextwidth__control__ret__scalar, ctrl_);
+        }
+
+        sqf_return_string ctrl_tooltip(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrltooltip__control__ret__string, ctrl_);
+        }
+
+        sqf_return_string ctrl_url(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlurl__control__ret__string, ctrl_);
+        }
+
+        control focused_ctrl(const display &disp_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__focusedctrl__display__ret__control, disp_);
+        }
+
+        std::vector<float> lb_selection(const control &ctrl_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__lbselection__control__ret__array, ctrl_));
+        }
+
+        bool open_gps(bool show_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__opengps__bool__ret__bool, show_);
+        }
+
+        //Menu
+        sqf_return_string menu_action(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menuaction__control__array__ret__string, ctrl_, {path_});
+        }
+        sqf_return_string menu_action(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menuaction__array__ret__string, {idc_, path_});
+        }
+        void menu_add(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menuadd__control__array__ret__scalar, ctrl_, {path_, value_});
+        }
+        void menu_add(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuadd__array__ret__scalar, {idc_, path_, value_});
+        }
+        bool menu_checked(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menuchecked__control__array__ret__bool, ctrl_, {path_});
+        }
+        bool menu_checked(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menuchecked__array__ret__bool, {idc_, path_});
+        }
+        void menu_collapse(const control &ctrl_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menucollapse__control__array__ret__nothing, ctrl_, {path_});
+        }
+        void menu_collapse(float idc_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menucollapse__array__ret__nothing, {idc_, path_});
+        }
+        sqf_return_string menu_data(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menudata__control__array__ret__string, ctrl_, {path_});
+        }
+        sqf_return_string menu_data(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menudata__array__ret__string, {idc_, path_});
+        }
+        void menu_delete(const control &ctrl_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menudelete__control__array__ret__nothing, ctrl_, {path_});
+        }
+        void menu_delete(float idc_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menudelete__array__ret__nothing, {idc_, path_});
+        }
+        void menu_enable(const control &ctrl_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menuenable__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_enable(float idc_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuenable__array__ret__nothing, {idc_, path_, value_});
+        }
+        bool menu_enabled(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menuenabled__control__array__ret__bool, ctrl_, {path_});
+        }
+        bool menu_enabled(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menuenabled__array__ret__bool, {idc_, path_});
+        }
+        void menu_expand(const control &ctrl_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menuexpand__control__array__ret__nothing, ctrl_, {path_});
+        }
+        void menu_expand(float idc_, const std::vector<int> &path_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuexpand__array__ret__nothing, {idc_, path_});
+        }
+        sqf_return_string menu_picture(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menupicture__control__array__ret__string, ctrl_, {path_});
+        }
+        sqf_return_string menu_picture(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menupicture__array__ret__string, {idc_, path_});
+        }
+        void menu_set_action(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetaction__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_action(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetaction__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_check(const control &ctrl_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetcheck__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_check(float idc_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetcheck__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_data(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetdata__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_data(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetdata__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_picture(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetpicture__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_picture(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetpicture__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_shortcut(const control &ctrl_, const std::vector<int> &path_, int value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetshortcut__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_shortcut(float idc_, const std::vector<int> &path_, int value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetshortcut__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_text(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusettext__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_text(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusettext__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_url(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menuseturl__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_url(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuseturl__array__ret__nothing, {idc_, path_, value_});
+        }
+        void menu_set_value(const control &ctrl_, const std::vector<int> &path_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusetvalue__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_set_value(float idc_, const std::vector<int> &path_, float value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusetvalue__array__ret__nothing, {idc_, path_, value_});
+        }
+        float menu_shortcut(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menushortcuttext__control__array__ret__string, ctrl_, {path_});
+        }
+        float menu_shortcut(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menushortcuttext__array__ret__string, {idc_, path_});
+        }
+        sqf_return_string menu_shortcut_text(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menushortcut__control__array__ret__scalar, ctrl_, {path_});
+        }
+        sqf_return_string menu_shortcut_text(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menushortcut__array__ret__scalar, {idc_, path_});
+        }
+        float menu_size(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menusize__control__array__ret__scalar, ctrl_, {path_});
+        }
+        float menu_size(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menusize__array__ret__scalar, {idc_, path_});
+        }
+        void menu_sort(const control &ctrl_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__menusort__control__array__ret__nothing, ctrl_, {path_, value_});
+        }
+        void menu_sort(float idc_, const std::vector<int> &path_, bool value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menusort__array__ret__nothing, {idc_, path_, value_});
+        }
+        sqf_return_string menu_text(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menutext__control__array__ret__string, ctrl_, {path_});
+        }
+        sqf_return_string menu_text(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menutext__array__ret__string, {idc_, path_});
+        }
+        sqf_return_string menu_url(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menuurl__control__array__ret__string, ctrl_, {path_});
+        }
+        sqf_return_string menu_url(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menuurl__array__ret__string, {idc_, path_});
+        }
+        float menu_value(const control &ctrl_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__menuvalue__control__array__ret__scalar, ctrl_, {path_});
+        }
+        float menu_value(float idc_, const std::vector<int> &path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__menuvalue__array__ret__scalar, {idc_, path_});
+        }
+        void menu_clear(const control &ctrl_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuclear__control__ret__nothing, ctrl_);
+        }
+        void menu_clear(float idc_) {
+            host::functions.invoke_raw_unary(__sqf::unary__menuclear__scalar__ret__nothing, idc_);
+        }
+        std::vector<int> menu_hover(const control& ctrl_) {
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__control__ret__array, ctrl_));
+        }
+        std::vector<int> menu_hover(float idc_) {
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__scalar__ret__array, idc_));
+        }
+
+        void ctrl_set_text_color_secondary(const control &ctrl_, const rv_color &color_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsettextcolorsecondary__control__array__ret__nothing, ctrl_, color_);
         }
     }  // namespace sqf
 }  // namespace intercept

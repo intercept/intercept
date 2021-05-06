@@ -24,7 +24,7 @@ namespace intercept {
             return *this;
         }
 
-        bool config_entry::operator==(const config_entry& other_) const {
+        bool config_entry::operator==(const config_entry &other_) const {
             if (_initialized != other_._initialized) return false;
             if (!_initialized) return true;
             return _config_entry == other_._config_entry;
@@ -146,6 +146,10 @@ namespace intercept {
             return config(host::functions.invoke_raw_nular(__sqf::nular__missionconfigfile__ret__config));
         }
 
+        config config_of(const object &obj_) {
+            return config(host::functions.invoke_raw_unary(__sqf::unary__configof__object__ret__config, obj_));
+        }
+
         game_value get_array(config config_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getarray__config__ret__array, config_);
         }
@@ -201,6 +205,10 @@ namespace intercept {
         }
         sqf_return_string type_of(const object &value_) {
             return __helpers::__string_unary_object(__sqf::unary__typeof__object__ret__string, value_);
+        }
+
+        sqf_return_string get_text_raw(const config &config_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__gettextraw__config__ret__string, config_);
         }
 
     }  // namespace sqf

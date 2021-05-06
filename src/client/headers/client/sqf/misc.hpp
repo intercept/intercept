@@ -21,8 +21,8 @@ namespace intercept {
     namespace sqf {
 
         struct rv_artillery_computer_settings {
-            std::string name;
-            std::string ammo;
+            sqf_string name;
+            sqf_string ammo;
             int mode;  //#TODO investigate what this actually is
 
             rv_artillery_computer_settings(const game_value &rv_game_value_)
@@ -31,21 +31,21 @@ namespace intercept {
                   mode(rv_game_value_[2]) {}
         };
         struct rv_credit {
-            std::string library_name;
-            std::string credits;
+            sqf_string library_name;
+            sqf_string credits;
 
             rv_credit(const game_value &rv_game_value_)
                 : library_name(rv_game_value_[0]),
                   credits(rv_game_value_[1]) {}
         };
         struct rv_product_version {
-            std::string name;
-            std::string name_short;
+            sqf_string name;
+            sqf_string name_short;
             float version;
             float build;
-            std::string branch;
+            sqf_string branch;
             bool mods;
-            std::string platform;
+            sqf_string platform;
 
             rv_product_version(const game_value &rv_game_value_)
                 : name(rv_game_value_[0]),

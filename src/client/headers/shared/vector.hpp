@@ -88,7 +88,7 @@ namespace intercept {
             constexpr T distance_2d(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_2d_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
             constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3_base(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
-            constexpr vector3_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
+            constexpr vector3_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f, 0.f}; return (*this / m); }
             constexpr vector3_base dir_to(const vector3_base& v) const noexcept { return normalize(v - * this); }
             constexpr vector3_base dir_to_2d(const vector3_base& v) const noexcept { vector3_base temp_dir = (v - *this); temp_dir.z = 0; return normalize(temp_dir); }
             constexpr vector3_base rotate_x(const T& rad) const noexcept { return vector3_base(x, y * std::cos(rad) - z * std::sin(rad), y * std::sin(rad) + z * std::cos(rad)); }
@@ -187,7 +187,7 @@ namespace intercept {
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
-            constexpr vector2_base normalize() const noexcept { return (*this / std::abs(magnitude())); }
+            constexpr vector2_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f}; return (*this / m); }
             constexpr vector2_base rotate(const T& rad) const noexcept { return vector2_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad)); }
             constexpr vector2_base rotate_deg(const T& deg) const noexcept { return rotate(deg * pi / 180.0f); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f) ? true : false); }

@@ -12,7 +12,8 @@ _registerTypesResult = (call compile "interceptRegisterTypes parsingNamespace") 
 diag_log text format["Intercept initialization part 2/3: %1", _registerTypesResult];
 
 private _intercept_projects = configFile >> "Intercept";
-for "_i" from 0 to (count _intercept_projects)-1 do {
+
+/* for "_i" from 0 to (count _intercept_projects)-1 do {
     private _project = _intercept_projects select _i;
     if(isClass _project) then {
         for "_x" from 0 to (count _project)-1 do {
@@ -31,7 +32,22 @@ for "_i" from 0 to (count _intercept_projects)-1 do {
             };
         };
     };
-};
+}; */
+
+{
+	{
+		private _plugin_name = getText(_x >> "pluginName");
+		if(_plugin_name != "") then {
+			diag_log text format["Intercept Loading Plugin: %1", _plugin_name];
+			_cert = getText(_module >> "certificate");
+			if (_cert != "") then {
+				"intercept" callExtension ("load_extension:" + _plugin_name + "," +_cert);
+			} else {
+				"intercept" callExtension ("load_extension:" + _plugin_name);
+			};
+		};
+	} forEach ("true" configClasses _x);
+} forEach ("true" configClasses _intercept_projects);
 
 if (_registerTypesResult) then {
     uiNamespace setVariable ["intercept_fnc_event", compileFinal preprocessFileLineNumbers "\z\intercept\rv\addons\core\event.sqf"];

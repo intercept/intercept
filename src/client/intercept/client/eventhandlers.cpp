@@ -26,27 +26,32 @@ namespace intercept::client {
                 if (found != funcMapMissionEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::object: {
+
+			case eventhandler_type::object: {
                 auto found = funcMapObjectEH.find({uid, handle, EHIteration, ehType });
                 if (found != funcMapObjectEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::ctrl: {
+
+			case eventhandler_type::ctrl: {
                 auto found = funcMapCtrlEH.find({uid, handle, EHIteration, ehType });
                 if (found != funcMapCtrlEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::mp: {
+
+			case eventhandler_type::mp: {
                 auto found = funcMapMPEH.find({ uid, handle, EHIteration, ehType });
                 if (found != funcMapMPEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::display: {
+
+			case eventhandler_type::display: {
                 auto found = funcMapDisplayEH.find({ uid, handle, EHIteration, ehType });
                 if (found != funcMapDisplayEH.end())
                     retVal = callEHHandler(found->second.first, args, found->second.second);
             } break;
-            case eventhandler_type::custom: {
+
+			case eventhandler_type::custom: {
                 auto found = customCallbackMap.find({ uid, handle, 0 });
                 if (found != customCallbackMap.end())
                     retVal = (*found->second)(args);
@@ -82,14 +87,15 @@ namespace intercept::client {
             case eventhandlers_mission::PreloadStarted: //[[fallthrough]]
             case eventhandlers_mission::PreloadFinished: //[[fallthrough]]
             case eventhandlers_mission::EachFrame: //[[fallthrough]]
+            case eventhandlers_mission::MPEnded: //[[fallthrough]]
             case eventhandlers_mission::Draw3D: {
                 (*func)();
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::Ended: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Ended)>*>(func.get()))(args[0]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::Loaded: {
                 auto type = static_cast<intercept::types::r_string>(args[0]);
                 loaded_saveType type_ = {};
@@ -100,79 +106,104 @@ namespace intercept::client {
                 else if (type == "continue"sv)
                     type_ = loaded_saveType::continuesave;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Loaded)>*>(func.get()))(type_);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::Map: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_Map)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::HandleDisconnect: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Mission_HandleDisconnect)>*>(func.get()))(args[0], args[1], args[2], args[3]);
                 if (ret) return *ret;
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::EntityRespawned: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_EntityRespawned)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::EntityKilled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_EntityKilled)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::MapSingleClick: {
                 auto& arr = args[0].to_array();
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MapSingleClick)>*>(func.get()))(intercept::types::auto_array<intercept::types::object>(arr.begin(), arr.end()), args[1], args[2], args[3]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::HCGroupSelectionChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HCGroupSelectionChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::CommandModeChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_CommandModeChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::GroupIconClick: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconClick)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::GroupIconOverEnter: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconOverEnter)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::GroupIconOverLeave: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_GroupIconOverLeave)>*>(func.get()))(args[0], args[1], args[2], args[3], {args[4], args[5]}, args[6], args[7], args[8]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::PlayerConnected: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerConnected)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::PlayerDisconnected: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerDisconnected)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::TeamSwitch: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_TeamSwitch)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::PlayerViewChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_PlayerViewChanged)>*>(func.get()))(args[0], args[1], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_mission::BuildingChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_BuildingChanged)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
+            case eventhandlers_mission::ControlsShifted: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_ControlsShifted)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            } break;
+
+            case eventhandlers_mission::ExtensionCallback: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_ExtensionCallback)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+            case eventhandlers_mission::HandleAccTime : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HandleAccTime)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+            case eventhandlers_mission::HandleChatMessage : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_HandleChatMessage)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+            } break;
+
+            case eventhandlers_mission::MarkerCreated : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerCreated)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+
+            case eventhandlers_mission::MarkerDeleted : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerDeleted)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_mission::MarkerUpdated : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Mission_MarkerUpdated)>*>(func.get()))(args[0], args[1]);
+            } break;
+
             default: ;
         }
         return {};
     }
 
     EHIdentifier addScriptEH(eventhandlers_mission type) {
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-
         r_string typeStr;
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
@@ -182,7 +213,11 @@ namespace intercept::client {
             default:;
         }
 
-        auto uid = dist(rng);
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_mission = 0;
+        int uid = (int)((uid_mission++) % 33'554'432) - 16'777'216;
+
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\""sv)
                               + intercept::client::host::module_name.data() + "\"," //modulename
@@ -214,76 +249,76 @@ namespace intercept::client {
         switch (ehType) {
             case eventhandlers_object::AnimChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::AnimDone: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimDone)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::AnimStateChanged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimStateChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::ContainerClosed: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ContainerClosed)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::ContainerOpened: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ContainerOpened)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::ControlsShifted: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_ControlsShifted)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Dammaged: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Dammaged)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Deleted: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Deleted)>*>(func.get()))(args[0]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Engine: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Engine)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::EpeContact: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContact)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::EpeContactEnd: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContactEnd)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::EpeContactStart: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_EpeContactStart)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Explosion: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Explosion)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Fired: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Fired)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::FiredMan: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_FiredMan)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::FiredNear: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_FiredNear)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Fuel: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Fuel)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Gear: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Gear)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::GetIn: {
                 types::r_string pos = args[1];
                 get_in_position p{};
@@ -294,8 +329,8 @@ namespace intercept::client {
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetIn)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::GetInMan: {
                 types::r_string pos = args[1];
                 get_in_position p{};
@@ -306,8 +341,8 @@ namespace intercept::client {
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetInMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::GetOut: {
                 types::r_string pos = args[1];
                 get_in_position p{};
@@ -318,8 +353,8 @@ namespace intercept::client {
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOut)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::GetOutMan: {
                 types::r_string pos = args[1];
                 get_in_position p{};
@@ -330,31 +365,31 @@ namespace intercept::client {
                 else if (pos == "cargo"sv)
                     p = get_in_position::cargo;
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_GetOutMan)>*>(func.get()))(args[0], p, args[2], types::rv_turret_path(args[3]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::HandleDamage: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<float>(EH_Func_Args_Object_HandleDamage)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
                 if (ret) return *ret;
-            }
-                break;
+            } break;
+
             case eventhandlers_object::HandleHeal: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_HandleHeal)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::HandleRating: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<float>(EH_Func_Args_Object_HandleRating)>*>(func.get()))(args[0], args[1]);
                 if (ret) return *ret;
-            }
-                break;
+            } break;
+
             case eventhandlers_object::HandleScore: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Object_HandleScore)>*>(func.get()))(args[0], args[1], args[2]);
                 if (ret) return *ret;
-            }
-                break;
+            } break;
+                
             case eventhandlers_object::Hit: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Hit)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
+            } break;
+                
             case eventhandlers_object::HitPart: {
                 std::vector<eventhandler_hit_part_type> vec;
                 for (auto& el : args.to_array()) {
@@ -362,121 +397,137 @@ namespace intercept::client {
                 }
 
                 (*reinterpret_cast<std::function<void(std::vector<eventhandler_hit_part_type>)>*>(func.get()))(std::move(vec));
-            }
-                break;
+            } break;
+                
             case eventhandlers_object::Init: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Init)>*>(func.get()))(args[0]);
-            }
-                break;
+            } break;
+                
             case eventhandlers_object::HandleIdentity: {
                 auto ret = (*reinterpret_cast<std::function<std::optional<bool>(EH_Func_Args_Object_HandleIdentity)>*>(func.get()))(args[0]);
                 if (ret) return *ret;
-            }
-                break;
+            } break;
+
             case eventhandlers_object::IncomingMissile: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_IncomingMissile)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::InventoryClosed: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_InventoryClosed)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::InventoryOpened: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_InventoryOpened)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Killed: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Killed)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::LandedTouchDown: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandedTouchDown)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::LandedStopped: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandedStopped)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Landing: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Landing)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::LandingCanceled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_LandingCanceled)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Local: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Local)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::PostReset: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PostReset)>*>(func.get()))();
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Put: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Put)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Reloaded: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Reloaded)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4].to_array(), args[5].to_array());
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Respawn: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Respawn)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::RopeAttach: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_RopeAttach)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
-            case eventhandlers_object::RopeBreak: {
+            } break;
+
+			case eventhandlers_object::RopeBreak: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_RopeBreak)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::SeatSwitched: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SeatSwitched)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::SeatSwitchedMan: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SeatSwitchedMan)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::SoundPlayed: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_SoundPlayed)>*>(func.get()))(args[0], static_cast<sound_played_origin>(static_cast<int>(args[1])));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::Take: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Take)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::TaskSetAsCurrent: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TaskSetAsCurrent)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::TurnIn: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnIn)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::TurnOut: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_TurnOut)>*>(func.get()))(args[0], args[1], types::rv_turret_path(args[2]));
-            }
-                break;
+            } break;
+
             case eventhandlers_object::WeaponAssembled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponAssembled)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::WeaponDisassembled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponDisassembled)>*>(func.get()))(args[0], args[1], args[2]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::WeaponDeployed: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponDeployed)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
             case eventhandlers_object::WeaponRested: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_Object_WeaponRested)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            } break;
+
+            case eventhandlers_object::Disassembled : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Disassembled)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+            case eventhandlers_object::PathCalculated: {
+                auto& arr_ = args[1].to_array();
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PathCalculated)>*>(func.get()))(args[0], auto_array<types::vector3>(arr_.begin(), arr_.end()));
+            } break;
+
+            case eventhandlers_object::PeriscopeElevationChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_PeriscopeElevationChanged)>*>(func.get()))(args[0], types::rv_turret_path(args[1]), args[2], args[3], args[4]);
+            } break;
+
+            case eventhandlers_object::Suppressed : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_Suppressed)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            } break;
 
             default: assert(false);
         }
@@ -484,9 +535,6 @@ namespace intercept::client {
     }
 
     EHIdentifier addScriptEH(types::object obj, eventhandlers_object type) {
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-
         r_string typeStr;
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
@@ -497,7 +545,11 @@ namespace intercept::client {
             default:;
         }
 
-        auto uid = dist(rng);
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_obj = 0;
+        int uid = (int)((uid_obj++) % 33'554'432) - 16'777'216;
+        
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("['")
                               + intercept::client::host::module_name.data() + "',"
@@ -526,43 +578,103 @@ namespace intercept::client {
 
     intercept::types::game_value callEHHandler(eventhandlers_ctrl ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
         switch (ehType) {
-            case eventhandlers_ctrl::Draw: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseButtonDown: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseButtonUp: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseButtonClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseButtonDblClick: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseMoving: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
-            case eventhandlers_ctrl::MouseHolding: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Object_AnimChanged)>*>(func.get()))(args[0], args[1]);
-            }
-                break;
+            case eventhandlers_ctrl::Draw : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Draw)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::MouseButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_ctrl::MouseButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_ctrl::MouseButtonClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonClick)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_ctrl::MouseButtonDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseButtonDblClick)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_ctrl::MouseMoving : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseMoving)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+
+			case eventhandlers_ctrl::MouseHolding : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_MouseHolding)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+
+			case eventhandlers_ctrl::ButtonClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonClick)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::ButtonDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonDblClick)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::ButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonDown)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::ButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_ButtonUp)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::CanDestroy : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CanDestroy)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::Char : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Char)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::CheckBoxesSelChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CheckBoxesSelChanged)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+			case eventhandlers_ctrl::CheckedChanged : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_CheckedChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::Destroy : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_Destroy)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::HTMLLink : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_HTMLLink)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::IMEChar : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_IMEChar)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::IMEComposition : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_IMEComposition)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_ctrl::KeyDown : {
+                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Ctrl_KeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            } break;
+
+			case eventhandlers_ctrl::KeyUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_KeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            } break;
+
+			case eventhandlers_ctrl::KillFocus : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_KillFocus)>*>(func.get()))(args[0]);
+            } break;
+
+			case eventhandlers_ctrl::LBDblClick : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Ctrl_LBDblClick)>*>(func.get()))(args[0], args[1]);
+            } break;
             default: assert(false);
         }
         return {};
     }
 
     EHIdentifier addScriptEH(types::control ctrl, eventhandlers_ctrl type) {
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-
         r_string typeStr;
         //#TODO eachFrame is just redirector to InvokePeriod.
         switch (type) {
@@ -572,7 +684,11 @@ namespace intercept::client {
             default:;
         }
 
-        auto uid = dist(rng);
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_ctrl = 0;
+        int uid = (int)((uid_ctrl++) % 33'554'432) - 16'777'216;
+
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\"")
                               + intercept::client::host::module_name.data() + "\","
@@ -603,26 +719,22 @@ namespace intercept::client {
         switch (ehType) {
             case eventhandlers_mp::MPHit: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPHit)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
-            case eventhandlers_mp::MPKilled: {
+            } break;
+
+			case eventhandlers_mp::MPKilled: {
                 (*reinterpret_cast<std::function<void(EH_Func_Args_MP_MPKilled)>*>(func.get()))(args[0], args[1], args[2], args[3]);
-            }
-                break;
-            case eventhandlers_mp::MPRespawn: {
+            } break;
+
+			case eventhandlers_mp::MPRespawn: {
                 auto newPos = (*reinterpret_cast<std::function<types::vector3(EH_Func_Args_MP_MPRespawn)>*>(func.get()))(args[0], args[1]);
                 return newPos;
-            }
-                break;
+            } break;
             default: assert(false);
         }
         return {};
     }
 
     EHIdentifier addScriptEH(types::object unit, eventhandlers_mp type) {
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-
         r_string typeStr;
         switch (type) {
         #define EHMP_CASE(name, retVal, args) \
@@ -631,7 +743,11 @@ namespace intercept::client {
             default:;
         }
 
-        auto uid = dist(rng);
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_mp = 0;
+        int uid = (int)((uid_mp++) % 33'554'432) - 16'777'216;
+
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\"")
             + intercept::client::host::module_name.data() + "\","
@@ -661,35 +777,54 @@ namespace intercept::client {
         switch (ehType) {
 
             case eventhandlers_display::Load: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onLoad)>*>(func.get()))(args);
-            }break;
-            case eventhandlers_display::Unload: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onUnload)>*>(func.get()))(args[0], args[1]);
-            }break;
-            case eventhandlers_display::ChildDestroyed: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
-            }break;
-            case eventhandlers_display::KeyDown: {
-                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Display_onKeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }
-            case eventhandlers_display::KeyUp: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onKeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
-            }break;
-            case eventhandlers_display::MouseMoving: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseMoving)>*>(func.get()))(args[0], args[1], args[2]);
-            }break;
-            case eventhandlers_display::MouseZChanged: {
-                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_onMouseZChanged)>*>(func.get()))(args[0], args[1]);
-            }break;
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Load)>*>(func.get()))(args);
+            } break;
+
+			case eventhandlers_display::Unload: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Unload)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_display::ChildDestroyed: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_ChildDestroyed)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+			case eventhandlers_display::KeyDown: {
+                return (*reinterpret_cast<std::function<bool(EH_Func_Args_Display_KeyDown)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            } break;
+
+			case eventhandlers_display::KeyUp: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_KeyUp)>*>(func.get()))(args[0], args[1], args[2], args[3], args[4]);
+            } break;
+
+			case eventhandlers_display::MouseMoving: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseMoving)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+			case eventhandlers_display::MouseZChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseZChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+			case eventhandlers_display::MouseButtonDown : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseButtonDown)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_display::MouseButtonUp : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseButtonUp)>*>(func.get()))(args[0], args[1], args[2],args[3], args[4], args[5], args[6]);
+            } break;
+
+			case eventhandlers_display::MouseHolding : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_MouseHolding)>*>(func.get()))(args[0], args[1], args[2]);
+            } break;
+
+			case eventhandlers_display::Char : {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Display_Char)>*>(func.get()))(args[0], args[1]);
+            } break;
             default: assert(false);
         }
         return {};
     }
 
     EHIdentifier addScriptEH(types::display disp, eventhandlers_display type) {
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-
         r_string typeStr;
         switch (type) {
         #define EHDisplay_CASE(name, retVal, args) \
@@ -698,7 +833,11 @@ namespace intercept::client {
             default:;
         }
 
-        auto uid = dist(rng);
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_disp = 0;
+        int uid = (int)((uid_disp++) % 33'554'432) - 16'777'216;
+
         //#TODO use hash of moduleName as identifier.. That's faster..
         std::string command = std::string("[\"")
             + intercept::client::host::module_name.data() + "\","
@@ -728,9 +867,11 @@ namespace intercept::client {
 
     std::pair<std::string, EHIdentifierHandle> generate_custom_callback(std::function<game_value(game_value_parameter)> fnc) {
         static int ehId = -16777210;
-        std::default_random_engine rng(std::random_device{}());
-        std::uniform_int_distribution<int32_t> dist(-16777215, 16777215);
-        auto uid = dist(rng);
+
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_custom = 0;
+        int uid = (int)((uid_custom++) % 33'554'432) - 16'777'216;
 
         ehId++;
         EHIdentifier ident{ uid, ehId, 0, 0 };

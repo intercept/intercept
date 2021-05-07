@@ -1,4 +1,4 @@
-﻿#include "cargo.hpp"
+#include "cargo.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -250,17 +250,12 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__attachedto__object__ret__array, obj_));
         }
 
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_) {
-            game_value args({object2_,
-                             offset_,
-                             memPoint_});
-            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_, bool follow_bone_) {
+            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, {object2_, offset_, memPoint_, follow_bone_});
         }
 
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_) {
-            game_value args({object2_,
-                             offset_});
-            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, args);
+            host::functions.invoke_raw_binary(__sqf::binary__attachto__object__array__ret__nothing, object1_, {object2_, offset_});
         }
 
         void detach(const object &value_) {
@@ -272,13 +267,15 @@ namespace intercept {
         }
 
         void light_attach_object(const object &light_, const object &object_, const vector3 &offset_) {
-            game_value params_right({object_,
-                                     offset_});
-
-            host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, params_right);
+            host::functions.invoke_raw_binary(__sqf::binary__lightattachobject__object__array__ret__nothing, light_, {object_, offset_});
         }
+
         int get_cargo_index(const object &vehicle_, const object &unit_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getcargoindex__object__object__ret__scalar, vehicle_, unit_);
+        }
+
+        std::vector<object> rope_segments(const object &rope_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropesegments__object__ret__object, rope_));
         }
     }  // namespace sqf
 }  // namespace intercept

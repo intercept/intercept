@@ -117,7 +117,7 @@ namespace intercept {
         }
 
 
-        script spawn(game_value args, const code& code_) {
+        script spawn(game_value args, const code &code_) {
             return host::functions.invoke_raw_binary(
                 __sqf::binary__spawn__any__code__ret__script,
                 args,
@@ -467,8 +467,9 @@ namespace intercept {
                 __sqf::unary__allvariables__control__ret__array, value_));
         }
 
-        bool __sqfassert(bool test_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isnull__script__ret__bool, test_);
+        sqf_return_string_list all_variables(const display &value_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
+                __sqf::unary__allvariables__display__ret__array, value_));
         }
 
         side blufor() {
@@ -566,6 +567,10 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__tofixed__scalar__scalar__ret__string, number_, decimals_);
         }
 
+        void to_fixed(int decimals_) {
+            host::functions.invoke_raw_unary(__sqf::unary__tofixed__scalar__ret__nothing, decimals_);
+        }
+
         bool user_input_disabled() {
             return host::functions.invoke_raw_nular(__sqf::nular__userinputdisabled__ret__bool);
         }
@@ -654,7 +659,7 @@ namespace intercept {
             return __helpers::__string_unary_string(__sqf::unary__localize__string__ret__string, value_);
         }
 
-        game_value text(sqf_string_const_ref value_) {
+        rv_text text(sqf_string_const_ref value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__text__string__ret__text, value_);
         }
 
@@ -666,7 +671,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__format__array__ret__string, params_);
         }
 
-        sqf_return_string compose_text(sqf_string_list_const_ref texts_) {
+        rv_text compose_text(sqf_string_list_const_ref texts_) {
             auto_array<game_value> texts(texts_.begin(), texts_.end());
 
             return host::functions.invoke_raw_unary(__sqf::unary__composetext__array__ret__text, std::move(texts));
@@ -886,14 +891,14 @@ namespace intercept {
             game_value params({type_,
                                command_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
         }
 
         int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
             game_value params({type_,
                                command_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__nothing_scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
         }
 
         void remove_mission_event_handler(sqf_string_const_ref type_, int index_) {
@@ -930,10 +935,85 @@ namespace intercept {
         int get_mission_version() {
             return host::functions.invoke_raw_nular(__sqf::nular__missionversion__ret__scalar);
         }
+
         sqf_return_string get_mission_path(sqf_string_const_ref path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getmissionpath__string__ret__string, path_);
         }
 
+        std::vector<rv_addon_info> all_addons_info() {
+            return __helpers::__convert_to_vector<rv_addon_info>(host::functions.invoke_raw_nular(__sqf::nular__alladdonsinfo__ret__array));
+        }
 
+        std::vector<rv_dlc_usage_stats> get_dlc_assets_usage() {
+            return __helpers::__convert_to_vector<rv_dlc_usage_stats>(host::functions.invoke_raw_nular(__sqf::nular__getdlcassetsusage__ret__array));
+        }
+
+        std::vector<rv_mod_info> get_loaded_mods_info() {
+            return __helpers::__convert_to_vector<rv_mod_info>(host::functions.invoke_raw_nular(__sqf::nular__getloadedmodsinfo__ret__array));
+        }
+
+        sqf_return_string_list get_mission_dlcs() {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__getmissiondlcs__ret__array));
+        }
+
+        std::vector<rv_friend_servers> get_steam_friends_servers() {
+            return __helpers::__convert_to_vector<rv_friend_servers>(host::functions.invoke_raw_nular(__sqf::nular__getsteamfriendsservers__ret__array));
+        }
+
+        bool is_3den_preview() {
+            return host::functions.invoke_raw_nular(__sqf::nular__is3denpreview__ret__bool);
+        }
+
+        bool is_game_focused() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isgamefocused__ret__bool);
+        }
+
+        bool is_game_paused() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isgamepaused__ret__bool);
+        }
+
+        rv_namespace local_namespace() {
+            return host::functions.invoke_raw_nular(__sqf::nular__localnamespace__ret__namespace);
+        }
+
+        sqf_return_string mission_name_source() {
+            return host::functions.invoke_raw_nular(__sqf::nular__missionnamesource__ret__string);
+        }
+
+        sqf_return_string_list addon_files(sqf_string_const_ref pboPrefix_, sqf_string_const_ref fileExt_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__addonfiles__array__ret__array, {pboPrefix_, fileExt_}));
+        }
+
+        code compile_script(sqf_string_const_ref path_, bool final_, sqf_string_const_ref prefix_header_) {
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compilescript__array__ret__code, {path_, final_, prefix_header_}));
+        }
+
+        bool file_exists(sqf_string_const_ref path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__fileexists__string__ret__bool, path_);
+        }
+
+        std::pair<bool, bool> force_cadet_difficulty(bool showCadetHints_, bool showCadetWP_) {
+            auto ret = host::functions.invoke_raw_unary(__sqf::unary__forcecadetdifficulty__array__ret__array, {showCadetHints_, showCadetWP_});
+            return std::pair<bool, bool>{ret[0], ret[1]};
+        }
+
+        rv_dlc_asset_info get_asset_dlc_info(const object &asset_) {
+            return rv_dlc_asset_info(host::functions.invoke_raw_unary(__sqf::unary__getassetdlcinfo__object_string__ret__array, asset_));
+        }
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref model_) {
+            return rv_dlc_asset_info(host::functions.invoke_raw_unary(__sqf::unary__getassetdlcinfo__object_string__ret__array, model_));
+        }
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config &config_) {
+            return rv_dlc_asset_info(host::functions.invoke_raw_unary(__sqf::unary__getassetdlcinfo__array__ret__array, {classname_, config_}));
+        }
+
+        std::pair<float, float> get_dlc_assets_usage_by_name(sqf_string_const_ref asset_) {
+            auto ret = host::functions.invoke_raw_unary(__sqf::unary__getdlcassetsusagebyname__string__ret__array, asset_);
+            return std::pair<float, float>{ret[0], ret[1]};
+        }
+
+        bool is_final(const code &code_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isfinal__code_string__ret__bool, code_);
+        }
     }  // namespace sqf
 }  // namespace intercept

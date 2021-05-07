@@ -269,5 +269,13 @@ namespace intercept {
         bool has_interface() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__hasinterface__ret__bool);
         }
+
+        void connect_to_server(sqf_string_const_ref ip_, float port, sqf_string_const_ref password_) {
+            host::functions.invoke_raw_unary(__sqf::unary__connecttoserver__array__ret__nothing, {ip_, port, password_});
+        }
+
+        std::vector<float> get_player_scores(const object &player_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getplayerscores__object__ret__array, player_));
+        }
     }  // namespace sqf
 }  // namespace intercept

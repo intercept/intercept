@@ -17,6 +17,72 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         /* World */
+        struct rv_road_info {
+            sqf_string mapType;            // - road segment type, could be "ROAD", "MAIN ROAD", "TRACK", "TRAIL" (see nearestTerrainObjects)
+            sqf_string texture;            // - road segment surface texture
+            sqf_string textureEnd;         // - road segment surface texture
+            sqf_string material;           // - road segment surface material
+            vector3 begPos;                // - start of the road segment in ASL
+            vector3 endPos;                // - finish of the road segment in ASL
+            float width;                   // - road segment width
+            bool isPedestrian;             // - when true road is for pedestrian use only
+            bool isBridge;                 // - when true road segment is a bridge
+            explicit rv_road_info(const game_value &gv_)
+                : mapType(gv_[0]),
+                  width(gv_[1]),
+                  isPedestrian(gv_[2]),
+                  texture(gv_[3]),
+                  textureEnd(gv_[4]),
+                  material(gv_[5]),
+                  begPos(gv_[6]),
+                  endPos(gv_[7]),
+                  isBridge(gv_[8]) {}
+        };
+
+        struct rv_world_airports {
+            std::vector<float> static_airports;
+            std::vector<object> dynamic_airports;
+            explicit rv_world_airports(const game_value &gv_) {
+                auto &arr_pair = gv_.to_array();
+                auto &arr_1 = arr_pair[0].to_array();
+                auto &arr_2 = arr_pair[1].to_array();
+                static_airports = std::move(std::vector<float>(arr_1.begin(), arr_1.end()));
+                dynamic_airports = std::move(std::vector<object>(arr_2.begin(), arr_2.end()));
+            }
+        };
+
+        struct rv_color_rgb {
+            float red{};
+            float green{};
+            float blue{};
+            explicit rv_color_rgb(const game_value &ret_game_value_) : red(ret_game_value_[0]),
+                                                                   green(ret_game_value_[1]),
+                                                                   blue(ret_game_value_[2]) {}
+        };
+
+        struct rv_world_lighting {
+            rv_color_rgb light;
+            vector3 direction;
+            float brightness;
+            float starts_visibility;
+            explicit rv_world_lighting(const game_value &gv_)
+                : light(gv_[0]),
+                  brightness(gv_[1]),
+                  direction(gv_[2]),
+                  starts_visibility(gv_[3]) {}
+        };
+
+        struct rv_object_lighting {
+            rv_color_rgb ambient_light;
+            rv_color_rgb dynamic_light;
+            float ambient_brightness;
+            float dynamic_brightness;
+            explicit rv_object_lighting(const game_value &gv_)
+                : ambient_light(gv_[0]),
+                  ambient_brightness(gv_[1]),
+                  dynamic_light(gv_[2]),
+                  dynamic_brightness(gv_[3]) {}
+        };
 
         struct rv_date {
             float year;
@@ -222,7 +288,14 @@ namespace intercept {
         bool underwater(const object &value_);
         std::vector<object> vehicles();
         void set_local_wind_params(float strength_, float diameter_);
-
+        float get_object_scale(const object &obj_);
+        void set_object_scale(const object &obj_, float scale_);
         float getelevationoffset();
+        rv_world_airports all_airports();
+        rv_world_lighting get_lighting();
+        rv_object_lighting get_lighting_at(const object &obj_);
+        rv_road_info get_road_info(const object &road_obj_);
+        void set_wind_dir(const vector2 &dir_);
+        sqf_return_string surface_texture(const vector2 &pos_);
     }  // namespace sqf
 }  // namespace intercept

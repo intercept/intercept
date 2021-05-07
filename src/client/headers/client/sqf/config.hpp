@@ -136,6 +136,7 @@ namespace intercept {
         config config_file();
         config config_null();
         config mission_config_file();
+        config config_of(const object& obj_);
         game_value get_array(config config_);
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_);
@@ -175,5 +176,6 @@ namespace intercept {
         }
         std::vector<game_value> mod_params(sqf_string_const_ref mod_class_, mod_params_options options_);
         sqf_return_string type_of(const object &value_);
+        sqf_return_string get_text_raw(const config &config_);
     }  // namespace sqf
 }  // namespace intercept

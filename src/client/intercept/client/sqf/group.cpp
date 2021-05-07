@@ -121,11 +121,14 @@ namespace intercept {
         std::vector<object> units(const group &gp_) {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__units__group__ret__array, gp_));
         }
+        std::vector<object> units(const side &side) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__units__side__ret__any, side));
+        }
         side get_side(const group &group_) {
             return side(host::functions.invoke_raw_unary(__sqf::unary__side__group__ret__side, group_));
         }
 
-        side side_get(const group& group_) { return get_side(group_); }
+        side side_get(const group &group_) { return get_side(group_); }
 
         sqf_return_string_list all_variables(const group &value_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(

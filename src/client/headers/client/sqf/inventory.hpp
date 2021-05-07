@@ -20,7 +20,7 @@ namespace intercept {
     namespace sqf {
 
         struct rv_magazine_ammo {
-            std::string name;
+            sqf_string name;
             int count;
 
             explicit rv_magazine_ammo(const game_value &from_gv_) : name(from_gv_[0]),
@@ -34,7 +34,7 @@ namespace intercept {
         struct rv_magazine_ammo_full : rv_magazine_ammo {
             bool loaded;
             int type;
-            std::string location;
+            sqf_string location;
 
             explicit rv_magazine_ammo_full(const game_value &from_gv_) : rv_magazine_ammo(from_gv_),
                                                                 loaded(from_gv_[2]),
@@ -58,14 +58,14 @@ namespace intercept {
 
             explicit rv_turret_magazine(game_value gv_) : name(gv_[0]),turret_path(gv_[1]),count(gv_[2]),id(gv_[3]),creator(gv_[4]){}
 
-            std::string name;
+            sqf_string name;
             rv_turret_path turret_path;
             int count;
             int id;
             object creator;  // player
         };
         struct rv_container {
-            std::string type;
+            sqf_string type;
             object container;
 
             explicit rv_container(const game_value &from_gv_) : type(from_gv_[0]),
@@ -75,17 +75,22 @@ namespace intercept {
             }
         };
         struct rv_weapon_accessories {
-            std::string silencer;
-            std::string flashlight_laserpointer;
-            std::string optics;
-            std::string bipod;
+            sqf_string silencer;
+            sqf_string flashlight_laserpointer;
+            sqf_string optics;
+            sqf_string bipod;
+            explicit rv_weapon_accessories(const game_value &gv_)
+                : silencer(gv_[0]),
+                  flashlight_laserpointer(gv_[1]),
+                  optics(gv_[2]),
+                  bipod(gv_[3]) {}
         };
 
         struct rv_weapon_state {
-            std::string weapon;
-            std::string muzzle;
-            std::string mode;
-            std::string magazine;
+            sqf_string weapon;
+            sqf_string muzzle;
+            sqf_string mode;
+            sqf_string magazine;
             float ammo_count;
 
             explicit rv_weapon_state(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
@@ -96,7 +101,7 @@ namespace intercept {
         };
 
         struct rv_magazine {
-            std::string name;
+            sqf_string name;
             int ammo;
 
             rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
@@ -108,13 +113,13 @@ namespace intercept {
         };
 
         struct rv_weapon_items {
-            std::string weapon;
-            std::string muzzle;
-            std::string laser;
-            std::string optics;
+            sqf_string weapon;
+            sqf_string muzzle;
+            sqf_string laser;
+            sqf_string optics;
             rv_magazine magazine;
             std::optional<rv_magazine> grenade_launcher_magazine;
-            std::string bipod;
+            sqf_string bipod;
 
             rv_weapon_items(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
                                                                  muzzle(ret_game_value_[1]),
@@ -616,5 +621,14 @@ namespace intercept {
         rv_weapon_state weapon_state(const object &unit_);
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
         std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
+        void add_binocular_item(const object &unit_, sqf_string_const_ref classname_);
+        void lock_inventory(const object &vehicle_, bool locked_);
+        void remove_binocular_item(const object &unit_, sqf_string_const_ref classname_);
+        rv_weapon_accessories binocular_items(const object &unit_);
+        sqf_return_string binocular_magazine(const object &unit_);
+        bool locked_inventory(const object &vehicle_);
+        void remove_all_binocular_items(const object &unit_);
+        void remove_all_secondary_weapon_items(const object &unit_);
+        
     }  // namespace sqf
 }  // namespace intercept

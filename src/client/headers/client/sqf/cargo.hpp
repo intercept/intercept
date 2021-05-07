@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -69,9 +69,11 @@ namespace intercept {
 
         std::vector<object> attached_objects(const object &obj_);
         object attached_to(const object &obj_);
-        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_);
+        void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_, bool follow_bone_ = false);
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_);
         void detach(const object &value_);
         int get_cargo_index(const object &vehicle_, const object &unit_);
+
+        std::vector<object> rope_segments(const object &rope_);
     }  // namespace sqf
 }  // namespace intercept

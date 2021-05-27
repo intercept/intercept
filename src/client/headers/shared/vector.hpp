@@ -102,21 +102,21 @@ namespace intercept {
             constexpr T cos(const vector2_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector2_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
-            constexpr T distance(const vector3_base& v) const noexcept { vector3_base(*this - v).magnitude(); }
-            constexpr T distance(const vector2_base<T>& v) const noexcept { vector3_base(*this - v).magnitude(); }
-            constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base(*this - v).magnitude_squared(); }
-            constexpr T distance_squared(const vector2_base<T>& v) const noexcept { vector3_base(*this - v).magnitude_squared(); }
-            constexpr T distance_2d(const vector3_base& v) const noexcept { vector2_base<T>(v - *this).magnitude(); }
-            constexpr T distance_2d(const vector2_base<T>& v) const noexcept { vector2_base<T>(v - *this).magnitude(); }
-            constexpr T distance_2d_squared(const vector3_base& v) const noexcept { vector2_base<T>(v - *this).magnitude_squared(); }
-            constexpr T distance_2d_squared(const vector2_base<T>& v) const noexcept { vector2_base<T>(v - *this).magnitude_squared(); }
+            constexpr T distance(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude(); }
+            constexpr T distance(const vector2_base<T>& v) const noexcept { return vector3_base(*this - v).magnitude(); }
+            constexpr T distance_squared(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude_squared(); }
+            constexpr T distance_squared(const vector2_base<T>& v) const noexcept { return vector3_base(*this - v).magnitude_squared(); }
+            constexpr T distance_2d(const vector3_base& v) const noexcept { return vector2_base<T>(v - *this).magnitude(); }
+            constexpr T distance_2d(const vector2_base<T>& v) const noexcept { return vector2_base<T>(v - *this).magnitude(); }
+            constexpr T distance_2d_squared(const vector3_base& v) const noexcept { return vector2_base<T>(v - *this).magnitude_squared(); }
+            constexpr T distance_2d_squared(const vector2_base<T>& v) const noexcept { return vector2_base<T>(v - *this).magnitude_squared(); }
             constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3_base(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
             constexpr vector3_base cross(const vector2_base<T>& v) const noexcept { return vector3_base(- z * v.y, z * v.x, x * v.y - y * v.x); }
             constexpr vector3_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f, 0.f}; return (*this / m); }
             constexpr vector3_base dir_to(const vector3_base& v) const noexcept { return vector3_base(v - * this).normalize(); }
             constexpr vector3_base dir_to(const vector2_base<T>& v) const noexcept { return vector3_base(v - *this).normalize(); }
-            constexpr vector3_base dir_to_2d(const vector3_base& v) const noexcept { vector3_base temp_dir(v - *this); temp_dir.z = 0; return temp_dir.normalize(); }
-            constexpr vector3_base dir_to_2d(const vector2_base<T>& v) const noexcept { vector3_base temp_dir(v - *this); temp_dir.z = 0; return temp_dir.normalize(); }
+            constexpr vector3_base dir_to_2d(const vector3_base& v) const noexcept { return vector3_base(vector2_base<T>(v - *this).normalize()); }
+            constexpr vector3_base dir_to_2d(const vector2_base<T>& v) const noexcept { return vector3_base(vector2_base<T>(v - *this).normalize()); }
             constexpr vector3_base rotate_x(const T& rad) const noexcept { return vector3_base(x, y * std::cos(rad) - z * std::sin(rad), y * std::sin(rad) + z * std::cos(rad)); }
             constexpr vector3_base rotate_y(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) + z * std::sin(rad), y, z * std::cos(rad) - x * std::sin(rad)); }
             constexpr vector3_base rotate_z(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad), z); }
@@ -223,10 +223,10 @@ namespace intercept {
             constexpr T cos(const vector3_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector3_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
-            constexpr T distance(const vector2_base& v) const noexcept { vector2_base(*this - v).magnitude(); }
-            constexpr T distance(const vector3_base<T>& v) const noexcept { vector2_base(*this - v).magnitude(); }
-            constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base(*this - v).magnitude_squared(); ; }
-            constexpr T distance_squared(const vector3_base<T>& v) const noexcept { vector2_base(*this - v).magnitude_squared(); }
+            constexpr T distance(const vector2_base& v) const noexcept { return vector2_base(*this - v).magnitude(); }
+            constexpr T distance(const vector3_base<T>& v) const noexcept { return vector2_base(*this - v).magnitude(); }
+            constexpr T distance_squared(const vector2_base& v) const noexcept{ return vector2_base(*this - v).magnitude_squared(); }
+            constexpr T distance_squared(const vector3_base<T>& v) const noexcept { return vector2_base(*this - v).magnitude_squared(); }
             constexpr vector2_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f}; return (*this / m); }
             constexpr vector2_base rotate(const T& rad) const noexcept { return vector2_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad)); }
             constexpr vector2_base rotate_deg(const T& deg) const noexcept { return rotate(deg * pi / 180.0f); }

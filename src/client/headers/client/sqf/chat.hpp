@@ -80,6 +80,9 @@ namespace intercept {
         void enable_channel(int channel_, bool chat_, bool voice_over_net_);
 
         rv_channel_info radio_channel_info(float channelID_);
-
+        bool radio_enabled();
+        bool sentences_enabled();
+        bool shown_subtitles();
+        bool conversation_disabled(const object &obj_);
     }  // namespace sqf
 }  // namespace intercept

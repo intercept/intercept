@@ -208,7 +208,47 @@ namespace intercept {
         }
 
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string_array__ret__array, obj_, selection_name_);
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, selection_name_);
+        }
+
+        vector3 selection_positon(const object& obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, {selection_name_, lod_});
+        }
+
+        vector3 selection_positon(const object& obj_, sqf_string_const_ref selection_name_, float lod_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, {selection_name_, lod_});
+        }
+
+        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+                case intercept::sqf::rv_selection_lods::Memory:
+                    lod_name = "Memory"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::Geometry:
+                    lod_name = "Geometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::FireGeometry:
+                    lod_name = "FireGeometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::LandContact:
+                    lod_name = "LandContact"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::HitPoints:
+                    lod_name = "HitPoints"sv;
+                    break;
+                default:
+                    lod_name = ""sv;
+                    break;
+            }
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_name});
+            
+        }
+        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_,
+                                                                                                         selection_name_,
+                                                                                                         lod_index_,
+                                                                                                         is_visual_});
         }
 
         rv_bounding_box bounding_box(const object &model_) {
@@ -536,9 +576,9 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (position_.index()) {
-                case 0: params_right.push_back(std::move(std::get<0>(position_).get())); break;
-                case 1: params_right.push_back(std::move(std::get<1>(position_).get())); break;
-                case 2: params_right.push_back(std::move(std::get<2>(position_))); break;
+                case 0: params_right.emplace_back(std::get<0>(position_).get()); break;
+                case 1: params_right.emplace_back(std::get<1>(position_).get()); break;
+                case 2: params_right.emplace_back(std::get<2>(position_)); break;
             }
 
             params_right.push_back(std::move(auto_array<game_value>(markers_.begin(), markers_.end())));

@@ -154,5 +154,21 @@ namespace intercept {
         rv_channel_info radio_channel_info(float channelID_) {
             return rv_channel_info(host::functions.invoke_raw_unary(__sqf::unary__radiochannelinfo__scalar__ret__array, channelID_));
         }
+
+        bool radio_enabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__radioenabled__ret__bool);
+        }
+
+        bool sentences_enabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__sentencesenabled__ret__bool);
+        }
+
+        bool shown_subtitles() {
+            return host::functions.invoke_raw_nular(__sqf::nular__shownsubtitles__ret__bool);
+        }
+
+        bool conversation_disabled(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__conversationdisabled__object__ret__bool, obj_);
+        }
     }  // namespace sqf
 }  // namespace intercept

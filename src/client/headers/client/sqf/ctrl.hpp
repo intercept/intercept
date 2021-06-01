@@ -279,6 +279,8 @@ namespace intercept {
         void lnb_sort(const control &ctrl_, int column_, bool reversed_ = false);
         void lnb_sort_by_value(float idc_, int column_, bool reversed_ = false);
         void lnb_sort_by_value(const control &ctrl_, int column_, bool reversed_ = false);
+        void lnb_sort_by(const control &ctrl_, int column_, sqf_string_const_ref sort_type_, bool reversed_ = false, bool case_sensitive_ = false);
+        void lnb_sort_by(int ctrl_, int column_, sqf_string_const_ref sort_type_, bool reversed_ = false, bool case_sensitive_ = false);
 
         //listbox
         bool lb_is_selected(const control &value0_, float value1_);
@@ -575,7 +577,7 @@ namespace intercept {
         void create_menu(const control &value0_, float value1_);
         void html_load(const control &value0_, sqf_string_const_ref value1_);
 
-        void map_center_on_camera(const control &main_map, bool enable_);
+        vector3 map_center_on_camera(const control &main_map, bool enable_);
         void move_object_to_end(const control &value0_, sqf_string_const_ref value1_);
         void progress_set_position(const control &value0_, float value1_);
         void remove_menu_item(const control &value0_, float value1_);
@@ -649,6 +651,8 @@ namespace intercept {
         void lb_sort(int control_);
         void lb_sort_by_value(const control& control_);
         void lb_sort_by_value(int control_);
+        void lb_sort_by(const control &control_, sqf_string_const_ref sort_type_, bool reversed_ = false, bool case_sensitive_ = false);
+        void lb_sort_by(int control_, sqf_string_const_ref sort_type_, bool reversed_ = false, bool case_sensitive_ = false);
 
         sqf_return_string ct_data(const control &control_, int index_);
         std::vector<float> ct_find_header_rows(const control &control_, int index_);
@@ -765,5 +769,8 @@ namespace intercept {
         void menu_clear(float idc_);
         std::vector<int> menu_hover(const control &ctrl_);
         std::vector<int> menu_hover(float idc_);
+
+        void ctrl_map_set_position(const control &ctrl_, const vector2 &pos_);
+        void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
     }  // namespace sqf
 }  // namespace intercept

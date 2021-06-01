@@ -330,7 +330,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__camsetdir__object__array__ret__nothing, camera_, direction_);
         }
         rv_apperture_params aperture_params() {
-            return host::functions.invoke_raw_nular(__sqf::nular__apertureparams__ret__bool);
+            return host::functions.invoke_raw_nular(__sqf::nular__apertureparams__ret__array);
         }
     }  // namespace sqf
 }  // namespace intercept

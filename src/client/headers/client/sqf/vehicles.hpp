@@ -47,13 +47,19 @@ namespace intercept {
                   magazine_ammo_count(gv_[4]),
                   magazine_detail(gv_[5]) {}
         };
-        enum class rv_selection_lods {
-            Memory,
-            Geometry,
-            FireGeometry,
-            LandContact,
-            HitPoints
+
+        struct rv_lod_info {
+            sqf_string LODname;  // String - LOD description name for LOD identification
+            float LODindex;  // Number - direct index of the LOD for fast access
+            float LODresolution;// Number - the actual LOD resolution, could be used to select LOD in selectionNames and selectionPosition
+            float countNamedSelections;  // Number - number of named selections in this LOD, could be returned with selectionNames command
+            explicit rv_lod_info(const game_value &gv_)
+                : LODindex(gv_[0]),
+                  LODname(gv_[1]),
+                  LODresolution(gv_[2]),
+                  countNamedSelections(gv_[3]) {}
         };
+
         struct rv_crew_member {
             object unit;
             sqf_string role;
@@ -74,6 +80,13 @@ namespace intercept {
                   cargo_index(cargo_index_),
                   turret_path(std::move(turret_path_)),
                   person_turret(person_turret_) {}
+        };
+
+        struct rv_cruise_params {
+            float speed{};
+            bool cruise_enabled{};
+            explicit rv_cruise_params(const game_value &gv_)
+                : speed(gv_[0]), cruise_enabled(gv_[1]) {}
         };
 
         struct rv_periscope_state {
@@ -370,5 +383,11 @@ namespace intercept {
         std::vector<rv_remote_target_info> list_remote_targets(side side_);
         std::vector<rv_named_properties> named_properties(const object &vehicle_);
         bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_);
+        void set_cruise_control(const object &veh_, float speed_, bool auto_thrust_);
+        void set_tow_parent(const object &towed_vehicle_, const object &towing_vehicle_);
+        rv_cruise_params get_cruise_control(const object &veh_);
+        std::vector<rv_lod_info> all_lods(const object &obj_);
+        std::vector<rv_lod_info> all_lods(sqf_string_const_ref model_path_);
+        void delete_vehicle_crew(const object &vehicle_);
     }  // namespace sqf
 }  // namespace intercept

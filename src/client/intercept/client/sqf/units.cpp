@@ -478,7 +478,7 @@ namespace intercept {
         }
 
         std::variant<bool, float> get_unit_trait(const object &unit_, sqf_string_const_ref skill_name_) {
-            game_value res = host::functions.invoke_raw_binary(__sqf::binary__getunittrait__object__string__ret__bool_scalar, unit_, skill_name_);
+            game_value res = host::functions.invoke_raw_binary(__sqf::binary__getunittrait__object__string__ret__nothing_bool, unit_, skill_name_);
 
             if (res.type() == game_data_bool::type_def) {
                 return static_cast<bool>(res);

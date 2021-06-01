@@ -1106,5 +1106,29 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__setinfopanel__array__ret__bool, {infopanelId_, componentClassOrType_});
         }
 
+        void set_cruise_control(const object& veh_, float speed_, bool auto_thrust_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcruisecontrol__object__array__ret__nothing, veh_, {speed_, auto_thrust_});
+        }
+
+        void set_tow_parent(const object& towed_vehicle_, const object& towing_vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__settowparent__object__object__ret__nothing, towed_vehicle_, towing_vehicle_);
+        }
+
+        std::vector<rv_lod_info> all_lods(const object &obj_) {
+            return __helpers::__convert_to_vector<rv_lod_info>(host::functions.invoke_raw_unary(__sqf::unary__alllods__object_string__ret__array, obj_));
+        }
+
+        std::vector<rv_lod_info> all_lods(sqf_string_const_ref model_path_) {
+            return __helpers::__convert_to_vector<rv_lod_info>(host::functions.invoke_raw_unary(__sqf::unary__alllods__object_string__ret__array, model_path_));
+        }
+
+        void delete_vehicle_crew(const object &vehicle_) {
+            host::functions.invoke_raw_unary(__sqf::unary__deletevehiclecrew__object__ret__nothing, vehicle_);
+        }
+
+        rv_cruise_params get_cruise_control(const object &veh_) {
+            return rv_cruise_params(host::functions.invoke_raw_unary(__sqf::unary__getcruisecontrol__object__ret__array, veh_));
+        }
+
     }  // namespace sqf
 }  // namespace intercept

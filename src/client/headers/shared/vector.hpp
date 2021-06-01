@@ -14,6 +14,8 @@ namespace intercept {
                 : _Val);
         }
 
+        template <typename T>
+        class vector2_base;
 
         template<typename T>
         class vector3_base {
@@ -56,23 +58,37 @@ namespace intercept {
                 z = copy_.z;
             }
 
+            //Allow operations between vector2 and vector3; in the case of vector2, we always assume z = 0 (which is why operator/ was not added)
+            constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept {
+                x = copy_.x;
+                y = copy_.y;
+                z = 0;
+            }
+
             constexpr vector3_base& operator= (const vector3_base& other) noexcept { x = other.x; y = other.y; z = other.z; return *this; }
             constexpr vector3_base operator * (const T& val) const noexcept { return vector3_base(x * val, y * val, z * val); }
             constexpr vector3_base operator / (const T& val) const noexcept { T invVal = T(1) / val; return vector3_base(x * invVal, y * invVal, z * invVal); }
             constexpr vector3_base operator + (const vector3_base& v) const noexcept { return vector3_base(x + v.x, y + v.y, z + v.z); }
+            constexpr vector3_base operator + (const vector2_base<T>& v) const noexcept { return vector3_base(x + v.x, y + v.y, z); }
             constexpr vector3_base operator / (const vector3_base& v) const noexcept { return vector3_base(x / v.x, y / v.y, z / v.z); }
             constexpr vector3_base operator * (const vector3_base& v) const noexcept { return vector3_base(x * v.x, y * v.y, z * v.z); }
+            constexpr vector3_base operator * (const vector2_base<T>& v) const noexcept { return vector3_base(x * v.x, y * v.y, 0); }
             constexpr vector3_base operator - (const vector3_base& v) const noexcept { return vector3_base(x - v.x, y - v.y, z - v.z); }
+            constexpr vector3_base operator - (const vector2_base<T>& v) const noexcept { return vector3_base(x - v.x, y - v.y, z); }
             constexpr vector3_base operator - () const noexcept { return vector3_base(-x, -y, -z); }
 
             constexpr vector3_base& operator *=(const vector3_base& v) noexcept { x *= v.x; y *= v.y; z *= v.z; return *this; }
+            constexpr vector3_base& operator *=(const vector2_base<T>& v) noexcept { x *= v.x; y *= v.y; z = 0; return *this; }
             constexpr vector3_base& operator *=(T mag) noexcept { x *= mag; y *= mag; z *= mag; return *this; }
             constexpr vector3_base& operator /=(const vector3_base& v) noexcept { x /= v.x; y /= v.y; z /= v.z; return *this; }
             constexpr vector3_base& operator /=(T mag) noexcept { x /= mag; y /= mag; z /= mag; return *this; }
             constexpr vector3_base& operator +=(const vector3_base& v) noexcept { x += v.x; y += v.y; z += v.z; return *this; }
+            constexpr vector3_base& operator +=(const vector2_base<T>& v) noexcept { x += v.x; y += v.y; return *this; }
             constexpr vector3_base& operator -=(const vector3_base& v) noexcept { x -= v.x; y -= v.y; z -= v.z; return *this; }
+            constexpr vector3_base& operator -=(const vector2_base<T>& v) noexcept { x -= v.x; y -= v.y; return *this; }
 
             constexpr bool operator == (const vector3_base& r) const noexcept { return (x == r.x && y == r.y && z == r.z); }
+            constexpr bool operator == (const vector2_base<T>& r) const noexcept { return (x == r.x && y == r.y && z == 0); }
             constexpr bool operator >  (const vector3_base& r) const noexcept { if (*this == r) return false; return magnitude() > r.magnitude(); }
             constexpr bool operator <  (const vector3_base& r) const noexcept { if (*this == r) return false; return magnitude() < r.magnitude(); }
             constexpr bool operator >= (const vector3_base& r) const noexcept { if (*this == r) return true; return magnitude() > r.magnitude(); }
@@ -81,16 +97,26 @@ namespace intercept {
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y + z * z); }
             constexpr T magnitude_squared() const noexcept { return x * x + y * y + z * z; }
             constexpr T dot(const vector3_base& v) const noexcept { return (x * v.x + y * v.y + z * v.z); }
+            constexpr T dot(const vector2_base<T>& v) const noexcept { return (x * v.x + y * v.y); }
             constexpr T cos(const vector3_base& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
+            constexpr T cos(const vector2_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
-            constexpr T distance(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y + dist.z); }
-            constexpr T distance_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y + dist.z); }
-            constexpr T distance_2d(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
-            constexpr T distance_2d_squared(const vector3_base& v) const noexcept { vector3_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
+            constexpr T angle(const vector2_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
+            constexpr T distance(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude(); }
+            constexpr T distance(const vector2_base<T>& v) const noexcept { return vector3_base(*this - v).magnitude(); }
+            constexpr T distance_squared(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude_squared(); }
+            constexpr T distance_squared(const vector2_base<T>& v) const noexcept { return vector3_base(*this - v).magnitude_squared(); }
+            constexpr T distance_2d(const vector3_base& v) const noexcept { return vector2_base<T>(v - *this).magnitude(); }
+            constexpr T distance_2d(const vector2_base<T>& v) const noexcept { return vector2_base<T>(v - *this).magnitude(); }
+            constexpr T distance_2d_squared(const vector3_base& v) const noexcept { return vector2_base<T>(v - *this).magnitude_squared(); }
+            constexpr T distance_2d_squared(const vector2_base<T>& v) const noexcept { return vector2_base<T>(v - *this).magnitude_squared(); }
             constexpr vector3_base cross(const vector3_base& v) const noexcept { return vector3_base(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
+            constexpr vector3_base cross(const vector2_base<T>& v) const noexcept { return vector3_base(- z * v.y, z * v.x, x * v.y - y * v.x); }
             constexpr vector3_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f, 0.f}; return (*this / m); }
-            constexpr vector3_base dir_to(const vector3_base& v) const noexcept { return normalize(v - * this); }
-            constexpr vector3_base dir_to_2d(const vector3_base& v) const noexcept { vector3_base temp_dir = (v - *this); temp_dir.z = 0; return normalize(temp_dir); }
+            constexpr vector3_base dir_to(const vector3_base& v) const noexcept { return vector3_base(v - * this).normalize(); }
+            constexpr vector3_base dir_to(const vector2_base<T>& v) const noexcept { return vector3_base(v - *this).normalize(); }
+            constexpr vector3_base dir_to_2d(const vector3_base& v) const noexcept { return vector3_base(vector2_base<T>(v - *this).normalize()); }
+            constexpr vector3_base dir_to_2d(const vector2_base<T>& v) const noexcept { return vector3_base(vector2_base<T>(v - *this).normalize()); }
             constexpr vector3_base rotate_x(const T& rad) const noexcept { return vector3_base(x, y * std::cos(rad) - z * std::sin(rad), y * std::sin(rad) + z * std::cos(rad)); }
             constexpr vector3_base rotate_y(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) + z * std::sin(rad), y, z * std::cos(rad) - x * std::sin(rad)); }
             constexpr vector3_base rotate_z(const T& rad) const noexcept { return vector3_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad), z); }
@@ -162,19 +188,28 @@ namespace intercept {
             constexpr vector2_base operator * (const T &val) const noexcept { return vector2_base(x * val, y * val); }
             constexpr vector2_base operator / (const T &val) const noexcept { T invVal = T(1) / val; return vector2_base(x * invVal, y * invVal); }
             constexpr vector2_base operator + (const vector2_base& v) const noexcept { return vector2_base(x + v.x, y + v.y); }
+            constexpr vector2_base operator + (const vector3_base<T>& v) const noexcept { return vector2_base(x + v.x, y + v.y); }
             constexpr vector2_base operator / (const vector2_base& v) const noexcept { return vector2_base(x / v.x, y / v.y); }
+            constexpr vector2_base operator / (const vector3_base<T>& v) const noexcept { return vector2_base(x / v.x, y / v.y); }
             constexpr vector2_base operator * (const vector2_base& v) const noexcept { return vector2_base(x * v.x, y * v.y); }
+            constexpr vector2_base operator * (const vector3_base<T>& v) const noexcept { return vector2_base(x * v.x, y * v.y); }
             constexpr vector2_base operator - (const vector2_base& v) const noexcept { return vector2_base(x - v.x, y - v.y); }
+            constexpr vector2_base operator - (const vector3_base<T>& v) const noexcept { return vector2_base(x - v.x, y - v.y); }
             constexpr vector2_base operator - () const noexcept { return vector2_base(-x, -y); }
 
             constexpr vector2_base& operator *=(const vector2_base& v) noexcept { x *= v.x; y *= v.y; return *this;}
+            constexpr vector2_base& operator *=(const vector3_base<T>& v) noexcept { x *= v.x; y *= v.y; return *this;}
             constexpr vector2_base& operator *=(T mag) noexcept { x *= mag; y *= mag; return *this; }
             constexpr vector2_base& operator /=(const vector2_base& v) noexcept { x /= v.x; y /= v.y; return *this; }
+            constexpr vector2_base& operator /=(const vector3_base<T>& v) noexcept { x /= v.x; y /= v.y; return *this; }
             constexpr vector2_base& operator /=(T mag) noexcept { x /= mag; y /= mag; return *this; }
             constexpr vector2_base& operator +=(const vector2_base& v) noexcept{ x += v.x; y += v.y; return *this; }
+            constexpr vector2_base& operator +=(const vector3_base<T>& v) noexcept{ x += v.x; y += v.y; return *this; }
             constexpr vector2_base& operator -=(const vector2_base& v) noexcept{ x -= v.x; y -= v.y; return *this; }
+            constexpr vector2_base& operator -=(const vector3_base<T>& v) noexcept{ x -= v.x; y -= v.y; return *this; }
 
             constexpr bool operator == (const vector2_base& r) const noexcept { return (x == r.x && y == r.y); }
+            constexpr bool operator == (const vector3_base<T>& r) const noexcept { return (x == r.x && y == r.y); }
             constexpr bool operator >  (const vector2_base& r) const noexcept { if (*this == r) return false; return magnitude() > r.magnitude(); }
             constexpr bool operator <  (const vector2_base& r) const noexcept { if (*this == r) return false; return magnitude() < r.magnitude(); }
             constexpr bool operator >= (const vector2_base& r) const noexcept { if (*this == r) return true; return magnitude() > r.magnitude(); }
@@ -183,15 +218,21 @@ namespace intercept {
             constexpr T magnitude() const noexcept { return std::sqrt(x * x + y * y); }
             constexpr T magnitude_squared() const noexcept { return x * x + y * y; }
             constexpr T dot(const vector2_base& v) const noexcept { return (x * v.x + y * v.y); }
+            constexpr T dot(const vector3_base<T>& v) const noexcept { return (x * v.x + y * v.y); }
             constexpr T cos(const vector2_base& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
+            constexpr T cos(const vector3_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
-            constexpr T distance(const vector2_base& v) const noexcept { vector2_base dist = (*this - v); dist = dist * dist; return std::sqrt(dist.x + dist.y); }
-            constexpr T distance_squared(const vector2_base& v) const noexcept{ vector2_base dist = (*this - v); dist = dist * dist; return (dist.x + dist.y); }
+            constexpr T angle(const vector3_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
+            constexpr T distance(const vector2_base& v) const noexcept { return vector2_base(*this - v).magnitude(); }
+            constexpr T distance(const vector3_base<T>& v) const noexcept { return vector2_base(*this - v).magnitude(); }
+            constexpr T distance_squared(const vector2_base& v) const noexcept{ return vector2_base(*this - v).magnitude_squared(); }
+            constexpr T distance_squared(const vector3_base<T>& v) const noexcept { return vector2_base(*this - v).magnitude_squared(); }
             constexpr vector2_base normalize() const noexcept { T m = magnitude(); if (m == 0) return {0.f, 0.f}; return (*this / m); }
             constexpr vector2_base rotate(const T& rad) const noexcept { return vector2_base(x * std::cos(rad) - y * std::sin(rad), y * std::cos(rad) + x * std::sin(rad)); }
             constexpr vector2_base rotate_deg(const T& deg) const noexcept { return rotate(deg * pi / 180.0f); }
             constexpr bool zero_distance() const noexcept { return ((x == 0.0f && y == 0.0f) ? true : false); }
-            constexpr vector2_base dir_to(const vector2_base& v) const noexcept { return normalize(v - *this); }
+            constexpr vector2_base dir_to(const vector2_base& v) const noexcept { return vector2_base(v - *this).normalize(); }
+            constexpr vector2_base dir_to(const vector3_base<T>& v) const noexcept { return vector2_base(v - *this).normalize(); }
             /// @brief linear interpolate
             static constexpr vector2_base lerp(const vector2_base& A, const vector2_base& B, const T t) noexcept { return A*t + B*(1.f - t); }
             /// @brief linear interpolate

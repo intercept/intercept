@@ -576,9 +576,9 @@ namespace intercept {
             auto_array<game_value> params_right;
 
             switch (position_.index()) {
-                case 0: params_right.emplace_back(std::get<0>(position_).get()); break;
-                case 1: params_right.emplace_back(std::get<1>(position_).get()); break;
-                case 2: params_right.emplace_back(std::get<2>(position_)); break;
+                case 0: params_right.emplace_back(std::move(std::get<0>(position_).get())); break;
+                case 1: params_right.emplace_back(std::move(std::get<1>(position_).get())); break;
+                case 2: params_right.emplace_back(std::move(std::get<2>(position_))); break;
             }
 
             params_right.push_back(std::move(auto_array<game_value>(markers_.begin(), markers_.end())));

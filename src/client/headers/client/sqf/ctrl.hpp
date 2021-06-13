@@ -577,7 +577,7 @@ namespace intercept {
         void create_menu(const control &value0_, float value1_);
         void html_load(const control &value0_, sqf_string_const_ref value1_);
 
-        vector3 map_center_on_camera(const control &main_map, bool enable_);
+        void map_center_on_camera(const control &main_map, bool enable_);
         void move_object_to_end(const control &value0_, sqf_string_const_ref value1_);
         void progress_set_position(const control &value0_, float value1_);
         void remove_menu_item(const control &value0_, float value1_);

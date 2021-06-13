@@ -49,15 +49,15 @@ namespace intercept {
         };
 
         struct rv_lod_info {
-            sqf_string LODname;  // String - LOD description name for LOD identification
-            float LODindex;  // Number - direct index of the LOD for fast access
-            float LODresolution;// Number - the actual LOD resolution, could be used to select LOD in selectionNames and selectionPosition
-            float countNamedSelections;  // Number - number of named selections in this LOD, could be returned with selectionNames command
+            sqf_string lod_name;           // String - LOD description name for LOD identification
+            float lod_index;               // Number - direct index of the LOD for fast access
+            float lod_resolution;          // Number - the actual LOD resolution, could be used to select LOD in selectionNames and selectionPosition
+            float count_named_selections;  // Number - number of named selections in this LOD, could be returned with selectionNames command
             explicit rv_lod_info(const game_value &gv_)
-                : LODindex(gv_[0]),
-                  LODname(gv_[1]),
-                  LODresolution(gv_[2]),
-                  countNamedSelections(gv_[3]) {}
+                : lod_index(gv_[0]),
+                  lod_name(gv_[1]),
+                  lod_resolution(gv_[2]),
+                  count_named_selections(gv_[3]) {}
         };
 
         struct rv_crew_member {
@@ -84,9 +84,9 @@ namespace intercept {
 
         struct rv_cruise_params {
             float speed{};
-            bool cruise_enabled{};
+            bool auto_thrust{};
             explicit rv_cruise_params(const game_value &gv_)
-                : speed(gv_[0]), cruise_enabled(gv_[1]) {}
+                : speed(gv_[0]), auto_thrust(gv_[1]) {}
         };
 
         struct rv_periscope_state {

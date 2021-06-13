@@ -2024,8 +2024,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lbvalue__control__scalar__ret__scalar, value0_, value1_);
         }
 
-        vector3 map_center_on_camera(const control &main_map_, bool enable_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__array, main_map_, enable_);
+        void map_center_on_camera(const control &main_map_, bool enable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__array, main_map_, enable_);
         }
 
         vector3 map_center_on_camera(const control &mini_map_) {

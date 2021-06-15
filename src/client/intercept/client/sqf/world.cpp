@@ -388,11 +388,7 @@ namespace intercept {
         }
 
         object nearest_object(const vector3 &pos_, sqf_string_const_ref type_) {
-            game_value params({pos_,
-                               type_});
-
-            return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
-            // Same as: position nearObjects filter (where position is vector3 and filter is string) - binary__nearestobject__array__string__ret__object
+            return host::functions.invoke_raw_binary(__sqf::binary__nearestobject__array__string__ret__object, pos_, type_);
         }
 
         object nearest_object(const object &obj_, sqf_string_const_ref type_) {
@@ -400,6 +396,7 @@ namespace intercept {
                                type_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__nearestobject__array__ret__object, params);
+            // Same as: position nearObjects filter (where position is vector3 and filter is string) - binary__nearestobject__array__string__ret__object
         }
 
         object nearest_object(const vector3 &pos_, float id_) {

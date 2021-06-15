@@ -1,6 +1,18 @@
 #pragma once
 #include "types.hpp"
 #include <variant>
+
+namespace intercept::sqf {
+    enum class rv_selection_lods {
+        Memory,
+        Geometry,
+        FireGeometry,
+        LandContact,
+        HitPoints,
+        ViewGeometry
+    };
+}
+
 namespace intercept::types {
 
 class internal_object : public game_value {

@@ -814,6 +814,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lnbsortbyvalue__control__array__ret__nothing, ctrl_, { column_ ,reversed_ });
         }
 
+        void lnb_sort_by(const control &ctrl_, int column_, sqf_string_const_ref sort_type_, bool reversed_, bool case_sensitive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsortby__array__array__ret__nothing, {ctrl_, column_}, {sort_type_, reversed_, case_sensitive_});
+        }
+
+        void lnb_sort_by(int ctrl_, int column_, sqf_string_const_ref sort_type_, bool reversed_, bool case_sensitive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lnbsortby__array__array__ret__nothing, {ctrl_, column_}, {sort_type_, reversed_, case_sensitive_});
+        }
+
         sqf_return_string lnb_data(float idc_, float row_, float column_) {
             game_value item({row_,
                              column_});
@@ -2017,7 +2025,7 @@ namespace intercept {
         }
 
         void map_center_on_camera(const control &main_map_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__nothing, main_map_, enable_);
+            host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__array, main_map_, enable_);
         }
 
         vector3 map_center_on_camera(const control &mini_map_) {
@@ -2729,6 +2737,14 @@ namespace intercept {
         void lb_sort_by_value(int control_) {
             host::functions.invoke_raw_unary(__sqf::unary__lbsortbyvalue__scalar__ret__nothing, control_);
         }
+
+        void lb_sort_by(const control &control_, sqf_string_const_ref sort_type_, bool reversed_, bool case_sensitive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lbsortby__control_scalar__array__ret__nothing, control_, {sort_type_, reversed_, case_sensitive_});
+        }
+        void lb_sort_by(int control_, sqf_string_const_ref sort_type_, bool reversed_, bool case_sensitive_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lbsortby__control_scalar__array__ret__nothing, control_, {sort_type_, reversed_, case_sensitive_});
+        }
+
         sqf_return_string ct_data(const control &control_, int index_) {
             return host::functions.invoke_raw_binary(__sqf::binary__ctdata__control__scalar__ret__string, control_, index_);
         }
@@ -2901,7 +2917,7 @@ namespace intercept {
         }
 
         rv_color ctrl_text_color(const control &ctrl_) {
-            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrltextcolor__control__ret__scalar, ctrl_));
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrltextcolor__control__ret__array, ctrl_));
         }
 
         rv_ctrl_text_selection ctrl_text_selection(const control &ctrl_) {
@@ -3098,6 +3114,13 @@ namespace intercept {
 
         void ctrl_set_text_color_secondary(const control &ctrl_, const rv_color &color_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsettextcolorsecondary__control__array__ret__nothing, ctrl_, color_);
+        }
+
+        void ctrl_map_set_position(const control &ctrl_, const vector2 &pos_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlmapsetposition__control__array__ret__nothing, ctrl_, pos_);
+        }
+        void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlmapsetposition__control__array__ret__nothing, ctrl_, {x_, y_, width_, height_});
         }
     }  // namespace sqf
 }  // namespace intercept

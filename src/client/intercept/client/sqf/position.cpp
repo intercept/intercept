@@ -155,6 +155,11 @@ namespace intercept {
         float get_terrain_height_asl(const vector3 &position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getterrainheightasl__array__ret__scalar, position_);
         }
+
+        float get_terrain_height_asl(const vector2 &position_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getterrainheightasl__array__ret__scalar, position_);
+        }
+
         vector3 world_to_model(const object &object_, const vector3 &position_) {
             return host::functions.invoke_raw_binary(__sqf::binary__worldtomodel__object__array__ret__array, object_, position_);
         }

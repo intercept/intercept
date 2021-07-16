@@ -261,7 +261,9 @@ namespace intercept {
         std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_ = false);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
+        bool surface_is_water(const vector2 &pos_);
         bool surface_is_water(const vector3 &pos_);
+        vector3 surface_normal(const vector2 &pos_);
         vector3 surface_normal(const vector3 &pos_);
         sqf_return_string surface_type(const vector3 &pos_);
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);

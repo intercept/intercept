@@ -458,8 +458,16 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__unitsbelowheight__array__scalar__ret__array, std::move(auto_array<game_value>(units_.begin(), units_.end())), height_));
         }
 
+        bool surface_is_water(const vector2 &pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfaceiswater__array__ret__bool, pos_);
+        }
+
         bool surface_is_water(const vector3 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfaceiswater__array__ret__bool, pos_);
+        }
+
+        vector3 surface_normal(const vector2 &pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacenormal__array__ret__array, pos_);
         }
 
         vector3 surface_normal(const vector3 &pos_) {

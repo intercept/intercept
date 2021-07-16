@@ -66,6 +66,7 @@ namespace intercept {
         void set_pos_world(const object &object_, const vector3 &position_);
         vector3 get_pos_world(const object &unit_);
         float get_terrain_height_asl(const vector3 &position_);
+        float get_terrain_height_asl(const vector2 &position_);
 
         vector3 world_to_model(const object &object_, const vector3 &position_);
         vector3 world_to_model_visual(const object &object_, const vector3 &position_);

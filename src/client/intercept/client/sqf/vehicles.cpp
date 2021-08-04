@@ -625,9 +625,10 @@ namespace intercept {
             return rv_model_info(host::functions.invoke_raw_unary(__sqf::unary__getmodelinfo__object__ret__array, object_));
         }
 
-        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld_) {
+        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld_, bool local_) {
             game_value params({shapename_,
-                               positionworld_});
+                               positionworld_,
+                               local_});
 
             return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
         }
@@ -669,11 +670,18 @@ namespace intercept {
                 case intercept::sqf::rv_selection_lods::HitPoints:
                     lod_name = "HitPoints"sv;
                     break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
                 default:
                     lod_name = ""sv;
                     break;
             }
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
+        }
+
+        sqf_return_string_list selection_names(const object &object_, float lod_index_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, lod_index_));
         }
 
         void switch_camera(const object &target_) {

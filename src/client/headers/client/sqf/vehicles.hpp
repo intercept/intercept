@@ -272,7 +272,7 @@ namespace intercept {
         sqf_return_string_list get_object_textures(const object &object_);
         std::vector<object> synchronized_objects(const object &obj_);
         rv_model_info get_model_info(const object &object_);
-        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld);
+        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld, bool local_ = false);
         float get_container_max_load(sqf_string_const_ref containerclass_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         bool is_simple_object(const object &object_);

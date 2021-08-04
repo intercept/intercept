@@ -2017,7 +2017,7 @@ namespace intercept {
         }
 
         void map_center_on_camera(const control &main_map_, bool enable_) {
-            host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__nothing, main_map_, enable_);
+            host::functions.invoke_raw_binary(__sqf::binary__mapcenteroncamera__control__bool__ret__array, main_map_, enable_);
         }
 
         vector3 map_center_on_camera(const control &mini_map_) {
@@ -2901,7 +2901,7 @@ namespace intercept {
         }
 
         rv_color ctrl_text_color(const control &ctrl_) {
-            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrltextcolor__control__ret__scalar, ctrl_));
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrltextcolor__control__ret__array, ctrl_));
         }
 
         rv_ctrl_text_selection ctrl_text_selection(const control &ctrl_) {

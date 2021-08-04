@@ -131,7 +131,7 @@ namespace intercept {
         }
 
         float diag_get_terrain_grid() {
-            return host::functions.invoke_raw_nular(__sqf::nular__diag_getterraingrid__ret__array);
+            return host::functions.invoke_raw_nular(__sqf::nular__diag_getterraingrid__ret__scalar);
         }
 
         void diag_reset_fsm() {
@@ -179,11 +179,11 @@ namespace intercept {
         }
 
         float diag_get_terrain_height(const vector2& pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__diag_getterrainheight__array__ret__nothing, pos_);
+            return host::functions.invoke_raw_unary(__sqf::unary__diag_getterrainheight__array__ret__scalar, pos_);
         }
 
         vector2 diag_get_terrain_segment_offset(const vector2& pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__diag_getterrainsegmentoffset__array__ret__nothing, pos_);
+            return host::functions.invoke_raw_unary(__sqf::unary__diag_getterrainsegmentoffset__array__ret__array, pos_);
         }
 
         void diag_light_new_load(sqf_string_const_ref path_) {

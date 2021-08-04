@@ -8,7 +8,7 @@ namespace intercept {
             game_value params({function_name_,
                                jip_id_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__string_nothing, params);
         }
 
         game_value remote_exec(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
@@ -22,7 +22,7 @@ namespace intercept {
             }
             params.push_back(jip_id_);
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, std::move(params));
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__string_nothing, std::move(params));
         }
 
         game_value remote_exec(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
@@ -30,14 +30,14 @@ namespace intercept {
                                targets_,
                                jip_id_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__string_nothing, params);
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_) {
             game_value params({function_name_,
                                jip_id_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__string_nothing, params);
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_) {
@@ -51,7 +51,7 @@ namespace intercept {
             }
             params.push_back(jip_id_);
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, std::move(params));
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__string_nothing, std::move(params));
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
@@ -59,7 +59,7 @@ namespace intercept {
                                targets_,
                                jip_id_});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__any, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__string_nothing, params);
         }
 
         bool is_multiplayer_solo() {
@@ -98,7 +98,7 @@ namespace intercept {
                                                   targets,
                                                   jip});
 
-            return host::functions.invoke_raw_binary(__sqf::binary__remoteexec__any__array__ret__any, params_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__remoteexec__any__array__ret__string_nothing, params_, params_right);
         }
 
         game_value remote_exec_call(const game_value &params_, sqf_string_const_ref function_, std::variant<int, object, sqf_string_const_ref_wrapper, side, group, std::reference_wrapper<const std::vector<game_value>>> targets_, std::optional<std::variant<sqf_string_const_ref_wrapper, bool, object, group>> jip_) {
@@ -125,7 +125,7 @@ namespace intercept {
                                                   targets,
                                                   jip});
 
-            return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__any, params_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__string_nothing, params_, params_right);
         }
 
         bool server_command(sqf_string_const_ref command_, sqf_string_const_ref password_) {

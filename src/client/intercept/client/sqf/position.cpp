@@ -248,8 +248,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name)});
         }
         
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_index_});
+        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float vis_lod_index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, vis_lod_index_});
         }
         
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {

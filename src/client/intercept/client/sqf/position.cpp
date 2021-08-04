@@ -217,11 +217,7 @@ namespace intercept {
         }
 
         vector3 selection_positon(const object& obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, {selection_name_, lod_});
-        }
-
-        vector3 selection_positon(const object& obj_, sqf_string_const_ref selection_name_, float lod_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, {selection_name_, lod_});
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_});
         }
 
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
@@ -242,18 +238,56 @@ namespace intercept {
                 case intercept::sqf::rv_selection_lods::HitPoints:
                     lod_name = "HitPoints"sv;
                     break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
                 default:
                     lod_name = ""sv;
                     break;
             }
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_name});
-            
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name)});
         }
+
+        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_index_});
+        }
+
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_,
-                                                                                                         selection_name_,
-                                                                                                         lod_index_,
-                                                                                                         is_visual_});
+            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_} );
+        }
+
+        std::pair<vector3, vector3> selection_vector_dir_and_up(const object& obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+                case intercept::sqf::rv_selection_lods::Memory:
+                    lod_name = "Memory"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::Geometry:
+                    lod_name = "Geometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::FireGeometry:
+                    lod_name = "FireGeometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::LandContact:
+                    lod_name = "LandContact"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::HitPoints:
+                    lod_name = "HitPoints"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
+                default:
+                    lod_name = ""sv;
+                    break;
+            }
+            game_value gv = host::functions.invoke_raw_binary(__sqf::binary__selectionvectordirandup__object__array__ret__array, obj_, {selection_name_, std::move(lod_name)});
+            return {gv[0], gv[1]};
+        }
+
+        std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_) {
+            game_value gv = host::functions.invoke_raw_binary(__sqf::binary__selectionvectordirandup__object__array__ret__array, obj_, {selection_name_, lod_index_});
+            return {gv[0], gv[1]};
         }
 
         rv_bounding_box bounding_box(const object &model_) {

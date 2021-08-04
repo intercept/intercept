@@ -100,10 +100,6 @@ namespace intercept {
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_);
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
         vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_ = true);
-=========
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_ = true);
 
         std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
         std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_);

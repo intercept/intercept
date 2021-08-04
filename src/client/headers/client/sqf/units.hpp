@@ -64,6 +64,7 @@ namespace intercept {
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         sqf_return_string animation_state(const object &unit_);
+        sqf_return_string gesture_state(const object &unit_);
         sqf_return_string assigned_team(const object &unit_);
         object assigned_vehicle(const object &unit_);
 
@@ -107,7 +108,9 @@ namespace intercept {
         bool is_turned_out(const object &value_);
         bool is_uavconnected(const object &value_);
         bool is_walking(const object &value_);
-        bool is_weapon_deployed(const object &value_);
+        bool is_weapon_deployed(const object &obj_);
+        bool is_weapon_deployed(const object &obj_, bool on_ground_);
+        bool can_deploy_weapon(const object &obj_);
         bool is_weapon_rested(const object &value_);
         void move(const object &unit_, const vector3 &pos_);
         void move(const group &group_, const vector3 &pos_);

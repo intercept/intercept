@@ -119,7 +119,11 @@ namespace intercept {
         }
 
         sqf_return_string animation_state(const object &unit_) {
-            return __helpers::__string_unary_object(__sqf::unary__animationstate__object__ret__string, unit_);
+            return host::functions.invoke_raw_unary(__sqf::unary__animationstate__object__ret__string, unit_);
+        }
+
+        sqf_return_string gesture_state(const object &unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__gesturestate__object__ret__string, unit_);
         }
 
         sqf_return_string assigned_team(const object &unit_) {
@@ -303,8 +307,16 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__iswalking__object__ret__bool, value_);
         }
 
-        bool is_weapon_deployed(const object &value_) {
-            return __helpers::__bool_unary_object(__sqf::unary__isweapondeployed__object__ret__bool, value_);
+        bool is_weapon_deployed(const object &obj_) {
+            return __helpers::__bool_unary_object(__sqf::unary__isweapondeployed__object__ret__bool, obj_);
+        }
+
+        bool is_weapon_deployed(const object &obj_, bool on_ground_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isweapondeployed__array__ret__bool, {obj_, on_ground_});
+        }
+
+        bool can_deploy_weapon(const object& obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__candeployweapon__object__ret__bool, obj_); 
         }
 
         bool is_weapon_rested(const object &value_) {

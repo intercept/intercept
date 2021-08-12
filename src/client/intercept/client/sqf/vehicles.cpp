@@ -1163,11 +1163,11 @@ namespace intercept {
         }
 
         std::vector<rv_sensor_target> get_sensor_targets(const object& vehicle_) {
-            __helpers::__convert_to_vector<rv_sensor_target>(host::functions.invoke_raw_unary(__sqf::unary__getsensortargets__object__ret__array, vehicle_));
+            return __helpers::__convert_to_vector<rv_sensor_target>(host::functions.invoke_raw_unary(__sqf::unary__getsensortargets__object__ret__array, vehicle_));
         }
 
         std::vector<rv_sensor_threat> get_sensor_threats(const object& vehicle_) {
-            __helpers::__convert_to_vector<rv_sensor_threat>(host::functions.invoke_raw_unary(__sqf::unary__getsensorthreats__object__ret__array, vehicle_));
+            return __helpers::__convert_to_vector<rv_sensor_threat>(host::functions.invoke_raw_unary(__sqf::unary__getsensorthreats__object__ret__array, vehicle_));
         }
 
     }  // namespace sqf

@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 205.147985 - Diag
+//Exported Pointer Definitions For: Arma 3 207.148052 - Diag
 
 
 // Unary Functions
@@ -447,6 +447,7 @@ static unary_function unary__getcustomaimcoef__object__ret__scalar;
 static unary_function unary__getcustomsoundcontroller__array__ret__scalar;
 static unary_function unary__getcustomsoundcontrollercount__object__ret__scalar;
 static unary_function unary__getdammage__object__ret__scalar;
+static unary_function unary__getdebriefingtext__string__ret__array;
 static unary_function unary__getdescription__object__ret__array;
 static unary_function unary__getdir__object__ret__scalar;
 static unary_function unary__getdirvisual__object__ret__scalar;
@@ -548,6 +549,7 @@ static unary_function unary__handgunitems__object__ret__array;
 static unary_function unary__handgunmagazine__object__ret__string;
 static unary_function unary__handgunweapon__object__ret__string;
 static unary_function unary__handshit__object__ret__scalar;
+static unary_function unary__hashvalue__object_side__ret__string;
 static unary_function unary__haspilotcamera__object__ret__bool;
 static unary_function unary__hcallgroups__object__ret__array;
 static unary_function unary__hcleader__group__ret__object;
@@ -2534,6 +2536,7 @@ static nular_function nular__allsites__ret__array;
 static nular_function nular__allunits__ret__array;
 static nular_function nular__allunitsuav__ret__array;
 static nular_function nular__allusers__ret__array;
+static nular_function nular__ambienttemperature__ret__array;
 static nular_function nular__apertureparams__ret__array;
 static nular_function nular__armorypoints__ret__scalar;
 static nular_function nular__benchmark__ret__scalar;
@@ -2690,6 +2693,7 @@ static nular_function nular__mapanimdone__ret__bool;
 static nular_function nular__markasfinishedonsteam__ret__bool;
 static nular_function nular__missionconfigfile__ret__config;
 static nular_function nular__missiondifficulty__ret__scalar;
+static nular_function nular__missionend__ret__array;
 static nular_function nular__missionname__ret__string;
 static nular_function nular__missionnamesource__ret__string;
 static nular_function nular__missionnamespace__ret__namespace;

@@ -169,6 +169,7 @@ namespace intercept {
         void ctrl_set_tooltip_color_box(const control &ctrl_, const rv_color &color_);
         void ctrl_set_tooltip_color_shade(const control &ctrl_, const rv_color &color_);
         void ctrl_set_tooltip_color_text(const control &ctrl_, const rv_color &color_);
+        float ctrl_set_tooltip_max_width(const control &ctrl_, float width_);
         void ctrl_activate(const control &value_);
         void ctrl_map_anim_clear(const control &value_);
         void ctrl_map_anim_commit(const control &value_);
@@ -217,7 +218,8 @@ namespace intercept {
         int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_);
         void ctrl_remove_all_event_handlers(const control &value0_, sqf_string_const_ref value1_);
         void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, int id_);
-
+        rv_color ctrl_background_color(const control &ctrl_);
+        rv_color ctrl_foreground_color(const control &ctrl_);
 
         //listbox/combobox
         void lnb_delete_column(const control &ctrl_, float index_);
@@ -328,6 +330,7 @@ namespace intercept {
         float lb_cur_sel(float value_);
         float lb_size(const control &value_);
         float lb_size(float value_);
+        sqf_return_string lb_tooltip(const control &ctrl_, float index_);
 
         sqf_return_string lb_data(int control_id_, int index_);
         sqf_return_string lb_data(const control &control_, int index_);
@@ -490,6 +493,7 @@ namespace intercept {
         void display_set_eventhandler(const display &display_, sqf_string_const_ref event_name_, sqf_string_const_ref code_);
         void display_remove_all_event_handlers(sqf_string_const_ref value0_, const display &value1_);
         display find_display(float value_);
+        display display_child(const display &disp_);
 
         bool is_tut_hints_enabled();
         void hint_c(sqf_string_const_ref value_);
@@ -772,5 +776,7 @@ namespace intercept {
 
         void ctrl_map_set_position(const control &ctrl_, const vector2 &pos_);
         void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
+
+        vector2 get_texture_info(sqf_string_const_ref path_);
     }  // namespace sqf
 }  // namespace intercept

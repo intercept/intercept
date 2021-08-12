@@ -299,5 +299,17 @@ namespace intercept {
         rv_road_info get_road_info(const object &road_obj_);
         void set_wind_dir(const vector2 &dir_);
         sqf_return_string surface_texture(const vector2 &pos_);
+
+        struct rv_ambient_temperature {
+            float air_temp;
+            float black_surf_temp;
+            float white_surf_temp;
+            explicit rv_ambient_temperature(const game_value &gv_)
+                : air_temp(gv_[0]),
+                  black_surf_temp(gv_[1]),
+                  white_surf_temp(gv_[2]) {}
+        };
+
+        rv_ambient_temperature ambient_temperature();
     }  // namespace sqf
 }  // namespace intercept

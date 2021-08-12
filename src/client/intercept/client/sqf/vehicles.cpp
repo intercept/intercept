@@ -827,6 +827,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setweaponreloadingtime__object__array__ret__bool, vehicle_, {gunner_, muzzle_class_, reload_time_});
         }
 
+        float weapon_reloading_time(const object& vehicle_, const object& gunner_, sqf_string_const_ref muzzle_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__weaponreloadingtime__object__array__ret__scalar, vehicle_, {gunner_, muzzle_name_});
+        }
+
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsadd__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
@@ -894,6 +898,18 @@ namespace intercept {
 
         void set_light_use_flare(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightuseflare__object__bool__ret__nothing, value0_, value1_);
+        }
+
+        void set_light_cone_pars(const object& lightcone_, float outer_angle_, float inner_angle_, float fade_coef_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightconepars__object__array__ret__nothing, lightcone_, {outer_angle_, inner_angle_, fade_coef_});
+        }
+
+        void set_light_ir(const object& lightcone_, bool ir_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightir__object__bool__ret__nothing, lightcone_, ir_);
+        }
+
+        void set_light_volume_shape(const object& lightcone_, sqf_string_const_ref shape_path_, float scale_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightvolumeshape__object__array__ret__nothing, lightcone_, {shape_path_, scale_});
         }
 
         rv_uav_control uav_control(const object &uav_) {
@@ -1136,6 +1152,22 @@ namespace intercept {
 
         rv_cruise_params get_cruise_control(const object &veh_) {
             return rv_cruise_params(host::functions.invoke_raw_unary(__sqf::unary__getcruisecontrol__object__ret__array, veh_));
+        }
+
+        bool direction_stabilization_enabled(const object& vehicle_, const rv_turret_path& turret_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__directionstabilizationenabled__object__array__ret__nothing, vehicle_, turret_);
+        }
+
+        void enable_direction_stabilization(const object& vehicle_, bool enabled_, const rv_turret_path& turret_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledirectionstabilization__object__array__ret__nothing, vehicle_, {enabled_, turret_});
+        }
+
+        std::vector<rv_sensor_target> get_sensor_targets(const object& vehicle_) {
+            __helpers::__convert_to_vector<rv_sensor_target>(host::functions.invoke_raw_unary(__sqf::unary__getsensortargets__object__ret__array, vehicle_));
+        }
+
+        std::vector<rv_sensor_threat> get_sensor_threats(const object& vehicle_) {
+            __helpers::__convert_to_vector<rv_sensor_threat>(host::functions.invoke_raw_unary(__sqf::unary__getsensorthreats__object__ret__array, vehicle_));
         }
 
     }  // namespace sqf

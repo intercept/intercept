@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 205.147985 - Diag
+//Exported Pointer Assignments For: Arma 3 207.148052 - Diag
 
 
 // Unary Functions
@@ -447,6 +447,7 @@ __sqf::unary__getcustomaimcoef__object__ret__scalar = (unary_function)host::func
 __sqf::unary__getcustomsoundcontroller__array__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcustomsoundcontroller"sv, "ARRAY"sv);
 __sqf::unary__getcustomsoundcontrollercount__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getcustomsoundcontrollercount"sv, "OBJECT"sv);
 __sqf::unary__getdammage__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getdammage"sv, "OBJECT"sv);
+__sqf::unary__getdebriefingtext__string__ret__array = (unary_function)host::functions.get_unary_function_typed("getdebriefingtext"sv, "STRING"sv);
 __sqf::unary__getdescription__object__ret__array = (unary_function)host::functions.get_unary_function_typed("getdescription"sv, "OBJECT"sv);
 __sqf::unary__getdir__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getdir"sv, "OBJECT"sv);
 __sqf::unary__getdirvisual__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getdirvisual"sv, "OBJECT"sv);
@@ -548,6 +549,7 @@ __sqf::unary__handgunitems__object__ret__array = (unary_function)host::functions
 __sqf::unary__handgunmagazine__object__ret__string = (unary_function)host::functions.get_unary_function_typed("handgunmagazine"sv, "OBJECT"sv);
 __sqf::unary__handgunweapon__object__ret__string = (unary_function)host::functions.get_unary_function_typed("handgunweapon"sv, "OBJECT"sv);
 __sqf::unary__handshit__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("handshit"sv, "OBJECT"sv);
+__sqf::unary__hashvalue__object_side__ret__string = (unary_function)host::functions.get_unary_function_typed("hashvalue"sv, "ARRAY"sv);
 __sqf::unary__haspilotcamera__object__ret__bool = (unary_function)host::functions.get_unary_function_typed("haspilotcamera"sv, "OBJECT"sv);
 __sqf::unary__hcallgroups__object__ret__array = (unary_function)host::functions.get_unary_function_typed("hcallgroups"sv, "OBJECT"sv);
 __sqf::unary__hcleader__group__ret__object = (unary_function)host::functions.get_unary_function_typed("hcleader"sv, "GROUP"sv);
@@ -2534,6 +2536,7 @@ __sqf::nular__allsites__ret__array = (nular_function)host::functions.get_nular_f
 __sqf::nular__allunits__ret__array = (nular_function)host::functions.get_nular_function("allunits"sv);
 __sqf::nular__allunitsuav__ret__array = (nular_function)host::functions.get_nular_function("allunitsuav"sv);
 __sqf::nular__allusers__ret__array = (nular_function)host::functions.get_nular_function("allusers"sv);
+__sqf::nular__ambienttemperature__ret__array = (nular_function)host::functions.get_nular_function("ambienttemperature"sv);
 __sqf::nular__apertureparams__ret__array = (nular_function)host::functions.get_nular_function("apertureparams"sv);
 __sqf::nular__armorypoints__ret__scalar = (nular_function)host::functions.get_nular_function("armorypoints"sv);
 __sqf::nular__benchmark__ret__scalar = (nular_function)host::functions.get_nular_function("benchmark"sv);
@@ -2690,6 +2693,7 @@ __sqf::nular__mapanimdone__ret__bool = (nular_function)host::functions.get_nular
 __sqf::nular__markasfinishedonsteam__ret__bool = (nular_function)host::functions.get_nular_function("markasfinishedonsteam"sv);
 __sqf::nular__missionconfigfile__ret__config = (nular_function)host::functions.get_nular_function("missionconfigfile"sv);
 __sqf::nular__missiondifficulty__ret__scalar = (nular_function)host::functions.get_nular_function("missiondifficulty"sv);
+__sqf::nular__missionend__ret__array = (nular_function)host::functions.get_nular_function("missionend"sv);
 __sqf::nular__missionname__ret__string = (nular_function)host::functions.get_nular_function("missionname"sv);
 __sqf::nular__missionnamesource__ret__string = (nular_function)host::functions.get_nular_function("missionnamesource"sv);
 __sqf::nular__missionnamespace__ret__namespace = (nular_function)host::functions.get_nular_function("missionnamespace"sv);

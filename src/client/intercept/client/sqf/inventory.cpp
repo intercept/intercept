@@ -868,6 +868,10 @@ namespace intercept {
             return rv_weapon_state(host::functions.invoke_raw_unary(__sqf::unary__weaponstate__object__ret__array, unit_));
         }
 
+        rv_weapon_state weapon_state(const object &unit_, sqf_string_const_ref muzzle_) {
+            return rv_weapon_state(host::functions.invoke_raw_binary(__sqf::binary__weaponstate__object__string__ret__array, unit_, muzzle_));
+        }
+
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_) {
             auto_array<game_value> params{vehicle_,
                                           std::move(turret_path_)};

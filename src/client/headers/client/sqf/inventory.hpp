@@ -92,12 +92,16 @@ namespace intercept {
             sqf_string mode;
             sqf_string magazine;
             float ammo_count;
+            float round_reload_phase;
+            float magazine_reload_phase;
 
             explicit rv_weapon_state(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
-                                                                 muzzle(ret_game_value_[1]),
-                                                                 mode(ret_game_value_[2]),
-                                                                 magazine(ret_game_value_[3]),
-                                                                 ammo_count(ret_game_value_[4]) {}
+                                                                          muzzle(ret_game_value_[1]),
+                                                                          mode(ret_game_value_[2]),
+                                                                          magazine(ret_game_value_[3]),
+                                                                          ammo_count(ret_game_value_[4]),
+                                                                          round_reload_phase(ret_game_value_[5]),
+                                                                          magazine_reload_phase(ret_game_value_[6]) {}
         };
 
         struct rv_magazine {
@@ -619,6 +623,7 @@ namespace intercept {
         sqf_return_string hmd(const object &value_);
 
         rv_weapon_state weapon_state(const object &unit_);
+        rv_weapon_state weapon_state(const object &unit_, sqf_string_const_ref muzzle_);
         rv_weapon_state weapon_state(const object &vehicle_, rv_turret_path turret_path_, std::optional<sqf_return_string> weapon_ = std::optional<sqf_return_string>());
         std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_);
         void add_binocular_item(const object &unit_, sqf_string_const_ref classname_);

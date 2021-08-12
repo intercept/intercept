@@ -287,6 +287,10 @@ namespace intercept {
             return __helpers::__bool_unary_object(__sqf::unary__isplayer__object__ret__bool, value_);
         }
 
+        bool is_player(const std::vector<object> &player_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isplayer__array__ret__bool, player_);
+        }
+
         bool is_sprint_allowed(const object &value_) {
             return __helpers::__bool_unary_object(__sqf::unary__issprintallowed__object__ret__bool, value_);
         }
@@ -542,24 +546,24 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lookat__object_array__object_array__ret__nothing, param_left, param_right);
         }
 
-        void play_action(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__playaction__object__string__ret__nothing, value0_, value1_);
+        void play_action(const object &unit_, sqf_string_const_ref action_) {
+            host::functions.invoke_raw_binary(__sqf::binary__playaction__object__string__ret__nothing, unit_, action_);
         }
 
-        void play_action_now(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__playactionnow__object__string__ret__nothing, value0_, value1_);
+        void play_action_now(const object &unit_, sqf_string_const_ref action_) {
+            host::functions.invoke_raw_binary(__sqf::binary__playactionnow__object__string__ret__nothing, unit_, action_);
         }
 
         void play_gesture(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__playgesture__object__string__ret__nothing, value0_, value1_);
         }
 
-        void play_move(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__playmove__object__string__ret__nothing, value0_, value1_);
+        void play_move(const object &unit_, sqf_string_const_ref anim_) {
+            host::functions.invoke_raw_binary(__sqf::binary__playmove__object__string__ret__nothing, unit_, anim_);
         }
 
-        void play_move_now(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__playmovenow__object__string__ret__nothing, value0_, value1_);
+        void play_move_now(const object &unit_, sqf_string_const_ref anim_) {
+            host::functions.invoke_raw_binary(__sqf::binary__playmovenow__object__string__ret__nothing, unit_, anim_);
         }
 
         void set_anim_speed_coef(const object &value0_, float value1_) {
@@ -622,8 +626,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__settargetage__object__string__ret__nothing, value0_, value1_);
         }
 
-        void set_unconscious(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setunconscious__object__bool__ret__nothing, value0_, value1_);
+        void set_unconscious(const object &unit_, bool enabled_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setunconscious__object__bool__ret__nothing, unit_, enabled_);
         }
 
         void set_unit_ability(const object &value0_, float value1_) {
@@ -646,16 +650,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setunitrecoilcoefficient__object__scalar__ret__nothing, value0_, value1_);
         }
 
-        void switch_action(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__switchaction__object__string__ret__nothing, value0_, value1_);
+        void switch_action(const object &unit_, sqf_string_const_ref action_) {
+            host::functions.invoke_raw_binary(__sqf::binary__switchaction__object__string__ret__nothing, unit_, action_);
         }
 
         void switch_gesture(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__switchgesture__object__string__ret__nothing, value0_, value1_);
         }
 
-        void switch_move(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__switchmove__object__string__ret__nothing, value0_, value1_);
+        void switch_move(const object &unit_, sqf_string_const_ref anim_) {
+            host::functions.invoke_raw_binary(__sqf::binary__switchmove__object__string__ret__nothing, unit_, anim_);
         }
 
         object leader(const object &value_) {
@@ -674,12 +678,16 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__morale__object__ret__scalar, value_);
         }
 
-        void move_out(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__moveout__object__ret__nothing, value_);
+        void move_out(const object &unit_) {
+            __helpers::__empty_unary_object(__sqf::unary__moveout__object__ret__nothing, unit_);
         }
 
-        float move_time(const object &value_) {
-            return __helpers::__number_unary_object(__sqf::unary__movetime__object__ret__scalar, value_);
+        void move_out(const object &unit_, const object &vehicle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__moveout__object__object__ret__nothing, unit_, vehicle_);
+        }
+
+        float move_time(const object &unit_) {
+            return __helpers::__number_unary_object(__sqf::unary__movetime__object__ret__scalar, unit_);
         }
 
         sqf_return_string name(const object &value_) {

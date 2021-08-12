@@ -1478,6 +1478,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing, ctrl_, color_);
         }
 
+        float ctrl_set_tooltip_max_width(const control &ctrl_, float width_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctrlsettooltipmaxwidth__control__scalar__ret__scalar, ctrl_, width_);
+        }
+
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__posscreentoworld__control__array__ret__array, ctrl_, pos_);
         }
@@ -1522,6 +1526,14 @@ namespace intercept {
                                command_});
 
             host::functions.invoke_raw_binary(__sqf::binary__ctrlseteventhandler__control__array__ret__nothing, ctrl_, params);
+        }
+
+        rv_color ctrl_background_color(const control& ctrl_) {
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrlbackgroundcolor__control__ret__array, ctrl_));
+        }
+
+        rv_color ctrl_foreground_color(const control &ctrl_) {
+            return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrlforegroundcolor__control__ret__array, ctrl_));
         }
 
         void button_set_action(int control_id_, sqf_string_const_ref code_) {
@@ -1837,6 +1849,10 @@ namespace intercept {
 
         float lb_value(const control &control_, int index_) {
             return host::functions.invoke_raw_binary(__sqf::binary__lbvalue__control__scalar__ret__scalar, control_, static_cast<float>(index_));
+        }
+
+        sqf_return_string lb_tooltip(const control &ctrl_, float index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__lbtooltip__control__scalar__ret__string, ctrl_, index_);
         }
 
         void load_overlay(const control &a_control_, const config &a_config_) {
@@ -2337,6 +2353,10 @@ namespace intercept {
 
         display find_display(float value_) {
             return display(host::functions.invoke_raw_unary(__sqf::unary__finddisplay__scalar__ret__display, value_));
+        }
+
+        display display_child(const display& disp_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__displaychild__display__ret__display, disp_);
         }
 
         bool is_tut_hints_enabled() {
@@ -2952,162 +2972,215 @@ namespace intercept {
         sqf_return_string menu_action(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menuaction__control__array__ret__string, ctrl_, {path_});
         }
+
         sqf_return_string menu_action(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuaction__array__ret__string, {idc_, path_});
         }
+
         void menu_add(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menuadd__control__array__ret__scalar, ctrl_, {path_, value_});
         }
+
         void menu_add(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuadd__array__ret__scalar, {idc_, path_, value_});
         }
+
         bool menu_checked(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menuchecked__control__array__ret__bool, ctrl_, {path_});
         }
+
         bool menu_checked(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuchecked__array__ret__bool, {idc_, path_});
         }
+
         void menu_collapse(const control &ctrl_, const std::vector<int> &path_) {
             host::functions.invoke_raw_binary(__sqf::binary__menucollapse__control__array__ret__nothing, ctrl_, {path_});
         }
+
         void menu_collapse(float idc_, const std::vector<int> &path_) {
             host::functions.invoke_raw_unary(__sqf::unary__menucollapse__array__ret__nothing, {idc_, path_});
         }
+
         sqf_return_string menu_data(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menudata__control__array__ret__string, ctrl_, {path_});
         }
+
         sqf_return_string menu_data(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menudata__array__ret__string, {idc_, path_});
         }
+
         void menu_delete(const control &ctrl_, const std::vector<int> &path_) {
             host::functions.invoke_raw_binary(__sqf::binary__menudelete__control__array__ret__nothing, ctrl_, {path_});
         }
+
         void menu_delete(float idc_, const std::vector<int> &path_) {
             host::functions.invoke_raw_unary(__sqf::unary__menudelete__array__ret__nothing, {idc_, path_});
         }
+
         void menu_enable(const control &ctrl_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menuenable__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_enable(float idc_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuenable__array__ret__nothing, {idc_, path_, value_});
         }
+
         bool menu_enabled(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menuenabled__control__array__ret__bool, ctrl_, {path_});
         }
+
         bool menu_enabled(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuenabled__array__ret__bool, {idc_, path_});
         }
+
         void menu_expand(const control &ctrl_, const std::vector<int> &path_) {
             host::functions.invoke_raw_binary(__sqf::binary__menuexpand__control__array__ret__nothing, ctrl_, {path_});
         }
+
         void menu_expand(float idc_, const std::vector<int> &path_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuexpand__array__ret__nothing, {idc_, path_});
         }
+
         sqf_return_string menu_picture(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menupicture__control__array__ret__string, ctrl_, {path_});
         }
+
         sqf_return_string menu_picture(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menupicture__array__ret__string, {idc_, path_});
         }
+
         void menu_set_action(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetaction__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_action(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetaction__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_check(const control &ctrl_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetcheck__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_check(float idc_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetcheck__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_data(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetdata__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_data(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetdata__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_picture(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetpicture__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_picture(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetpicture__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_shortcut(const control &ctrl_, const std::vector<int> &path_, int value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetshortcut__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_shortcut(float idc_, const std::vector<int> &path_, int value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetshortcut__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_text(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusettext__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_text(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusettext__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_url(const control &ctrl_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menuseturl__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_url(float idc_, const std::vector<int> &path_, sqf_string_const_ref value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuseturl__array__ret__nothing, {idc_, path_, value_});
         }
+
         void menu_set_value(const control &ctrl_, const std::vector<int> &path_, float value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusetvalue__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_set_value(float idc_, const std::vector<int> &path_, float value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusetvalue__array__ret__nothing, {idc_, path_, value_});
         }
+
         float menu_shortcut(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menushortcuttext__control__array__ret__string, ctrl_, {path_});
         }
+
         float menu_shortcut(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menushortcuttext__array__ret__string, {idc_, path_});
         }
+
         sqf_return_string menu_shortcut_text(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menushortcut__control__array__ret__scalar, ctrl_, {path_});
         }
+
         sqf_return_string menu_shortcut_text(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menushortcut__array__ret__scalar, {idc_, path_});
         }
+
         float menu_size(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menusize__control__array__ret__scalar, ctrl_, {path_});
         }
+
         float menu_size(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menusize__array__ret__scalar, {idc_, path_});
         }
+
         void menu_sort(const control &ctrl_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_binary(__sqf::binary__menusort__control__array__ret__nothing, ctrl_, {path_, value_});
         }
+
         void menu_sort(float idc_, const std::vector<int> &path_, bool value_) {
             host::functions.invoke_raw_unary(__sqf::unary__menusort__array__ret__nothing, {idc_, path_, value_});
         }
+
         sqf_return_string menu_text(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menutext__control__array__ret__string, ctrl_, {path_});
         }
+
         sqf_return_string menu_text(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menutext__array__ret__string, {idc_, path_});
         }
+
         sqf_return_string menu_url(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menuurl__control__array__ret__string, ctrl_, {path_});
         }
+
         sqf_return_string menu_url(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuurl__array__ret__string, {idc_, path_});
         }
+
         float menu_value(const control &ctrl_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_binary(__sqf::binary__menuvalue__control__array__ret__scalar, ctrl_, {path_});
         }
+
         float menu_value(float idc_, const std::vector<int> &path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__menuvalue__array__ret__scalar, {idc_, path_});
         }
+
         void menu_clear(const control &ctrl_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuclear__control__ret__nothing, ctrl_);
         }
+
         void menu_clear(float idc_) {
             host::functions.invoke_raw_unary(__sqf::unary__menuclear__scalar__ret__nothing, idc_);
         }
+
         std::vector<int> menu_hover(const control& ctrl_) {
             return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__control__ret__array, ctrl_));
         }
+
         std::vector<int> menu_hover(float idc_) {
             return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__menuhover__scalar__ret__array, idc_));
         }
@@ -3119,8 +3192,13 @@ namespace intercept {
         void ctrl_map_set_position(const control &ctrl_, const vector2 &pos_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlmapsetposition__control__array__ret__nothing, ctrl_, pos_);
         }
+
         void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlmapsetposition__control__array__ret__nothing, ctrl_, {x_, y_, width_, height_});
+        }
+
+        vector2 get_texture_info(sqf_string_const_ref path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__gettextureinfo__string__ret__array, path_);
         }
     }  // namespace sqf
 }  // namespace intercept

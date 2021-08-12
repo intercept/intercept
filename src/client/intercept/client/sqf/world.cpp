@@ -610,5 +610,9 @@ namespace intercept {
         sqf_return_string surface_texture(const vector2 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, pos_);
         }
+
+        rv_ambient_temperature ambient_temperature() {
+            return rv_ambient_temperature(host::functions.invoke_raw_nular(__sqf::nular__ambienttemperature__ret__array));
+        }
     }  // namespace sqf
 }  // namespace intercept

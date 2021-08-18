@@ -121,6 +121,28 @@ namespace intercept {
                 is_accessible(gv_[2]) {}
         };
 
+        struct rv_sensor_target {
+            object target;
+            sqf_string type;
+            sqf_string relationship;
+            sqf_string sensor;
+            explicit rv_sensor_target(const game_value &gv_)
+                : target(gv_[0]),
+                  type(gv_[1]),
+                  relationship(gv_[2]),
+                  sensor(gv_[3]) {}
+        };
+
+        struct rv_sensor_threat {
+            object target;
+            sqf_string type;
+            sqf_string sensor;
+            explicit rv_sensor_threat(const game_value &gv_)
+                : target(gv_[0]),
+                  type(gv_[1]),
+                  sensor(gv_[2]) {}
+        };
+
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
         sqf_return_string get_forced_flag_texture(const object &flag_pole_);
@@ -272,7 +294,7 @@ namespace intercept {
         sqf_return_string_list get_object_textures(const object &object_);
         std::vector<object> synchronized_objects(const object &obj_);
         rv_model_info get_model_info(const object &object_);
-        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld);
+        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld, bool local_ = false);
         float get_container_max_load(sqf_string_const_ref containerclass_);
         rv_shot_parents get_shot_parents(const object &projectile_);
         bool is_simple_object(const object &object_);
@@ -287,6 +309,7 @@ namespace intercept {
         void enable_collision_with(const object &object1_, const object &object2_);
         void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
         void lock_camera_to(const object &vehicle_, const object &target_, rv_turret_path turret_path_);
+        object locked_camera_to(const object &vehicle_, rv_turret_path turret_path_);
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
         bool locked_turret(const object &vehicle_, rv_turret_path turret_path_);
         void lock_turret(const object &vehicle_, rv_turret_path turret_path_, bool lock_);
@@ -312,6 +335,7 @@ namespace intercept {
         void set_shot_parents(const object &projectile_, const object &vehicle_, const object &instigator_);
         void set_vehicle_ti_parts(const object &vehicle_, const game_value &params_right_);
         void set_weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_class_, float reload_time_);
+        float weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_name_);
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
         object turret_unit(const object &vehicle_, rv_turret_path turret_path_);
@@ -333,6 +357,9 @@ namespace intercept {
         void set_light_ambient(const object &light_, float r_, float g_, float b_);
         void set_light_attenuation(const object &light_, float start_, float constant_, float linear_, float quadratic_, float hard_limit_start_, float hard_limit_end_);
         void set_light_color(const object &light_, float r_, float g_, float b_);
+        void set_light_cone_pars(const object &lightcone_, float outer_angle_, float inner_angle_, float fade_coef_);
+        void set_light_ir(const object &lightcone_, bool ir_);
+        void set_light_volume_shape(const object &lightcone_, sqf_string_const_ref shape_path_, float scale_);
 
         std::vector<object> roads_connected_to(const object &obj_);
 
@@ -389,5 +416,12 @@ namespace intercept {
         std::vector<rv_lod_info> all_lods(const object &obj_);
         std::vector<rv_lod_info> all_lods(sqf_string_const_ref model_path_);
         void delete_vehicle_crew(const object &vehicle_);
+
+        bool direction_stabilization_enabled(const object &vehicle_, const rv_turret_path &turret_);
+        void enable_direction_stabilization(const object &vehicle_, bool enabled_, const rv_turret_path &turret_);
+
+        std::vector<rv_sensor_target> get_sensor_targets(const object &vehicle_);
+        std::vector<rv_sensor_threat> get_sensor_threats(const object &vehicle_);
+
     }  // namespace sqf
 }  // namespace intercept

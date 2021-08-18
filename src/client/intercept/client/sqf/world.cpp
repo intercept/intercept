@@ -403,48 +403,50 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__nearestobject__array__scalar__ret__object, pos_, id_);
         }
 
-        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_) {
+        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
             game_value params({pos_,
                                std::move(types),
-                               radius_});
+                               radius_,
+                               mode_2d_});
 
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, std::move(params)));
         }
 
-        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_) {
+        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
             game_value params({obj_,
                                std::move(types),
-                               radius_});
+                               radius_,
+                               mode_2d_});
 
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, params));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestobjects__array__ret__array, std::move(params)));
         }
 
-        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_) {
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_2d_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
             game_value params({pos_,
                                std::move(types),
                                radius_,
                                sort_,
-                               mode_});
+                               mode_2d_});
 
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, std::move(params)));
         }
 
-        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_) {
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_2d_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
             game_value params({obj_,
                                std::move(types),
                                radius_,
                                sort_,
-                               mode_});
+                               mode_2d_});
 
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, params));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestterrainobjects__array__ret__array, std::move(params)));
         }
 
         std::vector<object> units_below_height(const group &group_, float height_) {
@@ -482,7 +484,7 @@ namespace intercept {
                                precision_,
                                max_results_});
 
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, std::move(params));
 
             return __helpers::__convert_to_vector<rv_best_place>(ret);
         }
@@ -494,7 +496,7 @@ namespace intercept {
                                precision_,
                                max_results_});
 
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, params);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__selectbestplaces__array__ret__array, std::move(params));
 
             return __helpers::__convert_to_vector<rv_best_place>(ret);
         }
@@ -607,6 +609,10 @@ namespace intercept {
 
         sqf_return_string surface_texture(const vector2 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, pos_);
+        }
+
+        rv_ambient_temperature ambient_temperature() {
+            return rv_ambient_temperature(host::functions.invoke_raw_nular(__sqf::nular__ambienttemperature__ret__array));
         }
     }  // namespace sqf
 }  // namespace intercept

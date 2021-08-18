@@ -757,6 +757,10 @@ namespace intercept {
             __helpers::__empty_unary_string(__sqf::unary__endmission__string__ret__nothing, value_);
         }
 
+        std::vector<game_value> mission_end() {
+            return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_nular(__sqf::nular__missionend__ret__array));
+        }
+
         void estimated_time_left(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__estimatedtimeleft__scalar__ret__nothing, value_);
         }
@@ -823,24 +827,15 @@ namespace intercept {
 
         //eventhandlers
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
-            game_value params_right({event_,
-                                     index_});
-
-            host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, params_right);
+            host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, {event_, index_});
         }
 
         int add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_) {
-            game_value args({type_,
-                             command_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, {type_, command_});
         }
 
         int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value args({type_,
-                             command_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, args);
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, {type_, command_});
         }
 
         void remove_all_mission_event_handlers(sqf_string_const_ref value_) {
@@ -848,10 +843,7 @@ namespace intercept {
         }
 
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_) {
-            game_value params_right({event_,
-                                     index_});
-
-            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, params_right);
+            host::functions.invoke_raw_binary(__sqf::binary__removempeventhandler__object__array__ret__nothing, object_, {event_, index_});
         }
 
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_) {
@@ -859,24 +851,68 @@ namespace intercept {
         }
 
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_) {
-            game_value params_right({target_,
-                                     code_});
+            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, {target_, code_});
+        }
 
-            host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, params_right);
+        int add_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, const code &code_) {
+            game_value mode_str;
+            switch (mode_) {
+                case intercept::sqf::user_action_modes::Activate:
+                    mode_str = "Activate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Deactivate:
+                    mode_str = "Deactivate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Analog:
+                    mode_str = "Analog"sv;
+                    break;
+                default:
+                    return -1;
+            }
+            return host::functions.invoke_raw_unary(__sqf::unary__adduseractioneventhandler__array__ret__scalar, {action_name_, std::move(mode_str), code_});
+        }
+        void remove_all_user_action_event_handlers(sqf_string_const_ref action_name_, user_action_modes mode_) {
+            game_value mode_str;
+            switch (mode_) {
+                case intercept::sqf::user_action_modes::Activate:
+                    mode_str = "Activate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Deactivate:
+                    mode_str = "Deactivate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Analog:
+                    mode_str = "Analog"sv;
+                    break;
+                default:
+                    return;
+            }
+            host::functions.invoke_raw_unary(__sqf::unary__removealluseractioneventhandlers__array__ret__nothing, {action_name_, std::move(mode_str)});
+        }
+
+        void remove_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, int index_) {
+            game_value mode_str;
+            switch (mode_) {
+                case intercept::sqf::user_action_modes::Activate:
+                    mode_str = "Activate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Deactivate:
+                    mode_str = "Deactivate"sv;
+                    break;
+                case intercept::sqf::user_action_modes::Analog:
+                    mode_str = "Analog"sv;
+                    break;
+                default:
+                    return;
+            }
+            host::functions.invoke_raw_unary(__sqf::unary__removeuseractioneventhandler__array__ret__nothing, {action_name_, std::move(mode_str), index_});
         }
 
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_) {
-            game_value params_right({type_,
-                                     expression_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, {type_, expression_});
         }
 
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, const code &expression_) {
-            game_value params_right({type_,
-                                     expression_});
-
-            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, params_right);
+            return host::functions.invoke_raw_binary(__sqf::binary__addmpeventhandler__object__array__ret__nothing_scalar, object_, {type_, expression_});
         }
 
         void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_) {
@@ -888,24 +924,15 @@ namespace intercept {
         }
 
         int add_mission_event_handler(sqf_string_const_ref type_, const code &command_) {
-            game_value params({type_,
-                               command_});
-
-            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, {type_, command_});
         }
 
         int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_) {
-            game_value params({type_,
-                               command_});
-
-            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__addmissioneventhandler__array__ret__scalar, {type_, command_});
         }
 
         void remove_mission_event_handler(sqf_string_const_ref type_, int index_) {
-            game_value params({type_,
-                               index_});
-
-            host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, params);
+            host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, {type_, index_});
         }
 
         bool is_equal_to(game_value left_, game_value right_) {
@@ -976,6 +1003,10 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__localnamespace__ret__namespace);
         }
 
+        rv_namespace server_namespace() {
+            return host::functions.invoke_raw_nular(__sqf::nular__servernamespace__ret__namespace);
+        }
+
         sqf_return_string mission_name_source() {
             return host::functions.invoke_raw_nular(__sqf::nular__missionnamesource__ret__string);
         }
@@ -1014,6 +1045,10 @@ namespace intercept {
 
         bool is_final(const code &code_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isfinal__code_string__ret__bool, code_);
+        }
+
+        sqf_return_string hash_value(const game_value &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__object_side__ret__string, value_);
         }
     }  // namespace sqf
 }  // namespace intercept

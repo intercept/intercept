@@ -277,5 +277,9 @@ namespace intercept {
         std::vector<float> get_player_scores(const object &player_) {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getplayerscores__object__ret__array, player_));
         }
+
+        sqf_return_string_list all_users() {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__allusers__ret__array));
+        }
     }  // namespace sqf
 }  // namespace intercept

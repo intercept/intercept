@@ -597,16 +597,11 @@ namespace intercept {
         }
 
         void set_hit_point_damage(const object &object_, sqf_string_const_ref hit_point_, float damage_) {
-            game_value params({hit_point_,
-                               damage_});
-
-            host::functions.invoke_raw_binary(__sqf::binary__sethitpointdamage__object__array__ret__nothing, object_, params);
+            host::functions.invoke_raw_binary(__sqf::binary__sethitpointdamage__object__array__ret__nothing, object_, {hit_point_, damage_});
         }
 
         rv_hit_points_damage get_all_hit_points_damage(const object &veh_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getallhitpointsdamage__object__ret__array, veh_);
-
-            return rv_hit_points_damage(ret);
+            return rv_hit_points_damage(host::functions.invoke_raw_unary(__sqf::unary__getallhitpointsdamage__object__ret__array, veh_));
         }
 
         sqf_return_string_list get_object_materials(const object &object_) {
@@ -625,11 +620,8 @@ namespace intercept {
             return rv_model_info(host::functions.invoke_raw_unary(__sqf::unary__getmodelinfo__object__ret__array, object_));
         }
 
-        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld_) {
-            game_value params({shapename_,
-                               positionworld_});
-
-            return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, params);
+        object create_simple_object(sqf_string_const_ref shapename_, const vector3 &positionworld_, bool local_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__createsimpleobject__array__ret__object, {shapename_, positionworld_, local_});
         }
 
         float get_container_max_load(sqf_string_const_ref containerclass_) {
@@ -669,11 +661,18 @@ namespace intercept {
                 case intercept::sqf::rv_selection_lods::HitPoints:
                     lod_name = "HitPoints"sv;
                     break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
                 default:
                     lod_name = ""sv;
                     break;
             }
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
+        }
+
+        sqf_return_string_list selection_names(const object &object_, float lod_index_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, lod_index_));
         }
 
         void switch_camera(const object &target_) {
@@ -719,11 +718,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__hideselection__object__array__ret__nothing, object_, params_right);
         }
 
-        void lock_camera_to(const object &vehicle_, const object &target_, rv_turret_path turret_path_) {
-            game_value params_right({target_,
-                                     std::move(turret_path_)});
+        void lock_camera_to(const object &vehicle_, const object &target_, const rv_turret_path &turret_path_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lockcamerato__object__array__ret__nothing, vehicle_, {target_, turret_path_});
+        }
 
-            host::functions.invoke_raw_binary(__sqf::binary__lockcamerato__object__array__ret__nothing, vehicle_, params_right);
+        object locked_camera_to(const object &vehicle_, const rv_turret_path &turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__lockedcamerato__object__array__ret__nothing_object, vehicle_, turret_path_);
         }
 
         void lock_cargo(const object &vehicle_, int index_, bool lock_) {
@@ -733,15 +733,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lockcargo__object__array__ret__nothing, vehicle_, params_right);
         }
 
-        bool locked_turret(const object &vehicle_, rv_turret_path turret_path_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__lockedturret__object__array__ret__bool, vehicle_, std::move(turret_path_));
+        bool locked_turret(const object &vehicle_, const rv_turret_path &turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__lockedturret__object__array__ret__bool, vehicle_, turret_path_);
         }
 
-        void lock_turret(const object &vehicle_, rv_turret_path turret_path_, bool lock_) {
-            game_value params_right({std::move(turret_path_),
-                                     lock_});
-
-            host::functions.invoke_raw_binary(__sqf::binary__lockturret__object__array__ret__nothing, vehicle_, params_right);
+        void lock_turret(const object &vehicle_, const rv_turret_path &turret_path_, bool lock_) {
+            host::functions.invoke_raw_binary(__sqf::binary__lockturret__object__array__ret__nothing, vehicle_, {turret_path_, lock_});
         }
 
         void respawn_vehicle(const object &vehicle_, float delay_, int count_) {
@@ -819,6 +816,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setweaponreloadingtime__object__array__ret__bool, vehicle_, {gunner_, muzzle_class_, reload_time_});
         }
 
+        float weapon_reloading_time(const object& vehicle_, const object& gunner_, sqf_string_const_ref muzzle_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__weaponreloadingtime__object__array__ret__scalar, vehicle_, {gunner_, muzzle_name_});
+        }
+
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_) {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsadd__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
@@ -827,12 +828,12 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__synchronizeobjectsremove__object__array__ret__nothing, unit_, std::move(auto_array<game_value>(objects_.begin(), objects_.end())));
         }
 
-        object turret_unit(const object &vehicle_, rv_turret_path turret_path_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__turretunit__object__array__ret__object, vehicle_, std::move(turret_path_));
+        object turret_unit(const object &vehicle_, const rv_turret_path &turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__turretunit__object__array__ret__object, vehicle_, turret_path_);
         }
 
-        sqf_return_string_list weapons_turret(const object &vehicle_, rv_turret_path turret_path_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, std::move(turret_path_)));
+        sqf_return_string_list weapons_turret(const object &vehicle_, const rv_turret_path &turret_path_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__weaponsturret__object__array__ret__array, vehicle_, turret_path_));
         }
 
         float flag_animation_phase(const object &flag_) {
@@ -886,6 +887,18 @@ namespace intercept {
 
         void set_light_use_flare(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__setlightuseflare__object__bool__ret__nothing, value0_, value1_);
+        }
+
+        void set_light_cone_pars(const object &lightcone_, float outer_angle_, float inner_angle_, float fade_coef_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightconepars__object__array__ret__nothing, lightcone_, {outer_angle_, inner_angle_, fade_coef_});
+        }
+
+        void set_light_ir(const object &lightcone_, bool ir_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightir__object__bool__ret__nothing, lightcone_, ir_);
+        }
+
+        void set_light_volume_shape(const object& lightcone_, sqf_string_const_ref shape_path_, float scale_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setlightvolumeshape__object__array__ret__nothing, lightcone_, {shape_path_, scale_});
         }
 
         rv_uav_control uav_control(const object &uav_) {
@@ -1106,11 +1119,11 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__setinfopanel__array__ret__bool, {infopanelId_, componentClassOrType_});
         }
 
-        void set_cruise_control(const object& veh_, float speed_, bool auto_thrust_) {
+        void set_cruise_control(const object &veh_, float speed_, bool auto_thrust_) {
             host::functions.invoke_raw_binary(__sqf::binary__setcruisecontrol__object__array__ret__nothing, veh_, {speed_, auto_thrust_});
         }
 
-        void set_tow_parent(const object& towed_vehicle_, const object& towing_vehicle_) {
+        void set_tow_parent(const object &towed_vehicle_, const object &towing_vehicle_) {
             host::functions.invoke_raw_binary(__sqf::binary__settowparent__object__object__ret__nothing, towed_vehicle_, towing_vehicle_);
         }
 
@@ -1128,6 +1141,22 @@ namespace intercept {
 
         rv_cruise_params get_cruise_control(const object &veh_) {
             return rv_cruise_params(host::functions.invoke_raw_unary(__sqf::unary__getcruisecontrol__object__ret__array, veh_));
+        }
+
+        bool direction_stabilization_enabled(const object &vehicle_, const rv_turret_path &turret_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__directionstabilizationenabled__object__array__ret__bool, vehicle_, turret_);
+        }
+
+        void enable_direction_stabilization(const object &vehicle_, bool enabled_, const rv_turret_path &turret_) {
+            host::functions.invoke_raw_binary(__sqf::binary__enabledirectionstabilization__object__array__ret__nothing, vehicle_, {enabled_, turret_});
+        }
+
+        std::vector<rv_sensor_target> get_sensor_targets(const object &vehicle_) {
+            return __helpers::__convert_to_vector<rv_sensor_target>(host::functions.invoke_raw_unary(__sqf::unary__getsensortargets__object__ret__array, vehicle_));
+        }
+
+        std::vector<rv_sensor_threat> get_sensor_threats(const object &vehicle_) {
+            return __helpers::__convert_to_vector<rv_sensor_threat>(host::functions.invoke_raw_unary(__sqf::unary__getsensorthreats__object__ret__array, vehicle_));
         }
 
     }  // namespace sqf

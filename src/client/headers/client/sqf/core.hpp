@@ -80,6 +80,11 @@ namespace intercept {
                   appID(gv_[4]),
                   DLCName(gv_[5]) {}
         };
+        enum class user_action_modes {
+            Activate,
+            Deactivate,
+            Analog
+        };
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
 
@@ -189,6 +194,7 @@ namespace intercept {
         rv_namespace profile_namespace();
         sqf_return_string profile_namesteam();
         rv_namespace local_namespace();
+        rv_namespace server_namespace();
 
         object obj_null();
         side blufor();
@@ -230,6 +236,9 @@ namespace intercept {
         void remove_mp_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const code &code_);
         void add_public_variable_eventhandler(sqf_string_const_ref var_name_, const object &target_, const code &code_);
+        int add_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, const code &code_);
+        void remove_all_user_action_event_handlers(sqf_string_const_ref action_name_, user_action_modes mode_);
+        void remove_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, int index_);
 
         bool user_input_disabled();
         bool screen_shot(sqf_string_const_ref filename_);
@@ -281,6 +290,7 @@ namespace intercept {
         void disable_user_input(bool value_);
         void echo(sqf_string_const_ref value_);
         void end_mission(sqf_string_const_ref value_);
+        std::vector<game_value> mission_end();
         void estimated_time_left(float value_);
         void fail_mission(sqf_string_const_ref value_);
         int count_enemy(const object &unit_, const std::vector<object> &units_);
@@ -313,8 +323,10 @@ namespace intercept {
         std::pair<bool,bool> force_cadet_difficulty(bool showCadetHints_, bool showCadetWP_);
         rv_dlc_asset_info get_asset_dlc_info(const object &asset_);
         rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref model_);
-        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config& config_);
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config &config_);
         std::pair<float, float> get_dlc_assets_usage_by_name(sqf_string_const_ref asset_);
         bool is_final(const code &code_);
+
+        sqf_return_string hash_value(const game_value &value_);
     }  // namespace sqf
 }  // namespace intercept

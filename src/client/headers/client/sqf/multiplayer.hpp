@@ -78,5 +78,7 @@ namespace intercept {
 
         void connect_to_server(sqf_string_const_ref ip_, float port, sqf_string_const_ref password_);
         std::vector<float> get_player_scores(const object &player_);
+
+        sqf_return_string_list all_users();
     }  // namespace sqf
 }  // namespace intercept

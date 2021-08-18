@@ -64,6 +64,7 @@ namespace intercept {
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         sqf_return_string animation_state(const object &unit_);
+        sqf_return_string gesture_state(const object &unit_);
         sqf_return_string assigned_team(const object &unit_);
         object assigned_vehicle(const object &unit_);
 
@@ -102,12 +103,15 @@ namespace intercept {
         bool is_forced_walk(const object &value_);
         bool is_formation_leader(const object &value_);
         bool is_player(const object &value_);
+        bool is_player(const std::vector<object> &player_); 
         bool is_sprint_allowed(const object &value_);
         bool is_stamina_enabled(const object &value_);
         bool is_turned_out(const object &value_);
         bool is_uavconnected(const object &value_);
         bool is_walking(const object &value_);
-        bool is_weapon_deployed(const object &value_);
+        bool is_weapon_deployed(const object &obj_);
+        bool is_weapon_deployed(const object &obj_, bool on_ground_);
+        bool can_deploy_weapon(const object &obj_);
         bool is_weapon_rested(const object &value_);
         void move(const object &unit_, const vector3 &pos_);
         void move(const group &group_, const vector3 &pos_);
@@ -157,11 +161,11 @@ namespace intercept {
         void look_at(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const std::vector<object>>> units_, std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector3>> target_);
 
         void leave_vehicle(const object &value0_, const group &value1_);
-        void play_action(const object &value0_, sqf_string_const_ref value1_);
-        void play_action_now(const object &value0_, sqf_string_const_ref value1_);
-        void play_gesture(const object &value0_, sqf_string_const_ref value1_);
-        void play_move(const object &value0_, sqf_string_const_ref value1_);
-        void play_move_now(const object &value0_, sqf_string_const_ref value1_);
+        void play_action(const object &unit_, sqf_string_const_ref action_);
+        void play_action_now(const object &unit_, sqf_string_const_ref action_);
+        void play_gesture(const object &unit_, sqf_string_const_ref anim_);
+        void play_move(const object &unit_, sqf_string_const_ref anim_);
+        void play_move_now(const object &unit_, sqf_string_const_ref anim_);
         void set_anim_speed_coef(const object &value0_, float value1_);
         void set_bleeding_remaining(const object &value0_, float value1_);
         void set_face(const object &value0_, sqf_string_const_ref value1_);
@@ -186,18 +190,19 @@ namespace intercept {
         void do_stop(const std::vector<object> &units_);
         void do_get_out(const object &unit_);
         void do_get_out(const std::vector<object> &units_);
-        void switch_action(const object &value0_, sqf_string_const_ref value1_);
+        void switch_action(const object &unit_, sqf_string_const_ref action_);
 
-        void switch_gesture(const object &value0_, sqf_string_const_ref value1_);
-        void switch_move(const object &value0_, sqf_string_const_ref value1_);
+        void switch_gesture(const object &unit_, sqf_string_const_ref anim_);
+        void switch_move(const object &unit_, sqf_string_const_ref anim_);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
 
         object leader(const object &value_);
         sqf_return_string life_state(const object &value_);
         bool lock_identity(const object &value_);
         float morale(const object &value_);
-        void move_out(const object &value_);
-        float move_time(const object &value_);
+        void move_out(const object &unit_);
+        void move_out(const object &unit_, const object &vehicle_);
+        float move_time(const object &unit_);
         sqf_return_string name(const object &value_);
         float need_reload(const object &value_);
         float precision(const object &value_);

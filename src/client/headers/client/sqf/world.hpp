@@ -255,10 +255,10 @@ namespace intercept {
         object nearest_object(const vector3 &pos_, sqf_string_const_ref type_);
         object nearest_object(const object &obj_, sqf_string_const_ref type_);
         object nearest_object(const vector3 &pos_, float id_);
-        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_);
-        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_ = false);
-        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_ = false);
+        std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_ = false);
+        std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_ = false);
+        std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
+        std::vector<object> nearest_terrain_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
         std::vector<object> units_below_height(const group &group_, float height_);
         std::vector<object> units_below_height(const std::vector<object> &units_, float height_);
         bool surface_is_water(const vector2 &pos_);
@@ -299,5 +299,17 @@ namespace intercept {
         rv_road_info get_road_info(const object &road_obj_);
         void set_wind_dir(const vector2 &dir_);
         sqf_return_string surface_texture(const vector2 &pos_);
+
+        struct rv_ambient_temperature {
+            float air_temp;
+            float black_surf_temp;
+            float white_surf_temp;
+            explicit rv_ambient_temperature(const game_value &gv_)
+                : air_temp(gv_[0]),
+                  black_surf_temp(gv_[1]),
+                  white_surf_temp(gv_[2]) {}
+        };
+
+        rv_ambient_temperature ambient_temperature();
     }  // namespace sqf
 }  // namespace intercept

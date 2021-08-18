@@ -2,17 +2,6 @@
 #include "types.hpp"
 #include <variant>
 
-namespace intercept::sqf {
-    enum class rv_selection_lods {
-        Memory,
-        Geometry,
-        FireGeometry,
-        LandContact,
-        HitPoints,
-        ViewGeometry
-    };
-}
-
 namespace intercept::types {
 
 class internal_object : public game_value {
@@ -423,7 +412,6 @@ class internal_object : public game_value {
     };
     using marker = sqf_return_string;
 
-
     /**
      * \brief A Deallocation Threadsafe variant of game_value.
      * \description When going out of scope it doesn't deallocate the data immediately but instead stores it
@@ -483,6 +471,19 @@ class internal_object : public game_value {
         static void discard(ref<game_data> && data);
     };
 
+}
+
+namespace intercept {
+    namespace sqf {
+        enum class rv_selection_lods {
+            Memory,
+            Geometry,
+            FireGeometry,
+            LandContact,
+            HitPoints,
+            ViewGeometry
+        };
+    }
 }
 
 //custom conversion from std::string& to const std::string& inside reference_wrapper

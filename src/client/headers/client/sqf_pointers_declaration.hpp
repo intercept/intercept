@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 207.148052 - Diag
+//Exported Pointer Definitions For: Arma 3 207.148076 - Diag
 
 
 // Unary Functions
@@ -1620,7 +1620,7 @@ static binary_function binary__deletevehiclecrew__object__object__ret__nothing;
 static binary_function binary__diag_enable__string__bool__ret__nothing;
 static binary_function binary__diag_setterrainheight__array__scalar__ret__nothing;
 static binary_function binary__diarysubjectexists__object__string__ret__bool;
-static binary_function binary__directionstabilizationenabled__object__array__ret__nothing;
+static binary_function binary__directionstabilizationenabled__object__array__ret__bool;
 static binary_function binary__directsay__object__string__ret__nothing;
 static binary_function binary__disableai__object__string__ret__nothing;
 static binary_function binary__disablecollisionwith__object__object__ret__nothing;
@@ -1941,6 +1941,7 @@ static binary_function binary__lockcamerato__object__array__ret__nothing;
 static binary_function binary__lockcargo__object__array__ret__nothing;
 static binary_function binary__lockcargo__object__bool__ret__nothing;
 static binary_function binary__lockdriver__object__bool__ret__nothing;
+static binary_function binary__lockedcamerato__object__array__ret__nothing_object;
 static binary_function binary__lockedcargo__object__scalar__ret__bool;
 static binary_function binary__lockedturret__object__array__ret__bool;
 static binary_function binary__lockinventory__object__bool__ret__nothing;
@@ -2748,7 +2749,7 @@ static nular_function nular__scriptnull__ret__script;
 static nular_function nular__selectnoplayer__ret__nothing;
 static nular_function nular__sentencesenabled__ret__bool;
 static nular_function nular__servername__ret__string;
-static nular_function nular__servernamespace__ret__nothing;
+static nular_function nular__servernamespace__ret__namespace;
 static nular_function nular__servertime__ret__scalar;
 static nular_function nular__shownartillerycomputer__ret__bool;
 static nular_function nular__shownchat__ret__bool;

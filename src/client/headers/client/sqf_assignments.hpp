@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 207.148052 - Diag
+//Exported Pointer Assignments For: Arma 3 207.148076 - Diag
 
 
 // Unary Functions
@@ -1620,7 +1620,7 @@ __sqf::binary__deletevehiclecrew__object__object__ret__nothing = (binary_functio
 __sqf::binary__diag_enable__string__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("diag_enable"sv, "STRING"sv, "BOOL"sv);
 __sqf::binary__diag_setterrainheight__array__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("diag_setterrainheight"sv, "ARRAY"sv, "SCALAR"sv);
 __sqf::binary__diarysubjectexists__object__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("diarysubjectexists"sv, "OBJECT"sv, "STRING"sv);
-__sqf::binary__directionstabilizationenabled__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("directionstabilizationenabled"sv, "OBJECT"sv, "ARRAY"sv);
+__sqf::binary__directionstabilizationenabled__object__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("directionstabilizationenabled"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__directsay__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("directsay"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__disableai__object__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("disableai"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__disablecollisionwith__object__object__ret__nothing = (binary_function)host::functions.get_binary_function_typed("disablecollisionwith"sv, "OBJECT"sv, "OBJECT"sv);
@@ -1941,6 +1941,7 @@ __sqf::binary__lockcamerato__object__array__ret__nothing = (binary_function)host
 __sqf::binary__lockcargo__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("lockcargo"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__lockcargo__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("lockcargo"sv, "OBJECT"sv, "BOOL"sv);
 __sqf::binary__lockdriver__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("lockdriver"sv, "OBJECT"sv, "BOOL"sv);
+__sqf::binary__lockedcamerato__object__array__ret__nothing_object = (binary_function)host::functions.get_binary_function_typed("lockedcamerato"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__lockedcargo__object__scalar__ret__bool = (binary_function)host::functions.get_binary_function_typed("lockedcargo"sv, "OBJECT"sv, "SCALAR"sv);
 __sqf::binary__lockedturret__object__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("lockedturret"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__lockinventory__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("lockinventory"sv, "OBJECT"sv, "BOOL"sv);
@@ -2748,7 +2749,7 @@ __sqf::nular__scriptnull__ret__script = (nular_function)host::functions.get_nula
 __sqf::nular__selectnoplayer__ret__nothing = (nular_function)host::functions.get_nular_function("selectnoplayer"sv);
 __sqf::nular__sentencesenabled__ret__bool = (nular_function)host::functions.get_nular_function("sentencesenabled"sv);
 __sqf::nular__servername__ret__string = (nular_function)host::functions.get_nular_function("servername"sv);
-__sqf::nular__servernamespace__ret__nothing = (nular_function)host::functions.get_nular_function("servernamespace"sv);
+__sqf::nular__servernamespace__ret__namespace = (nular_function)host::functions.get_nular_function("servernamespace"sv);
 __sqf::nular__servertime__ret__scalar = (nular_function)host::functions.get_nular_function("servertime"sv);
 __sqf::nular__shownartillerycomputer__ret__bool = (nular_function)host::functions.get_nular_function("shownartillerycomputer"sv);
 __sqf::nular__shownchat__ret__bool = (nular_function)host::functions.get_nular_function("shownchat"sv);

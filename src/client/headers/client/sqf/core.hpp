@@ -323,7 +323,7 @@ namespace intercept {
         std::pair<bool,bool> force_cadet_difficulty(bool showCadetHints_, bool showCadetWP_);
         rv_dlc_asset_info get_asset_dlc_info(const object &asset_);
         rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref model_);
-        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config& config_);
+        rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config &config_);
         std::pair<float, float> get_dlc_assets_usage_by_name(sqf_string_const_ref asset_);
         bool is_final(const code &code_);
 

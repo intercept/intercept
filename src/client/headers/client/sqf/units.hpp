@@ -163,7 +163,7 @@ namespace intercept {
         void leave_vehicle(const object &value0_, const group &value1_);
         void play_action(const object &unit_, sqf_string_const_ref action_);
         void play_action_now(const object &unit_, sqf_string_const_ref action_);
-        void play_gesture(const object &value0_, sqf_string_const_ref value1_);
+        void play_gesture(const object &unit_, sqf_string_const_ref anim_);
         void play_move(const object &unit_, sqf_string_const_ref anim_);
         void play_move_now(const object &unit_, sqf_string_const_ref anim_);
         void set_anim_speed_coef(const object &value0_, float value1_);
@@ -190,9 +190,9 @@ namespace intercept {
         void do_stop(const std::vector<object> &units_);
         void do_get_out(const object &unit_);
         void do_get_out(const std::vector<object> &units_);
-        void switch_action(const object &value0_, sqf_string_const_ref value1_);
+        void switch_action(const object &unit_, sqf_string_const_ref action_);
 
-        void switch_gesture(const object &value0_, sqf_string_const_ref value1_);
+        void switch_gesture(const object &unit_, sqf_string_const_ref anim_);
         void switch_move(const object &unit_, sqf_string_const_ref anim_);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
 

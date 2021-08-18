@@ -309,6 +309,7 @@ namespace intercept {
         void enable_collision_with(const object &object1_, const object &object2_);
         void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
         void lock_camera_to(const object &vehicle_, const object &target_, rv_turret_path turret_path_);
+        object locked_camera_to(const object &vehicle_, rv_turret_path turret_path_);
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
         bool locked_turret(const object &vehicle_, rv_turret_path turret_path_);
         void lock_turret(const object &vehicle_, rv_turret_path turret_path_, bool lock_);

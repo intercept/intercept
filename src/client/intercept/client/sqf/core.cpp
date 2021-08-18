@@ -854,7 +854,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addpublicvariableeventhandler__string__array__ret__nothing, var_name_, {target_, code_});
         }
 
-        int add_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, const code& code_) {
+        int add_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, const code &code_) {
             game_value mode_str;
             switch (mode_) {
                 case intercept::sqf::user_action_modes::Activate:
@@ -1004,7 +1004,7 @@ namespace intercept {
         }
 
         rv_namespace server_namespace() {
-            return host::functions.invoke_raw_nular(__sqf::nular__servernamespace__ret__nothing);
+            return host::functions.invoke_raw_nular(__sqf::nular__servernamespace__ret__namespace);
         }
 
         sqf_return_string mission_name_source() {
@@ -1047,7 +1047,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__isfinal__code_string__ret__bool, code_);
         }
 
-        sqf_return_string hash_value(const game_value& value_) {
+        sqf_return_string hash_value(const game_value &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__object_side__ret__string, value_);
         }
     }  // namespace sqf

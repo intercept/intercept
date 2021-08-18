@@ -1528,7 +1528,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlseteventhandler__control__array__ret__nothing, ctrl_, params);
         }
 
-        rv_color ctrl_background_color(const control& ctrl_) {
+        rv_color ctrl_background_color(const control &ctrl_) {
             return rv_color(host::functions.invoke_raw_unary(__sqf::unary__ctrlbackgroundcolor__control__ret__array, ctrl_));
         }
 
@@ -2355,7 +2355,7 @@ namespace intercept {
             return display(host::functions.invoke_raw_unary(__sqf::unary__finddisplay__scalar__ret__display, value_));
         }
 
-        display display_child(const display& disp_) {
+        display display_child(const display &disp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__displaychild__display__ret__display, disp_);
         }
 

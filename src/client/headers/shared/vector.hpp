@@ -65,7 +65,15 @@ namespace intercept {
                 z = 0;
             }
 
-            constexpr T& operator[](unsigned int index_) {
+            constexpr T& operator[](unsigned int index_) noexcept {
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
+            }
+
+            constexpr T operator[](unsigned int index_) const noexcept {
                 switch (index_) {
                     case (0): return x;
                     case (1): return y;
@@ -192,7 +200,11 @@ namespace intercept {
                 y = copy_.y;
             }
 
-            constexpr T& operator[](unsigned int index_) {
+            constexpr T& operator[](unsigned int index_) noexcept {
+                return (index_ == 0) ? x : y;
+            }
+
+            constexpr T operator[](unsigned int index_) const noexcept {
                 return (index_ == 0) ? x : y;
             }
 

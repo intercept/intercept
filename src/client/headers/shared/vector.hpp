@@ -65,6 +65,14 @@ namespace intercept {
                 z = 0;
             }
 
+            constexpr T& operator[](unsigned int index_) {
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
+            }
+
             constexpr vector3_base& operator= (const vector3_base& other) noexcept { x = other.x; y = other.y; z = other.z; return *this; }
             constexpr vector3_base operator * (const T& val) const noexcept { return vector3_base(x * val, y * val, z * val); }
             constexpr vector3_base operator / (const T& val) const noexcept { T invVal = T(1) / val; return vector3_base(x * invVal, y * invVal, z * invVal); }
@@ -182,6 +190,10 @@ namespace intercept {
             constexpr vector2_base(const vector2_base<T>& copy_) noexcept {
                 x = copy_.x;
                 y = copy_.y;
+            }
+
+            constexpr T& operator[](unsigned int index_) {
+                return (index_ == 0) ? x : y;
             }
 
             constexpr vector2_base& operator= (const vector2_base& other) noexcept { x = other.x; y = other.y; return *this; }

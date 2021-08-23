@@ -66,11 +66,19 @@ namespace intercept {
             }
 
             constexpr T& operator[](unsigned int index_) noexcept {
-                return (&x)[index_];
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
             }
 
             constexpr T operator[](unsigned int index_) const noexcept {
-                return (&x)[index_];
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
             }
 
             constexpr vector3_base& operator= (const vector3_base& other) noexcept { x = other.x; y = other.y; z = other.z; return *this; }

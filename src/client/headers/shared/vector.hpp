@@ -65,6 +65,22 @@ namespace intercept {
                 z = 0;
             }
 
+            constexpr T& operator[](unsigned int index_) noexcept {
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
+            }
+
+            constexpr T operator[](unsigned int index_) const noexcept {
+                switch (index_) {
+                    case (0): return x;
+                    case (1): return y;
+                    default: return z;
+                }
+            }
+
             constexpr vector3_base& operator= (const vector3_base& other) noexcept { x = other.x; y = other.y; z = other.z; return *this; }
             constexpr vector3_base operator * (const T& val) const noexcept { return vector3_base(x * val, y * val, z * val); }
             constexpr vector3_base operator / (const T& val) const noexcept { T invVal = T(1) / val; return vector3_base(x * invVal, y * invVal, z * invVal); }
@@ -102,6 +118,14 @@ namespace intercept {
             constexpr T cos(const vector2_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector2_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
+            //Azimuth from this vector to the other vector in radians
+            constexpr T get_azimuth(const vector3_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            //Azimuth from this vector to the other vector in radians
+            constexpr T get_azimuth(const vector2_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
+            constexpr T get_dir(const vector3_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
+            //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
+            constexpr T get_dir(const vector2_base<T>& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             constexpr T distance(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude(); }
             constexpr T distance(const vector2_base<T>& v) const noexcept { return vector3_base(*this - v).magnitude(); }
             constexpr T distance_squared(const vector3_base& v) const noexcept { return vector3_base(*this - v).magnitude_squared(); }
@@ -184,6 +208,14 @@ namespace intercept {
                 y = copy_.y;
             }
 
+            constexpr T& operator[](unsigned int index_) noexcept {
+                return (index_ == 0) ? x : y;
+            }
+
+            constexpr T operator[](unsigned int index_) const noexcept {
+                return (index_ == 0) ? x : y;
+            }
+
             constexpr vector2_base& operator= (const vector2_base& other) noexcept { x = other.x; y = other.y; return *this; }
             constexpr vector2_base operator * (const T &val) const noexcept { return vector2_base(x * val, y * val); }
             constexpr vector2_base operator / (const T &val) const noexcept { T invVal = T(1) / val; return vector2_base(x * invVal, y * invVal); }
@@ -223,6 +255,14 @@ namespace intercept {
             constexpr T cos(const vector3_base<T>& v) const noexcept { T m = magnitude() * v.magnitude(); if (m == 0.0f) return 0.0f; return dot(v) / m; }
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector3_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
+            //Azimuth from this vector to the other vector in radians
+            constexpr T get_azimuth(const vector2_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            //Azimuth from this vector to the other vector in radians
+            constexpr T get_azimuth(const vector3_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
+            constexpr T get_dir(const vector2_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
+            //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
+            constexpr T get_dir(const vector3_base<T>& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             constexpr T distance(const vector2_base& v) const noexcept { return vector2_base(*this - v).magnitude(); }
             constexpr T distance(const vector3_base<T>& v) const noexcept { return vector2_base(*this - v).magnitude(); }
             constexpr T distance_squared(const vector2_base& v) const noexcept{ return vector2_base(*this - v).magnitude_squared(); }

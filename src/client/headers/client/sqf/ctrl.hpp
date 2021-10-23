@@ -78,6 +78,13 @@ namespace intercept {
             }
         };
 
+        struct rv_ctrl_position {
+            float x, y, w, h;
+            explicit rv_ctrl_position(const game_value& gv_)
+                : x(gv_[0]), y(gv_[1]), w(gv_[2]), h(gv_[3])
+            {}
+        };
+
         struct rv_ct_list {
             int header_index;
             std::vector<control> controls;
@@ -204,7 +211,8 @@ namespace intercept {
         void ctrl_set_positionx(const control &ctrl_, float x_);
         void ctrl_set_positiony(const control &ctrl_, float y_);
 
-        std::vector<float> ctrl_position(const control &ctrl_);
+        rv_ctrl_position ctrl_position(const control &ctrl_);
+
         void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_);
         display ctrl_parent(const control &value_);
         control ctrl_parent_controls_group(const control &value_);
@@ -619,7 +627,8 @@ namespace intercept {
         display create_mission_display(sqf_string_const_ref value0_, const display &value1_);
         control control_null();
         control controls_group_ctrl(const control &value0_, float value1_);
-        control display_ctrl(const display &value0_, float value1_);
+        control display_ctrl(const display &disp_, float idc_);
+        control display_ctrl(float idc_);
         vector3 map_center_on_camera(const control &mini_map_);
 
         vector2 pos_screen_to_world(const control &ctrl_, const vector2 &pos_);
@@ -776,6 +785,9 @@ namespace intercept {
 
         void ctrl_map_set_position(const control &ctrl_, const vector2 &pos_);
         void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
+        rv_ctrl_position ctrl_map_position(const control &map_);
+
+        game_value ctrl_map_mouse_over(const control &map_);
 
         vector2 get_texture_info(sqf_string_const_ref path_);
     }  // namespace sqf

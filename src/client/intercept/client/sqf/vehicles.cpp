@@ -1159,5 +1159,12 @@ namespace intercept {
             return __helpers::__convert_to_vector<rv_sensor_threat>(host::functions.invoke_raw_unary(__sqf::unary__getsensorthreats__object__ret__array, vehicle_));
         }
 
+        void set_max_load(const object &container_, float load_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmaxload__object__scalar__ret__nothing, container_, load_);
+        }
+
+        float maxload(const object& container_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__maxload__object__ret__scalar, container_);
+        }
     }  // namespace sqf
 }  // namespace intercept

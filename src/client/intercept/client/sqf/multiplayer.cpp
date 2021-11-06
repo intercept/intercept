@@ -281,5 +281,9 @@ namespace intercept {
         sqf_return_string_list all_users() {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_nular(__sqf::nular__allusers__ret__array));
         }
+
+        rv_user_info get_user_info(sqf_string_const_ref id_) {
+            return rv_user_info(host::functions.invoke_raw_unary(__sqf::unary__getuserinfo__string__ret__array, id_));
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -41,6 +41,14 @@ namespace intercept {
                   target_position(gv_[6]) {}
         };
 
+        struct rv_vision_mode {
+            int vision_mode;
+            int FLIR_index;
+            explicit rv_vision_mode(const game_value &gv_)
+                : vision_mode(gv_[0]), FLIR_index(gv_[1]) {}
+
+        };
+
         void set_user_mfd_value(const object &object_, int index_, float value_);
         void forget_target(const object &unit_, const object& target_);
         void forget_target(const group &group_, const object& target_);
@@ -75,6 +83,8 @@ namespace intercept {
         float captive_num(const object &unit_);
         sqf_return_string current_command(const object &veh_);
         int current_vision_mode(const object &unit_);
+        rv_vision_mode current_vision_mode(const object &unit_, sqf_string_const_ref weapon_);
+        rv_vision_mode current_vision_mode(const object &vehicle_, const rv_turret_path &turret_path_);
         float current_zeroing(const object &gunner_);
         sqf_return_string face(const object &value_);
         sqf_return_string faction(const object &value_);
@@ -265,5 +275,7 @@ namespace intercept {
         float get_object_fov(const object &unit_);
         vector2 weapon_inertia(const object &unit_);
         rv_zeroing current_zeroing(const object &vehicle_, sqf_string_const_ref weapon_class_, sqf_string_const_ref muzzle_class_);
+
+        object get_connected_uav_unit(const object &unit_);
     }  // namespace sqf
 }  // namespace intercept

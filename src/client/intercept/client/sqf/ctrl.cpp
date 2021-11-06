@@ -1367,8 +1367,12 @@ namespace intercept {
             return display(host::functions.invoke_raw_binary(__sqf::binary__createmissiondisplay__display__string__ret__display, value0_, value1_));
         }
 
-        control display_ctrl(const display &value0_, float value1_) {
-            return control(host::functions.invoke_raw_binary(__sqf::binary__displayctrl__display__scalar__ret__control, value0_, value1_));
+        control display_ctrl(const display &disp_, float idc_) {
+            return control(host::functions.invoke_raw_binary(__sqf::binary__displayctrl__display__scalar__ret__control, disp_, idc_));
+        }
+
+        control display_ctrl(float idc_) {
+            return control(host::functions.invoke_raw_unary(__sqf::unary__displayctrl__scalar__ret__control, idc_));
         }
 
         vector2 slider_range(const float &value_) {
@@ -1495,9 +1499,8 @@ namespace intercept {
             return __helpers::__convert_to_vector<vector3>(ret);
         }
 
-        std::vector<float> ctrl_position(const control &ctrl_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__ctrlposition__control__ret__array, ctrl_);
-            return __helpers::__convert_to_vector<float>(ret);
+        rv_ctrl_position ctrl_position(const control &ctrl_) {
+            return rv_ctrl_position(host::functions.invoke_raw_unary(__sqf::unary__ctrlposition__control__ret__array, ctrl_));
         }
 
         int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_) {
@@ -3195,6 +3198,14 @@ namespace intercept {
 
         void ctrl_map_set_position(const control &ctrl_, float x_, float y_, float width_, float height_) {
             host::functions.invoke_raw_binary(__sqf::binary__ctrlmapsetposition__control__array__ret__nothing, ctrl_, {x_, y_, width_, height_});
+        }
+
+        rv_ctrl_position ctrl_map_position(const control& map_) {
+            return rv_ctrl_position(host::functions.invoke_raw_unary(__sqf::unary__ctrlmapposition__control__ret__array, map_));
+         }
+
+        game_value ctrl_map_mouse_over(const control& map_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlmapmouseover__control__ret__array, map_);
         }
 
         vector2 get_texture_info(sqf_string_const_ref path_) {

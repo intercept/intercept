@@ -162,7 +162,7 @@ namespace intercept {
         }
 
         std::vector<rv_turret_magazine> magazines_all_turrets(const object &obj_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesallturrets__object__ret__array, obj_);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__magazinesallturrets__object_array__ret__array, obj_);
             return __helpers::__convert_to_vector<rv_turret_magazine>(ret);
         }
 

@@ -162,6 +162,14 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__currentvisionmode__object__ret__scalar, unit_);
         }
 
+        rv_vision_mode current_vision_mode(const object& unit_, sqf_string_const_ref weapon_) {
+            return rv_vision_mode(host::functions.invoke_raw_binary(__sqf::binary__currentvisionmode__object__string__ret__array, unit_, weapon_));
+        }
+
+        rv_vision_mode current_vision_mode(const object& vehicle_, const rv_turret_path& turret_path_) {
+            return rv_vision_mode(host::functions.invoke_raw_binary(__sqf::binary__currentvisionmode__object__array__ret__array, vehicle_, turret_path_));
+        }
+
         float current_zeroing(const object &gunner_) {
             return __helpers::__number_unary_object(__sqf::unary__currentzeroing__object__ret__scalar, gunner_);
         }
@@ -930,6 +938,10 @@ namespace intercept {
 
         vector2 weapon_inertia(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__weaponinertia__object__ret__array, unit_);
+        }
+
+        object get_connected_uav_unit(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getconnecteduavunit__object__ret__object, unit_);
         }
     }  // namespace sqf
 }  // namespace intercept

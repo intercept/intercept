@@ -188,6 +188,7 @@ namespace intercept {
         //3D stuff
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_);
         void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_ = "", float shadow_ = 1.0f, float text_size_ = 1.0f, sqf_string_const_ref font_ = "TahomaB", sqf_string_const_ref text_align_ = "center", bool draw_offscreen_ = false);
+        void draw_laser(const vector3 &pos_asl_, const vector3 &dir_, const rv_color &beam_color_, const rv_color &dot_color_, float dot_size_, float beam_thickness_, float max_beam_length_ = -1, bool is_IR = true);
 
         /* potential namespace: particles */
         void set_particle_params(const object &particle_source_, const rv_particle_array &particle_array_);
@@ -208,8 +209,8 @@ namespace intercept {
         void reveal_mine(const side &value0_, const object &value1_);
         bool mine_detected_by(const object &value0_, const side &value1_);
         void add_score_side(const side &value0_, float value1_);
-        void airport_side(int id_);
-        void airport_side(const object &target_);
+        side airport_side(int id_);
+        side airport_side(const object &target_);
         float score_side(const side &value_);
 
         //From contact DLC
@@ -218,7 +219,7 @@ namespace intercept {
         game_value get_graph_values(const rv_graph_value_par& graph_val_par, const std::vector<float>& xy_);
 
 
-
+        std::vector<float> get_person_used_dlcs(const object &unit_);
 
     }  // namespace sqf
 }  // namespace intercept

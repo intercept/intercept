@@ -423,5 +423,7 @@ namespace intercept {
         std::vector<rv_sensor_target> get_sensor_targets(const object &vehicle_);
         std::vector<rv_sensor_threat> get_sensor_threats(const object &vehicle_);
 
+        void set_max_load(const object &container_, float load_);
+        float maxload(const object &container_);
     }  // namespace sqf
 }  // namespace intercept

@@ -465,6 +465,21 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
+        void draw_laser(const vector3& pos_asl_, const vector3& dir_, const rv_color& beam_color_, const rv_color& dot_color_, float dot_size_, float beam_thickness_, float max_beam_length_, bool is_IR) {
+            game_value args({
+                pos_asl_,
+                dir_,
+                beam_color_,
+                dot_color_,
+                dot_size_,
+                beam_thickness_,
+                max_beam_length_,
+                is_IR
+            });
+
+            host::functions.invoke_raw_unary(__sqf::unary__drawlaser__array__ret__nothing, args);
+        }
+
         //particles
         float particles_quality() {
             return __helpers::__retrieve_nular_number(__sqf::nular__particlesquality__ret__scalar);
@@ -540,11 +555,11 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addscoreside__side__scalar__ret__nothing, value0_, value1_);
         }
 
-        void airport_side(int id_) {
-            __helpers::__empty_unary_number(__sqf::unary__airportside__object_scalar__ret__nothing, static_cast<float>(id_));
+        side airport_side(int id_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__airportside__object_scalar__ret__side, static_cast<float>(id_));
         }
-        void airport_side(const object &target_) {
-            __helpers::__empty_unary_number(__sqf::unary__airportside__object_scalar__ret__nothing, target_);
+        side airport_side(const object &target_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__airportside__object_scalar__ret__side, target_);
         }
 
         float score_side(const side &value_) {
@@ -580,6 +595,10 @@ namespace intercept {
             parameter.insert(parameter.end(), xy_.begin(), xy_.end());
 
             return host::functions.invoke_raw_unary(__sqf::unary__getgraphvalues__array__ret__array,parameter);
+        }
+
+        std::vector<float> get_person_used_dlcs(const object& unit_) {
+            return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getpersonuseddlcs__object__ret__array, unit_));
         }
 
     }  // namespace sqf

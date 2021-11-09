@@ -2,8 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON) 
 
-add_definitions(/DINTERCEPT_HOST_DLL=1)
-add_definitions(/DNOMINMAX)
+add_compile_definitions(INTERCEPT_HOST_DLL=1 NOMINMAX)
 
 if (NOT CMAKE_BUILD_TYPE AND CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "No build type selected, default to Debug")
@@ -12,6 +11,7 @@ endif()
 
 option(DEVEL "DEVEL" ON)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
+option(USE_SYSTEM_SPDLOG "USE_SYSTEM_SPDLOG" OFF)
 
 include_directories("common")
 include_directories("controller")
@@ -22,7 +22,12 @@ include_directories("../client/headers")
 include_directories("intercept_dll")
 
 if(DEVEL)
-    add_definitions(-DDEVEL)
+    add_compile_definitions(DEVEL)
+endif()
+if(USE_SYSTEM_SPDLOG)
+    add_compile_definitions(INTERCEPT_SYSTEM_SPDLOG)
+else()
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/system)
 endif()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/common)

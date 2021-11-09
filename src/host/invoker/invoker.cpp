@@ -65,7 +65,7 @@ namespace intercept {
 
     bool invoker::invoker_end_register(const arguments&, std::string&) {
         //#TODO move pre_start to here
-        _intercept_registerTypes_function.clear(); //#TEST
+        // _intercept_registerTypes_function.clear(); //#TEST
         sqf_functions::get().setDisabled();
         init_file_bank_list();
 

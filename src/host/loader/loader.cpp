@@ -15,6 +15,7 @@
 #pragma comment (lib, "Psapi.lib")//GetModuleInformation
 #pragma comment (lib, "version.lib") //GetFileVersionInfoSize
 #endif
+#include "ptraccess.h" // IsBadReadPtr
 //template class intercept::types::rv_allocator<intercept::__internal::gsFunction>;
 //template class intercept::types::rv_allocator<intercept::__internal::gsOperator>;
 //template class intercept::types::rv_allocator<intercept::__internal::gsNular>;
@@ -28,6 +29,59 @@
 #endif
 
 namespace intercept {
+    template<typename count_t>
+    struct gamestate_array {
+        void *ptr;
+        count_t count;
+        count_t capacity;
+
+        inline bool is_valid() {
+            if (IsBadReadPtr(ptr, sizeof(void *))) return false;
+            return capacity >= count;
+        }
+
+        inline void dump(char prefix) {
+            fprintf(stderr, "\t%c_ptr: %p\n\t%c_count: %d\n\t%c_capacity: %d\n", prefix, ptr, prefix, count, prefix, capacity);
+        }
+    };
+
+    typedef struct gamestate_array<int> gamestate_array_t;
+
+    struct gamestate_partial {
+#if defined(_WIN32) || defined(_WIN64)
+        struct gamestate_array<uintptr_t> types;
+#else
+        struct gamestate_array<int> types;
+#endif
+        gamestate_array_t functions;
+        gamestate_array_t operators;
+        gamestate_array_t nulars;
+
+        bool is_valid() {
+            if (types.count != types.capacity) return false;
+            if (!types.is_valid()) return false;
+            if (!functions.is_valid()) return false;
+            if (!operators.is_valid()) return false;
+            if (!nulars.is_valid()) return false;
+            return true;
+        }
+
+        void dump() {
+            std::cerr << '\t' << "size: " << sizeof(struct gamestate_partial) << " (game_state: " << sizeof(game_state) << ')' << std::endl;
+            types.dump('t');
+            functions.dump('f');
+            operators.dump('o');
+            nulars.dump('n');
+        }
+    };
+
+    typedef struct gamestate_partial gamestate_partial_t;
+
+    static inline bool is_valid_gamestate(gamestate_partial_t *p) {
+        if (p == nullptr || IsBadReadPtrTyped(p)) return false;
+        return p->is_valid();
+    }
+
     loader::loader() : _attached(false), _patched(false) {}
 
     loader::~loader() {
@@ -592,42 +646,10 @@ namespace intercept {
         return _sqf_register_funcs;
     }
 
-#ifdef __linux__
-#include <unistd.h>     // getpid...
-    bool IsBadReadPtr(void *ptr, size_t size) {
-        int result = access((const char *) ptr, F_OK);
-        if (result == -1 && errno == EFAULT)
-            return true;
-        return false;
-    }
-
-#endif
-
     uintptr_t loader::find_game_state(uintptr_t stack_base) {
         auto checkValid = [](uintptr_t base) -> bool {
-            if (IsBadReadPtr(reinterpret_cast<void*>(base), 32)) return false;
-            struct size_check {
-                uintptr_t p1;//typearray
-                uintptr_t typeCount;
-                uintptr_t typeCapacity;
-                uintptr_t p2;//functions
-                int f_tableCount{ 0 };
-                int f_count{ 0 };
-                uintptr_t p3;//operators
-                int o_tableCount{ 0 };
-                int o_count{ 0 };
-                uintptr_t p4;//nulars
-                int n_tableCount{ 0 };
-                int n_count{ 0 };
-            };
-            auto size_check_type = reinterpret_cast<size_check*>(base);
-            if (size_check_type->typeCount != size_check_type->typeCapacity) return false; //auto_array size vs capacity. Should be compacted here.
-                                                                          //Check if all the function tables are valid
-            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p1), 32)) return false;
-            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p2), 32)) return false;
-            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p3), 32)) return false;
-            if (IsBadReadPtr(reinterpret_cast<void*>(size_check_type->p4), 32)) return false;
-            return true;
+            auto gs = reinterpret_cast<gamestate_partial_t *>(base);
+            return is_valid_gamestate(gs);
         };
 
         //#ifdef __linux__
@@ -644,11 +666,15 @@ namespace intercept {
         //
         //    if (checkValid(game_state_addr)) return game_state_addr;
 
-        for (uintptr_t i = 0; i < 0x300; i += sizeof(uintptr_t)) {
-            const bool is_valid = checkValid(*reinterpret_cast<uintptr_t *>(stack_base + i));
-            if (is_valid) return *reinterpret_cast<uintptr_t *>(stack_base + i);
+        for (uintptr_t i = 0; i < 0x400; i += sizeof(uintptr_t)) {
+            const uintptr_t to_check = *reinterpret_cast<uintptr_t *>(stack_base + i);
+            if (checkValid(to_check)) {
+                // std::fprintf(stderr, "intercept::loader: Found gamestate ptr at %p as %p\n", stack_base + i, to_check);
+                return to_check;
+            }
         }
 
+        // std::cerr << "intercept::loader: failed to find gamestate pointer" << std::endl;
         return 0x0;
     }
 }

@@ -241,12 +241,12 @@ namespace intercept {
             std::array<size_t,
             #if _WIN64 || __X86_64__
                 10
-            #else
-            #ifdef __linux__
+            #elif defined(_LINUX64)
+                7
+            #elif defined(__linux__)
                 8
             #else
                 11
-            #endif
             #endif
             > securityStuff {};  //Will scale with x64
             //size_t securityStuff[11];

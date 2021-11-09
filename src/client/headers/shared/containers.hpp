@@ -214,19 +214,19 @@ namespace intercept::types {
         /**
          * @brief Increments the reference counter
          */
-        constexpr int add_ref() const noexcept {
+        int add_ref() const noexcept {
             return ++_refcount;
         }
         /**
          * @brief Decrements the reference counter
          */
-        constexpr int dec_ref() const noexcept {
+        int dec_ref() const noexcept {
             return --_refcount;
         }
         /**
          * @brief Returns the reference count
          */
-        constexpr int ref_count() const noexcept {
+        int ref_count() const noexcept {
             return _refcount;
         }
         /**

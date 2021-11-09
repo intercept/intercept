@@ -1,4 +1,5 @@
 #include "search.hpp"
+#include <iostream>
 #include <sstream>
 #include <iterator>
 #include <algorithm>
@@ -60,8 +61,12 @@ namespace intercept::search {
     std::optional<std::string> plugin_searcher::find_extension(const std::string& name) {
         LOG(INFO, "Searching for Extension: {}", name);
         for (auto folder : active_mod_folder_list) {
+#if defined(__amd64__) || defined(__x86_64__)
+            std::string test_path = folder + "/intercept/" + name + "_x64.so";
+#else
             std::string test_path = folder + "/intercept/" + name + ".so";
-
+#endif
+            std::cerr << "intercept::host::extensions: searching path: " << test_path << std::endl;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 return test_path;

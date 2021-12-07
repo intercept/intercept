@@ -283,5 +283,17 @@ namespace intercept {
         bool set_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_, float value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__setcustomsoundcontroller__array__ret__bool, {vehicle_, controller_, value_});
         }
+
+        float get_env_3d_sound_controller(const object &obj_, sqf_string_const_ref controller_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getenv3dsoundcontroller__object__string__ret__scalar, obj_, controller_);
+        }
+
+        std::vector<rv_sound_controller> get_all_env_3d_sound_controllers(const object& obj_) {
+            return __helpers::__convert_to_vector<rv_sound_controller>(host::functions.invoke_raw_unary(__sqf::unary__getallenv3dsoundcontrollers__object__ret__array, obj_));
+        }
+
+        std::vector<object> all_env_3d_sound_sources() {
+            return __helpers::__convert_to_vector<object>(__sqf::nular__allenv3dsoundsources__ret__array);
+        }
     }  // namespace sqf
 }  // namespace intercept

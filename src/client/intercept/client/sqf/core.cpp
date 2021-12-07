@@ -1050,5 +1050,9 @@ namespace intercept {
         sqf_return_string hash_value(const game_value &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__object_side__ret__string, value_);
         }
+
+        bool is_saving() {
+            return host::functions.invoke_raw_nular(__sqf::nular__issaving__ret__bool);
+        }
     }  // namespace sqf
 }  // namespace intercept

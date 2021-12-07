@@ -1163,8 +1163,32 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmaxload__object__scalar__ret__nothing, container_, load_);
         }
 
-        float maxload(const object& container_) {
+        float max_load(const object& container_) {
             return host::functions.invoke_raw_unary(__sqf::unary__maxload__object__ret__scalar, container_);
+        }
+
+        bool is_awake(const object& obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isawake__object__ret__bool, obj_);
+        }
+
+        void awake(const object& obj_, bool awake_) {
+            host::functions.invoke_raw_binary(__sqf::binary__awake__object__bool__ret__nothing, obj_, awake_);
+        }
+
+        bool brakes_disabled(const object& veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__brakesdisabled__object__ret__bool, veh_);
+        }
+
+        void disable_brakes(const object& veh_, bool disable_) {
+            host::functions.invoke_raw_binary(__sqf::binary__disablebrakes__object__bool__ret__nothing, veh_, disable_);
+        }
+
+        std::vector<rv_collision_status> collision_disabled_with(const object& obj_) {
+            return __helpers::__convert_to_vector<rv_collision_status>(host::functions.invoke_raw_unary(__sqf::unary__collisiondisabledwith__object__ret__array, obj_));
+        }
+
+        bool is_allowed_crew_in_immobile(const object& veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isallowedcrewinimmobile__object__ret__bool, veh_);
         }
     }  // namespace sqf
 }  // namespace intercept

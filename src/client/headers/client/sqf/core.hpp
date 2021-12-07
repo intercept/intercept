@@ -328,5 +328,7 @@ namespace intercept {
         bool is_final(const code &code_);
 
         sqf_return_string hash_value(const game_value &value_);
+
+        bool is_saving();
     }  // namespace sqf
 }  // namespace intercept

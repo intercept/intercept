@@ -943,5 +943,9 @@ namespace intercept {
         object get_connected_uav_unit(const object& unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getconnecteduavunit__object__ret__object, unit_);
         }
+
+        sqf_return_string pose(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__pose__object__ret__string, unit_);
+        }
     }  // namespace sqf
 }  // namespace intercept

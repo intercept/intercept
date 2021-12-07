@@ -1,4 +1,4 @@
-﻿#include "actions.hpp"
+#include "actions.hpp"
 #include "client/pointers.hpp"
 #include "common_helpers.hpp"
 
@@ -139,15 +139,27 @@ namespace intercept {
         }
 
         sqf_return_string key_image(float value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__keyimage__scalar__ret__text, value_);
+            return host::functions.invoke_raw_unary(__sqf::unary__keyimage__string_scalar__ret__text, value_);
         }
 
         sqf_return_string key_name(float value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__keyname__scalar__ret__string, value_);
+            return host::functions.invoke_raw_unary(__sqf::unary__keyname__string_scalar__ret__string, value_);
         }
 
         sqf_return_string commanding_menu() {
             return __helpers::__retrieve_nular_string(__sqf::nular__commandingmenu__ret__string);
+        }
+
+        float input_controller(float input_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__inputcontroller__scalar__ret__scalar, input_);
+        }
+
+        float input_mouse(float button_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__inputmouse__scalar__ret__scalar, button_);
+        }
+
+        bool input_mouse(sqf_string_const_ref combo_code_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__inputmouse__string__ret__bool, combo_code_);
         }
 
     }  // namespace sqf

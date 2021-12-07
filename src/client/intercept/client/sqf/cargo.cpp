@@ -247,7 +247,7 @@ namespace intercept {
         }
 
         object attached_to(const object &obj_) {
-            return object(host::functions.invoke_raw_unary(__sqf::unary__attachedto__object__ret__array, obj_));
+            return object(host::functions.invoke_raw_unary(__sqf::unary__attachedto__object__ret__object, obj_));
         }
 
         void attach_to(const object &object1_, const object &object2_, const vector3 &offset_, sqf_string_const_ref memPoint_, bool follow_bone_) {

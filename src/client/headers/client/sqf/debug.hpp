@@ -61,7 +61,7 @@ namespace intercept {
         std::vector<script> diag_active_mission_fsms();
         std::vector<script> diag_active_sqf_scripts();
         std::vector<script> diag_active_sqs_scripts();
-        std::vector<script> diag_active_scripts();
+        std::vector<float> diag_active_scripts();
         auto_array<game_value> diag_all_mission_eventhandlers();
         float diag_delta_time();
 

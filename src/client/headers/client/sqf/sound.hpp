@@ -71,12 +71,18 @@ namespace intercept {
             float radio;
             float von;
 
-            rv_audio_options(const game_value& data_) :
+            rv_audio_options(const game_value &data_) :
                 effects(data_[0]),
                 music(data_[1]),
                 radio(data_[2]),
                 von(data_[3]) {
             }
+        };
+
+        struct rv_sound_controller {
+            sqf_string name;
+            float value;
+            explicit rv_sound_controller(const game_value &gv_) : name(gv_[0]), value(gv_[1]) {}
         };
 
         rv_audio_options get_audio_option_volumes();
@@ -96,5 +102,10 @@ namespace intercept {
         float get_custom_sound_controller_count(const object &vehicle_);
         float get_player_von_volume(const object &unit_);
         bool set_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_, float value_);
+
+        std::vector<rv_sound_controller> get_all_env_3d_sound_controllers(const object &obj_);
+        float get_env_3d_sound_controller(const object &obj_, sqf_string_const_ref controller_);
+
+        std::vector<object> all_env_3d_sound_sources();
     }  // namespace sqf
 }  // namespace intercept

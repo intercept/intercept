@@ -143,6 +143,12 @@ namespace intercept {
                   sensor(gv_[2]) {}
         };
 
+        struct rv_collision_status {
+            object obj;
+            bool mutual;
+            explicit rv_collision_status(const game_value &gv_) : obj(gv_[0]), mutual(gv_[1]) {}
+        };
+
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
         sqf_return_string get_forced_flag_texture(const object &flag_pole_);
@@ -424,6 +430,16 @@ namespace intercept {
         std::vector<rv_sensor_threat> get_sensor_threats(const object &vehicle_);
 
         void set_max_load(const object &container_, float load_);
-        float maxload(const object &container_);
+        float max_load(const object &container_);
+
+        bool is_awake(const object &obj_);
+        void awake(const object &obj_, bool awake_);
+
+        bool brakes_disabled(const object &veh_);
+        void disable_brakes(const object &veh_, bool disable_);
+
+        std::vector<rv_collision_status> collision_disabled_with(const object &obj_);
+
+        bool is_allowed_crew_in_immobile(const object &veh_);
     }  // namespace sqf
 }  // namespace intercept

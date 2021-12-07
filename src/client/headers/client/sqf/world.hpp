@@ -178,6 +178,104 @@ namespace intercept {
             }
         };
 
+        struct rv_rain_parameters {
+            sqf_string rainDropTexture;
+            float texDropCount;
+            float minRainDensity;
+            float effectRadius;
+            float windCoef;
+            float dropSpeed;
+            float rndSpeed;
+            float rndDir;
+            float dropWidth;
+            float dropHeight;
+            rv_color dropColor;
+            float lumSunFront;
+            float lumSunBack;
+            float refractCoef;
+            float refractSaturation;
+            bool snow;
+            bool dropColorStrong;
+            explicit rv_rain_parameters(const game_value &gv_)
+                : rainDropTexture(gv_[0]),
+                  texDropCount(gv_[1]),
+                  minRainDensity(gv_[2]),
+                  effectRadius(gv_[3]),
+                  windCoef(gv_[4]),
+                  dropSpeed(gv_[5]),
+                  rndSpeed(gv_[6]),
+                  rndDir(gv_[7]),
+                  dropWidth(gv_[8]),
+                  dropHeight(gv_[9]),
+                  dropColor(gv_[10]),
+                  lumSunFront(gv_[11]),
+                  lumSunBack(gv_[12]),
+                  refractCoef(gv_[13]),
+                  refractSaturation(gv_[14]),
+                  snow(gv_[15]),
+                  dropColorStrong(gv_[16])
+            {
+            }
+            rv_rain_parameters(
+                sqf_string_const_ref rainDropTexture_,
+                float texDropCount_,
+                float minRainDensity_,
+                float effectRadius_,
+                float windCoef_,
+                float dropSpeed_,
+                float rndSpeed_,
+                float rndDir_,
+                float dropWidth_,
+                float dropHeight_,
+                const rv_color& dropColor_,
+                float lumSunFront_,
+                float lumSunBack_,
+                float refractCoef_,
+                float refractSaturation_,
+                bool snow_,
+                bool dropColorStrong_) : rainDropTexture(rainDropTexture_),
+                                         texDropCount(texDropCount_),
+                                         minRainDensity(minRainDensity_),
+                                         effectRadius(effectRadius_),
+                                         windCoef(windCoef_),
+                                         dropSpeed(dropSpeed_),
+                                         rndSpeed(rndSpeed_),
+                                         rndDir(rndDir_),
+                                         dropWidth(dropWidth_),
+                                         dropHeight(dropHeight_),
+                                         dropColor(dropColor_),
+                                         lumSunFront(lumSunFront_),
+                                         lumSunBack(lumSunBack_),
+                                         refractCoef(refractCoef_),
+                                         refractSaturation(refractSaturation_),
+                                         snow(snow_),
+                                         dropColorStrong(dropColorStrong_)
+            {
+            }
+
+            explicit operator game_value() const {
+                return {
+                    rainDropTexture,
+                    texDropCount,
+                    minRainDensity,
+                    effectRadius,
+                    windCoef,
+                    dropSpeed,
+                    rndSpeed,
+                    rndDir,
+                    dropWidth,
+                    dropHeight,
+                    dropColor,
+                    lumSunFront,
+                    lumSunBack,
+                    refractCoef,
+                    refractSaturation,
+                    snow,
+                    dropColorStrong
+                };
+            }
+        };
+
         rv_fog_parameters fog_params();
 
         struct rv_rendering_distances {
@@ -213,6 +311,9 @@ namespace intercept {
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
         void set_gusts(float time_, float gusts_value_);
         void set_rain(float time_, float rain_value_);
+        void set_rain(const config &cfg_);
+        void set_rain(const rv_rain_parameters &rain_params_);
+        void set_humidity(float value_);
         void set_rainbow(float time_, float rainbow_value_);
         void set_overcast(float time_, float overcast_value_);
         void set_wind_dir(float time_, float wind_value_);
@@ -310,6 +411,7 @@ namespace intercept {
                   white_surf_temp(gv_[2]) {}
         };
 
+        rv_rain_parameters rain_params();
         rv_ambient_temperature ambient_temperature();
     }  // namespace sqf
 }  // namespace intercept

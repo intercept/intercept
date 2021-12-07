@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -43,5 +43,8 @@ namespace intercept {
         rv_action_params action_params(const object &entity_, int id_);
         void set_user_action_text(const object &object_, int action_index_, std::variant<std::string, rv_text> text_menu_, std::variant<std::string, rv_text> text_window_background_, std::variant<std::string, rv_text> text_window_foreground_);
 
+        float input_controller(float input_);
+        float input_mouse(float button_);
+        bool input_mouse(sqf_string_const_ref combo_code_);
     }  // namespace sqf
 }  // namespace intercept

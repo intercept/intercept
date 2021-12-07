@@ -190,6 +190,14 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setrain__scalar__scalar__ret__nothing, time_, rain_value_);
         }
 
+        void set_rain(const config &cfg_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setrain__config__ret__nothing, cfg_);
+        }
+
+        void set_rain(const rv_rain_parameters &rain_params_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setrain__array__ret__nothing, (game_value)rain_params_);
+        }
+
         void set_rainbow(float time_, float rainbow_value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setrainbow__scalar__scalar__ret__nothing, time_, rainbow_value_);
         }
@@ -613,6 +621,14 @@ namespace intercept {
 
         rv_ambient_temperature ambient_temperature() {
             return rv_ambient_temperature(host::functions.invoke_raw_nular(__sqf::nular__ambienttemperature__ret__array));
+        }
+
+        void set_humidity(float value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__sethumidity__scalar__ret__nothing, value_);
+        }
+
+        rv_rain_parameters rain_params() {
+            return rv_rain_parameters(host::functions.invoke_raw_nular(__sqf::nular__rainparams__ret__array));
         }
     }  // namespace sqf
 }  // namespace intercept

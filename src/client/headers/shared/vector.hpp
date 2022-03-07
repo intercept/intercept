@@ -25,18 +25,12 @@ namespace intercept {
             T y;
             T z;
 
-            vector3_base() noexcept
+            constexpr vector3_base() noexcept : x{0}, y{0}, z{0}
             {
-                x = 0;
-                y = 0;
-                z = 0;
             }
 
-            vector3_base(const T x_, const T y_, const T z_) noexcept
+            constexpr vector3_base(const T x_, const T y_, const T z_) noexcept : x{x_}, y{y_}, z{z_}
             {
-                x = x_;
-                y = y_;
-                z = z_;
             }
 
             vector3_base(std::istream & read_) {
@@ -46,23 +40,14 @@ namespace intercept {
                 read_.read(reinterpret_cast<char *>(&z), sizeof(T));
             }
 
-            explicit vector3_base(const float *buffer) noexcept {
-                x = buffer[0];
-                y = buffer[1];
-                z = buffer[2];
+            explicit vector3_base(const float* buffer) noexcept : x{buffer[0]}, y{buffer[1]}, z{buffer[2]} {
             }
 
-            constexpr vector3_base(const vector3_base& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
-                z = copy_.z;
+            constexpr vector3_base(const vector3_base& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
             }
 
             //Allow operations between vector2 and vector3; in the case of vector2, we always assume z = 0 (which is why operator/ was not added)
-            constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
-                z = 0;
+            constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{0} {
             }
 
             constexpr T& operator[](unsigned int index_) noexcept {
@@ -175,37 +160,25 @@ namespace intercept {
             T x;
             T y;
 
-            constexpr vector2_base() noexcept
-            {
-                x = 0;
-                y = 0;
+            constexpr vector2_base() noexcept : x{0}, y{0} {
             }
 
-            constexpr vector2_base(const T x_, const T y_) noexcept
-            {
-                x = x_;
-                y = y_;
+            constexpr vector2_base(const T x_, const T y_) noexcept : x{x_}, y{y_} {
             }
 
-            vector2_base(std::istream & read_) {
+            vector2_base(std::istream& read_) {
                 // Constructor to read from a stream
-                read_.read(reinterpret_cast<char *>(&x), sizeof(T));
-                read_.read(reinterpret_cast<char *>(&y), sizeof(T));
+                read_.read(reinterpret_cast<char*>(&x), sizeof(T));
+                read_.read(reinterpret_cast<char*>(&y), sizeof(T));
             }
 
-            explicit vector2_base(const float *buffer) {
-                x = buffer[0];
-                y = buffer[1];
+            explicit vector2_base(const float* buffer) noexcept : x{buffer[0]}, y{buffer[1]} {
             }
 
-            constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
+            constexpr vector2_base(const vector2_base& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
-            constexpr vector2_base(const vector2_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
+            constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
             constexpr T& operator[](unsigned int index_) noexcept {

@@ -643,6 +643,10 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
         }
 
+        sqf_return_string_list selection_names(const object &object_, float lod_res_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, lod_res_));
+        }
+
         sqf_return_string_list selection_names(const object &object_, rv_selection_lods lod_) {
             game_value lod_name;
             switch (lod_) {
@@ -669,10 +673,6 @@ namespace intercept {
                     break;
             }
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
-        }
-
-        sqf_return_string_list selection_names(const object &object_, float lod_index_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, lod_index_));
         }
 
         void switch_camera(const object &target_) {

@@ -234,7 +234,7 @@ namespace intercept {
                 float refractCoef_,
                 float refractSaturation_,
                 bool snow_,
-                bool dropColorStrong_) : rainDropTexture(rainDropTexture_),
+                bool dropColorStrong_) : rainDropTexture(static_cast<std::string_view>(rainDropTexture_)),
                                          texDropCount(texDropCount_),
                                          minRainDensity(minRainDensity_),
                                          effectRadius(effectRadius_),

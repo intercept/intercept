@@ -35,7 +35,7 @@ namespace intercept {
 
                 is_double_tap = ret_array[2];
                 main_dik_code = main_array[0];
-                main_device = main_array[1];
+                main_device = sqf_string(main_array[1]);
                 if (main_array.size() > 1)
                     device_id = main_array[2];
 
@@ -44,7 +44,7 @@ namespace intercept {
                     return;
 
                 combo_dik_code = combo_array[0];
-                combo_device = combo_array[1];
+                combo_device = sqf_string(combo_array[1]);
             }
         };
 

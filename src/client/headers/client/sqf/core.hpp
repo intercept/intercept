@@ -129,6 +129,7 @@ namespace intercept {
         bool finite(float value_);
         float exec_fsm(sqf_string_const_ref value_);
         void save_profile_namespace();
+        bool save_mission_profile_namespace();
         void exit();
         sqf_return_string copy_from_clipboard();
         void copy_to_clipboard(sqf_string_const_ref text_);
@@ -195,6 +196,7 @@ namespace intercept {
         sqf_return_string profile_namesteam();
         rv_namespace local_namespace();
         rv_namespace server_namespace();
+        rv_namespace mission_profile_namespace();
 
         object obj_null();
         side blufor();
@@ -223,12 +225,16 @@ namespace intercept {
         game_value on_show_new_object(const object &control_, sqf_string_const_ref command_);
         //eventhandler
         int add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_);
+        int add_event_handler(const group &group_, sqf_string_const_ref type_, const code &command_);
         int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_);
+        int add_event_handler(const group &group_, sqf_string_const_ref type_, sqf_string_const_ref command_);
         void remove_event_handler(const object &object_, sqf_string_const_ref event_, int index_);
+        void remove_event_handler(const group &group_, sqf_string_const_ref event_, int index_);
         int add_mission_event_handler(sqf_string_const_ref type_, const code &command_);
         int add_mission_event_handler(sqf_string_const_ref type_, sqf_string_const_ref command_);
         void remove_all_mission_event_handlers(sqf_string_const_ref value_);
-        void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_);
+        void remove_all_event_handlers(const object &object_, sqf_string_const_ref type_);
+        void remove_all_event_handlers(const group &group_, sqf_string_const_ref type_);
         void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_);
         void remove_mission_event_handler(sqf_string_const_ref type_, int index_);
         int add_mp_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref expression_);
@@ -328,6 +334,8 @@ namespace intercept {
         bool is_final(const code &code_);
 
         sqf_return_string hash_value(const game_value &value_);
+
+        bool is_mission_profile_namespace_loaded();
 
         bool is_saving();
     }  // namespace sqf

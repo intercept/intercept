@@ -70,6 +70,11 @@ namespace intercept {
         void collect_eden_history(const code &code_) {
             host::functions.invoke_raw_unary(__sqf::unary__collect3denhistory__code__ret__nothing, code_);
         }
+
+        void collect_eden_history(sqf_string_const_ref text_, sqf_string_const_ref tooltip_, sqf_string_const_ref icon_, const code& code_) {
+            host::functions.invoke_raw_binary(__sqf::binary__collect3denhistory__array__code__ret__nothing, {text_, tooltip_, icon_}, code_);
+        }
+
         float get_eden_entity_id(const object &entity_) {
             return host::functions.invoke_raw_unary(__sqf::unary__get3denentityid__any__ret__scalar, entity_);
         }

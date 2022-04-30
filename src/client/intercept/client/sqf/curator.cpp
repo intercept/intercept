@@ -33,6 +33,14 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__showncuratorcompass__ret__bool);
         }
 
+        std::vector<rv_curator_cam_area> curator_camera_area(const object &curator_) {
+            return __helpers::__convert_to_vector<rv_curator_cam_area>(host::functions.invoke_raw_unary(__sqf::unary__curatorcameraarea__object__ret__array, curator_));
+        }
+
+        rv_curator_cam_area curator_editing_area(const object &curator_) {
+            return rv_curator_cam_area(host::functions.invoke_raw_unary(__sqf::unary__curatoreditingarea__object__ret__array, curator_));
+        }
+
         float curator_camera_area_ceiling(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__curatorcameraareaceiling__object__ret__scalar, value_);
         }

@@ -212,15 +212,15 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__vectordirvisual__object__ret__array, obj_);
         }
 
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_) {
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, selection_name_);
         }
 
-        vector3 selection_positon(const object& obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
+        vector3 selection_position(const object& obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_});
         }
 
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
             game_value lod_name;
             switch (lod_) {
                 case intercept::sqf::rv_selection_lods::Memory:
@@ -248,11 +248,11 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name)});
         }
         
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float vis_lod_index_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, vis_lod_index_});
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_res_});
         }
         
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
             return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_} );
         }
 

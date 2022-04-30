@@ -86,6 +86,10 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropes__object__ret__array, obj_));
         }
 
+        std::vector<object> ropes_attached_to(const object &cargo_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropesattachedto__object__ret__array, cargo_));
+         }
+
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_) {
             game_value params({from_obj_,
                                from_point_,
@@ -234,7 +238,11 @@ namespace intercept {
                                     offset_,
                                     rope_end_down_dir_});
 
-            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__array__object__ret__nothing, params_left, rope_);
+            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__object_array__object__ret__nothing, params_left, rope_);
+        }
+
+        void rope_attach_to(const object &entity_, const object &rope_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ropeattachto__object_array__object__ret__nothing, entity_, rope_);
         }
 
         void rope_detach(const object &vehicle_, const object &rope_) {
@@ -275,7 +283,7 @@ namespace intercept {
         }
 
         std::vector<object> rope_segments(const object &rope_) {
-            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropesegments__object__ret__object, rope_));
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__ropesegments__object__ret__array, rope_));
         }
     }  // namespace sqf
 }  // namespace intercept

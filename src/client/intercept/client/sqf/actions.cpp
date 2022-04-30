@@ -56,6 +56,10 @@ namespace intercept {
             return r_arr;
         }
 
+        std::vector<rv_action_key_details> action_keys_ex(sqf_string_const_ref user_action_) {
+            return __helpers::__convert_to_vector<rv_action_key_details>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysex__string__ret__array, user_action_));
+        }
+
         rv_text action_keys_images(sqf_string_const_ref user_action_) {
             return rv_text(host::functions.invoke_raw_unary(__sqf::unary__actionkeysimages__string_array__ret__text, user_action_));
         }

@@ -253,6 +253,10 @@ namespace intercept {
             __helpers::__empty_unary_number(__sqf::unary__setviewdistance__scalar__ret__nothing, value_);
         }
 
+        void set_pip_view_distance(float value_) {
+            __helpers::__empty_unary_number(__sqf::unary__setpipviewdistance__scalar__ret__nothing, value_);
+        }
+
         void skip_time(float value_) {
             __helpers::__empty_unary_number(__sqf::unary__skiptime__scalar__ret__nothing, value_);
         }
@@ -321,6 +325,10 @@ namespace intercept {
 
         float view_distance() {
             return __helpers::__retrieve_nular_number(__sqf::nular__viewdistance__ret__scalar);
+        }
+
+        float get_pip_view_distance() {
+            return __helpers::__retrieve_nular_number(__sqf::nular__getpipviewdistance__ret__scalar);
         }
 
         void enable_caustics(bool value_) {
@@ -409,6 +417,10 @@ namespace intercept {
 
         object nearest_object(const vector3 &pos_, float id_) {
             return host::functions.invoke_raw_binary(__sqf::binary__nearestobject__array__scalar__ret__object, pos_, id_);
+        }
+
+        sqf_return_string get_object_id(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getobjectid__object__ret__string, obj_);
         }
 
         std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_) {

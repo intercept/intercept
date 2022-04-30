@@ -1,5 +1,10 @@
 #pragma once
 #include "../shared.hpp"
+
+#ifdef INTERCEPT_GLM_INTEROP
+#include <glm.hpp>
+#endif //INTERCEPT_GLM_INTEROP
+
 namespace intercept {
     constexpr float pi = 3.14159265358979323846f;
     namespace types {
@@ -49,6 +54,15 @@ namespace intercept {
             //Allow operations between vector2 and vector3; in the case of vector2, we always assume z = 0 (which is why operator/ was not added)
             constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{0} {
             }
+
+#ifdef INTERCEPT_GLM_INTEROP
+            constexpr vector3_base(const glm::vec3& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
+            }
+
+            operator glm::vec3() const {
+                return {x, y, z};
+            }
+#endif  //INTERCEPT_GLM_INTEROP
 
             constexpr T& operator[](unsigned int index_) noexcept {
                 switch (index_) {
@@ -104,9 +118,9 @@ namespace intercept {
             constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector2_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector3_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector3_base& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector2_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector2_base<T>& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
             constexpr T get_dir(const vector3_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
@@ -181,6 +195,15 @@ namespace intercept {
             constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
+#ifdef INTERCEPT_GLM_INTEROP
+            constexpr vector2_base(const glm::vec2& copy_) noexcept : x{copy_.x}, y{copy_.y} {
+            }
+
+            operator glm::vec2() const {
+                return {x, y};
+            }
+#endif  //INTERCEPT_GLM_INTEROP
+
             constexpr T& operator[](unsigned int index_) noexcept {
                 return (index_ == 0) ? x : y;
             }
@@ -229,9 +252,9 @@ namespace intercept {
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector3_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector2_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector2_base& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector3_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector3_base<T>& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
             constexpr T get_dir(const vector2_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi

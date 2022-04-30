@@ -31,6 +31,16 @@ namespace intercept {
             return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_unary(__sqf::unary__tvcursel__control__ret__array, ctrl_));
         }
 
+        std::vector<std::vector<int>> tv_selection(const control &ctrl_) {
+            auto game_array = host::functions.invoke_raw_unary(__sqf::unary__tvselection__control__ret__array, ctrl_).to_array();
+            std::vector<std::vector<int>> paths;
+            paths.reserve(game_array.size());
+            for (auto& gv : game_array) {
+                paths.emplace_back(__helpers::__convert_to_vector<int>(gv));
+            }
+            return paths;
+        }
+
         void tv_collapse(int idc_, const std::vector<int> &path_) {
             auto_array<game_value> path(path_.begin(), path_.end());
 
@@ -127,7 +137,7 @@ namespace intercept {
             game_value params({static_cast<float>(idc_),
                                std::move(path)});
 
-            return host::functions.invoke_raw_unary(__sqf::unary__tvpicture__array__ret__string, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__tvpictureright__array__ret__string, params);
         }
 
         sqf_return_string tv_picture_right(const control &ctrl_, const std::vector<int> &path_) {
@@ -2191,6 +2201,10 @@ namespace intercept {
             __helpers::__empty_unary_number(__sqf::unary__titlefadeout__scalar__ret__nothing, value_);
         }
 
+        game_value active_title_effect_params(float title_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__activetitleeffectparams__scalar__ret__array, title_);
+        }
+
         bool open_dlc_page(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__opendlcpage__scalar__ret__bool, value_);
         }
@@ -2633,6 +2647,10 @@ namespace intercept {
 
         bool create_dialog(sqf_string_const_ref dialog_name_) {
             return __helpers::__bool_unary_string(__sqf::unary__createdialog__string__ret__bool, dialog_name_);
+        }
+
+        display create_dialog(sqf_string_const_ref dialog_name_, bool force_on_top_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__createdialog__array__ret__display, {dialog_name_, force_on_top_});
         }
 
         void hc_show_bar(bool value_) {

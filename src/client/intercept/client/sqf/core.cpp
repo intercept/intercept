@@ -279,6 +279,10 @@ namespace intercept {
             __helpers::__empty_nular(__sqf::nular__saveprofilenamespace__ret__nothing);
         }
 
+        bool save_mission_profile_namespace() {
+            return host::functions.invoke_raw_nular(__sqf::nular__savemissionprofilenamespace__ret__bool);
+        }
+
         void copy_to_clipboard(sqf_string_const_ref text_) {
             __helpers::__empty_unary_string(__sqf::unary__copytoclipboard__string__ret__nothing, text_);
         }
@@ -830,12 +834,24 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__object__array__ret__nothing, object_, {event_, index_});
         }
 
+        void remove_event_handler(const group &group_, sqf_string_const_ref event_, int index_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removeeventhandler__group__array__ret__nothing, group_, {event_, index_});
+        }
+
         int add_event_handler(const object &object_, sqf_string_const_ref type_, const code &command_) {
             return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, {type_, command_});
         }
 
+        int add_event_handler(const group &group_, sqf_string_const_ref type_, const code &command_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, group_, {type_, command_});
+        }
+
         int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
             return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, object_, {type_, command_});
+        }
+
+        int add_event_handler(const group &group_, sqf_string_const_ref type_, sqf_string_const_ref command_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, group_, {type_, command_});
         }
 
         void remove_all_mission_event_handlers(sqf_string_const_ref value_) {
@@ -917,6 +933,10 @@ namespace intercept {
 
         void remove_all_event_handlers(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__removealleventhandlers__object__string__ret__nothing, value0_, value1_);
+        }
+
+        void remove_all_event_handlers(const group &group_, sqf_string_const_ref type_) {
+            host::functions.invoke_raw_binary(__sqf::binary__removealleventhandlers__group__string__ret__nothing, group_, type_);
         }
 
         void remove_all_mpevent_handlers(const object &value0_, sqf_string_const_ref value1_) {
@@ -1007,6 +1027,10 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__servernamespace__ret__namespace);
         }
 
+         rv_namespace mission_profile_namespace() {
+            return host::functions.invoke_raw_nular(__sqf::nular__missionprofilenamespace__ret__namespace);
+        }
+
         sqf_return_string mission_name_source() {
             return host::functions.invoke_raw_nular(__sqf::nular__missionnamesource__ret__string);
         }
@@ -1049,6 +1073,10 @@ namespace intercept {
 
         sqf_return_string hash_value(const game_value &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__object_side__ret__string, value_);
+        }
+
+        bool is_mission_profile_namespace_loaded() {
+            return host::functions.invoke_raw_nular(__sqf::nular__ismissionprofilenamespaceloaded__ret__bool);
         }
 
         bool is_saving() {

@@ -256,6 +256,86 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_} );
         }
 
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_, "AveragePoint"});
+        }
+
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+                case intercept::sqf::rv_selection_lods::Memory:
+                    lod_name = "Memory"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::Geometry:
+                    lod_name = "Geometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::FireGeometry:
+                    lod_name = "FireGeometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::LandContact:
+                    lod_name = "LandContact"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::HitPoints:
+                    lod_name = "HitPoints"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
+                default:
+                    lod_name = ""sv;
+                    break;
+            }
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name), "AveragePoint"});
+        }
+
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_res_, "AveragePoint"});
+        }
+
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_, "AveragePoint"});
+        }
+
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
+            return rv_bounding_box(host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_, "BoundingBox"}));
+        }
+
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+                case intercept::sqf::rv_selection_lods::Memory:
+                    lod_name = "Memory"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::Geometry:
+                    lod_name = "Geometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::FireGeometry:
+                    lod_name = "FireGeometry"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::LandContact:
+                    lod_name = "LandContact"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::HitPoints:
+                    lod_name = "HitPoints"sv;
+                    break;
+                case intercept::sqf::rv_selection_lods::ViewGeometry:
+                    lod_name = "ViewGeometry"sv;
+                    break;
+                default:
+                    lod_name = ""sv;
+                    break;
+            }
+            return rv_bounding_box(host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name), "BoundingBox"}));
+        }
+
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_) {
+            return rv_bounding_box(host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_res_, "BoundingBox"}));
+        }
+
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_, "BoundingBox"}));
+        }
+
         std::pair<vector3, vector3> selection_vector_dir_and_up(const object& obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
             game_value lod_name;
             switch (lod_) {

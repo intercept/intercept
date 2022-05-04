@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 209.149274 - Diag
+//Exported Pointer Assignments For: Arma 3 209.149299 - Diag
 
 
 // Unary Functions
@@ -862,6 +862,7 @@ __sqf::unary__nearestbuilding__array__ret__object = (unary_function)host::functi
 __sqf::unary__nearestlocation__array__ret__location = (unary_function)host::functions.get_unary_function_typed("nearestlocation"sv, "ARRAY"sv);
 __sqf::unary__nearestlocations__array__ret__array = (unary_function)host::functions.get_unary_function_typed("nearestlocations"sv, "ARRAY"sv);
 __sqf::unary__nearestlocationwithdubbing__array__ret__location = (unary_function)host::functions.get_unary_function_typed("nearestlocationwithdubbing"sv, "ARRAY"sv);
+__sqf::unary__nearestmines__array__ret__array = (unary_function)host::functions.get_unary_function_typed("nearestmines"sv, "ARRAY"sv);
 __sqf::unary__nearestobject__array__ret__object = (unary_function)host::functions.get_unary_function_typed("nearestobject"sv, "ARRAY"sv);
 __sqf::unary__nearestobjects__array__ret__array = (unary_function)host::functions.get_unary_function_typed("nearestobjects"sv, "ARRAY"sv);
 __sqf::unary__nearestterrainobjects__array__ret__array = (unary_function)host::functions.get_unary_function_typed("nearestterrainobjects"sv, "ARRAY"sv);
@@ -1409,6 +1410,7 @@ __sqf::binary__addweaponturret__object__array__ret__nothing = (binary_function)h
 __sqf::binary__addweaponwithattachmentscargo__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponwithattachmentscargo"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__addweaponwithattachmentscargoglobal__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("addweaponwithattachmentscargoglobal"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__aimedattarget__object__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("aimedattarget"sv, "OBJECT"sv, "ARRAY"sv);
+__sqf::binary__allobjects__scalar__scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("allobjects"sv, "SCALAR"sv, "SCALAR"sv);
 __sqf::binary__allow3dmode__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allow3dmode"sv, "CONTROL"sv, "BOOL"sv);
 __sqf::binary__allowcrewinimmobile__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allowcrewinimmobile"sv, "OBJECT"sv, "BOOL"sv);
 __sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allowcuratorlogicignoreareas"sv, "OBJECT"sv, "BOOL"sv);
@@ -2182,7 +2184,7 @@ __sqf::binary__setammocargo__object__scalar__ret__nothing = (binary_function)hos
 __sqf::binary__setammoonpylon__object__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setammoonpylon"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__setanimspeedcoef__object__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setanimspeedcoef"sv, "OBJECT"sv, "SCALAR"sv);
 __sqf::binary__setattributes__text_string__array__ret__text = (binary_function)host::functions.get_binary_function_typed("setattributes"sv, "STRING"sv, "ARRAY"sv);
-__sqf::binary__setautonomous__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setautonomous"sv, "OBJECT"sv, "BOOL"sv);
+__sqf::binary__setautonomous__object__bool__ret__bool = (binary_function)host::functions.get_binary_function_typed("setautonomous"sv, "OBJECT"sv, "BOOL"sv);
 __sqf::binary__setbehaviour__object_group__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setbehaviour"sv, "GROUP"sv, "STRING"sv);
 __sqf::binary__setbehaviourstrong__object_group__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setbehaviourstrong"sv, "GROUP"sv, "STRING"sv);
 __sqf::binary__setbleedingremaining__object__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("setbleedingremaining"sv, "OBJECT"sv, "SCALAR"sv);

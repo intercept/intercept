@@ -843,7 +843,7 @@ namespace intercept {
         }
 
         int add_event_handler(const group &group_, sqf_string_const_ref type_, const code &command_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__object__array__ret__nothing_scalar, group_, {type_, command_});
+            return host::functions.invoke_raw_binary(__sqf::binary__addeventhandler__group__array__ret__nothing_scalar, group_, {type_, command_});
         }
 
         int add_event_handler(const object &object_, sqf_string_const_ref type_, sqf_string_const_ref command_) {

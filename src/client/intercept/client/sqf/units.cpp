@@ -979,5 +979,21 @@ namespace intercept {
         sqf_return_string get_optics_mode(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getopticsmode__object__ret__string, unit_);
         }
+
+        sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, weapon_));
+        }
+
+        sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, {weapon_, muzzle_}));
+        }
+
+        sqf_return_string_list compatible_items(sqf_string_const_ref weapon_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, weapon_));
+        }
+
+        sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, {weapon_, slot_}));
+        }
     }  // namespace sqf
 }  // namespace intercept

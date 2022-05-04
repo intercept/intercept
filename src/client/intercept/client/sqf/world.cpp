@@ -642,5 +642,23 @@ namespace intercept {
         rv_rain_parameters rain_params() {
             return rv_rain_parameters(host::functions.invoke_raw_nular(__sqf::nular__rainparams__ret__array));
         }
+
+        std::vector<object> all_objects(int obj_type_, object_simulation_kind simulation_kind_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__scalar__scalar__ret__array, obj_type_, (int)simulation_kind_));
+        }
+
+        std::vector<object> all_objects(int obj_type_, int simulation_kind_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__scalar__scalar__ret__array, obj_type_, simulation_kind_));
+        }
+
+        std::vector<object> nearest_mines(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_2d_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestmines__array__ret__array, {pos_, std::move(types), radius_, sort_, mode_2d_}));
+        }
+
+        std::vector<object> nearest_mines(const vector2 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_2d_) {
+            auto_array<game_value> types(types_.begin(), types_.end());
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestmines__array__ret__array, {pos_, std::move(types), radius_, sort_, mode_2d_}));
+        }
     }  // namespace sqf
 }  // namespace intercept

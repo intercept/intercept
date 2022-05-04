@@ -416,5 +416,12 @@ namespace intercept {
 
         rv_rain_parameters rain_params();
         rv_ambient_temperature ambient_temperature();
+
+        std::vector<object> all_objects(int obj_type_, object_simulation_kind simulation_kind_);
+        std::vector<object> all_objects(int obj_type_, int simulation_kind_);
+
+        std::vector<object> nearest_mines(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
+        std::vector<object> nearest_mines(const vector2 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
+
     }  // namespace sqf
 }  // namespace intercept

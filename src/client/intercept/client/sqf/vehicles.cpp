@@ -318,7 +318,7 @@ namespace intercept {
             return __helpers::__number_unary_object(__sqf::unary__getobjectdlc__object__ret__scalar, value_);
         }
 
-        float get_object_type(const object &value_) {
+        int get_object_type(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getobjecttype__object__ret__scalar, value_);
         }
 
@@ -535,8 +535,8 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__lockedcargo__object__scalar__ret__bool, value0_, value1_);
         }
 
-        void set_autonomous(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setautonomous__object__bool__ret__nothing, value0_, value1_);
+        bool set_autonomous(const object &value0_, bool value1_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setautonomous__object__bool__ret__bool, value0_, value1_);
         }
 
         void set_damage(const object &value0_, float value1_, bool use_effects_) {

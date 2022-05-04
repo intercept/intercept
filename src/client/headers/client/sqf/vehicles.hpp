@@ -226,7 +226,7 @@ namespace intercept {
         float get_dammage(const object &value_);
         float get_mass(const object &value_);
         float get_object_dlc(const object &value_);
-        float get_object_type(const object &value_);
+        int get_object_type(const object &value_);
         void hide_object(const object &value_);
         void hide_object_global(const object &value_);
         bool inflamed(const object &value_);
@@ -280,7 +280,7 @@ namespace intercept {
         void lock_cargo(const object &value0_, bool value1_);
         void lock_driver(const object &value0_, bool value1_);
         bool locked_cargo(const object &value0_, float value1_);
-        void set_autonomous(const object &value0_, bool value1_);
+        bool set_autonomous(const object &value0_, bool value1_);
         void set_damage(const object &value0_, float value1_, bool use_effects_ = true);
         void set_dammage(const object &value0_, float value1_);
         void set_flag_side(const object &value0_, const side &value1_);

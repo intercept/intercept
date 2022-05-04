@@ -216,7 +216,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__string__ret__array, obj_, selection_name_);
         }
 
-        vector3 selection_position(const object& obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_});
         }
 

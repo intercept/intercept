@@ -738,7 +738,7 @@ namespace intercept {
             __helpers::__empty_unary_object(__sqf::unary__reload__object__ret__nothing, value_);
         }
 
-        bool reload(const object& unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref magazine_) {
+        bool reload(const object &unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref magazine_) {
             return host::functions.invoke_raw_binary(__sqf::binary__reload__object__array__ret__bool, unit_, {muzzle_, magazine_});
         }
 
@@ -952,15 +952,15 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__weaponinertia__object__ret__array, unit_);
         }
 
-        object get_connected_uav_unit(const object& unit_) {
+        object get_connected_uav_unit(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getconnecteduavunit__object__ret__object, unit_);
         }
 
-        sqf_return_string pose(const object& unit_) {
+        sqf_return_string pose(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__pose__object__ret__string, unit_);
         }
 
-        void set_unit_freefall_height(const object& unit_, float height_) {
+        void set_unit_freefall_height(const object &unit_, float height_) {
             host::functions.invoke_raw_binary(__sqf::binary__setunitfreefallheight__object__scalar__ret__nothing, unit_, height_);
         }
 
@@ -968,11 +968,11 @@ namespace intercept {
             return rv_freefall_info(host::functions.invoke_raw_unary(__sqf::unary__getunitfreefallinfo__object__ret__array, unit_));
         }
 
-        void set_optics_mode(const object& unit_, sqf_string_const_ref mode_) {
+        void set_optics_mode(const object &unit_, sqf_string_const_ref mode_) {
             host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, mode_);
         }
 
-        void set_optics_mode(const object& unit_, float index_) {
+        void set_optics_mode(const object &unit_, float index_) {
             host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, index_);
         }
 

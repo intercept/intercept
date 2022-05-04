@@ -509,11 +509,11 @@ namespace intercept {
         void remove_weapon_global(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeweaponglobal__object__string__ret__nothing, value0_, value1_);
         }
-        void select_weapon(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__string__ret__nothing, value0_, value1_);
+        void select_weapon(const object &unit_, sqf_string_const_ref muzzle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__string__ret__nothing, unit_, muzzle_);
         }
 
-        bool select_weapon(const object& unit_, sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_, sqf_string_const_ref mode_) {
+        bool select_weapon(const object &unit_, sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_, sqf_string_const_ref mode_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__array__ret__bool_nothing, unit_, {weapon_, muzzle_, mode_});
         }
 

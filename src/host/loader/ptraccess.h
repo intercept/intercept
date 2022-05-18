@@ -9,7 +9,7 @@ extern "C" {
 #else
 #include <stdbool.h>
 #endif /* defined(__cplusplus) */
-	bool IsBadReadPtr(const void *p, size_t size);
+    bool IsBadReadPtr(const void *p, size_t size);
 #ifdef __cplusplus
 }
 #endif /* defined(__cplusplus) */
@@ -18,6 +18,6 @@ extern "C" {
 #ifdef __cplusplus
 template<typename T>
 inline bool IsBadReadPtrTyped(const T *p) {
-	return IsBadReadPtr((void *)p, sizeof(T));
+    return IsBadReadPtr((void *)p, sizeof(T));
 }
 #endif /* defined(__cplusplus) */

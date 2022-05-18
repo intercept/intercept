@@ -34,6 +34,7 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
 		"-pthread"
 		"-static-libgcc"
 		"-static-libstdc++"
+		"-static"
 		"-Wno-ignored-attributes"
 		"$<$<CONFIG:Release>:-ffunction-sections>"
 		"$<$<CONFIG:Release>:-fdata-sections>"
@@ -41,7 +42,7 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
 	target_link_options(${INTERCEPT_EXTENSION_NAME} PRIVATE "-fPIC"
 	"$<$<CONFIG:Release>:-Wl,--gc-sections>"
 	"$<$<OR:$<CONFIG:Release>>:-Wl,--strip-all>"
-    "-Wl,-rpath,$ORIGIN"
+	"-Wl,-rpath,$ORIGIN"
 	) 
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 

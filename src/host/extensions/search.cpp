@@ -66,7 +66,6 @@ namespace intercept::search {
 #else
             std::string test_path = folder + "/intercept/" + name + ".so";
 #endif
-            std::cerr << "intercept::host::extensions: searching path: " << test_path << std::endl;
             std::ifstream check_file(test_path);
             if (check_file.good()) {
                 return test_path;

@@ -327,6 +327,7 @@ namespace intercept {
         void set_terrain_grid(float value_);
         void set_time_multiplier(float value_);
         void set_view_distance(float value_);
+        void set_pip_view_distance(float value_);
         void skip_time(float value_);
 
         void enable_environment(bool ambient_life_, bool ambient_sound_ = true);
@@ -346,6 +347,7 @@ namespace intercept {
         void set_fog(float time_, float fog_value_, float fog_decay_, float fog_base_);
         int get_terrain_grid();
         float view_distance();
+        float get_pip_view_distance();
         void enable_caustics(bool value_);
         void set_lightnings(float time_, float lightnings_value_);
         bool near_objects_ready(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> position_, float radius_);
@@ -356,6 +358,7 @@ namespace intercept {
         object nearest_object(const vector3 &pos_, sqf_string_const_ref type_);
         object nearest_object(const object &obj_, sqf_string_const_ref type_);
         object nearest_object(const vector3 &pos_, float id_);
+        sqf_return_string get_object_id(const object &obj_);
         std::vector<object> nearest_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_ = false);
         std::vector<object> nearest_objects(const object &obj_, sqf_string_list_const_ref types_, float radius_, bool mode_2d_ = false);
         std::vector<object> nearest_terrain_objects(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
@@ -413,5 +416,12 @@ namespace intercept {
 
         rv_rain_parameters rain_params();
         rv_ambient_temperature ambient_temperature();
+
+        std::vector<object> all_objects(int obj_type_, object_simulation_kind simulation_kind_);
+        std::vector<object> all_objects(int obj_type_, int simulation_kind_);
+
+        std::vector<object> nearest_mines(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
+        std::vector<object> nearest_mines(const vector2 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
+
     }  // namespace sqf
 }  // namespace intercept

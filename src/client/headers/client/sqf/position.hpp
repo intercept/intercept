@@ -94,11 +94,16 @@ namespace intercept {
             bool is_visual{true};
         };
         
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float vis_lod_index_);
-        vector3 selection_positon(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_);
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_);
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_);
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_);
+        vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_);
+
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_);
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_);
+        vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_);
 
         std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
         std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_);
@@ -115,6 +120,11 @@ namespace intercept {
 
         rv_bounding_box bounding_box(const object &model_);
         rv_bounding_box bounding_box_real(const object &model_);
+
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_);
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_);
+        rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_);
 
         enum class bounding_box_clipping_type {
             clip_visual = 0,

@@ -34,6 +34,7 @@ namespace intercept {
 
         //rope
         void rope_attach_to(const object &vehicle_, const vector3 &offset_, const vector3 &rope_end_down_dir_, const object &rope_);
+        void rope_attach_to(const object &entity_, const object &rope_);
         void rope_detach(const object &vehicle_, const object &rope_);
         bool rope_attach_enabled(const object &value_);
         object rope_attached_to(const object &value_);
@@ -43,6 +44,7 @@ namespace intercept {
         void enable_rope_attach(const object &value0_, bool value1_);
         std::vector<object> rope_attached_objects(const object &obj_);
         std::vector<object> ropes(const object &obj_);
+        std::vector<object> ropes_attached_to(const object &cargo_);
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);
         object rope_create(const object &from_obj_, const vector3 &from_point_, const object &to_obj_, const vector3 &to_point_, float segments_, float length_);
         object rope_create(const object &from_obj_, sqf_string_const_ref from_point_, const object &to_obj_, const vector3 &to_point_, float segments_);

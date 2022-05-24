@@ -211,5 +211,9 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__gettextraw__config__ret__string, config_);
         }
 
+        config load_config(sqf_string_const_ref file_path_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__loadconfig__string__ret__config, file_path_);
+        }
+
     }  // namespace sqf
 }  // namespace intercept

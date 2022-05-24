@@ -220,6 +220,14 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__canadd__object__string_array__ret__bool, obj_, params);
         }
 
+        bool can_add(sqf_string_const_ref weapon_, sqf_string_const_ref mag_or_item_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__canadd__string__string_array__ret__bool, weapon_, mag_or_item_);
+        }
+
+        bool can_add(sqf_string_const_ref weapon_, sqf_string_const_ref mag_or_item_, sqf_string_const_ref muzzle_or_slot_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__canadd__string__string_array__ret__bool, weapon_, {mag_or_item_, muzzle_or_slot_});
+        }
+
         bool can_add_item_to_backpack(const object &obj_, sqf_string_const_ref classname_) {
             return host::functions.invoke_raw_binary(__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, classname_);
         }
@@ -501,9 +509,14 @@ namespace intercept {
         void remove_weapon_global(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeweaponglobal__object__string__ret__nothing, value0_, value1_);
         }
-        void select_weapon(const object &value0_, sqf_string_const_ref value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__string__ret__nothing, value0_, value1_);
+        void select_weapon(const object &unit_, sqf_string_const_ref muzzle_) {
+            host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__string__ret__nothing, unit_, muzzle_);
         }
+
+        bool select_weapon(const object &unit_, sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_, sqf_string_const_ref mode_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__array__ret__bool_nothing, unit_, {weapon_, muzzle_, mode_});
+        }
+
         void unassign_item(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__unassignitem__object__string__ret__nothing, value0_, value1_);
         }

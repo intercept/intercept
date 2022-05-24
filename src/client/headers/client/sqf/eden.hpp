@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -54,6 +54,7 @@ namespace intercept {
         };
         rv_eden_mouse_over get_eden_mouse_over();
         void collect_eden_history(const code &code_);
+        void collect_eden_history(sqf_string_const_ref text_, sqf_string_const_ref tooltip_, sqf_string_const_ref icon_, const code &code_);
         float get_eden_entity_id(const object &entity_);
         float get_eden_entity_id(const group &entity_);
         float get_eden_entity_id(const vector3 &entity_);

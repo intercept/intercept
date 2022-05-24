@@ -38,10 +38,22 @@ namespace intercept {
             std::vector<intercept::sqf::waypoint> _waypoints;
             std::vector<marker> _marker;
         };
+
+        struct rv_curator_cam_area {
+            float cam_area_id;
+            vector3 pos;
+            float radius;
+            explicit rv_curator_cam_area(const game_value& gv_)
+                : cam_area_id(gv_[0]),
+                  pos(gv_[1]),
+                  radius(gv_[2]) {}
+        };
         
         curator_selected_return curator_selected();
         void open_curator_interface();
         bool shown_curatorcompass();
+        std::vector<rv_curator_cam_area> curator_camera_area(const object &curator_);
+        rv_curator_cam_area curator_editing_area(const object &curator_);
         float curator_camera_area_ceiling(const object &value_);
         bool curator_editing_area_type(const object &value_);
         float curator_points(const object &value_);

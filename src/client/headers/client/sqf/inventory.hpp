@@ -175,6 +175,8 @@ namespace intercept {
         sqf_return_string_list backpack_magazines(const object &unit_);
         bool can_add(const object &obj_, sqf_string_const_ref classname_);
         bool can_add(const object &obj_, sqf_string_const_ref classname_, int count_);
+        bool can_add(sqf_string_const_ref weapon_, sqf_string_const_ref mag_or_item_);
+        bool can_add(sqf_string_const_ref weapon_, sqf_string_const_ref mag_or_item_, sqf_string_const_ref muzzle_or_slot_);
         bool can_add_item_to_backpack(const object &obj_, sqf_string_const_ref classname_);
         bool can_add_item_to_backpack(const object &obj_, sqf_string_const_ref classname_, int count_);
         bool can_add_item_to_uniform(const object &obj_, sqf_string_const_ref classname_);
@@ -255,7 +257,8 @@ namespace intercept {
         void remove_secondary_weapon_item(const object &value0_, sqf_string_const_ref value1_);
         void remove_weapon(const object &value0_, sqf_string_const_ref value1_);
         void remove_weapon_global(const object &value0_, sqf_string_const_ref value1_);
-        void select_weapon(const object &value0_, sqf_string_const_ref value1_);
+        void select_weapon(const object &unit_, sqf_string_const_ref muzzle_);
+        bool select_weapon(const object &unit_, sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_, sqf_string_const_ref fire_mode_);
         void unassign_item(const object &value0_, sqf_string_const_ref value1_);
         void unlink_item(const object &value0_, sqf_string_const_ref value1_);
         sqf_return_string_list items(const object &unit_);

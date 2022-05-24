@@ -68,6 +68,7 @@ namespace intercept {
         rv_query_target targets_query(const object &unit_, const object &target_ignore_, const side &target_side, sqf_string_const_ref target_type_, const vector3 &target_position_, float target_max_age_);
 
         void action(const object &unit_, const std::vector<game_value> &action_array_);
+        void action(const std::vector<game_value> &action_array_);
 
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
@@ -83,6 +84,7 @@ namespace intercept {
         float captive_num(const object &unit_);
         sqf_return_string current_command(const object &veh_);
         int current_vision_mode(const object &unit_);
+        rv_vision_mode current_vision_mode_alt(const object &unit_);
         rv_vision_mode current_vision_mode(const object &unit_, sqf_string_const_ref weapon_);
         rv_vision_mode current_vision_mode(const object &vehicle_, const rv_turret_path &turret_path_);
         float current_zeroing(const object &gunner_);
@@ -219,7 +221,8 @@ namespace intercept {
         sqf_return_string rank(const object &value_);
         float rank_id(const object &value_);
         float rating(const object &value_);
-        void reload(const object &value_);
+        void reload(const object &unit_);
+        bool reload(const object &unit_, sqf_string_const_ref muzzle_, sqf_string_const_ref magazine_);
         bool reload_enabled(const object &value_);
         void remove_switchable_unit(const object &value_);
         void reset_subgroup_direction(const object &value_);
@@ -281,5 +284,45 @@ namespace intercept {
         object get_connected_uav_unit(const object &unit_);
 
         sqf_return_string pose(const object &unit_);
+
+        struct rv_freefall_info {
+            float min_height;
+            bool is_falling;
+            bool is_in_halo_pose;
+            explicit rv_freefall_info(const game_value &gv_)
+                : is_falling(gv_[0]), is_in_halo_pose(gv_[1]), min_height(gv_[2]) {}
+        };
+
+        void set_unit_freefall_height(const object &unit_, float height_);
+        rv_freefall_info get_unit_freefall_info(const object &unit_);
+
+        void set_optics_mode(const object &unit_, sqf_string_const_ref mode_);
+        void set_optics_mode(const object &unit_, float index_);
+
+        struct rv_weapons_info {
+            sqf_string weapon_name;    // - weapon name
+            sqf_string muzzle_name;    // - muzzle name
+            sqf_string firemode;       // - firemode that is set for this 'weaponIndex'
+            sqf_string magazine_name;  // - name of the loaded magazine or ""
+            float weapon_index;        // - internal weapon index (changes frequently) used with "SwitchWeapon" and "UseWeapon" actions
+            float ammo_count;          // - magazine ammo count or -1
+            bool is_selected;          // - true if this weapon is currently selected
+            
+            explicit rv_weapons_info(const game_value &gv_)
+                : weapon_index(gv_[0]),
+                  is_selected(gv_[1]),
+                  weapon_name(gv_[2]),
+                  muzzle_name(gv_[3]),
+                  firemode(gv_[4]),
+                  magazine_name(gv_[5]),
+                  ammo_count(gv_[6]) {}
+        };
+
+        sqf_return_string get_optics_mode(const object &unit_);
+
+        sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_);
+        sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_);
+        sqf_return_string_list compatible_items(sqf_string_const_ref weapon_);
+        sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_);
     }  // namespace sqf
 }  // namespace intercept

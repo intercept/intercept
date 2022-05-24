@@ -51,9 +51,11 @@ namespace intercept {
         }
 
         sqf_return_string_list action_keys(sqf_string_const_ref user_action_) {
-            game_value act_keys = host::functions.invoke_raw_unary(__sqf::unary__actionkeys__string__ret__array, user_action_);
-            sqf_return_string_list r_arr = __helpers::__convert_to_vector<sqf_return_string>(act_keys);
-            return r_arr;
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__actionkeys__array__ret__array, {user_action_}));
+        }
+
+        std::vector<rv_action_key_details> action_keys_ex(sqf_string_const_ref user_action_) {
+            return __helpers::__convert_to_vector<rv_action_key_details>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysex__string__ret__array, user_action_));
         }
 
         rv_text action_keys_images(sqf_string_const_ref user_action_) {

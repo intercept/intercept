@@ -483,6 +483,29 @@ namespace intercept {
             HitPoints,
             ViewGeometry
         };
+
+        enum object_types {
+            obj_type_primary = 1,
+            obj_type_network = 2,
+            obj_type_temporary = 4,
+            obj_type_vehicle = 8,
+            obj_type_temp_veh = 16,
+            obj_type_land_decal = 32
+        };
+
+        enum class object_simulation_kind {
+            Statics = 0,
+            Slow = 0,
+            Vehicles = 1,
+            Normal = 1,
+            Projectiles = 2,
+            Fast = 2,
+            Cloudlets = 3,
+            Holders = 4,
+            Out = 4,
+            Animals = 5,
+            Mines = 6
+        };
     }
 }
 

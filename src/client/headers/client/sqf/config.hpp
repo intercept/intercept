@@ -177,5 +177,7 @@ namespace intercept {
         std::vector<game_value> mod_params(sqf_string_const_ref mod_class_, mod_params_options options_);
         sqf_return_string type_of(const object &value_);
         sqf_return_string get_text_raw(const config &config_);
+
+        config load_config(sqf_string_const_ref file_path_);
     }  // namespace sqf
 }  // namespace intercept

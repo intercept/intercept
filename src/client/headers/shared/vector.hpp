@@ -1,5 +1,10 @@
 #pragma once
 #include "../shared.hpp"
+
+#ifdef INTERCEPT_GLM_INTEROP
+#include <glm.hpp>
+#endif //INTERCEPT_GLM_INTEROP
+
 namespace intercept {
     constexpr float pi = 3.14159265358979323846f;
     namespace types {
@@ -25,18 +30,12 @@ namespace intercept {
             T y;
             T z;
 
-            vector3_base() noexcept
+            constexpr vector3_base() noexcept : x{0}, y{0}, z{0}
             {
-                x = 0;
-                y = 0;
-                z = 0;
             }
 
-            vector3_base(const T x_, const T y_, const T z_) noexcept
+            constexpr vector3_base(const T x_, const T y_, const T z_) noexcept : x{x_}, y{y_}, z{z_}
             {
-                x = x_;
-                y = y_;
-                z = z_;
             }
 
             vector3_base(std::istream & read_) {
@@ -46,24 +45,24 @@ namespace intercept {
                 read_.read(reinterpret_cast<char *>(&z), sizeof(T));
             }
 
-            explicit vector3_base(const float *buffer) noexcept {
-                x = buffer[0];
-                y = buffer[1];
-                z = buffer[2];
+            explicit vector3_base(const float* buffer) noexcept : x{buffer[0]}, y{buffer[1]}, z{buffer[2]} {
             }
 
-            constexpr vector3_base(const vector3_base& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
-                z = copy_.z;
+            constexpr vector3_base(const vector3_base& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
             }
 
             //Allow operations between vector2 and vector3; in the case of vector2, we always assume z = 0 (which is why operator/ was not added)
-            constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
-                z = 0;
+            constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{0} {
             }
+
+#ifdef INTERCEPT_GLM_INTEROP
+            constexpr vector3_base(const glm::vec3& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
+            }
+
+            operator glm::vec3() const {
+                return {x, y, z};
+            }
+#endif  //INTERCEPT_GLM_INTEROP
 
             constexpr T& operator[](unsigned int index_) noexcept {
                 switch (index_) {
@@ -119,9 +118,9 @@ namespace intercept {
             constexpr T angle(const vector3_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector2_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector3_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector3_base& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector2_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector2_base<T>& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
             constexpr T get_dir(const vector3_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
@@ -175,38 +174,35 @@ namespace intercept {
             T x;
             T y;
 
-            constexpr vector2_base() noexcept
-            {
-                x = 0;
-                y = 0;
+            constexpr vector2_base() noexcept : x{0}, y{0} {
             }
 
-            constexpr vector2_base(const T x_, const T y_) noexcept
-            {
-                x = x_;
-                y = y_;
+            constexpr vector2_base(const T x_, const T y_) noexcept : x{x_}, y{y_} {
             }
 
-            vector2_base(std::istream & read_) {
+            vector2_base(std::istream& read_) {
                 // Constructor to read from a stream
-                read_.read(reinterpret_cast<char *>(&x), sizeof(T));
-                read_.read(reinterpret_cast<char *>(&y), sizeof(T));
+                read_.read(reinterpret_cast<char*>(&x), sizeof(T));
+                read_.read(reinterpret_cast<char*>(&y), sizeof(T));
             }
 
-            explicit vector2_base(const float *buffer) {
-                x = buffer[0];
-                y = buffer[1];
+            explicit vector2_base(const float* buffer) noexcept : x{buffer[0]}, y{buffer[1]} {
             }
 
-            constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
+            constexpr vector2_base(const vector2_base& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
-            constexpr vector2_base(const vector2_base<T>& copy_) noexcept {
-                x = copy_.x;
-                y = copy_.y;
+            constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
+
+#ifdef INTERCEPT_GLM_INTEROP
+            constexpr vector2_base(const glm::vec2& copy_) noexcept : x{copy_.x}, y{copy_.y} {
+            }
+
+            operator glm::vec2() const {
+                return {x, y};
+            }
+#endif  //INTERCEPT_GLM_INTEROP
 
             constexpr T& operator[](unsigned int index_) noexcept {
                 return (index_ == 0) ? x : y;
@@ -256,9 +252,9 @@ namespace intercept {
             constexpr T angle(const vector2_base& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             constexpr T angle(const vector3_base<T>& v) const noexcept { return std::acos(cos(v)) / pi * 180.0f; }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector2_base& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector2_base& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Azimuth from this vector to the other vector in radians
-            constexpr T get_azimuth(const vector3_base<T>& v) const noexcept { return atan2f(x * -v.y + y * v.x, x * v.x + y * v.y); }
+            constexpr T get_azimuth(const vector3_base<T>& v) const noexcept { return atan2f(x * v.y - y * v.x, x * v.x + y * v.y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi
             constexpr T get_dir(const vector2_base& pos) const noexcept { return atan2f(x - pos.x, pos.y - y); }
             //Similar to the command: _pos1 getDir _pos2; except the result is in radians, CCW and returns negative for angle > pi

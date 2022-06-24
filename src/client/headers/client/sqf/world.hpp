@@ -423,5 +423,24 @@ namespace intercept {
         std::vector<object> nearest_mines(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
         std::vector<object> nearest_mines(const vector2 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_ = true, bool mode_2d_ = false);
 
+        struct rv_terrain_info {
+            float terrain_grid_width;
+            int terrain_grid_size;
+            float sea_level;
+            float land_grid_width;
+            int land_grid_size;
+            explicit rv_terrain_info(const game_value &gv_)
+                : land_grid_width(gv_[0]),
+                  land_grid_size(gv_[1]),
+                  terrain_grid_width(gv_[2]),
+                  terrain_grid_size(gv_[3]),
+                  sea_level(gv_[4]) {}
+        };
+
+        rv_terrain_info get_terrain_info();
+        float get_tide();
+        float get_terrain_height(const vector2 &pos_);
+        void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_);
+
     }  // namespace sqf
 }  // namespace intercept

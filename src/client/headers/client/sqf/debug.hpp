@@ -78,13 +78,10 @@ namespace intercept {
         void throw_exception(game_value exception_);
         void diag_enable(debug_toggles mode_, bool enable_);
         bool diag_enabled(sqf_string_const_ref mode_);
-        void diag_set_terrain_height(const vector2 &position_, float height_);
         auto_array<game_value> diag_dump_terrain_synth();
-        float diag_get_terrain_grid();
         void diag_reset_fsm();
         void diag_reset_shapes();
         void diag_draw_mode(debug_draw_modes mode_); //diag-exe only
-        float diag_get_terrain_height(const vector2 &pos_);
         vector2 diag_get_terrain_segment_offset(const vector2 &pos_);
         void diag_light_new_load(sqf_string_const_ref path_);
         sqf_return_string_list diag_list(sqf_string_const_ref name_);

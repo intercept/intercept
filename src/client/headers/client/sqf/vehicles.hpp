@@ -259,7 +259,8 @@ namespace intercept {
         float speed(const object &value_);
         object vehicle(const object &value_);
         sqf_return_string vehicle_var_name(const object &value_);
-        void allow_crew_in_immobile(const object &value0_, bool value1_);
+        void allow_crew_in_immobile(const object &veh_, bool allow_);
+        void allow_crew_in_immobile(const object &veh_, bool broken_wheel_, bool upside_down_);
         void allow_damage(const object &value0_, bool value1_);
         void allow_dammage(const object &value0_, bool value1_);
         void disable_nvgequipment(const object &value0_, bool value1_);

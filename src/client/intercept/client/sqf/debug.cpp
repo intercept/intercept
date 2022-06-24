@@ -114,10 +114,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__diag_enable__string__bool__ret__nothing, std::move(mode), enable_);
         }
 
-        void diag_set_terrain_height(const vector2& position_, float height_) {
-            host::functions.invoke_raw_binary(__sqf::binary__diag_setterrainheight__array__scalar__ret__nothing, position_, height_);
-        }
-
         auto_array<game_value> diag_all_mission_eventhandlers() {
             return host::functions.invoke_raw_nular(__sqf::nular__diag_allmissioneventhandlers__ret__array).to_array();
         }
@@ -128,10 +124,6 @@ namespace intercept {
 
         auto_array<game_value> diag_dump_terrain_synth() {
             return host::functions.invoke_raw_nular(__sqf::nular__diag_dumpterrainsynth__ret__array).to_array();
-        }
-
-        float diag_get_terrain_grid() {
-            return host::functions.invoke_raw_nular(__sqf::nular__diag_getterraingrid__ret__scalar);
         }
 
         void diag_reset_fsm() {
@@ -176,10 +168,6 @@ namespace intercept {
                     return;
             }
             host::functions.invoke_raw_unary(__sqf::unary__diag_drawmode__string__ret__nothing, std::move(draw_mode));
-        }
-
-        float diag_get_terrain_height(const vector2& pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__diag_getterrainheight__array__ret__scalar, pos_);
         }
 
         vector2 diag_get_terrain_segment_offset(const vector2& pos_) {

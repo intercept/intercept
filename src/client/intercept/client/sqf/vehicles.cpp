@@ -451,8 +451,12 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__vehiclevarname__object__ret__string, value_);
         }
 
-        void allow_crew_in_immobile(const object &value0_, bool value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__allowcrewinimmobile__object__bool__ret__nothing, value0_, value1_);
+        void allow_crew_in_immobile(const object &veh_, bool allow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__allowcrewinimmobile__object__bool_array__ret__nothing, veh_, allow_);
+        }
+
+        void allow_crew_in_immobile(const object& veh_, bool broken_wheel_, bool upside_down_) {
+            host::functions.invoke_raw_binary(__sqf::binary__allowcrewinimmobile__object__bool_array__ret__nothing, veh_, {broken_wheel_, upside_down_});
         }
 
         void allow_damage(const object &value0_, bool value1_) {

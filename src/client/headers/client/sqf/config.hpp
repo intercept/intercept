@@ -136,8 +136,8 @@ namespace intercept {
         config config_file();
         config config_null();
         config mission_config_file();
-        config config_of(const object& obj_);
-        game_value get_array(config config_);
+        config config_of(const object &obj_);
+        game_value get_array(const config &config_);
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_);
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_);

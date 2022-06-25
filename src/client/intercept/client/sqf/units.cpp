@@ -969,15 +969,23 @@ namespace intercept {
         }
 
         void set_optics_mode(const object &unit_, sqf_string_const_ref mode_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, mode_);
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, mode_);
+        }
+
+        void set_optics_mode(const object &unit_, int slot_index_, sqf_string_const_ref mode_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_});
         }
 
         void set_optics_mode(const object &unit_, float index_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, index_);
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, index_);
         }
 
-        sqf_return_string get_optics_mode(const object &unit_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getopticsmode__object__ret__string, unit_);
+        void set_optics_mode(const object &unit_, int slot_index_, float mode_index_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_index_});
+        }
+
+        sqf_return_string get_optics_mode(const object &unit_, int slot) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getopticsmode__object__scalar__ret__string, unit_, slot);
         }
 
         sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_) {

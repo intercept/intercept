@@ -660,5 +660,22 @@ namespace intercept {
             auto_array<game_value> types(types_.begin(), types_.end());
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__nearestmines__array__ret__array, {pos_, std::move(types), radius_, sort_, mode_2d_}));
         }
+
+        rv_terrain_info get_terrain_info() {
+            return rv_terrain_info(host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__scalar));
+        }
+
+        float get_tide() {
+            auto ret = host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__scalar);
+            return ret[4];
+        }
+
+        float get_terrain_height(const vector2 &pos_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getterrainheight__array__ret__scalar, pos_);
+        }
+
+        void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setterrainheight__array__ret__nothing, {positions_, adjust_objs_});
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -298,6 +298,8 @@ namespace intercept {
 
         void set_optics_mode(const object &unit_, sqf_string_const_ref mode_);
         void set_optics_mode(const object &unit_, float index_);
+        void set_optics_mode(const object &unit_, int slot_index_, float optic_mode_);
+        void set_optics_mode(const object &unit_, int slot_index_, sqf_string_const_ref mode_);
 
         struct rv_weapons_info {
             sqf_string weapon_name;    // - weapon name

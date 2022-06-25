@@ -972,8 +972,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, mode_);
         }
 
+        void set_optics_mode(const object &unit_, int slot_index_, sqf_string_const_ref mode_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_});
+        }
+
         void set_optics_mode(const object &unit_, float index_) {
             host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, index_);
+        }
+
+        void set_optics_mode(const object &unit_, int slot_index_, float mode_index_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_index_});
         }
 
         sqf_return_string get_optics_mode(const object &unit_, int slot) {

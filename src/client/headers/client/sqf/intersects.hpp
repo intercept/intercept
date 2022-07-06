@@ -19,20 +19,13 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         struct intersect_surfaces {
-            sqf_string selection_name;  // selection name
-            sqf_string bisurf_path;     // path to the bisurf (surfuse properties)
             vector3 intersect_pos_asl;  ///< the actual position where line intersects 1st surface
             vector3 surface_normal;     ///< a normal to the intersected surface
             object intersect_object;    ///< the object the surface belongs to(could be proxy object)
             object parent_object;       ///< the object proxy object belongs to(not always the same as intersect object)
-            explicit intersect_surfaces(const game_value &gv_)
-                : intersect_pos_asl(gv_[0]),
-                  surface_normal(gv_[1]),
-                  intersect_object(gv_[2]),
-                  parent_object(gv_[3]),
-                  selection_name(gv_[4]),
-                  bisurf_path(gv_[5])
-            {}
+            sqf_return_string_list selection_names;  // selection name
+            sqf_return_string bisurf_path;     // path to the bisurf (surfuse properties)
+            explicit intersect_surfaces(const game_value &gv_);
         };
         typedef std::vector<intersect_surfaces> intersect_surfaces_list;
 

@@ -147,6 +147,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
         }
 
+        void play_sound_ui(sqf_string_const_ref class_or_path_, float vol_, float pitch_) {
+            host::functions.invoke_raw_unary(__sqf::unary__playsoundui__array__ret__nothing, {class_or_path_, vol_, pitch_});
+        }
+
         game_value get_all_env_sound_controllers(const vector3 &position_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getallenvsoundcontrollers__array__ret__array, position_);
         }

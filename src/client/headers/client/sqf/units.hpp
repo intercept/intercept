@@ -319,7 +319,7 @@ namespace intercept {
                   magazine_name(gv_[5]),
                   ammo_count(gv_[6]) {}
         };
-
+        rv_weapons_info weapons_info(const object &unit_, sqf_string_const_ref wpnOrMuzzle_, bool onlyLoaded_ = false);
         sqf_return_string get_optics_mode(const object &unit_, int slot);
 
         sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_);

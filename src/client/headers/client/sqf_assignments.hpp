@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 211.149685 - Diag
+//Exported Pointer Assignments For: Arma 3 209.149645 - Diag
 
 
 // Unary Functions
@@ -473,7 +473,6 @@ __sqf::unary__getdlcusagetime__scalar__ret__scalar = (unary_function)host::funct
 __sqf::unary__geteditorcamera__control__ret__object = (unary_function)host::functions.get_unary_function_typed("geteditorcamera"sv, "CONTROL"sv);
 __sqf::unary__geteditormode__control__ret__string = (unary_function)host::functions.get_unary_function_typed("geteditormode"sv, "CONTROL"sv);
 __sqf::unary__getenginetargetrpmrtd__object__ret__array = (unary_function)host::functions.get_unary_function_typed("getenginetargetrpmrtd"sv, "OBJECT"sv);
-__sqf::unary__geteventhandlerinfo__array__ret__array = (unary_function)host::functions.get_unary_function_typed("geteventhandlerinfo"sv, "ARRAY"sv);
 __sqf::unary__getfatigue__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getfatigue"sv, "OBJECT"sv);
 __sqf::unary__getfieldmanualstartpage__display__ret__array = (unary_function)host::functions.get_unary_function_typed("getfieldmanualstartpage"sv, "DISPLAY"sv);
 __sqf::unary__getforcedflagtexture__object__ret__string = (unary_function)host::functions.get_unary_function_typed("getforcedflagtexture"sv, "OBJECT"sv);
@@ -1802,7 +1801,6 @@ __sqf::binary__getdir__object_array__object_array__ret__scalar = (binary_functio
 __sqf::binary__geteditorobjectscope__control__string__ret__string = (binary_function)host::functions.get_binary_function_typed("geteditorobjectscope"sv, "CONTROL"sv, "STRING"sv);
 __sqf::binary__getenv3dsoundcontroller__object__string__ret__scalar = (binary_function)host::functions.get_binary_function_typed("getenv3dsoundcontroller"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__getenvsoundcontroller__array__string__ret__scalar = (binary_function)host::functions.get_binary_function_typed("getenvsoundcontroller"sv, "ARRAY"sv, "STRING"sv);
-__sqf::binary__geteventhandlerinfo__object__array__ret__array = (binary_function)host::functions.get_binary_function_typed("geteventhandlerinfo"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__getfriend__side__side__ret__scalar = (binary_function)host::functions.get_binary_function_typed("getfriend"sv, "SIDE"sv, "SIDE"sv);
 __sqf::binary__getfsmvariable__scalar__string_array__ret__any = (binary_function)host::functions.get_binary_function_typed("getfsmvariable"sv, "SCALAR"sv, "ARRAY"sv);
 __sqf::binary__getgroupicon__group__scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("getgroupicon"sv, "GROUP"sv, "SCALAR"sv);

@@ -96,15 +96,6 @@ namespace intercept {
         waypoint::speed waypoint_speed(waypoint &wp_) {
             return waypoint::__parse_speed(host::functions.invoke_raw_unary(__sqf::unary__waypointspeed__array__ret__string, wp_));
         }
-
-        rv_waypoint_statements waypoint_statements(const waypoint &wp_) {
-            return rv_waypoint_statements(host::functions.invoke_raw_unary(__sqf::unary__waypointstatements__array__ret__array, wp_));
-        }
-
-        rv_waypoint_timeout waypoint_timeout(const waypoint &wp_) {
-            return rv_waypoint_timeout(host::functions.invoke_raw_unary(__sqf::unary__waypointtimeout__array__ret__array, wp_));
-        }
-
         waypoint::type waypoint_type(waypoint &wp_) {
             return waypoint::__parse_type(host::functions.invoke_raw_unary(__sqf::unary__waypointtype__array__ret__string, wp_));
         }

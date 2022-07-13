@@ -245,19 +245,6 @@ namespace intercept {
         int add_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, const code &code_);
         void remove_all_user_action_event_handlers(sqf_string_const_ref action_name_, user_action_modes mode_);
         void remove_user_action_event_handler(sqf_string_const_ref action_name_, user_action_modes mode_, int index_);
-        struct rv_event_handler_info {
-            bool exists;
-            bool is_last;
-            int total;
-            explicit rv_event_handler_info(const game_value &gv_)
-                : exists(gv_[0]),
-                  is_last(gv_[1]),
-                  total(gv_[2])
-            {}
-
-        };
-        rv_event_handler_info get_event_handler_info(const object &obj_, sqf_string_const_ref event_, int id_);
-        rv_event_handler_info get_event_handler_info(sqf_string_const_ref event_, int id_);
 
         bool user_input_disabled();
         bool screen_shot(sqf_string_const_ref filename_);

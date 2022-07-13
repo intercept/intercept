@@ -1204,7 +1204,7 @@ namespace intercept {
         }
 
         void set_turret_optics_mode(const object &veh_, const rv_turret_path &turret_, int index_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setturretopticsmode__object__array__ret__nothing, veh_, {turret_, index_});
+            host::functions.invoke_raw_binary(__sqf::binary__setturretopticsmode__object__scalar__ret__nothing, veh_, {turret_, index_});
         }
 
         int get_turret_optics_mode(const object &veh_, const rv_turret_path &turret_) {

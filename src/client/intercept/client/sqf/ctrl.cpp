@@ -2838,7 +2838,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__ctvalue__control__scalar__ret__scalar, control_, index_);
         }
         rv_resolution get_resolution() {
-            return rv_resolution(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array));
+            return rv_resolution::from_game_value(host::functions.invoke_raw_nular(__sqf::nular__getresolution__ret__array));
         }
 
         vector2 get_mouse_position() {

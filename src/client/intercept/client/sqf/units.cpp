@@ -964,7 +964,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setunitfreefallheight__object__scalar__ret__nothing, unit_, height_);
         }
 
-        rv_freefall_info get_unit_freefall_info(const object &unit_) {
+        rv_freefall_info get_unit_freefall_info(const object& unit_) {
             return rv_freefall_info(host::functions.invoke_raw_unary(__sqf::unary__getunitfreefallinfo__object__ret__array, unit_));
         }
 
@@ -984,10 +984,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_index_});
         }
 
-        rv_weapons_info weapons_info(const object &unit_, sqf_string_const_ref wpnOrMuzzle_, bool onlyLoaded_) {
-            return rv_weapons_info(host::functions.invoke_raw_binary(__sqf::binary__weaponsinfo__object__array__ret__array, unit_, {wpnOrMuzzle_, onlyLoaded_}));
-        }
-
         sqf_return_string get_optics_mode(const object &unit_, int slot) {
             return host::functions.invoke_raw_binary(__sqf::binary__getopticsmode__object__scalar__ret__string, unit_, slot);
         }
@@ -1001,11 +997,11 @@ namespace intercept {
         }
 
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatibleitems__string_array__ret__array, weapon_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, weapon_));
         }
 
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatibleitems__string_array__ret__array, {weapon_, slot_}));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatiblemagazines__string_array__ret__array, {weapon_, slot_}));
         }
     }  // namespace sqf
 }  // namespace intercept

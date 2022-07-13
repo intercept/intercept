@@ -443,5 +443,10 @@ namespace intercept {
         std::vector<rv_collision_status> collision_disabled_with(const object &obj_);
 
         bool is_allowed_crew_in_immobile(const object &veh_);
+
+        void set_turret_optics_mode(const object &veh_, int index_);
+        int get_turret_optics_mode(const object &veh_);
+        void set_turret_optics_mode(const object &veh_, const rv_turret_path &turret_, int index_);
+        int get_turret_optics_mode(const object &veh_, const rv_turret_path &turret_);
     }  // namespace sqf
 }  // namespace intercept

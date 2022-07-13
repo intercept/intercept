@@ -4,7 +4,17 @@
 
 namespace intercept {
     namespace sqf {
-        
+
+        intersect_surfaces::intersect_surfaces(const game_value &gv_)
+            : intersect_pos_asl(gv_[0]),
+              surface_normal(gv_[1]),
+              intersect_object(gv_[2]),
+              parent_object(gv_[3]),
+              selection_names(__helpers::__convert_to_vector<sqf_return_string>(gv_[4])),
+              bisurf_path(gv_[5])
+        {
+        }
+
         intersect_result_list intersect(const object &obj_, sqf_string_const_ref lodname_, const vector3 &begin_pos_, const vector3 &end_pos_) {
             return __helpers::__convert_to_vector<intersect_result>(host::functions.invoke_raw_binary(__sqf::binary__intersect__array__array__ret__array, {obj_, lodname_}, {begin_pos_, end_pos_}));
         }

@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 209.149590 - Diag
+//Exported Pointer Assignments For: Arma 3 209.149645 - Diag
 
 
 // Unary Functions
@@ -234,6 +234,7 @@ __sqf::unary__ctrlscale__control__ret__scalar = (unary_function)host::functions.
 __sqf::unary__ctrlscrollvalues__control__ret__array = (unary_function)host::functions.get_unary_function_typed("ctrlscrollvalues"sv, "CONTROL"sv);
 __sqf::unary__ctrlsetfocus__control__ret__nothing = (unary_function)host::functions.get_unary_function_typed("ctrlsetfocus"sv, "CONTROL"sv);
 __sqf::unary__ctrlsettext__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("ctrlsettext"sv, "ARRAY"sv);
+__sqf::unary__ctrlshadow__control__ret__scalar = (unary_function)host::functions.get_unary_function_typed("ctrlshadow"sv, "CONTROL"sv);
 __sqf::unary__ctrlshow__array__ret__nothing = (unary_function)host::functions.get_unary_function_typed("ctrlshow"sv, "ARRAY"sv);
 __sqf::unary__ctrlshown__control__ret__bool = (unary_function)host::functions.get_unary_function_typed("ctrlshown"sv, "CONTROL"sv);
 __sqf::unary__ctrlstyle__control__ret__scalar = (unary_function)host::functions.get_unary_function_typed("ctrlstyle"sv, "CONTROL"sv);
@@ -247,6 +248,7 @@ __sqf::unary__ctrltextwidth__control__ret__scalar = (unary_function)host::functi
 __sqf::unary__ctrltooltip__control__ret__string = (unary_function)host::functions.get_unary_function_typed("ctrltooltip"sv, "CONTROL"sv);
 __sqf::unary__ctrltype__control__ret__scalar = (unary_function)host::functions.get_unary_function_typed("ctrltype"sv, "CONTROL"sv);
 __sqf::unary__ctrlurl__control__ret__string = (unary_function)host::functions.get_unary_function_typed("ctrlurl"sv, "CONTROL"sv);
+__sqf::unary__ctrlurloverlaymode__control__ret__scalar = (unary_function)host::functions.get_unary_function_typed("ctrlurloverlaymode"sv, "CONTROL"sv);
 __sqf::unary__ctrlvisible__scalar__ret__bool = (unary_function)host::functions.get_unary_function_typed("ctrlvisible"sv, "SCALAR"sv);
 __sqf::unary__ctrowcount__control__ret__scalar = (unary_function)host::functions.get_unary_function_typed("ctrowcount"sv, "CONTROL"sv);
 __sqf::unary__curatoraddons__object__ret__array = (unary_function)host::functions.get_unary_function_typed("curatoraddons"sv, "OBJECT"sv);
@@ -1613,6 +1615,7 @@ __sqf::binary__ctrlsetpositionx__control__scalar__ret__nothing = (binary_functio
 __sqf::binary__ctrlsetpositiony__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsetpositiony"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlsetscale__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsetscale"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlsetscrollvalues__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsetscrollvalues"sv, "CONTROL"sv, "ARRAY"sv);
+__sqf::binary__ctrlsetshadow__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsetshadow"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlsetstructuredtext__control__text__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsetstructuredtext"sv, "CONTROL"sv, "TEXT"sv);
 __sqf::binary__ctrlsettext__control__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsettext"sv, "CONTROL"sv, "STRING"sv);
 __sqf::binary__ctrlsettextcolor__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsettextcolor"sv, "CONTROL"sv, "ARRAY"sv);
@@ -1625,6 +1628,7 @@ __sqf::binary__ctrlsettooltipcolorshade__control__array__ret__nothing = (binary_
 __sqf::binary__ctrlsettooltipcolortext__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlsettooltipcolortext"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrlsettooltipmaxwidth__control__scalar__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrlsettooltipmaxwidth"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlseturl__control__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlseturl"sv, "CONTROL"sv, "STRING"sv);
+__sqf::binary__ctrlseturloverlaymode__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlseturloverlaymode"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlshow__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlshow"sv, "CONTROL"sv, "BOOL"sv);
 __sqf::binary__ctrowcontrols__control__scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("ctrowcontrols"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctsetcursel__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctsetcursel"sv, "CONTROL"sv, "SCALAR"sv);
@@ -1876,9 +1880,9 @@ __sqf::binary__inserteditorobject__control__array__ret__string = (binary_functio
 __sqf::binary__intersect__array__array__ret__array = (binary_function)host::functions.get_binary_function_typed("intersect"sv, "ARRAY"sv, "ARRAY"sv);
 __sqf::binary__isequalto__any__any__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequalto"sv, "ANY"sv, "ANY"sv);
 __sqf::binary__isequaltype__any__any__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltype"sv, "ANY"sv, "ANY"sv);
-__sqf::binary__isequaltypeall__array__any__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypeall"sv, "ARRAY"sv, "ANY"sv);
+__sqf::binary__isequaltypeall__any__any__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypeall"sv, "ANY"sv, "ANY"sv);
 __sqf::binary__isequaltypeany__any__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypeany"sv, "ANY"sv, "ARRAY"sv);
-__sqf::binary__isequaltypearray__array__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypearray"sv, "ARRAY"sv, "ARRAY"sv);
+__sqf::binary__isequaltypearray__any__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypearray"sv, "ANY"sv, "ARRAY"sv);
 __sqf::binary__isequaltypeparams__any__array__ret__bool = (binary_function)host::functions.get_binary_function_typed("isequaltypeparams"sv, "ANY"sv, "ARRAY"sv);
 __sqf::binary__isflashlighton__object__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("isflashlighton"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__isflatempty__array__array__ret__array = (binary_function)host::functions.get_binary_function_typed("isflatempty"sv, "ARRAY"sv, "ARRAY"sv);
@@ -2703,7 +2707,7 @@ __sqf::nular__getshadowdistance__ret__scalar = (nular_function)host::functions.g
 __sqf::nular__getsteamfriendsservers__ret__array = (nular_function)host::functions.get_nular_function("getsteamfriendsservers"sv);
 __sqf::nular__getsubtitleoptions__ret__array = (nular_function)host::functions.get_nular_function("getsubtitleoptions"sv);
 __sqf::nular__getterraingrid__ret__scalar = (nular_function)host::functions.get_nular_function("getterraingrid"sv);
-__sqf::nular__getterraininfo__ret__scalar = (nular_function)host::functions.get_nular_function("getterraininfo"sv);
+__sqf::nular__getterraininfo__ret__array = (nular_function)host::functions.get_nular_function("getterraininfo"sv);
 __sqf::nular__gettotaldlcusagetime__ret__scalar = (nular_function)host::functions.get_nular_function("gettotaldlcusagetime"sv);
 __sqf::nular__groupiconselectable__ret__bool = (nular_function)host::functions.get_nular_function("groupiconselectable"sv);
 __sqf::nular__groupiconsvisible__ret__array = (nular_function)host::functions.get_nular_function("groupiconsvisible"sv);
@@ -2735,6 +2739,7 @@ __sqf::nular__isremoteexecutedjip__ret__bool = (nular_function)host::functions.g
 __sqf::nular__issaving__ret__bool = (nular_function)host::functions.get_nular_function("issaving"sv);
 __sqf::nular__isserver__ret__bool = (nular_function)host::functions.get_nular_function("isserver"sv);
 __sqf::nular__issteammission__ret__bool = (nular_function)host::functions.get_nular_function("issteammission"sv);
+__sqf::nular__issteamoverlayenabled__ret__bool = (nular_function)host::functions.get_nular_function("issteamoverlayenabled"sv);
 __sqf::nular__isstreamfriendlyuienabled__ret__bool = (nular_function)host::functions.get_nular_function("isstreamfriendlyuienabled"sv);
 __sqf::nular__isstressdamageenabled__ret__bool = (nular_function)host::functions.get_nular_function("isstressdamageenabled"sv);
 __sqf::nular__istuthintsenabled__ret__bool = (nular_function)host::functions.get_nular_function("istuthintsenabled"sv);

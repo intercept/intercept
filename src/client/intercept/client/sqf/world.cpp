@@ -662,11 +662,11 @@ namespace intercept {
         }
 
         rv_terrain_info get_terrain_info() {
-            return rv_terrain_info(host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__scalar));
+            return rv_terrain_info(host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__array));
         }
 
         float get_tide() {
-            auto ret = host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__scalar);
+            auto ret = host::functions.invoke_raw_nular(__sqf::nular__getterraininfo__ret__array);
             return ret[4];
         }
 

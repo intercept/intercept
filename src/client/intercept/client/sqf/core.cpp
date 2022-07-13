@@ -964,7 +964,7 @@ namespace intercept {
         }
 
         bool is_equal_type_all(game_value value_array_, game_value type_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeall__array__any__ret__bool, value_array_, type_);
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypeall__any__any__ret__bool, value_array_, type_);
         }
 
         bool is_equal_type_any(game_value value_, game_value types_array_) {
@@ -972,7 +972,7 @@ namespace intercept {
         }
 
         bool is_equal_type_array(game_value left_array_, game_value right_array_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypearray__array__array__ret__bool, left_array_, right_array_);
+            return host::functions.invoke_raw_binary(__sqf::binary__isequaltypearray__any__array__ret__bool, left_array_, right_array_);
         }
 
         bool is_equal_type_params(game_value value_, game_value template_) {

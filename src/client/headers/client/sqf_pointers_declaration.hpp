@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 209.149645 - Diag
+//Exported Pointer Definitions For: Arma 3 211.149685 - Diag
 
 
 // Unary Functions
@@ -473,6 +473,7 @@ static unary_function unary__getdlcusagetime__scalar__ret__scalar;
 static unary_function unary__geteditorcamera__control__ret__object;
 static unary_function unary__geteditormode__control__ret__string;
 static unary_function unary__getenginetargetrpmrtd__object__ret__array;
+static unary_function unary__geteventhandlerinfo__array__ret__array;
 static unary_function unary__getfatigue__object__ret__scalar;
 static unary_function unary__getfieldmanualstartpage__display__ret__array;
 static unary_function unary__getforcedflagtexture__object__ret__string;
@@ -1801,6 +1802,7 @@ static binary_function binary__getdir__object_array__object_array__ret__scalar;
 static binary_function binary__geteditorobjectscope__control__string__ret__string;
 static binary_function binary__getenv3dsoundcontroller__object__string__ret__scalar;
 static binary_function binary__getenvsoundcontroller__array__string__ret__scalar;
+static binary_function binary__geteventhandlerinfo__object__array__ret__array;
 static binary_function binary__getfriend__side__side__ret__scalar;
 static binary_function binary__getfsmvariable__scalar__string_array__ret__any;
 static binary_function binary__getgroupicon__group__scalar__ret__array;

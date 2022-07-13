@@ -407,8 +407,23 @@ namespace intercept {
         @sa https://community.bistudio.com/wiki/waypointSpeed
         */
         waypoint::speed waypoint_speed(waypoint &wp_);
-        // TODO waypoint_statements needs struct for return value
-        // TODO waypoint_timeout needs struct for return value
+
+        struct rv_waypoint_statements {
+            sqf_return_string condition;
+            sqf_return_string statement;
+            explicit rv_waypoint_statements(const game_value &gv_)
+                : condition(gv_[0]), statement(gv_[1])
+            {}
+        };
+
+        struct rv_waypoint_timeout {
+            float min, mid, max;
+            explicit rv_waypoint_timeout(const game_value &gv_)
+                : min(gv_[0]), mid(gv_[1]), max(gv_[2]) {}
+        };
+
+        rv_waypoint_statements waypoint_statements(const waypoint &wp_);
+        rv_waypoint_timeout waypoint_timeout(const waypoint &wp_);
 
         /*!
         @brief Gets the waypoint type.

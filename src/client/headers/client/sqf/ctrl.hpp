@@ -96,22 +96,19 @@ namespace intercept {
             float aspect_ratio;
             float ui_scale;
             vector2 fov;
-            bool tripleHead = false;
+            float texture_quality;
+            bool triple_head;
 
-            static rv_resolution from_game_value(game_value_parameter resolution_result_) {
-                const vector2 resolution = {resolution_result_[0], resolution_result_[1]};
-                const vector2 viewport = {resolution_result_[2], resolution_result_[3]};
-                const float aspectRatio = resolution_result_[4];
-                const float uiScale = resolution_result_[5];
-
-                if (resolution_result_.size() > 6) {
-                    const vector2 fov = {resolution_result_[6], resolution_result_[7]};
-                    const bool tripleHead = resolution_result_[8];
-                    return rv_resolution{resolution, viewport, aspectRatio, uiScale, fov, tripleHead};
-                }
-
-                return rv_resolution{resolution, viewport, aspectRatio, uiScale};
-            }
+            explicit rv_resolution(const game_value& gv_)
+                : resolution(gv_[0], gv_[1]),
+                  viewport(gv_[2], gv_[3]),
+                  aspect_ratio(gv_[4]),
+                  ui_scale(gv_[5]),
+                  fov(gv_[6], gv_[7]),
+                  triple_head(gv_[8]),
+                  texture_quality(gv_[9])
+            {}
+           
         };
 
         /*ctrl_ */

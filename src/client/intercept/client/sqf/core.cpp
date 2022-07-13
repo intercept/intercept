@@ -955,6 +955,15 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__removemissioneventhandler__array__ret__nothing, {type_, index_});
         }
 
+        rv_event_handler_info get_event_handler_info(const object &obj_, sqf_string_const_ref event_, int id_) {
+            return rv_event_handler_info(host::functions.invoke_raw_binary(__sqf::binary__geteventhandlerinfo__object__array__ret__array, obj_, {event_, id_}));
+        }
+
+        rv_event_handler_info get_event_handler_info(sqf_string_const_ref event_, int id_) {
+            return rv_event_handler_info(host::functions.invoke_raw_unary(__sqf::unary__geteventhandlerinfo__array__ret__array, {event_, id_}));
+        }
+
+
         bool is_equal_to(game_value left_, game_value right_) {
             return host::functions.invoke_raw_binary(__sqf::binary__isequalto__any__any__ret__bool, left_, right_);
         }

@@ -38,7 +38,7 @@ namespace intercept {
 #if _WIN32 || _WIN64
         explicit MemorySection(const MODULEINFO& modInfo) noexcept :
             start(reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)),
-            end(reinterpret_cast<uintptr_t>(modInfo.SizeOfImage) + reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)) {}
+            end(static_cast<uintptr_t>(modInfo.SizeOfImage) + reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)) {}
 #endif // _WIN32 || _WIN64
         MemorySection(uintptr_t _start, uintptr_t _end) noexcept : start(_start), end(_end) {}
         uintptr_t start;

@@ -47,7 +47,7 @@ namespace intercept {
             return end - start;
         }
         std::optional<uintptr_t> findInMemory(const char* pattern, size_t patternLength) const {
-            const uintptr_t base = reinterpret_cast<const uintptr_t>(start);
+            const uintptr_t base = start;
             const auto sz = size();
             for (uintptr_t i = 0; i < sz - patternLength; i++) {
                 bool found = true;
@@ -64,7 +64,7 @@ namespace intercept {
             return std::nullopt;
         }
         std::optional<uintptr_t> findInMemoryPattern(const char* pattern, const char* mask, uintptr_t offset = 0) const {
-            const uintptr_t base = reinterpret_cast<const uintptr_t>(start);
+            const uintptr_t base = start;
             const auto sz = size();
             const auto patternLength = strlen(mask);
             for (uintptr_t i = 0; i < sz - patternLength; i++) {
@@ -212,10 +212,6 @@ namespace intercept {
             return true;
         }
         return false;
-    }
-
-    static inline const char* bool_to_str(bool b) {
-        return b ? "true" : "false";
     }
 
     void loader::do_function_walk(uintptr_t state_addr_) {

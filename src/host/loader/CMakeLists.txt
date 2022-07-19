@@ -1,3 +1,9 @@
+option(DEBUG_LOADER "DEBUG_LOADER" OFF)
+
+if (DEBUG_LOADER)
+    add_compile_definitions(LOADER_DEBUG=1)
+endif()
+
 file(GLOB_RECURSE INTERCEPT_LOADER_SOURCES *.h *.hpp *.c *.cpp)
 intercept_set_linker_options()
 file(GLOB LOADER_SOURCES *.h *.hpp *.c *.cpp)

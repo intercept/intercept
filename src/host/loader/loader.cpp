@@ -294,11 +294,25 @@ namespace intercept {
         #ifndef __linux__
             return (findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));
         #elif _LINUX64
-            uintptr_t vtableStart = stringOffset + 0x20;
-            return vtableStart;
+            bool oldCompiler = *reinterpret_cast<uintptr_t*>(stringOffset - 8) == stringOffset;
+
+            if (oldCompiler) {
+                uintptr_t vtableStart = stringOffset + 0x20;
+                return vtableStart;
+            }
+
+            auto ref = findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t));
+            if (!ref) return 0;
+            // find who points to the address after, there should only be one
+            ref += 8;
+            ref = findInMemory(reinterpret_cast<char*>(&ref), sizeof(uintptr_t));
+            if (!ref) return 0;
+            return ref - 0x108;
         #else
-            uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
-            return vtableStart;
+            static_assert(false, "32bit linux Not supported anymore intentional compile fail")
+            return 0;
+            //uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
+            //return vtableStart;
             //return (findInMemory(reinterpret_cast<char*>(&vtableStart), 4));
         #endif
         });

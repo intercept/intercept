@@ -2,6 +2,11 @@
 #include "controller.hpp"
 #include <thread>
 #include <future>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <optional>
+#include <regex>
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -16,12 +21,143 @@
 //template class intercept::types::rv_allocator<intercept::__internal::game_functions>;
 //template class intercept::types::rv_allocator<intercept::__internal::game_operators>;
 
+#ifdef LOADER_DEBUG
+#define DEBUG_PTR(n) std::cerr << "intercept::loader: " << #n << ": 0x" << std::hex << n << std::endl
+#else
+#define DEBUG_PTR(n)
+#endif
+
 namespace intercept {
     loader::loader() : _attached(false), _patched(false) {}
 
     loader::~loader() {
-
     }
+
+    class MemorySection {
+    public:
+#if _WIN32 || _WIN64
+        explicit MemorySection(const MODULEINFO& modInfo) noexcept :
+            start(reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)),
+            end(static_cast<uintptr_t>(modInfo.SizeOfImage) + reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)) {}
+#endif // _WIN32 || _WIN64
+        MemorySection(uintptr_t _start, uintptr_t _end) noexcept : start(_start), end(_end) {}
+        uintptr_t start;
+        uintptr_t end;
+        inline size_t size() const {
+            return end - start;
+        }
+        std::optional<uintptr_t> findInMemory(const char* pattern, size_t patternLength) const {
+            const uintptr_t base = start;
+            const auto sz = size();
+            for (uintptr_t i = 0; i < sz - patternLength; i++) {
+                bool found = true;
+                for (uintptr_t j = 0; j < patternLength; j++) {
+                    found &= pattern[j] == *reinterpret_cast<char*>(base + i + j);
+                    if (!found) {
+                        break;
+                    }
+                }
+                if (found) {
+                    return base + i;
+                }
+            }
+            return std::nullopt;
+        }
+        std::optional<uintptr_t> findInMemoryPattern(const char* pattern, const char* mask, uintptr_t offset = 0) const {
+            const uintptr_t base = start;
+            const auto sz = size();
+            const auto patternLength = strlen(mask);
+            for (uintptr_t i = 0; i < sz - patternLength; i++) {
+                bool found = true;
+                for (uintptr_t j = 0; j < patternLength; j++) {
+                    found &= mask[j] == '?' || pattern[j] == *reinterpret_cast<char*>(base + i + j);
+                    if (!found) {
+                        break;
+                    }
+                }
+                if (found) {
+                    return base + i + offset;
+                }
+            }
+            return std::nullopt;
+        }
+    };
+
+    class MemorySections {
+    protected:
+        std::vector<MemorySection> sections;
+    public:
+#if _WIN32 || _WIN64
+        MemorySections() {
+            MODULEINFO modInfo = { nullptr };
+            HMODULE hModule = GetModuleHandleA(nullptr);
+            GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+            const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+            const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+            sections.push_back(MemorySection(modInfo));
+        }
+#endif // _WIN32 || _WIN64
+#ifdef __linux__
+        MemorySections(const char* path = "/proc/self/maps") {
+            std::ifstream maps(path);
+            std::string line;
+            // example: 00400000-0040e000 r--p 00000000 00:27 1709145                            /opt/faststeam/steamapps/common/Arma 3 Server/arma3server_x64
+            const std::regex mapsPattern("^([0-9a-f]+)-([0-9a-f]+)\\s+(.{4})\\s+([0-9a-f]+)\\s+[0-9]+:[0-9]+\\s+[0-9]+\\s+(.*)$");
+            std::smatch match;
+            std::optional<std::string> firstModule = std::nullopt;
+            while (std::getline(maps, line)) {
+                if (!std::regex_match(line, match, mapsPattern)) {
+                    continue;
+                }
+                // If we don't get a module name, then skip it
+                if (match.size() < 6) {
+                    continue;
+                }
+                // If this is the first module encountered, set the module name.
+                if (!firstModule.has_value()) {
+                    firstModule = match[5].str();
+                }
+                // Only read sections while we're still in the first module, and before we get to it's heap
+                auto moduleName = match[5].str();
+                if (moduleName == "[heap]" || moduleName != firstModule.value()) {
+                    break;
+                }
+                // Parse out begin/end memory locations
+                auto startParsed = std::strtoul(match[1].str().c_str(), nullptr, 16);
+                auto endParsed = std::strtoul(match[2].str().c_str(), nullptr, 16);
+                #ifdef LOADER_DEBUG
+                    std::cerr << "intercept::loader: map line: " << line << std::endl;
+                    std::cerr << '\t' << std::hex << startParsed << "-" << std::hex << endParsed << std::endl;
+                #endif
+
+                // Add section to array
+                sections.push_back(MemorySection(static_cast<uintptr_t>(startParsed), static_cast<uintptr_t>(endParsed)));
+            }
+        }
+#endif // defined(__linux__)
+        explicit MemorySections(uintptr_t _start, uintptr_t _size): sections({MemorySection(_start, _start + _size)}) {}
+        uintptr_t findInMemory(const char* pattern, size_t patternLength) const {
+            for (const auto& section : sections) {
+                auto found = section.findInMemory(pattern, patternLength);
+                if (found.has_value()) {
+                    return found.value();
+                }
+            }
+            return 0;
+        }
+        uintptr_t findInMemory(const std::string_view& pattern) const {
+            return findInMemory(pattern.data(), pattern.length());
+        }
+        uintptr_t findInMemoryPattern(const char* pattern, const char* mask, uintptr_t offset = 0) const {
+            for (const auto& section : sections) {
+                auto found = section.findInMemoryPattern(pattern, mask, offset);
+                if (found.has_value()) {
+                    return found.value();
+                }
+            }
+            return 0;
+        }
+    };
 
     bool loader::get_function(std::string_view function_name_, unary_function & function_, std::string_view arg_signature_) {
         auto it = _unary_operators.find(function_name_);
@@ -80,59 +216,15 @@ namespace intercept {
 
     void loader::do_function_walk(uintptr_t state_addr_) {
         game_state_ptr = reinterpret_cast<game_state*>(state_addr_);
+        DEBUG_PTR(game_state_ptr);
 
-    #ifdef __linux__
-        std::ifstream maps("/proc/self/maps");
-        uintptr_t start;
-        uintptr_t end;
-        char placeholder;
-        maps >> std::hex >> start >> placeholder >> end;
-        //link_map *lm = (link_map*) dlopen(0, RTLD_NOW);
-        //uintptr_t baseAddress = reinterpret_cast<uintptr_t>(lm->l_addr);
-        //uintptr_t moduleSize = 35000000; //35MB hardcoded till I find out how to detect it properly
-        uintptr_t baseAddress = start;
-        uintptr_t moduleSize = end - start;
-    #else
-        MODULEINFO modInfo = { nullptr };
-        HMODULE hModule = GetModuleHandleA(nullptr);
-        GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
-        const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-        const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
-    #endif
-        //std::cout << "base - size" << std::hex << baseAddress << moduleSize << "\n";
-        auto findInMemory = [baseAddress, moduleSize](const char* pattern, size_t patternLength) ->uintptr_t {
-            const uintptr_t base = baseAddress;
-            const uintptr_t size = moduleSize;
-            for (uintptr_t i = 0; i < size - patternLength; i++) {
-                bool found = true;
-                for (uintptr_t j = 0; j < patternLength; j++) {
-                    found &= pattern[j] == *reinterpret_cast<char*>(base + i + j);
-                    if (!found)
-                        break;
-                }
-                if (found)
-                    return base + i;
-            }
-            return 0;
+        // default constructor chosen by platform
+        MemorySections memorySections;
+        auto findInMemory = [memorySections](const char* pattern, size_t patternLength) -> uintptr_t {
+            return memorySections.findInMemory(pattern, patternLength);
         };
-
-        auto findInMemoryPattern = [baseAddress, moduleSize](const char* pattern, const char* mask, uintptr_t offset = 0) {
-            const uintptr_t base = baseAddress;
-            const uintptr_t size = moduleSize;
-
-            const uintptr_t patternLength = static_cast<uintptr_t>(strlen(mask));
-
-            for (uintptr_t i = 0; i < size - patternLength; i++) {
-                bool found = true;
-                for (uintptr_t j = 0; j < patternLength; j++) {
-                    found &= mask[j] == '?' || pattern[j] == *reinterpret_cast<char*>(base + i + j);
-                    if (!found)
-                        break;
-                }
-                if (found)
-                    return base + i + offset;
-            }
-            return static_cast<uintptr_t>(0x0u);
+        auto findInMemoryPattern = [memorySections](const char* pattern, const char* mask, uintptr_t offset = 0) {
+            return memorySections.findInMemoryPattern(pattern, mask, offset);
         };
 
         auto getRTTIName = [](uintptr_t vtable) -> const char* {
@@ -185,7 +277,10 @@ namespace intercept {
     #ifdef __linux__
         auto future_stringOffset = std::async([&]() {
             auto offs = findInMemory("12MemFunction", 13);
-            //std::cout << "future_stringOffset" << std::hex << offs << "\n";
+            #ifdef LOADER_DEBUG
+                auto prefix = "intercept::loader";
+                fprintf(stderr, "%s: stringSearch: %s\n%s: stringOffset: %p\n", prefix, "12MemFunction", prefix, offs);
+            #endif
             return offs;
         });
     #else
@@ -199,14 +294,13 @@ namespace intercept {
         #ifndef __linux__
             return (findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));
         #elif _LINUX64
-          uintptr_t vtableStart = stringOffset + 0x20;
-          return vtableStart;
+            uintptr_t vtableStart = stringOffset + 0x20;
+            return vtableStart;
         #else
             uintptr_t vtableStart = stringOffset - (0x09D20C70 - 0x09D20BE8);
             return vtableStart;
             //return (findInMemory(reinterpret_cast<char*>(&vtableStart), 4));
         #endif
-
         });
 
 
@@ -312,6 +406,7 @@ namespace intercept {
         //We need the allocator before we run the command scanning because the logging calls need r_string allocations
 
         uintptr_t allocatorVtablePtr = future_allocatorVtablePtr.get();
+        DEBUG_PTR(allocatorVtablePtr);
 #ifdef __linux__
         const char* test = getRTTIName((uintptr_t)(&allocatorVtablePtr));
         assert(strcmp(test, "12MemFunctions") == 0);

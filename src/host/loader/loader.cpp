@@ -131,7 +131,7 @@ namespace intercept {
                 #endif
 
                 // Add section to array
-                sections.push_back(MemorySection(reinterpret_cast<uintptr_t>(startParsed), reinterpret_cast<uintptr_t>(endParsed)));
+                sections.push_back(MemorySection(static_cast<uintptr_t>(startParsed), static_cast<uintptr_t>(endParsed)));
             }
         }
 #endif // defined(__linux__)

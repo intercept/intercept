@@ -35,6 +35,11 @@ namespace intercept {
 
     class MemorySection {
     public:
+#if _WIN32 || _WIN64
+        explicit MemorySection(const MODULEINFO& modInfo) noexcept :
+            start(reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)),
+            end(reinterpret_cast<uintptr_t>(modInfo.SizeOfImage) + reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll)) {}
+#endif // _WIN32 || _WIN64
         MemorySection(uintptr_t _start, uintptr_t _end) noexcept : start(_start), end(_end) {}
         uintptr_t start;
         uintptr_t end;
@@ -82,8 +87,18 @@ namespace intercept {
     protected:
         std::vector<MemorySection> sections;
     public:
+#if _WIN32 || _WIN64
+        MemorySections() {
+            MODULEINFO modInfo = { nullptr };
+            HMODULE hModule = GetModuleHandleA(nullptr);
+            GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+            const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
+            const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
+            sections.push_back(MemorySection(modInfo));
+        }
+#endif // _WIN32 || _WIN64
 #ifdef __linux__
-        explicit MemorySections(const char* path = "/proc/self/maps") {
+        MemorySections(const char* path = "/proc/self/maps") {
             std::ifstream maps(path);
             std::string line;
             // example: 00400000-0040e000 r--p 00000000 00:27 1709145                            /opt/faststeam/steamapps/common/Arma 3 Server/arma3server_x64
@@ -207,20 +222,8 @@ namespace intercept {
         game_state_ptr = reinterpret_cast<game_state*>(state_addr_);
         DEBUG_PTR(game_state_ptr);
 
-        #ifdef __linux__
-            MemorySections memorySections("/proc/self/maps");
-        #else
-            MODULEINFO modInfo = { nullptr };
-            HMODULE hModule = GetModuleHandleA(nullptr);
-            GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
-            const uintptr_t baseAddress = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
-            const uintptr_t moduleSize = static_cast<uintptr_t>(modInfo.SizeOfImage);
-            MemorySections memorySections(baseAddress, moduleSize);
-            #ifdef LOADER_DEBUG
-                DEBUG_PTR(baseAddress);
-                fprintf(stderr, "intercept::loader: moduleSize: %p (%lu)\n", moduleSize, static_cast<long unsigned int>(moduleSize));
-            #endif
-        #endif
+        // default constructor chosen by platform
+        MemorySections memorySections;
         auto findInMemory = [memorySections](const char* pattern, size_t patternLength) -> uintptr_t {
             return memorySections.findInMemory(pattern, patternLength);
         };

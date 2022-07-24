@@ -289,7 +289,7 @@ namespace intercept {
 
         //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
 
-        auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&]() {
+        auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&]() -> uintptr_t {
             uintptr_t stringOffset = future_stringOffset.get();
         #ifndef __linux__
             return (findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));

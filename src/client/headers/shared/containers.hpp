@@ -365,7 +365,7 @@ namespace intercept::types {
 
         /**
          * @brief Swap references
-         * @param other_ reference to swap from
+         * @param other_ reference to swap with
          */
         void swap(ref& other_) noexcept {
             auto temp = other_._ref;

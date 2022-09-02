@@ -224,8 +224,7 @@ namespace intercept::types {
             return --_refcount;
         }
         /**
-         * @brief Returns refernce count
-         * 
+         * @brief Returns the reference count
          */
         constexpr int ref_count() const noexcept {
             return _refcount;

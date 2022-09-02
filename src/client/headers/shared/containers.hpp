@@ -260,7 +260,6 @@ namespace intercept::types {
 
         /**
          * @brief deletes object
-         * 
          */
         void destruct() const noexcept {
             delete const_cast<refcount*>(this);

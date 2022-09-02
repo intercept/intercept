@@ -265,7 +265,7 @@ namespace intercept::types {
             delete const_cast<refcount*>(this);
         }
         /**
-         * @brief wrapper for destruct
+         * @brief  customization point for destruct
          */
         virtual void lastRefDeleted() const { destruct(); }
 

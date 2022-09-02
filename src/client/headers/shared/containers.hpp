@@ -218,8 +218,7 @@ namespace intercept::types {
             return ++_refcount;
         }
         /**
-         * @brief Decreaments refernce counter
-         * 
+         * @brief Decrements the reference counter
          */
         constexpr int dec_ref() const noexcept {
             return --_refcount;

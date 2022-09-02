@@ -302,8 +302,9 @@ namespace intercept::types {
         }
 
         /**
-         * @brief Copy from pointer
-         * @param source_ generic type pointer to copy from
+         * @brief Assignment operator
+         * @param source_ generic type pointer to object to store
+         * @return object to store
          */
         ref& operator=(Type* source_) noexcept {
             Type* old = _ref;
@@ -314,8 +315,8 @@ namespace intercept::types {
         }
 
         /**
-         * @brief Construct from reference
-         * @param source_ref_  reference to construct from
+         * @brief copy constructor
+         * @param source_ref_  reference to copy from
          */
         constexpr ref(const ref& source_ref_) noexcept {
             Type* source = source_ref_._ref;
@@ -324,8 +325,9 @@ namespace intercept::types {
         }
 
         /**
-         * @brief Copy from reference
-         * @param other_ reference to copy from
+         * @brief Assignment operator
+         * @param other_ reference to object to store
+         * @return object to store
          */
         ref& operator=(const ref& other_) {
             Type* source = other_._ref;

@@ -212,8 +212,7 @@ namespace intercept::types {
         constexpr void operator=(const refcount_base&) const noexcept {}
 
         /**
-         * @brief Increaments refernce counter
-         * 
+         * @brief Increments the reference counter
          */
         constexpr int add_ref() const noexcept {
             return ++_refcount;

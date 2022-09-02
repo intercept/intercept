@@ -230,8 +230,8 @@ namespace intercept::types {
             return _refcount;
         }
         /**
-         * @brief refernce counter
-         * mutable do to const/constexpr functions
+         * @brief reference counter
+         * mutable due to const/constexpr functions
          */
         mutable int _refcount;
     };

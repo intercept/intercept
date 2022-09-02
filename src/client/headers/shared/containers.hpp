@@ -246,8 +246,7 @@ namespace intercept::types {
         virtual ~refcount() = default;
 
         /**
-         * @brief decrement reference and delete object if refcount is zero
-         * 
+         * @brief decrement reference count and delete object if refcount is zero
          */
         int release() const {
             const auto rcount = dec_ref();

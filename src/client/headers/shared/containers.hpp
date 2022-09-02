@@ -266,7 +266,6 @@ namespace intercept::types {
         }
         /**
          * @brief wrapper for destruct
-         * 
          */
         virtual void lastRefDeleted() const { destruct(); }
 

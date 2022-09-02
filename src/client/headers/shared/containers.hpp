@@ -277,7 +277,7 @@ namespace intercept::types {
 
     class game_value_static;
     /**
-     * @brief Referencing counting class template.
+     * @brief Reference counting class template.
      * Type must inherit from refcount_base
      * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
      */

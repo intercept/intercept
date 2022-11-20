@@ -514,6 +514,14 @@ namespace intercept {
             return __helpers::__number_unary_control(__sqf::unary__ctrltype__control__ret__scalar, value_);
         }
 
+        int ctrl_shadow(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlshadow__control__ret__scalar, ctrl_);
+        }
+
+        void ctrl_set_shadow(const control &ctrl_, int shadow_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlsetshadow__control__scalar__ret__nothing, ctrl_, shadow_);
+        }
+
         bool ctrl_visible(float value_) {
             return __helpers::__bool_unary_number(__sqf::unary__ctrlvisible__scalar__ret__bool, value_);
         }
@@ -3228,6 +3236,26 @@ namespace intercept {
 
         vector2 get_texture_info(sqf_string_const_ref path_) {
             return host::functions.invoke_raw_unary(__sqf::unary__gettextureinfo__string__ret__array, path_);
+        }
+
+        control ctrl_at(const display &disp_, const vector2 &pos_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__ctrlat__display__array__ret__nothing, disp_, pos_);
+        }
+
+        int ctrl_url_overlay_mode(const control &ctrl_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlurloverlaymode__control__ret__scalar, ctrl_);
+        }
+
+        void ctrl_set_url_overlay_mode(const control &ctrl_, int mode_) {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlseturloverlaymode__control__scalar__ret__nothing, ctrl_, mode_);
+        }
+
+        sqf_return_string display_unique_name(const display &disp_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__displayuniquename__display__ret__nothing, disp_);
+        }
+
+        void display_update(const display &disp_) {
+            host::functions.invoke_raw_unary(__sqf::unary__displayupdate__display__ret__nothing, disp_);
         }
     }  // namespace sqf
 }  // namespace intercept

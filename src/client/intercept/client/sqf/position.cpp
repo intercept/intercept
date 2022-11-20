@@ -413,6 +413,19 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getdir__object_array__object_array__ret__scalar, from, to);
         }
 
+        float get_dir_visual(t_sqf_in_area_position from_, t_sqf_in_area_position to_) {
+            game_value from;
+            game_value to;
+
+            if (from_.index() == 0) from = std::get<0>(from_).get();
+            if (from_.index() == 1) from = std::get<1>(from_).get();
+            if (to_.index() == 0) to = std::get<0>(to_).get();
+            if (to_.index() == 1) to = std::get<1>(to_).get();
+
+            return host::functions.invoke_raw_binary(__sqf::binary__getdirvisual__object_array__object_array__ret__scalar, from, to);
+        }
+
+
         void set_direction(const location &location_, float direction_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
         }

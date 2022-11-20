@@ -18,6 +18,11 @@ namespace intercept {
             return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
 
+        std::optional<bool> free_extension(sqf_string_const_ref extension_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__freeextension__string__ret__bool_nothing, extension_);
+            return ret.is_nil() ? std::nullopt : std::optional<bool>(ret);
+        }
+
         game_value call2(const code &code_, game_value args_) {
             game_value args({args_, code_});
 
@@ -631,6 +636,10 @@ namespace intercept {
             return __helpers::__convert_to_vector<group>(host::functions.invoke_raw_nular(__sqf::nular__allgroups__ret__array));
         }
 
+        std::vector<group> groups(const side &side_) {
+            return __helpers::__convert_to_vector<group>(host::functions.invoke_raw_unary(__sqf::unary__groups__side__ret__array, side_));
+        }
+
         std::vector<object> all_mines() {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_nular(__sqf::nular__allmines__ret__array));
         }
@@ -956,7 +965,7 @@ namespace intercept {
         }
 
         rv_event_handler_info get_event_handler_info(const object &obj_, sqf_string_const_ref event_, int id_) {
-            return rv_event_handler_info(host::functions.invoke_raw_binary(__sqf::binary__geteventhandlerinfo__object__array__ret__array, obj_, {event_, id_}));
+            return rv_event_handler_info(host::functions.invoke_raw_binary(__sqf::binary__geteventhandlerinfo__object_group__array__ret__array, obj_, {event_, id_}));
         }
 
         rv_event_handler_info get_event_handler_info(sqf_string_const_ref event_, int id_) {
@@ -1088,8 +1097,16 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__ismissionprofilenamespaceloaded__ret__bool);
         }
 
+        bool is_steam_overlay_enabled() {
+            return host::functions.invoke_raw_nular(__sqf::nular__issteamoverlayenabled__ret__bool);
+        }
+
         bool is_saving() {
             return host::functions.invoke_raw_nular(__sqf::nular__issaving__ret__bool);
+        }
+
+        void set_ti_parameter(sqf_string_const_ref param_, float value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__settiparameter__array__ret__nothing, {param_, value_});
         }
     }  // namespace sqf
 }  // namespace intercept

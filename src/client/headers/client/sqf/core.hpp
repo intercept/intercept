@@ -87,6 +87,7 @@ namespace intercept {
         };
         sqf_return_string call_extension(sqf_string_const_ref extension_, sqf_string_const_ref arguments_);
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_);
+        std::optional<bool> free_extension(sqf_string_const_ref extension_);
 
         ///Use this to check if fastCall is available. Which calls the engine function directly instead of going through a isNil wrapper
         bool _has_fast_call();
@@ -272,6 +273,7 @@ namespace intercept {
         std::vector<object> all_deadmen();
         std::vector<display> all_displays();
         std::vector<group> all_groups();
+        std::vector<group> groups(const side& side_);
         std::vector<object> all_mines();
         std::vector<object> all_players();
         // std::vector<site> all_sites(); // This command is depecrated and no longer supported https://community.bistudio.com/wiki/allSites
@@ -349,7 +351,9 @@ namespace intercept {
         sqf_return_string hash_value(const game_value &value_);
 
         bool is_mission_profile_namespace_loaded();
-
+        bool is_steam_overlay_enabled();
         bool is_saving();
+
+        void set_ti_parameter(sqf_string_const_ref param_, float value_);
     }  // namespace sqf
 }  // namespace intercept

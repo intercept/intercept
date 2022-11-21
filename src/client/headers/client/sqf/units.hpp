@@ -326,5 +326,7 @@ namespace intercept {
         sqf_return_string_list compatible_magazines(sqf_string_const_ref weapon_, sqf_string_const_ref muzzle_);
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_);
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_);
+
+        object get_corpse(const object &holder_);
     }  // namespace sqf
 }  // namespace intercept

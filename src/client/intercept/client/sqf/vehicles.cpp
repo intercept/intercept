@@ -262,6 +262,14 @@ namespace intercept {
             return __helpers::__object_unary_object(__sqf::unary__assignedtarget__object__ret__object, veh_);
         }
 
+        group assigned_group(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__assignedgroup__object__ret__group, veh_);
+        }
+
+        std::vector<object> assigned_vehicles(const group &grp_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__assignedvehicles__group__ret__array, grp_));
+        }
+
         object commander(const object &veh_) {
             return __helpers::__object_unary_object(__sqf::unary__commander__object__ret__object, veh_);
         }

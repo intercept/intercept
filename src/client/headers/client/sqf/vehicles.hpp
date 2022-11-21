@@ -209,6 +209,8 @@ namespace intercept {
         object assigned_driver(const object &veh_);
         object assigned_gunner(const object &veh_);
         object assigned_target(const object &veh_);
+        group assigned_group(const object &veh_);
+        std::vector<object> assigned_vehicles(const group &grp_);
         object commander(const object &veh_);
         group create_vehicle_crew(const object &veh_);
         float damage(const object &object_);

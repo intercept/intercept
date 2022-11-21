@@ -1007,5 +1007,9 @@ namespace intercept {
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__compatibleitems__string_array__ret__array, {weapon_, slot_}));
         }
+
+        object get_corpse(const object &holder_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getcorpse__object__ret__object, holder_);
+        }
     }  // namespace sqf
 }  // namespace intercept

@@ -140,6 +140,7 @@ namespace intercept {
         vector3 bounding_center(const object &obj_);
         void set_dir(const object &value0_, float value1_);
         float get_dir(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
+        float get_dir_visual(t_sqf_in_area_position from_, t_sqf_in_area_position to_);
         void set_direction(const location &location_, float direction_);
         void set_velocity_model_space(const object &vehicle_, const vector3 &relative_direction_);
         void set_velocity_transformation(const object &object_, const vector3 &position1_, const vector3 &position2_, const vector3 &velocity1_, const vector3 &velocity2_, const vector3 &direction1_, const vector3 &direction2_, const vector3 &up1_, const vector3 &up2_, float time_);

@@ -117,6 +117,5 @@ namespace intercept {
         void delete_resources(const team_member &team_member_, sqf_string_list_const_ref resources_);
         void remove_team_member(const team_member &team_, const team_member &member_);
         void set_leader(const team_member &team_, const team_member &leader_);
-
     }  // namespace sqf
 }  // namespace intercept

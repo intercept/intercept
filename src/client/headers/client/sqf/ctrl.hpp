@@ -196,6 +196,8 @@ namespace intercept {
         float ctrl_scale(const control &value_);
         float ctrl_text_height(const control &value_);
         float ctrl_type(const control &value_);
+        int ctrl_shadow(const control &ctrl_);
+        void ctrl_set_shadow(const control &ctrl_, int shadow_);
         sqf_return_string ctrl_class_name(const control &value_);
         sqf_return_string ctrl_model(const control &value_);
         sqf_return_string ctrl_text(const control &value_);
@@ -794,5 +796,12 @@ namespace intercept {
         game_value ctrl_map_mouse_over(const control &map_);
 
         vector2 get_texture_info(sqf_string_const_ref path_);
+
+        control ctrl_at(const display &disp_, const vector2 &pos_);
+        int ctrl_url_overlay_mode(const control &ctrl_);
+        void ctrl_set_url_overlay_mode(const control &ctrl_, int mode_);
+
+        sqf_return_string display_unique_name(const display &disp_);
+        void display_update(const display &disp_);
     }  // namespace sqf
 }  // namespace intercept

@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 211.150030 - Diag
+//Exported Pointer Assignments For: Arma 3 211.150151 - Diag
 
 
 // Unary Functions
@@ -334,7 +334,7 @@ __sqf::unary__disableuserinput__bool__ret__nothing = (unary_function)host::funct
 __sqf::unary__displaychild__display__ret__display = (unary_function)host::functions.get_unary_function_typed("displaychild"sv, "DISPLAY"sv);
 __sqf::unary__displayctrl__scalar__ret__control = (unary_function)host::functions.get_unary_function_typed("displayctrl"sv, "SCALAR"sv);
 __sqf::unary__displayparent__display__ret__display = (unary_function)host::functions.get_unary_function_typed("displayparent"sv, "DISPLAY"sv);
-__sqf::unary__displayuniquename__display__ret__nothing = (unary_function)host::functions.get_unary_function_typed("displayuniquename"sv, "DISPLAY"sv);
+__sqf::unary__displayuniquename__display__ret__string = (unary_function)host::functions.get_unary_function_typed("displayuniquename"sv, "DISPLAY"sv);
 __sqf::unary__displayupdate__display__ret__nothing = (unary_function)host::functions.get_unary_function_typed("displayupdate"sv, "DISPLAY"sv);
 __sqf::unary__dissolveteam__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("dissolveteam"sv, "STRING"sv);
 __sqf::unary__do3denaction__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("do3denaction"sv, "STRING"sv);
@@ -1426,6 +1426,7 @@ __sqf::binary__addweaponwithattachmentscargoglobal__object__array__ret__nothing 
 __sqf::binary__aimedattarget__object__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("aimedattarget"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__alldiaryrecords__object__string__ret__array = (binary_function)host::functions.get_binary_function_typed("alldiaryrecords"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__allobjects__scalar__scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("allobjects"sv, "SCALAR"sv, "SCALAR"sv);
+__sqf::binary__allobjects__string__scalar__ret__array = (binary_function)host::functions.get_binary_function_typed("allobjects"sv, "STRING"sv, "SCALAR"sv);
 __sqf::binary__allow3dmode__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allow3dmode"sv, "CONTROL"sv, "BOOL"sv);
 __sqf::binary__allowcrewinimmobile__object__bool_array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allowcrewinimmobile"sv, "OBJECT"sv, "ARRAY"sv);
 __sqf::binary__allowcuratorlogicignoreareas__object__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("allowcuratorlogicignoreareas"sv, "OBJECT"sv, "BOOL"sv);
@@ -1563,7 +1564,7 @@ __sqf::binary__ctremoverows__control__array__ret__nothing = (binary_function)hos
 __sqf::binary__ctrladdeventhandler__control__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrladdeventhandler"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrlanimatemodel__control__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlanimatemodel"sv, "CONTROL"sv, "ARRAY"sv);
 __sqf::binary__ctrlanimationphasemodel__control__string__ret__scalar = (binary_function)host::functions.get_binary_function_typed("ctrlanimationphasemodel"sv, "CONTROL"sv, "STRING"sv);
-__sqf::binary__ctrlat__display__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlat"sv, "DISPLAY"sv, "ARRAY"sv);
+__sqf::binary__ctrlat__display__array__ret__control = (binary_function)host::functions.get_binary_function_typed("ctrlat"sv, "DISPLAY"sv, "ARRAY"sv);
 __sqf::binary__ctrlchecked__control__scalar__ret__bool = (binary_function)host::functions.get_binary_function_typed("ctrlchecked"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcommit__control__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("ctrlcommit"sv, "CONTROL"sv, "SCALAR"sv);
 __sqf::binary__ctrlcreate__display__array__ret__control = (binary_function)host::functions.get_binary_function_typed("ctrlcreate"sv, "DISPLAY"sv, "ARRAY"sv);

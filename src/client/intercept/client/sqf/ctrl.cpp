@@ -3239,7 +3239,7 @@ namespace intercept {
         }
 
         control ctrl_at(const display &disp_, const vector2 &pos_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__ctrlat__display__array__ret__nothing, disp_, pos_);
+            return host::functions.invoke_raw_binary(__sqf::binary__ctrlat__display__array__ret__control, disp_, pos_);
         }
 
         int ctrl_url_overlay_mode(const control &ctrl_) {
@@ -3251,7 +3251,7 @@ namespace intercept {
         }
 
         sqf_return_string display_unique_name(const display &disp_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__displayuniquename__display__ret__nothing, disp_);
+            return host::functions.invoke_raw_unary(__sqf::unary__displayuniquename__display__ret__string, disp_);
         }
 
         void display_update(const display &disp_) {

@@ -647,8 +647,16 @@ namespace intercept {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__scalar__scalar__ret__array, obj_type_, (int)simulation_kind_));
         }
 
+        std::vector<object> all_objects(sqf_string_const_ref obj_type_, object_simulation_kind simulation_kind_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__string__scalar__ret__array, obj_type_, (int)simulation_kind_));
+        }
+
         std::vector<object> all_objects(int obj_type_, int simulation_kind_) {
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__scalar__scalar__ret__array, obj_type_, simulation_kind_));
+        }
+
+        std::vector<object> all_objects(sqf_string_const_ref obj_type_, int simulation_kind_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__allobjects__string__scalar__ret__array, obj_type_, simulation_kind_));
         }
 
         std::vector<object> nearest_mines(const vector3 &pos_, sqf_string_list_const_ref types_, float radius_, bool sort_, bool mode_2d_) {

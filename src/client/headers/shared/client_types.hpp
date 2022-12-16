@@ -504,7 +504,9 @@ namespace intercept {
             Holders = 4,
             Out = 4,
             Animals = 5,
-            Mines = 6
+            Mines = 6,
+            TriggersMap = 7,
+            VehiclesMap = 8
         };
     }
 }

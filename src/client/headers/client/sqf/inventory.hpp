@@ -637,6 +637,7 @@ namespace intercept {
         bool locked_inventory(const object &vehicle_);
         void remove_all_binocular_items(const object &unit_);
         void remove_all_secondary_weapon_items(const object &unit_);
+        sqf_return_string_list backpacks(const object &unit_);
         
     }  // namespace sqf
 }  // namespace intercept

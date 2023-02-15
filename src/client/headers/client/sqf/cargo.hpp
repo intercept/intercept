@@ -28,6 +28,7 @@ namespace intercept {
         void enable_vehicle_cargo(const object &vehicle_, bool enable_);
 
         bool can_sling_load(const object &vehicle_, const object &cargo_);
+        bool can_sling_load(sqf_string_const_ref vehicle_, sqf_string_const_ref cargo_);
         bool sling_load_assistant_shown();
         bool set_sling_load(const object &vehicle_, const object &load_);
         object get_sling_load(const object &value_);

@@ -422,6 +422,7 @@ namespace intercept {
         bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_);
         void set_cruise_control(const object &veh_, float speed_, bool auto_thrust_);
         void set_tow_parent(const object &towed_vehicle_, const object &towing_vehicle_);
+        object get_tow_parent(const object &towed_vehicle_);
         rv_cruise_params get_cruise_control(const object &veh_);
         std::vector<rv_lod_info> all_lods(const object &obj_);
         std::vector<rv_lod_info> all_lods(sqf_string_const_ref model_path_);
@@ -432,6 +433,16 @@ namespace intercept {
 
         std::vector<rv_sensor_target> get_sensor_targets(const object &vehicle_);
         std::vector<rv_sensor_threat> get_sensor_threats(const object &vehicle_);
+
+        struct rv_disabled_equipment {
+            bool nvg;
+            bool ti;
+            explicit rv_disabled_equipment(const game_value &gv_)
+                : nvg(gv_[0]),
+                  ti(gv_[1]) {}
+        };
+
+        rv_disabled_equipment equipment_disabled(const object &veh_);
 
         void set_max_load(const object &container_, float load_);
         float max_load(const object &container_);
@@ -446,9 +457,33 @@ namespace intercept {
 
         bool is_allowed_crew_in_immobile(const object &veh_);
 
+        // return 0: none, 1: auto, 2: manual, 3: both, -1: unsupported
+        int allowed_service(const object &veh_);
+        // 0: none, 1: auto, 2: manual, 3: both
+        void allow_service(const object &veh_, int service_);
+        bool need_service(const object &veh_);
+
         void set_turret_optics_mode(const object &veh_, int index_);
         int get_turret_optics_mode(const object &veh_);
         void set_turret_optics_mode(const object &veh_, const rv_turret_path &turret_, int index_);
         int get_turret_optics_mode(const object &veh_, const rv_turret_path &turret_);
+
+        struct rv_turret_limits {
+            float min_turn;   // from 0 to -angle in degrees (left)
+            float max_turn;   // from 0 to +angle in degrees (right)
+            float min_elev;   // from 0 to -angle in degrees (down)
+            float max_elev;   // from 0 to +angle in degrees (up)
+            bool overridden;  // if custom limits were applied
+
+            explicit rv_turret_limits(const game_value &gv_)
+                : min_turn(gv_[0]),
+                  max_turn(gv_[1]),
+                  min_elev(gv_[2]),
+                  max_elev(gv_[3]),
+                  overridden(gv_[4]) {}
+        };
+
+        rv_turret_limits get_turret_limits(const object &veh_, const rv_turret_path &turret_);
+        void set_turret_limits(const object &veh_, const rv_turret_path &turret_, float min_turn_, float max_turn_, float min_elev_, float max_elev_);
     }  // namespace sqf
 }  // namespace intercept

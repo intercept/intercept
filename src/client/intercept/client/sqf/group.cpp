@@ -44,6 +44,10 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__groupid__group__ret__string, value_);
         }
 
+        int group_id(const object &unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__groupid__object__ret__scalar, unit_);
+        }
+
         float group_owner(const group &value_) {
             return host::functions.invoke_raw_unary(__sqf::unary__groupowner__group__ret__scalar, value_);
         }

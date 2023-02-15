@@ -99,7 +99,8 @@ namespace intercept {
         float environment_volume();
         float get_music_played_time();
         float speech_volume();
-        void enable_audio_feature(sqf_string_const_ref feature_, bool enable_);
+        bool enable_audio_feature(sqf_string_const_ref feature_, bool enable_ = true);
+        bool enable_audio_feature(const object &building_, sqf_string_const_ref feature_, bool enable_ = true);
         float get_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_);
         float get_custom_sound_controller_count(const object &vehicle_);
         float get_player_von_volume(const object &unit_);

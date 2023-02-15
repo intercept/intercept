@@ -242,6 +242,16 @@ namespace intercept {
         void order_get_in(const std::vector<object> &units_, bool order_);
 
         void set_unload_in_combat(const object &unit_, bool allowCargo, bool allowTurrets);
+
+        struct rv_unload_in_combat {
+            bool allow_cargo;
+            bool allow_turrets;
+            explicit rv_unload_in_combat(const game_value &gv_)
+                : allow_cargo(gv_[0]),
+                  allow_turrets(gv_[1]) {}
+        };
+
+        rv_unload_in_combat get_unload_in_combat(const object &unit_);
         void swim_in_depth(const object &unit_, float depth_);
 
         object calculate_path(sqf_string_const_ref type_, sqf_string_const_ref behaviour_, const vector3& from_, const vector3& to_);

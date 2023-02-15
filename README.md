@@ -2,9 +2,9 @@
 
 [![TravisCI Build Indicator](https://travis-ci.org/intercept/intercept.svg?branch=master)](https://travis-ci.org/intercept/intercept) [![Build status](https://ci.appveyor.com/api/projects/status/508laymfxfnhpbp1/branch/master?svg=true)](https://ci.appveyor.com/project/Verox-/intercept-1irnq/branch/master) [![Slack Status](http://slackin-intercept.idi-systems.com/badge.svg)](http://slackin-intercept.idi-systems.com)
 
-Intercept is a C/C++ binding interface to the Arma 3 engine (internally referred to as the Real Virtuality or RV engine). It's goal is to provide easy to use library for addon makers to develop addons in a native language, or to develop language extensions for the Arma 3 engine.
+Intercept is a C/C++ binding interface to the Arma 3 engine (internally referred to as the Real Virtuality or RV engine). Its goal is to provide easy to use library for addon makers to develop addons in a native language, or to develop language extensions for the Arma 3 engine.
 
-In a nutshell, Intercept provides a full C/C++ binding system for calling the base C++ functions which are declared in RVEngine for SQF functions. All SQF functions within the RVEngine are actually native code, which is called by SQF via the function names. Intercept bypasses SQF entirely, allowing native C++ plugins to seamlessly interact with the game engine. In essence, Intercept allows for expansions of the game engine, calling internal functionality of the engine which has been exposed via SQF functions. 
+In a nutshell, Intercept provides a full C/C++ binding system for calling the base C++ functions which are declared in RVEngine for SQF functions. All SQF functions within the RVEngine are actually native code, which are called by SQF via the function names. Intercept bypasses SQF entirely, allowing native C++ plugins to seamlessly interact with the game engine. In essence, Intercept allows for expansions of the game engine, calling internal functionality of the engine which has been exposed via SQF functions. 
 
 Intercept works on a host/client based system, in which the host, Intercept itself, hosts client DLLs that implement the Intercept library. The Intercept host handles access to the RV engine by clients through a layer that provides thread concurrency, memory handling, and event dispatching. Client DLLs are then able to be written in a way that can safely ignore most internal nuances of handling data in the RV engine and work with standard C++ STD/STL data types, and only a few specialized objects specific to the game engine.
 
@@ -73,7 +73,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 ## Completion Status
 
-As of now (4/06/17) Intercept is over 99% language feature complete. You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13). Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
+As of now (15/02/2023) Intercept is over 97% language feature complete. You can view the progress of wrapper completion [here](https://github.com/intercept/intercept/issues/13). Almost all normally used SQF functions are available to the end user, and with the added ability of writing inline SQF code, you can call any function that has not had a wrapper written for it yet (though with a small performance penalty).
 
 ## Contributions
 

@@ -506,6 +506,7 @@ namespace intercept {
         void display_set_eventhandler(const display &display_, sqf_string_const_ref event_name_, sqf_string_const_ref code_);
         void display_remove_all_event_handlers(sqf_string_const_ref value0_, const display &value1_);
         display find_display(float value_);
+        display find_display(sqf_string_const_ref value_);
         display display_child(const display &disp_);
 
         bool is_tut_hints_enabled();
@@ -794,6 +795,7 @@ namespace intercept {
         rv_ctrl_position ctrl_map_position(const control &map_);
 
         game_value ctrl_map_mouse_over(const control &map_);
+        float ctrl_map_dir(const control &map_);
 
         vector2 get_texture_info(sqf_string_const_ref path_);
 

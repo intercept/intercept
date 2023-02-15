@@ -268,8 +268,12 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__speechvolume__ret__scalar);
         }
 
-        void enable_audio_feature(sqf_string_const_ref feature_, bool enable_) {
-            host::functions.invoke_raw_unary(__sqf::unary__enableaudiofeature__array__ret__bool, {feature_, enable_});
+        bool enable_audio_feature(sqf_string_const_ref feature_, bool enable_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__enableaudiofeature__array__ret__bool, {feature_, enable_});
+        }
+
+        bool enable_audio_feature(const object &building_, sqf_string_const_ref feature_, bool enable_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__enableaudiofeature__object__array__ret__bool, building_, {feature_, enable_});
         }
 
         float get_custom_sound_controller(const object &vehicle_, sqf_string_const_ref controller_) {

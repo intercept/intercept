@@ -775,6 +775,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setunloadincombat__object__array__ret__nothing, unit_, {allowCargo, allowTurrets});
         }
 
+        rv_unload_in_combat get_unload_in_combat(const object &unit_) {
+            return rv_unload_in_combat(host::functions.invoke_raw_unary(__sqf::unary__getunloadincombat__object__ret__array, unit_));
+        }
+
         void swim_in_depth(const object &unit_, float depth_) {
             host::functions.invoke_raw_binary(__sqf::binary__swimindepth__object__scalar__ret__nothing, unit_, depth_);
         }

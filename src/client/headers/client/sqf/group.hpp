@@ -34,6 +34,7 @@ namespace intercept {
 
         group group_from_net_id(sqf_string_const_ref value_);
         sqf_return_string group_id(const group &value_);
+        int group_id(const object &unit_);
         float group_owner(const group &value_);
         bool set_group_owner(const group &group_, int client_id_);
 

@@ -41,6 +41,10 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__canslingload__object__object__ret__bool, vehicle_, cargo_);
         }
 
+        bool can_sling_load(sqf_string_const_ref vehicle_, sqf_string_const_ref cargo_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__canslingload__string__string__ret__bool, vehicle_, cargo_);
+        }
+
         bool set_sling_load(const object &vehicle_, const object &load_) {
             return host::functions.invoke_raw_binary(__sqf::binary__setslingload__object__object__ret__bool, vehicle_, load_);
         }

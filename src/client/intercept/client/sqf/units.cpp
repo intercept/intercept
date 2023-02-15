@@ -863,6 +863,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__forcespeed__object__scalar__ret__nothing, value0_, value1_);
         }
 
+        float get_forced_speed(const object &unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getforcedspeed__object__ret__scalar, unit_);
+        }
+
         void force_walk(const object &value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__forcewalk__object__bool__ret__nothing, value0_, value1_);
         }
@@ -1010,6 +1014,10 @@ namespace intercept {
 
         object get_corpse(const object &holder_) {
             return host::functions.invoke_raw_unary(__sqf::unary__getcorpse__object__ret__object, holder_);
+        }
+
+        float inside_building(const object &unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__insidebuilding__object__ret__scalar, unit_);
         }
     }  // namespace sqf
 }  // namespace intercept

@@ -930,5 +930,9 @@ namespace intercept {
         void remove_all_secondary_weapon_items(const object &unit_) {
             host::functions.invoke_raw_unary(__sqf::unary__removeallsecondaryweaponitems__object__ret__nothing, unit_);
         }
+
+        sqf_return_string_list backpacks(const object &unit_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__backpacks__object__ret__array, unit_));
+        }
     }  // namespace sqf
 }  // namespace intercept

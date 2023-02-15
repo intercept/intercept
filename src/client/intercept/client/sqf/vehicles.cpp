@@ -1139,6 +1139,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__settowparent__object__object__ret__nothing, towed_vehicle_, towing_vehicle_);
         }
 
+        object get_tow_parent(const object &towed_vehicle_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__gettowparent__object__ret__object, towed_vehicle_);
+        }
+
         std::vector<rv_lod_info> all_lods(const object &obj_) {
             return __helpers::__convert_to_vector<rv_lod_info>(host::functions.invoke_raw_unary(__sqf::unary__alllods__object_string__ret__array, obj_));
         }
@@ -1175,6 +1179,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setmaxload__object__scalar__ret__nothing, container_, load_);
         }
 
+        rv_disabled_equipment equipment_disabled(const object &veh_) {
+            return rv_disabled_equipment(host::functions.invoke_raw_unary(__sqf::unary__equipmentdisabled__object__ret__array, veh_));
+        }
+
         float max_load(const object& container_) {
             return host::functions.invoke_raw_unary(__sqf::unary__maxload__object__ret__scalar, container_);
         }
@@ -1191,7 +1199,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__brakesdisabled__object__ret__bool, veh_);
         }
 
-        void disable_brakes(const object& veh_, bool disable_) {
+        void disable_brakes(const object &veh_, bool disable_) {
             host::functions.invoke_raw_binary(__sqf::binary__disablebrakes__object__bool__ret__nothing, veh_, disable_);
         }
 
@@ -1199,8 +1207,20 @@ namespace intercept {
             return __helpers::__convert_to_vector<rv_collision_status>(host::functions.invoke_raw_unary(__sqf::unary__collisiondisabledwith__object__ret__array, obj_));
         }
 
-        bool is_allowed_crew_in_immobile(const object& veh_) {
+        bool is_allowed_crew_in_immobile(const object &veh_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isallowedcrewinimmobile__object__ret__bool, veh_);
+        }
+
+        int allowed_service(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__allowedservice__object__ret__scalar, veh_);
+        }
+
+        void allow_service(const object &veh_, int service_) {
+            host::functions.invoke_raw_binary(__sqf::binary__allowservice__object__scalar__ret__nothing, veh_, service_);
+        }
+
+        bool need_service(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__needservice__object__ret__array, veh_);
         }
 
         void set_turret_optics_mode(const object &veh_, int index_) {
@@ -1217,6 +1237,14 @@ namespace intercept {
 
         int get_turret_optics_mode(const object &veh_, const rv_turret_path &turret_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getturretopticsmode__object__array__ret__nothing, veh_, turret_);
+        }
+
+        rv_turret_limits get_turret_limits(const object &veh_, const rv_turret_path &turret_) {
+            return rv_turret_limits(host::functions.invoke_raw_binary(__sqf::binary__getturretlimits__object__array__ret__array, veh_, turret_));
+        }
+
+        void set_turret_limits(const object &veh_, const rv_turret_path &turret_, float min_turn_, float max_turn_, float min_elev_, float max_elev_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setturretlimits__object__array__ret__nothing, veh_, {turret_, min_turn_, max_turn_, min_elev_, max_elev_});
         }
     }  // namespace sqf
 }  // namespace intercept

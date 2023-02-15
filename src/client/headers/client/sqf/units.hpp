@@ -258,6 +258,7 @@ namespace intercept {
         void enable_stamina(const object &value0_, bool value1_);
         void fire(const object &value0_, sqf_string_const_ref value1_);
         void force_speed(const object &value0_, float value1_);
+        float get_forced_speed(const object &unit_);
         void force_walk(const object &value0_, bool value1_);
         bool is_flashlight_on(const object &value0_, sqf_string_const_ref value1_);
         bool is_irlaser_on(const object &value0_, sqf_string_const_ref value1_);
@@ -328,5 +329,7 @@ namespace intercept {
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_);
 
         object get_corpse(const object &holder_);
+
+        float inside_building(const object &unit_);
     }  // namespace sqf
 }  // namespace intercept

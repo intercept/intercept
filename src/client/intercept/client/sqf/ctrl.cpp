@@ -2380,6 +2380,10 @@ namespace intercept {
             return display(host::functions.invoke_raw_unary(__sqf::unary__finddisplay__scalar__ret__display, value_));
         }
 
+        display find_display(sqf_string_const_ref value_) {
+            return display(host::functions.invoke_raw_unary(__sqf::unary__finddisplay__string__ret__display, value_));
+        }
+
         display display_child(const display &disp_) {
             return host::functions.invoke_raw_unary(__sqf::unary__displaychild__display__ret__display, disp_);
         }
@@ -3232,6 +3236,10 @@ namespace intercept {
 
         game_value ctrl_map_mouse_over(const control& map_) {
             return host::functions.invoke_raw_unary(__sqf::unary__ctrlmapmouseover__control__ret__array, map_);
+        }
+
+        float ctrl_map_dir(const control &map_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__ctrlmapdir__control__ret__scalar, map_);
         }
 
         vector2 get_texture_info(sqf_string_const_ref path_) {

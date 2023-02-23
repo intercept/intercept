@@ -657,7 +657,8 @@ namespace intercept {
             bool is_equalto_with_nil(const game_value& other) const;
 
             uint64_t get_hash() const;
-            [[deprecated]] size_t hash() const;
+            [[deprecated("Use get_hash instead")]] uint64_t hash() const { return this->get_hash(); }
+
             //set's this game_value to null
             void clear() { data = nullptr; }
 
@@ -888,9 +889,6 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
-            size_t hash() const {
-                return this->get_hash();
-            }
             //protected:
             //    static thread_local game_data_pool<game_data_number> _data_pool;
         };
@@ -909,7 +907,6 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
-            size_t hash() const { return this->get_hash(); }
             //protected:
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
@@ -971,7 +968,6 @@ namespace intercept {
             ~game_data_array();
             auto_array<game_value> data;
             auto length() const { return data.count(); }
-            size_t hash() const { return this->get_hash(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };
@@ -990,7 +986,6 @@ namespace intercept {
             game_data_string& operator=(game_data_string&& move_) noexcept;
             ~game_data_string();
             r_string raw_string;
-            size_t hash() const { return this->get_hash(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             //protected:
@@ -1005,7 +1000,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* group{};
         };
 
@@ -1017,7 +1011,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* config{};
             auto_array<r_string> path;
         };
@@ -1030,7 +1023,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* control{};
         };
 
@@ -1042,7 +1034,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* display{};
         };
 
@@ -1054,7 +1045,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* location{};
         };
 
@@ -1066,7 +1056,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* script{};
         };
 
@@ -1078,7 +1067,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* side{};
         };
 
@@ -1090,7 +1078,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* rv_text{};
         };
 
@@ -1102,7 +1089,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             void* team{};
         };
 
@@ -1114,7 +1100,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }  //#TODO proper hashing
 
             map_string_to_class<game_variable, auto_array<game_variable>> _variables;
             r_string _name;
@@ -1129,7 +1114,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            static size_t hash() { return 0x1337; }
+            static uint64_t hash() { return 0XCBF29CE484222325; } //64bit FNV-1 offset basis
         };
 
         class game_instruction : public refcount {
@@ -1159,7 +1144,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
@@ -1175,7 +1159,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return this->get_hash(); }
             struct visualState {
                 //will be false if you called stuff on nullObj
                 bool valid{false};

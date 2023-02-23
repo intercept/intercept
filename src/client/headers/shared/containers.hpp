@@ -1998,56 +1998,57 @@ namespace intercept::types {
 
     template <class Type, class Container, class Traits>
     class internal_hashmap : public map_string_to_class<Type, Container, Traits> {
+        using base = map_string_to_class<Type, Container, Traits>;
     public:
         typename Type::value_type& operator[](typename Type::key_type key_) {
-            auto& temp = this->get(key_);
-            if (this->is_null(temp)) {
-                return this->insert(Type(key_, Type::value_type())).value;
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
+                return base::insert(Type(key_, Type::value_type())).value;
             }
             return temp.value;
         }
         const typename Type::value_type& operator[](typename Type::key_type key_) const {
-            return this->at(key_);
+            return base::at(key_);
         }
         typename Type::value_type& at(typename Type::key_type key_) {
-            auto& temp = this->get(key_);
-            if (this->is_null(temp)) {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
                 throw std::out_of_range("Invalid key");
             }
             return temp.value;
         }
         const typename Type::value_type& at(typename Type::key_type key_) const {
-            auto& temp = this->get(key_);
-            if (this->is_null(temp)) {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
                 throw std::out_of_range("Invalid key");
             }
             return temp.value;
         }
 
-        template<class...Args>
-        Type& emplace(Args&&...args_) {
-            return this->insert(Type(std::forward<Args>(args_)...));
+        template <class... Args>
+        Type& emplace(Args&&... args_) {
+            return base::insert(Type(std::forward<Args>(args_)...));
         }
 
         Type* find(typename Type::key_type key_) {
-            auto& temp = this->get(key_);
-            if (this->is_null(temp))
+            auto& temp = base::get(key_);
+            if (base::is_null(temp))
                 return nullptr;
             return &temp;
         }
         const Type* find(typename Type::key_type key_) const {
-            auto& temp = this->get(key_);
-            if (this->is_null(temp))
+            auto& temp = base::get(key_);
+            if (base::is_null(temp))
                 return nullptr;
             return &temp;
         }
 
         bool contains(typename Type::key_type key_) const {
-            return this->has_key(key_);
+            return base::has_key(key_);
         }
 
         ~internal_hashmap() {
-            this->clear(true);
+            base::clear(true);
         }
     };
 

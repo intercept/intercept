@@ -894,11 +894,11 @@ namespace intercept {
 
         uint64_t game_value::get_hash() const {
             if (!data)
-                return 0;
+                return 0XCBF29CE484222325; //64bit FNV-1 offset basis
             return data.get()->get_hash();
         }
 
-        size_t game_value::hash() const {
+        uint64_t game_value::hash() const {
             return get_hash();
         }
 

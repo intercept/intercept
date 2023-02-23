@@ -1991,7 +1991,7 @@ namespace intercept::types {
         }
 
         template<class...Args>
-        typename Type& emplace(Args&&...args_) {
+        Type& emplace(Args&&...args_) {
             return this->insert(Type(std::forward<Args>(args_)...));
         }
 

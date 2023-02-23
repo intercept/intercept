@@ -926,6 +926,8 @@ namespace intercept {
             game_data_hashmap_pair(const game_value& k_, const game_value& v_) : key(k_), value(v_) {}
         };
         struct game_data_hashmap_traits {
+            using key_type = const game_value&;
+
             static uint64_t hash_key(const game_value& key) noexcept {
                 return key.data->get_hash();
             }

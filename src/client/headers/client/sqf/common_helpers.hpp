@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 @file
 @author Verox (verox.averre@gmail.com)
 @author Nou (korewananda@gmail.com)
@@ -70,6 +70,10 @@ namespace intercept {
                 if (input_.size() == 0) return {};
                 auto& arr = input_.to_array();
                 return std::vector<T>(arr.begin(), arr.end());
+            }
+
+            inline rv_hashmap __convert_to_hashmap(const game_value& input_) {
+                return std::move(input_.get_as<game_data_hashmap>()->data);
             }
 
 

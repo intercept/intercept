@@ -1782,6 +1782,34 @@ namespace intercept::types {
         }
 
         map_string_to_class() {}
+        map_string_to_class(const map_string_to_class& copy_) {
+            *this = copy_;
+        }
+        map_string_to_class(map_string_to_class&& move_) noexcept {
+            *this = std::move(move_);
+        }
+        map_string_to_class& operator=(const map_string_to_class& copy_) {
+            auto oldTableCount = _tableCount;
+            _tableCount = copy_._tableCount;
+            auto newTable = rv_allocator<Container>::create_array(_tableCount);
+            for (auto i = 0; i < _tableCount; i++) {
+                auto& container = copy_._table[i];
+                for (Type& item : container) {
+                    auto hashedKey = hash_key(item.get_map_key());
+                    newTable[hashedKey].emplace(newTable[hashedKey].end(), item);
+                }
+            }
+            std::swap(_table, newTable);
+            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+            return *this;
+        }
+        map_string_to_class& operator=(map_string_to_class&& move_) noexcept {
+            std::swap(_table, move_._table);
+            std::swap(_tableCount, move_._tableCount);
+            std::swap(_count, move_._count);
+            return *this;
+
+        }
 
         template <class Func>
         void for_each(Func func_) const {
@@ -1963,7 +1991,7 @@ namespace intercept::types {
     Type map_string_to_class<Type, Container, Traits>::_null_entry;
 
     template <class Type, class Container, class Traits>
-    class rv_hashmap : public map_string_to_class<Type, Container, Traits> {
+    class internal_hashmap : public map_string_to_class<Type, Container, Traits> {
     public:
         typename Type::value_type& operator[](typename Type::key_type key_) {
             auto& temp = this->get(key_);

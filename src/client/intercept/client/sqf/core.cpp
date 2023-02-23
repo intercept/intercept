@@ -1105,6 +1105,10 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__issaving__ret__bool);
         }
 
+        rv_hashmap get_video_options() {
+            return __helpers::__convert_to_hashmap(host::functions.invoke_raw_nular(__sqf::nular__getvideooptions__ret__hashmap));
+        }
+
         void set_ti_parameter(sqf_string_const_ref param_, float value_) {
             host::functions.invoke_raw_unary(__sqf::unary__settiparameter__array__ret__nothing, {param_, value_});
         }

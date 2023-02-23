@@ -733,12 +733,12 @@ namespace intercept {
             return dummy;
         }
 
-        game_hashmap_type &game_value::to_hashmap() const {
+        rv_hashmap &game_value::to_hashmap() const {
             if (data) {
                 if (data->get_vtable() != game_data_hashmap::type_def) throw game_value_conversion_error("Invalid conversion to hashmap");
                 return static_cast<game_data_hashmap*>(data.get())->data;
             }
-            static game_hashmap_type dummy;  //else we would return a temporary.
+            static rv_hashmap dummy;  //else we would return a temporary.
             dummy.clear();                   //In case user modified it before
             return dummy;
         }
@@ -899,44 +899,7 @@ namespace intercept {
         }
 
         size_t game_value::hash() const {
-            if (!data) return 0;
-
-            switch(type_enum()) {
-                case game_data_type::SCALAR: return reinterpret_cast<game_data_number*>(data.get())->hash();
-                case game_data_type::BOOL: return reinterpret_cast<game_data_bool*>(data.get())->hash();
-                case game_data_type::ARRAY: return reinterpret_cast<game_data_array*>(data.get())->hash();
-                case game_data_type::STRING: return reinterpret_cast<game_data_string*>(data.get())->hash();
-                case game_data_type::NOTHING: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case game_data_type::NAMESPACE: return reinterpret_cast<game_data_namespace*>(data.get())->hash();
-                case game_data_type::NaN: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case game_data_type::CODE: return reinterpret_cast<game_data_code*>(data.get())->hash();
-                case game_data_type::OBJECT: return reinterpret_cast<game_data_object*>(data.get())->hash();
-                case game_data_type::SIDE: return reinterpret_cast<game_data_side*>(data.get())->hash();
-                case game_data_type::GROUP: return reinterpret_cast<game_data_group*>(data.get())->hash();
-                case game_data_type::TEXT: return reinterpret_cast<game_data_rv_text*>(data.get())->hash();
-                case game_data_type::SCRIPT: return reinterpret_cast<game_data_script*>(data.get())->hash();
-                case game_data_type::TARGET: return reinterpret_cast<game_data*>(data.get())->to_string().hash();
-                case game_data_type::CONFIG: return reinterpret_cast<game_data_config*>(data.get())->hash();
-                case game_data_type::DISPLAY: return reinterpret_cast<game_data_display*>(data.get())->hash();
-                case game_data_type::CONTROL: return reinterpret_cast<game_data_control*>(data.get())->hash();
-#if defined(_DEBUG) && defined(_MSC_VER)
-                //If you encounter any of these give Dedmen a repro.
-                case game_data_type::ANY: __debugbreak(); break;//ANY should never be seen as a value.
-                case game_data_type::NetObject: __debugbreak(); break;
-                case game_data_type::SUBGROUP: __debugbreak(); break;
-#else
-                case game_data_type::ANY: return 0;
-                case game_data_type::NetObject: return 0;
-                case game_data_type::SUBGROUP: return 0;
-#endif
-                case game_data_type::TEAM_MEMBER: return reinterpret_cast<game_data_team_member*>(data.get())->hash();
-                case game_data_type::TASK: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"Task %s (id %d)" or "No Task"
-                case game_data_type::DIARY_RECORD: return reinterpret_cast<game_data*>(data.get())->to_string().hash(); //"No diary record" or... The text of that record? Text might be long and make this hash heavy
-                case game_data_type::LOCATION: return reinterpret_cast<game_data_location*>(data.get())->hash();
-                case game_data_type::end: return 0;
-            }
-
-            return types::__internal::pairhash<uintptr_t,uintptr_t>(data->get_vtable(),reinterpret_cast<uintptr_t>(data.get()));
+            return get_hash();
         }
 
         void* game_value::operator new(const std::size_t sz_) {

@@ -638,6 +638,9 @@ namespace intercept {
         void remove_all_binocular_items(const object &unit_);
         void remove_all_secondary_weapon_items(const object &unit_);
         sqf_return_string_list backpacks(const object &unit_);
+
+        rv_hashmap unique_unit_items(const object &unit_);
+        rv_hashmap unique_unit_items_filtered(const object &unit_, int weapons_items_ = 2, int uniform_items_ = 2, int vest_items = 2, int backpack_items_ = 2, int assigned_items_ = 2);
         
     }  // namespace sqf
 }  // namespace intercept

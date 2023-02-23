@@ -490,13 +490,9 @@ namespace intercept {
             obj_type_temporary = 4,
             obj_type_vehicle = 8,
             obj_type_temp_veh = 16,
-            obj_type_land_decal = 32,
-            obj_type_all = 63,
-            obj_type_all_inc_null = -1
+            obj_type_land_decal = 32
         };
-#ifdef DEFINE_ENUM_FLAG_OPERATORS
-        DEFINE_ENUM_FLAG_OPERATORS(object_types)
-#endif
+
         enum class object_simulation_kind {
             Statics = 0,
             Slow = 0,

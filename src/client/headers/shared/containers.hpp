@@ -1710,7 +1710,6 @@ namespace intercept::types {
         int _tableCount{0};
         int _count{0};
         static Type _null_entry;
-
     public:
         class iterator {
             size_t _table;
@@ -1961,11 +1960,15 @@ namespace intercept::types {
             return (!_table || !_count);
         }
 
-        void reserve(int newTable) {
-            if (newTable <= _tableCount)
-                return;
-
-            rebuild(newTable);
+        void reserve(int newCount_) {
+            int newTableCount_ = newCount_ / 16; 
+            if (newTableCount_ > _tableCount) {
+                rebuild(newTableCount_);
+            }
+            for (auto i = 0; i < _tableCount; ++i) {
+                auto& container = _table[i];
+                container.reserve(16);
+            }
         }
 
         void clear(bool reclaim_memory_ = false) {

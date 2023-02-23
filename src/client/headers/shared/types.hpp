@@ -503,8 +503,6 @@ namespace intercept {
             virtual void placeholder() const {}
             virtual bool can_serialize() { return false; }
 
-        public:
-
         private:
             int IaddRef() override { return add_ref(); }
             int Irelease() override { return release(); }

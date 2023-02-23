@@ -71,6 +71,11 @@ namespace intercept {
             game_data_array::data_type_def = data_type_def;
             game_data_array::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::ARRAY)];
 
+            host::functions.get_type_structure("HASHMAP"sv, type_def, data_type_def);
+            game_data_hashmap::type_def = type_def;
+            game_data_hashmap::data_type_def = data_type_def;
+            game_data_hashmap::pool_alloc_base = allocator_info->_poolAllocs[static_cast<size_t>(game_data_type::HASHMAP)];
+
 
             host::functions.get_type_structure("SCALAR"sv, type_def, data_type_def);
             game_data_number::type_def = type_def;

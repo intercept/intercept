@@ -1654,6 +1654,7 @@ namespace intercept::types {
         return hashValue;
     }
 
+
     struct map_string_to_class_trait {
         /*
         static unsigned int hash_key(const char* key) noexcept {
@@ -1663,6 +1664,7 @@ namespace intercept::types {
             return strcmp(k1, k2) == 0;
         }
         */
+
         static unsigned int hash_key(std::string_view key) noexcept {
             return rv_map_hash_string_case_sensitive(key);
         }
@@ -1801,7 +1803,8 @@ namespace intercept::types {
             }
         }
 
-        const Type& get(std::string_view key_) const {
+        template <class T>
+        const Type& get(T&& key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
@@ -1812,19 +1815,22 @@ namespace intercept::types {
             return _null_entry;
         }
 
-        Container* get_table_for_key(std::string_view key_) {
+        template <class T>
+        Container* get_table_for_key(T&& key_) {
             if (!_table || !_count) return nullptr;
             const int hashed_key = hash_key(key_);
             return &_table[hashed_key];
         }
 
-        const Container* get_table_for_key(std::string_view key_) const {
+        template <class T>
+        const Container* get_table_for_key(T&& key_) const {
             if (!_table || !_count) return nullptr;
             const int hashed_key = hash_key(key_);
             return &_table[hashed_key];
         }
 
-        Type& get(std::string_view key_) {
+        template <class T>
+        Type& get(T&& key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
@@ -1837,7 +1843,8 @@ namespace intercept::types {
 
         static bool is_null(const Type& value_) { return &value_ == &_null_entry; }
 
-        bool has_key(std::string_view key_) const {
+        template <class T>
+        bool has_key(T&& key_) const {
             return !is_null(get(key_));
         }
 
@@ -1910,7 +1917,8 @@ namespace intercept::types {
             return x;
         }
 
-        bool remove(std::string_view key) {
+        template <class T>
+        bool remove(T&& key) {
             if (_count <= 0) return false;
 
             int hashedKey = hash_key(key);
@@ -1926,12 +1934,14 @@ namespace intercept::types {
         }
 
         //Is empty?
-        bool empty() {
+        bool empty() const {
             return (!_table || !_count);
         }
 
     protected:
-        int hash_key(std::string_view key_) const {
+
+        template <class T>
+        int hash_key(T&& key_) const {
             return Traits::hash_key(key_) % _tableCount;
         }
     };

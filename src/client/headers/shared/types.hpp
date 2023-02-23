@@ -39,6 +39,7 @@ namespace intercept {
         class game_value;
         using game_value_parameter = const game_value&;
         class game_data_array;
+        class game_data_hashmap;
         class internal_object;
         class game_data;
         class game_state;
@@ -69,6 +70,7 @@ namespace intercept {
             NetObject,
             SUBGROUP,
             TEAM_MEMBER,
+            HASHMAP,
             TASK,
             DIARY_RECORD,
             LOCATION,
@@ -498,6 +500,9 @@ namespace intercept {
             virtual void placeholder() const {}
             virtual bool can_serialize() { return false; }
 
+        public:
+
+        private:
             int IaddRef() override { return add_ref(); }
             int Irelease() override { return release(); }
 
@@ -510,6 +515,8 @@ namespace intercept {
 
                 return serialization_return::no_error;
             }
+            virtual uint64_t get_hash() const { return 0; }
+
             static game_data* createFromSerialized(param_archive& ar);
 
         protected:
@@ -554,13 +561,13 @@ namespace intercept {
                 copy(copy_);
             }
 
-#pragma optimize("ts", on)
+//#pragma optimize("ts", on)
             game_value(game_value&& move_) noexcept {
                 set_vtable(__vptr_def);  //Whatever vtable move_ has.. if it's different then it's wrong
                 data = nullptr;
                 data.swap(move_.data);
             }
-#pragma optimize("", on)
+//#pragma optimize("", on)
 
             //Conversions
             game_value(game_data* val_) noexcept {
@@ -618,6 +625,7 @@ namespace intercept {
             * @throws game_value_conversion_error {if game_value is not an array}
             */
             auto_array<game_value>& to_array() const;
+            game_data_hashmap& to_hashmap() const;
 
             /**
             * @brief tries to convert the game_value to an array if possible and return the element at given index.
@@ -645,6 +653,7 @@ namespace intercept {
 
             bool operator==(const game_value& other) const;
             bool operator!=(const game_value& other) const;
+            bool is_equalto_with_nil(const game_value& other) const;
 
             size_t hash() const;
             //set's this game_value to null
@@ -685,11 +694,11 @@ namespace intercept {
             uintptr_t get_vtable() const noexcept {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
-#pragma optimize("ts", on)
+//#pragma optimize("ts", on)
             void set_vtable(uintptr_t vt) noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = vt;
             }
-#pragma optimize("", on)
+//#pragma optimize("", on)
         };
 
         class game_value_static : public game_value {
@@ -901,6 +910,73 @@ namespace intercept {
             size_t hash() const { return __internal::pairhash(type_def, val); }
             //protected:
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
+        };
+
+        class game_data_hashmap : public game_data {
+        public:
+            struct pair {
+                game_value key;
+                game_value value;
+                const game_value& get_map_key() const { return key; }
+                game_value& get_map_key() { return key; }
+            };
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;
+
+            struct traits {
+                static uint64_t hash_key(const game_value& key) noexcept {
+                    return key.data->get_hash();
+                }
+                static bool compare_keys(const game_value& k1, const game_value& k2) noexcept {
+                    return k1.is_equalto_with_nil(k2);
+                }
+            };
+
+            using game_hashmap_type = map_string_to_class<game_data_hashmap::pair, auto_array<game_data_hashmap::pair>, game_data_hashmap::traits>;
+
+            game_data_hashmap();
+            game_data_hashmap(const game_data_hashmap& copy_);
+            game_data_hashmap(game_data_hashmap&& move_) noexcept;
+            game_data_hashmap& operator=(const game_data_hashmap& copy_);
+            game_data_hashmap& operator=(game_data_hashmap&& move_) noexcept;
+            ~game_data_hashmap();
+
+            game_value& operator[](const game_value& v);
+            game_value& at(const game_value& v);
+            const game_value& operator[](const game_value& v) const;
+            const game_value& at(const game_value& v) const;
+            template<class T>
+            T get(const game_value& v) const {
+                return T{this->at(v)};
+            }
+            template<class T1, class T2>
+            pair& emplace(T1&& key, T2&& value) {
+                return data.insert(pair(std::forward<T1>(key), std::forward<T2>(value)));
+            }
+            void insert(const pair& pair);
+            void insert(const game_value& key, const game_value& value);
+            void insert(const game_data_hashmap& other);
+
+            void resize(int size);
+            void clear();
+            bool remove(const game_value& key);
+
+            inline game_hashmap_type::iterator begin() { return data.begin(); }
+            inline game_hashmap_type::iterator end() { return data.end(); }
+
+            pair* find(const game_value& key);
+            const pair* find(const game_value& key) const;
+            bool contains(const game_value& key) const;
+
+            inline int size() const { return data.count(); }
+            inline bool empty() const { return data.empty(); }
+
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
+        private:
+            game_hashmap_type data;
+            bool _readOnly = false;
         };
 
         class game_data_array : public game_data {
@@ -1589,7 +1665,7 @@ namespace std {
     template <>
     struct hash<intercept::types::game_value> {
         size_t operator()(const intercept::types::game_value& x) const {
-            return x.hash();
+            return x.data->get_hash();
         }
     };
 }  // namespace std

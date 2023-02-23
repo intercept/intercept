@@ -308,6 +308,15 @@ namespace intercept {
         game_data_array::type_def = structure.first;
         game_data_array::data_type_def = structure.second;
         game_data_array::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::ARRAY)];
+
+        ref<game_data> gd_hm(regInfo._types[static_cast<size_t>(GameDataType::HASHMAP)]->_createFunction(nullptr));
+        structure = {gd_hm->get_vtable(), gd_hm->get_secondary_vtable()};
+        invoker::get().type_map[structure.first] = "HASHMAP"sv;
+        invoker::get().type_structures["HASHMAP"sv] = structure;
+        game_data_hashmap::type_def = structure.first;
+        game_data_hashmap::data_type_def = structure.second;
+        game_data_hashmap::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::HASHMAP)];
+
         ref<game_data> gd_sc(regInfo._types[static_cast<size_t>(GameDataType::SCALAR)]->_createFunction(nullptr));
         structure = { gd_sc->get_vtable(), gd_sc->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "SCALAR"sv;
@@ -315,6 +324,7 @@ namespace intercept {
         game_data_number::type_def = structure.first;
         game_data_number::data_type_def = structure.second;
         game_data_number::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::SCALAR)];
+
         ref<game_data> gd_bo(regInfo._types[static_cast<size_t>(GameDataType::BOOL)]->_createFunction(nullptr));
         structure = { gd_bo->get_vtable(), gd_bo->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "BOOL"sv;
@@ -322,6 +332,7 @@ namespace intercept {
         game_data_bool::type_def = structure.first;
         game_data_bool::data_type_def = structure.second;
         game_data_bool::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::BOOL)];
+
         ref<game_data> gd_st(regInfo._types[static_cast<size_t>(GameDataType::STRING)]->_createFunction(nullptr));
         structure = { gd_st->get_vtable(), gd_st->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "STRING"sv;
@@ -329,6 +340,7 @@ namespace intercept {
         game_data_string::type_def = structure.first;
         game_data_string::data_type_def = structure.second;
         game_data_string::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::STRING)];
+
         ref<game_data> gd_code(regInfo._types[static_cast<size_t>(GameDataType::CODE)]->_createFunction(nullptr));
         structure = { gd_code->get_vtable(), gd_code->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "CODE"sv;
@@ -336,60 +348,70 @@ namespace intercept {
         game_data_code::type_def = structure.first;
         game_data_code::data_type_def = structure.second;
         game_data_code::pool_alloc_base = loader::get().get_allocator()->_poolAllocs[static_cast<size_t>(types::game_data_type::CODE)];
+
         ref<game_data> gd_ob(regInfo._types[static_cast<size_t>(GameDataType::OBJECT)]->_createFunction(nullptr));
         structure = { gd_ob->get_vtable(), gd_ob->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "OBJECT"sv;
         invoker::get().type_structures["OBJECT"sv] = structure;
         game_data_object::type_def = structure.first;
         game_data_object::data_type_def = structure.second;
+
         ref<game_data> gd_gr(regInfo._types[static_cast<size_t>(GameDataType::GROUP)]->_createFunction(nullptr));
         structure = { gd_gr->get_vtable(), gd_gr->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "GROUP"sv;
         invoker::get().type_structures["GROUP"sv] = structure;
         game_data_group::type_def = structure.first;
         game_data_group::data_type_def = structure.second;
+
         ref<game_data> gd_conf(regInfo._types[static_cast<size_t>(GameDataType::CONFIG)]->_createFunction(nullptr));
         structure = { gd_conf->get_vtable(), gd_conf->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "CONFIG"sv;
         invoker::get().type_structures["CONFIG"sv] = structure;
         game_data_config::type_def = structure.first;
         game_data_config::data_type_def = structure.second;
+
         ref<game_data> gd_cont(regInfo._types[static_cast<size_t>(GameDataType::CONTROL)]->_createFunction(nullptr));
         structure = { gd_cont->get_vtable(), gd_cont->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "CONTROL"sv;
         invoker::get().type_structures["CONTROL"sv] = structure;
         game_data_control::type_def = structure.first;
         game_data_control::data_type_def = structure.second;
+
         ref<game_data> gd_di(regInfo._types[static_cast<size_t>(GameDataType::DISPLAY)]->_createFunction(nullptr));
         structure = { gd_di->get_vtable(), gd_di->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "DISPLAY"sv;
         invoker::get().type_structures["DISPLAY"sv] = structure;
         game_data_display::type_def = structure.first;
         game_data_display::data_type_def = structure.second;
+
         ref<game_data> gd_loc(regInfo._types[static_cast<size_t>(GameDataType::LOCATION)]->_createFunction(nullptr));
         structure = { gd_loc->get_vtable(), gd_loc->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "LOCATION"sv;
         invoker::get().type_structures["LOCATION"sv] = structure;
         game_data_location::type_def = structure.first;
         game_data_location::data_type_def = structure.second;
+
         ref<game_data> gd_scr(regInfo._types[static_cast<size_t>(GameDataType::SCRIPT)]->_createFunction(nullptr));
         structure = { gd_scr->get_vtable(), gd_scr->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "SCRIPT"sv;
         invoker::get().type_structures["SCRIPT"sv] = structure;
         game_data_script::type_def = structure.first;
         game_data_script::data_type_def = structure.second;
+
         ref<game_data> gd_si(regInfo._types[static_cast<size_t>(GameDataType::SIDE)]->_createFunction(nullptr));
         structure = { gd_si->get_vtable(), gd_si->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "SIDE"sv;
         invoker::get().type_structures["SIDE"sv] = structure;
         game_data_side::type_def = structure.first;
         game_data_side::data_type_def = structure.second;
+
         ref<game_data> gd_te(regInfo._types[static_cast<size_t>(GameDataType::TEXT)]->_createFunction(nullptr));
         structure = { gd_te->get_vtable(), gd_te->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "TEXT"sv;
         invoker::get().type_structures["TEXT"sv] = structure;
         game_data_rv_text::type_def = structure.first;
         game_data_rv_text::data_type_def = structure.second;
+
         ref<game_data> gd_tm(regInfo._types[static_cast<size_t>(GameDataType::TEAM_MEMBER)]->_createFunction(nullptr));
         structure = { gd_tm->get_vtable(), gd_tm->get_secondary_vtable() };
         invoker::get().type_map[structure.first] = "TEAM_MEMBER"sv;

@@ -77,6 +77,10 @@ namespace intercept {
         uintptr_t game_data_array::data_type_def;
         rv_pool_allocator* game_data_array::pool_alloc_base;
 
+        uintptr_t game_data_hashmap::type_def;
+        uintptr_t game_data_hashmap::data_type_def;
+        rv_pool_allocator *game_data_hashmap::pool_alloc_base;
+
         uintptr_t game_data_bool::type_def;
         uintptr_t game_data_bool::data_type_def;
         rv_pool_allocator* game_data_bool::pool_alloc_base;
@@ -319,6 +323,117 @@ namespace intercept {
             return pool_alloc_base->deallocate(ptr_);
         }
 
+#pragma region HashmapImpl
+        game_data_hashmap::game_data_hashmap() {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+        }
+
+        game_data_hashmap::game_data_hashmap(const game_data_hashmap &copy_) {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+            data = copy_.data;
+        }
+
+        game_data_hashmap::game_data_hashmap(game_data_hashmap &&move_) noexcept {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+            data = std::move(move_.data);
+        }
+
+        game_data_hashmap &game_data_hashmap::operator=(const game_data_hashmap &copy_) {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+            data = copy_.data;
+            return *this;
+        }
+
+        game_data_hashmap &game_data_hashmap::operator=(game_data_hashmap &&move_) noexcept {
+            if (this == &move_)
+                return *this;
+            data = std::move(move_.data);
+            return *this;
+        }
+
+        game_data_hashmap::~game_data_hashmap() {}
+
+        void *game_data_hashmap::operator new(std::size_t) {
+#ifdef __linux__
+            return pool_alloc_base->allocate(sizeof(game_data_hashmap));
+#else
+            return pool_alloc_base->allocate(1);
+#endif
+        }
+
+        void game_data_hashmap::operator delete(void *ptr_, std::size_t) {
+            return pool_alloc_base->deallocate(ptr_);
+        }
+
+        game_value &game_data_hashmap::operator[](const game_value &v) {
+            auto &temp = data.get(v);
+            if (!data.is_null(temp)) {
+                return temp.value;
+            }
+            return data.insert(game_data_hashmap::pair{v, {}}).value;
+        }
+
+        const game_value &game_data_hashmap::operator[](const game_value &v) const {
+            return data.get(v).value;
+        }
+
+        game_value &game_data_hashmap::at(const game_value &v) {
+            auto &temp = data.get(v);
+            if (data.is_null(temp))
+                throw std::out_of_range("Invalid key");
+            return temp.value;
+        }
+
+        const game_value &game_data_hashmap::at(const game_value &v) const {
+            auto &temp = data.get(v);
+            if (data.is_null(temp))
+                throw std::out_of_range("Invalid key");
+            return temp.value;
+        }
+
+        void game_data_hashmap::insert(const game_data_hashmap::pair& pair) {
+            data.insert(pair);
+        }
+        void game_data_hashmap::insert(const game_value& key, const game_value& value) {
+            data.insert(pair{key, value});
+        }
+        void game_data_hashmap::insert(const game_data_hashmap& other) {
+            for (const auto& pair : other.data) {
+                insert(pair);
+            }
+        }
+
+        void game_data_hashmap::resize(int newSize) {
+            data.rebuild(newSize);
+        }
+        void game_data_hashmap::clear() {
+            data.rebuild(0);
+        }
+        bool game_data_hashmap::remove(const game_value &key) {
+            return data.remove(key);
+        }
+
+        game_data_hashmap::pair *game_data_hashmap::find(const game_value &key) {
+            auto &temp = data.get(key);
+            if (data.is_null(temp))
+                return nullptr;
+            return &temp;
+        }
+        const game_data_hashmap::pair *game_data_hashmap::find(const game_value &key) const {
+            auto &temp = data.get(key);
+            if (data.is_null(temp))
+                return nullptr;
+            return &temp;
+        }
+        bool game_data_hashmap::contains(const game_value &key) const {
+            return !data.is_null(data.get(key));
+        }
+#pragma endregion HashmapImpl
+
         game_data_array::game_data_array() {
             *reinterpret_cast<uintptr_t*>(this) = type_def;
             *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
@@ -427,6 +542,7 @@ namespace intercept {
             if (name == "NetObject"sv) return types::game_data_type::NetObject;
             if (name == "SUBGROUP"sv) return types::game_data_type::SUBGROUP;
             if (name == "TEAM_MEMBER"sv) return types::game_data_type::TEAM_MEMBER;
+            if (name == "HASHMAP"sv) return types::game_data_type::HASHMAP;
             if (name == "TASK"sv) return types::game_data_type::TASK;
             if (name == "DIARY_RECORD"sv) return types::game_data_type::DIARY_RECORD;
             if (name == "LOCATION"sv) return types::game_data_type::LOCATION;
@@ -457,7 +573,8 @@ namespace intercept {
                 case game_data_type::DISPLAY: return "DISPLAY"sv;
                 case game_data_type::CONTROL: return "CONTROL"sv;
                 case game_data_type::SUBGROUP:  return "SUBGROUP"sv;
-                case game_data_type::TEAM_MEMBER:return "TEAM_MEMBER"sv;
+                case game_data_type::TEAM_MEMBER: return "TEAM_MEMBER"sv;
+                case game_data_type::HASHMAP: return "HASHMAP"sv;
                 case game_data_type::TASK: return "TASK"sv;
                 case game_data_type::DIARY_RECORD: return "DIARY_RECORD"sv;
                 case game_data_type::LOCATION: return "LOCATION"sv;
@@ -680,6 +797,16 @@ namespace intercept {
             return dummy;
         }
 
+        game_data_hashmap &game_value::to_hashmap() const {
+            if (data) {
+                if (data->get_vtable() != game_data_hashmap::type_def) throw game_value_conversion_error("Invalid conversion to hashmap");
+                return *reinterpret_cast<game_data_hashmap*>(data.get());
+            }
+            static game_data_hashmap dummy;  //else we would return a temporary.
+            dummy.clear();                   //In case user modified it before
+            return dummy;
+        }
+
         game_value& game_value::operator [](size_t i_) const {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
@@ -719,6 +846,8 @@ namespace intercept {
                 return game_data_type::STRING;
             if (_type == game_data_array::type_def)
                 return game_data_type::ARRAY;
+            if (_type == game_data_hashmap::type_def)
+                return game_data_type::HASHMAP;
             if (_type == game_data_bool::type_def)
                 return game_data_type::BOOL;
             if (_type == game_data_group::type_def)
@@ -777,6 +906,7 @@ namespace intercept {
                 case game_data_type::TARGET:      //[[fallthrough]]
                 case game_data_type::NetObject:   //[[fallthrough]]
                 case game_data_type::SUBGROUP:    //[[fallthrough]]
+                case game_data_type::HASHMAP:     //[[fallthrough]]
                 case game_data_type::DIARY_RECORD:
                     return false;
                 case game_data_type::OBJECT:      //[[fallthrough]] //SL
@@ -820,6 +950,10 @@ namespace intercept {
             if (!data || !other.data) return true;
             if (data->type() != other.data->type()) return true;
             return !data->equals(other.data);
+        }
+        bool game_value::is_equalto_with_nil(const game_value &other) const {
+            if (is_nil() && other.is_nil()) return true;
+            return *this == other;
         }
 
         size_t game_value::hash() const {

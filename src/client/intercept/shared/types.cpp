@@ -898,10 +898,6 @@ namespace intercept {
             return data.get()->get_hash();
         }
 
-        uint64_t game_value::hash() const {
-            return get_hash();
-        }
-
         void* game_value::operator new(const std::size_t sz_) {
             return rv_allocator<game_value>::create_array(sz_);
         }

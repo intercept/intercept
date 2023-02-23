@@ -1791,6 +1791,7 @@ namespace intercept::types {
         map_string_to_class& operator=(const map_string_to_class& copy_) {
             auto oldTableCount = _tableCount;
             _tableCount = copy_._tableCount;
+            _count = copy_._count;
             auto newTable = rv_allocator<Container>::create_array(_tableCount);
             for (auto i = 0; i < _tableCount; i++) {
                 auto& container = copy_._table[i];
@@ -1880,12 +1881,14 @@ namespace intercept::types {
             auto oldTableCount = _tableCount;
             _tableCount = tableSize;
             auto newTable = rv_allocator<Container>::create_array(tableSize);
+            _count = 0; // redo count in case tableSize < oldTableCount
             for (auto i = 0; i < oldTableCount; i++) {
                 auto& container = _table[i];
                 for (Type& item : container) {
                     auto hashedKey = hash_key(item.get_map_key());
                     newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
                 }
+                _count += static_cast<int>(container.count());
             }
             std::swap(_table, newTable);
             rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
@@ -1980,6 +1983,9 @@ namespace intercept::types {
             }
             _count = 0;
         }
+        ~map_string_to_class() {
+            clear(true);
+        }
     protected:
 
         int hash_key(typename Traits::key_type key_) const {
@@ -2038,6 +2044,10 @@ namespace intercept::types {
 
         bool contains(typename Type::key_type key_) const {
             return this->has_key(key_);
+        }
+
+        ~internal_hashmap() {
+            this->clear(true);
         }
     };
 

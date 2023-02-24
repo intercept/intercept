@@ -894,7 +894,7 @@ namespace intercept {
 
         uint64_t game_value::get_hash() const {
             if (!data)
-                return 0XCBF29CE484222325; //64bit FNV-1 offset basis
+                return 0xCBF29CE484222325; //64bit FNV-1 offset basis
             return data.get()->get_hash();
         }
 

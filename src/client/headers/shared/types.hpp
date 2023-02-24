@@ -1114,7 +1114,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            static uint64_t hash() { return 0XCBF29CE484222325; } //64bit FNV-1 offset basis
+            static uint64_t hash() { return 0xCBF29CE484222325; } //64bit FNV-1 offset basis
         };
 
         class game_instruction : public refcount {

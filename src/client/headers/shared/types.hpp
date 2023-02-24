@@ -39,6 +39,10 @@ namespace intercept {
         class game_value;
         using game_value_parameter = const game_value&;
         class game_data_array;
+        class game_data_hashmap;
+        struct game_data_hashmap_pair;
+        struct game_data_hashmap_traits;
+        using rv_hashmap = internal_hashmap<game_data_hashmap_pair, auto_array<game_data_hashmap_pair>, game_data_hashmap_traits>;
         class internal_object;
         class game_data;
         class game_state;
@@ -69,6 +73,7 @@ namespace intercept {
             NetObject,
             SUBGROUP,
             TEAM_MEMBER,
+            HASHMAP,
             TASK,
             DIARY_RECORD,
             LOCATION,
@@ -498,6 +503,7 @@ namespace intercept {
             virtual void placeholder() const {}
             virtual bool can_serialize() { return false; }
 
+        private:
             int IaddRef() override { return add_ref(); }
             int Irelease() override { return release(); }
 
@@ -510,6 +516,8 @@ namespace intercept {
 
                 return serialization_return::no_error;
             }
+            virtual uint64_t get_hash() const { return 0; }
+
             static game_data* createFromSerialized(param_archive& ar);
 
         protected:
@@ -618,6 +626,7 @@ namespace intercept {
             * @throws game_value_conversion_error {if game_value is not an array}
             */
             auto_array<game_value>& to_array() const;
+            rv_hashmap& to_hashmap() const;
 
             /**
             * @brief tries to convert the game_value to an array if possible and return the element at given index.
@@ -645,8 +654,11 @@ namespace intercept {
 
             bool operator==(const game_value& other) const;
             bool operator!=(const game_value& other) const;
+            bool is_equalto_with_nil(const game_value& other) const;
 
-            size_t hash() const;
+            uint64_t get_hash() const;
+            [[deprecated("Use get_hash instead")]] uint64_t hash() const { return this->get_hash(); }
+
             //set's this game_value to null
             void clear() { data = nullptr; }
 
@@ -877,9 +889,6 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             float number;
-            size_t hash() const {
-                return __internal::pairhash(type_def, number);
-            }
             //protected:
             //    static thread_local game_data_pool<game_data_number> _data_pool;
         };
@@ -898,9 +907,48 @@ namespace intercept {
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             bool val;
-            size_t hash() const { return __internal::pairhash(type_def, val); }
             //protected:
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
+        };
+
+        struct game_data_hashmap_pair {
+            using key_type = const game_value&;
+            using value_type = game_value;
+            game_value key{};
+            game_value value{};
+            key_type get_map_key() const { return key; }
+            game_data_hashmap_pair() = default;
+            game_data_hashmap_pair(const game_value& k_, const game_value& v_) : key(k_), value(v_) {}
+        };
+        struct game_data_hashmap_traits {
+            using key_type = const game_value&;
+
+            static uint64_t hash_key(const game_value& key) noexcept {
+                return key.data->get_hash();
+            }
+            static bool compare_keys(const game_value& k1, const game_value& k2) noexcept {
+                return k1.is_equalto_with_nil(k2);
+            }
+        };
+
+        class game_data_hashmap : public game_data {
+        public:
+            static uintptr_t type_def;
+            static uintptr_t data_type_def;
+            static rv_pool_allocator* pool_alloc_base;    
+
+            game_data_hashmap();
+            game_data_hashmap(const game_data_hashmap& copy_);
+            game_data_hashmap(game_data_hashmap&& move_) noexcept;
+            game_data_hashmap& operator=(const game_data_hashmap& copy_);
+            game_data_hashmap& operator=(game_data_hashmap&& move_) noexcept;
+            ~game_data_hashmap();
+
+            static void* operator new(std::size_t sz_);
+            static void operator delete(void* ptr_, std::size_t sz_);
+        
+            rv_hashmap data;
+            bool _readOnly = false;
         };
 
         class game_data_array : public game_data {
@@ -920,7 +968,6 @@ namespace intercept {
             ~game_data_array();
             auto_array<game_value> data;
             auto length() const { return data.count(); }
-            size_t hash() const { return __internal::pairhash(type_def, data.hash()); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };
@@ -939,7 +986,6 @@ namespace intercept {
             game_data_string& operator=(game_data_string&& move_) noexcept;
             ~game_data_string();
             r_string raw_string;
-            size_t hash() const { return __internal::pairhash(type_def, raw_string); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             //protected:
@@ -954,7 +1000,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, group); }
             void* group{};
         };
 
@@ -966,7 +1011,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, config); }
             void* config{};
             auto_array<r_string> path;
         };
@@ -979,7 +1023,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, control); }
             void* control{};
         };
 
@@ -991,7 +1034,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, display); }
             void* display{};
         };
 
@@ -1003,7 +1045,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, location); }
             void* location{};
         };
 
@@ -1015,7 +1056,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, script); }
             void* script{};
         };
 
@@ -1027,7 +1067,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, side); }
             void* side{};
         };
 
@@ -1039,7 +1078,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, rv_text); }
             void* rv_text{};
         };
 
@@ -1051,7 +1089,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, team); }
             void* team{};
         };
 
@@ -1063,7 +1100,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, 0); }  //#TODO proper hashing
 
             map_string_to_class<game_variable, auto_array<game_variable>> _variables;
             r_string _name;
@@ -1078,7 +1114,7 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            static size_t hash() { return 0x1337; }
+            static uint64_t hash() { return 0xCBF29CE484222325; } //64bit FNV-1 offset basis
         };
 
         class game_instruction : public refcount {
@@ -1108,7 +1144,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, code_string); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
@@ -1124,7 +1159,6 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            size_t hash() const { return __internal::pairhash(type_def, reinterpret_cast<uintptr_t>(object ? object->object : object)); }
             struct visualState {
                 //will be false if you called stuff on nullObj
                 bool valid{false};
@@ -1589,7 +1623,7 @@ namespace std {
     template <>
     struct hash<intercept::types::game_value> {
         size_t operator()(const intercept::types::game_value& x) const {
-            return x.hash();
+            return x.get_hash();
         }
     };
 }  // namespace std

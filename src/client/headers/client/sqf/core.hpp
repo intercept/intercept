@@ -354,6 +354,8 @@ namespace intercept {
         bool is_steam_overlay_enabled();
         bool is_saving();
 
+        rv_hashmap get_video_options();
+        rv_hashmap get_ti_parameters();
         void set_ti_parameter(sqf_string_const_ref param_, float value_);
     }  // namespace sqf
 }  // namespace intercept

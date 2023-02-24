@@ -1654,6 +1654,7 @@ namespace intercept::types {
         return hashValue;
     }
 
+
     struct map_string_to_class_trait {
         /*
         static unsigned int hash_key(const char* key) noexcept {
@@ -1663,6 +1664,7 @@ namespace intercept::types {
             return strcmp(k1, k2) == 0;
         }
         */
+        using key_type = std::string_view;
         static unsigned int hash_key(std::string_view key) noexcept {
             return rv_map_hash_string_case_sensitive(key);
         }
@@ -1699,6 +1701,8 @@ namespace intercept::types {
         }
     };
 
+
+
     template <class Type, class Container, class Traits = map_string_to_class_trait>
     class map_string_to_class {
     protected:
@@ -1706,7 +1710,6 @@ namespace intercept::types {
         int _tableCount{0};
         int _count{0};
         static Type _null_entry;
-
     public:
         class iterator {
             size_t _table;
@@ -1778,6 +1781,35 @@ namespace intercept::types {
         }
 
         map_string_to_class() {}
+        map_string_to_class(const map_string_to_class& copy_) {
+            *this = copy_;
+        }
+        map_string_to_class(map_string_to_class&& move_) noexcept {
+            *this = std::move(move_);
+        }
+        map_string_to_class& operator=(const map_string_to_class& copy_) {
+            auto oldTableCount = _tableCount;
+            _tableCount = copy_._tableCount;
+            _count = copy_._count;
+            auto newTable = rv_allocator<Container>::create_array(_tableCount);
+            for (auto i = 0; i < _tableCount; i++) {
+                auto& container = copy_._table[i];
+                for (Type& item : container) {
+                    auto hashedKey = hash_key(item.get_map_key());
+                    newTable[hashedKey].emplace(newTable[hashedKey].end(), item);
+                }
+            }
+            std::swap(_table, newTable);
+            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+            return *this;
+        }
+        map_string_to_class& operator=(map_string_to_class&& move_) noexcept {
+            std::swap(_table, move_._table);
+            std::swap(_tableCount, move_._tableCount);
+            std::swap(_count, move_._count);
+            return *this;
+
+        }
 
         template <class Func>
         void for_each(Func func_) const {
@@ -1801,7 +1833,7 @@ namespace intercept::types {
             }
         }
 
-        const Type& get(std::string_view key_) const {
+        const Type& get(typename Traits::key_type key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
@@ -1812,19 +1844,19 @@ namespace intercept::types {
             return _null_entry;
         }
 
-        Container* get_table_for_key(std::string_view key_) {
+        Container* get_table_for_key(typename Traits::key_type key_) {
             if (!_table || !_count) return nullptr;
             const int hashed_key = hash_key(key_);
             return &_table[hashed_key];
         }
 
-        const Container* get_table_for_key(std::string_view key_) const {
+        const Container* get_table_for_key(typename Traits::key_type key_) const {
             if (!_table || !_count) return nullptr;
             const int hashed_key = hash_key(key_);
             return &_table[hashed_key];
         }
 
-        Type& get(std::string_view key_) {
+        Type& get(typename Traits::key_type key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
             for (size_t i = 0; i < _table[hashed_key].count(); i++) {
@@ -1837,7 +1869,7 @@ namespace intercept::types {
 
         static bool is_null(const Type& value_) { return &value_ == &_null_entry; }
 
-        bool has_key(std::string_view key_) const {
+        bool has_key(typename Traits::key_type key_) const {
             return !is_null(get(key_));
         }
 
@@ -1848,13 +1880,14 @@ namespace intercept::types {
             auto oldTableCount = _tableCount;
             _tableCount = tableSize;
             auto newTable = rv_allocator<Container>::create_array(tableSize);
-            for (auto i = 0; i < _tableCount; i++) {
-                auto& container = newTable[i];
+            _count = 0; // redo count in case tableSize < oldTableCount
+            for (auto i = 0; i < oldTableCount; i++) {
+                auto& container = _table[i];
                 for (Type& item : container) {
                     auto hashedKey = hash_key(item.get_map_key());
-                    auto it = newTable[hashedKey].emplace(newTable[hashedKey].end(), Type());
-                    *it = std::move(item);
+                    newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
                 }
+                _count += static_cast<int>(container.count());
             }
             std::swap(_table, newTable);
             rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
@@ -1876,6 +1909,7 @@ namespace intercept::types {
                 } while (_count + 1 > (16 * (tableSize - 1)));
                 rebuild(tableSize - 1);
             }
+
             auto hashedkey = hash_key(key);
             auto& x = *(_table[hashedkey].emplace_back(value));
             _count++;
@@ -1900,23 +1934,19 @@ namespace intercept::types {
                 rebuild(tableSize - 1);
             }
 
-            if (!_table) {
-                _table = rv_allocator<Container>::create_array(_tableCount);
-            }
-
             auto hashedkey = hash_key(key);
             auto& x = *(_table[hashedkey].emplace_back(std::move(value)));
             _count++;
             return x;
         }
 
-        bool remove(std::string_view key) {
+        bool remove(typename Traits::key_type key) {
             if (_count <= 0) return false;
 
             int hashedKey = hash_key(key);
-            for (size_t i = 0; i < _table[hashedKey].size(); i++) {
+            for (size_t i = 0; i < _table[hashedKey].size(); ++i) {
                 Type& item = _table[hashedKey][i];
-                if (Traits::compare_keys(item.get_map_key(), key) == 0) {
+                if (Traits::compare_keys(item.get_map_key(), key)) {
                     _table[hashedKey].erase(_table[hashedKey].begin() + i);
                     _count--;
                     return true;
@@ -1926,18 +1956,104 @@ namespace intercept::types {
         }
 
         //Is empty?
-        bool empty() {
+        bool empty() const {
             return (!_table || !_count);
         }
 
+        void reserve(int newCount_) {
+            int newTableCount_ = newCount_ / 16; 
+            if (newTableCount_ > _tableCount) {
+                rebuild(newTableCount_);
+            }
+            for (auto i = 0; i < _tableCount; ++i) {
+                auto& container = _table[i];
+                container.reserve(16);
+            }
+        }
+
+        void clear(bool reclaim_memory_ = false) {
+            if (reclaim_memory_) {
+                rv_allocator<Container>::destroy_deallocate(_table, _tableCount);
+                _tableCount = 0;
+                _count = 0;
+                _table = nullptr;
+                return;
+            }
+
+            for (auto i = 0; i < _tableCount; i++) {
+                auto& container = _table[i];
+                container.clear();
+            }
+            _count = 0;
+        }
+        ~map_string_to_class() {
+            clear(true);
+        }
     protected:
-        int hash_key(std::string_view key_) const {
+
+        int hash_key(typename Traits::key_type key_) const {
             return Traits::hash_key(key_) % _tableCount;
         }
     };
 
     template <class Type, class Container, class Traits>
     Type map_string_to_class<Type, Container, Traits>::_null_entry;
+
+    template <class Type, class Container, class Traits>
+    class internal_hashmap : public map_string_to_class<Type, Container, Traits> {
+        using base = map_string_to_class<Type, Container, Traits>;
+    public:
+        typename Type::value_type& operator[](typename Type::key_type key_) {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
+                return base::insert(Type(key_, Type::value_type())).value;
+            }
+            return temp.value;
+        }
+        const typename Type::value_type& operator[](typename Type::key_type key_) const {
+            return base::at(key_);
+        }
+        typename Type::value_type& at(typename Type::key_type key_) {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
+                throw std::out_of_range("Invalid key");
+            }
+            return temp.value;
+        }
+        const typename Type::value_type& at(typename Type::key_type key_) const {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp)) {
+                throw std::out_of_range("Invalid key");
+            }
+            return temp.value;
+        }
+
+        template <class... Args>
+        Type& emplace(Args&&... args_) {
+            return base::insert(Type(std::forward<Args>(args_)...));
+        }
+
+        Type* find(typename Type::key_type key_) {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp))
+                return nullptr;
+            return &temp;
+        }
+        const Type* find(typename Type::key_type key_) const {
+            auto& temp = base::get(key_);
+            if (base::is_null(temp))
+                return nullptr;
+            return &temp;
+        }
+
+        bool contains(typename Type::key_type key_) const {
+            return base::has_key(key_);
+        }
+
+        ~internal_hashmap() {
+            base::clear(true);
+        }
+    };
 
 #pragma endregion
 }

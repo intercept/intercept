@@ -523,7 +523,7 @@ namespace std {
     
 #define DEFINE_HASH_FUNCTION_FOR_CLASS(type) template <> struct hash<intercept::types::type> { \
         size_t operator()(const intercept::types::type& x) const { \
-            return x.hash(); \
+            return x.get_hash(); \
         } \
     }; 
 

@@ -703,7 +703,7 @@ namespace intercept {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
 
-#ifndef _blalb
+#ifndef __clang__
 #pragma optimize("ts", on)
 #endif  // ! __clang__
             void set_vtable(uintptr_t vt) noexcept {

@@ -562,13 +562,18 @@ namespace intercept {
                 copy(copy_);
             }
 
+// Clang says optimize pragma can only be used at file scope
+#ifndef  __clang__
 #pragma optimize("ts", on)
+#endif  // ! __clang__
             game_value(game_value&& move_) noexcept {
                 set_vtable(__vptr_def);  //Whatever vtable move_ has.. if it's different then it's wrong
                 data = nullptr;
                 data.swap(move_.data);
             }
+#ifndef __clang__
 #pragma optimize("", on)
+#endif  // ! __clang__
 
             //Conversions
             game_value(game_data* val_) noexcept {
@@ -697,11 +702,16 @@ namespace intercept {
             uintptr_t get_vtable() const noexcept {
                 return *reinterpret_cast<const uintptr_t*>(this);
             }
+
+#ifndef __clang__
 #pragma optimize("ts", on)
+#endif  // ! __clang__
             void set_vtable(uintptr_t vt) noexcept {
                 *reinterpret_cast<uintptr_t*>(this) = vt;
             }
+#ifndef __clang__
 #pragma optimize("", on)
+#endif  // ! __clang__
         };
 
         class game_value_static : public game_value {

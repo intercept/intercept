@@ -342,7 +342,7 @@ namespace intercept {
         }
 
         void set_trigger_activation(const object &trigger_, sqf_string_const_ref by_, sqf_string_const_ref type_, bool repeating_) {
-            host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, {by_, repeating_});
+            host::functions.invoke_raw_binary(__sqf::binary__settriggeractivation__object__array__ret__nothing, trigger_, {by_, type_, repeating_});
         }
 
         void set_trigger_area(const object &trigger_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {

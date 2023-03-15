@@ -86,6 +86,7 @@ namespace intercept {
             constexpr vector3_base operator + (const vector3_base& v) const noexcept { return vector3_base(x + v.x, y + v.y, z + v.z); }
             constexpr vector3_base operator + (const vector2_base<T>& v) const noexcept { return vector3_base(x + v.x, y + v.y, z); }
             constexpr vector3_base operator / (const vector3_base& v) const noexcept { return vector3_base(x / v.x, y / v.y, z / v.z); }
+            constexpr vector3_base operator / (const vector2_base<T>& v) const noexcept { return vector3_base(x / v.x, y / v.y, 0); }
             constexpr vector3_base operator * (const vector3_base& v) const noexcept { return vector3_base(x * v.x, y * v.y, z * v.z); }
             constexpr vector3_base operator * (const vector2_base<T>& v) const noexcept { return vector3_base(x * v.x, y * v.y, 0); }
             constexpr vector3_base operator - (const vector3_base& v) const noexcept { return vector3_base(x - v.x, y - v.y, z - v.z); }
@@ -96,6 +97,7 @@ namespace intercept {
             constexpr vector3_base& operator *=(const vector2_base<T>& v) noexcept { x *= v.x; y *= v.y; z = 0; return *this; }
             constexpr vector3_base& operator *=(T mag) noexcept { x *= mag; y *= mag; z *= mag; return *this; }
             constexpr vector3_base& operator /=(const vector3_base& v) noexcept { x /= v.x; y /= v.y; z /= v.z; return *this; }
+            constexpr vector3_base& operator /=(const vector2_base<T>& v) noexcept { x /= v.x; y /= v.y; z = 0; return *this; }
             constexpr vector3_base& operator /=(T mag) noexcept { x /= mag; y /= mag; z /= mag; return *this; }
             constexpr vector3_base& operator +=(const vector3_base& v) noexcept { x += v.x; y += v.y; z += v.z; return *this; }
             constexpr vector3_base& operator +=(const vector2_base<T>& v) noexcept { x += v.x; y += v.y; return *this; }

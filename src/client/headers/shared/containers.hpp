@@ -70,12 +70,12 @@ namespace intercept::types {
 
         static void destroy_deallocate(Type* _Ptr) {
             destroy(_Ptr);
-            return __internal::rv_allocator_deallocate_generic(_Ptr);
+            deallocate(_Ptr);
         }
 
         static void destroy_deallocate(Type* _Ptr, size_t size_) {
             destroy(_Ptr, size_);
-            return __internal::rv_allocator_deallocate_generic(_Ptr);
+            deallocate(_Ptr);
         }
 
         //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
@@ -1159,7 +1159,7 @@ namespace intercept::types {
         }
         Type& operator[](const size_t i_) { return get(i_); }
         const Type& operator[](const size_t i_) const { return get(i_); }
-        Type* data() { return _data; }
+        Type* data() noexcept { return _data; }
         constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
         constexpr size_t size() const noexcept { return static_cast<size_t>(_n); }
 
@@ -1184,8 +1184,8 @@ namespace intercept::types {
         Type& front() { return get(0); }
         Type& back() { return get(_n - 1); }
 
-        bool is_empty() const { return _n == 0; }
-        bool empty() const { return _n == 0; }
+        bool is_empty() const noexcept { return _n == 0; }
+        bool empty() const noexcept { return _n == 0; }
 
         template <class Func>
         void for_each(const Func& f_) const {
@@ -1220,7 +1220,7 @@ namespace intercept::types {
         }
     };
 
-    template <class Type, class Allocator = rv_allocator<Type>, size_t growthFactor = 32>
+    template <class Type, class Allocator = rv_allocator<Type>, size_t maxGrowth = 128>
     class
 #ifdef _MSC_VER
         __declspec(empty_bases)
@@ -1232,35 +1232,24 @@ namespace intercept::types {
 
     protected:
         int _maxItems;
-        Type* try_realloc(Type* old_, size_t n_) {
+        /*Type* try_realloc(Type* old_, size_t n_) {
             Type* ret = Allocator::reallocate(old_, n_);
             return ret;
-        }
+        }*/
 
         void reallocate(size_t size_) {
             if (_maxItems == size_) return;
 
-            if (base::_n > static_cast<int>(size_)) {
-                resize(size_);
-                return;  //resize calls reallocate and reallocates... Ugly.. I know
-            }
-            Type* newData = nullptr;
-            if (base::_data && size_ > 0 && ((newData = try_realloc(base::_data, size_)))) {
-                //if (size > _maxItems)//Don't null out new stuff if there is no new stuff
-                //    std::fill(reinterpret_cast<uint32_t*>(&newData[_maxItems]), reinterpret_cast<uint32_t*>(&newData[size]), 0);
-                _maxItems = static_cast<int>(size_);
-                base::_data = newData;
-                return;
-            }
-            newData = Allocator::create_uninitialized_array(size_);
-            //memset(newData, 0, size * sizeof(Type));
+            Type* newData = Allocator::allocate(size_);
             if (base::_data) {
+                if (base::_n) {
 #ifdef __GNUC__
-                memmove(newData, base::_data, base::_n * sizeof(Type));
+                    memmove(newData, base::_data, base::_n * sizeof(Type));
 #else
-                //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
-                memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                    //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
+                    memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
 #endif
+                }
                 Allocator::deallocate(base::_data);
             }
             base::_data = newData;
@@ -1269,7 +1258,8 @@ namespace intercept::types {
 
         void grow(const size_t n_) {
 #undef max
-            reallocate(_maxItems + std::max(n_, growthFactor));
+#undef min
+            reallocate(_maxItems + std::max(n_, std::min(static_cast<size_t>(_maxItems), maxGrowth)));
         }
 
     public:
@@ -1294,14 +1284,13 @@ namespace intercept::types {
             move_._maxItems = 0;
         }
         ~auto_array() {
-            if (base::_data == nullptr) return;
-            resize(0);
+            clear(true);
         }
         /**
         * @brief Reduces capacity to minimum required to store current content
         */
         void shrink_to_fit() {
-            resize(base::_n);
+            reallocate(base::_n);
         }
         auto_array& operator=(auto_array&& move_) noexcept {
             base::_n = move_._n;
@@ -1315,14 +1304,14 @@ namespace intercept::types {
 
         auto_array& operator=(const auto_array& copy_) {
             if (copy_._n) {
-                clear();
+                clear(true);
                 insert(base::end(), copy_.begin(), copy_.end());
             }
             return *this;
         }
 
         /**
-        * @brief Makes sure the capacity is exactly _n. Destructs and deallocates all elements past n_
+        * @brief Makes sure the size is exactly _n. Destructs all elements past n_
         */
         void resize(const size_t n_) {
             if (static_cast<int>(n_) < base::_n) {
@@ -1330,13 +1319,7 @@ namespace intercept::types {
                     (*this)[i].~Type();
                 }
             }
-            if (n_ == 0 && base::_data) {
-                Allocator::deallocate(rv_array<Type>::_data);
-                base::_n = 0;
-                rv_array<Type>::_data = nullptr;
-                return;
-            }
-            reallocate(n_);
+            reserve(n_);
             if (n_ > base::_n) { //adding elements, need to default init
                 for (size_t i = base::_n; i < n_; ++i) {
                 #pragma warning(suppress : 26409)
@@ -1351,9 +1334,8 @@ namespace intercept::types {
         * @param res_ new minimum buffer size
         */
         void reserve(const size_t res_) {
-            if (_maxItems < static_cast<int>(res_)) {
-                grow(res_ - _maxItems);
-            }
+            if (res_ > _maxItems)
+                reallocate(res_);
         }
 
         /**
@@ -1523,12 +1505,17 @@ namespace intercept::types {
             return insert(where_, values_.begin(), values_.end());
         }
 
-        void clear() {
-            if (base::_data)
-                Allocator::deallocate(rv_array<Type>::_data);
-            base::_data = nullptr;
+        void clear(bool dealloc_ = false) {
+            if (dealloc_) {
+                if (base::_data)
+                    Allocator::destroy_deallocate(rv_array<Type>::_data, rv_array<Type>::_n);
+                base::_data = nullptr;
+                _maxItems = 0;
+            } else {
+                if (base::_data)
+                    Allocator::destroy(rv_array<Type>::_data, rv_array<Type>::_n);
+            }
             base::_n = 0;
-            _maxItems = 0;
         }
 
         bool operator==(rv_array<Type> other_) {

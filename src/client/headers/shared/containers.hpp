@@ -1255,7 +1255,8 @@ namespace intercept::types {
             base::_data = newData;
             _maxItems = static_cast<int>(size_);
         }
-
+        // Doubles the capacity, or increases it by a maxGrowth limit
+        // Also makes sure at least n_ new elements are available
         void grow(const size_t n_) {
 #undef max
 #undef min
@@ -1508,12 +1509,12 @@ namespace intercept::types {
         void clear(bool dealloc_ = false) {
             if (dealloc_) {
                 if (base::_data)
-                    Allocator::destroy_deallocate(rv_array<Type>::_data, rv_array<Type>::_n);
+                    Allocator::destroy_deallocate(base::_data, base::_n);
                 base::_data = nullptr;
                 _maxItems = 0;
             } else {
                 if (base::_data)
-                    Allocator::destroy(rv_array<Type>::_data, rv_array<Type>::_n);
+                    Allocator::destroy(base::_data, base::_n);
             }
             base::_n = 0;
         }

@@ -1240,14 +1240,14 @@ namespace intercept::types {
         void reallocate(size_t size_) {
             if (_maxItems == size_) return;
 
-            Type* newData = Allocator::allocate(size_);
+            Type* newData = size_ > 0 ? Allocator::allocate(size_) : nullptr;
             if (base::_data) {
                 if (base::_n) {
 #ifdef __GNUC__
-                    memmove(newData, base::_data, base::_n * sizeof(Type));
+                    memcpy(newData, base::_data, base::_n * sizeof(Type));
 #else
                     //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
-                    memmove_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
+                    memcpy_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
 #endif
                 }
                 Allocator::deallocate(base::_data);
@@ -1347,7 +1347,7 @@ namespace intercept::types {
         */
         template <class... _Valty>
         iterator emplace(iterator where_, _Valty&&... val_) {
-            if (where_ < base::begin() || where_ > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (where_ < base::begin() || where_ >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = where_ - base::begin();
             auto previousEnd = base::_n;
             if (_maxItems < base::_n + 1) {
@@ -1403,9 +1403,8 @@ namespace intercept::types {
         //    memmove_s(&(*this)[index], (base::_n - index) * sizeof(Type), &(*this)[index + 1], (base::_n - index - 1) * sizeof(Type));
         //}
         void erase(const_iterator element_) {
-            if (element_ < base::begin() || element_ > base::end()) throw std::runtime_error("Invalid Iterator");
+            if (element_ < base::begin() || element_ >= base::end()) throw std::runtime_error("Invalid Iterator");
             const size_t index = std::distance(base::cbegin(), element_);
-            if (static_cast<int>(index) > base::_n) return;
             auto&& item = (*this)[index];
             item.~Type();
 #ifdef __GNUC__
@@ -1417,7 +1416,7 @@ namespace intercept::types {
         }
 
         void erase(const_iterator first_, const_iterator last_) {
-            if (first_ > last_ || first_ < base::begin() || last_ > base::end()) throw std::runtime_error("Invalid Iterator");
+            if (first_ > last_ || first_ < base::begin() || last_ >= base::end()) throw std::runtime_error("Invalid Iterator");
             const size_t firstIndex = std::distance(base::cbegin(), first_);
             const size_t lastIndex = std::distance(base::cbegin(), last_);
             const size_t range = std::distance(first_, last_);
@@ -1450,7 +1449,7 @@ namespace intercept::types {
         */
         template <class _InType>  //This is sooo not threadsafe!
         iterator insert(iterator _where, _InType&& _value) {
-            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (_where < base::begin() || _where >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
             const size_t oldSize = base::count();
@@ -1475,7 +1474,7 @@ namespace intercept::types {
         template <class _InIt>  //This is sooo not threadsafe!
         iterator insert(iterator _where, _InIt _first, _InIt _last) {
             if (_first == _last) return _where;                                                                //Boogie!
-            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (_where < base::begin() || _where >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
             const size_t oldSize = base::count();

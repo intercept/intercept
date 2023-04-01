@@ -1347,7 +1347,7 @@ namespace intercept::types {
         */
         template <class... _Valty>
         iterator emplace(iterator where_, _Valty&&... val_) {
-            if (where_ < base::begin() || where_ >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (where_ < base::begin() || where_ > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = where_ - base::begin();
             auto previousEnd = base::_n;
             if (_maxItems < base::_n + 1) {
@@ -1449,7 +1449,7 @@ namespace intercept::types {
         */
         template <class _InType>  //This is sooo not threadsafe!
         iterator insert(iterator _where, _InType&& _value) {
-            if (_where < base::begin() || _where >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
             const size_t oldSize = base::count();
@@ -1474,7 +1474,7 @@ namespace intercept::types {
         template <class _InIt>  //This is sooo not threadsafe!
         iterator insert(iterator _where, _InIt _first, _InIt _last) {
             if (_first == _last) return _where;                                                                //Boogie!
-            if (_where < base::begin() || _where >= base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
+            if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
             const size_t oldSize = base::count();

@@ -1416,7 +1416,7 @@ namespace intercept::types {
         }
 
         void erase(const_iterator first_, const_iterator last_) {
-            if (first_ > last_ || first_ < base::begin() || last_ >= base::end()) throw std::runtime_error("Invalid Iterator");
+            if (first_ > last_ || first_ < base::begin() || last_ > base::end()) throw std::runtime_error("Invalid Iterator");
             const size_t firstIndex = std::distance(base::cbegin(), first_);
             const size_t lastIndex = std::distance(base::cbegin(), last_);
             const size_t range = std::distance(first_, last_);

@@ -75,7 +75,7 @@ namespace intercept::types {
 
         static void destroy_deallocate(Type* _Ptr, size_t size_) {
             destroy(_Ptr, size_);
-            deallocate(_Ptr);
+            deallocate(_Ptr, size_);
         }
 
         //This only allocates the memory! This will not be initialized to 0 and the allocated object will not have it's constructor called!
@@ -1240,13 +1240,14 @@ namespace intercept::types {
         void reallocate(size_t size_) {
             if (_maxItems == size_) return;
 
-            Type* newData = size_ > 0 ? Allocator::allocate(size_) : nullptr;
-            if (base::_data) {
+            Type* newData = size_ > 0 ? Allocator::reallocate(base::_data, size_) : nullptr;
+            if (base::_data && newData != base::_data) {
                 if (base::_n) {
+                    // ! Technically this is only legal for trivially copyable types
+                    // see: https://en.cppreference.com/w/cpp/string/byte/memcpy
 #ifdef __GNUC__
                     memcpy(newData, base::_data, base::_n * sizeof(Type));
 #else
-                    //std::uninitialized_move(begin(), end(), newData); //This might be cleaner. But still causes a move construct call where memmove just moves bytes.
                     memcpy_s(newData, size_ * sizeof(Type), base::_data, base::_n * sizeof(Type));
 #endif
                 }
@@ -1335,7 +1336,7 @@ namespace intercept::types {
         * @param res_ new minimum buffer size
         */
         void reserve(const size_t res_) {
-            if (res_ > _maxItems)
+            if (static_cast<int>(res_) > _maxItems) // only increase capacity
                 reallocate(res_);
         }
 

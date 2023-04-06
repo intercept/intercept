@@ -1232,15 +1232,21 @@ namespace intercept::types {
 
     protected:
         int _maxItems;
-        /*Type* try_realloc(Type* old_, size_t n_) {
+        Type* try_realloc(Type* old_, size_t n_) {
             Type* ret = Allocator::reallocate(old_, n_);
             return ret;
-        }*/
+        }
 
         void reallocate(size_t size_) {
             if (_maxItems == size_) return;
 
-            Type* newData = size_ > 0 ? Allocator::reallocate(base::_data, size_) : nullptr;
+            Type* newData = nullptr;
+            if (base::_data && size_ > 0 && ((newData = try_realloc(base::_data, size_)))) {
+                _maxItems = static_cast<int>(size_);
+                base::_data = newData;
+                return;
+            }
+            newData = Allocator::create_uninitialized_array(size_);
             if (base::_data && newData != base::_data) {
                 if (base::_n) {
                     // ! Technically this is only legal for trivially copyable types

@@ -237,6 +237,10 @@ namespace intercept {
             v2* v = (v2*) vtable;
             try {
 
+                // Validate that we have a RTTI enabled type
+                if (!*reinterpret_cast<uintptr_t*>(vtable)) // vtable points to nothing, if it were a vtable there would be a function pointer there
+                    return "";
+
                 auto& typex = typeid(*v);
 #ifdef __GNUC__
                 auto test = typex.name();

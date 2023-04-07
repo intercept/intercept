@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   mod:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: git checkout
         uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
           path: releases/1.0.0/@intercept
 
   extension-linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: git checkout
         uses: actions/checkout@v2
@@ -70,7 +70,7 @@ jobs:
           path: build/win64/intercept/Release/intercept_x64.dll
 
   package:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs:
       - extension-linux
       - extension-windows

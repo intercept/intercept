@@ -163,7 +163,7 @@ namespace intercept {
         auto it = _unary_operators.find(function_name_);
         if (it != _unary_operators.end()) {
             for (auto op : it->second) {
-                if (op.op->arg_type.type().count(arg_signature_)) {
+                if (op.op->get_arg_type().type().count(arg_signature_)) {
                     function_ = reinterpret_cast<unary_function>(op.op->procedure_addr);
                     return true;
                 }
@@ -195,7 +195,7 @@ namespace intercept {
         auto it = _binary_operators.find(function_name_);
         if (it != _binary_operators.end()) {
             for (auto op : it->second) {
-                if (op.op->arg1_type.type().count(arg1_signature_) && op.op->arg2_type.type().count(arg2_signature_)) {
+                if (op.op->get_arg1_type().type().count(arg1_signature_) && op.op->get_arg2_type().type().count(arg2_signature_)) {
                     function_ = reinterpret_cast<binary_function>(op.op->procedure_addr);
                     return true;
                 }
@@ -458,7 +458,7 @@ namespace intercept {
                 new_entry.name = entry._name.data();
                 LOG(INFO, "Found unary operator: {} {} ({}) @{:x}",
                     new_entry.op->return_type.type_str(), new_entry.name,
-                    new_entry.op->arg_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
+                    new_entry.op->get_arg_type().type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _unary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -473,8 +473,8 @@ namespace intercept {
                 new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);
                 new_entry.name = entry._name.data();
                 LOG(INFO, "Found binary operator: {} ({}) {} ({}) @{:x}",
-                    new_entry.op->return_type.type_str(), new_entry.op->arg1_type.type_str(), new_entry.name,
-                    new_entry.op->arg2_type.type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
+                    new_entry.op->return_type.type_str(), new_entry.op->get_arg1_type().type_str(), new_entry.name,
+                    new_entry.op->get_arg2_type().type_str(), reinterpret_cast<uintptr_t>(new_entry.op->procedure_addr));
                 _binary_operators[entry._name2].push_back(new_entry);
             }
         }
@@ -530,8 +530,8 @@ namespace intercept {
             //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
     #endif
 
-        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->arg1_type.get_vtable();
-        _sqf_register_funcs._compoundtype_vtable = _unary_operators["isnil"sv].front().op->arg_type.compound_type->get_vtable();
+        _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->get_arg1_type().get_vtable();
+        _sqf_register_funcs._compoundtype_vtable = _unary_operators["isnil"sv].front().op->get_arg_type().compound_type->get_vtable();
 
         _sqf_register_funcs._gameState = state_addr_;
 

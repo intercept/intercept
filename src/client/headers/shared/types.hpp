@@ -392,7 +392,18 @@ namespace intercept {
         struct unary_operator : _refcount_vtable_dummy {
             unary_function* procedure_addr;
             sqf_script_type return_type;
+        private:
             sqf_script_type arg_type;
+            uint64_t dummySpace;
+            uint64_t dummySpace2;
+        public:
+            sqf_script_type& get_arg_type() {
+                // Arma 2.13 150487
+                if (!arg_type.get_vtable()) {
+                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg_type) + sizeof(uintptr_t));
+                }
+                return arg_type;
+            }
         };
 
         struct unary_entry {
@@ -404,8 +415,28 @@ namespace intercept {
         struct binary_operator : _refcount_vtable_dummy {
             binary_function* procedure_addr;
             sqf_script_type return_type;
+        private:
             sqf_script_type arg1_type;
             sqf_script_type arg2_type;
+            uint64_t dummySpace; // Make sure allocator allocates enough space
+            uint64_t dummySpace2;
+            uint64_t dummySpace3;
+        public:
+            sqf_script_type& get_arg1_type() {
+                // Arma 2.13 150487
+                if (!arg1_type.get_vtable()) {
+                      return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg1_type) + sizeof(uintptr_t));
+                }
+                return arg1_type;
+            }
+
+            sqf_script_type& get_arg2_type() {
+                // Arma 2.13 150487
+                if (!arg1_type.get_vtable()) {
+                      return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg2_type) + sizeof(uintptr_t)*2);
+                }
+                return arg2_type;
+            }
         };
 
         struct binary_entry {

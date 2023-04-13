@@ -103,11 +103,11 @@ namespace intercept {
             std::regex name_test = std::regex("[a-z]+?.*");
             if (std::regex_match(static_cast<std::string>(op_name), name_test)) {
                 for (auto op : unary_list[op_name]) {
-                    auto arg_types = op.op->arg_type.type_str();
+                    auto arg_types = op.op->get_arg_type().type_str();
                     arg_types.to_lower();
                     auto return_type = op.op->return_type.type_str();
                     return_type.to_lower();
-                    auto first_arg_type = *op.op->arg_type.type().begin();
+                    auto first_arg_type = *op.op->get_arg_type().type().begin();
                     auto pointer_name = "unary__" + op_name + "__" + arg_types + "__ret__" + return_type;
                     pointers_def << "unary_function __sqf::"sv << pointer_name << ";\n";
                     pointers << "static unary_function "sv << pointer_name << ";\n";
@@ -134,16 +134,16 @@ namespace intercept {
             std::regex name_test = std::regex("[a-z]+?.*");
             if (std::regex_match(static_cast<std::string>(op_name), name_test)) {
                 for (auto op : binary_list[op_name]) {
-                    auto arg1_types = op.op->arg1_type.type_str();
+                    auto arg1_types = op.op->get_arg1_type().type_str();
                     arg1_types.to_lower();
-                    auto arg2_types = op.op->arg2_type.type_str();
+                    auto arg2_types = op.op->get_arg2_type().type_str();
                     arg2_types.to_lower();
 
                     auto return_type = op.op->return_type.type_str();
                     return_type.to_lower();
 
-                    auto first_arg1_type = *op.op->arg1_type.type().begin();
-                    auto first_arg2_type = *op.op->arg2_type.type().begin();
+                    auto first_arg1_type = *op.op->get_arg1_type().type().begin();
+                    auto first_arg2_type = *op.op->get_arg2_type().type().begin();
 
                     auto pointer_name = "binary__" + op_name + "__" + arg1_types + "__" + arg2_types + "__ret__" + return_type;
                     pointers_def << "binary_function __sqf::"sv << pointer_name << ";\n"sv;

@@ -194,8 +194,8 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
     op._operator->return_type = retType;
-    op._operator->arg1_type = leftType;
-    op._operator->arg2_type = rightype;
+    op._operator->get_arg1_type() = leftType;
+    op._operator->get_arg2_type() = rightype;
 
     auto inserted = static_cast<__internal::gsOperator*>(operators->push_back(op));
 
@@ -284,7 +284,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     op._operator->_vtable = test->_operator->_vtable;
     op._operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
     op._operator->return_type = retType;
-    op._operator->arg_type = rightype;
+    op._operator->get_arg_type() = rightype;
 
     auto inserted = static_cast<__internal::gsFunction*>(functions->push_back(op));
 
@@ -509,7 +509,7 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     if (!funcs) return nullptr;
     auto argTypeString = types::__internal::to_string(argument_type);
     for (auto& it : *funcs) {
-        auto types = it._operator->arg_type.type();
+        auto types = it._operator->get_arg_type().type();
         if (types.find(argTypeString) != types.end()) {
             return &it;
         }
@@ -528,9 +528,9 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
     auto left_argTypeString = types::__internal::to_string(left_argument_type);
     auto right_argTypeString = types::__internal::to_string(right_argument_type);
     for (auto& it : *operators) {
-        auto left_types = it._operator->arg1_type.type();
+        auto left_types = it._operator->get_arg1_type().type();
         if (left_types.find(left_argTypeString) != left_types.end()) {
-            auto right_types = it._operator->arg2_type.type();
+            auto right_types = it._operator->get_arg2_type().type();
             if (right_types.find(right_argTypeString) != right_types.end()) {
                 return &it;
             }

@@ -486,6 +486,7 @@ sqf_script_type sqf_functions::register_compound_sqf_type(auto_array<types::game
     auto newType = rv_allocator<compound_script_type_info>::create_single(
         resolvedTypes
     );
+    newType->set_vtable(_registerFuncs._compoundtype_vtable);
 
     LOG(INFO, "sqf_functions::register_compound_sqf_type");
     return {_registerFuncs._type_vtable, nullptr, newType};

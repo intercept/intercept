@@ -392,14 +392,23 @@ namespace intercept {
         struct unary_operator : _refcount_vtable_dummy {
             unary_function* procedure_addr;
             sqf_script_type return_type;
+
         private:
             sqf_script_type arg_type;
-            uint64_t dummySpace;
-            uint64_t dummySpace2;
+            uint64_t dummySpace{0};
+            uint64_t dummySpace2{0};
+
         public:
-            sqf_script_type& get_arg_type() {
+            unary_operator() {
+                arg_type.set_vtable(0);
+                get_arg_type(true).set_vtable(sqf_script_type::type_def);  // Make sure we are setting vtable in correct place
+            }
+
+            sqf_script_type& get_arg_type(bool creation = false) {
+                static bool newVersionFlags = false;  // The check only works during load, not write, need member, VS please no crash again so I don't have to write this comment for the 7th time
                 // Arma 2.13 150487
-                if (!arg_type.get_vtable()) {
+                if (newVersionFlags || (!creation && !arg_type.get_vtable())) { // During construction it may validly be null, even though we aren't in new build
+                    newVersionFlags = true;
                     return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg_type) + sizeof(uintptr_t));
                 }
                 return arg_type;
@@ -415,25 +424,37 @@ namespace intercept {
         struct binary_operator : _refcount_vtable_dummy {
             binary_function* procedure_addr;
             sqf_script_type return_type;
+
         private:
             sqf_script_type arg1_type;
             sqf_script_type arg2_type;
-            uint64_t dummySpace; // Make sure allocator allocates enough space
-            uint64_t dummySpace2;
-            uint64_t dummySpace3;
+            uint64_t dummySpace{0};  // Make sure allocator allocates enough space
+            uint64_t dummySpace2{0};
+            uint64_t dummySpace3{0};
+
         public:
-            sqf_script_type& get_arg1_type() {
+            binary_operator() {
+                memset(&arg1_type, 0, sizeof(decltype(arg1_type)));
+                memset(&arg2_type, 0, sizeof(decltype(arg2_type)));
+                get_arg1_type(true).set_vtable(sqf_script_type::type_def);
+                get_arg2_type(true).set_vtable(sqf_script_type::type_def);
+            }
+            sqf_script_type& get_arg1_type(bool creation = false) {
+                static bool newVersionFlags = false;
                 // Arma 2.13 150487
-                if (!arg1_type.get_vtable()) {
-                      return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg1_type) + sizeof(uintptr_t));
+                if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
+                    newVersionFlags = true;
+                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg1_type) + sizeof(uintptr_t));
                 }
                 return arg1_type;
             }
 
-            sqf_script_type& get_arg2_type() {
+            sqf_script_type& get_arg2_type(bool creation = false) {
+                static bool newVersionFlags = false;
                 // Arma 2.13 150487
-                if (!arg1_type.get_vtable()) {
-                      return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg2_type) + sizeof(uintptr_t)*2);
+                if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
+                    newVersionFlags = true;
+                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg2_type) + sizeof(uintptr_t) * 2);
                 }
                 return arg2_type;
             }

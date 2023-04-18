@@ -73,10 +73,10 @@ namespace intercept {
             NetObject,
             SUBGROUP,
             TEAM_MEMBER,
-            HASHMAP,
             TASK,
             DIARY_RECORD,
             LOCATION,
+            HASHMAP,
             end
         };
 
@@ -1010,7 +1010,6 @@ namespace intercept {
             static void operator delete(void* ptr_, std::size_t sz_);
         
             rv_hashmap data;
-            bool _readOnly = false;
         };
 
         class game_data_array : public game_data {

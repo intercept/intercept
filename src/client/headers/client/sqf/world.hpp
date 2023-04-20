@@ -179,7 +179,7 @@ namespace intercept {
         };
 
         struct rv_rain_parameters {
-            sqf_string rainDropTexture = "a3\\data_f\\rainnormal_ca.paa";
+            sqf_string rainDropTexture{"a3\\data_f\\rainnormal_ca.paa"};
             float texDropCount = 1.f;
             float minRainDensity = 0.01f;
             float effectRadius = 15.f;
@@ -218,7 +218,7 @@ namespace intercept {
             {
             }
             rv_rain_parameters(
-                sqf_string_const_ref rainDropTexture_,
+                std::string_view rainDropTexture_,
                 float texDropCount_,
                 float minRainDensity_,
                 float effectRadius_,

@@ -716,7 +716,7 @@ namespace intercept::types {
         //    _ref = reinterpret_cast<compact_array<char>*>(&c);
         //}
         explicit r_string(compact_array<char>* dat_) noexcept : _ref(dat_) {}
-        explicit r_string(r_string&& move_) noexcept {
+        r_string(r_string&& move_) noexcept {
             _ref.swap(move_._ref);
         }
         r_string(const r_string& copy_) {

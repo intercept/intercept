@@ -179,23 +179,24 @@ namespace intercept {
         };
 
         struct rv_rain_parameters {
-            sqf_string rainDropTexture;
-            float texDropCount;
-            float minRainDensity;
-            float effectRadius;
-            float windCoef;
-            float dropSpeed;
-            float rndSpeed;
-            float rndDir;
-            float dropWidth;
-            float dropHeight;
-            rv_color dropColor;
-            float lumSunFront;
-            float lumSunBack;
-            float refractCoef;
-            float refractSaturation;
-            bool snow;
-            bool dropColorStrong;
+            sqf_string rainDropTexture{"a3\\data_f\\rainnormal_ca.paa"};
+            float texDropCount = 1.f;
+            float minRainDensity = 0.01f;
+            float effectRadius = 15.f;
+            float windCoef = 0.1f;
+            float dropSpeed = 2.f;
+            float rndSpeed = 0.5f;
+            float rndDir = 0.5f;
+            float dropWidth = 0.02f;
+            float dropHeight = 0.02f;
+            rv_color dropColor{0.1f, 0.1f, 0.1f, 1.f};
+            float lumSunFront = 0.1f;
+            float lumSunBack = 0.1f;
+            float refractCoef = 5.5f;
+            float refractSaturation = 0.3f;
+            bool snow = false;
+            bool dropColorStrong = false;
+            rv_rain_parameters() = default;
             explicit rv_rain_parameters(const game_value &gv_)
                 : rainDropTexture(gv_[0]),
                   texDropCount(gv_[1]),
@@ -217,7 +218,7 @@ namespace intercept {
             {
             }
             rv_rain_parameters(
-                sqf_string_const_ref rainDropTexture_,
+                std::string_view rainDropTexture_,
                 float texDropCount_,
                 float minRainDensity_,
                 float effectRadius_,

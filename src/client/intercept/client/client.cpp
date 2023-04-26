@@ -8,19 +8,6 @@ namespace intercept {
         client_functions host::functions;
         r_string host::module_name;
 
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionBinary function_, game_data_type return_arg_type, game_data_type left_arg_type, game_data_type right_arg_type) {
-            return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
-        }
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionUnary function_, game_data_type return_arg_type, game_data_type right_arg_type) {
-            return functions.register_sqf_function_unary(name, description, function_, return_arg_type, right_arg_type);
-        }
-        registered_sqf_function host::registerFunction(std::string_view name, std::string_view description, WrapperFunctionNular function_, game_data_type return_arg_type) {
-            return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
-        }
-        std::pair<game_data_type, sqf_script_type> host::registerType(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
-            return functions.register_sqf_type(name, localizedName, description, typeName, cf);
-        }
-
         registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionBinary function_, game_data_type return_arg_type, game_data_type left_arg_type, game_data_type right_arg_type) {
             return functions.register_sqf_function(name, description, function_, return_arg_type, left_arg_type, right_arg_type);
         }

@@ -449,12 +449,17 @@ bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf
 }
 
 
-std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     if (name.length() > 128) throw std::length_error("intercept::sqf_functions::register_sqf_type name can maximum be 128 chars long");
     auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
-    auto newType = rv_allocator<script_type_info>::create_single(
+    auto newType = rv_allocator<script_type_info>::allocate(2);
+
+    // Temporary workaround for size change in 2.13 150487. Make sure we have extra nulled space after the type
+
+    memset(newType, 0, sizeof(script_type_info) * 2);
+    ::new (newType) script_type_info(
     #ifdef __linux__
         name,cf,localizedName,localizedName
     #else
@@ -466,10 +471,17 @@ std::pair<types::game_data_type, sqf_script_type>  intercept::sqf_functions::reg
     _registerFuncs._types.emplace_back(newType);
     LOG(INFO, "sqf_functions::register_sqf_type {} {} {} ", name, localizedName, description, typeName);
     types::__internal::add_game_datatype(name, static_cast<types::game_data_type>(newIndex));
-    return { static_cast<types::game_data_type>(newIndex),{ _registerFuncs._type_vtable,newType,nullptr } };
+
+    auto typeInstance = //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, newType, nullptr);
+        // Temporary workaround for change in 2.13 150487
+        rv_allocator<sqf_script_type>::allocate(2);
+    memset(typeInstance, 0, sizeof(sqf_script_type) * 2);
+    ::new (typeInstance) sqf_script_type(_registerFuncs._type_vtable, newType, nullptr);
+
+    return {static_cast<types::game_data_type>(newIndex), {typeInstance}};
 }
 
-sqf_script_type sqf_functions::register_compound_sqf_type(auto_array<types::game_data_type> types) {
+sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<types::game_data_type>& types) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
@@ -489,7 +501,14 @@ sqf_script_type sqf_functions::register_compound_sqf_type(auto_array<types::game
     newType->set_vtable(_registerFuncs._compoundtype_vtable);
 
     LOG(INFO, "sqf_functions::register_compound_sqf_type");
-    return {_registerFuncs._type_vtable, nullptr, newType};
+
+    auto typeInstance =  //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, nullptr, newType);
+        // Temporary workaround for change in 2.13 150487
+        rv_allocator<sqf_script_type>::allocate(2);
+    memset(typeInstance, 0, sizeof(sqf_script_type) * 2);
+    ::new (typeInstance) sqf_script_type(_registerFuncs._type_vtable, nullptr, newType);
+
+    return typeInstance;
 }
 
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {

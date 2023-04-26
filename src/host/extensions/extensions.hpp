@@ -296,6 +296,8 @@ namespace intercept {
         @brief The struct that contains the functions exported to client plugins.
         */
         client_functions functions;
+        // Temporary alternate fallback set of functions, for plugins with API v2 during transition to new API
+        client_functions functionsAPIv2;
 
         /*!
         @brief A list of exported Plugin Interfaces.

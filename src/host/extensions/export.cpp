@@ -95,14 +95,14 @@ namespace intercept {
             CERT_EXIT;
             return registered;
         }
-        std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+        std::pair<types::game_data_type, sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             CERT_ENTER;
             auto registered = sqf_functions::get().register_sqf_type(name, localizedName, description, typeName, cf);
             CERT_EXIT;
             return registered;
         }
 
-        sqf_script_type register_compound_sqf_type(auto_array<types::game_data_type> types) {
+        sqf_script_type* register_compound_sqf_type(const auto_array<types::game_data_type>& types) {
             CERT_ENTER;
             auto registered = sqf_functions::get().register_compound_sqf_type(types);
             CERT_EXIT;

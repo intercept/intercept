@@ -57,10 +57,10 @@ namespace intercept {
             }
 
             ///@copydoc intercept::sqf_functions::register_sqf_type
-            [[nodiscard]] static std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+            [[nodiscard]] static std::pair<types::game_data_type, sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
             ///@copydoc intercept::sqf_functions::register_sqf_type
-            [[nodiscard]] static sqf_script_type register_compound_sqf_type(auto_array<types::game_data_type> types);
+            [[nodiscard]] static sqf_script_type* register_compound_sqf_type(const auto_array<types::game_data_type>& types);
 
 
             ///@copydoc intercept::extensions::register_plugin_interface

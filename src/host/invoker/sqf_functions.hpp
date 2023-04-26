@@ -132,18 +132,18 @@ namespace intercept {
         * @param description
         * @param typeName
         * @param cf
-        * @return The resulting game_data_type enum value and a instantiated sqf_script_type
+        * @return The resulting game_data_type enum value and a instantiated sqf_script_type. Consider the type instance to be a global static, don't delete it!
         * @ingroup RSQF
         */
-        std::pair<types::game_data_type, sqf_script_type> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+        [[nodiscard]] std::pair<types::game_data_type, sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
 
         /**
         * @brief Registers a custom SQF Compound script type
         * @param types
-        * @return a instantiated sqf_script_type
+        * @return a instantiated sqf_script_type.  Consider the type instance to be a global static, don't delete it!
         * @ingroup RSQF
         */
-        sqf_script_type register_compound_sqf_type(auto_array<types::game_data_type> types);
+        [[nodiscard]] sqf_script_type* register_compound_sqf_type(const auto_array<types::game_data_type>& types);
 
 
     private:

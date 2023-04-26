@@ -30,11 +30,11 @@ namespace intercept {
         registered_sqf_function host::register_sqf_command(std::string_view name, std::string_view description, WrapperFunctionNular function_, game_data_type return_arg_type) {
             return functions.register_sqf_function_nular(name, description, function_, return_arg_type);
         }
-        std::pair<game_data_type, sqf_script_type> host::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
+        std::pair<game_data_type, sqf_script_type*> host::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
             return functions.register_sqf_type(name, localizedName, description, typeName, cf);
         }
 
-        sqf_script_type host::register_compound_sqf_type(auto_array<game_data_type> types) {
+        sqf_script_type* host::register_compound_sqf_type(const auto_array<game_data_type>& types) {
             return functions.register_compound_sqf_type(types);
         }
 

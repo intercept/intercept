@@ -7,6 +7,10 @@
 #include <link.h>
 #endif
 
+// 1: Base
+// 2: Added compound type support
+// 3: Pass type pointers instead of instance for register_sqf_type/register_compound_sqf_type
+
 #define PLUGIN_MIN_API_VERSION 2
 
 namespace intercept {
@@ -43,6 +47,29 @@ namespace intercept {
             return extensions::get().request_plugin_interface(module_name_, name_, api_version_).value_or(nullptr);
         };
         functions.get_pbo_files_list = client_function_defs::get_pbo_files_list;
+
+        // Temporary fallback to allow old V2 plugins to load
+        {
+            functionsAPIv2 = functions;
+
+            // V2 expects return by value, not pointer, so we hack it a bit
+
+            using oldRegT = std::pair<types::game_data_type, sqf_script_type>(*)(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+            oldRegT f0 = [](std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) -> std::pair<types::game_data_type, sqf_script_type> {
+                auto result = client_function_defs::register_sqf_type(name, localizedName, description, typeName, cf);
+                return {result.first, *result.second};
+            };
+
+            functionsAPIv2.register_sqf_type = reinterpret_cast<decltype(functions.register_sqf_type)>(f0);
+
+            using oldCompoundRegT = sqf_script_type(*)(auto_array<types::game_data_type>);
+            oldCompoundRegT f1 = [](auto_array<types::game_data_type> types) -> sqf_script_type {
+                const auto result = client_function_defs::register_compound_sqf_type(types);
+                return *result;
+            };
+
+            functionsAPIv2.register_compound_sqf_type = reinterpret_cast<decltype(functions.register_compound_sqf_type)>(f1);
+        }
 
         std::string arg_line = search::plugin_searcher::get_command_line();
         std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
@@ -275,11 +302,14 @@ namespace intercept {
 #define EH_PROC_DEF(name, ...) new_module.eventhandlers.name = (module::name##_func)GET_PROC_ADDR(dllHandle, #name);
         EH_LIST(EH_PROC_DEF)
 
+        if (new_module.functions.api_version() == 2) {
+            // Temporary fallback for old API version
+            new_module.functions.assign_functions(functionsAPIv2, r_string(new_module.name));
+        } else {
+            new_module.functions.assign_functions(functions, r_string(new_module.name));
+        }
 
-        new_module.functions.assign_functions(functions, r_string(new_module.name));
         new_module.path = *full_path;
-
-
 
         _modules[path_] = new_module;
 #ifndef __linux__

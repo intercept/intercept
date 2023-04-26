@@ -33,7 +33,7 @@ An example of a very simple client that invokes `nular`, `unary`, and `binary` S
 
 // required exported function to return API version
 int __cdecl intercept::api_version() {
-    return 1;
+    return INTERCEPT_SDK_API_VERSION;
 }
 
 // This function is exported and is called by the host each frame.

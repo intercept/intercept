@@ -1780,19 +1780,22 @@ namespace intercept::types {
             *this = std::move(move_);
         }
         map_string_to_class& operator=(const map_string_to_class& copy_) {
+            //#TODO most of this work can just be skipped if we check copy_.empty()
             auto oldTableCount = _tableCount;
             _tableCount = copy_._tableCount;
             _count = copy_._count;
             auto newTable = rv_allocator<Container>::create_array(_tableCount);
-            for (auto i = 0; i < _tableCount; i++) {
-                auto& container = copy_._table[i];
-                for (Type& item : container) {
-                    auto hashedKey = hash_key(item.get_map_key());
-                    newTable[hashedKey].emplace(newTable[hashedKey].end(), item);
+            if (copy_._table) // If we had a table, copy over the values
+                for (auto i = 0; i < _tableCount; i++) {
+                    auto& container = copy_._table[i];
+                    for (Type& item : container) {
+                        auto hashedKey = hash_key(item.get_map_key());
+                        newTable[hashedKey].emplace(newTable[hashedKey].end(), item);
+                    }
                 }
-            }
             std::swap(_table, newTable);
-            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+            if (newTable) // is now old table, may have been nullptr
+                rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
             return *this;
         }
         map_string_to_class& operator=(map_string_to_class&& move_) noexcept {
@@ -1872,16 +1875,18 @@ namespace intercept::types {
             _tableCount = tableSize;
             auto newTable = rv_allocator<Container>::create_array(tableSize);
             _count = 0;  // redo count in case tableSize < oldTableCount
-            for (auto i = 0; i < oldTableCount; i++) {
-                auto& container = _table[i];
-                for (Type& item : container) {
-                    auto hashedKey = hash_key(item.get_map_key());
-                    newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
+            if (_table) // If we had a previous table, copy over old values
+                for (auto i = 0; i < oldTableCount; i++) {
+                    auto& container = _table[i];
+                    for (Type& item : container) {
+                        auto hashedKey = hash_key(item.get_map_key());
+                        newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
+                    }
+                    _count += static_cast<int>(container.count());
                 }
-                _count += static_cast<int>(container.count());
-            }
             std::swap(_table, newTable);
-            rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
+            if (newTable) // is now old table, may have been nullptr
+                rv_allocator<Container>::destroy_deallocate(newTable, oldTableCount);
         }
 
         Type& insert(const Type& value) {
@@ -1890,6 +1895,12 @@ namespace intercept::types {
             Type& old = get(key);
             if (!is_null(old)) {
                 return old;
+            }
+
+            //#TODO refactor this and the full check into a "ensure space" method
+            if (!_table) {
+                // Not initialized yet
+                rebuild(std::max(1, _tableCount));
             }
 
             //Are we full?
@@ -1914,6 +1925,11 @@ namespace intercept::types {
             if (!is_null(old)) {
                 old = std::move(value);
                 return old;
+            }
+
+            if (!_table) {
+                // Not initialized yet
+                rebuild(std::max(1, _tableCount));
             }
 
             //Are we full?
@@ -1964,7 +1980,8 @@ namespace intercept::types {
 
         void clear(bool reclaim_memory_ = false) {
             if (reclaim_memory_) {
-                rv_allocator<Container>::destroy_deallocate(_table, _tableCount);
+                if (_table)
+                    rv_allocator<Container>::destroy_deallocate(_table, _tableCount);
                 _tableCount = 0;
                 _count = 0;
                 _table = nullptr;

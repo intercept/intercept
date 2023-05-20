@@ -14,7 +14,7 @@ https://github.com/NouberNou/intercept
 #pragma once
 #include "arguments.hpp"
 #include "logging.hpp"
-#include "shared.hpp"
+#include "common.hpp"
 #include "shared/client_types.hpp"
 #include "shared/functions.hpp"
 #include "singleton.hpp"

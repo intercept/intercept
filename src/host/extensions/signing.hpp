@@ -1,5 +1,5 @@
 #pragma once
-#include "shared.hpp"
+#include "common.hpp"
 #include "shared/client_types.hpp"
 
 #ifndef __linux__

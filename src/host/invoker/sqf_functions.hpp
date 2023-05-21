@@ -8,7 +8,7 @@
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
+#include "common.hpp"
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"

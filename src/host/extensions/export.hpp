@@ -12,7 +12,7 @@ themselves using these functions they are most likely doing something unintentio
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
+#include "common.hpp"
 #include "shared/types.hpp"
 
 using namespace intercept::types;

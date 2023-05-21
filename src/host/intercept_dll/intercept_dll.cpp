@@ -13,7 +13,7 @@
 #include "extensions.hpp"
 #include "invoker.hpp"
 #include "logging.hpp"
-#include "shared.hpp"
+#include "common.hpp"
 #include "shared/functions.hpp"
 
 INITIALIZE_EASYLOGGINGPP

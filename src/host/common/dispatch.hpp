@@ -5,7 +5,7 @@
 #include <atomic>
 #include <queue>
 
-#include "shared.hpp"
+#include "common.hpp"
 #include "arguments.hpp"
 #include "singleton.hpp"
 #include <chrono>

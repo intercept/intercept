@@ -11,7 +11,7 @@ find and catalog the SQF function pointers and store them.
 https://github.com/NouberNou/intercept
 */
 #pragma once
-#include "shared.hpp"
+#include "common.hpp"
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"

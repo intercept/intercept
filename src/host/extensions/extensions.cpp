@@ -220,7 +220,8 @@ namespace intercept {
             return false;
         }
 #else
-        auto dllHandle = LoadLibraryW(full_path->c_str());
+        // LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR flag is needed, as the library may have dependencies in this directory to load
+        auto dllHandle = LoadLibraryExW(full_path->c_str(), NULL, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
         if (!dllHandle) {
             invoker::get().invoke_raw("diag_log", fmt::format("Intercept: LoadLibrary() failed, e={} [{}]", GetLastError(), path_));
             LOG(ERROR, "LoadLibrary() failed, e={} [{}]", GetLastError(), path_);

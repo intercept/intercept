@@ -999,7 +999,17 @@ namespace intercept {
             return serialization_return::no_error;
         }
     #pragma endregion
-    }
+        vm_context::callstack_item_data::callstack_item_data(game_data_code *code, callstack_item *parent, game_var_space varSpace, int stackPos, const game_state *gs) {
+            _code = code;
+            _parent = parent;
+            _varSpace = varSpace;
+            _stackEndAtStart = stackPos;
+
+            // add to scope
+            _stackEnd = stackPos + 1;
+            _programCounter = 0;
+        }
+    }  // namespace types
 }
 
 

@@ -1346,6 +1346,9 @@ namespace intercept {
                 virtual int getVariables(const IDebugVariable** storage, int count) const {
                     return 1;
                 }
+                /**
+                 * @brief EvaluateExpression doesn't work, it will throw an exception if called
+                */
                 virtual __internal::I_debug_value::RefType EvaluateExpression(const char* code, unsigned int rad) {
                     throw std::bad_function_call();
                     return game_value(1).data.get();

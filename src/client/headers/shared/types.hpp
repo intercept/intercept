@@ -13,6 +13,7 @@
 #include <cstring>
 #include <algorithm>
 #include <memory>
+#include <functional>
 #include "containers.hpp"
 
 #pragma push_macro("min")
@@ -1344,6 +1345,7 @@ namespace intercept {
                     return 1;
                 }
                 virtual __internal::I_debug_value::RefType EvaluateExpression(const char* code, unsigned int rad) {
+                    throw std::bad_function_call();
                     return game_value(1).data.get();
                 }
                 virtual void getSourceDocPosition(char* file, int fileSize, int& line) {

@@ -1307,13 +1307,13 @@ namespace intercept {
                 callstack_item_data(game_data_code* code, callstack_item* parent, game_var_space varSpace, int stackPos, const game_state* gs);
 
                 virtual game_instruction* next(int& d1, const game_state* s) {
-                    const auto_array<ref<game_instruction>> &codes = _code.get()->instructions;
-                    if (_programCounter >= codes.size()) {
+                    const auto_array<ref<game_instruction>> &instructions = _code.get()->instructions;
+                    if (_programCounter >= instructions.size()) {
                         d1 = execution::done;
                         return nullptr;
                     } else {
                         d1 = execution::continueEx;
-                        return codes[_programCounter++];
+                        return instructions[_programCounter++];
                     }
                 }
 

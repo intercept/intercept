@@ -839,6 +839,103 @@ namespace intercept {
             }
         };
 
+
+        class game_instruction;
+
+        class vm_context : public serialize_class {
+        public:
+            class IDebugScope {  //ArmaDebugEngine
+            public:
+                virtual ~IDebugScope() {}
+                virtual const char* getName() const = 0;
+                virtual int varCount() const = 0;
+                virtual int getVariables(const IDebugVariable** storage, int count) const = 0;
+                virtual __internal::I_debug_value::RefType EvaluateExpression(const char* code, unsigned int rad) = 0;
+                virtual void getSourceDocPosition(char* file, int fileSize, int& line) = 0;
+                virtual IDebugScope* getParent() = 0;
+            };
+
+            //ArmaDebugEngine. Usual Intercept users won't need this and shouldn't use this
+            class callstack_item : public intercept::types::refcount, public IDebugScope {
+            public:
+                callstack_item* _parent;
+                game_var_space _varSpace;
+
+                int _stackEndAtStart;
+                int _stackEnd;
+                r_string _scopeName;
+
+                virtual game_instruction* next(int& d1, const game_state* s) { return nullptr; };
+                virtual bool someEH(void* state) { return false; }
+                virtual bool someEH2(void* state) { return false; };
+
+                virtual r_string get_type() const = 0;
+
+                virtual serialization_return serialize(param_archive& ar) { return serialization_return::no_error; }
+
+                virtual void on_before_exec() {}
+            };
+
+
+            auto add_callstack_item(ref<callstack_item> newItem) {
+                return callstack.emplace_back(newItem);
+            }
+
+            void throw_script_exception(game_value value) {
+                exception_state = true;
+                exception_value = std::move(value);
+            }
+
+            bool is_scheduled() const {
+                return scheduled;
+            }
+
+            bool is_serialization_enabled() const {
+                return serialenabled;
+            }
+
+            void disable_serialization() {
+                serialenabled = false;
+            }
+
+            const sourcedocpos& get_current_position() {
+                return sdocpos;
+            }
+
+
+
+            auto_array<ref<callstack_item>, rv_allocator_local<ref<callstack_item>, 64>> callstack;  //#TODO check size on x64
+            bool serialenabled;                                                                      //disableSerialization -> true, 0x228
+            void* dummyu;                                                                            //VMContextBattlEyeMonitor : VMContextCallback
+
+            //const bool is_ui_context; //no touchy
+            auto_array<game_value, rv_allocator_local<game_value, 32>> scriptStack;
+
+            sourcedoc sdoc;
+
+            sourcedocpos sdocpos;  //last instruction pos
+
+            r_string name;  //profiler might like this
+
+            //breakOut
+            r_string breakscopename;
+            //throw
+            game_value exception_value;  //0x4B0
+            //breakOut
+            game_value breakvalue;
+        private:
+            uint32_t d[3];
+            bool dumm;
+            bool dumm2;             //undefined variables allowed?
+            const bool scheduled;   //canSuspend 0x4D6
+            bool local;
+            bool doNil; //undefined variable will be set to nil (unscheduled). If this is false it will throw error
+            //throw
+            bool exception_state;   //0x4D9
+            bool break_;            //0x4DA
+            bool breakout;
+        };
+
 #pragma region GameData Types
 
         class game_data_number : public game_data {
@@ -932,7 +1029,7 @@ namespace intercept {
             game_data_array& operator=(game_data_array&& move_) noexcept;
             ~game_data_array();
             auto_array<game_value> data;
-            auto length() const { return data.count(); }
+            auto length() const { return data.size(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };
@@ -1362,30 +1459,38 @@ namespace intercept {
                 }
             };
 
-            auto add_callstack_item(ref<callstack_item> newItem) {
+            auto add_callstack_item(ref<callstack_item> newItem)
+            {
                 return callstack.emplace_back(newItem);
             }
 
-            void throw_script_exception(game_value value) {
+            void throw_script_exception(game_value value)
+            {
                 exception_state = true;
                 exception_value = std::move(value);
             }
 
-            bool is_scheduled() const {
+            bool is_scheduled() const
+            {
                 return scheduled;
             }
 
-            bool is_serialization_enabled() const {
+            bool is_serialization_enabled() const
+            {
                 return serialenabled;
             }
 
-            void disable_serialization() {
+            void disable_serialization()
+            {
                 serialenabled = false;
             }
 
-            const sourcedocpos& get_current_position() {
-                return sdocpos;
+            const sourcedocpos& get_current_position()
+            {
+                return *sdocpos;
             }
+
+
 
             auto_array<ref<callstack_item>, rv_allocator_local<ref<callstack_item>, 64>> callstack;  //#TODO check size on x64
             bool serialenabled;                                                                      //disableSerialization -> true, 0x228
@@ -1396,7 +1501,7 @@ namespace intercept {
 
             sourcedoc sdoc;
 
-            sourcedocpos sdocpos;  //last instruction pos
+            ref<sourcedocposref> sdocpos;  //last instruction pos
 
             r_string name;  //profiler might like this
 
@@ -1406,17 +1511,16 @@ namespace intercept {
             game_value exception_value;  //0x4B0
             //breakOut
             game_value breakvalue;
-
         private:
             uint32_t d[3];
             bool dumm;
-            bool dumm2;            //undefined variables allowed?
-            const bool scheduled;  //canSuspend 0x4D6
+            bool dumm2;             //undefined variables allowed?
+            const bool scheduled;   //canSuspend 0x4D6
             bool local;
-            bool doNil;  //undefined variable will be set to nil (unscheduled). If this is false it will throw error
+            bool doNil; //undefined variable will be set to nil (unscheduled). If this is false it will throw error
             //throw
-            bool exception_state;  //0x4D9
-            bool break_;           //0x4DA
+            bool exception_state;   //0x4D9
+            bool break_;            //0x4DA
             bool breakout;
         };
 
@@ -1560,7 +1664,7 @@ namespace intercept {
                 eval->_errorType = type;
                 eval->_errorMessage = message;
                 if (current_context)
-                    eval->_errorPosition = current_context->sdocpos;
+                    eval->_errorPosition = *current_context->sdocpos;
             }
 
             /**
@@ -1616,9 +1720,6 @@ namespace intercept {
             const auto& get_script_nulars() {
                 return _scriptNulars;
             }
-
-
-
 
         private:
             types::auto_array<const types::script_type_info*> _scriptTypes;

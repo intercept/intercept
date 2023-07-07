@@ -1,8 +1,13 @@
 #pragma once
 #include <sstream>
 #include <fstream>
+#ifdef INTERCEPT_SYSTEM_SPDLOG
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+#else
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
+#endif
 
 #ifdef _DEBUG
 #define SPDLOG_TRACE_ON

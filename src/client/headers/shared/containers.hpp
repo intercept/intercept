@@ -200,29 +200,54 @@ namespace intercept::types {
 #pragma endregion
 
 #pragma region Refcounting
-
+    /**
+     * @brief Referencing counting base class
+     * This class keeps tracks of references for objects that we want to.
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     class refcount_base {
     public:
         constexpr refcount_base() noexcept : _refcount(0) {}
         constexpr refcount_base(const refcount_base&) noexcept : _refcount(0) {}
         constexpr void operator=(const refcount_base&) const noexcept {}
 
-        constexpr int add_ref() const noexcept {
+        /**
+         * @brief Increments the reference counter
+         */
+        int add_ref() const noexcept {
             return ++_refcount;
         }
-        constexpr int dec_ref() const noexcept {
+        /**
+         * @brief Decrements the reference counter
+         */
+        int dec_ref() const noexcept {
             return --_refcount;
         }
-        constexpr int ref_count() const noexcept {
+        /**
+         * @brief Returns the reference count
+         */
+        int ref_count() const noexcept {
             return _refcount;
         }
+        /**
+         * @brief reference counter
+         * mutable due to const/constexpr functions
+         */
         mutable int _refcount;
     };
 
-    //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
+    /**
+     * @brief Referencing counting class, inherits from refcount_base.
+     * refcount has to be the first element in a class. Use _refcount_vtable_dummy instead if refcount is preceded by a vtable
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     class refcount : public refcount_base {
     public:
         virtual ~refcount() = default;
+
+        /**
+         * @brief decrement reference count and delete object if refcount is zero
+         */
         int release() const {
             const auto rcount = dec_ref();
             if (rcount == 0) {
@@ -232,15 +257,29 @@ namespace intercept::types {
             }
             return rcount;
         }
+
+        /**
+         * @brief deletes object
+         */
         void destruct() const noexcept {
             delete const_cast<refcount*>(this);
         }
+        /**
+         * @brief  customization point for destruct
+         */
         virtual void lastRefDeleted() const { destruct(); }
 
     private:
         virtual int __dummy_refcount_func() const noexcept { return 0; }
     };
+
+
     class game_value_static;
+    /**
+     * @brief Reference counting class template.
+     * Type must inherit from refcount_base
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     template <class Type>
     class ref {
         friend class game_value_static;  //Overrides _ref to nullptr in destructor when Arma is exiting
@@ -253,12 +292,20 @@ namespace intercept::types {
         constexpr ref() noexcept = default;
         ~ref() { free(); }
 
-        //Construct from Pointer
+        /**
+         * @brief Construct from Pointer
+         * @param other_ generic type pointer to construct from
+         */
         constexpr ref(Type* other_) noexcept {
             if (other_) other_->add_ref();
             _ref = other_;
         }
-        //Copy from pointer
+
+        /**
+         * @brief Assignment operator
+         * @param source_ generic type pointer to object to store
+         * @return object to store
+         */
         ref& operator=(Type* source_) noexcept {
             Type* old = _ref;
             if (source_) source_->add_ref();
@@ -267,13 +314,21 @@ namespace intercept::types {
             return *this;
         }
 
-        //Construct from reference
+        /**
+         * @brief copy constructor
+         * @param source_ref_  reference to copy from
+         */
         constexpr ref(const ref& source_ref_) noexcept {
             Type* source = source_ref_._ref;
             if (source) source->add_ref();
             _ref = source;
         }
-        //Copy from reference.
+
+        /**
+         * @brief Assignment operator
+         * @param other_ reference to object to store
+         * @return object to store
+         */
         ref& operator=(const ref& other_) {
             Type* source = other_._ref;
             Type* old = _ref;
@@ -283,7 +338,10 @@ namespace intercept::types {
             return *this;
         }
 
-        //Construct from reference and convert
+        /**
+         * @brief Construct from reference and convert
+         * @param source_ref_ reference to construct from and convert
+         */
         template <typename T>
         constexpr ref(const ref<T>& source_ref_) noexcept {
             static_assert(std::is_constructible_v<Type*, T*> || std::is_base_of_v<T, Type>, "Cannot convert intercept::types::ref to incompatible type");
@@ -291,7 +349,11 @@ namespace intercept::types {
             if (source) source->add_ref();
             _ref = static_cast<Type*>(source);
         }
-        //Copy from reference.
+
+        /**
+         * @brief Copy from reference and convert
+         * @param other_ reference to copy from and convert
+         */
         template <class T>
         ref& operator=(const ref<T>& other_) {
             static_assert(std::is_constructible_v<Type*, T*> || std::is_base_of_v<T, Type>, "Cannot convert intercept::types::ref to incompatible type");
@@ -303,12 +365,25 @@ namespace intercept::types {
             return *this;
         }
 
+        /**
+         * @brief Swap references
+         * @param other_ reference to swap with
+         */
         void swap(ref& other_) noexcept {
             auto temp = other_._ref;
             other_._ref = _ref;
             _ref = temp;
         }
+
+        /**
+         * @brief check if ref is null
+         * @return bool
+         */
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
+        
+        /**
+         * @brief free reference and set to null
+         */
         void free() noexcept {
             if (!_ref) return;
             _ref->release();
@@ -317,11 +392,20 @@ namespace intercept::types {
         //This returns a pointer to the underlying object. Use with caution!
 
         [[deprecated]] constexpr Type* getRef() const noexcept { return _ref; }
-        ///This returns a pointer to the underlying object. Use with caution!
+
+        /**
+         * @brief get pointer.  Use with caution!
+         * @return pointer to the underlying object
+         */
         constexpr Type* get() const noexcept { return _ref; }
         constexpr Type* operator->() const noexcept { return _ref; }
         operator Type*() const noexcept { return _ref; }
         bool operator!=(const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
+
+        /**
+         * @brief get reference count
+         * @return reference count
+         */
         size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
     };
 
@@ -1150,17 +1234,18 @@ namespace intercept::types {
             move_._n = 0;
         }
         Type& get(const size_t i_) {
-            if (i_ > count()) throw std::out_of_range("rv_array access out of range");
+            if (i_ > size()) throw std::out_of_range("rv_array access out of range");
             return _data[i_];
         }
         const Type& get(const size_t i_) const {
-            if (i_ > count()) throw std::out_of_range("rv_array access out of range");
+            if (i_ > size()) throw std::out_of_range("rv_array access out of range");
             return _data[i_];
         }
         Type& operator[](const size_t i_) { return get(i_); }
         const Type& operator[](const size_t i_) const { return get(i_); }
         Type* data() noexcept { return _data; }
-        constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
+        const Type* data() const noexcept { return _data; }
+        [[deprecated("Use size() instead")]] constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
         constexpr size_t size() const noexcept { return static_cast<size_t>(_n); }
 
         iterator begin() {
@@ -1189,21 +1274,21 @@ namespace intercept::types {
 
         template <class Func>
         void for_each(const Func& f_) const {
-            for (size_t i = 0; i < count(); i++) {
+            for (size_t i = 0; i < size(); i++) {
                 f_(get(i));
             }
         }
 
         template <class Func>
         void for_each_backwards(const Func& f_) const {  //This returns if Func returns true
-            for (size_t i = count() - 1; i >= 0; i--) {
+            for (size_t i = size() - 1; i >= 0; i--) {
                 if (f_(get(i))) return;
             }
         }
 
         template <class Func>
         void for_each(const Func& f_) {
-            for (size_t i = 0; i < count(); i++) {
+            for (size_t i = 0; i < size(); i++) {
                 f_(get(i));
             }
         }
@@ -1346,6 +1431,10 @@ namespace intercept::types {
                 reallocate(res_);
         }
 
+        uint32_t capacity() const noexcept {
+            return static_cast<uint32_t>(_maxItems);
+        }
+
         /**
         * @brief Constructs a value at where_
         * @param where_ the iterator where to start inserting
@@ -1459,7 +1548,7 @@ namespace intercept::types {
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
-            const size_t oldSize = base::count();
+            const size_t oldSize = base::size();
             reserve(oldSize + 1);
 
             //emplace_back(_value);
@@ -1484,7 +1573,7 @@ namespace intercept::types {
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
-            const size_t oldSize = base::count();
+            const size_t oldSize = base::size();
             const size_t insertedSize = std::distance(_first, _last);
             reserve(oldSize + insertedSize);
 
@@ -1711,7 +1800,7 @@ namespace intercept::types {
                 return _map->_table ? static_cast<size_t>(_map->_tableCount) : 0u;
             }
             void get_next() {
-                while (_table < number_of_tables() && _item >= _map->_table[_table].count()) {
+                while (_table < number_of_tables() && _item >= _map->_table[_table].size()) {
                     _table++;
                     _item = 0;
                 }
@@ -1773,6 +1862,9 @@ namespace intercept::types {
         }
 
         map_string_to_class() {}
+        ~map_string_to_class() {
+            clear(true);
+        }
         map_string_to_class(const map_string_to_class& copy_) {
             *this = copy_;
         }
@@ -1810,7 +1902,7 @@ namespace intercept::types {
             if (!_table || !_count) return;
             for (int i = 0; i < _tableCount; i++) {
                 const Container& container = _table[i];
-                for (int j = 0; j < container.count(); j++) {
+                for (int j = 0; j < container.size(); j++) {
                     func_(container[j]);
                 }
             }
@@ -1821,7 +1913,7 @@ namespace intercept::types {
             if (!_table || !_count) return;
             for (int i = _tableCount - 1; i >= 0; i--) {
                 const Container& container = _table[i];
-                for (int j = container.count() - 1; j >= 0; j--) {
+                for (int j = container.size() - 1; j >= 0; j--) {
                     func_(container[j]);
                 }
             }
@@ -1830,7 +1922,7 @@ namespace intercept::types {
         const Type& get(typename Traits::key_type key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].size(); i++) {
                 const Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
@@ -1853,7 +1945,7 @@ namespace intercept::types {
         Type& get(typename Traits::key_type key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].size(); i++) {
                 Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
@@ -1867,7 +1959,8 @@ namespace intercept::types {
             return !is_null(get(key_));
         }
 
-        int count() const { return _count; }
+        [[deprecated("Use size() instead")]] int count() const { return _count; }
+        int size() const { return _count; }
 
         //ArmaDebugEngine
         void rebuild(int tableSize) {
@@ -1882,7 +1975,7 @@ namespace intercept::types {
                         auto hashedKey = hash_key(item.get_map_key());
                         newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
                     }
-                    _count += static_cast<int>(container.count());
+                    _count += static_cast<int>(container.size());
                 }
             std::swap(_table, newTable);
             if (newTable) // is now old table, may have been nullptr
@@ -1994,8 +2087,9 @@ namespace intercept::types {
             }
             _count = 0;
         }
-        ~map_string_to_class() {
-            clear(true);
+
+        const Container* GetTablePtrRaw() const noexcept {
+            return _table;
         }
 
     protected:

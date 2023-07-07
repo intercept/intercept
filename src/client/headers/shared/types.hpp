@@ -1302,6 +1302,9 @@ namespace intercept {
 
             // "code" abstraction, useful for placing on callstack as an item, once again, Usual Intercept users won't need this and shouldn't use this
             class callstack_item_data : public callstack_item {
+            private:
+                static void* operator new(std::size_t sz_) = delete;  
+                static void operator delete(void* ptr_, std::size_t sz_) = delete;
             public:
                 ref<game_data_code> _code;
                 //actual var space of the scope itself

@@ -200,29 +200,54 @@ namespace intercept::types {
 #pragma endregion
 
 #pragma region Refcounting
-
+    /**
+     * @brief Referencing counting base class
+     * This class keeps tracks of references for objects that we want to.
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     class refcount_base {
     public:
         constexpr refcount_base() noexcept : _refcount(0) {}
         constexpr refcount_base(const refcount_base&) noexcept : _refcount(0) {}
         constexpr void operator=(const refcount_base&) const noexcept {}
 
+        /**
+         * @brief Increments the reference counter
+         */
         constexpr int add_ref() const noexcept {
             return ++_refcount;
         }
+        /**
+         * @brief Decrements the reference counter
+         */
         constexpr int dec_ref() const noexcept {
             return --_refcount;
         }
+        /**
+         * @brief Returns the reference count
+         */
         constexpr int ref_count() const noexcept {
             return _refcount;
         }
+        /**
+         * @brief reference counter
+         * mutable due to const/constexpr functions
+         */
         mutable int _refcount;
     };
 
-    //refcount has to be the first element in a class. Use refcount_vtable instead if refcount is preceded by a vtable
+    /**
+     * @brief Referencing counting class, inherits from refcount_base.
+     * refcount has to be the first element in a class. Use _refcount_vtable_dummy instead if refcount is preceded by a vtable
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     class refcount : public refcount_base {
     public:
         virtual ~refcount() = default;
+
+        /**
+         * @brief decrement reference count and delete object if refcount is zero
+         */
         int release() const {
             const auto rcount = dec_ref();
             if (rcount == 0) {
@@ -232,15 +257,29 @@ namespace intercept::types {
             }
             return rcount;
         }
+
+        /**
+         * @brief deletes object
+         */
         void destruct() const noexcept {
             delete const_cast<refcount*>(this);
         }
+        /**
+         * @brief  customization point for destruct
+         */
         virtual void lastRefDeleted() const { destruct(); }
 
     private:
         virtual int __dummy_refcount_func() const noexcept { return 0; }
     };
+
+
     class game_value_static;
+    /**
+     * @brief Reference counting class template.
+     * Type must inherit from refcount_base
+     * <a href="https://en.wikipedia.org/wiki/Reference_counting"> Reference counting </a>
+     */
     template <class Type>
     class ref {
         friend class game_value_static;  //Overrides _ref to nullptr in destructor when Arma is exiting
@@ -253,12 +292,20 @@ namespace intercept::types {
         constexpr ref() noexcept = default;
         ~ref() { free(); }
 
-        //Construct from Pointer
+        /**
+         * @brief Construct from Pointer
+         * @param other_ generic type pointer to construct from
+         */
         constexpr ref(Type* other_) noexcept {
             if (other_) other_->add_ref();
             _ref = other_;
         }
-        //Copy from pointer
+
+        /**
+         * @brief Assignment operator
+         * @param source_ generic type pointer to object to store
+         * @return object to store
+         */
         ref& operator=(Type* source_) noexcept {
             Type* old = _ref;
             if (source_) source_->add_ref();
@@ -267,13 +314,21 @@ namespace intercept::types {
             return *this;
         }
 
-        //Construct from reference
+        /**
+         * @brief copy constructor
+         * @param source_ref_  reference to copy from
+         */
         constexpr ref(const ref& source_ref_) noexcept {
             Type* source = source_ref_._ref;
             if (source) source->add_ref();
             _ref = source;
         }
-        //Copy from reference.
+
+        /**
+         * @brief Assignment operator
+         * @param other_ reference to object to store
+         * @return object to store
+         */
         ref& operator=(const ref& other_) {
             Type* source = other_._ref;
             Type* old = _ref;
@@ -283,7 +338,10 @@ namespace intercept::types {
             return *this;
         }
 
-        //Construct from reference and convert
+        /**
+         * @brief Construct from reference and convert
+         * @param source_ref_ reference to construct from and convert
+         */
         template <typename T>
         constexpr ref(const ref<T>& source_ref_) noexcept {
             static_assert(std::is_constructible_v<Type*, T*> || std::is_base_of_v<T, Type>, "Cannot convert intercept::types::ref to incompatible type");
@@ -291,7 +349,11 @@ namespace intercept::types {
             if (source) source->add_ref();
             _ref = static_cast<Type*>(source);
         }
-        //Copy from reference.
+
+        /**
+         * @brief Copy from reference and convert
+         * @param other_ reference to copy from and convert
+         */
         template <class T>
         ref& operator=(const ref<T>& other_) {
             static_assert(std::is_constructible_v<Type*, T*> || std::is_base_of_v<T, Type>, "Cannot convert intercept::types::ref to incompatible type");
@@ -303,12 +365,25 @@ namespace intercept::types {
             return *this;
         }
 
+        /**
+         * @brief Swap references
+         * @param other_ reference to swap with
+         */
         void swap(ref& other_) noexcept {
             auto temp = other_._ref;
             other_._ref = _ref;
             _ref = temp;
         }
+
+        /**
+         * @brief check if ref is null
+         * @return bool
+         */
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
+        
+        /**
+         * @brief free reference and set to null
+         */
         void free() noexcept {
             if (!_ref) return;
             _ref->release();
@@ -317,11 +392,20 @@ namespace intercept::types {
         //This returns a pointer to the underlying object. Use with caution!
 
         [[deprecated]] constexpr Type* getRef() const noexcept { return _ref; }
-        ///This returns a pointer to the underlying object. Use with caution!
+
+        /**
+         * @brief get pointer.  Use with caution!
+         * @return pointer to the underlying object
+         */
         constexpr Type* get() const noexcept { return _ref; }
         constexpr Type* operator->() const noexcept { return _ref; }
         operator Type*() const noexcept { return _ref; }
         bool operator!=(const ref<Type>& other_) const noexcept { return _ref != other_._ref; }
+
+        /**
+         * @brief get reference count
+         * @return reference count
+         */
         size_t ref_count() const noexcept { return _ref ? _ref->ref_count() : 0; }
     };
 

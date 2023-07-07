@@ -999,6 +999,13 @@ namespace intercept {
             return serialization_return::no_error;
         }
     #pragma endregion
+
+        void *vm_context::callstack_item_data::operator new(std::size_t sz_) {
+            return rv_allocator<callstack_item_data>::create_array(sz_);
+        }
+        void vm_context::callstack_item_data::operator delete(void *ptr_, std::size_t sz_) {
+            rv_allocator<callstack_item_data>::deallocate(static_cast<callstack_item_data*>(ptr_));
+        }
         vm_context::callstack_item_data::callstack_item_data(game_data_code *code, callstack_item *parent, game_var_space varSpace, int stackPos, const game_state *gs) {
             _code = code;
             _parent = parent;

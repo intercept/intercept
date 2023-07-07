@@ -1303,8 +1303,8 @@ namespace intercept {
             // "code" abstraction, useful for placing on callstack as an item, once again, Usual Intercept users won't need this and shouldn't use this
             class callstack_item_data : public callstack_item {
             private:
-                static void* operator new(std::size_t sz_) = delete;  
-                static void operator delete(void* ptr_, std::size_t sz_) = delete;
+                void* operator new(std::size_t sz_);
+                void operator delete(void* ptr_, std::size_t sz_);
             public:
                 ref<game_data_code> _code;
                 //actual var space of the scope itself
@@ -1312,7 +1312,6 @@ namespace intercept {
                 int _programCounter;
                 callstack_item_data(){}
                 callstack_item_data(game_data_code* code, callstack_item* parent, game_var_space varSpace, int stackPos, const game_state* gs);
-                ~callstack_item_data(){}
 
                 virtual game_instruction* next(int& d1, const game_state* s) {
                     const auto_array<ref<game_instruction>> &instructions = _code.get()->instructions;

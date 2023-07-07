@@ -1,31 +1,32 @@
 #include "sqf_functions.hpp"
 #include "signing.hpp"
+#include "CommandTypesDynamic.hpp"
 
 using namespace intercept;
 using namespace intercept::__internal;
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, gsNular* func_) :
-    _type(functionType::sqf_nular), _name(func_->_name2),
+    _type(functionType::sqf_nular), _name(func_->get_name2()),
     _nular(func_), _lArgType(GameDataType::NOTHING), _rArgType(GameDataType::NOTHING), _returnType(return_type_) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, gsFunction* func_) :
-    _type(functionType::sqf_function), _name(func_->_name2),
+    _type(functionType::sqf_function), _name(func_->get_name2()),
     _func(func_), _lArgType(left_arg_type_), _rArgType(GameDataType::NOTHING), _returnType(return_type_) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, gsOperator* func_) :
-    _type(functionType::sqf_operator), _name(func_->_name2),
+    _type(functionType::sqf_operator), _name(func_->get_name2()),
     _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_), _returnType(return_type_) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, gsNular* func_, undo_info undo_) :
-    _type(functionType::sqf_nular), _name(func_->_name2),
+    _type(functionType::sqf_nular), _name(func_->get_name2()),
     _nular(func_), _lArgType(GameDataType::NOTHING), _rArgType(GameDataType::NOTHING), _returnType(return_type_), undo(std::make_unique<undo_info>(undo_)) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, gsFunction* func_, undo_info undo_) :
-    _type(functionType::sqf_function), _name(func_->_name2),
+    _type(functionType::sqf_function), _name(func_->get_name2()),
     _func(func_), _lArgType(left_arg_type_), _rArgType(GameDataType::NOTHING), _returnType(return_type_), undo(std::make_unique<undo_info>(undo_)) {}
 
 registered_sqf_func_wrapper::registered_sqf_func_wrapper(GameDataType return_type_, GameDataType left_arg_type_, GameDataType right_arg_type_, gsOperator* func_, undo_info undo_) :
-    _type(functionType::sqf_operator), _name(func_->_name2),
+    _type(functionType::sqf_operator), _name(func_->get_name2()),
     _op(func_), _lArgType(left_arg_type_), _rArgType(right_arg_type_), _returnType(return_type_), undo(std::make_unique<undo_info>(undo_)) {}
 
 
@@ -129,45 +130,48 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
     if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
-    sqf_script_type leftType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
-    sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
+    const sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    const sqf_script_type leftType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(left_arg_type)],nullptr };
+    const sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
-    const auto test = findBinary("getvariable", game_data_type::OBJECT, game_data_type::ARRAY);
+    const auto test = FindHelpers::findBinary(gs, "getvariable", game_data_type::OBJECT, game_data_type::ARRAY);
 
-    auto operators = findOperators(std::string(name));
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    auto operators = FindHelpers::findOperators(gs, std::string(name));
 
     if (!operators) {
-        auto table = gs->_scriptOperators.get_table_for_key(lowerName.c_str());
-        auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+        const auto table = gs->_scriptOperators.get_table_for_key(lowerName);
+        const auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
         if (found == _keeper.end()) {
             //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
-            auto_array<game_operators> backup(table->begin(), table->end());
-            _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
-            *table = std::move(backup);
+            //auto_array<game_operators> backup(table->begin(), table->end());
+            //_keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+            //*table = std::move(backup);
+
+            game_operators::SetupBackup(table, _keeper);
         }
 
-        operators = static_cast<game_operators*>(table->push_back(game_operators(r_string(lowerName))));
+        //operators = static_cast<game_operators*>(table->push_back(game_operators(r_string(lowerName))));
+        operators = game_operators::tableInsert(table, r_string(lowerName));
         operators->copyPH(test);
     } else {  //Name already exists
 
 
-        if (auto found = findBinary(std::string(name), left_arg_type, right_arg_type); found) {//Function with same arg types already exists
+        if (auto found = FindHelpers::findBinary(gs, std::string(name), left_arg_type, right_arg_type); found) {                              //Function with same arg types already exists
             if (intercept::cert::current_security_class != cert::signing::security_class::core) return registered_sqf_function{ nullptr }; //Core certified plugins have exception for this rule
 
             //We only manipulate elements that are resolved at runtime.
             //This redirects a normal script command to Intercept. You can still call the original from within Intercept.
 
             registered_sqf_func_wrapper::undo_info undo;
-            undo._procB = found->_operator->procedure_addr;
-            found->_operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
+            undo._procB = found->get_operator()->procedure_addr;
+            found->get_operator()->procedure_addr = reinterpret_cast<binary_function*>(function_);
         #ifndef __linux__
-            undo._description = found->_description;
-            found->_description = description;
+            undo._description = found->get_description();
+            found->set_description(description);
         #endif
 
             LOG(INFO, "sqf_functions::register_sqf_function binary OVERRIDE {} {} = {:x} {} = {:x} {} = {:x} @ {:x}", name,
@@ -184,20 +188,21 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     }
 
     __internal::gsOperator op;
-    op._name = name;
-    op._name2 = lowerName;
+    op.set_name(name);
+    op.set_name2(r_string(lowerName));
 #ifndef __linux__
-    op._description = description;
+    op.set_description(description);
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<binary_operator>::create_single();
-    op._operator->_vtable = test->_operator->_vtable;
-    op._operator->procedure_addr = reinterpret_cast<binary_function*>(function_);
-    op._operator->return_type = retType;
-    op._operator->get_arg1_type() = leftType;
-    op._operator->get_arg2_type() = rightype;
+    op.set_operator(rv_allocator<binary_operator>::create_single());
+    op.get_operator()->_vtable = test->get_operator()->_vtable;
+    op.get_operator()->procedure_addr = reinterpret_cast<binary_function*>(function_);
+    op.get_operator()->return_type = retType;
+    op.get_operator()->get_arg1_type() = leftType;
+    op.get_operator()->get_arg2_type() = rightype;
 
-    auto inserted = static_cast<__internal::gsOperator*>(operators->push_back(op));
+    //auto inserted = static_cast<__internal::gsOperator*>(operators->push_back(op));
+    auto inserted = operators->convertingInsert(op);
 
 
     //insertBinary(_registerFuncs._gameState, op);
@@ -221,43 +226,46 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
     if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
-    sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
+    const sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
+    const sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
+    
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
-    const auto test = findUnary("diag_log", game_data_type::ANY);
+    const auto test = FindHelpers::findUnary(gs, "diag_log", game_data_type::ANY);
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
-    auto functions = findFunctions(std::string(name));
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
-
+    auto functions = FindHelpers::findFunctions(gs, std::string(name));
     if (!functions) {
         if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
-        auto table = gs->_scriptFunctions.get_table_for_key(lowerName.c_str());
-        auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+        const auto table = gs->_scriptFunctions.get_table_for_key(lowerName);
+        const auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
         if (found == _keeper.end()) {
             //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
-            auto_array<game_functions> backup(table->begin(), table->end());
-            _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
-            *table = std::move(backup);
+            //auto_array<game_functions> backup(table->begin(), table->end());
+            //_keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+            //*table = std::move(backup);
+
+            game_functions::SetupBackup(table, _keeper);
         }
 
-        functions = static_cast<game_functions*>(table->push_back(game_functions(r_string(lowerName))));
+        //functions = static_cast<game_functions*>(table->push_back(game_functions(r_string(lowerName))));
+        functions = game_functions::tableInsert(table, r_string(lowerName));
         functions->copyPH(test);
     } else { //Name already exists
-        if (auto found = findUnary(std::string(name), right_arg_type); found) {//Function with same arg types already exists
+        if (auto found = FindHelpers::findUnary(gs, std::string(name), right_arg_type); found) {                                              //Function with same arg types already exists
             if (intercept::cert::current_security_class != cert::signing::security_class::core) return registered_sqf_function{ nullptr }; //Core certified plugins have exception for this rule
 
             //We only manipulate elements that are resolved at runtime.
             //This redirects a normal script command to Intercept. You can still call the original from within Intercept.
 
             registered_sqf_func_wrapper::undo_info undo;
-            undo._procU = found->_operator->procedure_addr;
-            found->_operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
+            undo._procU = found->get_operator()->procedure_addr;
+            found->get_operator()->procedure_addr = reinterpret_cast<unary_function*>(function_);
 #ifndef __linux__
-            undo._description = found->_description;
-            found->_description = description;
+            undo._description = found->get_description();
+            found->set_description(description);
 #endif
 
             LOG(INFO, "sqf_functions::register_sqf_function unary OVERRIDE {} {} = {:x} {} = {:x} @ {:x}", name,
@@ -274,20 +282,23 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     }
 
     __internal::gsFunction op;
-    op._name = name;
-    op._name2 = lowerName;
+    op.set_name(name);
+    op.set_name2(r_string(lowerName));
 #ifndef __linux__
-    op._description = description;
+    op.set_description(description);
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<unary_operator>::create_single();
-    op._operator->_vtable = test->_operator->_vtable;
-    op._operator->procedure_addr = reinterpret_cast<unary_function*>(function_);
-    op._operator->return_type = retType;
-    op._operator->get_arg_type() = rightype;
+    op.set_operator(rv_allocator<unary_operator>::create_single());
+    op.get_operator()->_vtable = test->get_operator()->_vtable;
+    op.get_operator()->procedure_addr = reinterpret_cast<unary_function*>(function_);
+    op.get_operator()->return_type = retType;
+    op.get_operator()->get_arg_type() = rightype;
+#ifndef __linux__
+    op.set_category("intercept"sv); //#TODO only allocate one r_string and reuse it
+#endif
 
-    auto inserted = static_cast<__internal::gsFunction*>(functions->push_back(op));
-
+    //auto inserted = static_cast<__internal::gsFunction*>(functions->push_back(op));
+    auto inserted = functions->convertingInsert(op);
 
     //auto inserted = findUnary(name, right_arg_type); //Could use this to check if == ref returned by push_back.. But I'm just assuming it works right now
     //std::stringstream stream;
@@ -307,16 +318,15 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     if (!_canRegister && intercept::cert::current_security_class != cert::signing::security_class::core) throw std::logic_error("Can only register SQF Commands on preStart");
     if (name.length() > 256) throw std::length_error("intercept::sqf_functions::register_sqf_function name can maximum be 256 chars long");
 
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
+    const sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
 
-    sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
-
-    const auto test = findNular("player");
+    const auto test = FindHelpers::findNular(gs, "player");
     std::string lowerName(name);
     std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
-    const auto alreadyExists = findNular(std::string(name));
+    const auto alreadyExists = FindHelpers::findNular(gs, std::string(name));
 
     if (alreadyExists) {//Name already exists
         if (intercept::cert::current_security_class != cert::signing::security_class::core) return registered_sqf_function{ nullptr }; //Core certified plugins have exception for this rule
@@ -324,11 +334,11 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
         //This redirects a normal script command to Intercept. You can still call the original from within Intercept.
 
         registered_sqf_func_wrapper::undo_info undo;
-        undo._procN = alreadyExists->_operator->procedure_addr;
-        alreadyExists->_operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
+        undo._procN = alreadyExists->get_operator()->procedure_addr;
+        alreadyExists->get_operator()->procedure_addr = reinterpret_cast<nular_function*>(function_);
 #ifndef __linux__
-        undo._description = alreadyExists->_description;
-        alreadyExists->_description = description;
+        undo._description = alreadyExists->get_description();
+        alreadyExists->set_description(description);
 #endif
         LOG(INFO, "sqf_functions::register_sqf_function nular OVERRIDE {} {} = {:x} @ {:x}", name, types::__internal::to_string(return_arg_type)
             , reinterpret_cast<uintptr_t>(_registerFuncs._types[static_cast<size_t>(return_arg_type)]), reinterpret_cast<uintptr_t>(alreadyExists)
@@ -341,30 +351,33 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
 
     __internal::gsNular op;
-    op._name = name;
-    op._name2 = lowerName; //#TODO move this into a constructor. for all types
+    op.set_name(name);
+    op.set_name2(r_string(lowerName)); //#TODO move this into a constructor. for all types
 #ifndef __linux__
-    op._description = description;
+    op.set_description(description);
 #endif
     op.copyPH(test);
-    op._operator = rv_allocator<nular_operator>::create_single();
-    op._operator->_vtable = test->_operator->_vtable;
-    op._operator->procedure_addr = reinterpret_cast<nular_function*>(function_);
-    op._operator->return_type = retType;
+    op.set_operator(rv_allocator<nular_operator>::create_single());
+    op.get_operator()->_vtable = test->get_operator()->_vtable;
+    op.get_operator()->procedure_addr = reinterpret_cast<nular_function*>(function_);
+    op.get_operator()->return_type = retType;
 #ifndef __linux__
-    op._category = "intercept"sv;
+    op.set_category("intercept"sv);
 #endif
 
-    auto table = gs->_scriptNulars.get_table_for_key(lowerName.c_str());
-    auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
+    const auto table = gs->_scriptNulars.get_table_for_key(lowerName);
+    const auto found = _keeper.find(reinterpret_cast<uintptr_t>(table->data()));
     if (found == _keeper.end()) {
         //copy array and keep old one active so we never deallocate it and pointers into the old array stay valid
-        auto_array<gsNular> backup(table->begin(), table->end());
-        _keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
-        *table = std::move(backup);
+        //auto_array<gsNular> backup(table->begin(), table->end());
+        //_keeper.insert_or_assign(reinterpret_cast<uintptr_t>(table->data()), std::move(*reinterpret_cast<auto_array<char>*>(table)));
+        //*table = std::move(backup);
+
+        gsNular::SetupBackup(table, _keeper);
     }
 
-    auto inserted = static_cast<__internal::gsNular*>(table->push_back(op));
+    //auto inserted = static_cast<__internal::gsNular*>(table->push_back(op));
+    auto inserted = gsNular::convertingInsert(table, op);
 
 
     //auto inserted = findNular(name);  Could use this to confirm that inserted points to correct value
@@ -381,38 +394,42 @@ bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf
     //Undoing a override is "safe"
     if (!_canRegister && !shared->undo) throw std::runtime_error("Can only unregister SQF Commands on preStart");
 
+    if (CT_Is214)
+        ; // This is just a marker so we find this again
+    return false; // Cannot do this on cross compat
+
     //Handle undo's
     if (shared->undo) {
         switch (shared->_type) {
         case functionType::sqf_nular:
-            shared->_nular->_operator->procedure_addr = shared->undo->_procN;
+            shared->_nular->get_operator()->procedure_addr = shared->undo->_procN;
 #ifndef __linux__
-            shared->_nular->_description = shared->undo->_description;
+            shared->_nular->set_description(shared->undo->_description);
 #endif
             return true;
         case functionType::sqf_function:
-            shared->_func->_operator->procedure_addr = shared->undo->_procU;
+            shared->_func->get_operator()->procedure_addr = shared->undo->_procU;
 #ifndef __linux__
-            shared->_func->_description = shared->undo->_description;
+            shared->_func->set_description(shared->undo->_description);
 #endif
             return true;
         case functionType::sqf_operator:
-            shared->_op->_operator->procedure_addr = shared->undo->_procB;
+            shared->_op->get_operator()->procedure_addr = shared->undo->_procB;
 #ifndef __linux__
-            shared->_op->_description = shared->undo->_description;
+            shared->_op->set_description(shared->undo->_description);
 #endif
             return true;
         }
         return false;
     }
 
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     switch (shared->_type) {
         case functionType::sqf_nular: {
-            auto table = gs->_scriptNulars.get_table_for_key(shared->_name.c_str());
-            auto found = std::find_if(table->begin(), table->end(), [name = shared->_name](const gsNular& fnc)
+            const auto table = gs->_scriptNulars.get_table_for_key(shared->_name.c_str());
+            const auto found = std::find_if(table->begin(), table->end(), [name = shared->_name](const gsNular& fnc)
             {
-                return fnc._name2 == name;
+                return fnc.get_name2() == name;
             });
             if (found != table->end()) {
                 table->erase(found);
@@ -422,9 +439,9 @@ bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf
         }break;
         case functionType::sqf_function: {
             auto& table = gs->_scriptFunctions.get(shared->_name.c_str());
-            auto found = std::find_if(table.begin(), table.end(), [name = shared->_name](const gsFunction& fnc)
+            const auto found = std::find_if(table.begin(), table.end(), [name = shared->_name](const gsFunction& fnc)
             {
-                return fnc._name2 == name;
+                return fnc.get_name2() == name;
             });
             if (found != table.end()) {
                 table.erase(found);
@@ -434,9 +451,9 @@ bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf
         }break;
         case functionType::sqf_operator: {
             auto& table = gs->_scriptOperators.get(shared->_name.c_str());
-            auto found = std::find_if(table.begin(), table.end(), [name = shared->_name](const gsOperator& fnc)
+            const auto found = std::find_if(table.begin(), table.end(), [name = shared->_name](const gsOperator& fnc)
             {
-                return fnc._name2 == name;
+                return fnc.get_name2() == name;
             });
             if (found != table.end()) {
                 table.erase(found);
@@ -452,7 +469,7 @@ bool sqf_functions::unregister_sqf_function(const std::shared_ptr<registered_sqf
 std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     if (name.length() > 128) throw std::length_error("intercept::sqf_functions::register_sqf_type name can maximum be 128 chars long");
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     auto newType = rv_allocator<script_type_info>::allocate(2);
 
@@ -483,19 +500,19 @@ std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::re
 
 sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<types::game_data_type>& types) {
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     auto_array<const script_type_info*> resolvedTypes;
 
     for (auto& it : types) {
-        auto argTypeString = types::__internal::to_string(it);
+        const auto argTypeString = types::__internal::to_string(it);
         for (auto& type : gs->get_script_types()) {
             if (type->_name == argTypeString)
                 resolvedTypes.emplace_back(type);
         }
     }
 
-    auto newType = rv_allocator<compound_script_type_info>::create_single(
+    const auto newType = rv_allocator<compound_script_type_info>::create_single(
         resolvedTypes
     );
     newType->set_vtable(_registerFuncs._compoundtype_vtable);
@@ -511,11 +528,13 @@ sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<type
     return typeInstance;
 }
 
+/* Temporary during 2.14 transition
+
 intercept::__internal::gsNular* intercept::sqf_functions::findNular(std::string name) const {
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-    auto& found = gs->_scriptNulars.get(name.c_str());
+    auto& found = gs->_scriptNulars.get(name);
     if (gs->_scriptNulars.is_null(found)) return nullptr;
     return &found;
 }
@@ -527,9 +546,9 @@ intercept::__internal::gsFunction* intercept::sqf_functions::findUnary(std::stri
     //});
     auto funcs = findFunctions(name);
     if (!funcs) return nullptr;
-    auto argTypeString = types::__internal::to_string(argument_type);
+    const auto argTypeString = types::__internal::to_string(argument_type);
     for (auto& it : *funcs) {
-        auto types = it._operator->get_arg_type().type();
+        auto types = it.get_operator()->get_arg_type().type();
         if (types.find(argTypeString) != types.end()) {
             return &it;
         }
@@ -545,12 +564,12 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
 
     auto operators = findOperators(name);
     if (!operators) return nullptr;
-    auto left_argTypeString = types::__internal::to_string(left_argument_type);
-    auto right_argTypeString = types::__internal::to_string(right_argument_type);
+    const auto left_argTypeString = types::__internal::to_string(left_argument_type);
+    const auto right_argTypeString = types::__internal::to_string(right_argument_type);
     for (auto& it : *operators) {
-        auto left_types = it._operator->get_arg1_type().type();
+        auto left_types = it.get_operator()->get_arg1_type().type();
         if (left_types.find(left_argTypeString) != left_types.end()) {
-            auto right_types = it._operator->get_arg2_type().type();
+            auto right_types = it.get_operator()->get_arg2_type().type();
             if (right_types.find(right_argTypeString) != right_types.end()) {
                 return &it;
             }
@@ -560,20 +579,21 @@ intercept::__internal::gsOperator* intercept::sqf_functions::findBinary(std::str
 }
 
 intercept::__internal::game_operators* intercept::sqf_functions::findOperators(std::string name) const {
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-    auto& found = gs->_scriptOperators.get(name.c_str());
+    auto& found = gs->_scriptOperators.get(name);
     if (gs->_scriptOperators.is_null(found)) return nullptr;
     return &found;
 }
 
 intercept::__internal::game_functions* intercept::sqf_functions::findFunctions(std::string name) const {
-    auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
+    const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-    auto& found = gs->_scriptFunctions.get(name.c_str());
+    auto& found = gs->_scriptFunctions.get(name);
     if (gs->_scriptFunctions.is_null(found)) return nullptr;
     return &found;
 }
 
+*/

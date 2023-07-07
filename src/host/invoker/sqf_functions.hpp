@@ -12,15 +12,19 @@ https://github.com/NouberNou/intercept
 #include "singleton.hpp"
 #include "logging.hpp"
 #include "arguments.hpp"
-#include "loader.hpp"
 #include "shared/types.hpp"
 #include <mutex>
 #include <condition_variable>
 #include <queue>
 
+#include "loader.hpp"
+
 namespace intercept {
 
     namespace __internal {
+        class gsOperator;
+        class gsFunction;
+
         enum class functionType {
             sqf_nular,
             sqf_function,
@@ -31,11 +35,11 @@ namespace intercept {
             using GameDataType = types::game_data_type;
         public:
             struct undo_info {
-                r_string _description;
+                types::r_string _description;
                 union {
-                    binary_function* _procB;
-                    unary_function* _procU;
-                    nular_function* _procN;
+                    types::binary_function* _procB;
+                    types::unary_function* _procU;
+                    types::nular_function* _procN;
                 };
             };
 
@@ -49,7 +53,7 @@ namespace intercept {
             void setUnused() noexcept;
 
             const functionType _type;
-            const r_string _name;
+            const types::r_string _name;
             union {
                 __internal::gsNular* _nular;
                 __internal::gsFunction* _func;
@@ -99,7 +103,7 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionBinary function_, types::game_data_type return_arg_type, types::game_data_type left_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Unary Command
         * @param name
@@ -110,7 +114,7 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionUnary function_, types::game_data_type return_arg_type, types::game_data_type right_arg_type);
         /**
         * @brief Registers a custom SQF Nular Command
         * @param name
@@ -120,7 +124,7 @@ namespace intercept {
         * @return A wrapper that should be kept alive as long as the function should be usable
         * @ingroup RSQF
         */
-        [[nodiscard]] registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
+        [[nodiscard]] types::registered_sqf_function register_sqf_function(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
 
 
         bool unregister_sqf_function(const std::shared_ptr<__internal::registered_sqf_func_wrapper>& shared);
@@ -135,7 +139,7 @@ namespace intercept {
         * @return The resulting game_data_type enum value and a instantiated sqf_script_type. Consider the type instance to be a global static, don't delete it!
         * @ingroup RSQF
         */
-        [[nodiscard]] std::pair<types::game_data_type, sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
+        [[nodiscard]] std::pair<types::game_data_type, types::sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, types::script_type_info::createFunc cf);
 
         /**
         * @brief Registers a custom SQF Compound script type
@@ -143,17 +147,17 @@ namespace intercept {
         * @return a instantiated sqf_script_type.  Consider the type instance to be a global static, don't delete it!
         * @ingroup RSQF
         */
-        [[nodiscard]] sqf_script_type* register_compound_sqf_type(const auto_array<types::game_data_type>& types);
+        [[nodiscard]] types::sqf_script_type* register_compound_sqf_type(const types::auto_array<types::game_data_type>& types);
 
 
     private:
-        __internal::gsNular* findNular(std::string name) const;
-        __internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;
-        __internal::gsOperator* findBinary(std::string name, types::game_data_type left_argument_type, types::game_data_type right_argument_type) const;
-        __internal::game_operators* findOperators(std::string name) const;
-        __internal::game_functions* findFunctions(std::string name) const;
+        //__internal::gsNular* findNular(std::string name) const;
+        //__internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;
+        //__internal::gsOperator* findBinary(std::string name, types::game_data_type left_argument_type, types::game_data_type right_argument_type) const;
+        //__internal::game_operators* findOperators(std::string name) const;
+        //__internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;
-        std::map<uintptr_t, auto_array<char>> _keeper;
+        std::map<uintptr_t, types::auto_array<char>> _keeper;
         /**
          * \brief If true then we can carelessly modify the script command tables
          */

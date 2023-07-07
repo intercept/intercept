@@ -1209,7 +1209,7 @@ namespace intercept {
             static void operator delete(void* ptr_, std::size_t sz_);
             r_string code_string;
             auto_array<ref<game_instruction>> instructions;
-            bool is_final;
+            [[deprecated("This is wrong, use get_final() virtual method")]] bool is_final;
         };
 
         class game_data_object : public game_data {
@@ -1360,8 +1360,6 @@ namespace intercept {
             friend class ::intercept::sqf_functions;
         public:
 
-
-            
             class game_evaluator : public refcount {  //refcounted
             public:
                 game_evaluator(game_var_space* var = nullptr) {
@@ -1551,7 +1549,7 @@ namespace intercept {
                 return _scriptNulars;
             }
 
-        private:
+        protected:
             types::auto_array<const types::script_type_info*> _scriptTypes;
 
             using game_functions = intercept::__internal::game_functions;

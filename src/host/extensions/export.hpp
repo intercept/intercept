@@ -96,8 +96,5 @@ namespace intercept {
         [[nodiscard]] types::registered_sqf_function register_sqf_function_nular(std::string_view name, std::string_view description, WrapperFunctionNular function_, types::game_data_type return_arg_type);
         [[nodiscard]] std::pair<types::game_data_type, sqf_script_type*> register_sqf_type(std::string_view name, std::string_view localizedName, std::string_view description, std::string_view typeName, script_type_info::createFunc cf);
         [[nodiscard]] sqf_script_type* register_compound_sqf_type(const auto_array<types::game_data_type>& types);
-
-
-        const auto_array<r_string>* get_pbo_files_list();
     }
 }

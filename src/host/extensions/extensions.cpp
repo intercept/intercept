@@ -46,7 +46,6 @@ namespace intercept {
         functions.request_plugin_interface = [](r_string module_name_, std::string_view name_, uint32_t api_version_) {
             return extensions::get().request_plugin_interface(module_name_, name_, api_version_).value_or(nullptr);
         };
-        functions.get_pbo_files_list = client_function_defs::get_pbo_files_list;
 
         // Temporary fallback to allow old V2 plugins to load
         {

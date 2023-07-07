@@ -569,12 +569,6 @@ namespace intercept {
             }
         }
 
-
-        //File Banks
-    #ifndef __linux__
-            //_sqf_register_funcs._file_banks = future_fileBanks.get(); //fixed in 1.76. broken again in prof v1
-    #endif
-
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->get_arg1_type().get_vtable();
         sqf_script_type::type_def = _sqf_register_funcs._type_vtable;
         _sqf_register_funcs._compoundtype_vtable = _unary_operators["isnil"sv].front().op->get_arg_type().compound_type->get_vtable();

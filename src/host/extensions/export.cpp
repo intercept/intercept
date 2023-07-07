@@ -108,9 +108,5 @@ namespace intercept {
             CERT_EXIT;
             return registered;
         }
-
-        const auto_array<r_string>* get_pbo_files_list() {
-            return &invoker::get().files_in_pbo_banks;
-        }
     }
 }

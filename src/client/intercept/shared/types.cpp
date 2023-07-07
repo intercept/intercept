@@ -688,7 +688,7 @@ namespace intercept {
         game_value::operator vector3() const {
             if (!data) return {};
             auto& array = data->get_as_array();
-            if (array.count() == 3)
+            if (array.size() == 3)
                 return vector3{ array[0], array[1], array[2] };
             return vector3();
         }
@@ -696,7 +696,7 @@ namespace intercept {
         game_value::operator vector2() const {
             if (!data) return {};
             auto& array = data->get_as_array();
-            if (array.count() == 2)
+            if (array.size() == 2)
                 return vector2{ array[0], array[1] };
             return {};
         }
@@ -747,7 +747,7 @@ namespace intercept {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) throw game_value_conversion_error("Invalid array access");
                 auto& array = data->get_as_array();
-                if (array.count() > i_)
+                if (array.size() > i_)
                     return array[i_];
             }
             static game_value dummy;//else we would return a temporary.
@@ -759,7 +759,7 @@ namespace intercept {
             if (data) {
                 if (data->get_vtable() != game_data_array::type_def) return *this;
                 auto& array = data->get_as_array();
-                if (array.count() > i_)
+                if (array.size() > i_)
                     return array[i_];
             }
             return {};
@@ -814,7 +814,7 @@ namespace intercept {
         size_t game_value::size() const {
             if (!data) return 0;
             if (data->get_vtable() != game_data_array::type_def) return 0;
-            return data->get_as_array().count();
+            return data->get_as_array().size();
         }
 
         bool game_value::is_nil() const {

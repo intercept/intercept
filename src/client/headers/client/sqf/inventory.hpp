@@ -476,7 +476,7 @@ namespace intercept {
                 if (ret_game_value_.size() > 0) {
                     container = static_cast<std::string>(ret_game_value_[0]);
                     auto &arr = ret_game_value_[1].to_array();
-                    items.reserve(arr.count());
+                    items.reserve(arr.size());
                     for (auto &it : arr)
                         items.emplace_back(it);
                 } else {

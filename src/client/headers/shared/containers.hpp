@@ -1234,17 +1234,18 @@ namespace intercept::types {
             move_._n = 0;
         }
         Type& get(const size_t i_) {
-            if (i_ > count()) throw std::out_of_range("rv_array access out of range");
+            if (i_ > size()) throw std::out_of_range("rv_array access out of range");
             return _data[i_];
         }
         const Type& get(const size_t i_) const {
-            if (i_ > count()) throw std::out_of_range("rv_array access out of range");
+            if (i_ > size()) throw std::out_of_range("rv_array access out of range");
             return _data[i_];
         }
         Type& operator[](const size_t i_) { return get(i_); }
         const Type& operator[](const size_t i_) const { return get(i_); }
         Type* data() noexcept { return _data; }
-        constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
+        const Type* data() const noexcept { return _data; }
+        [[deprecated("Use size() instead")]] constexpr size_t count() const noexcept { return static_cast<size_t>(_n); }
         constexpr size_t size() const noexcept { return static_cast<size_t>(_n); }
 
         iterator begin() {
@@ -1273,21 +1274,21 @@ namespace intercept::types {
 
         template <class Func>
         void for_each(const Func& f_) const {
-            for (size_t i = 0; i < count(); i++) {
+            for (size_t i = 0; i < size(); i++) {
                 f_(get(i));
             }
         }
 
         template <class Func>
         void for_each_backwards(const Func& f_) const {  //This returns if Func returns true
-            for (size_t i = count() - 1; i >= 0; i--) {
+            for (size_t i = size() - 1; i >= 0; i--) {
                 if (f_(get(i))) return;
             }
         }
 
         template <class Func>
         void for_each(const Func& f_) {
-            for (size_t i = 0; i < count(); i++) {
+            for (size_t i = 0; i < size(); i++) {
                 f_(get(i));
             }
         }
@@ -1547,7 +1548,7 @@ namespace intercept::types {
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
-            const size_t oldSize = base::count();
+            const size_t oldSize = base::size();
             reserve(oldSize + 1);
 
             //emplace_back(_value);
@@ -1572,7 +1573,7 @@ namespace intercept::types {
             if (_where < base::begin() || _where > base::end()) throw std::runtime_error("Invalid Iterator");  //WTF?!
             const size_t insertOffset = std::distance(base::begin(), _where);
             const size_t previousEnd = static_cast<size_t>(base::_n);
-            const size_t oldSize = base::count();
+            const size_t oldSize = base::size();
             const size_t insertedSize = std::distance(_first, _last);
             reserve(oldSize + insertedSize);
 
@@ -1799,7 +1800,7 @@ namespace intercept::types {
                 return _map->_table ? static_cast<size_t>(_map->_tableCount) : 0u;
             }
             void get_next() {
-                while (_table < number_of_tables() && _item >= _map->_table[_table].count()) {
+                while (_table < number_of_tables() && _item >= _map->_table[_table].size()) {
                     _table++;
                     _item = 0;
                 }
@@ -1901,7 +1902,7 @@ namespace intercept::types {
             if (!_table || !_count) return;
             for (int i = 0; i < _tableCount; i++) {
                 const Container& container = _table[i];
-                for (int j = 0; j < container.count(); j++) {
+                for (int j = 0; j < container.size(); j++) {
                     func_(container[j]);
                 }
             }
@@ -1912,7 +1913,7 @@ namespace intercept::types {
             if (!_table || !_count) return;
             for (int i = _tableCount - 1; i >= 0; i--) {
                 const Container& container = _table[i];
-                for (int j = container.count() - 1; j >= 0; j--) {
+                for (int j = container.size() - 1; j >= 0; j--) {
                     func_(container[j]);
                 }
             }
@@ -1921,7 +1922,7 @@ namespace intercept::types {
         const Type& get(typename Traits::key_type key_) const {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].size(); i++) {
                 const Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
@@ -1944,7 +1945,7 @@ namespace intercept::types {
         Type& get(typename Traits::key_type key_) {
             if (!_table || !_count) return _null_entry;
             const int hashed_key = hash_key(key_);
-            for (size_t i = 0; i < _table[hashed_key].count(); i++) {
+            for (size_t i = 0; i < _table[hashed_key].size(); i++) {
                 Type& item = _table[hashed_key][i];
                 if (Traits::compare_keys(item.get_map_key(), key_))
                     return item;
@@ -1958,7 +1959,8 @@ namespace intercept::types {
             return !is_null(get(key_));
         }
 
-        int count() const { return _count; }
+        [[deprecated("Use size() instead")]] int count() const { return _count; }
+        int size() const { return _count; }
 
         //ArmaDebugEngine
         void rebuild(int tableSize) {
@@ -1973,7 +1975,7 @@ namespace intercept::types {
                         auto hashedKey = hash_key(item.get_map_key());
                         newTable[hashedKey].emplace(newTable[hashedKey].end(), std::move(item));
                     }
-                    _count += static_cast<int>(container.count());
+                    _count += static_cast<int>(container.size());
                 }
             std::swap(_table, newTable);
             if (newTable) // is now old table, may have been nullptr

@@ -1028,7 +1028,7 @@ namespace intercept {
             game_data_array& operator=(game_data_array&& move_) noexcept;
             ~game_data_array();
             auto_array<game_value> data;
-            auto length() const { return data.count(); }
+            auto length() const { return data.size(); }
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
         };

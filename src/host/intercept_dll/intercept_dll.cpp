@@ -75,7 +75,13 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     }
 
     if (command == "init_patch"sv) {
-        uintptr_t game_state_addr = intercept::loader::find_game_state(reinterpret_cast<uintptr_t>(output) + outputSize);
+        const uintptr_t game_state_addr = intercept::loader::find_game_state(reinterpret_cast<uintptr_t>(output) + outputSize);
+
+        if (!game_state_addr) {
+            snprintf(output, outputSize, "%s", "intercept init failed");
+            EXTENSION_RETURN();
+            return;
+        }
 
         // std::cerr << "intercept_dll gameState: 0x" << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);

@@ -77,7 +77,7 @@ namespace intercept::types {
 
     rv_hit_points_damage::rv_hit_points_damage(const game_value& _gv) {
         auto& _arr = _gv.to_array();
-        if (_arr.count() != 3) return;
+        if (_arr.size() != 3) return;
         hit_points = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[0]);
         hit_selections = sqf::__helpers::__convert_to_vector<sqf_return_string>(_arr[1]);
         damages = sqf::__helpers::__convert_to_vector<float>(_arr[2]);

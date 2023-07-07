@@ -27,23 +27,22 @@ set_target_properties(${INTERCEPT_EXTENSION_NAME} PROPERTIES FOLDER intercept)
 if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
 	target_compile_options(
 		${INTERCEPT_EXTENSION_NAME} PRIVATE 
-		"-std=c++1z"
 		"$<$<CONFIG:Release>:-O3>"
-		"-s" #remove -s to enable debug symbols. Also maybe add -g or -g3
+		"$<$<CONFIG:Release>:-s>"
 		"-fPIC"
 		"-fpermissive"
 		"-pthread"
 		"-static-libgcc"
 		"-static-libstdc++"
-		"-Wno-ignored-attributes"
 		"-static"
+		"-Wno-ignored-attributes"
 		"$<$<CONFIG:Release>:-ffunction-sections>"
 		"$<$<CONFIG:Release>:-fdata-sections>"
 	)
 	target_link_options(${INTERCEPT_EXTENSION_NAME} PRIVATE "-fPIC"
 	"$<$<CONFIG:Release>:-Wl,--gc-sections>"
 	"$<$<OR:$<CONFIG:Release>>:-Wl,--strip-all>"
-    "-Wl,-rpath,$ORIGIN"
+	"-Wl,-rpath,$ORIGIN"
 	) 
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 

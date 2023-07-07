@@ -52,6 +52,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 
     std::string_view command = cmd.value();
 
+    // std::cerr << "intercept_dll command: " << command << std::endl;
+
     std::string argument_str;
     if (command.length() > 1 && input.length() > command.length() + 1) {
         argument_str = input.substr(command.length() + 1, input.length() + 1 - command.length());
@@ -75,8 +77,9 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
     if (command == "init_patch"sv) {
         uintptr_t game_state_addr = intercept::loader::find_game_state(reinterpret_cast<uintptr_t>(output) + outputSize);
 
-        //std::cout << "gameState " << std::hex << game_state_addr << "\n";
+        // std::cerr << "intercept_dll gameState: 0x" << std::hex << game_state_addr << "\n";
         intercept::loader::get().do_function_walk(game_state_addr);
+        output[0] = 0x00;
         return;
     }
 

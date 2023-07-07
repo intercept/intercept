@@ -29,55 +29,46 @@
 #endif
 
 namespace intercept {
-    template<typename count_t>
-    struct gamestate_array {
-        void *ptr;
-        count_t count;
-        count_t capacity;
-
-        inline bool is_valid() {
-            if (IsBadReadPtr(ptr, sizeof(void *))) return false;
-            return capacity >= count;
-        }
-
-        inline void dump(char prefix) {
-            fprintf(stderr, "\t%c_ptr: %p\n\t%c_count: %d\n\t%c_capacity: %d\n", prefix, ptr, prefix, count, prefix, capacity);
-        }
-    };
-
-    typedef struct gamestate_array<int> gamestate_array_t;
-
     struct gamestate_partial {
-#if defined(_WIN32) || defined(_WIN64)
-        struct gamestate_array<uintptr_t> types;
-#else
-        struct gamestate_array<int> types;
-#endif
-        gamestate_array_t functions;
-        gamestate_array_t operators;
-        gamestate_array_t nulars;
+        auto_array<void*> types;
+        map_string_to_class<__internal::game_functions, auto_array<__internal::game_functions>> functions;
+        map_string_to_class<__internal::game_operators, auto_array<__internal::game_operators>> operators;
+        map_string_to_class<__internal::gsNular, auto_array<__internal::gsNular>> nulars;
 
-        bool is_valid() {
-            if (types.count != types.capacity) return false;
-            if (!types.is_valid()) return false;
-            if (!functions.is_valid()) return false;
-            if (!operators.is_valid()) return false;
-            if (!nulars.is_valid()) return false;
+        static bool is_valid(const auto_array<void*>& arr) {
+            if (arr.size() != arr.capacity())
+                return false;
+
+            if (IsBadReadPtr(arr.data(), sizeof(void*)))
+                return false;
             return true;
         }
 
-        void dump() {
+        template <class Type>
+        static bool is_valid(const map_string_to_class<Type, auto_array<Type>>& map) {
+            if (IsBadReadPtr(map.GetTablePtrRaw(), sizeof(void*)))
+                return false;
+
+            // all arrays in map are compacted, could check that too. But if we get to here we're probably fine
+
+            return true;
+        }
+
+
+        bool is_valid() const {
+            if (!is_valid(types)) return false;
+            if (!is_valid(functions)) return false;
+            if (!is_valid(operators)) return false;
+            if (!is_valid(nulars)) return false;
+            return true;
+        }
+
+        void dump() const {
             std::cerr << '\t' << "size: " << sizeof(struct gamestate_partial) << " (game_state: " << sizeof(game_state) << ')' << std::endl;
-            types.dump('t');
-            functions.dump('f');
-            operators.dump('o');
-            nulars.dump('n');
         }
     };
 
-    typedef struct gamestate_partial gamestate_partial_t;
-
-    static inline bool is_valid_gamestate(gamestate_partial_t *p) {
+    static inline bool is_valid_gamestate(gamestate_partial* p) {
         if (p == nullptr || IsBadReadPtrTyped(p)) return false;
         return p->is_valid();
     }
@@ -648,7 +639,7 @@ namespace intercept {
 
     uintptr_t loader::find_game_state(uintptr_t stack_base) {
         auto checkValid = [](uintptr_t base) -> bool {
-            auto gs = reinterpret_cast<gamestate_partial_t *>(base);
+            auto gs = reinterpret_cast<gamestate_partial*>(base);
             return is_valid_gamestate(gs);
         };
 

@@ -1430,6 +1430,10 @@ namespace intercept::types {
                 reallocate(res_);
         }
 
+        uint32_t capacity() const noexcept {
+            return static_cast<uint32_t>(_maxItems);
+        }
+
         /**
         * @brief Constructs a value at where_
         * @param where_ the iterator where to start inserting
@@ -1857,6 +1861,9 @@ namespace intercept::types {
         }
 
         map_string_to_class() {}
+        ~map_string_to_class() {
+            clear(true);
+        }
         map_string_to_class(const map_string_to_class& copy_) {
             *this = copy_;
         }
@@ -2078,8 +2085,9 @@ namespace intercept::types {
             }
             _count = 0;
         }
-        ~map_string_to_class() {
-            clear(true);
+
+        const Container* GetTablePtrRaw() const noexcept {
+            return _table;
         }
 
     protected:

@@ -1310,6 +1310,7 @@ namespace intercept {
                 //actual var space of the scope itself
                 game_var_space _dataVarSpace;
                 int _programCounter;
+                callstack_item_data(){};
                 callstack_item_data(game_data_code* code, callstack_item* parent, game_var_space varSpace, int stackPos, const game_state* gs);
 
                 virtual game_instruction* next(int& d1, const game_state* s) {

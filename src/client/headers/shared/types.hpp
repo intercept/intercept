@@ -1387,8 +1387,7 @@ namespace intercept {
                 serialenabled = false;
             }
 
-            const sourcedocpos& get_current_position()
-            {
+            const sourcedocpos& get_current_position() {
                 return *sdocpos;
             }
 

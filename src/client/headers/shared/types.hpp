@@ -1366,8 +1366,7 @@ namespace intercept {
                 }
             };
 
-            auto add_callstack_item(ref<callstack_item> newItem)
-            {
+            auto add_callstack_item(ref<callstack_item> newItem) {
                 return callstack.emplace_back(newItem);
             }
 

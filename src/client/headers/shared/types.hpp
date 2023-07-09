@@ -1375,8 +1375,7 @@ namespace intercept {
                 exception_value = std::move(value);
             }
 
-            bool is_scheduled() const
-            {
+            bool is_scheduled() const {
                 return scheduled;
             }
 

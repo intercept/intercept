@@ -1379,8 +1379,7 @@ namespace intercept {
                 return scheduled;
             }
 
-            bool is_serialization_enabled() const
-            {
+            bool is_serialization_enabled() const {
                 return serialenabled;
             }
 

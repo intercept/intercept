@@ -1371,8 +1371,7 @@ namespace intercept {
                 return callstack.emplace_back(newItem);
             }
 
-            void throw_script_exception(game_value value)
-            {
+            void throw_script_exception(game_value value) {
                 exception_state = true;
                 exception_value = std::move(value);
             }

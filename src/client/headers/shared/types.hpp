@@ -1383,8 +1383,7 @@ namespace intercept {
                 return serialenabled;
             }
 
-            void disable_serialization()
-            {
+            void disable_serialization() {
                 serialenabled = false;
             }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <string_view>
 #include <iostream>
 #include <algorithm>
@@ -380,7 +381,7 @@ namespace intercept::types {
          * @return bool
          */
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
-        
+
         /**
          * @brief free reference and set to null
          */

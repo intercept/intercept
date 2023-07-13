@@ -1414,7 +1414,7 @@ namespace intercept::types {
                 }
             }
             reserve(n_);
-            if (n_ > base::_n) {  //adding elements, need to default init
+            if (static_cast<int>(n_) > base::_n) {  //adding elements, need to default init
                 for (size_t i = base::_n; i < n_; ++i) {
 #pragma warning(suppress : 26409)
                     ::new (base::_data + i) Type();

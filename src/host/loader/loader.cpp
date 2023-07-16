@@ -330,7 +330,7 @@ namespace intercept {
         auto [vMajor, vMinor, vBuild] = getGameVersion();
 
 
-        if (vMinor >= 13) {
+        if (vBuild >= 150720 || vMinor >= 13) {
             CT_Is214 = true;
             DoCommandScan214(*this, game_state_ptr);
         } else {
@@ -359,7 +359,7 @@ namespace intercept {
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
         #endif
         #endif
-            LOG(INFO, "{} {} {}", entry->_localizedName, entry->_javaFunc, entry->_readableName);
+            LOG(INFO, "{} {}", entry->_localizedName, entry->_readableName);
             LOG(INFO, "Found Type operator: {} create@{:x} pool@{:x}", entry->_name, reinterpret_cast<uintptr_t>(entry->_createFunction), poolAlloc);
             //OutputDebugStringA(entry->_name.data());
             //OutputDebugStringA("\n");

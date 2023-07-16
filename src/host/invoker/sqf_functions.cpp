@@ -188,6 +188,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     }
 
     __internal::gsOperator op;
+    memset(&op, 0, sizeof(op));  // I don't know why this fails, it has constructor and default zero initialization, but compiler just doesn't do it
     op.set_name(name);
     op.set_name2(r_string(lowerName));
 #ifndef __linux__
@@ -282,6 +283,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     }
 
     __internal::gsFunction op;
+    memset(&op, 0, sizeof(op));  // I don't know why this fails, it has constructor and default zero initialization, but compiler just doesn't do it
     op.set_name(name);
     op.set_name2(r_string(lowerName));
 #ifndef __linux__
@@ -351,6 +353,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     if (!_canRegister) throw std::logic_error("Can only register SQF Commands on preStart");
 
     __internal::gsNular op;
+    memset(&op, 0, sizeof(op)); // I don't know why this fails, it has constructor and default zero initialization, but compiler just doesn't do it
     op.set_name(name);
     op.set_name2(r_string(lowerName)); //#TODO move this into a constructor. for all types
 #ifndef __linux__

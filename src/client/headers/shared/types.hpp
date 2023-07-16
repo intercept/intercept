@@ -322,7 +322,7 @@ namespace intercept {
 #ifdef __linux__
             script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName) : _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _javaFunc("none") {}
 #else
-            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName, r_string description, r_string category, r_string typeName) : _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _description(std::move(description)), _category(std::move(category)), _typeName(std::move(typeName)), _javaFunc("none") {}
+            script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName, r_string description, r_string category, r_string typeName) : _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _description(std::move(description)), _category(std::move(category)), _typeName(std::move(typeName)) {}
 #endif
             r_string _name;  // SCALAR
             createFunc _createFunction{nullptr};
@@ -333,7 +333,7 @@ namespace intercept {
             r_string _category;     //Default
             r_string _typeName;     //float/NativeObject
 #endif
-            r_string _javaFunc;  //Lcom/bistudio/JNIScripting/NativeObject;
+            //r_string _javaFunc;  //Lcom/bistudio/JNIScripting/NativeObject;
         };
 
         struct compound_value_pair {

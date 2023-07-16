@@ -8,5 +8,9 @@ using namespace intercept;
 #define CMDSC_TYPE 214
 #define CT_VERSION 1
 
+namespace __CT214 {
+#include "CommandTypes.hpp"
+}
+
 #include "CommandTypes.hpp"
 #include "CommandScan.hpp"

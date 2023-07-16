@@ -10,6 +10,8 @@
 #define CONCAT_(a,b) a ## b
 #define CONCAT(a, b) CONCAT_(a,b)
 
+#define BASE_NAMESPACE CONCAT(__CT, CMDSC_TYPE)
+
 void CONCAT(DoCommandScan, CMDSC_TYPE) (loader& ldrPtr, game_state* gameStatePtr) {
     class game_state_access : public game_state {
     public:
@@ -35,7 +37,9 @@ void CONCAT(DoCommandScan, CMDSC_TYPE) (loader& ldrPtr, game_state* gameStatePtr
     We don't give a fuck about that though, we just want to iterate through all of the
     buckets and in turn each item in the bucket, because they are our operator entries.
     */
-    for (auto& it : gameState->_scriptFunctions) {
+
+    auto* funcAccess = (map_string_to_class<BASE_NAMESPACE::intercept::__internal::game_functions, auto_array<BASE_NAMESPACE::intercept::__internal::game_functions>>*)&gameState->_scriptFunctions;
+    for (auto& it : *funcAccess) {
         for (auto& entry : it) {
             unary_entry new_entry;
             new_entry.op = entry._operator;
@@ -51,7 +55,8 @@ void CONCAT(DoCommandScan, CMDSC_TYPE) (loader& ldrPtr, game_state* gameStatePtr
     /*
     Binary Hashmap
     */
-    for (auto& it : gameState->_scriptOperators) {
+    auto* opAccess = (map_string_to_class<BASE_NAMESPACE::intercept::__internal::game_operators, auto_array<BASE_NAMESPACE::intercept::__internal::game_operators>>*)&gameState->_scriptOperators;
+    for (auto& it : *opAccess) {
         for (auto& entry : it) {
             binary_entry new_entry;
             new_entry.op = entry._operator;
@@ -67,7 +72,8 @@ void CONCAT(DoCommandScan, CMDSC_TYPE) (loader& ldrPtr, game_state* gameStatePtr
     /*
     Nular Hashmap
     */
-    for (auto& entry : gameState->_scriptNulars) {
+    auto* nularAccess = (map_string_to_class<BASE_NAMESPACE::intercept::__internal::gsNular, auto_array<BASE_NAMESPACE::intercept::__internal::gsNular>>*)&gameState->_scriptNulars;
+    for (auto& entry : *nularAccess) {
         nular_entry new_entry;
         new_entry.op = entry._operator;
         new_entry.procedure_ptr_addr = reinterpret_cast<uintptr_t>(&entry._operator->procedure_addr);

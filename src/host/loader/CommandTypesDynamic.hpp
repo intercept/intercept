@@ -25,6 +25,10 @@ namespace intercept {
         class gsFuncBase {
             uint64_t dummyBuffer[16] {};
         public:
+            gsFuncBase() {
+                memset(&dummyBuffer, 0, sizeof(dummyBuffer));
+            }
+
             void copyPH(const gsFuncBase* other) noexcept {
                 if (CT_Is214)
                     reinterpret_cast<__CT214::intercept::__internal::gsFuncBase*>(this)->copyPH(reinterpret_cast<const __CT214::intercept::__internal::gsFuncBase*>(other));
@@ -35,6 +39,10 @@ namespace intercept {
         class gsFunction : public gsFuncBase {
         public:
             uint64_t dummySpace[32] {};  // This is memory allocated on stack, where we fill data into before we copy/move it into table
+
+            gsFunction() {
+                memset(&dummySpace, 0, sizeof(dummySpace));
+            }
 
             using TBase = __CTBase::intercept::__internal::gsFunction;
             using T214 = __CT214::intercept::__internal::gsFunction;
@@ -100,6 +108,10 @@ namespace intercept {
             uint64_t dummySpace[32]{};  // This is memory allocated on stack, where we fill data into before we copy/move it into table
 
         public:
+            gsOperator() {
+                memset(&dummySpace, 0, sizeof(dummySpace));
+            }
+
             using TBase = __CTBase::intercept::__internal::gsOperator;
             using T214 = __CT214::intercept::__internal::gsOperator;
 
@@ -163,6 +175,10 @@ namespace intercept {
         class gsNular : public gsFuncBase {
         public:
             uint64_t dummySpace[32]{};  // This is memory allocated on stack, where we fill data into before we copy/move it into table
+
+            gsNular() {
+                memset(&dummySpace, 0, sizeof(dummySpace));
+            }
 
             using TBase = __CTBase::intercept::__internal::gsNular;
             using T214 = __CT214::intercept::__internal::gsNular;

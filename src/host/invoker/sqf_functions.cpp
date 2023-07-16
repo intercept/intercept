@@ -229,7 +229,7 @@ intercept::types::registered_sqf_function intercept::sqf_functions::register_sqf
     const sqf_script_type retType{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(return_arg_type)],nullptr };
     const sqf_script_type rightype{ _registerFuncs._type_vtable,_registerFuncs._types[static_cast<size_t>(right_arg_type)],nullptr };
 
-    
+
     const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
     const auto test = FindHelpers::findUnary(gs, "diag_log", game_data_type::ANY);
@@ -484,16 +484,19 @@ std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::re
     #endif
     );
     gs->_scriptTypes.emplace_back(newType);
-    const auto newIndex = _registerFuncs._types.size();
-    _registerFuncs._types.emplace_back(newType);
+    const auto newIndex = _registerFuncs.add_type(newType);
     LOG(INFO, "sqf_functions::register_sqf_type {} {} {} ", name, localizedName, description, typeName);
     types::__internal::add_game_datatype(name, static_cast<types::game_data_type>(newIndex));
 
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+    auto typeInstance = rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, newType, nullptr);
+#else
     auto typeInstance = //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, newType, nullptr);
         // Temporary workaround for change in 2.13 150487
         rv_allocator<sqf_script_type>::allocate(2);
     memset(typeInstance, 0, sizeof(sqf_script_type) * 2);
     ::new (typeInstance) sqf_script_type(_registerFuncs._type_vtable, newType, nullptr);
+#endif
 
     return {static_cast<types::game_data_type>(newIndex), {typeInstance}};
 }
@@ -519,11 +522,15 @@ sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<type
 
     LOG(INFO, "sqf_functions::register_compound_sqf_type");
 
-    auto typeInstance =  //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, nullptr, newType);
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+    auto typeInstance = rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, nullptr, newType);
+#else
+    auto typeInstance = //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, nullptr, newType);
         // Temporary workaround for change in 2.13 150487
         rv_allocator<sqf_script_type>::allocate(2);
     memset(typeInstance, 0, sizeof(sqf_script_type) * 2);
     ::new (typeInstance) sqf_script_type(_registerFuncs._type_vtable, nullptr, newType);
+#endif
 
     return typeInstance;
 }

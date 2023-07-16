@@ -337,7 +337,11 @@ namespace intercept {
 
         //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {
-            if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
+            LOG(INFO, "{} - {:x}", entry->_name, entry->_flags);
+            _sqf_register_funcs.add_type_flag(entry->_flags);
+            if (!entry->_createFunction) {
+                continue; //Some types don't have create functions. Example: VECTOR.
+            }
         #if _WIN64 || __X86_64__
             auto baseOffset = 0x7;
             if (entry->_name == "CODE"sv) baseOffset += 2;
@@ -365,6 +369,7 @@ namespace intercept {
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }
         }
+        LOG(INFO, "type flags: {:x}", _sqf_register_funcs._flag_idx);
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->get_arg1_type().get_vtable();
         sqf_script_type::type_def = _sqf_register_funcs._type_vtable;
@@ -458,5 +463,21 @@ namespace intercept {
 
         // std::cerr << "intercept::loader: failed to find gamestate pointer" << std::endl;
         return 0x0;
+    }
+    size_t sqf_register_functions::add_type(script_type_info* ty) & {
+        const auto ret = _types.size();
+        if (!ty->_flags) {
+            ty->_flags = next_type_flag();
+        }
+        _types.emplace_back(ty);
+        return ret;
+    }
+    void sqf_register_functions::add_type_flag(uint64_t flag) {
+        const auto flag_idx = static_cast<uint8_t>(std::floor(std::log2(static_cast<double>(flag))));
+        if ((static_cast<uint64_t>(0x1) << flag_idx) == flag) {
+            _flag_idx = std::max(_flag_idx, flag_idx);
+        } else {
+            LOG(INFO, "combined type: with flags {:x}", flag);
+        }
     }
 }

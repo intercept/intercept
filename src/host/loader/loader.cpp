@@ -330,7 +330,7 @@ namespace intercept {
         auto [vMajor, vMinor, vBuild] = getGameVersion();
 
 
-        if (vBuild >= 150720 || vMinor >= 13) {
+        if ((vBuild >= 150720 && vBuild != 150779) || vMinor >= 13) {
             CT_Is214 = true;
             DoCommandScan214(*this, game_state_ptr);
         } else {

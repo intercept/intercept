@@ -126,7 +126,7 @@ namespace intercept {
     {
 #ifdef __linux__
         auto future_stringOffset = std::async([&]() {
-            auto offs = findInMemory("12MemFunction", 13);
+            auto offs = memorySections.findInMemory("12MemFunction", 13);
 #ifdef LOADER_DEBUG
             auto prefix = "intercept::loader";
             fprintf(stderr, "%s: stringSearch: %s\n%s: stringOffset: %p\n", prefix, "12MemFunction", prefix, offs);
@@ -141,8 +141,8 @@ namespace intercept {
 
         //Second part of finding the allocator. Done here so the second memorySearch is done when we are done parsing the Nulars
 
-        auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&memorySections, fut_stringOffset = std::move(future_stringOffset)]() mutable -> uintptr_t {
-            uintptr_t stringOffset = fut_stringOffset.get();
+        auto future_allocatorVtablePtr = std::async(std::launch::deferred, [&memorySections, future_stringOffset = std::move(future_stringOffset)]() mutable -> uintptr_t {
+            uintptr_t stringOffset = future_stringOffset.get();
 #ifndef __linux__
             return (memorySections.findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t)) - sizeof(uintptr_t));
 #elif _LINUX64
@@ -153,11 +153,11 @@ namespace intercept {
                     return vtableStart;
                 }
 
-                auto ref = findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t));
+                auto ref = memorySections.findInMemory(reinterpret_cast<char*>(&stringOffset), sizeof(uintptr_t));
                 if (!ref) return 0;
                 // find who points to the address after, there should only be one
                 ref += 8;
-                ref = findInMemory(reinterpret_cast<char*>(&ref), sizeof(uintptr_t));
+                ref = memorySections.findInMemory(reinterpret_cast<char*>(&ref), sizeof(uintptr_t));
                 if (!ref) return 0;
                 return ref - 0x108;
 #else
@@ -171,6 +171,7 @@ namespace intercept {
         return future_allocatorVtablePtr;
     }
 
+#ifndef __linux__
     static std::pair<std::future<uintptr_t>, std::future<uintptr_t>> startPoolAllocatorSearch(const MemorySections& memorySections) {
 #if _WIN64 || __X86_64__
         auto future_poolFuncAlloc = std::async([&]() {
@@ -188,19 +189,13 @@ namespace intercept {
             return result;
         });
 #else
-
-#ifdef __linux__
-        //auto future_poolFuncAlloc = std::async([&]() {return memorySections.findInMemoryPattern("", ""); });
-        //auto future_poolFuncDealloc = std::async([&]() {return memorySections.findInMemoryPattern("\x56\x53\x83\xec\x00\x8b\x44\x24\x00\x8b\x74\x24\x00\x85\xc0\x0f\x84\x00\x00\x00\x00\x8b\x18\x8b\x0b\x85\xc9\x0f\x85\x00\x00\x00\x00\x8b\x53\x00\x89\x10\x89\x43\x00\x89\x58\x00\x83\x6b\x00\x00\x0f\x94\xc0\x85\xd2\x0f\x84\x00\x00\x00\x00\x84\xc0\x74\x00\x8b\x43\x00\x8b\x53\x00\x89\x10\x8b\x53\x00\x89\x42\x00\xc7\x43\x00\x00\x00\x00\x00\x83\x6e\x00\x00\x8b\x56\x00\x8d\x43\x00\x89\x02\x89\x53\x00\x8d\x56\x00\x89\x53\x00\x83\x46\x00\x00\x89\x46", "xxxx?xxx?xxx?xxxx????xxxxxxxx????xx?xxxx?xx?xx??xxxxxxx????xxx?xx?xx?xxxx?xx?xx?????xx??xx?xx?xxxx?xx?xx?xx??xx"); });
-#else
         auto future_poolFuncAlloc = std::async([&]() { return memorySections.findInMemoryPattern("\x56\x8B\xF1\xFF\x46\x38\x8B\x46\x04\x3B\xC6\x74\x09\x85\xC0\x74\x05\x83\xC0\xF0\x75\x26\x8B\x4E\x10\x8D\x46\x0C\x3B\xC8\x74\x0B\x85\xC9\x74\x07\x8D\x41\xF0\x85\xC0\x75\x11", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); });
         auto future_poolFuncDealloc = std::async([&]() { return memorySections.findInMemoryPattern("\x8B\x44\x24\x04\x85\xC0\x74\x09\x89\x44\x24\x04\xE9", "xxxxxxxxxxxxx"); });
 #endif
 
-#endif
-
         return {std::move(future_poolFuncAlloc), std::move(future_poolFuncDealloc)};
     }
+#endif
 
     //This can be used to detect game version in case we already fix something for next release
     // Returns MAJOR, MINOR, BUILD
@@ -256,8 +251,10 @@ namespace intercept {
 
         //#TODO these patternfinds can be replaced by taking the alloc function out of any Types createFunction. and the dealloc function is right next to it asm wise
 
+#ifndef __linux__
         auto [future_poolFuncAlloc, future_poolFuncDealloc] = startPoolAllocatorSearch(memorySections);
-    
+#endif
+
 
     #if _WIN32 && !_WIN64
         //via profile context "scrpt"
@@ -336,11 +333,15 @@ namespace intercept {
         } else {
             DoCommandScanBase(*this, game_state_ptr);
         }
-        
+
 
         //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {
-            if (!entry->_createFunction) continue; //Some types don't have create functions. Example: VECTOR.
+            LOG(INFO, "{} - {:x}", entry->_name, entry->_flags);
+            _sqf_register_funcs.add_type_flag(entry->_flags);
+            if (!entry->_createFunction) {
+                continue; //Some types don't have create functions. Example: VECTOR.
+            }
         #if _WIN64 || __X86_64__
             auto baseOffset = 0x7;
             if (entry->_name == "CODE"sv) baseOffset += 2;
@@ -351,13 +352,11 @@ namespace intercept {
             const auto instructionPointer = reinterpret_cast<uintptr_t>(entry->_createFunction) + baseOffset + 0x4;
             const auto offset = *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + baseOffset);
             uintptr_t poolAlloc = /*reinterpret_cast<uintptr_t>*/(instructionPointer + offset);
-        #else
-        #ifdef __linux__
+        #elif defined(__linux__)
             uintptr_t poolAlloc = 1;
         #else
             auto p1 = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(entry->_createFunction) + 0x3);
             uintptr_t poolAlloc = *reinterpret_cast<uintptr_t*>(p1);
-        #endif
         #endif
             LOG(INFO, "{} {} {}", entry->_localizedName, entry->_javaFunc, entry->_readableName);
             LOG(INFO, "Found Type operator: {} create@{:x} pool@{:x}", entry->_name, reinterpret_cast<uintptr_t>(entry->_createFunction), poolAlloc);
@@ -370,6 +369,7 @@ namespace intercept {
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }
         }
+        LOG(INFO, "type flags: {:x}", _sqf_register_funcs._flag_idx);
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->get_arg1_type().get_vtable();
         sqf_script_type::type_def = _sqf_register_funcs._type_vtable;
@@ -393,7 +393,7 @@ namespace intercept {
                 typedef game_value*(__thiscall *evaluate_func) (game_state* gs, game_value& ret, const r_string& code, void* instruction_list, void* context, void* ns, const r_string& name);
 
                 const evaluate_func func = reinterpret_cast<evaluate_func>(loader::get().evaluate_script_function);
-                
+
 
                 struct contextType {
                     bool _local;
@@ -463,5 +463,21 @@ namespace intercept {
 
         // std::cerr << "intercept::loader: failed to find gamestate pointer" << std::endl;
         return 0x0;
+    }
+    size_t sqf_register_functions::add_type(script_type_info* ty) & {
+        const auto ret = _types.size();
+        if (!ty->_flags) {
+            ty->_flags = next_type_flag();
+        }
+        _types.emplace_back(ty);
+        return ret;
+    }
+    void sqf_register_functions::add_type_flag(uint64_t flag) {
+        const auto flag_idx = static_cast<uint8_t>(std::floor(std::log2(static_cast<double>(flag))));
+        if ((static_cast<uint64_t>(0x1) << flag_idx) == flag) {
+            _flag_idx = std::max(_flag_idx, flag_idx);
+        } else {
+            LOG(INFO, "combined type: with flags {:x}", flag);
+        }
     }
 }

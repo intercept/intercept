@@ -525,12 +525,14 @@ namespace std {
         reference_wrapper(string& _Val) noexcept
             : reference_wrapper<std::string>(_Val) {};
     };
-    
+
 #define DEFINE_HASH_FUNCTION_FOR_CLASS(type) template <> struct hash<intercept::types::type> { \
         size_t operator()(const intercept::types::type& x) const { \
-            return x.get_hash(); \
+            auto ret = x.get_hash(); \
+            assert(ret < SIZE_MAX); \
+            return static_cast<size_t>(ret); \
         } \
-    }; 
+    };
 
     DEFINE_HASH_FUNCTION_FOR_CLASS(object)
     DEFINE_HASH_FUNCTION_FOR_CLASS(location)

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <string_view>
 #include <iostream>
 #include <algorithm>
@@ -380,7 +381,7 @@ namespace intercept::types {
          * @return bool
          */
         constexpr bool is_null() const noexcept { return _ref == nullptr; }
-        
+
         /**
          * @brief free reference and set to null
          */
@@ -1413,7 +1414,7 @@ namespace intercept::types {
                 }
             }
             reserve(n_);
-            if (n_ > base::_n) {  //adding elements, need to default init
+            if (static_cast<int>(n_) > base::_n) {  //adding elements, need to default init
                 for (size_t i = base::_n; i < n_; ++i) {
 #pragma warning(suppress : 26409)
                     ::new (base::_data + i) Type();

@@ -28,7 +28,8 @@ namespace intercept {
     //! Binary functon map.
     typedef std::unordered_map<r_string, std::vector<binary_entry>> binary_map;
 
-    struct sqf_register_functions {
+    class sqf_register_functions {
+    public:
         sqf_register_functions() : _types(static_cast<size_t>(types::game_data_type::end)) {}
         uintptr_t _gameState{};
         uintptr_t _operator_construct{};
@@ -38,6 +39,13 @@ namespace intercept {
         uintptr_t _type_vtable{};
         uintptr_t _compoundtype_vtable{};
         std::vector<const script_type_info *> _types;
+        uint8_t _flag_idx{0};
+        size_t add_type(script_type_info* ty) &;
+        void add_type_flag(uint64_t flags);
+    private:
+        inline uint64_t next_type_flag() & {
+            return static_cast<uint64_t>(0x1) << (++_flag_idx);
+        }
     };
 
     /*!

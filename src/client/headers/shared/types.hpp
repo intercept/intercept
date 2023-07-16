@@ -334,6 +334,7 @@ namespace intercept {
             r_string _typeName;     //float/NativeObject
 #endif
             r_string _javaFunc;  //Lcom/bistudio/JNIScripting/NativeObject;
+            uint64_t _flags{0x0};
         };
 
         struct compound_value_pair {
@@ -355,13 +356,18 @@ namespace intercept {
         public:
             static uintptr_t type_def;  //#TODO should not be accessible
             sqf_script_type() noexcept { set_vtable(type_def); }
-            sqf_script_type(const script_type_info* type) noexcept {
-                single_type = type;
+            sqf_script_type(const script_type_info* type) noexcept : single_type(type) {
                 set_vtable(type_def);
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+                type_flags = derive_flags();
+#endif
             }
             //#TODO use type_def instead
             sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept : single_type(st), compound_type(ct) {
                 set_vtable(vt);
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+                type_flags = derive_flags();
+#endif
             }
             void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
             uintptr_t get_vtable() const noexcept { return *reinterpret_cast<const uintptr_t*>(this); }
@@ -379,6 +385,9 @@ namespace intercept {
             }
             const script_type_info* single_type{nullptr};
             compound_script_type_info* compound_type{nullptr};
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+            uint64_t type_flags{0x0};
+#endif
             value_types type() const;
             r_string type_str() const;
             bool operator==(const sqf_script_type& other) const noexcept {
@@ -387,6 +396,21 @@ namespace intercept {
             bool operator!=(const sqf_script_type& other) const noexcept {
                 return single_type != other.single_type || compound_type != other.compound_type;
             }
+        private:
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+            uint64_t derive_flags() const& {
+                uint64_t ret = 0x0;
+                if (single_type) {
+                    ret |= single_type->_flags;
+                }
+                if (compound_type) {
+                    std::for_each(compound_type->cbegin(), compound_type->cend(), [&](const script_type_info* info) {
+                        ret |= info->_flags;
+                    });
+                }
+                return ret;
+            }
+#endif
         };
 
         struct unary_operator : _refcount_vtable_dummy {
@@ -395,8 +419,9 @@ namespace intercept {
 
         private:
             sqf_script_type arg_type;
-            uint64_t dummySpace{0};
-            uint64_t dummySpace2{0};
+#ifndef INTERCEPT_213_SCRIPT_TYPES
+            std::array<uint64_t, 2> dummySpace{0, 0};
+#endif
 
         public:
             unary_operator() {
@@ -405,12 +430,14 @@ namespace intercept {
             }
 
             sqf_script_type& get_arg_type(bool creation = false) {
+#ifndef INTERCEPT_213_SCRIPT_TYPES
                 static bool newVersionFlags = false;  // The check only works during load, not write, need member, VS please no crash again so I don't have to write this comment for the 7th time
                 // Arma 2.13 150487
                 if (newVersionFlags || (!creation && !arg_type.get_vtable())) { // During construction it may validly be null, even though we aren't in new build
                     newVersionFlags = true;
                     return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg_type) + sizeof(uintptr_t));
                 }
+#endif
                 return arg_type;
             }
         };
@@ -428,10 +455,9 @@ namespace intercept {
         private:
             sqf_script_type arg1_type;
             sqf_script_type arg2_type;
-            uint64_t dummySpace{0};  // Make sure allocator allocates enough space
-            uint64_t dummySpace2{0};
-            uint64_t dummySpace3{0};
-
+#ifndef INTERCEPT_213_SCRIPT_TYPES
+            std::array<uint64_t, 3> dummySpace{0, 0, 0};
+#endif
         public:
             binary_operator() {
                 memset(&arg1_type, 0, sizeof(decltype(arg1_type)));
@@ -440,22 +466,26 @@ namespace intercept {
                 get_arg2_type(true).set_vtable(sqf_script_type::type_def);
             }
             sqf_script_type& get_arg1_type(bool creation = false) {
+#ifndef INTERCEPT_213_SCRIPT_TYPES
                 static bool newVersionFlags = false;
                 // Arma 2.13 150487
                 if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
                     newVersionFlags = true;
                     return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg1_type) + sizeof(uintptr_t));
                 }
+#endif
                 return arg1_type;
             }
 
             sqf_script_type& get_arg2_type(bool creation = false) {
+#ifndef INTERCEPT_213_SCRIPT_TYPES
                 static bool newVersionFlags = false;
                 // Arma 2.13 150487
                 if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
                     newVersionFlags = true;
                     return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg2_type) + sizeof(uintptr_t) * 2);
                 }
+#endif
                 return arg2_type;
             }
         };
@@ -693,7 +723,7 @@ namespace intercept {
 
             /**
             * @brief tries to convert the game_value to an array if possible and return the element at given index.
-            * @description If value is not an array and index==0 it returns the value. 
+            * @description If value is not an array and index==0 it returns the value.
             * If the index is out of bounds it returns empty optional.
             */
             std::optional<game_value> get(size_t i_) const;
@@ -997,7 +1027,7 @@ namespace intercept {
         public:
             static uintptr_t type_def;
             static uintptr_t data_type_def;
-            static rv_pool_allocator* pool_alloc_base;    
+            static rv_pool_allocator* pool_alloc_base;
 
             game_data_hashmap();
             game_data_hashmap(const game_data_hashmap& copy_);
@@ -1008,7 +1038,7 @@ namespace intercept {
 
             static void* operator new(std::size_t sz_);
             static void operator delete(void* ptr_, std::size_t sz_);
-        
+
             rv_hashmap data;
         };
 
@@ -1482,7 +1512,7 @@ namespace intercept {
                 if (!eval || !eval->local) return;
                 eval->local->delete_variable(name);
             }
-            
+
             /**
             * @brief Sets a script error at current position.
             * @param type This type is actually irrelevant, it just needs to be !=ok and !=handled though it's still recommended to use a sensible type
@@ -1673,13 +1703,17 @@ namespace std {
     template <>
     struct hash<intercept::types::r_string> {
         size_t operator()(const intercept::types::r_string& x) const {
-            return x.hash();
+            auto ret = x.hash();
+            assert(ret <= SIZE_MAX);
+            return static_cast<size_t>(ret);
         }
     };
     template <>
     struct hash<intercept::types::game_value> {
         size_t operator()(const intercept::types::game_value& x) const {
-            return x.get_hash();
+            auto ret = x.get_hash();
+            assert(ret <= SIZE_MAX);
+            return static_cast<size_t>(ret);
         }
     };
 }  // namespace std

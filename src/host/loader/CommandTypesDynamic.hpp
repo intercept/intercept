@@ -74,6 +74,7 @@ namespace intercept {
                     reinterpret_cast<TBase*>(this)->_name2 = newOP;
             }
 
+#ifndef __linux__
             r_string get_description() const {
                 if (CT_Is214)
                     return reinterpret_cast<const T214*>(this)->_description;
@@ -95,6 +96,7 @@ namespace intercept {
                     reinterpret_cast<TBase*>(this)->_category = newOP;
             }
 
+#endif
         };
         class gsOperator : public gsFuncBase {
             uint64_t dummySpace[32]{};  // This is memory allocated on stack, where we fill data into before we copy/move it into table
@@ -138,6 +140,7 @@ namespace intercept {
                     reinterpret_cast<TBase*>(this)->_name2 = newOP;
             }
 
+#ifndef __linux__
             r_string get_description() const {
                 if (CT_Is214)
                     return reinterpret_cast<const T214*>(this)->_description;
@@ -158,7 +161,7 @@ namespace intercept {
                 else
                     reinterpret_cast<TBase*>(this)->_category = newOP;
             }
-
+#endif
         };
         class gsNular : public gsFuncBase {
         public:
@@ -202,6 +205,7 @@ namespace intercept {
                     reinterpret_cast<TBase*>(this)->_name2 = newOP;
             }
 
+#ifndef __linux__
             r_string get_description() const {
                 if (CT_Is214)
                     return reinterpret_cast<const T214*>(this)->_description;
@@ -222,6 +226,7 @@ namespace intercept {
                 else
                     reinterpret_cast<TBase*>(this)->_category = newOP;
             }
+#endif
 
             std::string_view get_map_key() const noexcept {
                 if (CT_Is214)

@@ -12,6 +12,7 @@ endif()
 
 option(USE_64BIT_BUILD "USE_64BIT_BUILD" OFF)
 option(USE_STATIC_LINKING "USE_STATIC_LINKING" ON)
+option(USE_213_SCRIPT_TYPES "USE_213_SCRIPT_TYPES" OFF)
 
 if(USE_STATIC_LINKING)
     message("WARNING: Linking statically")
@@ -19,6 +20,10 @@ if(USE_STATIC_LINKING)
 else()
     message("WARNING: Linking dynamically")
     set(INTERCEPT_LINK_TYPE "dynamic")
+endif()
+
+if(USE_213_SCRIPT_TYPES)
+    add_compile_definitions(INTERCEPT_213_SCRIPT_TYPES)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" AND "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")

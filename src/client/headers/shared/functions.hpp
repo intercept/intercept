@@ -106,6 +106,8 @@ namespace intercept {
             @param value_ A pointer to the allocator
             */
             const types::__internal::allocatorInfo*(*get_engine_allocator)();
+
+            void* _placeholder = nullptr; // Old unused function, can be reused if adding a new one
         private:
             /*!
             @brief Registers SQF Function

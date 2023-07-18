@@ -14,7 +14,7 @@ set_target_properties(controller_static PROPERTIES PREFIX "")
 set_target_properties(controller_static PROPERTIES COMPILE_DEFINITIONS _STATIC)
 set_target_properties(controller_static PROPERTIES FOLDER intercept)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
     target_compile_options(controller_static PRIVATE "-fPIC")
     set_target_properties(controller_static PROPERTIES LINK_SEARCH_START_STATIC 1)
     set_target_properties(controller_static PROPERTIES LINK_SEARCH_END_STATIC 1)

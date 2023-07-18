@@ -34,15 +34,15 @@
 #define INTERCEPT_ASSERT intercept::runtime_assert()
 #endif
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #define CDECL __attribute__ ((__cdecl__))
 #else
 #undef CDECL
 #define CDECL __cdecl
 #endif
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #define DLLEXPORT __attribute__((visibility("default")))
-#else
+#elif defined(_MSC_VER)
 #define DLLEXPORT __declspec(dllexport)
 #endif

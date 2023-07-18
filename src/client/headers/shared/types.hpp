@@ -317,7 +317,9 @@ namespace intercept {
 
 #pragma endregion
 
-        struct script_type_info {  //Donated from ArmaDebugEngine
+        //Donated from ArmaDebugEngine
+        class script_type_info {
+        public:
             using createFunc = game_data* (*)(param_archive* ar);
 #ifdef __linux__
             script_type_info(r_string name, createFunc cf, r_string localizedName, r_string readableName) : _name(std::move(name)), _createFunction(cf), _localizedName(std::move(localizedName)), _readableName(std::move(readableName)), _javaFunc("none") {}
@@ -334,7 +336,26 @@ namespace intercept {
             r_string _typeName;     //float/NativeObject
 #endif
             r_string _javaFunc;  //Lcom/bistudio/JNIScripting/NativeObject;
-            uint64_t _flags{0x0};
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+        private:
+            // These are here even if INTERCEPT_213_SCRIPT_TYPES is unset so that the type will
+            // still be right-sized on 2.13 versions, just be 0-initialized
+            uint64_t _flags = 0x0;
+            std::array<uint64_t, 2> _dummySpace{0, 0};
+        public:
+            inline uint64_t flags() const& {
+                return _flags;
+            }
+#else
+            static inline constexpr uint64_t flags() {
+                return 0x0;
+            }
+#endif
+            inline void set_flags(uint64_t new_flags) & {
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+                _flags = new_flags;
+#endif
+            }
         };
 
         struct compound_value_pair {
@@ -356,19 +377,8 @@ namespace intercept {
         public:
             static uintptr_t type_def;  //#TODO should not be accessible
             sqf_script_type() noexcept { set_vtable(type_def); }
-            sqf_script_type(const script_type_info* type) noexcept : single_type(type) {
-                set_vtable(type_def);
-#ifdef INTERCEPT_213_SCRIPT_TYPES
-                type_flags = derive_flags();
-#endif
-            }
-            //#TODO use type_def instead
-            sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept : single_type(st), compound_type(ct) {
-                set_vtable(vt);
-#ifdef INTERCEPT_213_SCRIPT_TYPES
-                type_flags = derive_flags();
-#endif
-            }
+            sqf_script_type(const script_type_info* type) noexcept;
+            sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept;
             void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
             uintptr_t get_vtable() const noexcept { return *reinterpret_cast<const uintptr_t*>(this); }
             sqf_script_type(sqf_script_type&& other) noexcept : single_type(other.single_type), compound_type(other.compound_type) {
@@ -386,7 +396,10 @@ namespace intercept {
             const script_type_info* single_type{nullptr};
             compound_script_type_info* compound_type{nullptr};
 #ifdef INTERCEPT_213_SCRIPT_TYPES
+        private:
+            // Only present after 2.13
             uint64_t type_flags{0x0};
+        public:
 #endif
             value_types type() const;
             r_string type_str() const;
@@ -396,21 +409,13 @@ namespace intercept {
             bool operator!=(const sqf_script_type& other) const noexcept {
                 return single_type != other.single_type || compound_type != other.compound_type;
             }
-        private:
+            inline uint64_t flags() const& noexcept {
 #ifdef INTERCEPT_213_SCRIPT_TYPES
-            uint64_t derive_flags() const& {
-                uint64_t ret = 0x0;
-                if (single_type) {
-                    ret |= single_type->_flags;
-                }
-                if (compound_type) {
-                    std::for_each(compound_type->cbegin(), compound_type->cend(), [&](const script_type_info* info) {
-                        ret |= info->_flags;
-                    });
-                }
-                return ret;
-            }
+                return type_flags;
+#else
+                return 0x0;
 #endif
+            }
         };
 
         struct unary_operator : _refcount_vtable_dummy {

@@ -471,12 +471,14 @@ std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::re
     if (name.length() > 128) throw std::length_error("intercept::sqf_functions::register_sqf_type name can maximum be 128 chars long");
     const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+    auto newType = rv_allocator<script_type_info>::create_single(
+#else
     auto newType = rv_allocator<script_type_info>::allocate(2);
-
     // Temporary workaround for size change in 2.13 150487. Make sure we have extra nulled space after the type
-
     memset(newType, 0, sizeof(script_type_info) * 2);
     ::new (newType) script_type_info(
+#endif
     #ifdef __linux__
         name,cf,localizedName,localizedName
     #else

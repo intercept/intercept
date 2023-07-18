@@ -41,11 +41,9 @@ namespace intercept {
         std::vector<const script_type_info *> _types;
         uint8_t _flag_idx{0};
         size_t add_type(script_type_info* ty) &;
-        void add_type_flag(uint64_t flags);
+        void add_type_flag(const script_type_info& ty) &;
     private:
-        inline uint64_t next_type_flag() & {
-            return static_cast<uint64_t>(0x1) << (++_flag_idx);
-        }
+        uint64_t next_type_flag() &;
     };
 
     /*!

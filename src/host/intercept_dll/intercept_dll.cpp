@@ -99,6 +99,44 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
 
 intercept::client_functions intercept::client::host::functions;
 
+class logging_config {
+public:
+    using spdlog_level = decltype(spdlog::level::info);
+    logging_config(const spdlog_level default_level = spdlog::level::info) :
+        level(get_log_level("INTERCEPT_LOG_LEVEL", default_level))
+    {}
+    void init() const& {
+        spdlog::set_level(level);
+        logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
+    }
+    spdlog_level level = spdlog::level::info;
+private:
+    static spdlog_level parse_log_level(const std::string_view s, const spdlog_level default_level) {
+        const std::array<std::pair<std::string_view, spdlog_level>, 4> levels_map = {
+            std::make_pair("debug"sv, spdlog::level::debug),
+            std::make_pair("info"sv, spdlog::level::info),
+            std::make_pair("error"sv, spdlog::level::err),
+            std::make_pair("err"sv, spdlog::level::err)
+        };
+        const auto ret = std::find_if(levels_map.cbegin(), levels_map.cend(), [s](const std::pair<std::string_view, spdlog_level>& v) {
+            return v.first == s;
+        });
+        if (ret != levels_map.cend()) {
+            return ret->second;
+        } else {
+            return default_level;
+        }
+    }
+    static spdlog_level get_log_level(const std::string& key, const spdlog_level default_level) {
+        auto cfg = std::getenv(key.c_str());
+        if (!cfg) {
+            return default_level;
+        } else {
+            return parse_log_level(cfg, default_level);
+        }
+    }
+};
+
 void
 #ifdef __linux__
 __attribute__((constructor))
@@ -108,9 +146,7 @@ __attribute__((constructor))
     auto arg_line = intercept::search::plugin_searcher::get_command_line();
     std::transform(arg_line.begin(), arg_line.end(), arg_line.begin(), ::tolower);
 
-
-    spdlog::set_level(spdlog::level::debug);
-    logging::logfile = spdlog::stdout_logger_mt("Intercept Core");
+    logging_config().init();
     // if (arg_line.find("-interceptdebuglog"sv) != std::string::npos) {
     //     spdlog::set_level(spdlog::level::debug);
     // } else {

@@ -7,6 +7,7 @@
 #include <cstring>
 #include <optional>
 #include <regex>
+#include <stdexcept>
 #ifdef __linux__
 #include <dlfcn.h>
 #include <link.h>
@@ -337,8 +338,8 @@ namespace intercept {
 
         //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {
-            LOG(INFO, "{} - {:x}", entry->_name, entry->_flags);
-            _sqf_register_funcs.add_type_flag(entry->_flags);
+            LOG(DEBUG, "{} - {:x}", entry->_name, entry->flags());
+            _sqf_register_funcs.add_type_flag(*entry);
             if (!entry->_createFunction) {
                 continue; //Some types don't have create functions. Example: VECTOR.
             }
@@ -369,7 +370,7 @@ namespace intercept {
                 _sqf_register_funcs._types[static_cast<size_t>(type)] = entry;
             }
         }
-        LOG(INFO, "type flags: {:x}", _sqf_register_funcs._flag_idx);
+        LOG(DEBUG, "type flags: {:x}", static_cast<uint64_t>(0x1) << _sqf_register_funcs._flag_idx);
 
         _sqf_register_funcs._type_vtable = _binary_operators["arrayintersect"sv].front().op->get_arg1_type().get_vtable();
         sqf_script_type::type_def = _sqf_register_funcs._type_vtable;
@@ -466,18 +467,28 @@ namespace intercept {
     }
     size_t sqf_register_functions::add_type(script_type_info* ty) & {
         const auto ret = _types.size();
-        if (!ty->_flags) {
-            ty->_flags = next_type_flag();
+        if (!ty->flags()) {
+            ty->set_flags(next_type_flag());
         }
         _types.emplace_back(ty);
         return ret;
     }
-    void sqf_register_functions::add_type_flag(uint64_t flag) {
+    void sqf_register_functions::add_type_flag(const script_type_info& ty) & {
+        const auto flag = ty.flags();
+        if (!flag)
+            return;
+        // Filter down to only types that have 1 single bit (i.e. log2(flags) is an integer)
         const auto flag_idx = static_cast<uint8_t>(std::floor(std::log2(static_cast<double>(flag))));
         if ((static_cast<uint64_t>(0x1) << flag_idx) == flag) {
             _flag_idx = std::max(_flag_idx, flag_idx);
         } else {
-            LOG(INFO, "combined type: with flags {:x}", flag);
+            LOG(INFO, "combined type: {} with flags {:x}", ty._name.c_str(), flag);
         }
+    }
+    uint64_t sqf_register_functions::next_type_flag() & {
+        // ensure we don't overflow here
+        if (_flag_idx >= 62)
+            throw std::runtime_error("too many types registered to fit in bitmask");
+        return static_cast<uint64_t>(0x1) << (++_flag_idx);
     }
 }

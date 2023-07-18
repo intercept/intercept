@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <future>
 #include <sstream> //Debugging
+#include <algorithm>
 
 #if INTERCEPT_HOST_DLL
 #include "loader.hpp"
@@ -128,14 +129,54 @@ namespace intercept {
         uintptr_t game_value::__vptr_def;
         uintptr_t sqf_script_type::type_def;
 
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+        static uint64_t derive_flags(const script_type_info* single_type, compound_script_type_info* compound_type) noexcept {
+            uint64_t ret = single_type ? single_type->flags() : 0x0;
+            if (compound_type) {
+                std::for_each(compound_type->cbegin(), compound_type->cend(), [&](const script_type_info* info) {
+                    ret |= info->flags();
+                });
+            }
+            return ret;
+        }
+#endif
+
+        sqf_script_type::sqf_script_type(const script_type_info* type) noexcept :
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+            single_type(type),
+            type_flags(type ? type->flags() : 0x0)
+#else
+            single_type(type)
+#endif
+        {
+            set_vtable(type_def);
+        }
+
+        sqf_script_type::sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept :
+            single_type(st),
+#ifdef INTERCEPT_213_SCRIPT_TYPES
+            compound_type(ct),
+            type_flags(derive_flags(st, ct))
+#else
+            compound_type(ct)
+#endif
+        {
+            //#TODO use type_def instead
+            set_vtable(vt);
+        }
+
         value_types sqf_script_type::type() const {
             if (single_type != nullptr) {
                 return {single_type->_name};
+            } else if (compound_type) {
+                value_types x;
+                std::for_each(compound_type->cbegin(), compound_type->cend(), [&](const script_type_info* info) {
+                    x.insert(info->_name);
+                });
+                return x;
+            } else {
+                return {};
             }
-            value_types x;
-            for (auto &it : *compound_type)
-                x.insert(it->_name);
-            return x;
         }
 
         r_string sqf_script_type::type_str() const {
@@ -657,7 +698,7 @@ namespace intercept {
             #endif
                 return static_cast<int>(data->get_as_number());
             }
-                
+
             return 0;
         }
 
@@ -708,7 +749,7 @@ namespace intercept {
                     return static_cast<std::string>(data->get_as_string());
                 return static_cast<std::string>(data->to_string());
             }
-                
+
             return {};
         }
 
@@ -853,7 +894,7 @@ namespace intercept {
                 case game_data_type::TEAM_MEMBER: //[[fallthrough]] //SLP
                 case game_data_type::TASK:        //[[fallthrough]] //LL
                 case game_data_type::LOCATION://LL
-                { 
+                {
                     const uintptr_t datax = reinterpret_cast<uintptr_t>(data.get());
                     const uintptr_t data_1 = datax + sizeof(uintptr_t) * 3;
                     const uintptr_t data_2 = *reinterpret_cast<uintptr_t *>(data_1);
@@ -871,7 +912,7 @@ namespace intercept {
 
                 default: ;
             }
-            
+
 
             return false; //Dunno that Type. Users fault.
         }
@@ -905,7 +946,7 @@ namespace intercept {
         void game_value::operator delete(void* ptr_, std::size_t) {
             rv_allocator<game_value>::deallocate(static_cast<game_value*>(ptr_));
         }
-       
+
         bool exiting = false;
         /// @private
         extern "C" DLLEXPORT void CDECL handle_unload_internal() {

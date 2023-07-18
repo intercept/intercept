@@ -2324,9 +2324,9 @@ namespace intercept {
         }
 
         void start_loading_screen(sqf_string_const_ref text_) {
-            game_value params({text_});
+            auto_array<game_value> params({text_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__startloadingscreen__array__ret__nothing, params);
+            host::functions.invoke_raw_unary(__sqf::unary__startloadingscreen__array__ret__nothing, std::move(params));
         }
 
         void start_loading_screen(sqf_string_const_ref text_, sqf_string_const_ref resource_) {

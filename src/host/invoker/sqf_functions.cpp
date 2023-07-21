@@ -486,6 +486,31 @@ std::pair<types::game_data_type, sqf_script_type*>  intercept::sqf_functions::re
         name,cf,localizedName,localizedName,description,r_string("intercept"sv),typeName
     #endif
     );
+
+    if (CT_Is214) {
+        uint64_t maxB = 0;
+        for (const auto script_type : gs->_scriptTypes) {
+            const auto tPtr = reinterpret_cast<uint64_t *>(reinterpret_cast<uintptr_t>(&script_type->_typeName) + sizeof(script_type->_typeName));
+            if (*tPtr == 0) {
+                // ERROR! Some type is not initialized yet
+                throw std::runtime_error("Error during type registration, tell a dev!");
+            }
+            if (*tPtr == ~(1ull << 63))
+                continue; // Skip "Any" type
+
+            if (*tPtr > maxB)
+                maxB = *tPtr;
+        }
+        const auto tPtr = reinterpret_cast<uint64_t *>(reinterpret_cast<uintptr_t>(&newType->_typeName) + sizeof(newType->_typeName));
+
+        if (maxB > (1ull << 61)) {
+            // Too many types registered. Fail
+            throw std::runtime_error("Cannot register SQF Type, maximum number of types has been reached");
+        }
+
+        *tPtr = maxB << 1;
+    }
+
     gs->_scriptTypes.emplace_back(newType);
     const auto newIndex = _registerFuncs._types.size();
     _registerFuncs._types.emplace_back(newType);

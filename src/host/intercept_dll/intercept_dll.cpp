@@ -34,6 +34,7 @@ std::optional<std::string_view> get_command(std::string_view input) {
 }
 
 std::atomic_bool _threaded(false);
+bool _initializationSucceeded = false;
 #ifdef __linux__
 extern "C" void RVExtension(char *output, int outputSize, const char *function) {
 #else
@@ -80,14 +81,20 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function) {
         if (!game_state_addr) {
             snprintf(output, outputSize, "%s", "intercept init failed");
             EXTENSION_RETURN();
-            return;
         }
 
         // std::cerr << "intercept_dll gameState: 0x" << std::hex << game_state_addr << "\n";
-        intercept::loader::get().do_function_walk(game_state_addr);
+        if (intercept::loader::get().do_function_walk(game_state_addr))
+            _initializationSucceeded = true;
         output[0] = 0x00;
         return;
     }
+
+    if (!_initializationSucceeded && command.substr(0, 4) != "init"sv) {
+        snprintf(output, outputSize, "%s", "Tried to call before initialization");
+        EXTENSION_RETURN();
+    }
+
 
     intercept::controller::get().call(command, _args, result, _threaded);
 

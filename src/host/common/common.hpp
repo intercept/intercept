@@ -15,6 +15,7 @@
 
 #ifdef _DEBUG
 #define ZERO_OUTPUT()    { memset(output, 0x00, outputSize); }
+// Needed to bypass Arma erroring because in debug uninitialized memory will be filled with marker, and Arma checks for null char at end to detect buffer overflow
 #define EXTENSION_RETURN() {output[outputSize-1] = 0x00; } return;
 #else
 #define ZERO_OUTPUT()

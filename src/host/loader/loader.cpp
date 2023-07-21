@@ -234,7 +234,7 @@ namespace intercept {
     }
 
 
-    void loader::do_function_walk(uintptr_t state_addr_) {
+    bool loader::do_function_walk(uintptr_t state_addr_) {
         game_state_ptr = reinterpret_cast<game_state*>(state_addr_);
         DEBUG_PTR(game_state_ptr);
 
@@ -408,9 +408,13 @@ namespace intercept {
     #endif
 
 
+        if (!_allocator.poolFuncAlloc || !_allocator.poolFuncDealloc) {
+            LOG(ERROR, "Loader failed on pool allocator");
+            return false;
+        }
+        //#TODO check others
 
-
-
+        return true;
     }
 
     const unary_map & loader::unary() const {

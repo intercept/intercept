@@ -59,7 +59,7 @@ namespace intercept {
         gets their comref information, arguement types, and the pointer to the
         actual function and stores them.
         */
-        void do_function_walk(uintptr_t state_addr_);
+        bool do_function_walk(uintptr_t state_addr_);
 
         /*!
         @brief Returns a unary SQF function from the loaders library of found SQF functions.

@@ -530,13 +530,18 @@ sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<type
     if (!_canRegister) throw std::runtime_error("Can only register SQF Types on preStart");
     const auto gs = reinterpret_cast<game_state*>(_registerFuncs._gameState);
 
+    LOG(INFO, "sqf_functions::register_compound_sqf_type");
+
     auto_array<const script_type_info*> resolvedTypes;
 
     for (auto& it : types) {
         const auto argTypeString = types::__internal::to_string(it);
         for (auto& type : gs->get_script_types()) {
-            if (type->_name == argTypeString)
+            if (type->_name == argTypeString) {
                 resolvedTypes.emplace_back(type);
+                LOG(INFO, "compound part {}", type->_name.data());
+            }
+                
         }
     }
 
@@ -544,8 +549,6 @@ sqf_script_type* sqf_functions::register_compound_sqf_type(const auto_array<type
         resolvedTypes
     );
     newType->set_vtable(_registerFuncs._compoundtype_vtable);
-
-    LOG(INFO, "sqf_functions::register_compound_sqf_type");
 
     auto typeInstance =  //rv_allocator<sqf_script_type>::create_single(_registerFuncs._type_vtable, nullptr, newType);
         // Temporary workaround for change in 2.13 150487

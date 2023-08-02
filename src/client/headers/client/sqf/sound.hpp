@@ -116,7 +116,7 @@ namespace intercept {
             float cur_pos;    // current play position in 0...1 range
             float length;     // total sound duration in seconds
             float time;       // time passed since the start of playback
-            float volume;     //playback volume
+            float volume;     // playback volume
 
             explicit rv_sound_params(const game_value &gv_)
                 : path(gv_[0]),

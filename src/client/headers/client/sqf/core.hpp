@@ -48,11 +48,15 @@ namespace intercept {
         struct rv_addon_info {
             sqf_string prefix{};
             sqf_string version_str{};
+            sqf_string hash{};
+            int mod_index{};
             bool is_patched{};
             explicit rv_addon_info(const game_value &gv_)
                 : prefix(gv_[0]),
                   version_str(gv_[1]),
-                  is_patched(gv_[2]) {}
+                  is_patched(gv_[2]),
+                  mod_index(gv_[3]),
+                  hash(gv_[4]) {}
         };
         struct rv_dlc_usage_stats {
             sqf_string name{};

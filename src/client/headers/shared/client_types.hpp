@@ -60,7 +60,7 @@ class internal_object : public game_value {
         object bullet;
         vector3 position;
         vector3 velocity;
-        std::vector<std::string> selections;
+        sqf_return_string_list selections;
         r_string ammo_type;
         hit_part_ammo ammo_data;
         hit_part_impulse impulse_data;
@@ -319,7 +319,7 @@ class internal_object : public game_value {
     };
     struct rv_uav_control {
         object unit;
-        std::string position;
+        sqf_string position;
 
         explicit rv_uav_control(const game_value &ret_game_value_) :
             unit(ret_game_value_[0]),
@@ -327,14 +327,16 @@ class internal_object : public game_value {
     };
 
     struct rv_model_info {
-        std::string name;
-        std::string path;
+        sqf_string name;
+        sqf_string path;
+        vector3 placing_point;
         bool skeleton;
 
-        explicit rv_model_info(const game_value &ret_game_value_) :
-            name(ret_game_value_[0]),
-            path(ret_game_value_[1]),
-            skeleton(ret_game_value_[2]) {}
+        explicit rv_model_info(const game_value &ret_game_value_)
+            : name(ret_game_value_[0]),
+              path(ret_game_value_[1]),
+              skeleton(ret_game_value_[2]),
+              placing_point(ret_game_value_[3]) {}
     };
 
     struct rv_shot_parents {
@@ -342,23 +344,23 @@ class internal_object : public game_value {
         object instigator;
     };
     struct rv_action_params {
-        std::string title;
-        std::string script;
+        sqf_string title;
+        sqf_string script;
         game_value arguments;
         float priority;
         bool show_window;
         bool hide_on_use;
-        std::string shortcut;
-        std::string condition;
+        sqf_string shortcut;
+        sqf_string condition;
         float radius;
         bool unconscious;
-        std::string text_window_background;
-        std::string text_window_foreground;
-        std::string selection;
+        sqf_string text_window_background;
+        sqf_string text_window_foreground;
+        sqf_string selection;
     };
     struct rv_target {
         vector3 position;
-        std::string type;
+        sqf_string type;
         side side_;
         float subjective_cost;
         object object_;
@@ -378,7 +380,7 @@ class internal_object : public game_value {
         float accuracy;
         object target;
         side target_side;
-        std::string target_type;
+        sqf_string target_type;
         vector2 target_position;
         float target_age;
     };
@@ -387,7 +389,7 @@ class internal_object : public game_value {
     struct rv_cursor_object_params
     {
         object cursor_object;
-        std::string cursor_object_named_sel;
+        sqf_string cursor_object_named_sel;
         float distance;
     };
 
@@ -407,7 +409,7 @@ class internal_object : public game_value {
     };
 
     struct rv_vehicle_role {
-        std::string role;
+        sqf_string role;
         rv_turret_path turret_path{ game_value() };
     };
     using marker = sqf_return_string;

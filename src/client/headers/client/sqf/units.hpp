@@ -304,22 +304,24 @@ namespace intercept {
         void set_optics_mode(const object &unit_, int slot_index_, sqf_string_const_ref mode_);
 
         struct rv_weapons_info {
-            sqf_string weapon_name;    // - weapon name
-            sqf_string muzzle_name;    // - muzzle name
-            sqf_string firemode;       // - firemode that is set for this 'weaponIndex'
-            sqf_string magazine_name;  // - name of the loaded magazine or ""
-            float weapon_index;        // - internal weapon index (changes frequently) used with "SwitchWeapon" and "UseWeapon" actions
-            float ammo_count;          // - magazine ammo count or -1
-            bool is_selected;          // - true if this weapon is currently selected
-            
+            sqf_string weapon_name;    // weapon name
+            sqf_string muzzle_name;    // muzzle name
+            sqf_string fire_mode;      // firemode that is set for this 'weaponIndex'
+            sqf_string magazine_name;  // name of the loaded magazine or ""
+            float weapon_index;        // internal weapon index (changes frequently) used with "SwitchWeapon" and "UseWeapon" actions
+            float ammo_count;          // magazine ammo count or -1
+            bool is_selected;          // true if this weapon is currently selected
+            bool is_primary;           // true if this muzzle is considered primary by the engine (Since Arma 3 2.14)
+
             explicit rv_weapons_info(const game_value &gv_)
                 : weapon_index(gv_[0]),
                   is_selected(gv_[1]),
                   weapon_name(gv_[2]),
                   muzzle_name(gv_[3]),
-                  firemode(gv_[4]),
+                  fire_mode(gv_[4]),
                   magazine_name(gv_[5]),
-                  ammo_count(gv_[6]) {}
+                  ammo_count(gv_[6]),
+                  is_primary(gv_[7]) {}
         };
         rv_weapons_info weapons_info(const object &unit_, sqf_string_const_ref wpnOrMuzzle_, bool onlyLoaded_ = false);
         sqf_return_string get_optics_mode(const object &unit_, int slot);

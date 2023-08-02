@@ -666,8 +666,8 @@ namespace intercept {
         rv_shot_parents get_shot_parents(const object &projectile_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getshotparents__object__ret__array, projectile_);
 
-            return rv_shot_parents({ret[0],
-                                    ret[1]});
+            return rv_shot_parents{ret[0],
+                                   ret[1]};
         }
 
         bool is_simple_object(const object &object_) {

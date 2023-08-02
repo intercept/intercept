@@ -147,15 +147,22 @@ namespace intercept {
         void pp_effect_enable(const std::vector<int> &effets_, bool enable_);
 
         struct rv_camera_target {
-            bool is_tracking;
-            vector3 target_position;
             object target_object;
+            vector3 target_position;
+            bool is_tracking;
+
+            explicit rv_camera_target(const game_value& gv_)
+                : is_tracking(gv_[0]),
+                  target_position(gv_[1]),
+                  target_object(gv_[2]) {}
         };
 
         vector3 get_pilot_camera_direction(const object &object_);
         vector3 get_pilot_camera_position(const object &object_);
         vector3 get_pilot_camera_rotation(const object &object_);
         rv_camera_target get_pilot_camera_target(const object &object_);
+        float get_pilot_camera_optics_mode(const object &object_);
+        bool set_pilot_camera_optics_mode(const object &object_, float value_);
         bool has_pilot_camera(const object &object_);
 
         void cam_set_dir(const object &camera_, const vector3 &direction_);

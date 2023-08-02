@@ -430,8 +430,16 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__string__ret__scalar, optionname_);
         }
 
+        auto_array<game_value> difficulty_option(const auto_array<game_value> &arr_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__difficultyoption__array__ret__array, arr_).to_array();
+        }
+
         void enable_weapon_disassembly(bool enable_) {
             host::functions.invoke_raw_unary(__sqf::unary__enableweapondisassembly__bool__ret__nothing, enable_);
+        }
+
+        bool weapon_disassembly_enabled(const object &player_or_wpn_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__weapondisassemblyenabled__object__ret__bool, player_or_wpn_);
         }
 
         object create_site(sqf_string_const_ref type_, const vector3 &pos_) {

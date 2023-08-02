@@ -626,6 +626,7 @@ namespace intercept {
         sqf_return_string_list primary_weapon_magazine(const object &unit_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__primaryweaponmagazine__object__ret__array, unit_));
         }
+
         sqf_return_string_list secondary_weapon_items(const object &unit_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__secondaryweaponitems__object__ret__array, unit_));
         }
@@ -633,15 +634,27 @@ namespace intercept {
         sqf_return_string_list secondary_weapon_magazine(const object &unit_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__secondaryweaponmagazine__object__ret__array, unit_));
         }
+
         std::vector<rv_weapon_items> weapons_items(const object &obj_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitems__object__ret__array, obj_);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitems__object_array__ret__array, obj_);
             return __helpers::__convert_to_vector<rv_weapon_items>(ret);
         }
 
         std::vector<rv_weapon_items> weapons_items_cargo(const object &veh_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitemscargo__object__ret__array, veh_);
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitemscargo__object_array__ret__array, veh_);
             return __helpers::__convert_to_vector<rv_weapon_items>(ret);
         }
+
+        std::vector<rv_weapon_items> weapons_items(const object &obj_, bool inc_muzzles_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitems__object_array__ret__array, {obj_, inc_muzzles_});
+            return __helpers::__convert_to_vector<rv_weapon_items>(ret);
+        }
+
+        std::vector<rv_weapon_items> weapons_items_cargo(const object &veh_, bool inc_muzzles_) {
+            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__weaponsitemscargo__object_array__ret__array, {veh_, inc_muzzles_});
+            return __helpers::__convert_to_vector<rv_weapon_items>(ret);
+        }
+
         rv_handgun_items handgun_items(const object &unit_) {
             return rv_handgun_items(host::functions.invoke_raw_unary(__sqf::unary__handgunitems__object__ret__array, unit_));
         }
@@ -663,10 +676,16 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__uniformitems__object__ret__array, unit_));
         }
         void remove_all_assigned_items(const object &value_) {
-            __helpers::__empty_unary_object(__sqf::unary__removeallassigneditems__object__ret__nothing, value_);
+            __helpers::__empty_unary_object(__sqf::unary__removeallassigneditems__object_array__ret__nothing, value_);
+        }
+        void remove_all_assigned_items(const object &obj_, bool all_items_, bool inc_binocs_) {
+            host::functions.invoke_raw_unary(__sqf::unary__removeallassigneditems__object_array__ret__nothing, {obj_, all_items_, inc_binocs_});
         }
         sqf_return_string_list assigned_items(const object &unit_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object_array__ret__array, unit_));
+        }
+        sqf_return_string_list assigned_items(const object &unit_, bool all_items_, bool inc_bincos_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object_array__ret__array, { unit_, all_items_, inc_bincos_ }));
         }
         sqf_return_string current_magazine(const object &veh_) {
             return __helpers::__string_unary_object(__sqf::unary__currentmagazine__object__ret__string, veh_);

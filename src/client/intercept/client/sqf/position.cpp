@@ -127,6 +127,11 @@ namespace intercept {
 
             return host::functions.invoke_raw_binary(__sqf::binary__getrelpos__object__array__ret__array, pos_, args);
         }
+
+        vector3 get_rel_pos(const object &obj_, const object &attached_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getrelpos__object__object__ret__array, obj_, attached_);
+        }
+
         float get_rel_dir(const object &obj_, const object &pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getreldir__object__object_array__ret__scalar, obj_, pos_);
         }
@@ -179,6 +184,15 @@ namespace intercept {
         vector3 vector_up(const object &obj_) {
             return host::functions.invoke_raw_unary(__sqf::unary__vectorup__object__ret__array, obj_);
         }
+
+        vector3 vector_side_visual(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vectorsidevisual__object__ret__array, obj_);
+        }
+
+        vector3 vector_side(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__vectorside__object__ret__array, obj_);
+        }
+
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisual__object__array__ret__array, model_, model_pos_);
         }
@@ -376,6 +390,14 @@ namespace intercept {
 
         rv_bounding_box bounding_box_real(const object &model_) {
             return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__object__ret__array, model_));
+        }
+
+        rv_bounding_box bounding_box_real(const object &model_, sqf_string_const_ref lod_) {
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__array__ret__array, { model_, lod_ }));
+        }
+
+        rv_bounding_box bounding_box_real(const object &model_, float lod_) {
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__array__ret__array, {model_, lod_}));
         }
 
         rv_bounding_box bounding_box(bounding_box_clipping_type type_, const object &model_) {
@@ -588,6 +610,69 @@ namespace intercept {
 
             return host::functions.invoke_raw_binary(__sqf::binary__inareaarray__array__location__ret__array, param_left, location_);
         }
+
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, const object &trigger_) {
+            game_value param_left;
+
+            switch (position_.index()) {
+                case 0: param_left = std::move(auto_array<game_value>({std::get<0>(position_).get().begin(), std::get<0>(position_).get().end()})); break;
+                case 1: param_left = std::move(auto_array<game_value>({std::get<1>(position_).get().begin(), std::get<1>(position_).get().end()})); break;
+                case 2: param_left = std::move(auto_array<game_value>({std::get<2>(position_).get().begin(), std::get<2>(position_).get().end()})); break;
+            }
+
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_binary(__sqf::binary__inareaarrayindexes__array__object__ret__array, param_left, trigger_));
+        }
+
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_) {
+            game_value param_left;
+
+            switch (position_.index()) {
+                case 0: param_left = std::move(auto_array<game_value>({std::get<0>(position_).get().begin(), std::get<0>(position_).get().end()})); break;
+                case 1: param_left = std::move(auto_array<game_value>({std::get<1>(position_).get().begin(), std::get<1>(position_).get().end()})); break;
+                case 2: param_left = std::move(auto_array<game_value>({std::get<2>(position_).get().begin(), std::get<2>(position_).get().end()})); break;
+            }
+
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_binary(__sqf::binary__inareaarrayindexes__array__string__ret__array, param_left, marker_));
+        }
+
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_) {
+            game_value param_left;
+            auto_array<game_value> params_right;
+
+            switch (position_.index()) {
+                case 0: param_left = std::move(auto_array<game_value>({std::get<0>(position_).get().begin(), std::get<0>(position_).get().end()})); break;
+                case 1: param_left = std::move(auto_array<game_value>({std::get<1>(position_).get().begin(), std::get<1>(position_).get().end()})); break;
+                case 2: param_left = std::move(auto_array<game_value>({std::get<2>(position_).get().begin(), std::get<2>(position_).get().end()})); break;
+            }
+
+            switch (center_.index()) {
+                case 0: params_right.push_back(std::get<0>(center_).get()); break;
+                case 1: params_right.push_back(std::get<1>(center_).get()); break;
+                case 2: params_right.push_back(std::get<2>(center_).get()); break;
+            }
+
+            params_right.push_back(radius_x_);
+            params_right.push_back(radius_y_);
+            params_right.push_back(angle_);
+            params_right.push_back(is_rectangle_);
+
+            if (radius_z_.has_value()) params_right.push_back(*radius_z_);
+
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_binary(__sqf::binary__inareaarrayindexes__array__array__ret__array, param_left, std::move(params_right)));
+        }
+
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, const location &location_) {
+            game_value param_left;
+
+            switch (position_.index()) {
+                case 0: param_left = std::move(auto_array<game_value>({std::get<0>(position_).get().begin(), std::get<0>(position_).get().end()})); break;
+                case 1: param_left = std::move(auto_array<game_value>({std::get<1>(position_).get().begin(), std::get<1>(position_).get().end()})); break;
+                case 2: param_left = std::move(auto_array<game_value>({std::get<2>(position_).get().begin(), std::get<2>(position_).get().end()})); break;
+            }
+
+            return __helpers::__convert_to_vector<int>(host::functions.invoke_raw_binary(__sqf::binary__inareaarrayindexes__array__location__ret__array, param_left, location_));
+        }
+
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water_, bool shore_line_, const object &ignore_object_) {
             game_value params_right({min_distance_,
                                      max_gradient_,
@@ -748,7 +833,19 @@ namespace intercept {
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_) {
             auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
 
-            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__array__array__ret__bool, position_, std::move(polygon));
+            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__object_array__array__ret__bool, position_, std::move(polygon));
+        }
+
+        bool in_polygon(const object &position_, const std::vector<vector3> &polygon_) {
+            auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__object_array__array__ret__bool, position_, std::move(polygon));
+        }
+
+        bool in_polygon(const group &position_, const std::vector<vector3> &polygon_) {
+            auto_array<game_value> polygon({polygon_.begin(), polygon_.end()});
+
+            return host::functions.invoke_raw_binary(__sqf::binary__inpolygon__object_array__array__ret__bool, position_, std::move(polygon));
         }
 
         vector3 get_pos_world_visual(const object &object_) {

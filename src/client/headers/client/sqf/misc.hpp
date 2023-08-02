@@ -163,7 +163,9 @@ namespace intercept {
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_);
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_);
         float difficulty_option(sqf_string_const_ref optionname_);
+        auto_array<game_value> difficulty_option(const auto_array<game_value> &arr_);
         void enable_weapon_disassembly(bool enable_);
+        bool weapon_disassembly_enabled(const object &player_or_wpn_);
         object create_site(sqf_string_const_ref type_, const vector3 &pos_);
         bool save_identity(const object &value0_, sqf_string_const_ref value1_);
 

@@ -57,6 +57,7 @@ namespace intercept {
         vector3 get_pos(const vector3 &pos_, float distance_, float heading_);
         vector3 get_rel_pos(const object &obj_, float distance_, float heading_);
         vector3 get_rel_pos(const vector3 &pos_, float distance_, float heading_);
+        vector3 get_rel_pos(const object &parent_, const object &attached_obj_);
         float get_rel_dir(const object &obj_, const object &pos_);
         float get_rel_dir(const object &obj_, const vector3 &pos_);
 
@@ -74,6 +75,8 @@ namespace intercept {
         vector3 velocity_model_space(const object &obj_);
         vector3 vector_up_visual(const object &obj_);
         vector3 vector_up(const object &obj_);
+        vector3 vector_side_visual(const object &obj_);
+        vector3 vector_side(const object &obj_);
 
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
@@ -120,6 +123,8 @@ namespace intercept {
 
         rv_bounding_box bounding_box(const object &model_);
         rv_bounding_box bounding_box_real(const object &model_);
+        rv_bounding_box bounding_box_real(const object &model_, sqf_string_const_ref lod_);
+        rv_bounding_box bounding_box_real(const object &model_, float lod_res_);
 
         rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_);
         rv_bounding_box selection_position_bb(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_);
@@ -166,8 +171,14 @@ namespace intercept {
         bool in_area_array(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_);
         bool in_area_array(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
         bool in_area_array(t_sqf_in_area_position_array position_, const location &location_);
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, const object &trigger_);
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, sqf_string_const_ref marker_);
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, t_sqf_in_area_position center_, float radius_x_, float radius_y_, float angle_, bool is_rectangle_, std::optional<float> radius_z_);
+        std::vector<int> in_area_array_indexes(t_sqf_in_area_position_array position_, const location &location_);
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water, bool shore_line_, const object &ignore_object_);
         bool in_polygon(const vector3 &position_, const std::vector<vector3> &polygon_);
+        bool in_polygon(const object &position_, const std::vector<vector3> &polygon_);
+        bool in_polygon(const group &position_, const std::vector<vector3> &polygon_);
         //#Categorize are these two really position category? Sounds more worldish
         vector3 find_empty_position(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float min_distance_, float max_distance_, std::optional<std::string> vehicle_type_);
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_);

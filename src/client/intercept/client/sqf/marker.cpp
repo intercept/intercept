@@ -548,32 +548,38 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getplayerid__object__ret__string, player_);
         }
 
-        sqf_return_string marker_channel(marker marker_) {
+        sqf_return_string marker_channel(sqf_string_const_ref marker_) {
             return host::functions.invoke_raw_unary(__sqf::unary__markerchannel__string__ret__string, marker_);
         }
 
-        std::vector<float> marker_polyline(marker marker_) {
+        std::vector<float> marker_polyline(sqf_string_const_ref marker_) {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__markerpolyline__string__ret__array, marker_));
         }
 
-        bool marker_shadow(marker marker_) {
+        bool marker_shadow(sqf_string_const_ref marker_) {
             return host::functions.invoke_raw_unary(__sqf::unary__markershadow__string__ret__bool, marker_);
         }
 
-        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_) {
+        void set_marker_polyline(sqf_string_const_ref marker_, const std::vector<float> &polyline_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolyline__string__array__ret__nothing, marker_, polyline_);
         }
 
-        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_) {
+        void set_marker_polyline_local(sqf_string_const_ref marker_, const std::vector<float> &polyline_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkerpolylinelocal__string__array__ret__nothing, marker_, polyline_);
         }
 
-        void set_marker_shadow(marker marker_, bool shadow_) {
+        void set_marker_shadow(sqf_string_const_ref marker_, bool shadow_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkershadow__string__bool__ret__nothing, marker_, shadow_);
         }
 
-        void set_marker_shadow_local(marker marker_, bool shadow_) {
+        void set_marker_shadow_local(sqf_string_const_ref marker_, bool shadow_) {
             host::functions.invoke_raw_binary(__sqf::binary__setmarkershadowlocal__string__bool__ret__nothing, marker_, shadow_);
+        }
+        float marker_draw_priority(sqf_string_const_ref marker_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__markerdrawpriority__string__ret__scalar, marker_);
+        }
+        void set_marker_draw_priority(sqf_string_const_ref marker_, float priority_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setmarkerdrawpriority__string__scalar__ret__nothing, marker_, priority_);
         }
     }  // namespace sqf
 }  // namespace intercept

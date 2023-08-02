@@ -385,6 +385,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__moveinturret__object__array__ret__nothing, unit_, params);
         }
 
+        object remote_controlled(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__remotecontrolled__object__ret__object, obj_);
+        }
+
         void remote_control(const object &controller_, const object &controlled_) {
             host::functions.invoke_raw_binary(__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
         }
@@ -1018,6 +1022,9 @@ namespace intercept {
 
         float inside_building(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__insidebuilding__object__ret__scalar, unit_);
+        }
+        sqf_return_string get_slot_item_name(const object& unit_, slot_item item_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getslotitemname__object__scalar__ret__string, unit_, (int)item_);
         }
     }  // namespace sqf
 }  // namespace intercept

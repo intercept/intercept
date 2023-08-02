@@ -134,6 +134,7 @@ namespace intercept {
         void move_in_gunner(const object &unit_, const object &vehicle_);
         void move_in_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
 
+        object remote_controlled(const object &obj_);
         void remote_control(const object &controller_, const object &controlled_);
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
         group get_group(const object &unit_);  // originally "group", but is already a type
@@ -331,5 +332,23 @@ namespace intercept {
         object get_corpse(const object &holder_);
 
         float inside_building(const object &unit_);
+
+        enum class slot_item {
+            Goggles = 603,
+            Headgear = 605,
+            Map = 608,
+            Compass = 609,
+            Watch = 610,
+            Radio = 611,
+            GPS = 612,
+            HMD = 616,
+            Binoculars = 617,
+            Vest = 701,
+            Uniform = 801,
+            Backpack = 901
+        };
+
+        sqf_return_string get_slot_item_name(const object &unit_, slot_item item_);
+
     }  // namespace sqf
 }  // namespace intercept

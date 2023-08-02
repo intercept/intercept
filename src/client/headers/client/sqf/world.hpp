@@ -25,6 +25,7 @@ namespace intercept {
             vector3 begPos;                // - start of the road segment in ASL
             vector3 endPos;                // - finish of the road segment in ASL
             float width;                   // - road segment width
+            float aiPathOffset;            // - config value of `AIpathOffset`
             bool isPedestrian;             // - when true road is for pedestrian use only
             bool isBridge;                 // - when true road segment is a bridge
             explicit rv_road_info(const game_value &gv_)
@@ -36,7 +37,8 @@ namespace intercept {
                   material(gv_[5]),
                   begPos(gv_[6]),
                   endPos(gv_[7]),
-                  isBridge(gv_[8]) {}
+                  isBridge(gv_[8]),
+                  aiPathOffset(gv_[9]) {}
         };
 
         struct rv_world_airports {

@@ -102,6 +102,8 @@ namespace intercept {
         bool is_nil_code(const code &code_);
         code compile(sqf_string_const_ref sqf_);
         code compile_final(sqf_string_const_ref sqf_);
+        code compile_final(const code &sqf_);
+        rv_hashmap compile_final(const rv_hashmap& hashmap_);
         bool is_nil(sqf_string_const_ref var_);
         sqf_return_string preprocess_file(sqf_string_const_ref value_);
         sqf_return_string preprocess_file_line_numbers(sqf_string_const_ref value_);
@@ -346,7 +348,7 @@ namespace intercept {
         rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref model_);
         rv_dlc_asset_info get_asset_dlc_info(sqf_string_const_ref classname_, const config &config_);
         std::pair<float, float> get_dlc_assets_usage_by_name(sqf_string_const_ref asset_);
-        bool is_final(const code &code_);
+        bool is_final(const game_value &any_);
 
         sqf_return_string hash_value(const game_value &value_);
 
@@ -357,5 +359,7 @@ namespace intercept {
         rv_hashmap get_video_options();
         rv_hashmap get_ti_parameters();
         void set_ti_parameter(sqf_string_const_ref param_, float value_);
+
+        rv_hashmap create_hashmap_object(const auto_array<game_value> &class_);
     }  // namespace sqf
 }  // namespace intercept

@@ -195,5 +195,25 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__assigncurator__object__object__ret__nothing, player_, curator_module_);
         }
 
+        void add_curator_selected(const auto_array<game_value> &data_) {
+            host::functions.invoke_raw_unary(__sqf::unary__addcuratorselected__array__ret__nothing, data_);
+        }
+
+        void set_curator_selected(const auto_array<game_value> &data_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setcuratorselected__array__ret__nothing, data_);
+        }
+
+        std::vector<object> curator_selection_preset(float num_key_) {
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_unary(__sqf::unary__curatorselectionpreset__scalar__ret__array, num_key_));
+        }
+
+        void set_curator_selection_preset(const auto_array<game_value> &data_, float num_key_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setcuratorselectionpreset__scalar__array__ret__nothing, num_key_, data_);
+        }
+
+        void load_curator_selection_preset(float num_key_) {
+            host::functions.invoke_raw_unary(__sqf::unary__loadcuratorselectionpreset__scalar__ret__nothing, num_key_);
+        }
+
     }  // namespace sqf
 }  // namespace intercept

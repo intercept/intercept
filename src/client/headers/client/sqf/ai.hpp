@@ -191,7 +191,8 @@ namespace intercept {
             CombatFormationSoft
         };
         void enable_aifeature(bool value0_, ai_feature_types value1_);
-        void fly_in_height(const object &value0_, float value1_);
+        void fly_in_height(const object &veh_, float height_);
+        void fly_in_height(const object &veh_, float height_, bool forced_);
         float knows_about(const object &source_, const object &target_);
         float knows_about(const group &source_, const object &target_);
         float knows_about(const side &side_, const object &target_);

@@ -315,11 +315,15 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getpilotcamerarotation__object__ret__array, object_);
         }
         rv_camera_target get_pilot_camera_target(const object &object_) {
-            game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_);
+            return rv_camera_target(host::functions.invoke_raw_unary(__sqf::unary__getpilotcameratarget__object__ret__array, object_));
+        }
 
-            return rv_camera_target({ret[0],
-                                     ret[1],
-                                     ret[2]});
+        float get_pilot_camera_optics_mode(const object &object_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getpilotcameraopticsmode__object__ret__scalar, object_);
+        }
+
+        bool set_pilot_camera_optics_mode(const object &object_, float value_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setpilotcameraopticsmode__object__scalar__ret__bool, object_, value_);
         }
 
         bool has_pilot_camera(const object &object_) {

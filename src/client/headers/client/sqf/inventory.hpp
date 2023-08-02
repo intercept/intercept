@@ -111,8 +111,8 @@ namespace intercept {
             int max_ammo;
             rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
                                                              ammo(ret_game_value_[1]),
-                                                             muzzle(ret_game_value_.size() > 2 ? ret_game_value_[2] : ""sv),
-                                                             max_ammo(ret_game_value_.size() > 3 ? ret_game_value_[3] : -1) {}
+                                                             muzzle(ret_game_value_.size() > 2 ? sqf_string(ret_game_value_[2]) : sqf_string (""sv)),
+                                                             max_ammo(ret_game_value_.size() > 3 ? (int)ret_game_value_[3] : -1) {}
 
             explicit operator game_value() const {
                 return game_value({name, ammo});

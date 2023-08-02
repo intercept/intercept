@@ -43,6 +43,24 @@ class internal_object : public game_value {
     RV_GENERIC_OBJECT_DEC(rv_namespace);
     RV_GENERIC_OBJECT_DEC(task);
 
+        //#TODO make a typedef for std::vector and let it be replaced by auto_array for using engine types
+#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
+    using sqf_string = r_string;
+    using sqf_return_string = r_string;  //Special return type so we can have that be different than argument type
+    using sqf_return_string_list = std::vector<r_string>;
+    using sqf_string_list_const_ref = const std::vector<r_string> &;
+
+    using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
+#else
+    using sqf_string = std::string;
+    using sqf_return_string = std::string;  //Special return type so we can have that be different than argument type
+    using sqf_return_string_list = std::vector<std::string>;
+    using sqf_string_list_const_ref = const std::vector<std::string> &;
+
+    //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
+    using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
+#endif
+
     struct hit_part_ammo {
         float hit;
         float indirect_hit;
@@ -125,30 +143,6 @@ class internal_object : public game_value {
         }
         std::variant<r_string, std::string_view> _var;
     };
-
-
-    //#TODO make a typedef for std::vector and let it be replaced by auto_array for using engine types
-#ifdef INTERCEPT_SQF_STRTYPE_RSTRING
-    using sqf_string = r_string;
-    using sqf_return_string = r_string;   //Special return type so we can have that be different than argument type
-    using sqf_return_string_list = std::vector<r_string>;
-    using sqf_string_list_const_ref = const std::vector<r_string>&;
-
-
-    using sqf_string_const_ref_wrapper = std::reference_wrapper<const r_string>;
-#else
-    using sqf_string = std::string;
-    using sqf_return_string = std::string;   //Special return type so we can have that be different than argument type
-    using sqf_return_string_list = std::vector<std::string>;
-    using sqf_string_list_const_ref = const std::vector<std::string>&;
-
-    //using sqf_string_const_ref = const std::string_view; //const sqf_string&;
-    using sqf_string_const_ref_wrapper = std::reference_wrapper<const std::string>;
-#endif
-
-
-
-
 
     using t_sqf_in_area_position = std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3> >;
 

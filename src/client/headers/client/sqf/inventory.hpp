@@ -105,17 +105,18 @@ namespace intercept {
         };
 
         struct rv_magazine {
-            sqf_string name;
-            sqf_string muzzle;
-            int ammo;
-            int max_ammo;
-            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
-                                                             ammo(ret_game_value_[1]),
-                                                             muzzle(ret_game_value_.size() > 2 ? sqf_string(ret_game_value_[2]) : sqf_string (""sv)),
+            sqf_string name;    // returns "" if invalid/not loaded
+            sqf_string muzzle;  // returns "" if invalid
+            int ammo;           // returns -1 if invalid/not loaded
+            int max_ammo;       // returns -1 if invalid
+            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_.size() > 0 ? sqf_string(ret_game_value_[0]) : sqf_string(""sv)),
+                                                             ammo(ret_game_value_.size() > 1 ? (int)ret_game_value_ [1] : -1),
+                                                             muzzle(ret_game_value_.size() > 2 ? sqf_string(ret_game_value_[2]) : sqf_string(""sv)),
                                                              max_ammo(ret_game_value_.size() > 3 ? (int)ret_game_value_[3] : -1) {}
 
             explicit operator game_value() const {
-                return game_value({name, ammo});
+                // game_value cast is only needed for addWeaponWithAttachmentsCargo, and it only needs 'name' and 'ammo'
+                return game_value({name, ammo}); 
             }
         };
 

@@ -1524,7 +1524,7 @@ namespace intercept::types {
             }
             if (last_ != end()) {
 #ifdef __GNUC__
-                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+                memmove(&(*this)[firstIndex], &(*this)[lastIndex], (base::_n - lastIndex) * sizeof(Type));
 #else
                 memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex], (base::_n - lastIndex) * sizeof(Type));
 #endif

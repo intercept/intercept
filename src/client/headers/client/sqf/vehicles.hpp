@@ -200,6 +200,7 @@ namespace intercept {
         vector3 get_center_of_mass(const object &obj_);
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_);
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
+        object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         void delete_vehicle(const object &obj_);
         std::vector<rv_turret_path> all_turrets(const object &vehicle_, bool person_turrets_);
 
@@ -213,6 +214,8 @@ namespace intercept {
         std::vector<object> assigned_vehicles(const group &grp_);
         object commander(const object &veh_);
         group create_vehicle_crew(const object &veh_);
+        group create_vehicle_crew(const group &grp_, const object &veh_);
+        group create_vehicle_crew(const side &side_, const object &veh_);
         float damage(const object &object_);
         object driver(const object &value_);
         object effective_commander(const object &value_);
@@ -226,6 +229,7 @@ namespace intercept {
 
         float fuel(const object &value_);
         float get_dammage(const object &value_);
+        bool water_damaged(const object &obj_);
         float get_mass(const object &value_);
         float get_object_dlc(const object &value_);
         int get_object_type(const object &value_);
@@ -418,7 +422,9 @@ namespace intercept {
         std::vector<rv_info_panel> info_panels(const object &vehicle_, const rv_turret_path &turret_);
         bool is_laser_on(const object &vehicle_);
         std::vector<rv_remote_target_info> list_remote_targets(side side_);
-        std::vector<rv_named_properties> named_properties(const object &vehicle_);
+        std::vector<rv_named_properties> named_properties(const object &obj_);
+        rv_hashmap named_properties(const object &obj_, float lod_res_);
+        rv_hashmap named_properties(const object &obj_, sqf_string_const_ref lod_);
         bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_);
         void set_cruise_control(const object &veh_, float speed_, bool auto_thrust_);
         void set_tow_parent(const object &towed_vehicle_, const object &towing_vehicle_);

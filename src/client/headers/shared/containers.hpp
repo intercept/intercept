@@ -1386,6 +1386,7 @@ namespace intercept::types {
             reallocate(base::_n);
         }
         auto_array& operator=(auto_array&& move_) noexcept {
+            clear(true);
             base::_n = move_._n;
             _maxItems = move_._maxItems;
             base::_data = move_._data;
@@ -1523,9 +1524,9 @@ namespace intercept::types {
             }
             if (last_ != end()) {
 #ifdef __GNUC__
-                memmove(&(*this)[firstIndex], &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+                memmove(&(*this)[firstIndex], &(*this)[lastIndex], (base::_n - lastIndex) * sizeof(Type));
 #else
-                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex + 1], (base::_n - lastIndex - 1) * sizeof(Type));
+                memmove_s(&(*this)[firstIndex], (base::_n - firstIndex) * sizeof(Type), &(*this)[lastIndex], (base::_n - lastIndex) * sizeof(Type));
 #endif
             }
             base::_n -= range;
@@ -1891,9 +1892,13 @@ namespace intercept::types {
             return *this;
         }
         map_string_to_class& operator=(map_string_to_class&& move_) noexcept {
-            std::swap(_table, move_._table);
-            std::swap(_tableCount, move_._tableCount);
-            std::swap(_count, move_._count);
+            clear(true);
+            _table = move_._table;
+            _tableCount = move_._tableCount;
+            _count = move_._count;
+            move_._table = nullptr;
+            move_._count = 0;
+            move_._tableCount = 0;
             return *this;
         }
 

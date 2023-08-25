@@ -329,10 +329,24 @@ namespace intercept {
             *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
         }
 
+        game_data_hashmap::game_data_hashmap(rv_hashmap &&init_) {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+            data = std::move(init_);
+        }
+
+
+
         game_data_hashmap::game_data_hashmap(const game_data_hashmap &copy_) {
             *reinterpret_cast<uintptr_t *>(this) = type_def;
             *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
             data = copy_.data;
+        }
+
+        game_data_hashmap::game_data_hashmap(const rv_hashmap &copy_) {
+            *reinterpret_cast<uintptr_t *>(this) = type_def;
+            *reinterpret_cast<uintptr_t *>(static_cast<I_debug_value *>(this)) = data_type_def;
+            data = copy_;
         }
 
         game_data_hashmap::game_data_hashmap(game_data_hashmap &&move_) noexcept {
@@ -573,6 +587,16 @@ namespace intercept {
         game_value::game_value(auto_array<game_value> &&array_) {
             set_vtable(__vptr_def);
             data = new game_data_array(std::move(array_));
+        }
+
+        game_value::game_value(rv_hashmap &&hashmap_) {
+            set_vtable(__vptr_def);
+            data = new game_data_hashmap(std::move(hashmap_));
+        }
+
+        game_value::game_value(const rv_hashmap &hashmap_) {
+            set_vtable(__vptr_def);
+            data = new game_data_hashmap(hashmap_);
         }
 
         game_value::game_value(const vector3 & vec_) {

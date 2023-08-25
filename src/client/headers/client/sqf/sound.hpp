@@ -47,12 +47,12 @@ namespace intercept {
         void play_sound(sqf_string_const_ref name_);
         void play_sound(sqf_string_const_ref name_, bool force_);
         bool preload_sound(sqf_string_const_ref value_);
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_);
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_);
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_);
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_);
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_);
-        void play_sound_ui(sqf_string_const_ref class_or_path_, float vol_ = 1.f, float pitch_ = 1.f);
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_);
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_);
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_);
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_);
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_);
+        float play_sound_ui(sqf_string_const_ref class_or_path_, float vol_ = 1.f, float pitch_ = 1.f);
 
         game_value get_all_env_sound_controllers(const vector3 &position_);
         game_value get_all_sound_controllers(const object &vehicle_);
@@ -110,6 +110,24 @@ namespace intercept {
         float get_env_3d_sound_controller(const object &obj_, sqf_string_const_ref controller_);
 
         std::vector<object> all_env_3d_sound_sources();
+
+        struct rv_sound_params {
+            sqf_string path;  // the path to the played sound file
+            float cur_pos;    // current play position in 0...1 range
+            float length;     // total sound duration in seconds
+            float time;       // time passed since the start of playback
+            float volume;     // playback volume
+
+            explicit rv_sound_params(const game_value &gv_)
+                : path(gv_[0]),
+                  cur_pos(gv_[1]),
+                  length(gv_[2]),
+                  time(gv_[3]),
+                  volume(gv_[4]) {}
+        };
+
+        rv_sound_params sound_params(float id_);
+        void stop_sound(float id_);
 
     }  // namespace sqf
 }  // namespace intercept

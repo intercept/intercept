@@ -582,9 +582,15 @@ namespace intercept {
 
             host::functions.invoke_raw_binary(__sqf::binary__enableaifeature__string__bool__ret__nothing, value0_, std::move(type));
         }
-        void fly_in_height(const object &value0_, float value1_) {
-            host::functions.invoke_raw_binary(__sqf::binary__flyinheight__object__scalar__ret__nothing, value0_, value1_);
+
+        void fly_in_height(const object &veh_, float height_) {
+            host::functions.invoke_raw_binary(__sqf::binary__flyinheight__object__scalar_array__ret__nothing, veh_, height_);
         }
+
+        void fly_in_height(const object &veh_, float height_, bool forced_) {
+            host::functions.invoke_raw_binary(__sqf::binary__flyinheight__object__scalar_array__ret__nothing, veh_, {height_, forced_});
+        }
+
         float knows_about(const object &source_, const object &target_) {
             return host::functions.invoke_raw_binary(__sqf::binary__knowsabout__object_group__object__ret__scalar, source_, target_);
         }

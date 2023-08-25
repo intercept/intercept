@@ -102,41 +102,41 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__directsay__object__string__ret__nothing, value0_, value1_);
         }
 
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_) {
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_) {
             game_value params({name_,
                                source_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__scalar, params);
         }
 
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_) {
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_) {
             game_value params({name_,
                                source_,
                                pos_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__scalar, params);
         }
 
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_) {
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_) {
             game_value params({name_,
                                source_,
                                pos_,
                                volume_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__scalar, params);
         }
 
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_) {
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_) {
             game_value params({name_,
                                source_,
                                pos_,
                                volume_,
                                pitch_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__scalar, params);
         }
 
-        void play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_) {
+        float play_sound_3d(sqf_string_const_ref name_, const object &source_, vector3 &pos_, float volume_, float pitch_, float distance_) {
             game_value params({name_,
                                source_,
                                pos_,
@@ -144,11 +144,11 @@ namespace intercept {
                                pitch_,
                                distance_});
 
-            host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__playsound3d__array__ret__scalar, params);
         }
 
-        void play_sound_ui(sqf_string_const_ref class_or_path_, float vol_, float pitch_) {
-            host::functions.invoke_raw_unary(__sqf::unary__playsoundui__array__ret__nothing, {class_or_path_, vol_, pitch_});
+        float play_sound_ui(sqf_string_const_ref class_or_path_, float vol_, float pitch_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__playsoundui__array__ret__scalar, {class_or_path_, vol_, pitch_});
         }
 
         game_value get_all_env_sound_controllers(const vector3 &position_) {
@@ -302,6 +302,14 @@ namespace intercept {
 
         std::vector<object> all_env_3d_sound_sources() {
             return __helpers::__convert_to_vector<object>(__sqf::nular__allenv3dsoundsources__ret__array);
+        }
+
+        rv_sound_params sound_params(float id_) {
+            return rv_sound_params(host::functions.invoke_raw_unary(__sqf::unary__soundparams__scalar__ret__array, id_));
+        }
+
+        void stop_sound(float id_) {
+            host::functions.invoke_raw_unary(__sqf::unary__stopsound__scalar__ret__nothing, id_);
         }
     }  // namespace sqf
 }  // namespace intercept

@@ -41,9 +41,7 @@ namespace intercept {
         using game_value_parameter = const game_value&;
         class game_data_array;
         class game_data_hashmap;
-        struct game_data_hashmap_pair;
-        struct game_data_hashmap_traits;
-        using rv_hashmap = internal_hashmap<game_data_hashmap_pair, auto_array<game_data_hashmap_pair>, game_data_hashmap_traits>;
+        
         class internal_object;
         class game_data;
         class game_state;
@@ -80,6 +78,30 @@ namespace intercept {
             HASHMAP,
             end
         };
+
+        // using template here because game_value is not defined
+        template<class Type>
+        struct game_data_hashmap_pair {
+            using key_type = const Type&;
+            using value_type = Type;
+            Type key{};
+            Type value{};
+            key_type get_map_key() const { return key; }
+            game_data_hashmap_pair() = default;
+            game_data_hashmap_pair(const Type& k_, const Type& v_) : key(k_), value(v_) {}
+        };
+        template<class Type>
+        struct game_data_hashmap_traits {
+            using key_type = const Type&;
+
+            static uint64_t hash_key(key_type key) noexcept {
+                return key.data->get_hash();
+            }
+            static bool compare_keys(key_type k1, key_type k2) noexcept {
+                return k1.is_equalto_with_nil(k2);
+            }
+        };
+        using rv_hashmap = internal_hashmap<game_data_hashmap_pair<game_value>, auto_array<game_data_hashmap_pair<game_value>>, game_data_hashmap_traits<game_value>>;
 
         [[deprecated("use game_data_type")]] typedef game_data_type GameDataType;
 
@@ -644,6 +666,8 @@ namespace intercept {
             game_value(const std::vector<game_value>& list_);
             game_value(const std::initializer_list<game_value>& list_);
             game_value(auto_array<game_value>&& array_);
+            game_value(rv_hashmap&& hashmap_);
+            game_value(const rv_hashmap& hashmap_);
             template <class Type>
             game_value(const auto_array<Type>& array_) : game_value(auto_array<game_value>(array_.begin(), array_.end())) {
                 static_assert(std::is_convertible<Type, game_value>::value);
@@ -877,26 +901,6 @@ namespace intercept {
             //    static thread_local game_data_pool<game_data_bool> _data_pool;
         };
 
-        struct game_data_hashmap_pair {
-            using key_type = const game_value&;
-            using value_type = game_value;
-            game_value key{};
-            game_value value{};
-            key_type get_map_key() const { return key; }
-            game_data_hashmap_pair() = default;
-            game_data_hashmap_pair(const game_value& k_, const game_value& v_) : key(k_), value(v_) {}
-        };
-        struct game_data_hashmap_traits {
-            using key_type = const game_value&;
-
-            static uint64_t hash_key(const game_value& key) noexcept {
-                return key.data->get_hash();
-            }
-            static bool compare_keys(const game_value& k1, const game_value& k2) noexcept {
-                return k1.is_equalto_with_nil(k2);
-            }
-        };
-
         class game_data_hashmap : public game_data {
         public:
             static uintptr_t type_def;
@@ -904,7 +908,9 @@ namespace intercept {
             static rv_pool_allocator* pool_alloc_base;    
 
             game_data_hashmap();
+            game_data_hashmap(rv_hashmap&& init_);
             game_data_hashmap(const game_data_hashmap& copy_);
+            game_data_hashmap(const rv_hashmap& copy_);
             game_data_hashmap(game_data_hashmap&& move_) noexcept;
             game_data_hashmap& operator=(const game_data_hashmap& copy_);
             game_data_hashmap& operator=(game_data_hashmap&& move_) noexcept;
@@ -1309,7 +1315,7 @@ namespace intercept {
                 ref<game_data_code> _code;
                 //actual var space of the scope itself
                 game_var_space _dataVarSpace;
-                int _programCounter;
+                int _programCounter{};
                 callstack_item_data(){}
                 callstack_item_data(game_data_code* code, callstack_item* parent, game_var_space varSpace, int stackPos, const game_state* gs);
 

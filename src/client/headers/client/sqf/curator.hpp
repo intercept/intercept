@@ -89,5 +89,10 @@ namespace intercept {
         void set_curator_coef(const object &curator_, sqf_string_const_ref action_, std::variant<float, bool> coef_);
         void assign_curator(const object &player_, const object &curator_module_);
 
+        void add_curator_selected(const auto_array<game_value> &data_);
+        void set_curator_selected(const auto_array<game_value> &data_);
+        std::vector<object> curator_selection_preset(float num_key_);
+        void load_curator_selection_preset(float num_key_);
+        void set_curator_selection_preset(const auto_array<game_value> &data_, float num_key_);
     }  // namespace sqf
 }  // namespace intercept

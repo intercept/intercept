@@ -132,12 +132,14 @@ namespace intercept {
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_);
         void disable_map_indicators(bool disableFriendly_, bool disableEnemy_, bool disableMines_, bool disablePing_);
         sqf_return_string get_player_id(const object &player_);
-        sqf_return_string marker_channel(marker marker_);
-        std::vector<float> marker_polyline(marker marker_);
-        void set_marker_polyline(marker marker_, const std::vector<float> &polyline_);
-        void set_marker_polyline_local(marker marker_, const std::vector<float> &polyline_);
-        void set_marker_shadow(marker marker_, bool shadow_);
-        void set_marker_shadow_local(marker marker_, bool shadow_);
-        bool marker_shadow(marker marker_);
+        sqf_return_string marker_channel(sqf_string_const_ref marker_);
+        std::vector<float> marker_polyline(sqf_string_const_ref marker_);
+        void set_marker_polyline(sqf_string_const_ref marker_, const std::vector<float> &polyline_);
+        void set_marker_polyline_local(sqf_string_const_ref marker_, const std::vector<float> &polyline_);
+        void set_marker_shadow(sqf_string_const_ref marker_, bool shadow_);
+        void set_marker_shadow_local(sqf_string_const_ref marker_, bool shadow_);
+        bool marker_shadow(sqf_string_const_ref marker_);
+        float marker_draw_priority(sqf_string_const_ref marker_);
+        void set_marker_draw_priority(sqf_string_const_ref marker_, float priority_);
     }  // namespace sqf
 }  // namespace intercept

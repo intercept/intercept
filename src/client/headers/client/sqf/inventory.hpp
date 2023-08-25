@@ -105,14 +105,18 @@ namespace intercept {
         };
 
         struct rv_magazine {
-            sqf_string name;
-            int ammo;
-
-            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_[0]),
-                                                             ammo(ret_game_value_[1]) {}
+            sqf_string name;    // returns "" if invalid/not loaded
+            sqf_string muzzle;  // returns "" if invalid
+            int ammo;           // returns -1 if invalid/not loaded
+            int max_ammo;       // returns -1 if invalid
+            rv_magazine(const game_value &ret_game_value_) : name(ret_game_value_.size() > 0 ? sqf_string(ret_game_value_[0]) : sqf_string(""sv)),
+                                                             ammo(ret_game_value_.size() > 1 ? (int)ret_game_value_ [1] : -1),
+                                                             muzzle(ret_game_value_.size() > 2 ? sqf_string(ret_game_value_[2]) : sqf_string(""sv)),
+                                                             max_ammo(ret_game_value_.size() > 3 ? (int)ret_game_value_[3] : -1) {}
 
             explicit operator game_value() const {
-                return game_value({name, ammo});
+                // game_value cast is only needed for addWeaponWithAttachmentsCargo, and it only needs 'name' and 'ammo'
+                return game_value({name, ammo}); 
             }
         };
 
@@ -121,20 +125,20 @@ namespace intercept {
             sqf_string muzzle;
             sqf_string laser;
             sqf_string optics;
-            rv_magazine magazine;
-            std::optional<rv_magazine> grenade_launcher_magazine;
+            rv_magazine primary_magazine;
+            rv_magazine secondary_magazine;
             sqf_string bipod;
 
             rv_weapon_items(const game_value &ret_game_value_) : weapon(ret_game_value_[0]),
                                                                  muzzle(ret_game_value_[1]),
                                                                  laser(ret_game_value_[2]),
                                                                  optics(ret_game_value_[3]),
-                                                                 magazine(ret_game_value_[4]),
-                                                                 grenade_launcher_magazine(ret_game_value_.size() > 6 ? ret_game_value_[5] : std::optional<rv_magazine>()),
-                                                                 bipod(ret_game_value_.size() > 6 ? ret_game_value_[6] : ret_game_value_[5]) {}
+                                                                 primary_magazine(ret_game_value_[4]),
+                                                                 secondary_magazine(ret_game_value_[5]),
+                                                                 bipod(ret_game_value_[6]) {}
 
             explicit operator game_value() const {
-                return game_value({weapon, muzzle, laser, optics, game_value(magazine), grenade_launcher_magazine ? game_value(*grenade_launcher_magazine) : game_value({}), bipod});
+                return game_value({weapon, muzzle, laser, optics, game_value(primary_magazine), game_value(secondary_magazine), bipod});
             }
         };
 
@@ -298,7 +302,9 @@ namespace intercept {
         sqf_return_string_list secondary_weapon_magazine(const object &unit_);
 
         std::vector<rv_weapon_items> weapons_items(const object &obj_);
+        std::vector<rv_weapon_items> weapons_items(const object &obj_, bool inc_muzzles_);
         std::vector<rv_weapon_items> weapons_items_cargo(const object &veh_);
+        std::vector<rv_weapon_items> weapons_items_cargo(const object &veh_, bool inc_muzzles_);
         struct rv_handgun_items {
             std::string silencer;
             std::string laser;
@@ -325,8 +331,10 @@ namespace intercept {
         sqf_return_string_list uniform_magazines(const object &unit_);
         sqf_return_string_list uniform_items(const object &unit_);
 
-        void remove_all_assigned_items(const object &value_);
+        void remove_all_assigned_items(const object &obj_);
+        void remove_all_assigned_items(const object &obj_, bool all_items_, bool inc_binocs_);
         sqf_return_string_list assigned_items(const object &unit_);
+        sqf_return_string_list assigned_items(const object &unit_, bool all_items_, bool inc_bincos_);
         sqf_return_string current_magazine(const object &veh_);
         sqf_return_string current_muzzle(const object &gunner_);
         sqf_return_string current_weapon(const object &veh_);

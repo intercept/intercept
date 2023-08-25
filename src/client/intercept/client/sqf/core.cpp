@@ -140,7 +140,15 @@ namespace intercept {
         }
 
         code compile_final(sqf_string_const_ref sqf_) {
-            return code(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__string__ret__code, sqf_));
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__code_string__ret__code, sqf_));
+        }
+
+        code compile_final(const code &sqf_) {
+            return code(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__code_string__ret__code, sqf_));
+        }
+
+        rv_hashmap compile_final(const rv_hashmap &hashmap_) {
+            return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__compilefinal__hashmap__ret__hashmap, hashmap_));
         }
 
         bool is_nil(sqf_string_const_ref var_) {
@@ -1085,8 +1093,8 @@ namespace intercept {
             return std::pair<float, float>{ret[0], ret[1]};
         }
 
-        bool is_final(const code &code_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__isfinal__code_string__ret__bool, code_);
+        bool is_final(const game_value &any_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isfinal__any__ret__bool, any_);
         }
 
         sqf_return_string hash_value(const game_value &value_) {
@@ -1115,6 +1123,9 @@ namespace intercept {
 
         void set_ti_parameter(sqf_string_const_ref param_, float value_) {
             host::functions.invoke_raw_unary(__sqf::unary__settiparameter__array__ret__nothing, {param_, value_});
+        }
+        rv_hashmap create_hashmap_object(const auto_array<game_value> &class_) {
+            return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__createhashmapobject__array__ret__hashmap, class_));
         }
     }  // namespace sqf
 }  // namespace intercept

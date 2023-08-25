@@ -226,6 +226,17 @@ namespace intercept {
             return object(host::functions.invoke_raw_unary(__sqf::unary__createvehicle__array__ret__object, args));
         }
 
+        object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_, sqf_string_const_ref special_) {
+            auto_array<game_value> markers(markers_.begin(), markers_.end());
+            game_value args({type_,
+                             pos_,
+                             std::move(markers),
+                             placement_,
+                             special_});
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createvehiclelocal__array__ret__object, args));
+        }
+
         void delete_vehicle(const object &obj_) {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
         }
@@ -278,6 +289,14 @@ namespace intercept {
             return group(host::functions.invoke_raw_unary(__sqf::unary__createvehiclecrew__object__ret__group, veh_));
         }
 
+        group create_vehicle_crew(const group &grp_, const object &veh_) {
+            return group(host::functions.invoke_raw_binary(__sqf::binary__createvehiclecrew__group__object__ret__group, grp_, veh_));
+        }
+
+        group create_vehicle_crew(const side &side_, const object &veh_) {
+            return group(host::functions.invoke_raw_binary(__sqf::binary__createvehiclecrew__side__object__ret__group, side_, veh_));
+        }
+
         float damage(const object &object_) {
             return __helpers::__number_unary_object(__sqf::unary__damage__object__ret__scalar, object_);
         }
@@ -316,6 +335,10 @@ namespace intercept {
 
         float get_dammage(const object &value_) {
             return __helpers::__number_unary_object(__sqf::unary__getdammage__object__ret__scalar, value_);
+        }
+
+        bool water_damaged(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__waterdamaged__object__ret__bool, obj_);
         }
 
         float get_mass(const object &value_) {
@@ -643,8 +666,8 @@ namespace intercept {
         rv_shot_parents get_shot_parents(const object &projectile_) {
             game_value ret = host::functions.invoke_raw_unary(__sqf::unary__getshotparents__object__ret__array, projectile_);
 
-            return rv_shot_parents({ret[0],
-                                    ret[1]});
+            return rv_shot_parents{ret[0],
+                                   ret[1]};
         }
 
         bool is_simple_object(const object &object_) {
@@ -1125,6 +1148,14 @@ namespace intercept {
 
         std::vector<rv_named_properties> named_properties(const object &vehicle_) {
             return __helpers::__convert_to_vector<rv_named_properties>(host::functions.invoke_raw_unary(__sqf::unary__namedproperties__object__ret__array, vehicle_));
+        }
+
+        rv_hashmap named_properties(const object &vehicle_, sqf_string_const_ref lod_) {
+            return __helpers::__convert_to_hashmap(host::functions.invoke_raw_binary(__sqf::binary__namedproperties__object__array__ret__hashmap, vehicle_, lod_));
+        }
+
+        rv_hashmap named_properties(const object &vehicle_, float lod_) {
+            return __helpers::__convert_to_hashmap(host::functions.invoke_raw_binary(__sqf::binary__namedproperties__object__array__ret__hashmap, vehicle_, lod_));
         }
 
         bool set_info_panel(sqf_string_const_ref infopanelId_, sqf_string_const_ref componentClassOrType_) {

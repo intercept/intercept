@@ -94,10 +94,10 @@ namespace intercept {
         struct game_data_hashmap_traits {
             using key_type = const Type&;
 
-            static uint64_t hash_key(const Type& key) noexcept {
+            static uint64_t hash_key(key_type key) noexcept {
                 return key.data->get_hash();
             }
-            static bool compare_keys(const Type& k1, const Type& k2) noexcept {
+            static bool compare_keys(key_type k1, key_type k2) noexcept {
                 return k1.is_equalto_with_nil(k2);
             }
         };

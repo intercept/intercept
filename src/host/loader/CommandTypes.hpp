@@ -39,7 +39,7 @@ namespace intercept {
 #if _WIN64 || __X86_64__
                        9 // Win64
 #elif defined(_LINUX64)
-                       7 // Linux64 //#UNTESTED!
+                       9 // Linux64
 #elif defined(__linux__)
                        8 // Linux32 //#UNTESTED! //#TODO drop linux32 support
 #else
@@ -113,7 +113,7 @@ namespace intercept {
             game_functions(r_string name) : _name(std::move(name)) {}
             r_string _name;
             game_functions() noexcept {
-                
+
             }
             ~game_functions() noexcept {
 

@@ -11,8 +11,9 @@ namespace intercept {
             if (arr.size() != arr.capacity())
                 return false;
 
-            if (IsBadReadPtr(arr.data(), sizeof(void*)))
+            if (IsBadReadPtr(arr.data(), sizeof(void*) + 2 * sizeof(int)))
                 return false;
+
             return true;
         }
 

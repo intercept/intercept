@@ -860,6 +860,121 @@ namespace intercept::client {
     }
 #pragma endregion
 
+#pragma region Group Eventhandlers
+    std::unordered_map<EHIdentifier, std::pair<eventhandlers_group, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapGroupEH;
+
+    intercept::types::game_value callEHHandler(eventhandlers_group ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func) {
+        switch (ehType) {
+            case eventhandlers_group::UnitJoined: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_UnitJoined)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::UnitLeft: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_UnitLeft)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::VehicleAdded: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_VehicleAdded)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::VehicleRemoved: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_VehicleRemoved)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::Empty: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_Empty)>*>(func.get()))(args[0]);
+            } break;
+
+            case eventhandlers_group::Deleted: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_Deleted)>*>(func.get()))(args[0]);
+            } break;
+
+            case eventhandlers_group::Local: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_Local)>*>(func.get()))(args[0]);
+            } break;
+
+            case eventhandlers_group::CombatModeChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_CombatModeChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::CommandChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_CommandChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::FormationChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_FormationChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::SpeedModeChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_SpeedModeChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::EnableAttackChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_EnableAttackChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::LeaderChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_LeaderChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::GroupIdChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_GroupIdChanged)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::KnowsAboutChanged: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_KnowsAboutChanged)>*>(func.get()))(args[0], args[1], args[2], args[3]);
+            } break;
+
+            case eventhandlers_group::WaypointComplete: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_WaypointComplete)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::Fleeing: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_Fleeing)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            case eventhandlers_group::EnemyDetected: {
+                (*reinterpret_cast<std::function<void(EH_Func_Args_Group_EnemyDetected)>*>(func.get()))(args[0], args[1]);
+            } break;
+
+            default: assert(false);
+        }
+        return {};
+    }
+
+    EHIdentifier addScriptEH(types::group grp, eventhandlers_group type) {
+        r_string typeStr;
+        switch (type) {
+#define EHGroup_CASE(name, retVal, args) \
+    case eventhandlers_group::name: typeStr = #name##sv; break;
+            EHDEF_Group(EHGroup_CASE) default:;
+        }
+
+        //16'777'216 is the maximum float that can be cast "accurately" to an int;
+        //In addition, 2^32 (max unsigned int) is divisible by that number and thus wrap-around is safe (no collisions)
+        static unsigned int uid_grp = 0;
+        int uid = (int)((uid_grp++) % 33'554'432) - 16'777'216;
+
+        //#TODO use hash of moduleName as identifier.. That's faster..
+        std::string command = std::string("[\"")
+                              + intercept::client::host::module_name.data() + "\","
+                              + std::to_string(static_cast<uint32_t>(eventhandler_type::group)) + ","
+                              + std::to_string(uid) + ","
+                              + "_thisEventHandler] InterceptClientEvent [_this]";
+        int ehid = intercept::sqf::add_event_handler(grp, static_cast<sqf_string_const_ref>(typeStr), command);
+
+        return {uid, ehid, EHIteration, static_cast<uint8_t>(eventhandler_type::group)};
+    }
+
+    void delScriptEH(types::group grp, eventhandlers_group type, EHIdentifier& handle) {
+        if (handle.EHIteration != EHIteration || handle.already_deleted) return;  //Handle not valid anymore
+        r_string typeStr;
+        switch (type) {
+            EHDEF_Group(EHGroup_CASE) default:;
+        }
+        sqf::remove_event_handler(grp, static_cast<sqf_string_const_ref>(typeStr), handle.arma_eh_id);
+    }
+#pragma endregion
 
 #pragma region Custom Callback
 

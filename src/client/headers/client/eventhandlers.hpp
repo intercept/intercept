@@ -915,6 +915,116 @@ namespace intercept::client {
     }
 #pragma endregion
 
+#pragma region Group EventHandlers
+#define EH_Func_Args_Group_UnitJoined types::group grp, types::object newUnit
+#define EH_Func_Args_Group_UnitLeft types::group grp, types::object oldUnit
+#define EH_Func_Args_Group_VehicleAdded types::group grp, types::object newVehicle
+#define EH_Func_Args_Group_VehicleRemoved types::group grp, types::object oldVehicle
+#define EH_Func_Args_Group_Empty types::group grp
+#define EH_Func_Args_Group_Deleted types::group grp
+#define EH_Func_Args_Group_Local types::group grp
+#define EH_Func_Args_Group_CombatModeChanged types::group grp, types::r_string newMode
+#define EH_Func_Args_Group_CommandChanged types::group grp, types::r_string newCommand
+#define EH_Func_Args_Group_FormationChanged types::group grp, types::r_string newFormation
+#define EH_Func_Args_Group_SpeedModeChanged types::group grp, types::r_string newSpeedmode
+#define EH_Func_Args_Group_EnableAttackChanged types::group grp, bool attackEnabled
+#define EH_Func_Args_Group_LeaderChanged types::group grp, types::object newLeader
+#define EH_Func_Args_Group_GroupIdChanged types::group grp, types::r_string newGroupID
+#define EH_Func_Args_Group_KnowsAboutChanged types::group grp, types::object targetUnit, int newKnowsAbout, int oldKnowsAbout
+#define EH_Func_Args_Group_WaypointComplete types::group grp, int waypointIndex
+#define EH_Func_Args_Group_Fleeing types::group grp, bool fleeingNow
+#define EH_Func_Args_Group_EnemyDetected types::group grp, types::object newTarget
+
+
+    //Name,Function return value, Function Arguments
+#define EHDEF_Group(XX)                                                          \
+    XX(UnitJoined, void, EH_Func_Args_Group_UnitJoined)                                      \
+    XX(UnitLeft, void, EH_Func_Args_Group_UnitLeft)                                      \
+    XX(VehicleAdded, void, EH_Func_Args_Group_VehicleAdded)                                      \
+    XX(VehicleRemoved, void, EH_Func_Args_Group_VehicleRemoved)                                      \
+    XX(Empty, void, EH_Func_Args_Group_Empty)                                      \
+    XX(Deleted, void, EH_Func_Args_Group_Deleted)                                      \
+    XX(Local, void, EH_Func_Args_Group_Local)                                      \
+    XX(CombatModeChanged, void, EH_Func_Args_Group_CombatModeChanged)                                      \
+    XX(CommandChanged, void, EH_Func_Args_Group_CommandChanged)                                      \
+    XX(FormationChanged, void, EH_Func_Args_Group_FormationChanged)                                      \
+    XX(SpeedModeChanged, void, EH_Func_Args_Group_SpeedModeChanged)                                      \
+    XX(EnableAttackChanged, void, EH_Func_Args_Group_EnableAttackChanged)                                      \
+    XX(LeaderChanged, void, EH_Func_Args_Group_LeaderChanged)                                      \
+    XX(GroupIdChanged, void, EH_Func_Args_Group_GroupIdChanged)                                      \
+    XX(KnowsAboutChanged, void, EH_Func_Args_Group_KnowsAboutChanged)                                      \
+    XX(WaypointComplete, void, EH_Func_Args_Group_WaypointComplete)                                      \
+    XX(Fleeing, void, EH_Func_Args_Group_Fleeing)                                      \
+    XX(EnemyDetected, void, EH_Func_Args_Group_EnemyDetected)
+
+#define COMPILETIME_CHECK_ENUM_Group(name, retVal, funcArg) static_assert(eventhandlers_group::name >= eventhandlers_group::UnitJoined);
+
+    /** @enum eventhandlers_group
+    @brief #TODO
+    */
+    //#TODO doc
+    enum class eventhandlers_group {
+        UnitJoined,       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#UnitJoined">see the wiki</a>
+        UnitLeft,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#UnitLeft">see the wiki</a>
+        VehicleAdded,     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#VehicleAdded">see the wiki</a>
+        VehicleRemoved,   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#VehicleRemoved">see the wiki</a>
+        Empty,            ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Empty">see the wiki</a>
+        Deleted,         ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Deleted">see the wiki</a>
+        Local,           ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Local">see the wiki</a>
+        CombatModeChanged,  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#CombatModeChanged">see the wiki</a>
+        CommandChanged,     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#CommandChanged">see the wiki</a>
+        FormationChanged,   ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#FormationChanged">see the wiki</a>
+        SpeedModeChanged,    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#SpeedModeChanged">see the wiki</a>
+        EnableAttackChanged,  ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#EnableAttackChanged">see the wiki</a>
+        LeaderChanged,        ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#LeaderChanged">see the wiki</a>
+        GroupIdChanged,       ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#GroupIdChanged">see the wiki</a>
+        KnowsAboutChanged,    ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#KnowsAboutChanged">see the wiki</a>
+        WaypointComplete,     ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#WaypointComplete">see the wiki</a>
+        Fleeing,              ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#Fleeing">see the wiki</a>
+        EnemyDetected,        ///< <a href="https://community.bistudio.com/wiki/Arma_3:_Event_Handlers#EnemyDetected">see the wiki</a>
+    };
+
+    EHDEF_Group(COMPILETIME_CHECK_ENUM_Group)
+
+    /// @private
+        intercept::types::game_value callEHHandler(eventhandlers_group ehType, intercept::types::game_value args, std::shared_ptr<std::function<void()>> func);
+    /// @private
+    EHIdentifier addScriptEH(types::group grp, eventhandlers_group type);
+    /// @private
+    void delScriptEH(types::group grp, eventhandlers_group type, EHIdentifier& handle);
+    /// @private
+    extern std::unordered_map<EHIdentifier, std::pair<eventhandlers_group, std::shared_ptr<std::function<void()>>>, EHIdentifier_hasher> funcMapGroupEH;
+    /// @private
+    template <eventhandlers_group Type>
+    struct __groupAddEventHandler_Impl;
+
+#define EH_Add_Group_definition(name, retVal, fncArg)                                                                                                             \
+    template <>                                                                                                                                                     \
+    struct __groupAddEventHandler_Impl<eventhandlers_group::name> {                                                                                             \
+        using fncType = std::function<retVal(fncArg)>;                                                                                                              \
+        [[nodiscard]] static EHIdentifier add(types::group grp, std::function<retVal(fncArg)> function) {                                                        \
+            auto ident = addScriptEH(grp, eventhandlers_group::name);                                                                                            \
+            funcMapGroupEH[ident] = {eventhandlers_group::name, std::make_shared<std::function<void()>>(*reinterpret_cast<std::function<void()>*>(&function))}; \
+            return ident;                                                                                                                                           \
+        }                                                                                                                                                           \
+    };
+
+    EHDEF_Group(EH_Add_Group_definition)
+
+        /**
+    * @brief Registers a Group Eventhandler with callback to a C++ function
+    * @tparam Type is a value from intercept::client::eventhandlers_group
+    * @param grp - the group you add this Eventhandler to.
+    * @param fnc - The function that will get called
+    * @return A wrapper that should be kept alive as long as the Eventhandler should be active
+    * @ingroup eh_bind
+    */
+        template <eventhandlers_group Type, typename Func = typename __groupAddEventHandler_Impl<Type>::fncType>
+        [[nodiscard]] EHIdentifierHandle addEventHandler(types::group grp, Func fnc) {
+        return {__groupAddEventHandler_Impl<Type>::add(grp, fnc), [grp, type = Type](EHIdentifier& id) { funcMapGroupEH.erase(id); delScriptEH(grp,type,id); }};
+    }
+#pragma endregion
+
 #pragma region Custom Callback
 
     /// @private

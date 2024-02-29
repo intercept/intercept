@@ -675,6 +675,7 @@ namespace intercept {
 
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water_, bool shore_line_, const object &ignore_object_) {
             game_value params_right({min_distance_,
+                                    -1,
                                      max_gradient_,
                                      max_gradient_radius_,
                                      over_land_or_water_,

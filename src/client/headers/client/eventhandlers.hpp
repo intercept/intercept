@@ -96,6 +96,8 @@ namespace intercept::client {
         display,
         ctrl,
         mp,
+        group,
+        ammo,
         custom
     };
 

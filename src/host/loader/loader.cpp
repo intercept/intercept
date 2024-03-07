@@ -318,7 +318,7 @@ namespace intercept {
         const char* test = getRTTIName(allocatorVtablePtr);
         bool vc143Allocator = false;
         if (strlen(test) == 0) {
-            allocatorVtablePtr -= 0xB0; // vc143 build
+            allocatorVtablePtr -= 0xA8; // vc143 build
             test = getRTTIName(allocatorVtablePtr);
             vc143Allocator = true;
         }

@@ -125,4 +125,12 @@ public:
         }
         return 0;
     }
+
+    bool IsInAnySection(uintptr_t address) const {
+        for (const auto& section : sections) {
+            if (section.start < address && address < section.end)
+                return true;
+        }
+        return false;
+    }
 };

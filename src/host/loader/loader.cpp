@@ -104,6 +104,13 @@ namespace intercept {
         class v2 : public v1 {
             virtual void doStuff() {}
         };
+
+        if (IsBadReadPtr(*(void**)vtable, sizeof(uintptr_t)))
+        {
+            return "";
+        }
+
+
         v2* v = (v2*)vtable;
         try {
             // Validate that we have a RTTI enabled type
@@ -320,6 +327,41 @@ namespace intercept {
         if (strlen(test) == 0) {
             allocatorVtablePtr -= 0x4B8;  // vc143 build
             test = getRTTIName(allocatorVtablePtr);
+
+            if (strlen(test) == 0) {
+                // Okey... Lets go nuts.
+                allocatorVtablePtr -= 0x200;
+
+                auto canBeVtable = [&memorySections](uintptr_t value) {
+
+                    if (!memorySections.IsInAnySection(value))
+                        return false;
+
+                    for (size_t i = 0; i < 8; ++i) {
+                        // check if plausible that its a vtable
+                        uintptr_t funcAddress = *reinterpret_cast<uintptr_t*>(value + i*8);
+
+                        if (!memorySections.IsInAnySection(funcAddress))
+                            return false;
+                    }
+                    return true;
+                };
+
+                for (size_t i = allocatorVtablePtr; i < allocatorVtablePtr + 0x800; i+=8) {
+                    uintptr_t value = *reinterpret_cast<uintptr_t *>(i);
+
+                    if (!canBeVtable(value))
+                        continue;
+
+                    test = getRTTIName(i);
+                    if (strcmp(test, ".?AVMemTableFunctions@@") == 0)
+                    {
+                        allocatorVtablePtr = i;
+                        break;
+                    }
+                }
+            }
+
             vc143Allocator = true;
         }
 

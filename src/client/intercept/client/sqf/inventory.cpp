@@ -961,6 +961,14 @@ namespace intercept {
         rv_hashmap unique_unit_items_filtered(const object& unit_, int weapons_items_, int uniform_items_, int vest_items, int backpack_items_, int assigned_items_) {
             return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__uniqueunititems__object_array__ret__hashmap, {unit_, weapons_items_, uniform_items_, vest_items, backpack_items_, assigned_items_}));
         }
+
+        bool is_throwable(sqf_string_const_ref class_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isthrowable__string__ret__bool, class_);
+        }
+
+        std::vector<rv_throwable> throwables(const object &unit_) {
+            return __helpers::__convert_to_vector<rv_throwable>(host::functions.invoke_raw_unary(__sqf::unary__throwables__object__ret__array, unit_));
+        }
         
     }  // namespace sqf
 }  // namespace intercept

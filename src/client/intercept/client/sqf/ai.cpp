@@ -638,6 +638,12 @@ namespace intercept {
         void use_ai_steering_component(bool use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
         }
+        void use_ai_steering_component(const object &veh_, bool use_) {
+            host::functions.invoke_raw_binary(__sqf::binary__useaisteeringcomponent__object__bool__ret__nothing, veh_, use_);
+        }
+        bool is_ai_steering_component_enabled(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isaisteeringcomponentenabled__object__ret__bool, veh_);
+        }
         void command_suppressive_fire(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
         }
@@ -952,7 +958,12 @@ namespace intercept {
         }
 
         std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_) {
-            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object_string__ret__array, unit_));
+        }
+
+        std::vector<rv_unit_trait> get_all_unit_traits(sqf_string_const_ref class_)
+        {
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object_string__ret__array, class_));
         }
 
         object get_attack_target(const object &unit_) {

@@ -447,5 +447,7 @@ namespace intercept {
         float get_terrain_height(const vector2 &pos_);
         void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_);
 
+        rv_hashmap get_mission_options();
+        void set_mission_options(const rv_hashmap& options_);
     }  // namespace sqf
 }  // namespace intercept

@@ -2299,6 +2299,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__setcompassoscillation__array__ret__nothing, params);
         }
 
+        void set_compass_declination(float angle_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setcompassdeclination__scalar__ret__nothing, angle_);
+        }
+
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_) {
             game_value params({min_speed_,
                                max_speed_,

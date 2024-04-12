@@ -218,6 +218,8 @@ namespace intercept {
 
         void use_ai_oper_map_obstruction_test(bool use_);
         void use_ai_steering_component(bool use_);
+        void use_ai_steering_component(const object &veh_, bool use_);
+        bool is_ai_steering_component_enabled(const object &veh_);
         void command_suppressive_fire(const object &unit_, const object &target_);
         void command_suppressive_fire(const object &unit_, const vector3 &target_position_);
 
@@ -270,6 +272,7 @@ namespace intercept {
         void set_unit_combat_mode(const object &unit_, sqf_string_const_ref mode_);
         sqf_return_string unit_combat_mode(const object &unit_);
         std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_);
+        std::vector<rv_unit_trait> get_all_unit_traits(sqf_string_const_ref class_);
         object get_attack_target(const object &unit_);
         std::pair<sqf_return_string, sqf_return_string> vehicle_move_info(const object &vehicle_);
     }  // namespace sqf

@@ -489,6 +489,7 @@ namespace intercept {
         float pixel_w();
 
         void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
+        void set_compass_declination(float angle_);
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3 &pos_);
         void start_loading_screen(sqf_string_const_ref text_);

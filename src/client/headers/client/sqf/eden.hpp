@@ -111,5 +111,10 @@ namespace intercept {
         void set_3den_logic_type(const std::vector<object> &objects_, sqf_string_const_ref class_name_);
         sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_);
 
+        int get_3den_layer(const object &obj_);
+        object get_3den_parent(const object &obj_);
+
+        void ignore_3den_history(const code &code_);
+        bool load_3den_scenario(sqf_string_const_ref scenario_or_world_);
     }  // namespace sqf
 }  // namespace intercept

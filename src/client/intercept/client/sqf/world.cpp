@@ -685,5 +685,13 @@ namespace intercept {
         void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_) {
             host::functions.invoke_raw_unary(__sqf::unary__setterrainheight__array__ret__nothing, {positions_, adjust_objs_});
         }
+
+        rv_hashmap get_mission_options() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmissionoptions__ret__hashmap).to_hashmap();
+        }
+
+        void set_mission_options(const rv_hashmap &options_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setmissionoptions__hashmap__ret__nothing, options_);
+        }
     }  // namespace sqf
 }  // namespace intercept

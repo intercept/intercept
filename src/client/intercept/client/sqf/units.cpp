@@ -389,6 +389,10 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__remotecontrolled__object__ret__object, obj_);
         }
 
+        bool is_remote_controlling(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isremotecontrolling__object__ret__bool, unit_);
+        }
+
         void remote_control(const object &controller_, const object &controlled_) {
             host::functions.invoke_raw_binary(__sqf::binary__remotecontrol__object__object__ret__nothing, controller_, controlled_);
         }
@@ -977,19 +981,19 @@ namespace intercept {
         }
 
         void set_optics_mode(const object &unit_, sqf_string_const_ref mode_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, mode_);
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, mode_);
         }
 
         void set_optics_mode(const object &unit_, int slot_index_, sqf_string_const_ref mode_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_});
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, {slot_index_, mode_});
         }
 
         void set_optics_mode(const object &unit_, float index_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, index_);
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, index_);
         }
 
         void set_optics_mode(const object &unit_, int slot_index_, float mode_index_) {
-            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__array_string__ret__nothing, unit_, {slot_index_, mode_index_});
+            host::functions.invoke_raw_binary(__sqf::binary__setopticsmode__object__string_scalar__ret__nothing, unit_, {slot_index_, mode_index_});
         }
 
         rv_weapons_info weapons_info(const object &unit_, sqf_string_const_ref wpnOrMuzzle_, bool onlyLoaded_) {
@@ -1020,11 +1024,30 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__getcorpse__object__ret__object, holder_);
         }
 
+        std::pair<object, object> get_corpse_weapon_holders(const object &corpse_) {
+            auto ret = host::functions.invoke_raw_unary(__sqf::unary__getcorpseweaponholders__object__ret__array, corpse_);
+            auto& arr = ret.to_array();
+            return std::pair<object, object>(arr[0], arr[1]);
+        }
+
         float inside_building(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__insidebuilding__object__ret__scalar, unit_);
         }
+
         sqf_return_string get_slot_item_name(const object& unit_, slot_item item_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getslotitemname__object__scalar__ret__string, unit_, (int)item_);
+        }
+
+        float get_leaning(const object& unit_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getleaning__object__ret__scalar, unit_);
+        }
+
+        rv_move_info get_unit_moves_info(const object &unit_) {
+            return rv_move_info(host::functions.invoke_raw_unary(__sqf::unary__getunitmovesinfo__object__ret__array, unit_));
+        }
+
+        game_value get_unit_moves_info(const object &unit_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getunitmovesinfo__object__scalar__ret__any, unit_, index_);
         }
     }  // namespace sqf
 }  // namespace intercept

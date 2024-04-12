@@ -128,6 +128,7 @@ namespace intercept {
         script exec_vm(sqf_string_const_ref value_);
         bool script_done(script value_);
         void terminate(script value_);
+        void terminate(float value_);
         void debug_fsm(float value0_, bool value1_);
         void uisleep(float value_);
         sqf_return_string to_lower(sqf_string_const_ref value_);
@@ -135,6 +136,7 @@ namespace intercept {
         void sleep(float value_);
         bool finite(float value_);
         float exec_fsm(sqf_string_const_ref value_);
+        int exec_fsm(sqf_string_const_ref value_, bool allow_termination_);
         void save_profile_namespace();
         bool save_mission_profile_namespace();
         void exit();
@@ -145,6 +147,7 @@ namespace intercept {
         void set_fsm_variable(float handle_, sqf_string_const_ref name_, game_value value_);
         void set_fsm_variable(int fsm_handle_, sqf_string_const_ref variable_, const game_value &value_);
         int exec_fsm(const game_value &arguments_, sqf_string_const_ref file_name_);
+        int exec_fsm(const game_value &arguments_, sqf_string_const_ref file_name_, bool allow_termination_);
         script exec_vm(const game_value &arguments_, sqf_string_const_ref file_name_);
         void exec(const game_value &argument_, sqf_string_const_ref script_);
         sqf_return_string str(game_value data_);

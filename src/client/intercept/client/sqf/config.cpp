@@ -155,12 +155,11 @@ namespace intercept {
         }
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, attribute_);
+            return host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__string_scalar, attribute_);
         }
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_) {
-            return game_value(
-                host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, {attribute_, default_value_}));
+            return game_value(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__string_scalar, {attribute_, default_value_}));
         }
 
         bool is_kind_of(const object &obj_, sqf_string_const_ref type_) {

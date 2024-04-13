@@ -493,8 +493,12 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacenormal__array__ret__array, pos_);
         }
 
-        sqf_return_string surface_type(const vector3 &pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, pos_);
+        sqf_return_string surface_type(const vector2 &pos_, bool accurate_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, { pos_.x, pos_.y, accurate_ });
+        }
+
+        sqf_return_string surface_texture(const vector2 &pos_, bool accurate_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, { pos_.x, pos_.y, accurate_ });
         }
 
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
@@ -625,10 +629,6 @@ namespace intercept {
 
         void set_wind_dir(const vector2 &dir_) {
             host::functions.invoke_raw_unary(__sqf::unary__setwinddir__array__ret__nothing, dir_);
-        }
-
-        sqf_return_string surface_texture(const vector2 &pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, pos_);
         }
 
         rv_ambient_temperature ambient_temperature() {

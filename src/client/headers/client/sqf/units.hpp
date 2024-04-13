@@ -71,12 +71,10 @@ namespace intercept {
         };
 
         void set_user_mfd_value(const object &object_, int index_, float value_);
-        void forget_target(const object &unit_, const object& target_);
-        void forget_target(const group &group_, const object& target_);
-        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
-
+        
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
         object camera_on();
+        object focus_on();
         bool can_unload_in_combat(const object &unit_);
 
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
@@ -90,6 +88,7 @@ namespace intercept {
 
         void action(const object &unit_, const std::vector<game_value> &action_array_);
         void action(const std::vector<game_value> &action_array_);
+        void action_now(const object &unit_, const std::vector<game_value> &action_array_);
 
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
@@ -228,7 +227,9 @@ namespace intercept {
         void switch_action(const object &unit_, sqf_string_const_ref action_);
 
         void switch_gesture(const object &unit_, sqf_string_const_ref anim_);
+        void switch_gesture(const object &unit_, sqf_string_const_ref anim_, float time_, float factor_ = 1.f);
         void switch_move(const object &unit_, sqf_string_const_ref anim_);
+        void switch_move(const object &unit_, sqf_string_const_ref anim_, float time_, float factor_ = 1.f, bool reset_aim_ = true);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
 
         object leader(const object &value_);
@@ -379,5 +380,16 @@ namespace intercept {
         float get_leaning(const object &unit_);
         rv_move_info get_unit_moves_info(const object &unit_);
         game_value get_unit_moves_info(const object &unit_, int index_);
+
+        struct rv_player_target_lock {
+            object target;     // the locked object;
+            config config;     // used weapon's CfgWeapons config;
+            float lock_value;  // in range 0..1 where 1 is fully locked
+            explicit rv_player_target_lock(const game_value &gv_) : target{gv_[0]},
+                                                                    config{gv_[2]},
+                                                                    lock_value{gv_[1]} {}
+        };
+
+        rv_player_target_lock player_target_lock();
     }  // namespace sqf
 }  // namespace intercept

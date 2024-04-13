@@ -8,44 +8,6 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setusermfdvalue__object__array__ret__nothing, object_, {index_, value_});
         }
 
-        void forget_target(const object &unit_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, unit_, target_);
-        }
-
-        void forget_target(const group &group_, const object &target_) {
-            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, group_, target_);
-        }
-
-        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_) {
-            auto_array<game_value> params_right;
-
-            if (enemy_only_.has_value())
-                params_right.push_back(*enemy_only_);
-            else
-                params_right.push_back(game_value());
-            if (max_distance_.has_value())
-                params_right.push_back(*max_distance_);
-            else
-                params_right.push_back(game_value());
-            if (sides_.has_value())
-                params_right.push_back(auto_array<game_value>((*sides_).begin(), (*sides_).end()));
-            else
-                params_right.push_back(game_value());
-            if (max_age_.has_value())
-                params_right.push_back(*max_age_);
-            else
-                params_right.push_back(game_value());
-            if (alternate_center_.has_value()) {
-                if ((*alternate_center_).index() == 0)
-                    params_right.push_back(std::get<0>(*alternate_center_).get());
-                else
-                    params_right.push_back(std::get<1>(*alternate_center_).get());
-            } else
-                params_right.push_back(game_value());
-
-            host::functions.invoke_raw_binary(__sqf::binary__targets__object__array__ret__array, unit_, std::move(params_right));
-        }
-
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_) {
             game_value params_right({uav_,
                                      check_all_items_});
@@ -55,6 +17,11 @@ namespace intercept {
 
         object camera_on() {
             return __helpers::__retrieve_nular_object(__sqf::nular__cameraon__ret__object);
+        }
+
+        object focus_on()
+        {
+            return __helpers::__retrieve_nular_object(__sqf::nular__focuson__ret__object);
         }
 
         bool can_unload_in_combat(const object &unit_) {
@@ -75,6 +42,10 @@ namespace intercept {
 
         void action(const std::vector<game_value> &action_array_) {
             host::functions.invoke_raw_unary(__sqf::unary__action__array__ret__nothing, action_array_);
+        }
+
+        void action_now(const object &unit_, const std::vector<game_value> &action_array_) {
+            host::functions.invoke_raw_binary(__sqf::binary__actionnow__object__array__ret__nothing, unit_, action_array_);
         }
 
         void set_hide_behind(const object &unit_, const object &object_where_hide_, const vector3 &hide_position_) {
@@ -682,8 +653,16 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__switchgesture__object__string__ret__nothing, value0_, value1_);
         }
 
+        void switch_gesture(const object& unit_, sqf_string_const_ref anim_, float time_, float factor_) {
+            host::functions.invoke_raw_binary(__sqf::binary__switchgesture__object__array__ret__nothing, unit_, {anim_, time_, factor_});
+        }
+
         void switch_move(const object &unit_, sqf_string_const_ref anim_) {
             host::functions.invoke_raw_binary(__sqf::binary__switchmove__object__string__ret__nothing, unit_, anim_);
+        }
+
+        void switch_move(const object& unit_, sqf_string_const_ref anim_, float time_, float factor_, bool reset_aim_) {
+            host::functions.invoke_raw_binary(__sqf::binary__switchmove__object__array__ret__nothing, unit_, {anim_, time_, factor_, reset_aim_});
         }
 
         object leader(const object &value_) {
@@ -1048,6 +1027,10 @@ namespace intercept {
 
         game_value get_unit_moves_info(const object &unit_, int index_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getunitmovesinfo__object__scalar__ret__any, unit_, index_);
+        }
+
+        rv_player_target_lock player_target_lock() {
+            return rv_player_target_lock(host::functions.invoke_raw_nular(__sqf::nular__playertargetlock__ret__array));
         }
     }  // namespace sqf
 }  // namespace intercept

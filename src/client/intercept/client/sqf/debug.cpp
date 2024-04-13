@@ -134,6 +134,10 @@ namespace intercept {
             host::functions.invoke_raw_nular(__sqf::nular__diag_resetshapes__ret__nothing);
         }
 
+        void diag_reset_anims() {
+            host::functions.invoke_raw_nular(__sqf::nular__diag_resetanims__ret__nothing);
+        }
+
         void diag_draw_mode(debug_draw_modes mode_) {
             game_value draw_mode;
             switch (mode_) {

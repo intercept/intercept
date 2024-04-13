@@ -682,10 +682,6 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__selectionnames__object__ret__array, object_));
         }
 
-        sqf_return_string_list get_bone_names(const object& object_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getbonenames__object__ret__array, object_));
-        }
-
         sqf_return_string_list selection_names(const object &object_, float lod_res_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, lod_res_));
         }
@@ -716,6 +712,42 @@ namespace intercept {
                     break;
             }
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
+        }
+
+        sqf_return_string_list get_bone_names(const object& object_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getbonenames__object__ret__array, object_));
+        }
+
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, float lod_res_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__getselectionbones__object__array__ret__array, object_, { selection_, lod_res_ }));
+        }
+
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+            case intercept::sqf::rv_selection_lods::Memory:
+                lod_name = "Memory"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::Geometry:
+                lod_name = "Geometry"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::FireGeometry:
+                lod_name = "FireGeometry"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::LandContact:
+                lod_name = "LandContact"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::HitPoints:
+                lod_name = "HitPoints"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::ViewGeometry:
+                lod_name = "ViewGeometry"sv;
+                break;
+            default:
+                lod_name = ""sv;
+                break;
+            }
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__getselectionbones__object__array__ret__array, object_, { selection_, std::move(lod_name) }));
         }
 
         void switch_camera(const object &target_) {

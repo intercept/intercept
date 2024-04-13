@@ -509,6 +509,7 @@ namespace intercept {
         void remove_weapon_global(const object &value0_, sqf_string_const_ref value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__removeweaponglobal__object__string__ret__nothing, value0_, value1_);
         }
+
         void select_weapon(const object &unit_, sqf_string_const_ref muzzle_) {
             host::functions.invoke_raw_binary(__sqf::binary__selectweapon__object__string__ret__nothing, unit_, muzzle_);
         }
@@ -969,6 +970,9 @@ namespace intercept {
         std::vector<rv_throwable> throwables(const object &unit_) {
             return __helpers::__convert_to_vector<rv_throwable>(host::functions.invoke_raw_unary(__sqf::unary__throwables__object__ret__array, unit_));
         }
-        
+
+        bool select_throwable(const object &unit_, sqf_string_const_ref muzzle_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__selectthrowable__object__string__ret__bool, unit_, muzzle_);
+        }
     }  // namespace sqf
 }  // namespace intercept

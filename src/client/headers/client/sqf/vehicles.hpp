@@ -395,9 +395,11 @@ namespace intercept {
         rv_shot_parents get_shot_parents(const object &projectile_);
         bool is_simple_object(const object &object_);
         sqf_return_string_list selection_names(const object &object_);
-        sqf_return_string_list get_bone_names(const object &object_);
         sqf_return_string_list selection_names(const object &object_, float lod_res_);
         sqf_return_string_list selection_names(const object &object_, rv_selection_lods lod_);
+        sqf_return_string_list get_bone_names(const object &object_);
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, float lod_res_);
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, rv_selection_lods lod_);
         void switch_camera(const object &target_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, float speed_);

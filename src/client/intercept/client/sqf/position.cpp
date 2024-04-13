@@ -210,17 +210,25 @@ namespace intercept {
         void set_velocity(const object &obj_, const vector3 &vel_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvelocity__object__array__ret__nothing, obj_, vel_);
         }
-        void set_angular_velocity(const object &obj_, const vector3 &vel_)
-        {
+
+        void set_angular_velocity(const object &obj_, const vector3 &vel_) {
             host::functions.invoke_raw_binary(__sqf::binary__setangularvelocity__object__array__ret__nothing, obj_, vel_);
         }
+
+        void set_angular_velocity_model_space(const object &obj_, const vector3 &vel_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setangularvelocitymodelspace__object__array__ret__nothing, obj_, vel_);
+        }
+
         vector3 velocity(const object &obj_) {
             return host::functions.invoke_raw_unary(__sqf::unary__velocity__object__ret__array, obj_);
         }
 
-        vector3 angular_velocity(const object &obj_)
-        {
+        vector3 angular_velocity(const object &obj_) {
             return host::functions.invoke_raw_unary(__sqf::unary__angularvelocity__object__ret__array, obj_);
+        }
+
+        vector3 angular_velocity_model_space(const object &obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__angularvelocitymodelspace__object__ret__array, obj_);
         }
 
         float direction(const object &value_) {

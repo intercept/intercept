@@ -658,5 +658,6 @@ namespace intercept {
 
         bool is_throwable(sqf_string_const_ref class_);
         std::vector<rv_throwable> throwables(const object &unit_);
+        bool select_throwable(const object& unit_, sqf_string_const_ref muzzle_);
     }  // namespace sqf
 }  // namespace intercept

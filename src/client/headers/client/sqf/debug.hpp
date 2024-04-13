@@ -81,6 +81,7 @@ namespace intercept {
         auto_array<game_value> diag_dump_terrain_synth();
         void diag_reset_fsm();
         void diag_reset_shapes();
+        void diag_reset_anims();
         void diag_draw_mode(debug_draw_modes mode_); //diag-exe only
         vector2 diag_get_terrain_segment_offset(const vector2 &pos_);
         void diag_light_new_load(sqf_string_const_ref path_);

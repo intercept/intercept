@@ -390,6 +390,10 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__namespace__array__ret__any, namespace_, {var_name_, std::move(default_value_)});
         }
 
+        game_value get_variable(const display& display_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, var_name_);
+        }
+
         game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, {var_name_, std::move(default_value_)});
         }
@@ -440,6 +444,18 @@ namespace intercept {
 
         game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, {var_name_, std::move(default_value_)});
+        }
+
+        bool is_nil(const rv_namespace &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__namespace__string__ret__bool, namespace_, var_name_);
+        }
+
+        bool is_nil(const group &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__group__string__ret__bool, namespace_, var_name_);
+        }
+
+        bool is_nil(const object &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__object__string__ret__bool, namespace_, var_name_);
         }
 
         bool is_null(const object &value_) {

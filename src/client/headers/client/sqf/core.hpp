@@ -167,6 +167,7 @@ namespace intercept {
 
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
         game_value get_variable(const rv_namespace &namespace_, sqf_string_const_ref var_name_, game_value default_value_);
+        game_value get_variable(const display &display_, sqf_string_const_ref var_name_);
         game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const object &obj_, sqf_string_const_ref var_name_);
         game_value get_variable(const object &obj_, sqf_string_const_ref var_name_, game_value default_value_);
@@ -180,6 +181,16 @@ namespace intercept {
         game_value get_variable(const control &control_, sqf_string_const_ref var_name_, game_value default_value_);
         game_value get_variable(const location &loc_, sqf_string_const_ref var_name_);
         game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_);
+
+        bool is_nil(const rv_namespace &namespace_, sqf_string_const_ref var_name_);
+        bool is_nil(const object &obj_, sqf_string_const_ref var_name_);
+        bool is_nil(const group &group_, sqf_string_const_ref var_name_);
+
+        bool is_nil(const display &display_, sqf_string_const_ref var_name_);
+        bool is_nil(const team_member &team_member_, sqf_string_const_ref var_name_);
+        bool is_nil(const task &task_, sqf_string_const_ref var_name_);
+        bool is_nil(const control &control_, sqf_string_const_ref var_name_);
+        bool is_nil(const location &loc_, sqf_string_const_ref var_name_);
 
         bool is_null(const object &value_);
         bool is_null(const control &value_);

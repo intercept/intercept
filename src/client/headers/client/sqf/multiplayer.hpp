@@ -18,36 +18,33 @@ using namespace intercept::types;
 namespace intercept {
     namespace sqf {
         struct rv_user_info {
-            sqf_string network_id;           //networkId : String - user network id (see getPlayerID, allUsers)
-            float owner;                     //owner : Number - user owner (see owner)
-            sqf_string player_uid;           //playerUID : String - player UID (see getPlayerUID)
-            sqf_string name;                 //soldierName : String - player name (see profileName)
-            sqf_string name_inc_squad;       //soldierNameInclSquad : String - player name including squad (see name, squadParams)
-            sqf_string steam_profile_name;   //steamProfileName : String steam profile name (see profileNameSteam)
-            sqf_string client_state_number;  //clientStateNumber : String user client state (see getClientStateNumber)
-            bool is_headless;                //isHeadless : Boolean - whether or not this is a headless client (see hasInterface, isServer)
-            float admin_state;               //adminState : Number - admin status of the user (see admin)
-            float avg_ping;                  //[avgPing, avgBandwidth, desync] : Array of Numbers - user ping, bandwidth and desync info
-            float avg_bandwidth;
-            float desync;
-            object player_object;  //playerObject : Object - user player entity (see player, selectPlayer)
-            explicit rv_user_info(const game_value& gv_)
-                : network_id(gv_[0]),
-                  owner(gv_[1]),
-                  player_uid(gv_[2]),
-                  name(gv_[3]),
-                  name_inc_squad(gv_[4]),
-                  steam_profile_name(gv_[5]),
-                  client_state_number(gv_[6]),
-                  is_headless(gv_[7]),
-                  admin_state(gv_[8]),
-                  avg_ping(gv_[9][0]),
-                  avg_bandwidth(gv_[9][1]),
-                  desync(gv_[9][2]),
-                  player_object(gv_[10])
-            {}
+            sqf_string player_id;           // 0 - user DirectPlay ID (see getPlayerID, PlayerConnected);
+            sqf_string player_uid;          // 2 - player UID (see getPlayerUID);
+            sqf_string soldier_name;        // 3 - player name (see profileName);
+            sqf_string display_name;        // 4 - player name including squad (see name, squadParams);
+            sqf_string steam_profile_name;  // 5 - steam profile name (see profileNameSteam);
+            object player_object;           // 10 - user player entity (see player, selectPlayer);
+            float owner;                    // 1 - user owner (see owner);
+            float client_state;             // 6 -  : String user client state (see getClientStateNumber);
+            float admin_state;              // 8 - admin status of the user (see admin);
+            float avg_ping;                 // 9 - 0
+            float avg_bandwidth;            // 9 - 1
+            float desync;                   // 9 - 2
+            bool is_headless;               // 7 - whether or not this is a headless client (see hasInterface, isServer)
+            explicit rv_user_info(const game_value &gv_) : player_id{gv_[0]},
+                                                           player_uid{gv_[2]},
+                                                           soldier_name{gv_[3]},
+                                                           display_name{gv_[4]},
+                                                           steam_profile_name{gv_[5]},
+                                                           player_object{gv_[10]},
+                                                           owner{gv_[1]},
+                                                           client_state{gv_[6]},
+                                                           admin_state{gv_[8]},
+                                                           avg_ping{gv_[9][0]},
+                                                           avg_bandwidth{gv_[9][1]},
+                                                           desync{gv_[9][2]},
+                                                           is_headless{gv_[7]} {}
         };
-
 
         game_value remote_exec(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_);
         game_value remote_exec(sqf_string_const_ref function_name_, std::variant<int, object, side, group, sqf_string_const_ref_wrapper> target_, sqf_string_const_ref jip_id_);
@@ -114,5 +111,6 @@ namespace intercept {
         sqf_return_string_list all_users();
 
         rv_user_info get_user_info(sqf_string_const_ref id_);
+        game_value get_user_info(sqf_string_const_ref id_, int index_);
     }  // namespace sqf
 }  // namespace intercept

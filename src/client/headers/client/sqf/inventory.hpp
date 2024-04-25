@@ -142,6 +142,18 @@ namespace intercept {
             }
         };
 
+        struct rv_throwable {
+            sqf_string magazine_name;
+            sqf_string muzzle_name;
+            float world_id;
+            float creator_id;
+            explicit rv_throwable(const game_value &gv_) : magazine_name{gv_[0]},
+                                                           muzzle_name{gv_[1]},
+                                                           world_id{gv_[2][0]},
+                                                           creator_id{gv_[2][1]} {}
+        };
+
+
         /* potential namespace: items, inventory, campaign */
         void add_item_pool(sqf_string_const_ref item_name_, int item_count_);
         void add_magazine_pool(sqf_string_const_ref mag_name_, int mag_count_);
@@ -266,12 +278,6 @@ namespace intercept {
         void unassign_item(const object &value0_, sqf_string_const_ref value1_);
         void unlink_item(const object &value0_, sqf_string_const_ref value1_);
         sqf_return_string_list items(const object &unit_);
-
-        struct rv_throwable {
-            std::string magazine_class_name;
-            std::string muzzle_class_name;
-            std::vector<float> ids;
-        };
 
         rv_throwable current_throwable(const object &unit_);
 
@@ -649,6 +655,9 @@ namespace intercept {
 
         rv_hashmap unique_unit_items(const object &unit_);
         rv_hashmap unique_unit_items_filtered(const object &unit_, int weapons_items_ = 2, int uniform_items_ = 2, int vest_items = 2, int backpack_items_ = 2, int assigned_items_ = 2);
-        
+
+        bool is_throwable(sqf_string_const_ref class_);
+        std::vector<rv_throwable> throwables(const object &unit_);
+        bool select_throwable(const object& unit_, sqf_string_const_ref muzzle_);
     }  // namespace sqf
 }  // namespace intercept

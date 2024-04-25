@@ -49,13 +49,32 @@ namespace intercept {
 
         };
 
-        void set_user_mfd_value(const object &object_, int index_, float value_);
-        void forget_target(const object &unit_, const object& target_);
-        void forget_target(const group &group_, const object& target_);
-        void targets(const object &unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_);
+        struct rv_move_info {
+            float move_progress;     // 0 -  - move progress in range 0-1;
+            float move_time;         // 1 -  - move elapsed time (move progress * move duration);
+            float move_duration;     // 2 -  - move duration;
+            float move_factor;       // 3 -  - move blend factor;
+            vector3 rtm_step;        // 4 -  - rtm step (how many meters the unit will move after finishing the animation);
+            float gesture_progress;  // 5 -  - gesture progress in range 0-1;
+            float gesture_time;      // 6 -  - gesture elapsed time (gesture progress * gesture duration);
+            float gesture_duration;  // 7 -  - gesture duration;
+            float gesture_factor;    // 8 -  - gesture blend factor
+            explicit rv_move_info(const game_value &gv_) : move_progress{gv_[0]},
+                                                           move_time{gv_[1]},
+                                                           move_duration{gv_[2]},
+                                                           move_factor{gv_[3]},
+                                                           rtm_step{gv_[4]},
+                                                           gesture_progress{gv_[5]},
+                                                           gesture_time{gv_[6]},
+                                                           gesture_duration{gv_[7]},
+                                                           gesture_factor{gv_[8]} {}
+        };
 
+        void set_user_mfd_value(const object &object_, int index_, float value_);
+        
         bool is_uav_connectable(const object &unit_, const object &uav_, bool check_all_items_);
         object camera_on();
+        object focus_on();
         bool can_unload_in_combat(const object &unit_);
 
         void ais_finish_heal(const object &wounded_, const object &medic_, bool medic_can_heal_);
@@ -69,6 +88,7 @@ namespace intercept {
 
         void action(const object &unit_, const std::vector<game_value> &action_array_);
         void action(const std::vector<game_value> &action_array_);
+        void action_now(const object &unit_, const std::vector<game_value> &action_array_);
 
         void create_unit(sqf_string_const_ref type_, const vector3 &pos_, const group &group_, sqf_string_const_ref init_ = "", float skill_ = 0.5f, sqf_string_const_ref rank_ = "PRIVATE");
         object create_unit(const group &group_, sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
@@ -135,6 +155,7 @@ namespace intercept {
         void move_in_turret(const object &unit_, const object &vehicle_, rv_turret_path turret_path_);
 
         object remote_controlled(const object &obj_);
+        bool is_remote_controlling(const object &unit_);
         void remote_control(const object &controller_, const object &controlled_);
         rv_vehicle_role assigned_vehicle_role(const object &unit_);
         group get_group(const object &unit_);  // originally "group", but is already a type
@@ -206,7 +227,9 @@ namespace intercept {
         void switch_action(const object &unit_, sqf_string_const_ref action_);
 
         void switch_gesture(const object &unit_, sqf_string_const_ref anim_);
+        void switch_gesture(const object &unit_, sqf_string_const_ref anim_, float time_, float factor_ = 1.f);
         void switch_move(const object &unit_, sqf_string_const_ref anim_);
+        void switch_move(const object &unit_, sqf_string_const_ref anim_, float time_, float factor_ = 1.f, bool reset_aim_ = true);
         void use_audio_time_for_moves(const object &value0_, bool value1_);
 
         object leader(const object &value_);
@@ -332,6 +355,8 @@ namespace intercept {
         sqf_return_string_list compatible_items(sqf_string_const_ref weapon_, sqf_string_const_ref slot_);
 
         object get_corpse(const object &holder_);
+        // returns primary and secondary weapon holders
+        std::pair<object, object> get_corpse_weapon_holders(const object &corpse_);
 
         float inside_building(const object &unit_);
 
@@ -352,5 +377,19 @@ namespace intercept {
 
         sqf_return_string get_slot_item_name(const object &unit_, slot_item item_);
 
+        float get_leaning(const object &unit_);
+        rv_move_info get_unit_moves_info(const object &unit_);
+        game_value get_unit_moves_info(const object &unit_, int index_);
+
+        struct rv_player_target_lock {
+            object target;     // the locked object;
+            config config;     // used weapon's CfgWeapons config;
+            float lock_value;  // in range 0..1 where 1 is fully locked
+            explicit rv_player_target_lock(const game_value &gv_) : target{gv_[0]},
+                                                                    config{gv_[2]},
+                                                                    lock_value{gv_[1]} {}
+        };
+
+        rv_player_target_lock player_target_lock();
     }  // namespace sqf
 }  // namespace intercept

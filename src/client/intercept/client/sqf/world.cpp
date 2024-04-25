@@ -493,8 +493,12 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__surfacenormal__array__ret__array, pos_);
         }
 
-        sqf_return_string surface_type(const vector3 &pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, pos_);
+        sqf_return_string surface_type(const vector2 &pos_, bool accurate_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetype__array__ret__string, { pos_.x, pos_.y, accurate_ });
+        }
+
+        sqf_return_string surface_texture(const vector2 &pos_, bool accurate_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, { pos_.x, pos_.y, accurate_ });
         }
 
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_) {
@@ -627,10 +631,6 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__setwinddir__array__ret__nothing, dir_);
         }
 
-        sqf_return_string surface_texture(const vector2 &pos_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__surfacetexture__array__ret__string, pos_);
-        }
-
         rv_ambient_temperature ambient_temperature() {
             return rv_ambient_temperature(host::functions.invoke_raw_nular(__sqf::nular__ambienttemperature__ret__array));
         }
@@ -684,6 +684,14 @@ namespace intercept {
 
         void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_) {
             host::functions.invoke_raw_unary(__sqf::unary__setterrainheight__array__ret__nothing, {positions_, adjust_objs_});
+        }
+
+        rv_hashmap get_mission_options() {
+            return host::functions.invoke_raw_nular(__sqf::nular__getmissionoptions__ret__hashmap).to_hashmap();
+        }
+
+        void set_mission_options(const rv_hashmap &options_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setmissionoptions__hashmap__ret__nothing, options_);
         }
     }  // namespace sqf
 }  // namespace intercept

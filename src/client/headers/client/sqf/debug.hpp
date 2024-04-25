@@ -81,6 +81,7 @@ namespace intercept {
         auto_array<game_value> diag_dump_terrain_synth();
         void diag_reset_fsm();
         void diag_reset_shapes();
+        void diag_reset_anims();
         void diag_draw_mode(debug_draw_modes mode_); //diag-exe only
         vector2 diag_get_terrain_segment_offset(const vector2 &pos_);
         void diag_light_new_load(sqf_string_const_ref path_);
@@ -89,5 +90,7 @@ namespace intercept {
         void diag_merge_config_file(sqf_string_const_ref path_, bool is_user_path_ = false);
         void diag_set_light_new(sqf_string_const_ref str_config_);
         void diag_toggle(debug_toggles mode_);
+        auto_array<game_value> diag_remains_collector(float value_);
+        void diag_sqfc_debug_dump(sqf_string_const_ref source_, sqf_string_const_ref target_);
     }  // namespace sqf
 }  // namespace intercept

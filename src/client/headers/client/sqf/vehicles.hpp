@@ -149,6 +149,88 @@ namespace intercept {
             explicit rv_collision_status(const game_value &gv_) : obj(gv_[0]), mutual(gv_[1]) {}
         };
 
+        struct rv_entity_info {
+            object last_entity_causing_damage;  // 4 - objNull or the entity that last caused damage to this entity. Is not the same as the killer but could be the same. Killed entity might not have this set either. The entity does not have to be dead in order to have last entity that caused damage assigned.;
+            float dead_set_time;                // 3 - for how long the entity was dead;
+            float last_damage_time;             // 5 - how long ago was lastEntityCausingDamage assigned;
+            float upside_down_time;             // 7 - how long the entity was upside down.;
+            bool is_man;                        // 0 - true if the entity is a man;
+            bool is_animal;                     // 1 - true if the entity is an animal;
+            bool is_dead_set;                   // 2 - true if the entity has dead flag set. Often has the same value as !alive, but is not the same, as alive checks the total damage.;
+            bool is_upside_down;                // 6 - true if the entity is upside down. The engine considers this to be vectorUp ent select 2 < 0.3;
+            bool is_stopped;                    // 8 - true when the entity does not need to be actively simulated.;
+            bool can_float;                     // 9 - true if the entity is able to float on water.;
+            bool has_terminal_opened;           // 10 - true if the UAV terminal is opened for the given entity.;
+            bool is_weaponholder;               // 11 - true if the entity is weaponholder.;
+            bool is_wreck;                      // 12 - true if the entity is wreck.;
+            bool is_smoking;                    // 13 - true if the entity has smoke and fire destruction effect active.
+            explicit rv_entity_info(const game_value &gv_)
+                : last_entity_causing_damage{gv_[4]},
+                  dead_set_time{gv_[3]},
+                  last_damage_time{gv_[5]},
+                  upside_down_time{gv_[7]},
+                  is_man{gv_[0]},
+                  is_animal{gv_[1]},
+                  is_dead_set{gv_[2]},
+                  is_upside_down{gv_[6]},
+                  is_stopped{gv_[8]},
+                  can_float{gv_[9]},
+                  has_terminal_opened{gv_[10]},
+                  is_weaponholder{gv_[11]},
+                  is_wreck{gv_[12]},
+                  is_smoking{gv_[13]} {}
+        };
+
+        struct rv_vehicle_respawn_info {
+            object respawn_unit;             // 5 - pilot/driver unit that will be placed into the new vehicle.;
+            side respawn_side;               // 7 - what side markers to use for respawn. For example if 'respawnSide' set to east the markers with names 'respawn_vehicle_eastXXX' and 'respawn_eastXXX' will be used.;
+            sqf_string respawn_marker_name;  // 11 - Chosen vehicle respawn marker, when vehicle respawns it will use the marker params. The respawn marker is processed instantly uppon vehicle's death.;
+            float respawn_delay;             // 0 - how long the vehicle will be in respawn queue after death. -1 - 'missionRespawnDelay' value is used.;
+            float respawn_count;             // 1 - how many times left for the vehicle to respawn. -1 - indefinite, 0 - no more respawns;
+            float respawn_mode;              // 6 - individual respawn mode for this vehicle. Any mode other than 2,3 or -1 means disabled respawn. -1 - use 'missionRespawnMode';
+            float respawn_time_remaining;    // 12 - how long left before the respawn. -1 after vehicle has respawned or has respawn disabled.;
+            float mission_respawn_delay;     // 13 - global mission vehicle respawn delay. script command > mission param > 3DEN param;
+            float mission_respawn_mode;      // 14 - global mission vehicle respawn mode. script command > mission param > 3DEN param;
+            bool delete_old_wreck;           // 2 - if true then the old wreck will be deleted when vehicle respawns.;
+            bool respawn_on_server;          // 3 - if true the wreck will be transfered to the server and vehicle will respawn on server.;
+            bool respawn_flying;             // 4 - if true vehicle will not be forced to the ground and if can fly and has pilot will be spawned flying.;
+            bool use_respawn_marker_dir;     // 8 - align respawned vehicle with respawn marker direction or with wreck direction if no marker found or "INSTANT" mode is used. Otherwise, direction is random.;
+            bool can_respawn;                // 9 - true if vehicle is respawnable (all conditions for respawn are ok);
+            bool is_respawning;              // 10 - true if vehicle is currently in the respawn queue awaiting respawn.
+            explicit rv_vehicle_respawn_info(const game_value &gv_) : respawn_unit{gv_[5]},
+                                                                      respawn_side{gv_[7]},
+                                                                      respawn_marker_name{gv_[11]},
+                                                                      respawn_delay{gv_[0]},
+                                                                      respawn_count{gv_[1]},
+                                                                      respawn_mode{gv_[6]},
+                                                                      respawn_time_remaining{gv_[12]},
+                                                                      mission_respawn_delay{gv_[13]},
+                                                                      mission_respawn_mode{gv_[14]},
+                                                                      delete_old_wreck{gv_[2]},
+                                                                      respawn_on_server{gv_[3]},
+                                                                      respawn_flying{gv_[4]},
+                                                                      use_respawn_marker_dir{gv_[8]},
+                                                                      can_respawn{gv_[9]},
+                                                                      is_respawning{gv_[10]} {}
+        };
+
+        struct rv_shot_info {
+            float effective_time_to_live;   // 0 - how much more shot has to live.;
+            float fuse_distance_left;       // 1 - how long shot has to travel more to get fused (undebarrel grenade for example).;
+            float time_to_explosion;        // 2 - how long before shot fuse explodes (hand grenade for example).;
+            bool trigger_is_forced;         // 3 - true if shot ammo was triggered with triggerAmmo.;
+            bool shown_tracer;              // 4 - true if the shot shown as tracer.;
+            bool is_real;                   // 5 - true if the shot is considered in damage events.;
+            bool is_submunition_triggered;  // 6 - true if the shot contains submunition and it is triggered.
+            explicit rv_shot_info(const game_value &gv_) : effective_time_to_live{gv_[0]},
+                                                           fuse_distance_left{gv_[1]},
+                                                           time_to_explosion{gv_[2]},
+                                                           trigger_is_forced{gv_[3]},
+                                                           shown_tracer{gv_[4]},
+                                                           is_real{gv_[5]},
+                                                           is_submunition_triggered{gv_[6]} {}
+        };
+
         int airplane_throttle(const object &airplane_);
         sqf_return_string_list get_pylon_magazines(const object &vehicle_);
         sqf_return_string get_forced_flag_texture(const object &flag_pole_);
@@ -202,6 +284,7 @@ namespace intercept {
         object create_vehicle(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         object create_vehicle_local(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_, float placement_ = 0.0f, sqf_string_const_ref special_ = "NONE");
         void delete_vehicle(const object &obj_);
+        void delete_vehicle(const std::vector<object> &obj_);
         std::vector<rv_turret_path> all_turrets(const object &vehicle_, bool person_turrets_);
 
         std::vector<rv_turret_path> all_turrets(const object &vehicle_);
@@ -314,6 +397,9 @@ namespace intercept {
         sqf_return_string_list selection_names(const object &object_);
         sqf_return_string_list selection_names(const object &object_, float lod_res_);
         sqf_return_string_list selection_names(const object &object_, rv_selection_lods lod_);
+        sqf_return_string_list get_bone_names(const object &object_);
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, float lod_res_);
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, rv_selection_lods lod_);
         void switch_camera(const object &target_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, bool speed_);
         void animate_source(const object &object_, sqf_string_const_ref source_, float phase_, float speed_);
@@ -322,13 +408,13 @@ namespace intercept {
         void disable_collision_with(const object &object1_, const object &object2_);
         void enable_collision_with(const object &object1_, const object &object2_);
         void hide_selection(const object &object_, sqf_string_const_ref selection_, bool hide_);
-        void lock_camera_to(const object &vehicle_, const object &target_, rv_turret_path turret_path_);
-        object locked_camera_to(const object &vehicle_, rv_turret_path turret_path_);
+        void lock_camera_to(const object &vehicle_, const object &target_, const rv_turret_path &turret_path_);
+        game_value locked_camera_to(const object &vehicle_, const rv_turret_path &turret_path_);
         void lock_cargo(const object &vehicle_, int index_, bool lock_);
-        bool locked_turret(const object &vehicle_, rv_turret_path turret_path_);
-        void lock_turret(const object &vehicle_, rv_turret_path turret_path_, bool lock_);
+        bool locked_turret(const object &vehicle_, const rv_turret_path &turret_path_);
+        void lock_turret(const object &vehicle_, const rv_turret_path &turret_path_, bool lock_);
         void respawn_vehicle(const object &vehicle_, float delay_, int count_);
-        void select_weapon_turret(const object &, sqf_string_const_ref weapon_, rv_turret_path turret_path_);
+        void select_weapon_turret(const object &, sqf_string_const_ref weapon_, const rv_turret_path &turret_path_);
         void set_center_of_mass(const object &object_, const vector3 &offset_, float time_ = 0.f);
         enum class feature_type {
             disabled = 0,                 ///< Feature disabled
@@ -352,8 +438,8 @@ namespace intercept {
         float weapon_reloading_time(const object &vehicle_, const object &gunner_, sqf_string_const_ref muzzle_name_);
         void synchronize_objects_add(const object &unit_, const std::vector<object> &objects_);
         void synchronize_objects_remove(const object &unit_, const std::vector<object> &objects_);
-        object turret_unit(const object &vehicle_, rv_turret_path turret_path_);
-        sqf_return_string_list weapons_turret(const object &vehicle_, rv_turret_path turret_path_);
+        object turret_unit(const object &vehicle_, const rv_turret_path &turret_path_);
+        sqf_return_string_list weapons_turret(const object &vehicle_, const rv_turret_path &turret_path_);
         float flag_animation_phase(const object &flag_);
         object create_mine(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
 
@@ -491,5 +577,22 @@ namespace intercept {
 
         rv_turret_limits get_turret_limits(const object &veh_, const rv_turret_path &turret_);
         void set_turret_limits(const object &veh_, const rv_turret_path &turret_, float min_turn_, float max_turn_, float min_elev_, float max_elev_);
+        bool force_hitpoints_damage_sync(const object &entity_);
+
+        rv_entity_info get_entity_info(const object &obj_);
+        game_value get_entity_info(const object &obj_, int index_);
+        rv_shot_info get_shot_info(const object &obj_);
+        game_value get_shot_info(const object &obj_, int index_);
+
+        float get_fuel_consumption_coef(const object &veh_);
+        void set_fuel_consumption_coef(const object &veh_, float value_);
+
+        rv_vehicle_respawn_info get_vehicle_respawn_info(const object &veh_);
+        game_value get_vehicle_respawn_info(const object &veh_, int index_);
+
+        float get_water_fill_percentage(const object &veh_);
+        void set_water_fill_percentage(const object &veh_, float value_);
+        float get_water_leakiness(const object &veh_);
+        void set_water_leakiness(const object &veh_, float value_);
     }  // namespace sqf
 }  // namespace intercept

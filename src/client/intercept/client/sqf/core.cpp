@@ -241,6 +241,11 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__execfsm__any__string__ret__scalar, arguments_, file_name_);
         }
 
+        int exec_fsm(const game_value& arguments_, sqf_string_const_ref file_name_, bool allow_termination_)
+        {
+            return host::functions.invoke_raw_binary(__sqf::binary__execfsm__any__string__ret__scalar, arguments_, { file_name_, allow_termination_ });
+        }
+
         script exec_vm(const game_value &arguments_, sqf_string_const_ref file_name_) {
             return host::functions.invoke_raw_binary(__sqf::binary__execvm__any__string__ret__script, arguments_, file_name_);
         }
@@ -255,6 +260,9 @@ namespace intercept {
 
         void terminate(script value_) {
             host::functions.invoke_raw_unary(__sqf::unary__terminate__script__ret__nothing, value_);
+        }
+        void terminate(float value_) {
+            host::functions.invoke_raw_unary(__sqf::unary__lognetworkterminate__scalar__ret__nothing, value_);
         }
         void debug_fsm(float value0_, bool value1_) {
             host::functions.invoke_raw_binary(__sqf::binary__debugfsm__scalar__bool__ret__nothing, value0_, value1_);
@@ -282,6 +290,11 @@ namespace intercept {
 
         float exec_fsm(sqf_string_const_ref value_) {
             return __helpers::__number_unary_string(__sqf::unary__execfsm__string__ret__scalar, value_);
+        }
+
+        int exec_fsm(sqf_string_const_ref value_, bool allow_termination_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__execfsm__string__ret__scalar, { value_, allow_termination_ });
         }
 
         void exit() {
@@ -377,6 +390,10 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__namespace__array__ret__any, namespace_, {var_name_, std::move(default_value_)});
         }
 
+        game_value get_variable(const display& display_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, var_name_);
+        }
+
         game_value get_variable(const display &display_, sqf_string_const_ref var_name_, game_value default_value_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__display__string_array__ret__any, display_, {var_name_, std::move(default_value_)});
         }
@@ -427,6 +444,18 @@ namespace intercept {
 
         game_value get_variable(const location &location_, sqf_string_const_ref var_name_, game_value default_value_) {
             return host::functions.invoke_raw_binary(__sqf::binary__getvariable__location__array__ret__any, location_, {var_name_, std::move(default_value_)});
+        }
+
+        bool is_nil(const rv_namespace &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__namespace__string__ret__bool, namespace_, var_name_);
+        }
+
+        bool is_nil(const group &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__group__string__ret__bool, namespace_, var_name_);
+        }
+
+        bool is_nil(const object &namespace_, sqf_string_const_ref var_name_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__isnil__object__string__ret__bool, namespace_, var_name_);
         }
 
         bool is_null(const object &value_) {
@@ -973,7 +1002,7 @@ namespace intercept {
         }
 
         rv_event_handler_info get_event_handler_info(const object &obj_, sqf_string_const_ref event_, int id_) {
-            return rv_event_handler_info(host::functions.invoke_raw_binary(__sqf::binary__geteventhandlerinfo__object_group__array__ret__array, obj_, {event_, id_}));
+            return rv_event_handler_info(host::functions.invoke_raw_binary(__sqf::binary__geteventhandlerinfo__control_object__array__ret__array, obj_, {event_, id_}));
         }
 
         rv_event_handler_info get_event_handler_info(sqf_string_const_ref event_, int id_) {
@@ -1098,7 +1127,7 @@ namespace intercept {
         }
 
         sqf_return_string hash_value(const game_value &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__object_side__ret__string, value_);
+            return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__nan_scalar__ret__string, value_);
         }
 
         bool is_mission_profile_namespace_loaded() {

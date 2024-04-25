@@ -116,56 +116,56 @@ namespace intercept {
         control ctrl_create(const display &display_, sqf_string_const_ref class_, int idc_);
         control ctrl_create(const display &display_, sqf_string_const_ref class_, int idc_, const control &controls_group_);
 
-        bool ctrl_auto_scroll_rewind(const control &value_);
-        bool ctrl_checked(const control &value_);
+        bool ctrl_auto_scroll_rewind(const control &ctrl_);
+        bool ctrl_checked(const control &ctrl_);
         bool ctrl_checked(const control &control_, int index_);
-        bool ctrl_committed(const control &value_);
-        bool ctrl_delete(const control &value_);
-        bool ctrl_enabled(const control &value_);
+        bool ctrl_committed(const control &ctrl_);
+        bool ctrl_delete(const control &ctrl_);
+        bool ctrl_enabled(const control &ctrl_);
         bool ctrl_enabled(float value_);
-        bool ctrl_htmlloaded(const control &value_);
-        bool ctrl_map_anim_done(const control &value_);
-        bool ctrl_shown(const control &value_);
+        bool ctrl_htmlloaded(const control &ctrl_);
+        bool ctrl_map_anim_done(const control &ctrl_);
+        bool ctrl_shown(const control &ctrl_);
         bool ctrl_visible(float value_);
-        void ctrl_commit(const control &value0_, float value1_);
+        void ctrl_commit(const control &ctrl0_, float value1_);
         void ctrl_enable(int control_id_, bool enable_);
         void ctrl_enable(const control &control_, bool enable_);
         void ctrl_set_disabled_color(const control &control_, const rv_color &color_);
-        void ctrl_set_fade(const control &value0_, float value1_);
-        void ctrl_set_font(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h1(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h1b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h2(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h2b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h3(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h3b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h4(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h4b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h5(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h5b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h6(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_h6b(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_height(const control &value0_, float value1_);
-        void ctrl_set_font_height_h1(const control &value0_, float value1_);
-        void ctrl_set_font_height_h2(const control &value0_, float value1_);
-        void ctrl_set_font_height_h3(const control &value0_, float value1_);
-        void ctrl_set_font_height_h4(const control &value0_, float value1_);
-        void ctrl_set_font_height_h5(const control &value0_, float value1_);
-        void ctrl_set_font_height_h6(const control &value0_, float value1_);
-        void ctrl_set_font_height_secondary(const control &value0_, float value1_);
-        void ctrl_set_font_p(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_p(const control &value0_, float value1_);
-        void ctrl_set_font_pb(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_font_secondary(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_model(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_model_scale(const control &value0_, float value1_);
-        void ctrl_set_scale(const control &value0_, float value1_);
-        void ctrl_set_structured_text(const control &value0_, const rv_text &value1_);
-        void ctrl_set_text(const control &value0_, sqf_string_const_ref value1_);
+        void ctrl_set_fade(const control &ctrl0_, float value1_);
+        void ctrl_set_font(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h1(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h1b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h2(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h2b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h3(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h3b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h4(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h4b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h5(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h5b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h6(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_h6b(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_height(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h1(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h2(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h3(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h4(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h5(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_h6(const control &ctrl0_, float value1_);
+        void ctrl_set_font_height_secondary(const control &ctrl0_, float value1_);
+        void ctrl_set_font_p(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_p(const control &ctrl0_, float value1_);
+        void ctrl_set_font_pb(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_font_secondary(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_model(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_model_scale(const control &ctrl0_, float value1_);
+        void ctrl_set_scale(const control &ctrl0_, float value1_);
+        void ctrl_set_structured_text(const control &ctrl0_, const rv_text &value1_);
+        void ctrl_set_text(const control &ctrl0_, sqf_string_const_ref value1_);
         void ctrl_set_text(int control_id_, sqf_string_const_ref text_);
-        void ctrl_set_text_secondary(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_set_tooltip(const control &value0_, sqf_string_const_ref value1_);
-        void ctrl_show(const control &value0_, bool value1_);
+        void ctrl_set_text_secondary(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_set_tooltip(const control &ctrl0_, sqf_string_const_ref value1_);
+        void ctrl_show(const control &ctrl0_, bool value1_);
         void ctrl_show(int control_id_, bool show_);
         void ctrl_set_foreground_color(const control &ctrl_, const rv_color &color_);
         void ctrl_set_model_dir_and_up(const control &ctrl_, const vector3 &dir_, const vector3 &up_);
@@ -174,35 +174,36 @@ namespace intercept {
         void ctrl_set_tooltip_color_shade(const control &ctrl_, const rv_color &color_);
         void ctrl_set_tooltip_color_text(const control &ctrl_, const rv_color &color_);
         float ctrl_set_tooltip_max_width(const control &ctrl_, float width_);
-        void ctrl_activate(const control &value_);
-        void ctrl_map_anim_clear(const control &value_);
-        void ctrl_map_anim_commit(const control &value_);
+        void ctrl_activate(const control &ctrl_);
+        void ctrl_activate(const control &ctrl_, bool full_);
+        void ctrl_map_anim_clear(const control &ctrl_);
+        void ctrl_map_anim_commit(const control &ctrl_);
         void ctrl_map_cursor(const control &ctrl_, sqf_string_const_ref default_cursor_, sqf_string_const_ref new_cursor_);
         void ctrl_set_active_color(const control &ctrl_, const rv_color &color_);
-        void ctrl_set_auto_scroll_delay(const control &value0_, float value1_);
-        void ctrl_set_auto_scroll_rewind(const control &value0_, bool value1_);
-        void ctrl_set_auto_scroll_speed(const control &value0_, float value1_);
+        void ctrl_set_auto_scroll_delay(const control &ctrl0_, float value1_);
+        void ctrl_set_auto_scroll_rewind(const control &ctrl0_, bool value1_);
+        void ctrl_set_auto_scroll_speed(const control &ctrl0_, float value1_);
         void ctrl_set_background_color(const control &ctrl_, const rv_color &color_);
-        void ctrl_set_checked(const control &value0_, bool value1_);
+        void ctrl_set_checked(const control &ctrl0_, bool value1_);
         void ctrl_set_checked(const control &control_, int index_, bool checked_);
-        void ctrl_set_focus(const control &value_);
-        float ctrl_auto_scroll_delay(const control &value_);
-        float ctrl_auto_scroll_speed(const control &value_);
-        float ctrl_fade(const control &value_);
-        float ctrl_idc(const control &value_);
+        void ctrl_set_focus(const control &ctrl_);
+        float ctrl_auto_scroll_delay(const control &ctrl_);
+        float ctrl_auto_scroll_speed(const control &ctrl_);
+        float ctrl_fade(const control &ctrl_);
+        float ctrl_idc(const control &ctrl_);
         float ctrl_idd(const display &value_);
-        float ctrl_map_scale(const control &value_);
-        float ctrl_model_scale(const control &value_);
-        float ctrl_scale(const control &value_);
-        float ctrl_text_height(const control &value_);
-        float ctrl_type(const control &value_);
+        float ctrl_map_scale(const control &ctrl_);
+        float ctrl_model_scale(const control &ctrl_);
+        float ctrl_scale(const control &ctrl_);
+        float ctrl_text_height(const control &ctrl_);
+        float ctrl_type(const control &ctrl_);
         int ctrl_shadow(const control &ctrl_);
         void ctrl_set_shadow(const control &ctrl_, int shadow_);
-        sqf_return_string ctrl_class_name(const control &value_);
-        sqf_return_string ctrl_model(const control &value_);
-        sqf_return_string ctrl_text(const control &value_);
+        sqf_return_string ctrl_class_name(const control &ctrl_);
+        sqf_return_string ctrl_model(const control &ctrl_);
+        sqf_return_string ctrl_text(const control &ctrl_);
         sqf_return_string ctrl_text(float value_);
-        sqf_return_string ctrl_text_secondary(const control &value_);
+        sqf_return_string ctrl_text_secondary(const control &ctrl_);
         void ctrl_set_position(const control &ctrl_, float x_, float y_, float width_, float height_);
 
         void ctrl_set_positionh(const control &ctrl_, float height_);
@@ -213,8 +214,8 @@ namespace intercept {
         rv_ctrl_position ctrl_position(const control &ctrl_);
 
         void ctrl_map_anim_add(const control &ctrl_, float time_, float zoom_, vector2 pos_);
-        display ctrl_parent(const control &value_);
-        control ctrl_parent_controls_group(const control &value_);
+        display ctrl_parent(const control &ctrl_);
+        control ctrl_parent_controls_group(const control &ctrl_);
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
 
         vector2 ctrl_map_world_to_screen(const control &ctrl_, const std::variant<vector2, vector3> &position_);
@@ -223,14 +224,14 @@ namespace intercept {
         void ctrl_set_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
         int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, sqf_string_const_ref command_);
         int ctrl_add_event_handler(const control &ctrl_, sqf_string_const_ref name_, const code &command_);
-        void ctrl_remove_all_event_handlers(const control &value0_, sqf_string_const_ref value1_);
+        void ctrl_remove_all_event_handlers(const control &ctrl0_, sqf_string_const_ref value1_);
         void ctrl_remove_event_handler(const control &ctrl_, sqf_string_const_ref name_, int id_);
         rv_color ctrl_background_color(const control &ctrl_);
         rv_color ctrl_foreground_color(const control &ctrl_);
 
         //listbox/combobox
         void lnb_delete_column(const control &ctrl_, float index_);
-        void lnb_delete_row(const control &value0_, float value1_);
+        void lnb_delete_row(const control &ctrl0_, float value1_);
         void lnb_set_cur_sel_row(float idc_, float index_);
         void lnb_set_cur_sel_row(const control &ctrl_, float index_);
         void lnb_delete_column(float idc_, float index_);
@@ -255,7 +256,7 @@ namespace intercept {
         void lnb_set_tooltip(const control &ctrl_, float row_, float column_, const game_value &data_);
         void lnb_set_value(float idc_, float row_, float column_, float value_);
         void lnb_set_value(const control &ctrl_, float row_, float column_, float value_);
-        void lnb_clear(const control &value_);
+        void lnb_clear(const control &ctrl_);
         void lnb_clear(float value_);
         float lnb_add_array(float idc_, const std::vector<rv_lnb_array> &lnb_array_);
         float lnb_add_array(const control &ctrl_, const std::vector<rv_lnb_array> &lnb_array_);
@@ -263,8 +264,8 @@ namespace intercept {
         float lnb_add_row(const control &ctrl_, sqf_string_list_const_ref strings_);
         float lnb_value(float idc_, float row_, float column_);
         float lnb_value(const control &ctrl_, float row_, float column_);
-        float lnb_add_column(const control &value0_, float value1_);
-        float lnb_cur_sel_row(const control &value_);
+        float lnb_add_column(const control &ctrl0_, float value1_);
+        float lnb_cur_sel_row(const control &ctrl_);
         float lnb_cur_sel_row(float value_);
         sqf_return_string lnb_data(float idc_, float row_, float column_);
         sqf_return_string lnb_data(const control &ctrl_, float row_, float column_);
@@ -292,7 +293,7 @@ namespace intercept {
         void lnb_sort_by(int ctrl_, int column_, sqf_string_const_ref sort_type_, bool reversed_ = false, bool case_sensitive_ = false);
 
         //listbox
-        bool lb_is_selected(const control &value0_, float value1_);
+        bool lb_is_selected(const control &ctrl0_, float value1_);
         void lb_delete(int control_id_, int index_);
         void lb_delete(const control &control_, int index_);
         // TODO std::vector<float> lb_selection(const control &control_); // USE lb_cur_sel IN A3 https://community.bistudio.com/wiki/lbSelection
@@ -323,7 +324,7 @@ namespace intercept {
         void lb_set_tooltip(const control &control_, int index_, sqf_string_const_ref tooltip_);
         void lb_set_value(int control_id_, int index_, float val_);
         void lb_set_value(const control &control_, int index_, float val_);
-        void lb_clear(const control &value_);
+        void lb_clear(const control &ctrl_);
         void lb_clear(float value_);
         float lb_add(int control_id_, sqf_string_const_ref text_);
         float lb_add(const control &control_, sqf_string_const_ref text_);
@@ -333,9 +334,9 @@ namespace intercept {
         float lb_color_right(const control &control_, int index_);
         float lb_value(int control_id_, int index_);
         float lb_value(const control &control_, int index_);
-        float lb_cur_sel(const control &value_);
+        float lb_cur_sel(const control &ctrl_);
         float lb_cur_sel(float value_);
-        float lb_size(const control &value_);
+        float lb_size(const control &ctrl_);
         float lb_size(float value_);
         sqf_return_string lb_tooltip(const control &ctrl_, float index_);
 
@@ -349,14 +350,14 @@ namespace intercept {
         sqf_return_string lb_text(const control &control_, int index_);
         sqf_return_string lb_text_right(int control_id_, int index_);
         sqf_return_string lb_text_right(const control &control_, int index_);
-        void lb_delete(const control &value0_, float value1_);
-        void lb_set_cur_sel(const control &value0_, float value1_);
-        float lb_value(const control &value0_, float value1_);
-        sqf_return_string lb_data(const control &value0_, float value1_);
-        sqf_return_string lb_picture(const control &value0_, float value1_);
-        sqf_return_string lb_picture_right(const control &value0_, float value1_);
-        sqf_return_string lb_text(const control &value0_, float value1_);
-        sqf_return_string lb_text_right(const control &value0_, float value1_);
+        void lb_delete(const control &ctrl0_, float value1_);
+        void lb_set_cur_sel(const control &ctrl0_, float value1_);
+        float lb_value(const control &ctrl0_, float value1_);
+        sqf_return_string lb_data(const control &ctrl0_, float value1_);
+        sqf_return_string lb_picture(const control &ctrl0_, float value1_);
+        sqf_return_string lb_picture_right(const control &ctrl0_, float value1_);
+        sqf_return_string lb_text(const control &ctrl0_, float value1_);
+        sqf_return_string lb_text_right(const control &ctrl0_, float value1_);
 
         //treeview
         void tv_set_text(float idc_, const std::vector<float> &path_, sqf_string_const_ref text_);
@@ -386,7 +387,7 @@ namespace intercept {
         void tv_sort(const control &ctrl_, const std::vector<int> &path_, bool reversed_ = false);
         void tv_sort_by_value(const control &ctrl_, const std::vector<int> &path_, bool reversed_ = false);
         void tv_clear(float value_);
-        void tv_clear(const control &value_);
+        void tv_clear(const control &ctrl_);
         //#TODO typedef for const std::vector<int>
         sqf_return_string tv_data(int idc_, const std::vector<int> &path_);
         sqf_return_string tv_data(const control &ctrl_, const std::vector<int> &path_);
@@ -424,21 +425,21 @@ namespace intercept {
         void slider_set_range(float value0_, float value1_, float value2_);
         void slider_set_range(const control &slider_, float min_, float max_);
         void slider_set_speed(float value0_, float value1_, float value2_);
-        void slider_set_speed(const control &value0_, float value1_, float value2_);
+        void slider_set_speed(const control &ctrl0_, float value1_, float value2_);
         void slider_set_position(float value0_, float value1_);
-        void slider_set_position(const control &value0_, float value1_);
+        void slider_set_position(const control &ctrl0_, float value1_);
         vector2 slider_range(const float &value_);
         vector2 slider_range(const control &ctrl_);
         vector2 slider_speed(const float &value_);
         vector2 slider_speed(const control &ctrl_);
-        float slider_position(const control &value_);
+        float slider_position(const control &ctrl_);
         float slider_position(float value_);
 
         //Overlay
         void clear_overlay(const control &map_);
         void close_overlay(const control &map_);
         void commit_overlay(const control &map_);
-        void save_overlay(const control &value_);
+        void save_overlay(const control &ctrl_);
         void load_overlay(const control &a_control_, const config &a_config_);
         void new_overlay(const control &a_control_, const config &a_config_);
 
@@ -489,6 +490,7 @@ namespace intercept {
         float pixel_w();
 
         void set_compass_oscillation(float angle_, float freq_min_, float freq_max_);
+        void set_compass_declination(float angle_);
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_);
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const vector3 &pos_);
         void start_loading_screen(sqf_string_const_ref text_);
@@ -523,12 +525,12 @@ namespace intercept {
         bool visible_gps();
         bool visible_compass();
         bool cb_checked(const control &control_);
-        void cb_set_checked(const control &value0_, bool value1_);
+        void cb_set_checked(const control &ctrl0_, bool value1_);
         bool create_dialog(sqf_string_const_ref dialog_name_);
         display create_dialog(sqf_string_const_ref dialog_name_, bool force_on_top_ = false);
 
-        bool is_real_time(const control &value_);
-        bool is_showing(const control &value_);
+        bool is_real_time(const control &ctrl_);
+        bool is_showing(const control &ctrl_);
 
         bool map_anim_done();
 
@@ -585,25 +587,25 @@ namespace intercept {
 
         void draw_rectangle(const control &ctrl_, vector2 center_pos_, float a_, float b_, float angle_, const rv_color &color_, sqf_string_const_ref fill_texture_);
 
-        void collapse_object_tree(const control &value_);
-        void import_all_groups(const control &value_);
+        void collapse_object_tree(const control &ctrl_);
+        void import_all_groups(const control &ctrl_);
 
-        void restart_editor_camera(const control &value_);
-        void selected_editor_objects(const control &value_);
-        void update_object_tree(const control &value_);
-        void allow3dmode(const control &value0_, bool value1_);
-        void allow_file_operations(const control &value0_, bool value1_);
-        void create_menu(const control &value0_, float value1_);
-        void html_load(const control &value0_, sqf_string_const_ref value1_);
+        void restart_editor_camera(const control &ctrl_);
+        void selected_editor_objects(const control &ctrl_);
+        void update_object_tree(const control &ctrl_);
+        void allow3dmode(const control &ctrl0_, bool value1_);
+        void allow_file_operations(const control &ctrl0_, bool value1_);
+        void create_menu(const control &ctrl0_, float value1_);
+        void html_load(const control &ctrl0_, sqf_string_const_ref value1_);
 
         void map_center_on_camera(const control &main_map, bool enable_);
-        void move_object_to_end(const control &value0_, sqf_string_const_ref value1_);
-        void progress_set_position(const control &value0_, float value1_);
-        void remove_menu_item(const control &value0_, float value1_);
-        void remove_menu_item(const control &value0_, sqf_string_const_ref value1_);
-        void set_editor_mode(const control &value0_, sqf_string_const_ref value1_);
-        void show3dicons(const control &value0_, bool value1_);
-        void show_legend(const control &value0_, bool value1_);
+        void move_object_to_end(const control &ctrl0_, sqf_string_const_ref value1_);
+        void progress_set_position(const control &ctrl0_, float value1_);
+        void remove_menu_item(const control &ctrl0_, float value1_);
+        void remove_menu_item(const control &ctrl0_, sqf_string_const_ref value1_);
+        void set_editor_mode(const control &ctrl0_, sqf_string_const_ref value1_);
+        void show3dicons(const control &ctrl0_, bool value1_);
+        void show_legend(const control &ctrl0_, bool value1_);
         /* potential namespace: controls, ui, gui, misc */
         void button_set_action(int control_id_, sqf_string_const_ref code_);
         void button_set_action(const control &control_, sqf_string_const_ref action_);
@@ -612,9 +614,9 @@ namespace intercept {
         void force_map(bool value_);
         void in_game_ui_set_event_handler(sqf_string_const_ref name_, sqf_string_const_ref command_);
 
-        float gear_slot_ammo_count(const control &value_);
-        float next_menu_item_index(const control &value_);
-        float progress_position(const control &value_);
+        float gear_slot_ammo_count(const control &ctrl_);
+        float next_menu_item_index(const control &ctrl_);
+        float progress_position(const control &ctrl_);
         float safe_zone_x();
         float safe_zone_y();
         float safe_zone_h();
@@ -625,15 +627,15 @@ namespace intercept {
         sqf_return_string button_action(const control &control_);
         sqf_return_string button_action(int idc_);
 
-        sqf_return_string gear_slot_data(const control &value_);
-        sqf_return_string get_editor_mode(const control &value_);
-        sqf_return_string get_editor_object_scope(const control &value0_, sqf_string_const_ref value1_);
+        sqf_return_string gear_slot_data(const control &ctrl_);
+        sqf_return_string get_editor_mode(const control &ctrl_);
+        sqf_return_string get_editor_object_scope(const control &ctrl0_, sqf_string_const_ref value1_);
         sqf_return_string map_grid_position(const object &obj_);
         sqf_return_string map_grid_position(const vector2 &pos_);
         display create_display(sqf_string_const_ref value0_, const display &value1_);
         display create_mission_display(sqf_string_const_ref value0_, const display &value1_);
         control control_null();
-        control controls_group_ctrl(const control &value0_, float value1_);
+        control controls_group_ctrl(const control &ctrl0_, float value1_);
         control display_ctrl(const display &disp_, float idc_);
         control display_ctrl(float idc_);
         vector3 map_center_on_camera(const control &mini_map_);
@@ -642,8 +644,8 @@ namespace intercept {
         vector2 pos_world_to_screen(const control &ctrl_, const vector2 &pos_);
         std::vector<control> all_controls(const display &display_);
         std::vector<control> all_controls(const control &ctrl_);
-        object get_editor_camera(const control &value_);
-        object get_object_proxy(const control &value0_, sqf_string_const_ref value1_);
+        object get_editor_camera(const control &ctrl_);
+        object get_object_proxy(const control &ctrl0_, sqf_string_const_ref value1_);
 
         display display_parent(const display &display_);
 

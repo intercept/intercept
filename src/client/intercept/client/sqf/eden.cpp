@@ -404,8 +404,16 @@ namespace intercept {
             //#TODO: add binary__get3denattribute__array__string__ret__array
         }
 
+        std::vector<game_value> get_3den_attributes(const object &obj_, sqf_string_const_ref category_) {
+            return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__get3denattribute__scalar__string__ret__array, obj_, category_));
+        }
+
         game_value get_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref class_) {
             return host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattribute__string__string__ret__any, section_, class_);
+        }
+
+        game_value get_3den_mission_attributes(sqf_string_const_ref section_, sqf_string_const_ref category_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__get3denmissionattributes__string__string__ret__array, section_, category_);
         }
 
         bool set_3den_mission_attribute(sqf_string_const_ref section_, sqf_string_const_ref attribute_class_, game_value _attribute_value) {
@@ -426,6 +434,28 @@ namespace intercept {
 
         sqf_return_string_list get_mission_layer_entities(sqf_string_const_ref layername_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getmissionlayerentities__string_scalar__ret__array, layername_));
+        }
+
+        int get_3den_layer(const object& obj_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denlayer__scalar_string__ret__nothing, obj_);
+        }
+
+        object get_3den_parent(const object& obj_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denparent__scalar_string__ret__nothing, obj_);
+        }
+
+        void ignore_3den_history(const code& code_) {
+            host::functions.invoke_raw_unary(__sqf::unary__ignore3denhistory__code__ret__nothing, code_);
+        }
+
+        bool load_3den_scenario(sqf_string_const_ref scenario_or_world_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__load3denscenario__string__ret__bool, scenario_or_world_);
+        }
+
+        bool save_3den_preferences()
+        {
+            return host::functions.invoke_raw_nular(__sqf::nular__save3denpreferences__ret__bool);
         }
 
         sqf_return_string_list get_mission_layers() {  //#TODO: Find out if this really returns sqf_return_string_list

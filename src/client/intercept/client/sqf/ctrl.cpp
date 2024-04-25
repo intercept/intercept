@@ -394,6 +394,11 @@ namespace intercept {
             __helpers::__empty_unary_control(__sqf::unary__ctrlactivate__control__ret__nothing, value_);
         }
 
+        void ctrl_activate(const control& ctrl_, bool full_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__ctrlactivate__control__bool__ret__nothing, ctrl_, full_);
+        }
+
         float ctrl_auto_scroll_delay(const control &value_) {
             return __helpers::__number_unary_control(__sqf::unary__ctrlautoscrolldelay__control__ret__scalar, value_);
         }
@@ -2297,6 +2302,10 @@ namespace intercept {
                                freq_max_});
 
             host::functions.invoke_raw_unary(__sqf::unary__setcompassoscillation__array__ret__nothing, params);
+        }
+
+        void set_compass_declination(float angle_) {
+            host::functions.invoke_raw_unary(__sqf::unary__setcompassdeclination__scalar__ret__nothing, angle_);
         }
 
         void set_hud_movement_levels(float min_speed_, float max_speed_, float min_alt_, float max_alt_, float min_dir_, float max_dir_, const object &obj_) {

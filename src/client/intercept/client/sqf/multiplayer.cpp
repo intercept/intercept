@@ -285,5 +285,9 @@ namespace intercept {
         rv_user_info get_user_info(sqf_string_const_ref id_) {
             return rv_user_info(host::functions.invoke_raw_unary(__sqf::unary__getuserinfo__string__ret__array, id_));
         }
+
+        game_value get_user_info(sqf_string_const_ref id_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getuserinfo__string__scalar__ret__any, id_, index_);
+        }
     }  // namespace sqf
 }  // namespace intercept

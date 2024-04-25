@@ -84,7 +84,11 @@ namespace intercept {
 
         void set_vector_dir(const object &obj_, const vector3 &vec_);
         void set_velocity(const object &obj_, const vector3 &vel_);
+        void set_angular_velocity(const object& obj_, const vector3& vel_);
+        void set_angular_velocity_model_space(const object& obj_, const vector3& vel_);
         vector3 velocity(const object &obj_);
+        vector3 angular_velocity(const object &obj_);
+        vector3 angular_velocity_model_space(const object &obj_);
         float direction(const object &value_);
 
         vector3 vector_dir(const object &obj_);

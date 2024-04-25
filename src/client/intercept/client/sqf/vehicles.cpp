@@ -241,6 +241,10 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__object__ret__nothing, obj_);
         }
 
+        void delete_vehicle(const std::vector<object> &obj_) {
+            host::functions.invoke_raw_unary(__sqf::unary__deletevehicle__array__ret__nothing, obj_);
+        }
+
         std::vector<rv_turret_path> all_turrets(const object &vehicle_, bool person_turrets_) {
             game_value array_input({vehicle_,
                                     person_turrets_});
@@ -710,6 +714,42 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__selectionnames__object__string_scalar__ret__array, object_, std::move(lod_name)));
         }
 
+        sqf_return_string_list get_bone_names(const object& object_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__getbonenames__object__ret__array, object_));
+        }
+
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, float lod_res_) {
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__getselectionbones__object__array__ret__array, object_, { selection_, lod_res_ }));
+        }
+
+        sqf_return_string_list get_selection_bones(const object &object_, sqf_string_const_ref selection_, rv_selection_lods lod_) {
+            game_value lod_name;
+            switch (lod_) {
+            case intercept::sqf::rv_selection_lods::Memory:
+                lod_name = "Memory"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::Geometry:
+                lod_name = "Geometry"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::FireGeometry:
+                lod_name = "FireGeometry"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::LandContact:
+                lod_name = "LandContact"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::HitPoints:
+                lod_name = "HitPoints"sv;
+                break;
+            case intercept::sqf::rv_selection_lods::ViewGeometry:
+                lod_name = "ViewGeometry"sv;
+                break;
+            default:
+                lod_name = ""sv;
+                break;
+            }
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_binary(__sqf::binary__getselectionbones__object__array__ret__array, object_, { selection_, std::move(lod_name) }));
+        }
+
         void switch_camera(const object &target_) {
             host::functions.invoke_raw_unary(__sqf::unary__switchcamera__object__ret__nothing, target_);
         }
@@ -757,8 +797,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__lockcamerato__object__array__ret__nothing, vehicle_, {target_, turret_path_});
         }
 
-        object locked_camera_to(const object &vehicle_, const rv_turret_path &turret_path_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__lockedcamerato__object__array__ret__nothing_object, vehicle_, turret_path_);
+        game_value locked_camera_to(const object &vehicle_, const rv_turret_path &turret_path_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__lockedcamerato__object__array__ret__nothing_array, vehicle_, turret_path_);
         }
 
         void lock_cargo(const object &vehicle_, int index_, bool lock_) {
@@ -783,7 +823,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__respawnvehicle__object__array__ret__nothing, vehicle_, params_right);
         }
 
-        void select_weapon_turret(const object &vec_, sqf_string_const_ref weapon_, rv_turret_path turret_path_) {
+        void select_weapon_turret(const object &vec_, sqf_string_const_ref weapon_, const rv_turret_path &turret_path_) {
             host::functions.invoke_raw_binary(__sqf::binary__selectweaponturret__object__array__ret__nothing, vec_, {weapon_, std::move(turret_path_)});
         }
 
@@ -1276,6 +1316,58 @@ namespace intercept {
 
         void set_turret_limits(const object &veh_, const rv_turret_path &turret_, float min_turn_, float max_turn_, float min_elev_, float max_elev_) {
             host::functions.invoke_raw_binary(__sqf::binary__setturretlimits__object__array__ret__nothing, veh_, {turret_, min_turn_, max_turn_, min_elev_, max_elev_});
+        }
+
+        bool force_hitpoints_damage_sync(const object &entity_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__forcehitpointsdamagesync__object__ret__bool, entity_);
+        }
+
+        rv_entity_info get_entity_info(const object &obj_) {
+            return rv_entity_info(host::functions.invoke_raw_unary(__sqf::unary__getentityinfo__object__ret__array, obj_));
+        }
+
+        game_value get_entity_info(const object &obj_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getentityinfo__object__scalar__ret__any, obj_, index_);
+        }
+
+        rv_shot_info get_shot_info(const object &obj_) {
+            return rv_shot_info(host::functions.invoke_raw_unary(__sqf::unary__getshotinfo__object__ret__array, obj_));
+        }
+
+        game_value get_shot_info(const object &obj_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getshotinfo__object__scalar__ret__any, obj_, index_);
+        }
+
+        float get_fuel_consumption_coef(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getfuelconsumptioncoef__object__ret__scalar, veh_);
+        }
+
+        void set_fuel_consumption_coef(const object &veh_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setfuelconsumptioncoef__object__scalar__ret__nothing, veh_, value_);
+        }
+
+        rv_vehicle_respawn_info get_vehicle_respawn_info(const object &veh_) {
+            return rv_vehicle_respawn_info(host::functions.invoke_raw_unary(__sqf::unary__getrespawnvehicleinfo__object__ret__array, veh_));
+        }
+
+        game_value get_vehicle_respawn_info(const object &veh_, int index_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__getrespawnvehicleinfo__object__scalar__ret__any, veh_, index_);
+        }
+
+        float get_water_fill_percentage(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getwaterfillpercentage__object__ret__scalar, veh_);
+        }
+
+        void set_water_fill_percentage(const object &veh_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaterfillpercentage__object__scalar__ret__nothing, veh_, value_);
+        }
+
+        float get_water_leakiness(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__getwaterleakiness__object__ret__scalar, veh_);
+        }
+
+        void set_water_leakiness(const object &veh_, float value_) {
+            host::functions.invoke_raw_binary(__sqf::binary__setwaterleakiness__object__scalar__ret__nothing, veh_, value_);
         }
     }  // namespace sqf
 }  // namespace intercept

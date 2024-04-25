@@ -372,7 +372,6 @@ namespace intercept {
         bool surface_is_water(const vector3 &pos_);
         vector3 surface_normal(const vector2 &pos_);
         vector3 surface_normal(const vector3 &pos_);
-        sqf_return_string surface_type(const vector3 &pos_);
         std::vector<rv_best_place> select_best_places(const object &obj_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
         std::vector<rv_best_place> select_best_places(const vector3 &pos_, float radius_, sqf_string_const_ref expression_, float precision_, float max_results_);
         bool is_on_road(const object &object_);
@@ -405,7 +404,8 @@ namespace intercept {
         rv_object_lighting get_lighting_at(const object &obj_);
         rv_road_info get_road_info(const object &road_obj_);
         void set_wind_dir(const vector2 &dir_);
-        sqf_return_string surface_texture(const vector2 &pos_);
+        sqf_return_string surface_texture(const vector2 &pos_, bool accurate_ = false);
+        sqf_return_string surface_type(const vector2 &pos_, bool accurate_ = false);
 
         struct rv_ambient_temperature {
             float air_temp;
@@ -447,5 +447,7 @@ namespace intercept {
         float get_terrain_height(const vector2 &pos_);
         void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_);
 
+        rv_hashmap get_mission_options();
+        void set_mission_options(const rv_hashmap& options_);
     }  // namespace sqf
 }  // namespace intercept

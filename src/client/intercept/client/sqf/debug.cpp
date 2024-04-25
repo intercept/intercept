@@ -134,6 +134,10 @@ namespace intercept {
             host::functions.invoke_raw_nular(__sqf::nular__diag_resetshapes__ret__nothing);
         }
 
+        void diag_reset_anims() {
+            host::functions.invoke_raw_nular(__sqf::nular__diag_resetanims__ret__nothing);
+        }
+
         void diag_draw_mode(debug_draw_modes mode_) {
             game_value draw_mode;
             switch (mode_) {
@@ -186,6 +190,11 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__diag_localized__string__ret__array, stringtable_));
         }
 
+        void diag_merge_config_file(sqf_string_const_ref path_, bool is_user_path_)
+        {
+            host::functions.invoke_raw_unary(__sqf::unary__diag_mergeconfigfile__array__ret__nothing, {path_, is_user_path_});
+        }
+
         void diag_set_light_new(sqf_string_const_ref str_config_) {
             host::functions.invoke_raw_unary(__sqf::unary__diag_setlightnew__string__ret__nothing, str_config_);
         }
@@ -220,6 +229,16 @@ namespace intercept {
             }
 
             host::functions.invoke_raw_unary(__sqf::unary__diag_toggle__string__ret__nothing, std::move(mode));
+        }
+
+        auto_array<game_value> diag_remains_collector(float value_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__diag_remainscollector__scalar__ret__array, value_).to_array();
+        }
+
+        void diag_sqfc_debug_dump(sqf_string_const_ref source_, sqf_string_const_ref target_)
+        {
+            host::functions.invoke_raw_unary(__sqf::unary__diag_sqfcdebugdump__array__ret__nothing, { source_, target_ });
         }
 
         bool diag_enabled(sqf_string_const_ref mode_) {

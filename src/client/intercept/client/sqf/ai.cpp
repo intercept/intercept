@@ -610,9 +610,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, value1_);
         }
 
-        void land_at(const object &value0_, const object &helipad_) {
-            host::functions.invoke_raw_binary(__sqf::binary__landat__object__object_scalar__ret__nothing, value0_, helipad_);
+        bool land_at(const object &heli_, const object &helipad_, sqf_string_const_ref mode_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__landat__object__array__ret__bool, heli_, { helipad_, mode_ });
         }
+
         float skill(const object &value0_, sqf_string_const_ref value1_) {
             return host::functions.invoke_raw_binary(__sqf::binary__skill__object__string__ret__scalar, value0_, value1_);
         }
@@ -637,6 +638,15 @@ namespace intercept {
 
         void use_ai_steering_component(bool use_) {
             host::functions.invoke_raw_unary(__sqf::unary__useaisteeringcomponent__bool__ret__nothing, use_);
+        }
+        void use_ai_steering_component(const object &veh_, bool use_) {
+            host::functions.invoke_raw_binary(__sqf::binary__useaisteeringcomponent__object__bool__ret__nothing, veh_, use_);
+        }
+        bool is_ai_steering_component_enabled(const object &veh_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__isaisteeringcomponentenabled__object__ret__bool, veh_);
+        }
+        bool is_using_ai_steering_component() {
+            return host::functions.invoke_raw_nular(__sqf::nular__isusingaisteeringcomponent__ret__bool);
         }
         void command_suppressive_fire(const object &unit_, const object &target_) {
             host::functions.invoke_raw_binary(__sqf::binary__commandsuppressivefire__object_array__object_array__ret__nothing, unit_, target_);
@@ -952,7 +962,12 @@ namespace intercept {
         }
 
         std::vector<rv_unit_trait> get_all_unit_traits(const object &unit_) {
-            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object__ret__array, unit_));
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object_string__ret__array, unit_));
+        }
+
+        std::vector<rv_unit_trait> get_all_unit_traits(sqf_string_const_ref class_)
+        {
+            return __helpers::__convert_to_vector<rv_unit_trait>(host::functions.invoke_raw_unary(__sqf::unary__getallunittraits__object_string__ret__array, class_));
         }
 
         object get_attack_target(const object &unit_) {
@@ -963,5 +978,56 @@ namespace intercept {
             auto mov_info = host::functions.invoke_raw_unary(__sqf::unary__vehiclemoveinfo__object__ret__array, vehicle_);
             return {mov_info[0], mov_info[1]};
         }
+
+        void forget_target(const object &unit_, const object &target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, unit_, target_);
+        }
+
+        void forget_target(const group &group_, const object &target_) {
+            host::functions.invoke_raw_binary(__sqf::binary__forgettarget__object_group__object__ret__nothing, group_, target_);
+        }
+
+        std::vector<object> targets(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>> unit_, std::optional<bool> enemy_only_, std::optional<float> max_distance_, std::optional<std::vector<side>> sides_, std::optional<float> max_age_, std::optional<std::variant<std::reference_wrapper<vector2>, std::reference_wrapper<vector3>>> alternate_center_) {
+            auto_array<game_value> params_right;
+            game_value params_left;
+            if (unit_.index() == 0)
+                params_left = std::get<0>(unit_);
+            else
+                params_left = std::get<1>(unit_);
+
+            if (enemy_only_.has_value())
+                params_right.push_back(*enemy_only_);
+            else
+                params_right.push_back(game_value());
+            if (max_distance_.has_value())
+                params_right.push_back(*max_distance_);
+            else
+                params_right.push_back(game_value());
+            if (sides_.has_value())
+                params_right.push_back(auto_array<game_value>((*sides_).begin(), (*sides_).end()));
+            else
+                params_right.push_back(game_value());
+            if (max_age_.has_value())
+                params_right.push_back(*max_age_);
+            else
+                params_right.push_back(game_value());
+            if (alternate_center_.has_value()) {
+                if ((*alternate_center_).index() == 0)
+                    params_right.push_back(std::get<0>(*alternate_center_).get());
+                else
+                    params_right.push_back(std::get<1>(*alternate_center_).get());
+            } else
+                params_right.push_back(game_value());
+
+            return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__targets__object__array__ret__array, std::move(params_left), std::move(params_right)));
+        }
+
+        void ignore_target(const group &group_, const object &target_, bool is_ignored_) {
+            if (is_ignored_)
+                host::functions.invoke_raw_binary(__sqf::binary__ignoretarget__object_group__object_array__ret__nothing, group_, target_);
+            else
+                host::functions.invoke_raw_binary(__sqf::binary__ignoretarget__object_group__object_array__ret__nothing, group_, {target_, is_ignored_});
+        }
+
     }  // namespace sqf
 }  // namespace intercept

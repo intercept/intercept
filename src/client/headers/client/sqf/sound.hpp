@@ -64,6 +64,9 @@ namespace intercept {
         float get_sound_controller(const object &vehicle_, sqf_string_const_ref controller_);
         float get_sound_controller_result(const object &object_, const config &config_entry_);
         object create_sound_source(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
+        object create_sound_source(sqf_string_const_ref type_, const object &obj_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
+        object create_sound_source_local(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
+        object create_sound_source_local(sqf_string_const_ref type_, const object &obj_, const std::vector<marker> &markers_ = {}, float placement_ = 0.0f);
         float radio_volume();
         float music_volume();
 

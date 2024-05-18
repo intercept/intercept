@@ -693,5 +693,18 @@ namespace intercept {
         void set_mission_options(const rv_hashmap &options_) {
             host::functions.invoke_raw_unary(__sqf::unary__setmissionoptions__hashmap__ret__nothing, options_);
         }
+
+        rv_camera_info::rv_camera_info(const game_value &gv_) : camera{gv_[0]},
+                                                                r2t_infos{__helpers::__convert_to_vector<r2t>(gv_[1])},
+                                                                effect_name{gv_[3]},
+                                                                TIIndex{gv_[5]},
+                                                                view_mode{gv_[4]},
+                                                                is_primary{gv_[2]} {
+        }
+        std::vector<rv_camera_info> all_cameras()
+        {
+            return __helpers::__convert_to_vector<rv_camera_info>(host::functions.invoke_raw_nular(__sqf::nular__allcameras__ret__array));
+        }
+
     }  // namespace sqf
 }  // namespace intercept

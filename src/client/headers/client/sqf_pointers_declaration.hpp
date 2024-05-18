@@ -1,4 +1,4 @@
-//Exported Pointer Definitions For: Arma 3 217.151686 - Diag
+//Exported Pointer Definitions For: Arma 3 217.151825 - Diag
 
 
 // Unary Functions
@@ -198,6 +198,7 @@ static unary_function unary__createmarkerlocal__array__ret__string;
 static unary_function unary__createmine__array__ret__object;
 static unary_function unary__createsimpleobject__array__ret__object;
 static unary_function unary__createsoundsource__array__ret__object;
+static unary_function unary__createsoundsourcelocal__array__ret__object;
 static unary_function unary__createteam__array__ret__team_member;
 static unary_function unary__createtrigger__array__ret__object;
 static unary_function unary__createvehicle__array__ret__object;
@@ -453,10 +454,10 @@ static unary_function unary__get3denactionstate__string__ret__scalar;
 static unary_function unary__get3denconnections__any__ret__array;
 static unary_function unary__get3denentity__scalar__ret__any;
 static unary_function unary__get3denentityid__any__ret__scalar;
-static unary_function unary__get3dengrid__string__ret__nothing;
-static unary_function unary__get3denlayer__scalar_string__ret__nothing;
+static unary_function unary__get3dengrid__string__ret__scalar;
+static unary_function unary__get3denlayer__scalar_string__ret__scalar;
 static unary_function unary__get3denlayerentities__scalar__ret__array;
-static unary_function unary__get3denparent__scalar_string__ret__nothing;
+static unary_function unary__get3denparent__scalar_string__ret__any;
 static unary_function unary__get3denselected__string__ret__array;
 static unary_function unary__getaimingcoef__object__ret__scalar;
 static unary_function unary__getallenv3dsoundcontrollers__object__ret__array;
@@ -1577,7 +1578,7 @@ static binary_function binary__catch__exception__code__ret__any;
 static binary_function binary__cbsetchecked__control__bool__ret__nothing;
 static binary_function binary__checkaifeature__object__string__ret__bool;
 static binary_function binary__checkvisibility__array__array__ret__scalar;
-static binary_function binary__clear3denattribute__any__string__ret__nothing;
+static binary_function binary__clear3denattribute__any__string__ret__bool;
 static binary_function binary__closedisplay__display__scalar__ret__nothing;
 static binary_function binary__collect3denhistory__array__code__ret__nothing;
 static binary_function binary__commandartilleryfire__object_array__array__ret__nothing;
@@ -2711,6 +2712,7 @@ static nular_function nular__all3denentities__ret__array;
 static nular_function nular__allactivetitleeffects__ret__array;
 static nular_function nular__alladdonsinfo__ret__array;
 static nular_function nular__allairports__ret__array;
+static nular_function nular__allcameras__ret__array;
 static nular_function nular__allcurators__ret__array;
 static nular_function nular__allcutlayers__ret__array;
 static nular_function nular__alldead__ret__array;

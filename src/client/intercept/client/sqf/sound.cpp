@@ -193,11 +193,50 @@ namespace intercept {
             game_value args({
                 type_,
                 pos_,
-                std::move(markers),
+                markers,
                 placement_,
             });
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsource__array__ret__object, args));
+        }
+
+        object create_sound_source(sqf_string_const_ref type_, const object &obj_, const std::vector<marker> &markers_, float placement_) {
+            auto_array<game_value> markers(markers_.begin(), markers_.end());
+
+            game_value args({
+                type_,
+                obj_,
+                markers,
+                placement_,
+                });
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsource__array__ret__object, args));
+        }
+
+        object create_sound_source_local(sqf_string_const_ref type_, const vector3 &pos_, const std::vector<marker> &markers_ /* = {}*/, float placement_ /* = 0.0f*/) {
+            auto_array<game_value> markers(markers_.begin(), markers_.end());
+
+            game_value args({
+                type_,
+                pos_,
+                markers,
+                placement_,
+            });
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsourcelocal__array__ret__object, args));
+        }
+
+        object create_sound_source_local(sqf_string_const_ref type_, const object &obj_, const std::vector<marker> &markers_, float placement_) {
+            auto_array<game_value> markers(markers_.begin(), markers_.end());
+
+            game_value args({
+                type_,
+                obj_,
+                markers,
+                placement_,
+            });
+
+            return object(host::functions.invoke_raw_unary(__sqf::unary__createsoundsourcelocal__array__ret__object, args));
         }
 
         float sound_volume() {

@@ -1,4 +1,4 @@
-//Exported Pointer Assignments For: Arma 3 217.151686 - Diag
+//Exported Pointer Assignments For: Arma 3 217.151825 - Diag
 
 
 // Unary Functions
@@ -198,6 +198,7 @@ __sqf::unary__createmarkerlocal__array__ret__string = (unary_function)host::func
 __sqf::unary__createmine__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createmine"sv, "ARRAY"sv);
 __sqf::unary__createsimpleobject__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createsimpleobject"sv, "ARRAY"sv);
 __sqf::unary__createsoundsource__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createsoundsource"sv, "ARRAY"sv);
+__sqf::unary__createsoundsourcelocal__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createsoundsourcelocal"sv, "ARRAY"sv);
 __sqf::unary__createteam__array__ret__team_member = (unary_function)host::functions.get_unary_function_typed("createteam"sv, "ARRAY"sv);
 __sqf::unary__createtrigger__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createtrigger"sv, "ARRAY"sv);
 __sqf::unary__createvehicle__array__ret__object = (unary_function)host::functions.get_unary_function_typed("createvehicle"sv, "ARRAY"sv);
@@ -453,10 +454,10 @@ __sqf::unary__get3denactionstate__string__ret__scalar = (unary_function)host::fu
 __sqf::unary__get3denconnections__any__ret__array = (unary_function)host::functions.get_unary_function_typed("get3denconnections"sv, "ANY"sv);
 __sqf::unary__get3denentity__scalar__ret__any = (unary_function)host::functions.get_unary_function_typed("get3denentity"sv, "SCALAR"sv);
 __sqf::unary__get3denentityid__any__ret__scalar = (unary_function)host::functions.get_unary_function_typed("get3denentityid"sv, "ANY"sv);
-__sqf::unary__get3dengrid__string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("get3dengrid"sv, "STRING"sv);
-__sqf::unary__get3denlayer__scalar_string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("get3denlayer"sv, "ARRAY"sv);
+__sqf::unary__get3dengrid__string__ret__scalar = (unary_function)host::functions.get_unary_function_typed("get3dengrid"sv, "STRING"sv);
+__sqf::unary__get3denlayer__scalar_string__ret__scalar = (unary_function)host::functions.get_unary_function_typed("get3denlayer"sv, "ARRAY"sv);
 __sqf::unary__get3denlayerentities__scalar__ret__array = (unary_function)host::functions.get_unary_function_typed("get3denlayerentities"sv, "SCALAR"sv);
-__sqf::unary__get3denparent__scalar_string__ret__nothing = (unary_function)host::functions.get_unary_function_typed("get3denparent"sv, "ARRAY"sv);
+__sqf::unary__get3denparent__scalar_string__ret__any = (unary_function)host::functions.get_unary_function_typed("get3denparent"sv, "ARRAY"sv);
 __sqf::unary__get3denselected__string__ret__array = (unary_function)host::functions.get_unary_function_typed("get3denselected"sv, "STRING"sv);
 __sqf::unary__getaimingcoef__object__ret__scalar = (unary_function)host::functions.get_unary_function_typed("getaimingcoef"sv, "OBJECT"sv);
 __sqf::unary__getallenv3dsoundcontrollers__object__ret__array = (unary_function)host::functions.get_unary_function_typed("getallenv3dsoundcontrollers"sv, "OBJECT"sv);
@@ -1577,7 +1578,7 @@ __sqf::binary__catch__exception__code__ret__any = (binary_function)host::functio
 __sqf::binary__cbsetchecked__control__bool__ret__nothing = (binary_function)host::functions.get_binary_function_typed("cbsetchecked"sv, "CONTROL"sv, "BOOL"sv);
 __sqf::binary__checkaifeature__object__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("checkaifeature"sv, "OBJECT"sv, "STRING"sv);
 __sqf::binary__checkvisibility__array__array__ret__scalar = (binary_function)host::functions.get_binary_function_typed("checkvisibility"sv, "ARRAY"sv, "ARRAY"sv);
-__sqf::binary__clear3denattribute__any__string__ret__nothing = (binary_function)host::functions.get_binary_function_typed("clear3denattribute"sv, "ANY"sv, "STRING"sv);
+__sqf::binary__clear3denattribute__any__string__ret__bool = (binary_function)host::functions.get_binary_function_typed("clear3denattribute"sv, "ANY"sv, "STRING"sv);
 __sqf::binary__closedisplay__display__scalar__ret__nothing = (binary_function)host::functions.get_binary_function_typed("closedisplay"sv, "DISPLAY"sv, "SCALAR"sv);
 __sqf::binary__collect3denhistory__array__code__ret__nothing = (binary_function)host::functions.get_binary_function_typed("collect3denhistory"sv, "ARRAY"sv, "CODE"sv);
 __sqf::binary__commandartilleryfire__object_array__array__ret__nothing = (binary_function)host::functions.get_binary_function_typed("commandartilleryfire"sv, "ARRAY"sv, "ARRAY"sv);
@@ -2711,6 +2712,7 @@ __sqf::nular__all3denentities__ret__array = (nular_function)host::functions.get_
 __sqf::nular__allactivetitleeffects__ret__array = (nular_function)host::functions.get_nular_function("allactivetitleeffects"sv);
 __sqf::nular__alladdonsinfo__ret__array = (nular_function)host::functions.get_nular_function("alladdonsinfo"sv);
 __sqf::nular__allairports__ret__array = (nular_function)host::functions.get_nular_function("allairports"sv);
+__sqf::nular__allcameras__ret__array = (nular_function)host::functions.get_nular_function("allcameras"sv);
 __sqf::nular__allcurators__ret__array = (nular_function)host::functions.get_nular_function("allcurators"sv);
 __sqf::nular__allcutlayers__ret__array = (nular_function)host::functions.get_nular_function("allcutlayers"sv);
 __sqf::nular__alldead__ret__array = (nular_function)host::functions.get_nular_function("alldead"sv);

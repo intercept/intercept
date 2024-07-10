@@ -151,11 +151,11 @@ namespace intercept {
 
 
     private:
-        //__internal::gsNular* findNular(std::string name) const;
-        //__internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;
-        //__internal::gsOperator* findBinary(std::string name, types::game_data_type left_argument_type, types::game_data_type right_argument_type) const;
-        //__internal::game_operators* findOperators(std::string name) const;
-        //__internal::game_functions* findFunctions(std::string name) const;
+        __internal::gsNular* findNular(std::string name) const;
+        __internal::gsFunction* findUnary(std::string name, types::game_data_type argument_type) const;
+        __internal::gsOperator* findBinary(std::string name, types::game_data_type left_argument_type, types::game_data_type right_argument_type) const;
+        __internal::game_operators* findOperators(std::string name) const;
+        __internal::game_functions* findFunctions(std::string name) const;
         sqf_register_functions _registerFuncs;
         std::map<uintptr_t, types::auto_array<char>> _keeper;
         /**

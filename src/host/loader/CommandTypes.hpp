@@ -5,6 +5,7 @@
 #define CT_VERSION 0
 #endif
 
+static_assert(CT_VERSION == 0);
 
 namespace intercept {
     namespace __internal {
@@ -18,23 +19,6 @@ namespace intercept {
 
         private:
 #if CT_VERSION == 0
-
-            std::array<size_t,
-#if _WIN64 || __X86_64__
-                       10
-#elif defined(_LINUX64)
-                       7
-#elif defined(__linux__)
-                       8  //#TODO drop linux32 support
-#else
-                       11
-#endif
-                       >
-                securityStuff{};  //Will scale with x64
-
-#elif CT_VERSION == 1
-
-
             std::array<size_t,
 #if _WIN64 || __X86_64__
                        9 // Win64
@@ -54,9 +38,6 @@ namespace intercept {
 
         };
         class gsFunction : public gsFuncBase {
-#if CT_VERSION == 0
-            void* placeholder12{nullptr};  //0x30  //jni function
-#endif
         public:
             r_string _name2;               //0x34 this is (tolower name)
             unary_operator* _operator;     //0x38
@@ -70,11 +51,18 @@ namespace intercept {
             r_string _category{"intercept"sv};  //0x48
 #endif
                 //const rv_string* placeholder13;
+
+
+            const r_string& get_name2() const { return _name2; }
+            unary_operator* get_operator() const { return _operator; }
+            void set_operator(unary_operator* newOP) { _operator = newOP; }
+            void set_name(r_string newOP) { _name = newOP; }
+            void set_name2(r_string newOP) { _name2 = newOP; }
+            const r_string& get_description() const { return _description; }
+            void set_description(r_string newOP) { _description = newOP; }
+            void set_category(r_string newOP) { _category = newOP; }
         };
         class gsOperator : public gsFuncBase {
-#if CT_VERSION == 0
-            void* placeholder12{nullptr};       //0x30  JNI function
-#endif
         public:
             r_string _name2;                    //0x34 this is (tolower name)
             int32_t placeholder_10{4};          //0x38 Small int 0-5  priority
@@ -89,6 +77,15 @@ namespace intercept {
             r_string placeholder_12;            //0x68
             r_string _category{"intercept"sv};  //0x6c
 #endif
+
+            const r_string& get_name2() const { return _name2; }
+            binary_operator* get_operator() const { return _operator; }
+            void set_operator(binary_operator* newOP) { _operator = newOP; }
+            void set_name(r_string newOP) { _name = newOP; }
+            void set_name2(r_string newOP) { _name2 = newOP; }
+            const r_string& get_description() const { return _description; }
+            void set_description(r_string newOP) { _description = newOP; }
+            void set_category(r_string newOP) { _category = newOP; }
         };
         class gsNular : public gsFuncBase {
         public:
@@ -102,10 +99,16 @@ namespace intercept {
             r_string placeholder_10;
             r_string _category;            //0x4d
 #endif
-#if CT_VERSION == 0
-            void* placeholder11{nullptr};  //0x50 JNI probably
-#endif
             std::string_view get_map_key() const noexcept { return _name2; }
+
+            const r_string& get_name2() const { return _name2; }
+            nular_operator* get_operator() const { return _operator; }
+            void set_operator(nular_operator* newOP) { _operator = newOP; }
+            void set_name(r_string newOP) { _name = newOP; }
+            void set_name2(r_string newOP) { _name2 = newOP; }
+            const r_string& get_description() const { return _description; }
+            void set_description(r_string newOP) { _description = newOP; }
+            void set_category(r_string newOP) { _category = newOP; }
         };
 
         class game_functions : public auto_array<gsFunction>, public gsFuncBase {

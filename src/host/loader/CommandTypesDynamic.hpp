@@ -1,5 +1,7 @@
 #pragma once
 
+// This is old file set up to turn static memory address lookups, into dynamic ones that can switch based on a bool being set or not. This can be used to adjust for game updates changing structure sizes
+
 #define CT_NOALLOC
 
 namespace __CTBase {

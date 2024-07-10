@@ -146,6 +146,18 @@ namespace intercept {
             return (*compound_type)[0]->_name + "_" + (*compound_type)[1]->_name;
         }
 
+        void sqf_script_type::update_bitmask() {
+            if (single_type != nullptr) {
+                bitmask = single_type->_bitmask;
+                return;
+            }
+
+            bitmask = 0;
+
+            for (auto &it : *compound_type)
+                bitmask |= it->_bitmask;
+        }
+
     #pragma region GameData Types
         game_data_number::game_data_number() noexcept {
             *reinterpret_cast<uintptr_t*>(this) = type_def;

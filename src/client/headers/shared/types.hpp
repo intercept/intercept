@@ -357,6 +357,7 @@ namespace intercept {
             r_string _typeName;     //float/NativeObject
 #endif
             //r_string _javaFunc;  //Lcom/bistudio/JNIScripting/NativeObject;
+            uint64_t _bitmask;
         };
 
         struct compound_value_pair {
@@ -381,29 +382,35 @@ namespace intercept {
             sqf_script_type(const script_type_info* type) noexcept {
                 single_type = type;
                 set_vtable(type_def);
+                update_bitmask();
             }
             //#TODO use type_def instead
             sqf_script_type(uintptr_t vt, const script_type_info* st, compound_script_type_info* ct) noexcept : single_type(st), compound_type(ct) {
                 set_vtable(vt);
+                update_bitmask();
             }
             void set_vtable(uintptr_t v) noexcept { *reinterpret_cast<uintptr_t*>(this) = v; }
             uintptr_t get_vtable() const noexcept { return *reinterpret_cast<const uintptr_t*>(this); }
-            sqf_script_type(sqf_script_type&& other) noexcept : single_type(other.single_type), compound_type(other.compound_type) {
+            sqf_script_type(sqf_script_type&& other) noexcept : single_type(other.single_type), compound_type(other.compound_type), bitmask(other.bitmask) {
                 set_vtable(other.get_vtable());
+                update_bitmask();
             }
-            sqf_script_type(const sqf_script_type& other) noexcept : single_type(other.single_type), compound_type(other.compound_type) {
+            sqf_script_type(const sqf_script_type& other) noexcept : single_type(other.single_type), compound_type(other.compound_type), bitmask(other.bitmask) {
                 set_vtable(other.get_vtable());
             }
             sqf_script_type& operator=(const sqf_script_type& other) noexcept {
                 single_type = other.single_type;
                 compound_type = other.compound_type;
+                bitmask = other.bitmask;
                 set_vtable(other.get_vtable());
                 return *this;
             }
             const script_type_info* single_type{nullptr};
             compound_script_type_info* compound_type{nullptr};
+            uint64_t bitmask;
             value_types type() const;
             r_string type_str() const;
+            void update_bitmask();
             bool operator==(const sqf_script_type& other) const noexcept {
                 return single_type == other.single_type && compound_type == other.compound_type;
             }
@@ -418,22 +425,13 @@ namespace intercept {
 
         private:
             sqf_script_type arg_type;
-            uint64_t dummySpace{0};
-            uint64_t dummySpace2{0};
 
         public:
             unary_operator() {
-                arg_type.set_vtable(0);
-                get_arg_type(true).set_vtable(sqf_script_type::type_def);  // Make sure we are setting vtable in correct place
+                arg_type.set_vtable(sqf_script_type::type_def);
             }
 
-            sqf_script_type& get_arg_type(bool creation = false) {
-                static bool newVersionFlags = false;  // The check only works during load, not write, need member, VS please no crash again so I don't have to write this comment for the 7th time
-                // Arma 2.13 150487
-                if (newVersionFlags || (!creation && !arg_type.get_vtable())) { // During construction it may validly be null, even though we aren't in new build
-                    newVersionFlags = true;
-                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg_type) + sizeof(uintptr_t));
-                }
+            sqf_script_type& get_arg_type() {
                 return arg_type;
             }
         };
@@ -451,34 +449,17 @@ namespace intercept {
         private:
             sqf_script_type arg1_type;
             sqf_script_type arg2_type;
-            uint64_t dummySpace{0};  // Make sure allocator allocates enough space
-            uint64_t dummySpace2{0};
-            uint64_t dummySpace3{0};
 
         public:
             binary_operator() {
-                memset(&arg1_type, 0, sizeof(decltype(arg1_type)));
-                memset(&arg2_type, 0, sizeof(decltype(arg2_type)));
-                get_arg1_type(true).set_vtable(sqf_script_type::type_def);
-                get_arg2_type(true).set_vtable(sqf_script_type::type_def);
+                arg1_type.set_vtable(sqf_script_type::type_def);
+                arg2_type.set_vtable(sqf_script_type::type_def);
             }
-            sqf_script_type& get_arg1_type(bool creation = false) {
-                static bool newVersionFlags = false;
-                // Arma 2.13 150487
-                if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
-                    newVersionFlags = true;
-                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg1_type) + sizeof(uintptr_t));
-                }
+            sqf_script_type& get_arg1_type() {
                 return arg1_type;
             }
 
-            sqf_script_type& get_arg2_type(bool creation = false) {
-                static bool newVersionFlags = false;
-                // Arma 2.13 150487
-                if (newVersionFlags || (!creation && !arg1_type.get_vtable())) {
-                    newVersionFlags = true;
-                    return *reinterpret_cast<sqf_script_type*>(reinterpret_cast<uintptr_t>(&arg2_type) + sizeof(uintptr_t) * 2);
-                }
+            sqf_script_type& get_arg2_type() {
                 return arg2_type;
             }
         };

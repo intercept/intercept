@@ -31,12 +31,14 @@
 #include "MemorySection.hpp"
 #include "StateTypes.hpp"
 
-// CommandScan.cpp
+// Old code for dynamic dispatch, allowing to support structure size changes for different game versions
+
+// CommandScan.cpp -> implementation in CommandScan.hpp
 extern void DoCommandScanBase(intercept::loader& ldr, game_state* gameStatePtr);
 // CommandScan214.cpp
-extern void DoCommandScan214(intercept::loader& ldr, game_state* gameStatePtr);
+//extern void DoCommandScan214(intercept::loader& ldr, game_state* gameStatePtr);
 // CommandTypesDynamic.hpp
-bool CT_Is214 = false;
+//bool CT_Is214 = false;
 
 namespace intercept {
 
@@ -377,14 +379,7 @@ namespace intercept {
 
         auto [vMajor, vMinor, vBuild] = getGameVersion();
 
-
-        if ((vBuild >= 150720 && vBuild != 150779) || vMinor >= 13) {
-            CT_Is214 = true;
-            DoCommandScan214(*this, game_state_ptr);
-        } else {
-            DoCommandScanBase(*this, game_state_ptr);
-        }
-        
+        DoCommandScanBase(*this, game_state_ptr);
 
         //GameData pool allocators
         for (auto& entry : game_state_ptr->_scriptTypes) {

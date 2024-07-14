@@ -1392,7 +1392,7 @@ namespace intercept {
             if (ar.size() > 0)
             {
                 static constexpr std::string_view lookup[] = { "INIT"sv, "THRUST"sv, "FLY"sv };
-                std::string_view engine = ar[0].get_as<game_data_string>()->to_string();
+                std::string_view engine = ar[0].get_as<game_data_string>()->raw_string;
 
                 for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
                 {
@@ -1406,7 +1406,7 @@ namespace intercept {
             if (ar.size() > 1)
             {
                 static constexpr std::string_view lookup[] = { "MANUAL"sv, "LOCKED"sv, "LOST"sv, "INITIAL"sv, "SEEKING"sv };
-                std::string_view lock = ar[1].get_as<game_data_string>()->to_string();
+                std::string_view lock = ar[1].get_as<game_data_string>()->raw_string;
 
                 for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
                 {
@@ -1420,7 +1420,7 @@ namespace intercept {
             if (ar.size() > 2)
             {
                 static constexpr std::string_view lookup[] = { "DEFAULT"sv, "DIRECT"sv, "TOPDOWN"sv, "LOALDISTANCE"sv, "LOALALTITUDE"sv, "OVERFLY"sv, "CRUISE"sv };
-                std::string_view flight = ar[2].get_as<game_data_string>()->to_string();
+                std::string_view flight = ar[2].get_as<game_data_string>()->raw_string;
 
                 for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
                 {

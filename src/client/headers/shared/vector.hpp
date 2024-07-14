@@ -2,7 +2,7 @@
 #include "../shared.hpp"
 
 #ifdef INTERCEPT_GLM_INTEROP
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #endif //INTERCEPT_GLM_INTEROP
 
 namespace intercept {

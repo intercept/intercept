@@ -379,5 +379,7 @@ namespace intercept {
         void set_ti_parameter(sqf_string_const_ref param_, float value_);
 
         rv_hashmap create_hashmap_object(const auto_array<game_value> &class_);
+
+        sqf_return_string name(const rv_namespace& namespace_);
     }  // namespace sqf
 }  // namespace intercept

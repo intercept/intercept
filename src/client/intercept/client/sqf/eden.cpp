@@ -62,7 +62,7 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__do3denaction__string__ret__nothing, value_);
         }
         void get_eden_grid(sqf_string_const_ref value_) {
-            host::functions.invoke_raw_unary(__sqf::unary__get3dengrid__string__ret__nothing, value_);
+            host::functions.invoke_raw_unary(__sqf::unary__get3dengrid__string__ret__scalar, value_);
         }
         rv_eden_mouse_over get_eden_mouse_over() {
             return rv_eden_mouse_over(host::functions.invoke_raw_nular(__sqf::nular__get3denmouseover__ret__array));
@@ -380,8 +380,8 @@ namespace intercept {
             host::functions.invoke_raw_unary(__sqf::unary__set3denselected__array__ret__nothing, std::move(entities));
         }
 
-        void clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_) {
-            host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__nothing, unknown_, attribute_);
+        bool clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__clear3denattribute__any__string__ret__bool, unknown_, attribute_);
         }
 
         eden_entity create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty) {
@@ -438,11 +438,11 @@ namespace intercept {
 
         int get_3den_layer(const object& obj_)
         {
-            return host::functions.invoke_raw_unary(__sqf::unary__get3denlayer__scalar_string__ret__nothing, obj_);
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denlayer__scalar_string__ret__scalar, obj_);
         }
 
         object get_3den_parent(const object& obj_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__get3denparent__scalar_string__ret__nothing, obj_);
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denparent__scalar_string__ret__any, obj_);
         }
 
         void ignore_3den_history(const code& code_) {
@@ -456,6 +456,11 @@ namespace intercept {
         bool save_3den_preferences()
         {
             return host::functions.invoke_raw_nular(__sqf::nular__save3denpreferences__ret__bool);
+        }
+
+        void set_3den_attached_cursor_entity(const rv_hashmap& values_)
+        {
+            host::functions.invoke_raw_unary(__sqf::unary__set3denattachedcursorentity__hashmap__ret__nothing, values_);
         }
 
         sqf_return_string_list get_mission_layers() {  //#TODO: Find out if this really returns sqf_return_string_list

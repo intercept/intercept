@@ -1032,5 +1032,10 @@ namespace intercept {
         rv_player_target_lock player_target_lock() {
             return rv_player_target_lock(host::functions.invoke_raw_nular(__sqf::nular__playertargetlock__ret__array));
         }
+
+        bool has_custom_face(const object& unit_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__hascustomface__object__ret__bool, unit_);
+        }
     }  // namespace sqf
 }  // namespace intercept

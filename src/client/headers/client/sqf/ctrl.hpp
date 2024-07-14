@@ -104,7 +104,7 @@ namespace intercept {
                   viewport(gv_[2], gv_[3]),
                   aspect_ratio(gv_[4]),
                   ui_scale(gv_[5]),
-                  fov(gv_[6], gv_[7]),
+                  fov(gv_[7], gv_[6]),
                   triple_head(gv_[8]),
                   texture_quality(gv_[9])
             {}

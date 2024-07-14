@@ -81,6 +81,7 @@ namespace intercept {
         vector3 model_to_world_visual(const object &model_, const vector3 &model_pos_);
 
         std::optional<vector2> world_to_screen(const vector3 &pos_agl_);
+        std::optional<vector2> world_to_screen(const object &cam_, const vector3 &pos_agl_);
 
         void set_vector_dir(const object &obj_, const vector3 &vec_);
         void set_velocity(const object &obj_, const vector3 &vel_);
@@ -163,7 +164,10 @@ namespace intercept {
         vector3 model_to_world_visual_world(const object &object_, const vector3 &model_pos_);
         vector3 model_to_world_world(const object &object_, const vector3 &model_pos_);
 
+        vector3 screen_to_world(const object &cam_, const vector2 &pos_);
+        vector3 screen_to_world_direction(const object &cam_, const vector2 &pos_);
         vector3 screen_to_world(const vector2 &pos_);
+        vector3 screen_to_world_direction(const vector2 &pos_);
         vector3 model_to_world(const object &object_, const vector3 &offset_);
         bool in_area(t_sqf_in_area_position position_, const object &trigger_);
         bool in_area(t_sqf_in_area_position position_, sqf_string_const_ref marker_);

@@ -451,7 +451,11 @@ namespace intercept {
         }
 
         bool set_missile_target(const object &value_, const object &target_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object__ret__bool, value_, target_);
+            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object_array__ret__bool, value_, target_);
+        }
+
+        bool set_missile_target(const object &value_, const object &target_, bool force_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object_array__ret__bool, value_, target_);
         }
 
         void set_missile_target_pos(const object &value_, const vector3 &position_) {
@@ -1278,6 +1282,16 @@ namespace intercept {
             return __helpers::__convert_to_vector<rv_collision_status>(host::functions.invoke_raw_unary(__sqf::unary__collisiondisabledwith__object__ret__array, obj_));
         }
 
+        rv_physics_flags get_physics_collision_flag(const object &obj_)
+        {
+            return rv_physics_flags(host::functions.invoke_raw_unary(__sqf::unary__getphysicscollisionflag__object__ret__array, obj_));
+        }
+
+        void set_physics_collision_flag(const object &obj_, bool enabled_)
+        {
+            host::functions.invoke_raw_binary(__sqf::binary__setphysicscollisionflag__object__bool__ret__nothing, obj_, enabled_);
+        }
+
         bool is_allowed_crew_in_immobile(const object &veh_) {
             return host::functions.invoke_raw_unary(__sqf::unary__isallowedcrewinimmobile__object__ret__bool, veh_);
         }
@@ -1368,6 +1382,56 @@ namespace intercept {
 
         void set_water_leakiness(const object &veh_, float value_) {
             host::functions.invoke_raw_binary(__sqf::binary__setwaterleakiness__object__scalar__ret__nothing, veh_, value_);
+        }
+        rv_missile_state missile_state(const object &missile_)
+        {
+            auto gv = host::functions.invoke_raw_unary(__sqf::unary__missilestate__object__ret__array, missile_);
+            auto& ar = gv.to_array();
+            rv_missile_state ret{};
+
+            if (ar.size() > 0)
+            {
+                static constexpr std::string_view lookup[] = { "INIT"sv, "THRUST"sv, "FLY"sv };
+                std::string_view engine = ar[0].get_as<game_data_string>()->to_string();
+
+                for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
+                {
+                    if (engine == lookup[i])
+                    {
+                        ret.engine_state = (rv_missile_state::engine)i;
+                        break;
+                    }
+                }
+            }
+            if (ar.size() > 1)
+            {
+                static constexpr std::string_view lookup[] = { "MANUAL"sv, "LOCKED"sv, "LOST"sv, "INITIAL"sv, "SEEKING"sv };
+                std::string_view lock = ar[1].get_as<game_data_string>()->to_string();
+
+                for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
+                {
+                    if (lock == lookup[i])
+                    {
+                        ret.lock_state = (rv_missile_state::lock)i;
+                        break;
+                    }
+                }
+            }
+            if (ar.size() > 2)
+            {
+                static constexpr std::string_view lookup[] = { "DEFAULT"sv, "DIRECT"sv, "TOPDOWN"sv, "LOALDISTANCE"sv, "LOALALTITUDE"sv, "OVERFLY"sv, "CRUISE"sv };
+                std::string_view flight = ar[2].get_as<game_data_string>()->to_string();
+
+                for (int i = 0; i < std::extent_v<decltype(lookup)>; ++i)
+                {
+                    if (flight == lookup[i])
+                    {
+                        ret.flight_state = (rv_missile_state::flight)i;
+                        break;
+                    }
+                }
+            }
+            return ret;
         }
     }  // namespace sqf
 }  // namespace intercept

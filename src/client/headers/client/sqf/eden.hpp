@@ -92,7 +92,7 @@ namespace intercept {
         using eden_entity = game_value;
         bool remove_3den_connection(sqf_string_const_ref type_, eden_entity from_, eden_entity to_);
         //#undocumented
-        void clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_);
+        bool clear_3den_attribute(const game_value &unknown_, sqf_string_const_ref attribute_);
         eden_entity create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty = false);
         //Not fully implemented
         std::vector<game_value> get_3den_attribute(std::variant<std::reference_wrapper<const object>, std::reference_wrapper<const group>, sqf_string_const_ref_wrapper, std::reference_wrapper<float>> entity_, sqf_string_const_ref attribute_);
@@ -120,5 +120,7 @@ namespace intercept {
         bool load_3den_scenario(sqf_string_const_ref scenario_or_world_);
 
         bool save_3den_preferences();
+
+        void set_3den_attached_cursor_entity(const rv_hashmap& values_);
     }  // namespace sqf
 }  // namespace intercept

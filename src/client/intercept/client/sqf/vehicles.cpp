@@ -455,7 +455,7 @@ namespace intercept {
         }
 
         bool set_missile_target(const object &value_, const object &target_, bool force_) {
-            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object_array__ret__bool, value_, target_);
+            return host::functions.invoke_raw_binary(__sqf::binary__setmissiletarget__object__object_array__ret__bool, value_, {target_, force_});
         }
 
         void set_missile_target_pos(const object &value_, const vector3 &position_) {

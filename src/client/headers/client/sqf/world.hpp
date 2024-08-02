@@ -448,6 +448,28 @@ namespace intercept {
         void set_terrain_height(const std::vector<vector3> &positions_, bool adjust_objs_);
 
         rv_hashmap get_mission_options();
-        void set_mission_options(const rv_hashmap& options_);
+        void set_mission_options(const rv_hashmap &options_);
+
+        struct rv_camera_info {
+            struct r2t {
+                sqf_string r2t_name;         // the camera's RTT name (see cameraEffect);
+                sqf_string r2t_effect_name;  // see cameraEffect for possible values;
+                sqf_string pp_effect_type;   // one of Normal, NightVision, Thermal, Colors, Mirror, ChromAber or FilmGrain;
+                float ti_index;               // see setCamUseTI for possible values;
+                explicit r2t(const game_value &gv_) : r2t_name{gv_[0]},
+                                                      r2t_effect_name{gv_[1]},
+                                                      pp_effect_type{gv_[2]},
+                    ti_index{gv_[3]} {}
+            };
+            object camera;              // the camera itself (see camCreate);
+            std::vector<r2t> r2t_infos;  // [r2tName, r2tEffectName, ppEffectType, TIindex]
+            sqf_string effect_name;     // (Optional, only available if isPrimary is true) see cameraEffect for possible values;
+            float view_mode;            // (Optional, only available if isPrimary is true) 0 = normal, 1 = NVG, 2 = TI, 3 = NVG + TI;
+            float ti_index;              // (Optional, only available if isPrimary is true) see setCamUseTI for possible values;
+            bool is_primary;            // whether or not this camera is the current main one
+            explicit rv_camera_info(const game_value &gv_);
+        };
+
+        std::vector<rv_camera_info> all_cameras();
     }  // namespace sqf
 }  // namespace intercept

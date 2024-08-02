@@ -163,7 +163,8 @@ namespace intercept {
             bool has_terminal_opened;           // 10 - true if the UAV terminal is opened for the given entity.;
             bool is_weaponholder;               // 11 - true if the entity is weaponholder.;
             bool is_wreck;                      // 12 - true if the entity is wreck.;
-            bool is_smoking;                    // 13 - true if the entity has smoke and fire destruction effect active.
+			bool is_smoking;                    // 13 - true if the entity has smoke and fire destruction effect active.
+			bool is_set_for_deletion;           // 14 - true if the entity was set for deletion, but is not yet removed from the simulation.
             explicit rv_entity_info(const game_value &gv_)
                 : last_entity_causing_damage{gv_[4]},
                   dead_set_time{gv_[3]},
@@ -178,7 +179,8 @@ namespace intercept {
                   has_terminal_opened{gv_[10]},
                   is_weaponholder{gv_[11]},
                   is_wreck{gv_[12]},
-                  is_smoking{gv_[13]} {}
+                  is_smoking{gv_[13]},
+                  is_set_for_deletion{gv_[14]} {}
         };
 
         struct rv_vehicle_respawn_info {
@@ -339,6 +341,7 @@ namespace intercept {
         object missile_target(const object &value_);
         vector3 missile_target_pos(const object &value_);
         bool set_missile_target(const object &value_, const object &target_);
+        bool set_missile_target(const object &value_, const object &target_, bool force_);
         void set_missile_target_pos(const object &value_, const vector3 &position_);
         bool locked_driver(const object &value_);
         object object_parent(const object &value_);
@@ -547,6 +550,16 @@ namespace intercept {
 
         std::vector<rv_collision_status> collision_disabled_with(const object &obj_);
 
+        struct rv_physics_flags
+        {
+            bool collision;
+            explicit rv_physics_flags(const game_value &gv_)
+                : collision(gv_[0]) {}
+        };
+
+        rv_physics_flags get_physics_collision_flag(const object &obj_);
+        void set_physics_collision_flag(const object &obj_, bool enabled_);
+
         bool is_allowed_crew_in_immobile(const object &veh_);
 
         // return 0: none, 1: auto, 2: manual, 3: both, -1: unsupported
@@ -594,5 +607,26 @@ namespace intercept {
         void set_water_fill_percentage(const object &veh_, float value_);
         float get_water_leakiness(const object &veh_);
         void set_water_leakiness(const object &veh_, float value_);
+
+        struct rv_missile_state
+        {
+            enum class engine
+            {
+                INIT,THRUST,FLY,NONE
+            };
+            enum class lock
+            {
+                MANUAL,LOCKED,LOST,INITIAL,SEEKING,NONE
+            };
+            enum class flight
+            {
+                DEFAULT,DIRECT,TOPDOWN,LOALDISTANCE,OVERFLY,CRUISE,NONE
+            };
+            engine engine_state = engine::NONE; // one of the "INIT", "THRUST", "FLY" or "".;
+            lock lock_state = lock::NONE;       // one of the "MANUAL", "LOCKED", "LOST", "INITIAL", "SEEKING" or "".;
+            flight flight_state = flight::NONE; // one of the "DEFAULT", "DIRECT", "TOPDOWN", "LOALDISTANCE", "LOALALTITUDE", "OVERFLY", "CRUISE" or "". LOAL stands for "Lock-on after launch".
+        };
+
+        rv_missile_state missile_state(const object &missile_);
     }  // namespace sqf
 }  // namespace intercept

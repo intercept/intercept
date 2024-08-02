@@ -203,6 +203,15 @@ namespace intercept {
                 return game_value(result);
             return {};
         }
+
+        std::optional<vector2> world_to_screen(const object& cam_, const vector3& pos_agl_)
+        {
+            game_value result = host::functions.invoke_raw_binary(__sqf::binary__worldtoscreen__object__array__ret__array, cam_, pos_agl_);
+            if (static_cast<game_data_array *>(result.data.get())->length() == 2)
+                return game_value(result);
+            return {};
+        }
+
         void set_vector_dir(const object &obj_, const vector3 &vec_) {
             host::functions.invoke_raw_binary(__sqf::binary__setvectordir__object__array__ret__nothing, obj_, vec_);
         }
@@ -488,6 +497,7 @@ namespace intercept {
         vector3 unit_aim_position_visual(const object &unit_) {
             return host::functions.invoke_raw_unary(__sqf::unary__unitaimpositionvisual__object__ret__array, unit_);
         }
+
         vector3 model_to_world_visual_world(const object &object_, const vector3 &model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldvisualworld__object__array__ret__array, object_, model_pos_);
         }
@@ -495,12 +505,29 @@ namespace intercept {
         vector3 model_to_world_world(const object &object_, const vector3 &model_pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworldworld__object__array__ret__array, object_, model_pos_);
         }
+
+        vector3 screen_to_world(const object &cam_, const vector2 &pos_) {
+            return host::functions.invoke_raw_binary(__sqf::binary__screentoworld__object__array__ret__array, cam_, pos_);
+        }
+
+        vector3 screen_to_world_direction(const object &cam_, const vector2& pos_)
+        {
+            return host::functions.invoke_raw_binary(__sqf::binary__screentoworlddirection__object__array__ret__array, cam_, pos_);
+        }
+
         vector3 screen_to_world(const vector2 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__screentoworld__array__ret__array, pos_);
         }
+
+        vector3 screen_to_world_direction(const vector2& pos_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__screentoworlddirection__array__ret__array, pos_);
+        }
+
         vector3 model_to_world(const object &object_, const vector3 &offset_) {
             return host::functions.invoke_raw_binary(__sqf::binary__modeltoworld__object__array__ret__array, object_, offset_);
         }
+
         bool in_area(t_sqf_in_area_position position_, const object &trigger_) {
             game_value param_left;
 

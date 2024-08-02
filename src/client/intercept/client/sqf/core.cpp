@@ -1156,5 +1156,10 @@ namespace intercept {
         rv_hashmap create_hashmap_object(const auto_array<game_value> &class_) {
             return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__createhashmapobject__array__ret__hashmap, class_));
         }
+
+        sqf_return_string name(const rv_namespace &namespace_)
+        {
+            return host::functions.invoke_raw_unary(__sqf::unary__name__namespace__ret__string, namespace_);
+        }
     }  // namespace sqf
 }  // namespace intercept

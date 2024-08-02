@@ -391,5 +391,7 @@ namespace intercept {
         };
 
         rv_player_target_lock player_target_lock();
+
+        bool has_custom_face(const object &unit_);
     }  // namespace sqf
 }  // namespace intercept

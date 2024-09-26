@@ -546,8 +546,10 @@ namespace intercept {
 
         protected:
             virtual void set_readonly(bool) {}  //No clue what this does...
+        public:
             virtual bool get_readonly() const { return false; }
             virtual bool get_final() const { return false; }
+        protected:
             virtual void set_final(bool) {}  //Only on GameDataCode AFAIK
         public:
             virtual r_string to_string() const { return r_string(); }

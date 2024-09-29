@@ -16,7 +16,7 @@ jobs:
           args: build --release
 
       - name: Upload mod
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: 'mod'
           path: releases/1.0.0/@intercept
@@ -40,7 +40,7 @@ jobs:
           CXX: g++-8
 
       - name: Upload Linux 64 bit
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: intercept_x64.so
           path: build-linux64/src/host/intercept_dll/intercept_x64.so
@@ -58,13 +58,13 @@ jobs:
         run: mkdir build-win64 && cd build-win64 && cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 16 2019" -A x64 .. && cmake --build . --config Release
 
       - name: Upload Windows 32 bit
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: intercept.dll
           path: build/win32/intercept/Release/intercept.dll
 
       - name: Upload Windows 64 bit
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: intercept_x64.dll
           path: build/win64/intercept/Release/intercept_x64.dll
@@ -101,7 +101,7 @@ jobs:
           path: '@intercept'
 
       - name: Upload built mod
-        uses: actions/upload-artifact@1.0.0
+        uses: actions/upload-artifact@v4
         with:
           name: '@intercept'
           path: '.'

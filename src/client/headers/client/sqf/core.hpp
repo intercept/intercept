@@ -381,5 +381,10 @@ namespace intercept {
         rv_hashmap create_hashmap_object(const auto_array<game_value> &class_);
 
         sqf_return_string name(const rv_namespace& namespace_);
+
+        game_value from_json(sqf_string_const_ref str_);
+        sqf_return_string to_json(const game_value &value_);
+
+        std::vector<sqf_return_string> all_extensions();
     }  // namespace sqf
 }  // namespace intercept

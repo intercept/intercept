@@ -72,31 +72,31 @@ namespace intercept {
         }
 
         void set_traffic_density(float density_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({density_,
-                               x_min_,
-                               x_max_,
-                               z_min_,
-                               z_max_});
+            game_value params{density_,
+                              x_min_,
+                              x_max_,
+                              z_min_,
+                              z_max_};
 
             host::functions.invoke_raw_unary(__sqf::unary__settrafficdensity__array__ret__nothing, params);
         }
 
         void set_traffic_gap(float gap_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({gap_,
-                               x_min_,
-                               x_max_,
-                               z_min_,
-                               z_max_});
+            game_value params{gap_,
+                              x_min_,
+                              x_max_,
+                              z_min_,
+                              z_max_};
 
             host::functions.invoke_raw_unary(__sqf::unary__settrafficgap__array__ret__nothing, params);
         }
 
         void set_traffic_speed(float speed_, float x_min_, float x_max_, float z_min_, float z_max_) {
-            game_value params({speed_,
-                               x_min_,
-                               x_max_,
-                               z_min_,
-                               z_max_});
+            game_value params{speed_,
+                              x_min_,
+                              x_max_,
+                              z_min_,
+                              z_max_};
 
             host::functions.invoke_raw_unary(__sqf::unary__settrafficspeed__array__ret__nothing, params);
         }
@@ -110,14 +110,14 @@ namespace intercept {
         bool in_range_of_artillery(const vector3 &position_, const std::vector<object> &units_, sqf_string_const_ref magazine_type_) {
             auto_array<game_value> units({units_.begin(), units_.end()});
 
-            game_value params_right({std::move(units),
-                                     magazine_type_});
+            game_value params_right{std::move(units),
+                                    magazine_type_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__inrangeofartillery__array__array__ret__bool, position_, params_right);
         }
         float get_artillery_eta(const object &unit_, const vector3 &target_position_, sqf_string_const_ref magazine_type_) {
-            game_value params_right({target_position_,
-                                     magazine_type_});
+            game_value params_right{target_position_,
+                                    magazine_type_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getartilleryeta__object__array__ret__scalar, unit_, params_right);
         }
@@ -156,8 +156,8 @@ namespace intercept {
         }
 
         void enable_saving(bool enable_, bool autosave_) {
-            game_value args({enable_,
-                             autosave_});
+            game_value args{enable_,
+                            autosave_};
 
             host::functions.invoke_raw_unary(__sqf::unary__enablesaving__bool_array__ret__nothing, args);
         }
@@ -359,69 +359,69 @@ namespace intercept {
         }
 
         bool set_stat_value(sqf_string_const_ref name_, float value_) {
-            game_value params({name_,
-                               value_});
+            game_value params{name_,
+                              value_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__setstatvalue__array__ret__bool, params);
         }
 
         void host_mission(const config &config_, const display &display_) {
-            game_value params({config_,
-                               display_});
+            game_value params{config_,
+                              display_};
 
             host::functions.invoke_raw_unary(__sqf::unary__hostmission__array__ret__nothing, params);
         }
 
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_) {
-            game_value params({campaign_,
-                               mission_});
+            game_value params{campaign_,
+                              mission_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playmission__array__ret__nothing, params);
         }
 
         void play_mission(sqf_string_const_ref campaign_, sqf_string_const_ref mission_, bool skip_briefing_) {
-            game_value params({campaign_,
-                               mission_,
-                               skip_briefing_});
+            game_value params{campaign_,
+                              mission_,
+                              skip_briefing_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playmission__array__ret__nothing, params);
         }
 
         void play_mission(sqf_string_const_ref campaign_, const config &mission_) {
-            game_value params({campaign_,
-                               mission_});
+            game_value params{campaign_,
+                              mission_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playmission__array__ret__nothing, params);
         }
 
         void play_mission(sqf_string_const_ref campaign_, const config &mission_, bool skip_briefing_) {
-            game_value params({campaign_,
-                               mission_,
-                               skip_briefing_});
+            game_value params{campaign_,
+                              mission_,
+                              skip_briefing_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playmission__array__ret__nothing, params);
         }
 
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_) {
-            game_value params({world_,
-                               command_});
+            game_value params{world_,
+                              command_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playscriptedmission__array__ret__nothing, params);
         }
 
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_) {
-            game_value params({world_,
-                               command_,
-                               config_});
+            game_value params{world_,
+                              command_,
+                              config_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playscriptedmission__array__ret__nothing, params);
         }
 
         void play_scripted_mission(sqf_string_const_ref world_, const code &command_, const config &config_, bool ignore_child_window_) {
-            game_value params({world_,
-                               command_,
-                               config_,
-                               ignore_child_window_});
+            game_value params{world_,
+                              command_,
+                              config_,
+                              ignore_child_window_};
 
             host::functions.invoke_raw_unary(__sqf::unary__playscriptedmission__array__ret__nothing, params);
         }
@@ -448,14 +448,14 @@ namespace intercept {
 
         //3d Stuff
         void draw_line_3d(const vector3 &pos1_, const vector3 &pos2_, const rv_color &color_) {
-            game_value args({pos1_,
-                             pos2_,
-                             color_});
+            game_value args{pos1_,
+                            pos2_,
+                            color_};
             host::functions.invoke_raw_unary(__sqf::unary__drawline3d__array__ret__nothing, args);
         }
 
-        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color & color_, const vector3 & pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_, float shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref text_align_, bool draw_offscreen_) {
-            game_value args({
+        void draw_icon_3d(sqf_string_const_ref texture_, const rv_color &color_, const vector3 &pos_agl_, float width_, float height_, float angle_, sqf_string_const_ref text_, float shadow_, float text_size_, sqf_string_const_ref font_, sqf_string_const_ref text_align_, bool draw_offscreen_) {
+            game_value args{
                 texture_,
                 color_,
                 pos_agl_,
@@ -467,14 +467,13 @@ namespace intercept {
                 text_size_,
                 font_,
                 text_align_,
-                draw_offscreen_
-            });
+                draw_offscreen_};
 
             host::functions.invoke_raw_unary(__sqf::unary__drawicon3d__array__ret__nothing, args);
         }
 
-        void draw_laser(const vector3& pos_asl_, const vector3& dir_, const rv_color& beam_color_, const rv_color& dot_color_, float dot_size_, float beam_thickness_, float max_beam_length_, bool is_IR) {
-            game_value args({
+        void draw_laser(const vector3 &pos_asl_, const vector3 &dir_, const rv_color &beam_color_, const rv_color &dot_color_, float dot_size_, float beam_thickness_, float max_beam_length_, bool is_IR) {
+            game_value args{
                 pos_asl_,
                 dir_,
                 beam_color_,
@@ -482,8 +481,7 @@ namespace intercept {
                 dot_size_,
                 beam_thickness_,
                 max_beam_length_,
-                is_IR
-            });
+                is_IR};
 
             host::functions.invoke_raw_unary(__sqf::unary__drawlaser__array__ret__nothing, args);
         }
@@ -502,15 +500,15 @@ namespace intercept {
         }
 
         void set_particle_circle(const object &particle_source_, float radius_, const vector3 &velocity_) {
-            game_value args({radius_,
-                             velocity_});
+            game_value args{radius_,
+                            velocity_};
             host::functions.invoke_raw_binary(__sqf::binary__setparticlecircle__object__array__ret__nothing, particle_source_, args);
         }
 
         void set_particle_fire(const object &particle_source_, float core_intensity_, float core_distance_, float damage_time_) {
-            game_value args({core_intensity_,
-                             core_distance_,
-                             damage_time_});
+            game_value args{core_intensity_,
+                            core_distance_,
+                            damage_time_};
             host::functions.invoke_raw_binary(__sqf::binary__setparticlefire__object__array__ret__nothing, particle_source_, args);
         }
 
@@ -574,7 +572,6 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__scoreside__side__ret__scalar, value_);
         }
 
-
         bool is_key_active(sqf_string_const_ref value_) {
             return __helpers::__bool_unary_string(__sqf::unary__iskeyactive__string__ret__bool, value_);
         }
@@ -583,29 +580,28 @@ namespace intercept {
             return __helpers::__retrieve_nular_bool(__sqf::nular__reversedmousey__ret__bool);
         }
 
-
         //From contact DLC
-        std::vector<float> decay_graph_values(const std::vector<float>& lower_bound_values_, const std::vector<float>& graph_values_, float coef_) {
+        std::vector<float> decay_graph_values(const std::vector<float> &lower_bound_values_, const std::vector<float> &graph_values_, float coef_) {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__decaygraphvalues__array__ret__array, {lower_bound_values_, graph_values_, coef_}));
         }
 
         game_value get_graph_values(const rv_graph_value_par &graph_val_par, const std::vector<float> &xy_) {
             auto_array<game_value> parameter;
-            parameter.reserve(xy_.size()+1);
+            parameter.reserve(xy_.size() + 1);
             parameter.push_back({
-                    graph_val_par.graph_min_x,
-                    graph_val_par.graph_min_y,
-                    graph_val_par.graph_max_x,
-                    graph_val_par.graph_max_y,
-                    graph_val_par.valueCount,
-                    graph_val_par.randomOffset,
-                });
+                graph_val_par.graph_min_x,
+                graph_val_par.graph_min_y,
+                graph_val_par.graph_max_x,
+                graph_val_par.graph_max_y,
+                graph_val_par.valueCount,
+                graph_val_par.randomOffset,
+            });
             parameter.insert(parameter.end(), xy_.begin(), xy_.end());
 
-            return host::functions.invoke_raw_unary(__sqf::unary__getgraphvalues__array__ret__array,parameter);
+            return host::functions.invoke_raw_unary(__sqf::unary__getgraphvalues__array__ret__array, parameter);
         }
 
-        std::vector<float> get_person_used_dlcs(const object& unit_) {
+        std::vector<float> get_person_used_dlcs(const object &unit_) {
             return __helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__getpersonuseddlcs__object__ret__array, unit_));
         }
 

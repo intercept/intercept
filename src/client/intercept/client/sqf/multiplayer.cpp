@@ -5,8 +5,8 @@
 namespace intercept {
     namespace sqf {
         game_value remote_exec(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_) {
-            game_value params({function_name_,
-                               jip_id_});
+            game_value params{function_name_,
+                              jip_id_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__string_nothing, params);
         }
@@ -26,16 +26,16 @@ namespace intercept {
         }
 
         game_value remote_exec(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
-            game_value params({function_name_,
-                               targets_,
-                               jip_id_});
+            game_value params{function_name_,
+                              targets_,
+                              jip_id_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexec__array__ret__string_nothing, params);
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, sqf_string_const_ref jip_id_) {
-            game_value params({function_name_,
-                               jip_id_});
+            game_value params{function_name_,
+                              jip_id_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__string_nothing, params);
         }
@@ -55,9 +55,9 @@ namespace intercept {
         }
 
         game_value remote_exec_call(sqf_string_const_ref function_name_, const game_value &targets_, sqf_string_const_ref jip_id_) {
-            game_value params({function_name_,
-                               targets_,
-                               jip_id_});
+            game_value params{function_name_,
+                              targets_,
+                              jip_id_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__remoteexeccall__array__ret__string_nothing, params);
         }
@@ -94,9 +94,9 @@ namespace intercept {
                     case 3: jip = std::get<group>(*jip_); break;
                 }
             }
-            game_value params_right = game_value({function_,
+            game_value params_right = game_value{function_,
                                                   targets,
-                                                  jip});
+                                                  jip};
 
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexec__any__array__ret__string_nothing, params_, params_right);
         }
@@ -121,9 +121,9 @@ namespace intercept {
                     case 3: jip = std::get<group>(*jip_); break;
                 }
             }
-            game_value params_right = game_value({function_,
+            game_value params_right = game_value{function_,
                                                   targets,
-                                                  jip});
+                                                  jip};
 
             return host::functions.invoke_raw_binary(__sqf::binary__remoteexeccall__any__array__ret__string_nothing, params_, params_right);
         }
@@ -264,6 +264,10 @@ namespace intercept {
         }
         int remote_executed_owner() {
             return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
+        }
+
+        sqf_return_string remote_executed_jip_id() {
+            return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedjipid__ret__string);
         }
 
         bool has_interface() {

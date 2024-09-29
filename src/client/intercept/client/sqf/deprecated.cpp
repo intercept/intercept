@@ -9,8 +9,8 @@ namespace intercept {
         }
 
         void editor_set_event_handler(const control &map_, sqf_string_const_ref event_type_, sqf_string_const_ref event_function_) {
-            game_value params_right({event_type_,
-                                     event_function_});
+            game_value params_right{event_type_,
+                                    event_function_};
 
             host::functions.invoke_raw_binary(__sqf::binary__editorseteventhandler__control__array__ret__nothing, map_, params_right);
         }
@@ -20,8 +20,8 @@ namespace intercept {
         }
 
         game_value exec_editor_script(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref script_) {
-            game_value params_right({object_,
-                                     script_});
+            game_value params_right{object_,
+                                    script_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__execeditorscript__control__array__ret__any, map_, params_right);
         }
@@ -37,10 +37,10 @@ namespace intercept {
         */
 
         sqf_return_string insert_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &value_, sqf_string_list_const_ref values_, sqf_string_const_ref sub_type_) {
-            game_value params_right({type_,
-                                     value_,
-                                     std::move(auto_array<game_value>({values_.begin(), values_.end()})),
-                                     sub_type_});
+            game_value params_right{type_,
+                                    value_,
+                                    std::move(auto_array<game_value>({values_.begin(), values_.end()})),
+                                    sub_type_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__inserteditorobject__control__array__ret__string, map_, params_right);
         }
@@ -50,11 +50,11 @@ namespace intercept {
         }
 
         void set_editor_object_scope(const control &map_, sqf_string_list_const_ref objects_, sqf_string_const_ref editor_type_, sqf_string_const_ref condition_, sqf_string_const_ref scope_, bool sub_ordinates_also_) {
-            game_value params_right({std::move(auto_array<game_value>(objects_.begin(), objects_.end())),
-                                     editor_type_,
-                                     condition_,
-                                     scope_,
-                                     sub_ordinates_also_});
+            game_value params_right{std::move(auto_array<game_value>(objects_.begin(), objects_.end())),
+                                    editor_type_,
+                                    condition_,
+                                    scope_,
+                                    sub_ordinates_also_};
 
             host::functions.invoke_raw_binary(__sqf::binary__seteditorobjectscope__control__array__ret__nothing, map_, params_right);
         }
@@ -69,34 +69,34 @@ namespace intercept {
         }
 
         sqf_return_string add_editor_object(const control &map_, sqf_string_const_ref type_, const game_value &values_, sqf_string_const_ref subtype_class_) {
-            game_value params_right({type_,
-                                     values_,
-                                     subtype_class_});
+            game_value params_right{type_,
+                                    values_,
+                                    subtype_class_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addeditorobject__control__array__ret__string, map_, params_right);
         }
 
         int add_menu(const control &map_, sqf_string_const_ref text_, float priority_) {
-            game_value params_right({text_,
-                                     priority_});
+            game_value params_right{text_,
+                                    priority_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmenu__control__array__ret__scalar, map_, params_right);
         }
 
         int add_menu_item(const control &map_, sqf_string_const_ref menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_) {
-            game_value params_right({menu_,
-                                     text_,
-                                     command_,
-                                     priority_});
+            game_value params_right{menu_,
+                                    text_,
+                                    command_,
+                                    priority_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right);
         }
 
         int add_menu_item(const control &map_, int menu_, sqf_string_const_ref text_, sqf_string_const_ref command_, float priority_) {
-            game_value params_right({static_cast<float>(menu_),
-                                     text_,
-                                     command_,
-                                     priority_});
+            game_value params_right{static_cast<float>(menu_),
+                                    text_,
+                                    command_,
+                                    priority_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addmenuitem__control__array__ret__scalar, map_, params_right);
         }
@@ -131,8 +131,8 @@ namespace intercept {
         }
 
         sqf_return_string get_object_argument(const control &map_, const object &object_, sqf_string_const_ref argument_) {
-            game_value params_right({object_,
-                                     argument_});
+            game_value params_right{object_,
+                                    argument_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getobjectargument__control__array__ret__string, map_, params_right);
         }

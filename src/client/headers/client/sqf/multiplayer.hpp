@@ -104,6 +104,7 @@ namespace intercept {
         //mp
         int admin(int owner_id_);
         int remote_executed_owner();
+        sqf_return_string remote_executed_jip_id();
 
         void connect_to_server(sqf_string_const_ref ip_, float port, sqf_string_const_ref password_);
         std::vector<float> get_player_scores(const object &player_);

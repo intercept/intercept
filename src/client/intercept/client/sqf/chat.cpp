@@ -35,7 +35,7 @@ namespace intercept {
         }
 
         void custom_chat(const object &obj_, uint32_t channel_id_, sqf_string_const_ref message_) {
-            game_value args({static_cast<float>(channel_id_), message_});
+            game_value args{static_cast<float>(channel_id_), message_};
             host::functions.invoke_raw_binary(__sqf::binary__customchat__object__array__ret__nothing, obj_, args);
         }
 
@@ -62,10 +62,10 @@ namespace intercept {
         float radio_channel_create(const rv_color &color_, sqf_string_const_ref label_, sqf_string_const_ref callsign_, const std::vector<object> &units_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
-            game_value params({color_,
-                               label_,
-                               callsign_,
-                               std::move(units)});
+            game_value params{color_,
+                              label_,
+                              callsign_,
+                              std::move(units)};
 
             return host::functions.invoke_raw_unary(__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
@@ -73,11 +73,11 @@ namespace intercept {
         float radio_channel_create(const rv_color &color_, sqf_string_const_ref label_, sqf_string_const_ref callsign_, const std::vector<object> &units_, bool quote_) {
             auto_array<game_value> units(units_.begin(), units_.end());
 
-            game_value params({color_,
-                               label_,
-                               callsign_,
-                               std::move(units),
-                               quote_});
+            game_value params{color_,
+                              label_,
+                              callsign_,
+                              std::move(units),
+                              quote_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__radiochannelcreate__array__ret__scalar, params);
         }
@@ -132,8 +132,8 @@ namespace intercept {
         }
 
         void custom_radio(const object &unit_, int channel_, sqf_string_const_ref message_) {
-            game_value params_right({static_cast<float>(channel_),
-                                     message_});
+            game_value params_right{static_cast<float>(channel_),
+                                    message_};
 
             host::functions.invoke_raw_binary(__sqf::binary__customradio__object__array__ret__nothing, unit_, params_right);
         }
@@ -145,8 +145,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__sideradio__object_array__string__ret__nothing, {side_, identity_}, radio_name_);
         }
         void enable_channel(int channel_, bool chat_, bool voice_over_net_) {
-            game_value params_right({chat_,
-                                     voice_over_net_});
+            game_value params_right{chat_,
+                                    voice_over_net_};
 
             host::functions.invoke_raw_binary(__sqf::binary__enablechannel__scalar__array__ret__nothing, channel_, params_right);
         }

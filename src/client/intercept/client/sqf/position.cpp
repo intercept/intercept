@@ -101,29 +101,29 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__asltoatl__array__ret__array, asl_);
         }
         vector3 get_pos(const object &obj_, float distance_, float heading_) {
-            game_value args({distance_,
-                             heading_});
+            game_value args{distance_,
+                            heading_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getpos__object_array__array__ret__array, obj_, args);
         }
 
         vector3 get_pos(const vector3 &pos_, float distance_, float heading_) {
-            game_value args({distance_,
-                             heading_});
+            game_value args{distance_,
+                            heading_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getpos__object_array__array__ret__array, pos_, args);
         }
 
         vector3 get_rel_pos(const object &obj_, float distance_, float heading_) {
-            game_value args({distance_,
-                             heading_});
+            game_value args{distance_,
+                            heading_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getrelpos__object__array__ret__array, obj_, args);
         }
 
         vector3 get_rel_pos(const vector3 &pos_, float distance_, float heading_) {
-            game_value args({distance_,
-                             heading_});
+            game_value args{distance_,
+                            heading_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__getrelpos__object__array__ret__array, pos_, args);
         }
@@ -144,8 +144,8 @@ namespace intercept {
         }
 
         void set_vector_dir_and_up(const object &object_, const vector3 &vector_dir_, const vector3 &vector_up_) {
-            game_value vector({vector_dir_,
-                               vector_up_});
+            game_value vector{vector_dir_,
+                              vector_up_};
 
             host::functions.invoke_raw_binary(__sqf::binary__setvectordirandup__object__array__ret__nothing, object_, vector);
         }
@@ -204,8 +204,7 @@ namespace intercept {
             return {};
         }
 
-        std::optional<vector2> world_to_screen(const object& cam_, const vector3& pos_agl_)
-        {
+        std::optional<vector2> world_to_screen(const object &cam_, const vector3 &pos_agl_) {
             game_value result = host::functions.invoke_raw_binary(__sqf::binary__worldtoscreen__object__array__ret__array, cam_, pos_agl_);
             if (static_cast<game_data_array *>(result.data.get())->length() == 2)
                 return game_value(result);
@@ -287,13 +286,13 @@ namespace intercept {
             }
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, std::move(lod_name)});
         }
-        
+
         vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_res_) {
             return host::functions.invoke_raw_binary(__sqf::binary__selectionposition__object__array__ret__array, obj_, {selection_name_, lod_res_});
         }
-        
+
         vector3 selection_position(const object &obj_, sqf_string_const_ref selection_name_, float lod_index_, bool is_visual_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_} );
+            return host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_});
         }
 
         vector3 selection_position_avg(const object &obj_, sqf_string_const_ref selection_name_, sqf_string_const_ref lod_) {
@@ -376,7 +375,7 @@ namespace intercept {
             return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__selectionposition__array__ret__array, {obj_, selection_name_, lod_index_, is_visual_, "BoundingBox"}));
         }
 
-        std::pair<vector3, vector3> selection_vector_dir_and_up(const object& obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
+        std::pair<vector3, vector3> selection_vector_dir_and_up(const object &obj_, sqf_string_const_ref selection_name_, rv_selection_lods lod_) {
             game_value lod_name;
             switch (lod_) {
                 case intercept::sqf::rv_selection_lods::Memory:
@@ -419,7 +418,7 @@ namespace intercept {
         }
 
         rv_bounding_box bounding_box_real(const object &model_, sqf_string_const_ref lod_) {
-            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__array__ret__array, { model_, lod_ }));
+            return rv_bounding_box(host::functions.invoke_raw_unary(__sqf::unary__boundingboxreal__array__ret__array, {model_, lod_}));
         }
 
         rv_bounding_box bounding_box_real(const object &model_, float lod_) {
@@ -473,7 +472,6 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__getdirvisual__object_array__object_array__ret__scalar, from, to);
         }
 
-
         void set_direction(const location &location_, float direction_) {
             host::functions.invoke_raw_binary(__sqf::binary__setdirection__location__scalar__ret__nothing, location_, direction_);
         }
@@ -510,8 +508,7 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__screentoworld__object__array__ret__array, cam_, pos_);
         }
 
-        vector3 screen_to_world_direction(const object &cam_, const vector2& pos_)
-        {
+        vector3 screen_to_world_direction(const object &cam_, const vector2 &pos_) {
             return host::functions.invoke_raw_binary(__sqf::binary__screentoworlddirection__object__array__ret__array, cam_, pos_);
         }
 
@@ -519,8 +516,7 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__screentoworld__array__ret__array, pos_);
         }
 
-        vector3 screen_to_world_direction(const vector2& pos_)
-        {
+        vector3 screen_to_world_direction(const vector2 &pos_) {
             return host::functions.invoke_raw_unary(__sqf::unary__screentoworlddirection__array__ret__array, pos_);
         }
 
@@ -718,13 +714,13 @@ namespace intercept {
         }
 
         std::vector<vector3> is_flat_empty(const vector3 &position_, float min_distance_, float max_gradient_, float max_gradient_radius_, float over_land_or_water_, bool shore_line_, const object &ignore_object_) {
-            game_value params_right({min_distance_,
+            game_value params_right{min_distance_,
                                     -1,
-                                     max_gradient_,
-                                     max_gradient_radius_,
-                                     over_land_or_water_,
-                                     shore_line_,
-                                     ignore_object_});
+                                    max_gradient_,
+                                    max_gradient_radius_,
+                                    over_land_or_water_,
+                                    shore_line_,
+                                    ignore_object_};
 
             return __helpers::__convert_to_vector<vector3>(host::functions.invoke_raw_binary(__sqf::binary__isflatempty__array__array__ret__array, position_, params_right));
         }
@@ -742,8 +738,8 @@ namespace intercept {
         }
 
         bool find_empty_position_ready(std::variant<std::reference_wrapper<const vector2>, std::reference_wrapper<const vector3>> center_, float radius_, float max_distance_) {
-            game_value params_right({radius_,
-                                     max_distance_});
+            game_value params_right{radius_,
+                                    max_distance_};
 
             if (center_.index() == 0) {
                 return host::functions.invoke_raw_binary(__sqf::binary__findemptypositionready__array__array__ret__bool, std::get<0>(center_).get(), params_right);
@@ -792,8 +788,8 @@ namespace intercept {
         std::vector<object> near_entities(const object &position, sqf_string_list_const_ref types_, float range_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value args({std::move(types),
-                             range_});
+            game_value args{std::move(types),
+                            range_};
 
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object__array__ret__array, position, args));
         }
@@ -801,22 +797,22 @@ namespace intercept {
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_list_const_ref types_, float range_) {
             auto_array<game_value> types(types_.begin(), types_.end());
 
-            game_value args({std::move(types),
-                             range_});
+            game_value args{std::move(types),
+                            range_};
 
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__array__array__ret__array, pos_agl_, args));
         }
 
         std::vector<object> near_entities(const object &position, sqf_string_const_ref type_, float range_) {
-            game_value args({std::move(type_),
-                             range_});
+            game_value args{std::move(type_),
+                            range_};
 
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__object__array__ret__array, position, args));
         }
 
         std::vector<object> near_entities(const vector3 &pos_agl_, sqf_string_const_ref type_, float range_) {
-            game_value args({std::move(type_),
-                             range_});
+            game_value args{std::move(type_),
+                            range_};
 
             return __helpers::__convert_to_vector<object>(host::functions.invoke_raw_binary(__sqf::binary__nearentities__array__array__ret__array, pos_agl_, args));
         }

@@ -77,25 +77,25 @@ jobs:
       - mod
     steps:
       - name: Download mod
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: 'mod'
           path: '@intercept'
 
       - name: Download Linux 64 bit
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: intercept_x64.so
           path: '@intercept'
 
       - name: Download Windows 32 bit
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: intercept.dll
           path: '@intercept'
 
       - name: Download Windows 64 bit
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: intercept_x64.dll
           path: '@intercept'

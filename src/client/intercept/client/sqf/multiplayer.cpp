@@ -266,6 +266,10 @@ namespace intercept {
             return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedowner__ret__scalar);
         }
 
+        sqf_return_string remote_executed_jip_id() {
+            return host::functions.invoke_raw_nular(__sqf::nular__remoteexecutedjipid__ret__string);
+        }
+
         bool has_interface() {
             return __helpers::__retrieve_nular_bool(__sqf::nular__hasinterface__ret__bool);
         }

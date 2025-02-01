@@ -965,8 +965,28 @@ namespace intercept {
                 *reinterpret_cast<uintptr_t*>(this) = type_def;
                 *reinterpret_cast<uintptr_t*>(static_cast<I_debug_value*>(this)) = data_type_def;
             }
-            void* config{};
-            auto_array<r_string> path;
+
+            struct config_internal;
+            struct entry_internal {
+                void* _vtbl1;
+                config_internal* _unk;
+                void* _vtbl2;
+            };
+
+            struct config_internal {
+                uint32_t _unk;
+                uint32_t _unk2;
+                entry_internal* _entry;
+                //void* _unk3;
+                //r_string _entryName; // It is here, but probably unreliable?
+            };
+
+            bool is_null() const {
+                return config == nullptr || config->_entry == nullptr;
+            }
+
+            config_internal* config {};
+            //auto_array<r_string> path;
         };
 
         class game_data_control : public game_data {

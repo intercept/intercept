@@ -901,7 +901,7 @@ namespace intercept {
                     return true;
                 }
                 case game_data_type::CONFIG: {
-                    return !reinterpret_cast<game_data_config*>(data.get())->path.is_empty();//#TODO test
+                    return reinterpret_cast<game_data_config*>(data.get())->is_null();
                 }
 
 

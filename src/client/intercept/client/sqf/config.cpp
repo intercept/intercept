@@ -66,9 +66,9 @@ namespace intercept {
         }
 
         std::vector<config> config_properties(const config &config_entry, sqf_string_const_ref condition_, bool inherit) {
-            game_value array_entry({config_entry,
-                                    condition_,
-                                    inherit});
+            game_value array_entry{config_entry,
+                                   condition_,
+                                   inherit};
             game_value output = host::functions.invoke_raw_unary(__sqf::unary__configproperties__array__ret__array, array_entry);
             return __helpers::__convert_to_vector<config>(output);
         }
@@ -155,11 +155,11 @@ namespace intercept {
         }
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__string_scalar, attribute_);
+            return host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, attribute_);
         }
 
         game_value get_mission_config_value(sqf_string_const_ref attribute_, game_value default_value_) {
-            return game_value(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__string_scalar, {attribute_, default_value_}));
+            return game_value(host::functions.invoke_raw_unary(__sqf::unary__getmissionconfigvalue__string_array__ret__array_string, {attribute_, default_value_}));
         }
 
         bool is_kind_of(const object &obj_, sqf_string_const_ref type_) {
@@ -171,8 +171,8 @@ namespace intercept {
         }
 
         bool is_kind_of(sqf_string_const_ref type1_, sqf_string_const_ref type2_, const config &target_config_) {
-            game_value params({type2_,
-                               target_config_});
+            game_value params{type2_,
+                              target_config_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__iskindof__string__array__ret__bool, type1_, params);
         }

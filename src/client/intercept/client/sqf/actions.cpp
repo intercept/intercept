@@ -67,13 +67,13 @@ namespace intercept {
         }
 
         sqf_return_string action_keys_names(sqf_string_const_ref user_action_, int max_keys_) {
-            game_value params({user_action_, static_cast<float>(max_keys_)});
+            game_value params{user_action_, static_cast<float>(max_keys_)};
             return host::functions.invoke_raw_unary(__sqf::unary__actionkeysnames__string_array__ret__string, params);
         }
         sqf_return_string action_keys_names(sqf_string_const_ref user_action_, int max_keys_, sqf_string_const_ref input_device_priority_) {
-            game_value params({user_action_,
-                               static_cast<float>(max_keys_),
-                               input_device_priority_});
+            game_value params{user_action_,
+                              static_cast<float>(max_keys_),
+                              input_device_priority_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__actionkeysnames__string_array__ret__string, params);
         }
@@ -86,40 +86,40 @@ namespace intercept {
         }
 
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_) {
-            game_value params({user_action_, static_cast<float>(max_keys_)});
+            game_value params{user_action_, static_cast<float>(max_keys_)};
 
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
         sqf_return_string_list action_keys_names_array(sqf_string_const_ref user_action_, int max_keys_, sqf_string_const_ref input_device_priority_) {
-            game_value params({user_action_,
-                               static_cast<float>(max_keys_),
-                               input_device_priority_});
+            game_value params{user_action_,
+                              static_cast<float>(max_keys_),
+                              input_device_priority_};
 
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__actionkeysnamesarray__string_array__ret__array, params));
         }
 
         float add_action(const object &object_, sqf_string_const_ref title_, sqf_string_const_ref script_, game_value arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
-            game_value args({title_,
-                             script_,
-                             arguments_,
-                             priority_,
-                             show_window_,
-                             hide_on_use_,
-                             shortcut_,
-                             condition_});
+            game_value args{title_,
+                            script_,
+                            arguments_,
+                            priority_,
+                            show_window_,
+                            hide_on_use_,
+                            shortcut_,
+                            condition_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args);
         }
 
         float add_action(const object &object_, sqf_string_const_ref title_, const code &script_, game_value arguments_, float priority_, bool show_window_, bool hide_on_use_, sqf_string_const_ref shortcut_, sqf_string_const_ref condition_) {
-            game_value args({title_,
-                             script_,
-                             arguments_,
-                             priority_,
-                             show_window_,
-                             hide_on_use_,
-                             shortcut_,
-                             condition_});
+            game_value args{title_,
+                            script_,
+                            arguments_,
+                            priority_,
+                            show_window_,
+                            hide_on_use_,
+                            shortcut_,
+                            condition_};
 
             return host::functions.invoke_raw_binary(__sqf::binary__addaction__object__array__ret__nothing_scalar, object_, args);
         }

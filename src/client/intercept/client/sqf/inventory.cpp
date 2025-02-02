@@ -6,149 +6,147 @@ namespace intercept {
     namespace sqf {
         /* potential namespace: items, inventory, campaign */
         void add_item_pool(sqf_string_const_ref item_name_, int item_count_) {
-            game_value params({item_name_,
-                               static_cast<float>(item_count_)});
+            game_value params{item_name_,
+                              static_cast<float>(item_count_)};
 
             host::functions.invoke_raw_unary(__sqf::unary__additempool__array__ret__nothing, params);
         }
 
         void add_magazine_pool(sqf_string_const_ref mag_name_, int mag_count_) {
-            game_value params({mag_name_,
-                               static_cast<float>(mag_count_)});
+            game_value params{mag_name_,
+                              static_cast<float>(mag_count_)};
             host::functions.invoke_raw_unary(__sqf::unary__addmagazinepool__array__ret__nothing, params);
         }
 
         void add_backpack_cargo(const object &vehicle_, sqf_string_const_ref packClassName_, int count_) {
-            game_value args({packClassName_,
-                             static_cast<float>(count_)});
+            game_value args{packClassName_,
+                            static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addbackpackcargo__object__array__ret__nothing, vehicle_, args);
         }
 
         void add_backpack_cargo_global(const object &vehicle_, sqf_string_const_ref packClassName_, int count_) {
-            game_value args({packClassName_,
-                             static_cast<float>(count_)});
+            game_value args{packClassName_,
+                            static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addbackpackcargoglobal__object__array__ret__nothing, vehicle_, args);
         }
 
         void add_item_cargo(const object &object_, sqf_string_const_ref item_, int count_) {
-            game_value args({item_,
-                             static_cast<float>(count_)});
+            game_value args{item_,
+                            static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__additemcargo__object__array__ret__nothing, object_, args);
         }
 
         void add_item_cargo_global(const object &object_, sqf_string_const_ref item_, int count_) {
-            game_value args({item_,
-                             static_cast<float>(count_)});
+            game_value args{item_,
+                            static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__additemcargoglobal__object__array__ret__nothing, object_, args);
         }
 
         void add_magazine(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazine__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_ammo_cargo(const object &obj_, sqf_string_const_ref classname_, int quantity_, int ammocount_) {
-            game_value params({classname_,
-                               static_cast<float>(quantity_),
-                               static_cast<float>(ammocount_)});
+            game_value params{classname_,
+                              static_cast<float>(quantity_),
+                              static_cast<float>(ammocount_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazineammocargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazinecargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazinecargoglobal__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazines(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazines__object__array__ret__nothing, obj_, params);
         }
 
         void add_magazine_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_, int ammocount_) {
-            game_value params({classname_,
-                               std::move(turret_path_),
-                               static_cast<float>(ammocount_)});
+            game_value params{classname_,
+                              std::move(turret_path_),
+                              static_cast<float>(ammocount_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addmagazineturret__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_turret(const object &obj_, sqf_string_const_ref classname_, rv_turret_path turret_path_) {
-            game_value params({classname_,
-                               std::move(turret_path_)});
+            game_value params{classname_,
+                              std::move(turret_path_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponturret__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_cargo(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponcargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_cargo_global(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponcargoglobal__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_) {
-            game_value params({weapon_name_,
-                               item_name_});
+            game_value params{weapon_name_,
+                              item_name_};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_, int ammo_count_) {
-            game_value params({weapon_name_,
-                               game_value({item_name_,
-                                           static_cast<float>(ammo_count_)})});
+            game_value params{weapon_name_,
+                              game_value{item_name_,
+                                          static_cast<float>(ammo_count_)}};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_item(const object &obj_, sqf_string_const_ref weapon_name_, sqf_string_const_ref item_name_, int ammo_count_, sqf_string_const_ref muzzle_name_) {
-            game_value params({weapon_name_,
-                               game_value({item_name_,
-                                           static_cast<float>(ammo_count_),
-                                           muzzle_name_})});
+            game_value params{weapon_name_,
+                              game_value{item_name_,
+                                          static_cast<float>(ammo_count_),
+                                          muzzle_name_}};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponitem__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_with_attachments_cargo(const object &obj_, const rv_weapon_items &weapons_items_, size_t count_) {
-            game_value params({
+            game_value params{
                 weapons_items_.operator game_value(),
-                count_
-            });
+                count_};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponwithattachmentscargo__object__array__ret__nothing, obj_, params);
         }
 
         void add_weapon_with_attachments_cargo_global(const object &obj_, const rv_weapon_items &weapons_items_, size_t count_) {
-            game_value params({
+            game_value params{
                 weapons_items_.operator game_value(),
-                count_
-            });
+                count_};
 
             host::functions.invoke_raw_binary(__sqf::binary__addweaponwithattachmentscargoglobal__object__array__ret__nothing, obj_, params);
         }
@@ -214,8 +212,8 @@ namespace intercept {
         }
 
         bool can_add(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             return host::functions.invoke_raw_binary(__sqf::binary__canadd__object__string_array__ret__bool, obj_, params);
         }
@@ -233,8 +231,8 @@ namespace intercept {
         }
 
         bool can_add_item_to_backpack(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             return host::functions.invoke_raw_binary(__sqf::binary__canadditemtobackpack__object__string_array__ret__bool, obj_, params);
         }
@@ -244,8 +242,8 @@ namespace intercept {
         }
 
         bool can_add_item_to_uniform(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             return host::functions.invoke_raw_binary(__sqf::binary__canadditemtouniform__object__string_array__ret__bool, obj_, params);
         }
@@ -255,8 +253,8 @@ namespace intercept {
         }
 
         bool can_add_item_to_vest(const object &obj_, sqf_string_const_ref classname_, int count_) {
-            game_value params({classname_,
-                               static_cast<float>(count_)});
+            game_value params{classname_,
+                              static_cast<float>(count_)};
 
             return host::functions.invoke_raw_binary(__sqf::binary__canadditemtovest__object__string_array__ret__bool, obj_, params);
         }
@@ -686,7 +684,7 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object_array__ret__array, unit_));
         }
         sqf_return_string_list assigned_items(const object &unit_, bool all_items_, bool inc_bincos_) {
-            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object_array__ret__array, { unit_, all_items_, inc_bincos_ }));
+            return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__assigneditems__object_array__ret__array, {unit_, all_items_, inc_bincos_}));
         }
         sqf_return_string current_magazine(const object &veh_) {
             return __helpers::__string_unary_object(__sqf::unary__currentmagazine__object__ret__string, veh_);
@@ -703,9 +701,9 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__currentweaponmode__object__ret__string, gunner_);
         }
         void load_magazine(const object &obj_, rv_turret_path turret_path_, sqf_string_const_ref weapon_name_, sqf_string_const_ref magazine_name_) {
-            game_value params({std::move(turret_path_),
-                               weapon_name_,
-                               magazine_name_});
+            game_value params{std::move(turret_path_),
+                              weapon_name_,
+                              magazine_name_};
 
             host::functions.invoke_raw_binary(__sqf::binary__loadmagazine__object__array__ret__nothing, obj_, params);
         }
@@ -741,10 +739,10 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__removemagazine__object__string_array__ret__nothing, target_, magazine_);
         }
         void remove_magazines_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, target_, {magazine_, turret_path_ });
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazinesturret__object__array__ret__nothing, target_, {magazine_, turret_path_});
         }
         void remove_magazine_turret(const object &target_, sqf_string_const_ref magazine_, rv_turret_path turret_path_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, target_, {magazine_, turret_path_ });
+            host::functions.invoke_raw_binary(__sqf::binary__removemagazineturret__object__array__ret__nothing, target_, {magazine_, turret_path_});
         }
         void remove_weapon_attachment_cargo(const object &, const std::vector<game_value> &) {
             //binary__removeweaponattachmentcargo__object__array__ret__nothing
@@ -753,7 +751,7 @@ namespace intercept {
             //binary__removeweaponcargo__object__array__ret__nothing
         }
         void remove_weapon_turret(const object &target_, sqf_string_const_ref weapon_name_, rv_turret_path turret_path_) {
-            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, target_, {weapon_name_, turret_path_ });
+            host::functions.invoke_raw_binary(__sqf::binary__removeweaponturret__object__array__ret__nothing, target_, {weapon_name_, turret_path_});
         }
         void set_ammo(const object &target_, sqf_string_const_ref weapon_, int count) {
             host::functions.invoke_raw_binary(__sqf::binary__setammo__object__array__ret__nothing, target_, {weapon_, count});
@@ -839,8 +837,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setammocargo__object__scalar__ret__nothing, value0_, value1_);
         }
         void add_weapon_pool(sqf_string_const_ref weapon_name_, int count_) {
-            game_value params({weapon_name_,
-                               static_cast<float>(count_)});
+            game_value params{weapon_name_,
+                              static_cast<float>(count_)};
 
             host::functions.invoke_raw_unary(__sqf::unary__addweaponpool__array__ret__nothing, params);
         }
@@ -916,7 +914,7 @@ namespace intercept {
 
         std::pair<float, float> backpack_space_for(const object &backpack_, sqf_string_const_ref weapon_) {
             auto res = host::functions.invoke_raw_binary(__sqf::binary__backpackspacefor__object__string__ret__array, backpack_, weapon_);
-            return  { res[0], res[1] };
+            return {res[0], res[1]};
         }
 
         void add_binocular_item(const object &unit_, sqf_string_const_ref classname_) {
@@ -926,7 +924,7 @@ namespace intercept {
         void remove_binocular_item(const object &unit_, sqf_string_const_ref classname_) {
             host::functions.invoke_raw_binary(__sqf::binary__removebinocularitem__object__string__ret__nothing, unit_, classname_);
         }
-        
+
         void lock_inventory(const object &vehicle_, bool locked_) {
             host::functions.invoke_raw_binary(__sqf::binary__lockinventory__object__bool__ret__nothing, vehicle_, locked_);
         }
@@ -955,11 +953,11 @@ namespace intercept {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(__sqf::unary__backpacks__object__ret__array, unit_));
         }
 
-        rv_hashmap unique_unit_items(const object& unit_) {
+        rv_hashmap unique_unit_items(const object &unit_) {
             return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__uniqueunititems__object_array__ret__hashmap, unit_));
         }
 
-        rv_hashmap unique_unit_items_filtered(const object& unit_, int weapons_items_, int uniform_items_, int vest_items, int backpack_items_, int assigned_items_) {
+        rv_hashmap unique_unit_items_filtered(const object &unit_, int weapons_items_, int uniform_items_, int vest_items, int backpack_items_, int assigned_items_) {
             return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__uniqueunititems__object_array__ret__hashmap, {unit_, weapons_items_, uniform_items_, vest_items, backpack_items_, assigned_items_}));
         }
 

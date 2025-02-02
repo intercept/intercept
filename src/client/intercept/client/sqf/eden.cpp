@@ -327,18 +327,18 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__set3denmissionattributes__array__ret__nothing, params);
         }
         std::vector<game_value> create_3den_composition(const config &configPath_, const vector3 &position_) {
-            game_value parameters_({configPath_,
-                                    position_});
+            game_value parameters_{configPath_,
+                                    position_};
 
             auto ret = host::functions.invoke_raw_unary(__sqf::unary__create3dencomposition__array__ret__array, parameters_);
             return __helpers::__convert_to_vector<game_value>(ret);
         }
 
         game_value create_3den_entity(sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty_) {
-            game_value parameters_({mode_,
-                                    class_,
-                                    position_,
-                                    is_empty_});
+            game_value parameters_{mode_,
+                                   class_,
+                                   position_,
+                                   is_empty_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__create3denentity__array__ret__any, parameters_);
         }
@@ -367,11 +367,7 @@ namespace intercept {
         }
 
         bool remove_3den_connection(sqf_string_const_ref type_, eden_entity from_, eden_entity to_) {
-            game_value params({type_,
-                               from_,
-                               to_});
-
-            return host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, params);
+            return host::functions.invoke_raw_unary(__sqf::unary__remove3denconnection__array__ret__nothing, {type_, from_, to_});
         }
 
         void set_3den_selected(const std::vector<object> &entites_) {
@@ -385,10 +381,10 @@ namespace intercept {
         }
 
         eden_entity create_3den_entity(const group &group_, sqf_string_const_ref mode_, sqf_string_const_ref class_, const vector3 &position_, bool is_empty) {
-            game_value params_right({mode_,
-                                     class_,
-                                     position_,
-                                     is_empty});
+            game_value params_right{mode_,
+                                    class_,
+                                    position_,
+                                    is_empty};
 
             return host::functions.invoke_raw_binary(__sqf::binary__create3denentity__group__array__ret__any, group_, params_right);
         }
@@ -438,11 +434,11 @@ namespace intercept {
 
         int get_3den_layer(const object& obj_)
         {
-            return host::functions.invoke_raw_unary(__sqf::unary__get3denlayer__scalar_string__ret__scalar, obj_);
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denlayer__scalar_array__ret__scalar, obj_);
         }
 
         object get_3den_parent(const object& obj_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__get3denparent__scalar_string__ret__any, obj_);
+            return host::functions.invoke_raw_unary(__sqf::unary__get3denparent__scalar_array__ret__any, obj_);
         }
 
         void ignore_3den_history(const code& code_) {

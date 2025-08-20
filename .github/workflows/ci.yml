@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   mod:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: git checkout
         uses: actions/checkout@v2
@@ -22,22 +22,13 @@ jobs:
           path: releases/1.0.0/@intercept
 
   extension-linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: git checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y g++-8-multilib
-
       - name: Build Linux 64 bit
         run: mkdir build-linux64 && cd build-linux64 && cmake -DCMAKE_TOOLCHAIN_FILE=../linux64/toolchain.cmake -DCMAKE_BUILD_TYPE=Release .. && make
-        env:
-          CC: gcc-8
-          CXX: g++-8
 
       - name: Upload Linux 64 bit
         uses: actions/upload-artifact@v4
@@ -70,7 +61,7 @@ jobs:
           path: build/win64/intercept/Release/intercept_x64.dll
 
   package:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs:
       - extension-linux
       - extension-windows

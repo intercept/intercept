@@ -217,6 +217,7 @@ namespace intercept {
         display ctrl_parent(const control &ctrl_);
         control ctrl_parent_controls_group(const control &ctrl_);
         std::vector<vector3> ctrl_model_dir_and_up(const control &ctrl_);
+        vector3 ctrl_model_vector_side(const control &ctrl_);
 
         vector2 ctrl_map_world_to_screen(const control &ctrl_, const std::variant<vector2, vector3> &position_);
         vector2 ctrl_map_screen_to_world(const control &ctrl_, const vector2 &screen_pos_);
@@ -807,5 +808,7 @@ namespace intercept {
 
         sqf_return_string display_unique_name(const display &disp_);
         void display_update(const display &disp_);
+
+        void ctrl_web_browser_action(const control &ctrl_, const game_value &action_);
     }  // namespace sqf
 }  // namespace intercept

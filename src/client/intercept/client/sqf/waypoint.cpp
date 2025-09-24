@@ -14,19 +14,19 @@ namespace intercept {
         const std::string_view waypoint::__loiter_lookup[2] = {"CIRCLE"sv, "CIRCLE_L"sv};
 
         waypoint add_waypoint(group &gp_, const vector3 &center_, float radius_, int index_, sqf_string_const_ref name_) {
-            game_value args({center_,
-                             radius_,
-                             static_cast<float>(index_),
-                             name_});
+            game_value args{center_,
+                            radius_,
+                            static_cast<float>(index_),
+                            name_};
 
             return waypoint(game_value(host::functions.invoke_raw_binary(__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
         }
 
         waypoint add_waypoint(group &gp_, const object &center_, float radius_, int index_, sqf_string_const_ref name_) {
-            game_value args({center_,
-                             radius_,
-                             static_cast<float>(index_),
-                             name_});
+            game_value args{center_,
+                            radius_,
+                            static_cast<float>(index_),
+                            name_};
 
             return waypoint(game_value(host::functions.invoke_raw_binary(__sqf::binary__addwaypoint__group__array__ret__array, gp_, args)));
         }
@@ -149,7 +149,7 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointname__array__string__ret__nothing, wp_, name_);
         }
         void set_waypoint_position(waypoint &wp_, vector3 &pos_, float radius_) {
-            game_value args({pos_, radius_});
+            game_value args{pos_, radius_};
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointposition__array__array__ret__nothing, wp_, args);
         }
         void set_waypoint_script(waypoint &wp_, std::string &command_) {
@@ -159,13 +159,13 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointspeed__array__string__ret__nothing, wp_, waypoint::__get_enum_as_str(mode_));
         }
         void set_waypoint_statements(waypoint &wp_, std::string condition_, std::string statement_) {
-            game_value args({condition_, statement_});
+            game_value args{condition_, statement_};
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointstatements__array__array__ret__nothing, wp_, args);
         }
         void set_waypoint_timeout(waypoint &wp_, float min_, float mid_, float max_) {
-            game_value args({game_value({min_,
-                                         mid_,
-                                         max_})});
+            game_value args{min_,
+                            mid_,
+                            max_};
             host::functions.invoke_raw_binary(__sqf::binary__setwaypointtimeout__array__array__ret__nothing, wp_, args);
         }
         void set_waypoint_type(waypoint &wp_, waypoint::type type_) {
@@ -203,8 +203,8 @@ namespace intercept {
         }
 
         bool waypoint_force_behaviour(const group &group_, int index_) {
-            game_value params({group_,
-                               static_cast<float>(index_)});
+            game_value params{group_,
+                              static_cast<float>(index_)};
 
             return host::functions.invoke_raw_unary(__sqf::unary__waypointforcebehaviour__array__ret__bool, params);
         }
@@ -245,8 +245,8 @@ namespace intercept {
         }
 
         vector3 get_wp_pos(const group &group_, int index_) {
-            game_value params({group_,
-                               static_cast<float>(index_)});
+            game_value params{group_,
+                              static_cast<float>(index_)};
 
             return host::functions.invoke_raw_unary(__sqf::unary__getwppos__array__ret__array, params);
         }
@@ -276,10 +276,10 @@ namespace intercept {
         }
 
         void create_guarded_point(const side &side_, const vector3 &pos_, float idstatic_, const object &veh_) {
-            game_value params({side_,
-                               pos_,
-                               idstatic_,
-                               veh_});
+            game_value params{side_,
+                              pos_,
+                              idstatic_,
+                              veh_};
 
             host::functions.invoke_raw_unary(__sqf::unary__createguardedpoint__array__ret__nothing, params);
         }
@@ -326,17 +326,17 @@ namespace intercept {
             return __helpers::__string_unary_object(__sqf::unary__triggertype__object__ret__string, value_);
         }
         object create_trigger(sqf_string_const_ref type_, const vector3 &pos_, bool make_global_ /* = true*/) {
-            game_value args({type_,
-                             pos_,
-                             make_global_});
+            game_value args{type_,
+                            pos_,
+                            make_global_};
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }
 
         object create_trigger(sqf_string_const_ref type_, const object &pos_, bool make_global_ /*= true*/) {
-            game_value args({type_,
-                             pos_,
-                             make_global_});
+            game_value args{type_,
+                            pos_,
+                            make_global_};
 
             return object(host::functions.invoke_raw_unary(__sqf::unary__createtrigger__array__ret__object, args));
         }

@@ -12,8 +12,8 @@ namespace intercept {
         std::vector<game_value> call_extension(sqf_string_const_ref extension_, sqf_string_const_ref function_, std::vector<game_value> &arguments_) {
             auto_array<game_value> arguments(arguments_.begin(), arguments_.end());
 
-            game_value params_right({function_,
-                                     std::move(arguments)});
+            game_value params_right{function_,
+                                    std::move(arguments)};
 
             return __helpers::__convert_to_vector<game_value>(host::functions.invoke_raw_binary(__sqf::binary__callextension__string__array__ret__array, extension_, params_right));
         }
@@ -24,7 +24,7 @@ namespace intercept {
         }
 
         game_value call2(const code &code_, game_value args_) {
-            game_value args({args_, code_});
+            game_value args{args_, code_};
 
             set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
@@ -53,7 +53,7 @@ namespace intercept {
         }
 
         game_value call2(const code &code_) {
-            game_value args({game_value(), code_});
+            game_value args{game_value(), code_};
 
             set_variable(mission_namespace(), "INTERCEPT_CALL_ARGS"sv, args);
             /*
@@ -199,8 +199,8 @@ namespace intercept {
 
         float random(float seed_, float x_, std::optional<float> y_) {
             if (y_.has_value()) {
-                game_value params_right({x_,
-                                         *y_});
+                game_value params_right{x_,
+                                         *y_};
 
                 return host::functions.invoke_raw_binary(__sqf::binary__random__scalar__scalar_array__ret__scalar, seed_, params_right);
             }
@@ -217,22 +217,22 @@ namespace intercept {
         }
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_) {
-            game_value params({min_,
-                               max_,
-                               value_,
-                               new_min_,
-                               new_max_});
+            game_value params{min_,
+                              max_,
+                              value_,
+                              new_min_,
+                              new_max_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__linearconversion__array__ret__scalar, params);
         }
 
         float linear_conversion(float min_, float max_, float value_, float new_min_, float new_max_, bool clamp_) {
-            game_value params({min_,
-                               max_,
-                               value_,
-                               new_min_,
-                               new_max_,
-                               clamp_});
+            game_value params{min_,
+                              max_,
+                              value_,
+                              new_min_,
+                              new_max_,
+                              clamp_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__linearconversion__array__ret__scalar, params);
         }
@@ -323,8 +323,8 @@ namespace intercept {
 
         game_value get_fsm_variable(int &fsm_handle_, sqf_string_const_ref variable_, std::optional<game_value> default_value_) {
             if (default_value_.has_value()) {
-                game_value params_right({variable_,
-                                         *default_value_});
+                game_value params_right{variable_,
+                                        *default_value_};
 
                 return host::functions.invoke_raw_binary(__sqf::binary__getfsmvariable__scalar__string_array__ret__any, fsm_handle_, params_right);
             }
@@ -1127,7 +1127,7 @@ namespace intercept {
         }
 
         sqf_return_string hash_value(const game_value &value_) {
-            return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__nan_scalar__ret__string, value_);
+            return host::functions.invoke_raw_unary(__sqf::unary__hashvalue__scalar_bool__ret__string, value_);
         }
 
         bool is_mission_profile_namespace_loaded() {
@@ -1157,9 +1157,19 @@ namespace intercept {
             return __helpers::__convert_to_hashmap(host::functions.invoke_raw_unary(__sqf::unary__createhashmapobject__array__ret__hashmap, class_));
         }
 
-        sqf_return_string name(const rv_namespace &namespace_)
-        {
+        sqf_return_string name(const rv_namespace &namespace_) {
             return host::functions.invoke_raw_unary(__sqf::unary__name__namespace__ret__string, namespace_);
+        }
+
+        game_value from_json(sqf_string_const_ref str_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__fromjson__string__ret__any, str_);
+        }
+
+        sqf_return_string to_json(const game_value &value_) {
+            return host::functions.invoke_raw_unary(__sqf::unary__tojson__any__ret__string, value_);
+        }
+        std::vector<sqf_return_string> all_extensions() {
+            return  __helpers::__convert_to_vector<sqf_return_string>(__sqf::nular__allextensions__ret__array);
         }
     }  // namespace sqf
 }  // namespace intercept

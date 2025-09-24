@@ -1,10 +1,6 @@
 #pragma once
 #include "../shared.hpp"
 
-#ifdef INTERCEPT_GLM_INTEROP
-#include <glm/glm.hpp>
-#endif //INTERCEPT_GLM_INTEROP
-
 namespace intercept {
     constexpr float pi = 3.14159265358979323846f;
     namespace types {
@@ -55,28 +51,28 @@ namespace intercept {
             constexpr explicit vector3_base(const vector2_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{0} {
             }
 
-#ifdef INTERCEPT_GLM_INTEROP
-            constexpr vector3_base(const glm::vec3& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
+            template <class OtherVec, typename = std::enable_if_t<std::is_scalar_v<decltype(OtherVec::x)> && std::is_scalar_v<decltype(OtherVec::y)> && std::is_scalar_v<decltype(OtherVec::z)>>>
+            explicit constexpr vector3_base(const OtherVec& copy_) noexcept : x{copy_.x}, y{copy_.y}, z{copy_.z} {
             }
 
-            operator glm::vec3() const {
-                return {x, y, z};
+            template <class OtherVec, typename = std::enable_if_t<std::is_scalar_v<decltype(OtherVec::x)> && std::is_scalar_v<decltype(OtherVec::y)> && std::is_scalar_v<decltype(OtherVec::z)>>>
+            explicit operator OtherVec() const {
+                return OtherVec(x, y, z);
             }
-#endif  //INTERCEPT_GLM_INTEROP
 
             constexpr T& operator[](unsigned int index_) noexcept {
                 switch (index_) {
-                    case (0): return x;
-                    case (1): return y;
-                    default: return z;
+                case (0): return x;
+                case (1): return y;
+                default: return z;
                 }
             }
 
             constexpr T operator[](unsigned int index_) const noexcept {
                 switch (index_) {
-                    case (0): return x;
-                    case (1): return y;
-                    default: return z;
+                case (0): return x;
+                case (1): return y;
+                default: return z;
                 }
             }
 
@@ -195,14 +191,14 @@ namespace intercept {
             constexpr explicit vector2_base(const vector3_base<T>& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
-#ifdef INTERCEPT_GLM_INTEROP
-            constexpr vector2_base(const glm::vec2& copy_) noexcept : x{copy_.x}, y{copy_.y} {
+            template <class OtherVec, typename = std::enable_if_t<std::is_scalar_v<decltype(OtherVec::x)> && std::is_scalar_v<decltype(OtherVec::y)>>>
+            explicit constexpr vector2_base(const OtherVec& copy_) noexcept : x{copy_.x}, y{copy_.y} {
             }
 
-            operator glm::vec2() const {
-                return {x, y};
+            template <class OtherVec, typename = std::enable_if_t<std::is_scalar_v<decltype(OtherVec::x)> && std::is_scalar_v<decltype(OtherVec::y)>>>
+            explicit operator OtherVec() const {
+                return OtherVec(x, y);
             }
-#endif  //INTERCEPT_GLM_INTEROP
 
             constexpr T& operator[](unsigned int index_) noexcept {
                 return (index_ == 0) ? x : y;
@@ -273,7 +269,7 @@ namespace intercept {
             static constexpr vector2_base lerp(const vector2_base& A, const vector2_base& B, const T t) noexcept { return A*t + B*(1.f - t); }
             /// @brief linear interpolate
             constexpr vector2_base lerp(const vector2_base& B, const T t) const noexcept { return vector2_base::lerp(*this, B, t); }
-            
+
             /// @brief spherical linear interpolate
             static constexpr vector2_base slerp(vector2_base start, vector2_base end, T percent) noexcept {
                 T dot = start.dot(end);

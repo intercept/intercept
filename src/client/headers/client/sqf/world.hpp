@@ -311,6 +311,7 @@ namespace intercept {
         void simul_cloud_density(const vector3 &pos_);
         void simul_cloud_occlusion(const vector3 &pos1_, const vector3 &pos2_);
         bool simul_in_clouds(const vector3 &pos_);
+        void simul_set_humidity(float humidity_);
         void set_fog(float &time_, float &fog_value_, std::optional<float> fog_decay_, std::optional<float> fog_base_);
         void set_gusts(float time_, float gusts_value_);
         void set_rain(float time_, float rain_value_);

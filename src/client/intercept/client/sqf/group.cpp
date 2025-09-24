@@ -110,15 +110,15 @@ namespace intercept {
         }
 
         void join_as(const object &unit_, const group &group_, int pos_id_) {
-            game_value params({group_,
-                               static_cast<float>(pos_id_)});
+            game_value params{group_,
+                              static_cast<float>(pos_id_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__joinas__object__array__ret__nothing, unit_, params);
         }
 
         void join_as_silent(const object &unit_, const group &group_, int pos_id_) {
-            game_value params({group_,
-                               static_cast<float>(pos_id_)});
+            game_value params{group_,
+                              static_cast<float>(pos_id_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__joinassilent__object__array__ret__nothing, unit_, params);
         }
@@ -154,8 +154,8 @@ namespace intercept {
             host::functions.invoke_raw_binary(__sqf::binary__addvehicle__group__object__ret__nothing, value0_, value1_);
         }
         void set_group_icons_visible(bool map_, bool hud_) {
-            game_value params({map_,
-                               hud_});
+            game_value params{map_,
+                              hud_};
 
             host::functions.invoke_raw_unary(__sqf::unary__setgroupiconsvisible__array__ret__nothing, params);
         }
@@ -169,8 +169,8 @@ namespace intercept {
             return rv_group_icon({res[0], vector2(res[1][0], res[1][0])});
         }
         void group_select_unit(const object &player_, const object &unit_, bool select_) {
-            game_value params_right({unit_,
-                                     select_});
+            game_value params_right{unit_,
+                                    select_};
 
             host::functions.invoke_raw_binary(__sqf::binary__groupselectunit__object__array__ret__nothing, player_, params_right);
         }
@@ -211,10 +211,10 @@ namespace intercept {
 
         //Teams
         team_member create_team(sqf_string_const_ref type_, sqf_string_const_ref name_) {
-            game_value args({
+            game_value args{
                 type_,
                 name_,
-            });
+            };
 
             return team_member(host::functions.invoke_raw_unary(__sqf::unary__createteam__array__ret__team_member, args));
         }

@@ -70,23 +70,23 @@ namespace intercept {
             return rv_weight_rtd::from_vector(__helpers::__convert_to_vector<float>(host::functions.invoke_raw_unary(__sqf::unary__weightrtd__object__ret__array, heli_)));
         }
         void set_brakes_rtd(const object &heli_, float amount_, int wheel_index_) {
-            game_value params({amount_,
-                               static_cast<float>(wheel_index_)});
+            game_value params{amount_,
+                              static_cast<float>(wheel_index_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__setbrakesrtd__object__array__ret__nothing, heli_, params);
         }
 
         void set_engine_rpm_rtd(const object &heli_, float rpms_, int engine_index_) {
-            game_value params({rpms_,
-                               static_cast<float>(engine_index_)});
+            game_value params{rpms_,
+                              static_cast<float>(engine_index_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__setenginerpmrtd__object__array__ret__nothing, heli_, params);
         }
 
         void set_wanted_rpm_rtd(const object &heli_, float rpms_, float time_, int engine_index_) {
-            game_value params({rpms_,
-                               time_,
-                               static_cast<float>(engine_index_)});
+            game_value params{rpms_,
+                              time_,
+                              static_cast<float>(engine_index_)};
 
             host::functions.invoke_raw_binary(__sqf::binary__setwantedrpmrtd__object__array__ret__nothing, heli_, params);
         }

@@ -6,49 +6,49 @@ namespace intercept {
     namespace sqf {
 
         sqf_return_string create_marker(sqf_string_const_ref name_, const vector2 &pos_) {
-            game_value params({name_,
-                               pos_});
+            game_value params{name_,
+                              pos_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         sqf_return_string create_marker(sqf_string_const_ref name_, const vector3 &pos_) {
-            game_value params({name_,
-                               pos_});
+            game_value params{name_,
+                              pos_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         sqf_return_string create_marker(sqf_string_const_ref name_, const object &pos_) {
-            game_value params({name_,
-                               pos_});
+            game_value params{name_,
+                              pos_};
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarker__array__ret__string, params);
         }
 
         sqf_return_string create_marker_local(sqf_string_const_ref name_, const vector2 &pos_) {
-            game_value params({
+            game_value params{
                 name_,
                 pos_,
-            });
+            };
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
 
         sqf_return_string create_marker_local(sqf_string_const_ref name_, const vector3 &pos_) {
-            game_value params({
+            game_value params{
                 name_,
                 pos_,
-            });
+            };
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
 
         sqf_return_string create_marker_local(sqf_string_const_ref name_, const object &pos_) {
-            game_value params({
+            game_value params{
                 name_,
                 pos_,
-            });
+            };
 
             return host::functions.invoke_raw_unary(__sqf::unary__createmarkerlocal__array__ret__string, params);
         }
@@ -249,15 +249,15 @@ namespace intercept {
             return host::functions.invoke_raw_binary(__sqf::binary__distance__array__location__ret__scalar, start_, end_);
         }
         location nearest_location(const vector3 &pos_, sqf_string_const_ref location_class_) {
-            game_value args({pos_,
-                             location_class_});
+            game_value args{pos_,
+                            location_class_};
 
             return location(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
         }
 
         location nearest_location(const object &unit_, sqf_string_const_ref location_class_) {
-            game_value args({unit_,
-                             location_class_});
+            game_value args{unit_,
+                            location_class_};
 
             return location(host::functions.invoke_raw_unary(__sqf::unary__nearestlocation__array__ret__location, args));
         }
@@ -286,13 +286,13 @@ namespace intercept {
         vector2 location_position(const location &loc_) {
             return host::functions.invoke_raw_unary(__sqf::unary__locationposition__location__ret__array, loc_);
         }
-        
+
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value args({pos_,
-                             std::move(loctypes),
-                             radius_});
+            game_value args{pos_,
+                            std::move(loctypes),
+                            radius_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
@@ -300,10 +300,10 @@ namespace intercept {
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value args({pos_,
-                             std::move(loctypes),
-                             radius_,
-                             sort_position_});
+            game_value args{pos_,
+                            std::move(loctypes),
+                            radius_,
+                            sort_position_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
@@ -311,10 +311,10 @@ namespace intercept {
         std::vector<location> nearest_locations(const vector3 &pos_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
             auto_array<game_value> loc_types(location_types_.begin(), location_types_.end());
 
-            game_value params({pos_,
-                               std::move(loc_types),
-                               radius_,
-                               sort_obj_});
+            game_value params{pos_,
+                              std::move(loc_types),
+                              radius_,
+                              sort_obj_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, params));
         }
@@ -322,9 +322,9 @@ namespace intercept {
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value args({unit_,
-                             std::move(loctypes),
-                             radius_});
+            game_value args{unit_,
+                            std::move(loctypes),
+                            radius_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
@@ -332,26 +332,25 @@ namespace intercept {
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const vector3 &sort_position_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value args({unit_,
-                             std::move(loctypes),
-                             radius_,
-                             sort_position_});
+            game_value args{unit_,
+                            std::move(loctypes),
+                            radius_,
+                            sort_position_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
-        
+
         std::vector<location> nearest_locations(const object &unit_, sqf_string_list_const_ref location_types_, float radius_, const object &sort_obj_) {
             auto_array<game_value> loctypes(location_types_.begin(), location_types_.end());
 
-            game_value args({unit_,
-                             std::move(loctypes),
-                             radius_,
-                             sort_obj_});
+            game_value args{unit_,
+                            std::move(loctypes),
+                            radius_,
+                            sort_obj_};
 
             return __helpers::__convert_to_vector<location>(host::functions.invoke_raw_unary(__sqf::unary__nearestlocations__array__ret__array, args));
         }
-        
-        
+
         sqf_return_string_list all_variables(const location &value_) {
             return __helpers::__convert_to_vector<sqf_return_string>(host::functions.invoke_raw_unary(
                 __sqf::unary__allvariables__location__ret__array, value_));
@@ -368,27 +367,27 @@ namespace intercept {
             return host::functions.invoke_raw_unary(__sqf::unary__classname__location__ret__string, loc_);
         }
         location create_location(sqf_string_const_ref classname_, const vector3 &pos_, float size_x_, float size_y_) {
-            game_value params({classname_,
-                               pos_,
-                               size_x_,
-                               size_y_});
+            game_value params{classname_,
+                              pos_,
+                              size_x_,
+                              size_y_};
 
             return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
 
         location create_location(sqf_string_const_ref classname_, const vector2 &pos_, float size_x_, float size_y_) {
-            game_value params({classname_,
-                               pos_,
-                               size_x_,
-                               size_y_});
+            game_value params{classname_,
+                              pos_,
+                              size_x_,
+                              size_y_};
 
             return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
         location create_location(sqf_string_const_ref classname_, const object &obj_, float size_x_, float size_y_) {
-            game_value params({classname_,
-                               obj_,
-                               size_x_,
-                               size_y_});
+            game_value params{classname_,
+                              obj_,
+                              size_x_,
+                              size_y_};
 
             return location(host::functions.invoke_raw_unary(__sqf::unary__createlocation__array__ret__location, params));
         }
@@ -502,40 +501,40 @@ namespace intercept {
         void draw_polygon(const control &map_, const std::vector<vector3> &polygon_, const rv_color &color_) {
             auto_array<game_value> polygon(polygon_.begin(), polygon_.end());
 
-            game_value params_right({std::move(polygon),
-                                     color_});
+            game_value params_right{std::move(polygon),
+                                    color_};
 
             host::functions.invoke_raw_binary(__sqf::binary__drawpolygon__control__array__ret__nothing, map_, params_right);
         }
 
         void remove_draw_icon(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref string_identifier) {
-            game_value params_right({object_,
-                                     string_identifier});
+            game_value params_right{object_,
+                                    string_identifier};
 
             host::functions.invoke_raw_binary(__sqf::binary__removedrawicon__control__array__ret__nothing, map_, params_right);
         }
 
         void remove_draw_links(const control &map_, sqf_string_const_ref object_, sqf_string_const_ref string_identifier) {
-            game_value params_right({object_,
-                                     string_identifier});
+            game_value params_right{object_,
+                                    string_identifier};
 
             host::functions.invoke_raw_binary(__sqf::binary__removedrawlinks__control__array__ret__nothing, map_, params_right);
         }
 
         void set_draw_icon(const control &map_, const object &object_, sqf_string_const_ref texture_, const rv_color &color_, const vector3 &offset_, float width_, float height_, float size_, float angle_, sqf_string_const_ref identifier_, float shadow_, bool is_3d_, bool draw_line_, float priority_) {
-            game_value params_right({object_,
-                                     texture_,
-                                     color_,
-                                     offset_,
-                                     width_,
-                                     height_,
-                                     size_,
-                                     angle_,
-                                     identifier_,
-                                     shadow_,
-                                     is_3d_,
-                                     draw_line_,
-                                     priority_});
+            game_value params_right{object_,
+                                    texture_,
+                                    color_,
+                                    offset_,
+                                    width_,
+                                    height_,
+                                    size_,
+                                    angle_,
+                                    identifier_,
+                                    shadow_,
+                                    is_3d_,
+                                    draw_line_,
+                                    priority_};
 
             host::functions.invoke_raw_binary(__sqf::binary__setdrawicon__control__array__ret__nothing, map_, params_right);
         }
